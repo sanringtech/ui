@@ -1,32 +1,26 @@
 import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { cn } from '@sanring/ui';
-import { DocsTocComponent } from './docs-toc.component';
+import { FooterComponent } from '../section/footer/footer.component';
 import { HeaderComponent } from '../section/header/header.component';
-import { DocsSidebarComponent } from '../section/sidebar/docs-sidebar.component';
 
 const docsLayoutClasses = {
-  shell: cn(
-    'grid min-h-[calc(100dvh-76px)] grid-cols-[260px_minmax(0,1fr)_280px]',
-    'max-[1180px]:grid-cols-[240px_minmax(0,1fr)] max-[860px]:block',
-  ),
-  main: cn('min-w-0 px-12 pb-24 pt-16', 'max-[860px]:px-5 max-[860px]:pb-[72px] max-[860px]:pt-8'),
+  root: cn('min-h-dvh bg-[var(--docs-bg)] text-[var(--docs-fg)]'),
+  main: cn('min-h-[calc(100dvh-76px)]'),
 };
 
 @Component({
   selector: 'app-docs-layout',
-  imports: [RouterOutlet, HeaderComponent, DocsSidebarComponent, DocsTocComponent],
+  imports: [RouterOutlet, HeaderComponent, FooterComponent],
   template: `
-    <app-header />
-
-    <div [class]="classes.shell">
-      <app-docs-sidebar />
+    <div [class]="classes.root">
+      <app-header />
 
       <main [class]="classes.main">
         <router-outlet />
       </main>
 
-      <app-docs-toc />
+      <!-- <app-footer /> -->
     </div>
   `,
 })
