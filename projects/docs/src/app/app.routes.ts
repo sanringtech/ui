@@ -68,11 +68,25 @@ export const routes: Routes = [
           ),
         children: [
           {
-            path: 'components/accordion',
+            path: 'components',
             loadComponent: () =>
-              import('./pages/components/accordion/accordion-page.component').then(
-                (m) => m.AccordionPageComponent,
+              import('./layouts/docs-components-layout.component').then(
+                (m) => m.DocsComponentsLayoutComponent,
               ),
+            children: [
+              {
+                path: '',
+                pathMatch: 'full',
+                redirectTo: 'accordion',
+              },
+              {
+                path: 'accordion',
+                loadComponent: () =>
+                  import('./pages/components/accordion/accordion-page.component').then(
+                    (m) => m.AccordionPageComponent,
+                  ),
+              },
+            ],
           },
         ],
       },

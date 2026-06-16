@@ -1,23 +1,22 @@
 import { Component } from '@angular/core';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger, cn } from '@sanring/ui';
+import { ComponentPageHeaderComponent } from '../component-page-header.component';
 
 @Component({
   selector: 'app-accordion-page',
-  imports: [Accordion, AccordionItem, AccordionTrigger, AccordionContent],
+  imports: [
+    Accordion,
+    AccordionItem,
+    AccordionTrigger,
+    AccordionContent,
+    ComponentPageHeaderComponent,
+  ],
   template: `
     <article [class]="classes.root">
-      <div [class]="classes.toolbar">
-        <button type="button" [class]="classes.toolbarButton">Copy Page</button>
-        <button type="button" [class]="classes.toolbarButton" aria-label="Previous page">←</button>
-        <button type="button" [class]="classes.toolbarButton" aria-label="Next page">→</button>
-      </div>
-
-      <header [class]="classes.hero">
-        <h1 [class]="classes.title">Accordion</h1>
-        <p [class]="classes.description">
-          A vertically stacked set of interactive headings that each reveal a section of content.
-        </p>
-      </header>
+      <app-component-page-header
+        title="Accordion"
+        description="A vertically stacked set of interactive headings that each reveal a section of content."
+      />
 
       <div [class]="classes.tabs" role="tablist" aria-label="Accordion variants">
         <button type="button" [class]="cn(classes.tab, classes.activeTab)">Radix UI</button>
@@ -88,16 +87,8 @@ export class AccordionPageComponent {
   protected readonly cn = cn;
 
   protected readonly classes = {
-    root: cn('relative mx-auto max-w-[832px] text-[var(--docs-fg)]'),
-    toolbar: cn('absolute right-0 top-0 flex gap-2.5', 'max-[720px]:static max-[720px]:mb-7'),
-    toolbarButton: cn(
-      'h-9 cursor-pointer rounded-lg border border-[var(--docs-border)]',
-      'bg-[var(--docs-elevated)] px-3.5 font-semibold text-[var(--docs-fg)]',
-    ),
-    hero: cn('max-w-[520px] pr-[220px] max-[720px]:pr-0'),
-    title: cn('m-0 text-[38px] leading-[1.1] tracking-normal max-[720px]:text-[34px]'),
-    description: cn('mb-0 mt-4 text-xl leading-[1.45] text-[var(--docs-muted)]'),
-    tabs: cn('mt-[42px] flex gap-7 border-b border-[var(--docs-border)]'),
+    root: cn('mx-auto max-w-[832px] text-[var(--docs-fg)]'),
+    tabs: cn('flex gap-7 border-b border-[var(--docs-border)]'),
     tab: cn(
       'h-10 cursor-pointer border-0 border-b-2 border-transparent',
       'bg-transparent p-0 text-lg font-semibold text-[var(--docs-muted)]',
