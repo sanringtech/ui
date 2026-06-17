@@ -1,22 +1,15 @@
 import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import { cn } from '@sanring/ui';
-import { FooterComponent } from '../section/footer/footer.component';
-import { HeaderComponent } from '../section/header/header.component';
-
-const docsLayoutClasses = {
-  root: cn('min-h-dvh bg-[var(--docs-bg)] text-[var(--docs-fg)]'),
-  main: cn('min-h-[calc(100dvh-76px)]'),
-};
+import { HeaderComponent } from '../sections/header/header.component';
 
 @Component({
   selector: 'app-docs-layout',
-  imports: [RouterOutlet, HeaderComponent, FooterComponent],
+  imports: [RouterOutlet, HeaderComponent],
   template: `
-    <div [class]="classes.root">
+    <div class="min-h-dvh bg-[var(--docs-bg)] text-[var(--docs-fg)]">
       <app-header />
 
-      <main [class]="classes.main">
+      <main class="min-h-[calc(100dvh-76px)]">
         <router-outlet />
       </main>
 
@@ -24,6 +17,4 @@ const docsLayoutClasses = {
     </div>
   `,
 })
-export class DocsLayoutComponent {
-  protected readonly classes = docsLayoutClasses;
-}
+export class DocsLayoutComponent {}
