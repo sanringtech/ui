@@ -1,9 +1,10 @@
 import { Component, Input } from '@angular/core';
 import { LucideArrowLeft, LucideArrowRight, LucideChevronDown, LucideCopy } from '@lucide/angular';
+import { Button } from '@sanring/ui';
 
 @Component({
   selector: 'app-component-page-header',
-  imports: [LucideArrowLeft, LucideArrowRight, LucideChevronDown, LucideCopy],
+  imports: [Button, LucideArrowLeft, LucideArrowRight, LucideChevronDown, LucideCopy],
   template: `
     <header
       class="mb-10 flex items-start justify-between gap-6 border-b border-[var(--docs-border)] pb-7 max-[720px]:block"
@@ -20,30 +21,19 @@ import { LucideArrowLeft, LucideArrowRight, LucideChevronDown, LucideCopy } from
       </div>
 
       <div class="flex shrink-0 items-center gap-2 max-[720px]:mt-6">
-        <button
-          type="button"
-          class="inline-flex h-8 cursor-pointer items-center gap-2 rounded-lg border-0 bg-[var(--docs-elevated)] px-3 text-sm font-semibold text-[var(--docs-fg)]"
-        >
+        <sanring-button type="button" variant="secondary" size="sm">
           <svg class="size-4" lucideCopy></svg>
           <span>Copy Page</span>
           <svg class="size-4" lucideChevronDown></svg>
-        </button>
+        </sanring-button>
 
-        <button
-          type="button"
-          class="grid size-8 cursor-pointer place-items-center rounded-lg border-0 bg-[var(--docs-elevated)] text-[var(--docs-fg)]"
-          aria-label="Previous page"
-        >
+        <sanring-button type="button" variant="secondary" size="icon" ariaLabel="Previous page">
           <svg class="size-4" lucideArrowLeft></svg>
-        </button>
+        </sanring-button>
 
-        <button
-          type="button"
-          class="grid size-8 cursor-pointer place-items-center rounded-lg border-0 bg-[var(--docs-elevated)] text-[var(--docs-fg)]"
-          aria-label="Next page"
-        >
+        <sanring-button type="button" variant="secondary" size="icon" ariaLabel="Next page">
           <svg class="size-4" lucideArrowRight></svg>
-        </button>
+        </sanring-button>
       </div>
     </header>
   `,
