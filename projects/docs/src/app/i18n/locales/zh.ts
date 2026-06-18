@@ -72,6 +72,10 @@ export const zh: Record<TranslationKey, string> = {
   'button.demo.small': '下載',
   'button.demo.medium': '繼續',
   'button.demo.icon': '設定',
+  'button.examples.description': '常見的按鈕模式，適用於操作與精簡控制項。',
+  'button.examples.basic.description':
+    '外框按鈕適合次要操作；純圖示按鈕需要提供可存取標籤。',
+  'button.usage.description': '匯入 directive，並套用在原生 button 元素上。',
   'button.installation.description':
     '從 @sanring/ui 匯入 Button，並依照操作情境選擇合適的 variant 與 size。',
   'button.composition.description':

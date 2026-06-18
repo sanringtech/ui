@@ -1,97 +1,161 @@
 import { Component, inject } from '@angular/core';
-import { LucideArrowRight, LucideDownload, LucideSettings } from '@lucide/angular';
+import { LucideSettings } from '@lucide/angular';
 import { Button } from '@sanring/ui';
+import { ComponentPageCodeBlock } from '../../../blocks/component-page-code-block.component';
+import { ComponentPageComponent } from '../../../blocks/component-page.component';
+import { ComponentPageCodePreviewer } from '../../../blocks/component-page-code-previewer.component';
 import { ComponentPageHeaderComponent } from '../../../blocks/component-page-header.component';
+import { ComponentPageSectionComponent } from '../../../blocks/component-page-section.component';
+import {
+  ComponentPageDefinition,
+  ComponentPageSectionDefinition,
+} from '../../../blocks/component-page.types';
 import { I18nService } from '../../../i18n/i18n.service';
+
+const buttonPage = {
+  componentId: 'button',
+  titleKey: 'component.button',
+  descriptionKey: 'button.description',
+  sections: [
+    {
+      id: 'basic',
+      titleKey: 'toc.basic',
+      descriptionKey: 'button.examples.basic.description',
+      level: 2,
+    },
+    {
+      id: 'usage',
+      titleKey: 'toc.usage',
+      descriptionKey: 'button.usage.description',
+      level: 2,
+    },
+    {
+      id: 'installation',
+      titleKey: 'sidebar.installation',
+      descriptionKey: 'button.installation.description',
+      level: 2,
+    },
+    {
+      id: 'composition',
+      titleKey: 'toc.composition',
+      descriptionKey: 'button.composition.description',
+      level: 2,
+    },
+    {
+      id: 'example',
+      titleKey: 'toc.examples',
+      descriptionKey: 'button.examples.description',
+      level: 2,
+    },
+  ],
+} as const satisfies ComponentPageDefinition;
 
 @Component({
   selector: 'app-button-page',
-  imports: [Button, ComponentPageHeaderComponent, LucideArrowRight, LucideDownload, LucideSettings],
+  imports: [
+    Button,
+    ComponentPageCodeBlock,
+    ComponentPageComponent,
+    ComponentPageCodePreviewer,
+    ComponentPageHeaderComponent,
+    ComponentPageSectionComponent,
+    LucideSettings,
+  ],
   template: `
-    <article class="mx-auto max-w-[832px] text-[var(--docs-fg)]">
+    <app-component-page [sections]="page.sections">
       <app-component-page-header
-        componentId="button"
-        [title]="i18n.t('component.button')"
-        [description]="i18n.t('button.description')"
+        [componentId]="page.componentId"
+        [title]="i18n.t(page.titleKey)"
+        [description]="i18n.t(page.descriptionKey)"
       />
 
-      <section
-        class="mt-9 overflow-hidden rounded-lg border border-[var(--docs-border)] bg-[var(--docs-panel)]"
-        id="usage"
-      >
-        <div class="grid min-h-[390px] place-items-center p-11 max-[720px]:p-6">
-          <div class="grid gap-8">
+      <app-component-page-section [section]="section('basic')">
+        <app-component-page-code-previewer>
+          <div previewer class="grid gap-8">
             <div class="flex flex-wrap items-center justify-center gap-3">
-              <sanring-button type="button" variant="default">
-                {{ i18n.t('button.demo.default') }}
-              </sanring-button>
-              <sanring-button type="button" variant="secondary">
-                {{ i18n.t('button.demo.secondary') }}
-              </sanring-button>
-              <sanring-button type="button" variant="outline">
+              <button sanringBtn type="button" variant="outline">
                 {{ i18n.t('button.demo.outline') }}
-              </sanring-button>
-              <sanring-button type="button" variant="ghost">
-                {{ i18n.t('button.demo.ghost') }}
-              </sanring-button>
-            </div>
-
-            <div class="flex flex-wrap items-center justify-center gap-3">
-              <sanring-button type="button" variant="secondary" size="sm">
-                <svg class="size-4" lucideDownload></svg>
-                <span>{{ i18n.t('button.demo.small') }}</span>
-              </sanring-button>
-              <sanring-button type="button" variant="outline" size="md">
-                <span>{{ i18n.t('button.demo.medium') }}</span>
-                <svg class="size-4" lucideArrowRight></svg>
-              </sanring-button>
-              <sanring-button
+              </button>
+              <button
+                sanringBtn
                 type="button"
                 variant="outline"
                 size="icon"
-                [ariaLabel]="i18n.t('button.demo.icon')"
+                [attr.aria-label]="i18n.t('button.demo.icon')"
               >
                 <svg class="size-4" lucideSettings></svg>
-              </sanring-button>
+              </button>
             </div>
           </div>
+
+          <ng-container code>{{ codeExample() }}</ng-container>
+        </app-component-page-code-previewer>
+      </app-component-page-section>
+
+      <app-component-page-section [section]="section('installation')" />
+
+      <app-component-page-section [section]="section('usage')">
+        <div class="overflow-hidden rounded-lg border border-[var(--docs-border)]">
+          <app-component-page-code-block [code]="usageExample()" />
         </div>
+      </app-component-page-section>
 
-        <pre
-          class="m-0 overflow-auto border-t border-[var(--docs-border)] bg-[var(--docs-code)] px-10 py-7 text-[15px] leading-[1.7] text-[#d4d4d4]"
-        ><code>{{ codeExample }}</code></pre>
-      </section>
+      <app-component-page-section [section]="section('composition')" />
 
-      <section id="installation" class="pt-16">
-        <h2 class="mb-3.5 mt-0 text-[28px] tracking-normal">
-          {{ i18n.t('sidebar.installation') }}
-        </h2>
-        <p class="m-0 text-base leading-[1.7] text-[var(--docs-muted)]">
-          {{ i18n.t('button.installation.description') }}
-        </p>
-      </section>
-
-      <section id="composition" class="pt-16">
-        <h2 class="mb-3.5 mt-0 text-[28px] tracking-normal">
-          {{ i18n.t('toc.composition') }}
-        </h2>
-        <p class="m-0 text-base leading-[1.7] text-[var(--docs-muted)]">
-          {{ i18n.t('button.composition.description') }}
-        </p>
-      </section>
-    </article>
+      <app-component-page-section [section]="section('example')" />
+    </app-component-page>
   `,
 })
 export class ButtonPageComponent {
+  protected readonly page = buttonPage;
   protected readonly i18n = inject(I18nService);
 
-  protected readonly codeExample = `import { Button } from '@sanring/ui';
+  protected section(id: string): ComponentPageSectionDefinition {
+    const section = this.findSection(this.page.sections, id);
 
-<sanring-button type="button" variant="default">
-  Button
-</sanring-button>
+    if (!section) {
+      throw new Error(`Missing button docs section: ${id}`);
+    }
 
-<sanring-button type="button" variant="outline" size="icon" ariaLabel="Settings">
+    return section;
+  }
+
+  protected codeExample() {
+    return `import { Button } from '@sanring/ui';
+
+<button sanringBtn type="button" variant="outline">
+  ${this.i18n.t('button.demo.outline')}
+</button>
+
+<button sanringBtn type="button" variant="outline" size="icon" aria-label="Settings">
   <svg class="size-4" lucideSettings></svg>
-</sanring-button>`;
+</button>`;
+  }
+
+  protected usageExample() {
+    return `import { Button } from '@sanring/ui';
+
+<button sanringBtn type="button" variant="outline">
+  Button
+</button>`;
+  }
+
+  private findSection(
+    sections: readonly ComponentPageSectionDefinition[],
+    id: string,
+  ): ComponentPageSectionDefinition | null {
+    for (const section of sections) {
+      if (section.id === id) {
+        return section;
+      }
+
+      const childSection = this.findSection(section.children ?? [], id);
+
+      if (childSection) {
+        return childSection;
+      }
+    }
+
+    return null;
+  }
 }

@@ -76,6 +76,10 @@ export const en = {
   'button.demo.small': 'Download',
   'button.demo.medium': 'Continue',
   'button.demo.icon': 'Settings',
+  'button.examples.description': 'Common button patterns for actions and compact controls.',
+  'button.examples.basic.description':
+    'Use outline buttons for secondary actions and icon-only buttons with an accessible label.',
+  'button.usage.description': 'Import the directive and apply it to a native button element.',
   'button.installation.description':
     'Import Button from @sanring/ui and choose a variant and size that match the action.',
   'button.composition.description':
