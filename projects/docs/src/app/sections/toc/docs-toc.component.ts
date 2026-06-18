@@ -1,4 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
+import { I18nService } from '../../i18n/i18n.service';
+import { DocsTocItem, DocsTocService } from './docs-toc.service';
 
 @Component({
   selector: 'app-docs-toc',
@@ -6,60 +8,33 @@ import { Component } from '@angular/core';
     <aside
       class="sticky top-[76px] h-[calc(100dvh-76px)] overflow-auto bg-[var(--docs-bg)] pb-12 pl-2.5 pr-8 pt-12 max-[1180px]:hidden"
     >
-      <nav class="mb-11" aria-label="On this page">
+      <nav class="mb-11" [attr.aria-label]="i18n.t('toc.label')">
         <p class="mb-4 text-sm font-semibold leading-normal text-[var(--docs-muted)]">
-          On This Page
+          {{ i18n.t('toc.label') }}
         </p>
-        <a
-          class="my-3 block text-sm font-semibold text-[var(--docs-fg)] no-underline"
-          href="#installation"
-        >
-          Installation
-        </a>
-        <a class="my-3 block text-sm text-[var(--docs-muted)] no-underline" href="#usage">
-          Usage
-        </a>
-        <a class="my-3 block text-sm text-[var(--docs-muted)] no-underline" href="#composition">
-          Composition
-        </a>
-        <a class="my-3 block text-sm text-[var(--docs-muted)] no-underline" href="#examples">
-          Examples
-        </a>
-        <a class="my-3 block pl-[18px] text-sm text-[var(--docs-muted)] no-underline" href="#basic">
-          Basic
-        </a>
-        <a
-          class="my-3 block pl-[18px] text-sm text-[var(--docs-muted)] no-underline"
-          href="#multiple"
-        >
-          Multiple
-        </a>
-        <a
-          class="my-3 block pl-[18px] text-sm text-[var(--docs-muted)] no-underline"
-          href="#disabled"
-        >
-          Disabled
-        </a>
-        <a class="my-3 block text-sm text-[var(--docs-muted)] no-underline" href="#api-reference">
-          API Reference
-        </a>
+        @for (item of items(); track item.id) {
+          <a [class]="itemClass(item)" [href]="'#' + item.id">
+            {{ item.label }}
+          </a>
+        }
       </nav>
-
-      <div class="rounded-lg border border-[var(--docs-border)] bg-[var(--docs-elevated)] p-7">
-        <h2 class="mb-3 mt-0 text-lg leading-tight text-[var(--docs-fg)]">
-          Build your Sanring UI app
-        </h2>
-        <p class="m-0 leading-normal text-[var(--docs-muted)]">
-          Use the docs app to preview components, examples, and API decisions before publishing.
-        </p>
-        <button
-          type="button"
-          class="mt-[18px] h-9 cursor-pointer rounded-lg border border-[var(--docs-border-strong)] bg-transparent px-3.5 text-[var(--docs-fg)]"
-        >
-          Open Registry
-        </button>
-      </div>
     </aside>
   `,
 })
-export class DocsTocComponent {}
+export class DocsTocComponent {
+  protected readonly i18n = inject(I18nService);
+  private readonly toc = inject(DocsTocService);
+
+  protected items() {
+    return this.toc.items();
+  }
+
+  protected itemClass(item: DocsTocItem) {
+    return [
+      'my-3 block text-sm text-[var(--docs-muted)] no-underline',
+      item.level === 3 ? 'pl-[18px]' : '',
+    ]
+      .filter(Boolean)
+      .join(' ');
+  }
+}
