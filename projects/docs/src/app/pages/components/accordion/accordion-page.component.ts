@@ -1,6 +1,12 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@sanring/ui';
+import { ComponentPageComponent } from '../../../blocks/component-page.component';
+import { ComponentPageCodePreviewer } from '../../../blocks/component-page-code-previewer.component';
 import { ComponentPageHeaderComponent } from '../../../blocks/component-page-header.component';
+import { ComponentPageSectionComponent } from '../../../blocks/component-page-section.component';
+import { ComponentPageSectionDefinition } from '../../../blocks/component-page.types';
+import { I18nService } from '../../../i18n/i18n.service';
+import { accordionPage } from './accordion.docs';
 
 @Component({
   selector: 'app-accordion-page',
@@ -9,103 +15,84 @@ import { ComponentPageHeaderComponent } from '../../../blocks/component-page-hea
     AccordionItem,
     AccordionTrigger,
     AccordionContent,
+    ComponentPageComponent,
+    ComponentPageCodePreviewer,
     ComponentPageHeaderComponent,
+    ComponentPageSectionComponent,
   ],
   template: `
-    <article class="mx-auto max-w-[832px] text-[var(--docs-fg)]">
+    <app-component-page [sections]="page.sections">
       <app-component-page-header
-        title="Accordion"
-        description="A vertically stacked set of interactive headings that each reveal a section of content."
+        [componentId]="page.componentId"
+        [title]="i18n.t(page.titleKey)"
+        [description]="i18n.t(page.descriptionKey)"
       />
 
-      <div
-        class="flex gap-7 border-b border-[var(--docs-border)]"
-        role="tablist"
-        aria-label="Accordion variants"
-      >
-        <button
-          type="button"
-          class="h-10 cursor-pointer border-0 border-b-2 border-[var(--docs-fg)] bg-transparent p-0 text-lg font-semibold text-[var(--docs-fg)]"
-        >
-          Radix UI
-        </button>
-        <button
-          type="button"
-          class="h-10 cursor-pointer border-0 border-b-2 border-transparent bg-transparent p-0 text-lg font-semibold text-[var(--docs-muted)]"
-        >
-          Base UI
-        </button>
-      </div>
+      <app-component-page-section [section]="section('code')">
+        <app-component-page-code-previewer>
+          <div previewer class="w-[min(500px,100%)]">
+            <sanring-accordion class="w-[min(500px,100%)]">
+              <sanring-accordion-item>
+                <sanring-accordion-trigger>
+                  <span header>{{ i18n.t('accordion.demo.shipping.question') }}</span>
+                </sanring-accordion-trigger>
+                <sanring-accordion-content>
+                  <p class="mb-0 mt-0 px-4 pb-2 text-sm leading-relaxed text-[var(--docs-muted)]">
+                    {{ i18n.t('accordion.demo.shipping.answer') }}
+                  </p>
+                </sanring-accordion-content>
+              </sanring-accordion-item>
 
-      <section
-        class="mt-9 overflow-hidden rounded-lg border border-[var(--docs-border)] bg-[var(--docs-panel)]"
-        id="usage"
-      >
-        <div
-          class="grid min-h-[390px] place-items-center p-11 max-[720px]:min-h-80 max-[720px]:p-6"
-        >
-          <sanring-accordion class="w-[min(500px,100%)]">
-            <sanring-accordion-item>
-              <sanring-accordion-trigger>
-                <span header>What are your shipping options?</span>
-              </sanring-accordion-trigger>
-              <sanring-accordion-content>
-                <p class="mb-0 mt-0 px-4 pb-2 text-sm leading-relaxed text-[var(--docs-muted)]">
-                  We ship domestically and internationally with tracked delivery.
-                </p>
-              </sanring-accordion-content>
-            </sanring-accordion-item>
+              <sanring-accordion-item>
+                <sanring-accordion-trigger>
+                  <span header>{{ i18n.t('accordion.demo.returns.question') }}</span>
+                </sanring-accordion-trigger>
+                <sanring-accordion-content>
+                  <p class="mb-0 mt-0 px-4 pb-2 text-sm leading-relaxed text-[var(--docs-muted)]">
+                    {{ i18n.t('accordion.demo.returns.answer') }}
+                  </p>
+                </sanring-accordion-content>
+              </sanring-accordion-item>
 
-            <sanring-accordion-item>
-              <sanring-accordion-trigger>
-                <span header>What is your return policy?</span>
-              </sanring-accordion-trigger>
-              <sanring-accordion-content>
-                <p class="mb-0 mt-0 px-4 pb-2 text-sm leading-relaxed text-[var(--docs-muted)]">
-                  Returns are accepted within 30 days for unused items in original packaging.
-                </p>
-              </sanring-accordion-content>
-            </sanring-accordion-item>
+              <sanring-accordion-item>
+                <sanring-accordion-trigger>
+                  <span header>{{ i18n.t('accordion.demo.support.question') }}</span>
+                </sanring-accordion-trigger>
+                <sanring-accordion-content>
+                  <p class="mb-0 mt-0 px-4 pb-2 text-sm leading-relaxed text-[var(--docs-muted)]">
+                    {{ i18n.t('accordion.demo.support.answer') }}
+                  </p>
+                </sanring-accordion-content>
+              </sanring-accordion-item>
+            </sanring-accordion>
+          </div>
 
-            <sanring-accordion-item>
-              <sanring-accordion-trigger>
-                <span header>How can I contact customer support?</span>
-              </sanring-accordion-trigger>
-              <sanring-accordion-content>
-                <p class="mb-0 mt-0 px-4 pb-2 text-sm leading-relaxed text-[var(--docs-muted)]">
-                  Contact support through the dashboard or email us during business hours.
-                </p>
-              </sanring-accordion-content>
-            </sanring-accordion-item>
-          </sanring-accordion>
-        </div>
+          <ng-container code>{{ codeExample() }}</ng-container>
+        </app-component-page-code-previewer>
+      </app-component-page-section>
 
-        <pre
-          class="m-0 overflow-auto border-t border-[var(--docs-border)] bg-[var(--docs-code)] px-10 py-7 text-[15px] leading-[1.7] text-[#d4d4d4]"
-        ><code>{{ codeExample }}</code></pre>
-      </section>
+      <app-component-page-section [section]="section('installation')" />
 
-      <section id="installation" class="pt-16">
-        <h2 class="mb-3.5 mt-0 text-[28px] tracking-normal">Installation</h2>
-        <p class="m-0 text-base leading-[1.7] text-[var(--docs-muted)]">
-          Import the accordion primitives from
-          <code class="text-[var(--docs-fg)]">&#64;sanring/ui</code> and compose them in your
-          template.
-        </p>
-      </section>
-
-      <section id="composition" class="pt-16">
-        <h2 class="mb-3.5 mt-0 text-[28px] tracking-normal">Composition</h2>
-        <p class="m-0 text-base leading-[1.7] text-[var(--docs-muted)]">
-          The component is split into root, item, trigger, and content primitives so each part
-          remains reusable.
-        </p>
-      </section>
-    </article>
+      <app-component-page-section [section]="section('composition')" />
+    </app-component-page>
   `,
 })
 export class AccordionPageComponent {
-  protected readonly codeExample = `import {
+  protected readonly page = accordionPage;
+  protected readonly i18n = inject(I18nService);
+
+  protected section(id: string): ComponentPageSectionDefinition {
+    const section = this.page.sections.find((item) => item.id === id);
+
+    if (!section) {
+      throw new Error(`Missing accordion docs section: ${id}`);
+    }
+
+    return section;
+  }
+
+  protected codeExample() {
+    return `import {
   Accordion,
   AccordionContent,
   AccordionItem,
@@ -115,11 +102,12 @@ export class AccordionPageComponent {
 <sanring-accordion>
   <sanring-accordion-item>
     <sanring-accordion-trigger>
-      <span header>What are your shipping options?</span>
+      <span header>${this.i18n.t('accordion.demo.shipping.question')}</span>
     </sanring-accordion-trigger>
     <sanring-accordion-content>
-      We ship domestically and internationally.
+      ${this.i18n.t('accordion.demo.shipping.answer')}
     </sanring-accordion-content>
   </sanring-accordion-item>
 </sanring-accordion>`;
+  }
 }
