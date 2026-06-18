@@ -1,4 +1,5 @@
-import { Component, Input, inject } from '@angular/core';
+import { Component, DestroyRef, Input, inject, signal } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { CdkAccordionItem } from '@angular/cdk/accordion';
 import { cn } from '../../utils';
 
@@ -20,7 +21,9 @@ import { cn } from '../../utils';
   `,
 })
 export class AccordionItem {
-  protected item = inject(CdkAccordionItem);
+  private readonly item = inject(CdkAccordionItem);
+  private readonly destroyRef = inject(DestroyRef);
+  private readonly expandedState = signal(false);
   protected cn = cn;
 
   @Input() headerClass?: string;
@@ -28,4 +31,28 @@ export class AccordionItem {
   @Input() showDescription = false;
   // 2. 切換模式 (icon 或 text)
   @Input() triggerType: 'icon' | 'text' = 'icon';
+
+  get expanded() {
+    return this.expandedState();
+  }
+
+  get disabled() {
+    return this.item.disabled;
+  }
+
+  toggle() {
+    this.item.toggle();
+    this.syncState();
+  }
+
+  constructor() {
+    this.syncState();
+    this.item.expandedChange
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe(() => this.syncState());
+  }
+
+  private syncState() {
+    this.expandedState.set(this.item.expanded);
+  }
 }
