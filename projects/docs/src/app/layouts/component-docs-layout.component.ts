@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 
 @Component({
-  selector: 'app-docs-components-layout',
+  selector: 'app-component-docs-layout',
   imports: [RouterOutlet],
   template: `
     <section class="mx-auto min-w-0 max-w-[832px]">
@@ -12,4 +12,4 @@ import { RouterOutlet } from '@angular/router';
     </section>
   `,
 })
-export class DocsComponentsLayoutComponent {}
+export class ComponentDocsLayoutComponent {}

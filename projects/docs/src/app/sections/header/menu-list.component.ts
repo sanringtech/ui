@@ -1,20 +1,22 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { RouterLink, RouterLinkActive } from '@angular/router';
-import { menuItems } from '../../app.routes';
+import { menuItems, type MenuItem } from '../../app.routes';
+import { I18nService } from '../../i18n/i18n.service';
 
 @Component({
   selector: 'app-menu-list',
   imports: [RouterLink, RouterLinkActive],
   template: `
     <nav class="flex min-w-0 items-center" aria-label="Primary">
-      @for (item of items; track item.path) {
+      @for (item of items; track item.labelKey) {
         <a
-          class="whitespace-nowrap rounded-[5px] px-4 py-1.5 text-[15px] font-medium text-[var(--docs-fg)] no-underline transition-colors hover:bg-[var(--docs-elevated)] hover:text-[var(--docs-fg)] max-[980px]:hidden"
+          class="inline-flex justify-center whitespace-nowrap rounded-[5px] px-4 py-1.5 text-center text-[15px] font-medium text-[var(--docs-fg)] no-underline transition-colors hover:bg-[var(--docs-elevated)] hover:text-[var(--docs-fg)] max-[980px]:hidden"
           [routerLink]="item.path"
           routerLinkActive="!block"
           [routerLinkActiveOptions]="{ exact: item.exact }"
+          [style.min-width.px]="itemMinWidth(item)"
         >
-          {{ item.name }}
+          {{ i18n.t(item.labelKey) }}
         </a>
       }
     </nav>
@@ -22,4 +24,19 @@ import { menuItems } from '../../app.routes';
 })
 export class MenuListComponent {
   protected readonly items = menuItems;
+  protected readonly i18n = inject(I18nService);
+
+  private readonly itemMinWidths: Partial<Record<MenuItem['labelKey'], number>> = {
+    'nav.home': 72,
+    'nav.docs': 64,
+    'nav.components': 120,
+    'nav.blocks': 84,
+    'nav.charts': 84,
+    'nav.directory': 108,
+    'nav.create': 84,
+  };
+
+  protected itemMinWidth(item: MenuItem) {
+    return this.itemMinWidths[item.labelKey] ?? 84;
+  }
 }

@@ -4,7 +4,7 @@ import { DocsSidebarComponent } from '../sections/sidebar/docs-sidebar.component
 import { DocsTocComponent } from '../sections/toc/docs-toc.component';
 
 @Component({
-  selector: 'app-docs-article-layout',
+  selector: 'app-docs-article-shell',
   imports: [RouterOutlet, DocsSidebarComponent, DocsTocComponent],
   template: `
     <section
@@ -22,4 +22,4 @@ import { DocsTocComponent } from '../sections/toc/docs-toc.component';
     </section>
   `,
 })
-export class DocsArticleLayoutComponent {}
+export class DocsArticleShellComponent {}

@@ -1,12 +1,14 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { DocsSectionComponent } from '../../blocks/docs-section.component';
-import { docsSectionItems } from '../../app.routes';
+import { docsSectionItems } from '../../docs-navigation';
+import { I18nService } from '../../i18n/i18n.service';
 
 @Component({
   selector: 'app-docs-sections-list',
   imports: [DocsSectionComponent],
-  template: ` <app-docs-section title="Sections" [items]="items" /> `,
+  template: ` <app-docs-section [title]="i18n.t('sidebar.sections')" [items]="items" /> `,
 })
 export class DocsSectionsListComponent {
   protected readonly items = docsSectionItems;
+  protected readonly i18n = inject(I18nService);
 }

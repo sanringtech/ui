@@ -3,7 +3,7 @@ import { RouterOutlet } from '@angular/router';
 import { HeaderComponent } from '../sections/header/header.component';
 
 @Component({
-  selector: 'app-docs-layout',
+  selector: 'app-docs-shell',
   imports: [RouterOutlet, HeaderComponent],
   template: `
     <div class="min-h-dvh bg-[var(--docs-bg)] text-[var(--docs-fg)]">
@@ -17,4 +17,4 @@ import { HeaderComponent } from '../sections/header/header.component';
     </div>
   `,
 })
-export class DocsLayoutComponent {}
+export class DocsShellComponent {}

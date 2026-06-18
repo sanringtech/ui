@@ -1,59 +1,28 @@
 import { Routes } from '@angular/router';
+import { TranslationKey } from './i18n/translations';
+export { docsComponentItems, docsSectionItems, type DocsSidebarItem } from './docs-navigation';
 
 export interface MenuItem {
-  name: string;
+  labelKey: TranslationKey;
   path: string;
   exact: boolean;
 }
 
-export interface DocsSidebarItem {
-  name: string;
-  path?: string;
-  active?: boolean;
-  badge?: boolean;
-  disabled?: boolean;
-}
-
 export const menuItems: MenuItem[] = [
-  { name: 'Home', path: '/', exact: true },
-  { name: 'Docs', path: '/', exact: true },
-  { name: 'Components', path: '/components/accordion', exact: false },
-  { name: 'Blocks', path: '/', exact: true },
-  { name: 'Charts', path: '/', exact: true },
-  { name: 'Directory', path: '/', exact: true },
-  { name: 'Create', path: '/', exact: true },
-];
-
-export const docsSectionItems: DocsSidebarItem[] = [
-  { name: 'Introduction', path: '/' },
-  { name: 'Components', path: '/components/accordion', active: true },
-  { name: 'Installation', path: '/' },
-  { name: 'Theming', path: '/' },
-  { name: 'CLI', path: '/' },
-  { name: 'RTL', path: '/' },
-  { name: 'Skills', path: '/' },
-  { name: 'MCP Server', path: '/' },
-  { name: 'Registry', path: '/' },
-  { name: 'Forms', path: '/' },
-  { name: 'Changelog', path: '/', badge: true },
-];
-
-export const docsComponentItems: DocsSidebarItem[] = [
-  { name: 'Accordion', path: '/components/accordion', active: true },
-  { name: 'Alert', path: '/' },
-  { name: 'Alert Dialog', path: '/' },
-  { name: 'Aspect Ratio', path: '/' },
-  { name: 'Avatar', path: '/' },
-  { name: 'Badge', path: '/' },
-  { name: 'Breadcrumb', path: '/' },
-  { name: 'Button', disabled: true },
+  { labelKey: 'nav.home', path: '/', exact: true },
+  { labelKey: 'nav.docs', path: '/', exact: true },
+  { labelKey: 'nav.components', path: '/components/accordion', exact: false },
+  { labelKey: 'nav.blocks', path: '/', exact: true },
+  { labelKey: 'nav.charts', path: '/', exact: true },
+  { labelKey: 'nav.directory', path: '/', exact: true },
+  { labelKey: 'nav.create', path: '/', exact: true },
 ];
 
 export const routes: Routes = [
   {
     path: '',
     loadComponent: () =>
-      import('./layouts/docs-layout.component').then((m) => m.DocsLayoutComponent),
+      import('./layouts/docs-shell.component').then((m) => m.DocsShellComponent),
     children: [
       {
         path: '',
@@ -63,15 +32,15 @@ export const routes: Routes = [
       {
         path: '',
         loadComponent: () =>
-          import('./layouts/docs-article-layout.component').then(
-            (m) => m.DocsArticleLayoutComponent,
+          import('./layouts/docs-article-shell.component').then(
+            (m) => m.DocsArticleShellComponent,
           ),
         children: [
           {
             path: 'components',
             loadComponent: () =>
-              import('./layouts/docs-components-layout.component').then(
-                (m) => m.DocsComponentsLayoutComponent,
+              import('./layouts/component-docs-layout.component').then(
+                (m) => m.ComponentDocsLayoutComponent,
               ),
             children: [
               {
@@ -84,6 +53,20 @@ export const routes: Routes = [
                 loadComponent: () =>
                   import('./pages/components/accordion/accordion-page.component').then(
                     (m) => m.AccordionPageComponent,
+                  ),
+              },
+              {
+                path: 'button',
+                loadComponent: () =>
+                  import('./pages/components/button/button-page.component').then(
+                    (m) => m.ButtonPageComponent,
+                  ),
+              },
+              {
+                path: 'divider',
+                loadComponent: () =>
+                  import('./pages/components/divider/divider-page.component').then(
+                    (m) => m.DividerPageComponent,
                   ),
               },
             ],

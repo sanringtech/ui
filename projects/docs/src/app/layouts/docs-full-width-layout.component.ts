@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 
 @Component({
-  selector: 'app-docs-full-layout',
+  selector: 'app-docs-full-width-layout',
   imports: [RouterOutlet],
   template: `
     <section
@@ -12,4 +12,4 @@ import { RouterOutlet } from '@angular/router';
     </section>
   `,
 })
-export class DocsFullLayoutComponent {}
+export class DocsFullWidthLayoutComponent {}
