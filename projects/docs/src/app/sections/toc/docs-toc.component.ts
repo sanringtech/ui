@@ -30,9 +30,15 @@ export class DocsTocComponent {
   }
 
   protected itemClass(item: DocsTocItem) {
+    const indentClasses: Record<2 | 3 | 4, string> = {
+      2: '',
+      3: 'pl-[18px]',
+      4: 'pl-9',
+    };
+
     return [
       'my-3 block text-sm text-[var(--docs-muted)] no-underline',
-      item.level === 3 ? 'pl-[18px]' : '',
+      indentClasses[item.level ?? 2],
     ]
       .filter(Boolean)
       .join(' ');

@@ -5,8 +5,9 @@ export interface ComponentPageSectionDefinition {
   id: string;
   titleKey: TranslationKey;
   descriptionKey?: TranslationKey;
-  level?: 2 | 3;
+  level?: 2 | 3 | 4;
   hideFromToc?: boolean;
+  children?: readonly ComponentPageSectionDefinition[];
 }
 
 export interface ComponentPageDefinition {

@@ -6,17 +6,26 @@ import { ComponentPageSectionDefinition } from './component-page.types';
   selector: 'app-component-page-section',
   standalone: true,
   template: `
-    <section [id]="sectionId" class="pt-16">
+    <section [id]="sectionId" [class]="sectionClass">
       <div class="mb-3.5">
-        @if (level === 3) {
-          <h3 class="m-0 text-[22px] tracking-normal">
-            {{ i18n.t(section.titleKey) }}
-          </h3>
-        } @else {
-          <h2 class="m-0 text-[28px] tracking-normal">
-            {{ i18n.t(section.titleKey) }}
-          </h2>
+        @switch (level) {
+          @case (4) {
+            <h4 [class]="headingClass">
+              {{ i18n.t(section.titleKey) }}
+            </h4>
+          }
+          @case (3) {
+            <h3 [class]="headingClass">
+              {{ i18n.t(section.titleKey) }}
+            </h3>
+          }
+          @default {
+            <h2 [class]="headingClass">
+              {{ i18n.t(section.titleKey) }}
+            </h2>
+          }
         }
+
         @if (section.descriptionKey) {
           <p class="mb-0 mt-3 text-base leading-[1.7] text-[var(--docs-muted)]">
             {{ i18n.t(section.descriptionKey) }}
@@ -40,5 +49,19 @@ export class ComponentPageSectionComponent {
 
   protected get level() {
     return this.section.level ?? 2;
+  }
+
+  protected get sectionClass() {
+    return this.level === 2 ? 'pt-16' : 'pt-10';
+  }
+
+  protected get headingClass() {
+    const headingClasses: Record<2 | 3 | 4, string> = {
+      2: 'm-0 text-[28px] tracking-normal',
+      3: 'm-0 text-[22px] tracking-normal',
+      4: 'm-0 text-lg font-semibold tracking-normal',
+    };
+
+    return headingClasses[this.level];
   }
 }

@@ -3,7 +3,7 @@ import { Injectable, signal } from '@angular/core';
 export interface DocsTocItem {
   id: string;
   label: string;
-  level?: 2 | 3;
+  level?: 2 | 3 | 4;
 }
 
 @Injectable({ providedIn: 'root' })
