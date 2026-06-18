@@ -1,10 +1,12 @@
 import { Component, inject } from '@angular/core';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@sanring/ui';
-import { ComponentPageComponent } from '../../../blocks/component-page.component';
-import { ComponentPageCodePreviewer } from '../../../blocks/component-page-code-previewer.component';
-import { ComponentPageHeaderComponent } from '../../../blocks/component-page-header.component';
-import { ComponentPageSectionComponent } from '../../../blocks/component-page-section.component';
-import { ComponentPageSectionDefinition } from '../../../blocks/component-page.types';
+import { ComponentPageSectionDefinition } from '../../../docs-schema/component-page.types';
+import {
+  ComponentPageCodePreviewer,
+  ComponentPageComponent,
+  ComponentPageHeaderComponent,
+  ComponentPageSectionComponent,
+} from '../../../layouts/component-page';
 import { I18nService } from '../../../i18n/i18n.service';
 import { accordionPage } from './accordion.docs';
 

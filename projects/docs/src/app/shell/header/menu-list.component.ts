@@ -1,7 +1,7 @@
 import { Component, inject } from '@angular/core';
 import { RouterLink, RouterLinkActive } from '@angular/router';
-import { menuItems, type MenuItem } from '../../app.routes';
 import { I18nService } from '../../i18n/i18n.service';
+import { menuItems, type MenuItem } from '../../navigation/menu-navigation';
 
 @Component({
   selector: 'app-menu-list',

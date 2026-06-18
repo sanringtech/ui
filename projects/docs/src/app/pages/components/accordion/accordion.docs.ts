@@ -1,4 +1,4 @@
-import { ComponentPageDefinition } from '../../../blocks/component-page.types';
+import { ComponentPageDefinition } from '../../../docs-schema/component-page.types';
 
 export const accordionPage = {
   componentId: 'accordion',

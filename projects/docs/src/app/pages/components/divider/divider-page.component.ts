@@ -1,7 +1,7 @@
 import { Component, inject } from '@angular/core';
 import { Divider } from '@sanring/ui';
-import { ComponentPageHeaderComponent } from '../../../blocks/component-page-header.component';
 import { I18nService } from '../../../i18n/i18n.service';
+import { ComponentPageHeaderComponent } from '../../../layouts/component-page';
 
 @Component({
   selector: 'app-divider-page',

@@ -1,7 +1,7 @@
 import { Component, inject, Input } from '@angular/core';
 import { RouterLink, RouterLinkActive } from '@angular/router';
-import { DocsSidebarItem } from '../docs-navigation';
-import { I18nService } from '../i18n/i18n.service';
+import { DocsSidebarItem } from '../../navigation/docs-navigation';
+import { I18nService } from '../../i18n/i18n.service';
 
 @Component({
   selector: 'app-docs-section',

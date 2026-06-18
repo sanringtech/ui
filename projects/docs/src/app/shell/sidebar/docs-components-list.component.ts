@@ -1,7 +1,7 @@
 import { Component, inject } from '@angular/core';
-import { DocsSectionComponent } from '../../blocks/docs-section.component';
-import { docsComponentItems } from '../../docs-navigation';
 import { I18nService } from '../../i18n/i18n.service';
+import { docsComponentItems } from '../../navigation/docs-navigation';
+import { DocsSectionComponent } from './docs-section.component';
 
 @Component({
   selector: 'app-docs-components-list',

@@ -1,16 +1,18 @@
 import { Component, inject } from '@angular/core';
 import { LucideSettings } from '@lucide/angular';
 import { Button } from '@sanring/ui';
-import { ComponentPageCodeBlock } from '../../../blocks/component-page-code-block.component';
-import { ComponentPageComponent } from '../../../blocks/component-page.component';
-import { ComponentPageCodePreviewer } from '../../../blocks/component-page-code-previewer.component';
-import { ComponentPageHeaderComponent } from '../../../blocks/component-page-header.component';
-import { ComponentPageSectionComponent } from '../../../blocks/component-page-section.component';
 import {
   ComponentPageDefinition,
   ComponentPageSectionDefinition,
-} from '../../../blocks/component-page.types';
+} from '../../../docs-schema/component-page.types';
 import { I18nService } from '../../../i18n/i18n.service';
+import {
+  ComponentPageCodeBlock,
+  ComponentPageCodePreviewer,
+  ComponentPageComponent,
+  ComponentPageHeaderComponent,
+  ComponentPageSectionComponent,
+} from '../../../layouts/component-page';
 
 const buttonPage = {
   componentId: 'button',

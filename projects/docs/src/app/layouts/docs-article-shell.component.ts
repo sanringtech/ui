@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import { DocsSidebarComponent } from '../sections/sidebar/docs-sidebar.component';
-import { DocsTocComponent } from '../sections/toc/docs-toc.component';
+import { DocsSidebarComponent } from '../shell/sidebar/docs-sidebar.component';
+import { DocsTocComponent } from '../shell/toc/docs-toc.component';
 
 @Component({
   selector: 'app-docs-article-shell',

@@ -11,7 +11,7 @@ import {
 } from '@angular/core';
 import { LucideClipboard } from '@lucide/angular';
 
-import { I18nService } from '../i18n/i18n.service';
+import { I18nService } from '../../i18n/i18n.service';
 
 export interface ComponentPageCodeCopyEvent {
   code: string;

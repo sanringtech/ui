@@ -1,4 +1,4 @@
-import { DocsComponentId } from '../docs-navigation';
+import { DocsComponentId } from '../navigation/docs-navigation';
 import { TranslationKey } from '../i18n/translations';
 
 export interface ComponentPageSectionDefinition {

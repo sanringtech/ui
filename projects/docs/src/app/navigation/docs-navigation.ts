@@ -1,4 +1,4 @@
-import { TranslationKey } from './i18n/translations';
+import { TranslationKey } from '../i18n/translations';
 
 export interface DocsSidebarItem {
   labelKey: TranslationKey;

@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import { HeaderComponent } from '../sections/header/header.component';
+import { HeaderComponent } from '../shell/header/header.component';
 
 @Component({
   selector: 'app-docs-shell',

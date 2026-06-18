@@ -1,6 +1,6 @@
 import { Component, inject, Input } from '@angular/core';
-import { I18nService } from '../i18n/i18n.service';
-import { ComponentPageSectionDefinition } from './component-page.types';
+import { ComponentPageSectionDefinition } from '../../docs-schema/component-page.types';
+import { I18nService } from '../../i18n/i18n.service';
 
 @Component({
   selector: 'app-component-page-section',
