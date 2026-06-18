@@ -48,9 +48,9 @@ import { HeaderActionButtonComponent } from './header-action-button.component';
           <span>{{ i18n.localeLabels[i18n.locale()].shortLabel }}</span>
         </app-header-action-button>
 
-        <sanring-button class="flex-none" type="button" variant="default" size="toolbar">
+        <button sanringBtn class="flex-none" type="button" variant="default" size="toolbar">
           {{ i18n.t('actions.new') }}
-        </sanring-button>
+        </button>
       </div>
     </div>
   `,

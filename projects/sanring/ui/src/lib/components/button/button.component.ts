@@ -1,27 +1,18 @@
-import { Component, Input } from '@angular/core';
+import { Directive, Input } from '@angular/core';
 import { cn } from '../../utils';
-import type { ButtonSize, ButtonType, ButtonVariant } from './button.types';
+import type { ButtonSize, ButtonVariant } from './button.types';
 
-@Component({
-  selector: 'sanring-button',
+@Directive({
+  selector: 'button[sanringBtn], a[sanringBtn]',
   standalone: true,
-  template: `
-    <button
-      [attr.type]="type"
-      [attr.aria-label]="ariaLabel"
-      [disabled]="disabled"
-      [class]="buttonClass"
-    >
-      <ng-content />
-    </button>
-  `,
+  host: {
+    '[class]': 'buttonClass',
+  },
 })
 export class Button {
-  @Input() type: ButtonType = 'button';
+  @Input() class = '';
   @Input() variant: ButtonVariant = 'default';
   @Input() size: ButtonSize = 'md';
-  @Input() disabled = false;
-  @Input() ariaLabel: string | null = null;
 
   protected get buttonClass() {
     return cn(
@@ -30,6 +21,7 @@ export class Button {
       'focus-visible:ring-[var(--docs-border-strong)] disabled:pointer-events-none disabled:opacity-50',
       this.variantClasses,
       this.sizeClasses,
+      this.class,
     );
   }
 
@@ -43,7 +35,6 @@ export class Button {
       ghost:
         'border-transparent bg-transparent text-[var(--docs-fg)] hover:bg-[var(--docs-elevated)]',
     };
-
     return variants[this.variant];
   }
 
@@ -55,7 +46,6 @@ export class Button {
       toolbar: 'h-[38px] min-w-[76px] px-3.5 text-sm',
       toolbarIcon: 'size-[38px] p-0',
     };
-
     return sizes[this.size];
   }
 }

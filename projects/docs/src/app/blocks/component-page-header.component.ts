@@ -28,33 +28,35 @@ import { I18nService } from '../i18n/i18n.service';
       </div>
 
       <div class="flex shrink-0 items-center gap-2 max-[720px]:mt-6">
-        <sanring-button type="button" variant="secondary" size="sm">
+        <button sanringBtn type="button" variant="secondary" size="sm">
           <svg class="size-4" lucideCopy></svg>
           <span>{{ i18n.t('actions.copyPage') }}</span>
           <svg class="size-4" lucideChevronDown></svg>
-        </sanring-button>
+        </button>
 
-        <sanring-button
+        <button
+          sanringBtn
           type="button"
           variant="secondary"
           size="icon"
-          [ariaLabel]="i18n.t('actions.previousPage')"
+          [attr.aria-label]="i18n.t('actions.previousPage')"
           [disabled]="!previousComponent"
           (click)="goToComponent(previousComponent)"
         >
           <svg class="size-4" lucideArrowLeft></svg>
-        </sanring-button>
+        </button>
 
-        <sanring-button
+        <button
+          sanringBtn
           type="button"
           variant="secondary"
           size="icon"
-          [ariaLabel]="i18n.t('actions.nextPage')"
+          [attr.aria-label]="i18n.t('actions.nextPage')"
           [disabled]="!nextComponent"
           (click)="goToComponent(nextComponent)"
         >
           <svg class="size-4" lucideArrowRight></svg>
-        </sanring-button>
+        </button>
       </div>
     </header>
   `,

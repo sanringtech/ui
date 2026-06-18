@@ -5,16 +5,17 @@ import { Button, ButtonSize } from '@sanring/ui';
   selector: 'app-header-action-button',
   imports: [Button],
   template: `
-    <sanring-button
+    <button
+      sanringBtn
       class="flex-none"
       type="button"
       variant="outline"
       [size]="size"
-      [ariaLabel]="ariaLabel"
+      [attr.aria-label]="ariaLabel"
       (click)="clicked.emit()"
     >
       <ng-content />
-    </sanring-button>
+    </button>
   `,
 })
 export class HeaderActionButtonComponent {
