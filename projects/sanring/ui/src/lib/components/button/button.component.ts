@@ -34,6 +34,9 @@ export class Button {
         'border-[var(--docs-border)] bg-transparent text-[var(--docs-fg)] hover:bg-[var(--docs-elevated)]',
       ghost:
         'border-transparent bg-transparent text-[var(--docs-fg)] hover:bg-[var(--docs-elevated)]',
+      destructive:
+        'border-transparent bg-[#dc2626] text-white hover:bg-[#b91c1c] focus-visible:ring-[#ef4444]',
+      link: 'border-transparent bg-transparent px-0 text-[var(--docs-fg)] underline-offset-4 hover:underline',
     };
     return variants[this.variant];
   }
