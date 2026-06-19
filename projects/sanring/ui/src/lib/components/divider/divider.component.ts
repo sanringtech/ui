@@ -1,6 +1,5 @@
 import { Component, Input } from '@angular/core';
-
-export type DividerInset = 'none' | 'start' | 'end' | 'both';
+import { DividerInset } from './divider.type';
 
 @Component({
   selector: 'sanring-divider',
