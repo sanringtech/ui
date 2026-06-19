@@ -10,3 +10,4 @@ export * from './lib/components/accordion/accordion-trigger.component';
 export * from './lib/components/accordion/accordion-content.component';
 export * from './lib/components/button';
 export * from './lib/components/divider/divider.component';
+export * from './lib/components/link/link.component';
