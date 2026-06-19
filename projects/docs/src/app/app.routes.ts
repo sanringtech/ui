@@ -27,8 +27,10 @@ export const routes: Routes = [
             children: [
               {
                 path: '',
-                pathMatch: 'full',
-                redirectTo: 'accordion',
+                loadComponent: () =>
+                  import('./pages/components/components-page.component').then(
+                    (m) => m.ComponentsPageComponent,
+                  ),
               },
               {
                 path: 'accordion',

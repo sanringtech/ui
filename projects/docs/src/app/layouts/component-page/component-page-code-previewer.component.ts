@@ -1,7 +1,8 @@
-import { Component, EventEmitter, Output } from '@angular/core';
+import { Component, EventEmitter, input, Output } from '@angular/core';
 import {
   ComponentPageCodeBlock,
   ComponentPageCodeCopyEvent,
+  ComponentPageCodeLanguage,
 } from './component-page-code-block.component';
 
 @Component({
@@ -17,13 +18,18 @@ import {
       </div>
 
       <div class="border-t border-[var(--docs-border)]">
-        <app-component-page-code-block (codeCopy)="codeCopy.emit($event)">
-          <ng-content code select="[code]" />
-        </app-component-page-code-block>
+        <app-component-page-code-block
+          [code]="code()"
+          [language]="language()"
+          (codeCopy)="codeCopy.emit($event)"
+        />
       </div>
     </div>
   `,
 })
 export class ComponentPageCodePreviewer {
+  readonly code = input('');
+  readonly language = input<ComponentPageCodeLanguage>('angular-html');
+
   @Output() codeCopy = new EventEmitter<ComponentPageCodeCopyEvent>();
 }

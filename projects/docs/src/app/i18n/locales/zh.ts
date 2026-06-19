@@ -38,6 +38,7 @@ export const zh: Record<TranslationKey, string> = {
   'component.breadcrumb': '麵包屑',
   'component.button': '按鈕',
   'component.divider': '分隔線',
+  'components.description': '這裡列出目前元件庫可用的所有元件，後續會隨系統成長持續補上更多元件。',
   'toc.label': '本頁內容',
   'toc.usage': '使用方式',
   'toc.code': '程式碼',
@@ -72,6 +73,11 @@ export const zh: Record<TranslationKey, string> = {
   'button.demo.small': '下載',
   'button.demo.medium': '繼續',
   'button.demo.icon': '設定',
+  'button.demo.size': '尺寸',
+  'button.demo.destructive': '危險操作',
+  'button.demo.link': '連結',
+  'button.demo.withIcon': '包含圖示',
+  'button.demo.rounded': '圓角',
   'button.examples.description': '常見的按鈕模式，適用於操作與精簡控制項。',
   'button.examples.basic.description':
     '外框按鈕適合次要操作；純圖示按鈕需要提供可存取標籤。',
@@ -88,6 +94,9 @@ export const zh: Record<TranslationKey, string> = {
   'divider.demo.horizontal': '水平',
   'divider.demo.inset': '縮排',
   'divider.demo.vertical': '垂直',
+  'divider.examples.description': '常見的分隔線模式，適合用來區隔相關內容。',
+  'divider.examples.basic.description': '使用分隔線區隔堆疊內容、對齊列表列與 inline 群組。',
+  'divider.usage.description': '匯入元件，並將它放在相關內容之間。',
   'divider.installation.description':
     '從 @sanring/ui 匯入 Divider，並放在相關區塊或控制項之間。',
   'divider.composition.description':

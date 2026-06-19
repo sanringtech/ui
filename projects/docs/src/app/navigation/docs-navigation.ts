@@ -26,7 +26,7 @@ export interface DocsComponentNavItem extends DocsSidebarItem {
 
 export const docsSectionItems: DocsSidebarItem[] = [
   { labelKey: 'sidebar.introduction', path: '/' },
-  { labelKey: 'nav.components', path: '/components/accordion', active: true },
+  { labelKey: 'nav.components', path: '/components', active: true },
   { labelKey: 'sidebar.installation', path: '/' },
   { labelKey: 'sidebar.theming', path: '/' },
   { labelKey: 'sidebar.cli', path: '/' },

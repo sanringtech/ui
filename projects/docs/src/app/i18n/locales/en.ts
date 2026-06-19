@@ -36,6 +36,8 @@ export const en = {
   'component.breadcrumb': 'Breadcrumb',
   'component.button': 'Button',
   'component.divider': 'Divider',
+  'components.description':
+    'Here you can find all components currently available in the library. More components will be added as the system grows.',
   'toc.label': 'On this page',
   'toc.usage': 'Usage',
   'toc.code': 'Code',
@@ -76,6 +78,11 @@ export const en = {
   'button.demo.small': 'Download',
   'button.demo.medium': 'Continue',
   'button.demo.icon': 'Settings',
+  'button.demo.size': 'Size',
+  'button.demo.destructive': 'Destructive',
+  'button.demo.link': 'Link',
+  'button.demo.withIcon': 'With Icon',
+  'button.demo.rounded': 'Rounded',
   'button.examples.description': 'Common button patterns for actions and compact controls.',
   'button.examples.basic.description':
     'Use outline buttons for secondary actions and icon-only buttons with an accessible label.',
@@ -92,6 +99,10 @@ export const en = {
   'divider.demo.horizontal': 'Horizontal',
   'divider.demo.inset': 'Inset',
   'divider.demo.vertical': 'Vertical',
+  'divider.examples.description': 'Common divider patterns for separating related content.',
+  'divider.examples.basic.description':
+    'Use dividers to separate stacked content, aligned list rows, and inline groups.',
+  'divider.usage.description': 'Import the component and place it between related content.',
   'divider.installation.description':
     'Import Divider from @sanring/ui and place it between related sections or controls.',
   'divider.composition.description':

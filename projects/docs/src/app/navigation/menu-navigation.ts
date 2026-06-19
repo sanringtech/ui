@@ -9,7 +9,7 @@ export interface MenuItem {
 export const menuItems: MenuItem[] = [
   { labelKey: 'nav.home', path: '/', exact: true },
   { labelKey: 'nav.docs', path: '/', exact: true },
-  { labelKey: 'nav.components', path: '/components/accordion', exact: false },
+  { labelKey: 'nav.components', path: '/components', exact: false },
   { labelKey: 'nav.blocks', path: '/', exact: true },
   { labelKey: 'nav.charts', path: '/', exact: true },
   { labelKey: 'nav.directory', path: '/', exact: true },

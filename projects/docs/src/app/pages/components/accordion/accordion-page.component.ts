@@ -1,6 +1,6 @@
 import { Component, inject } from '@angular/core';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@sanring/ui';
-import { ComponentPageSectionDefinition } from '../../../docs-schema/component-page.types';
+import { getComponentPageSection } from '../../../docs-schema/component-page.utils';
 import {
   ComponentPageCodePreviewer,
   ComponentPageComponent,
@@ -31,7 +31,7 @@ import { accordionPage } from './accordion.docs';
       />
 
       <app-component-page-section [section]="section('code')">
-        <app-component-page-code-previewer>
+        <app-component-page-code-previewer [code]="codeExample()" language="angular-html">
           <div previewer class="w-[min(500px,100%)]">
             <sanring-accordion class="w-[min(500px,100%)]">
               <sanring-accordion-item>
@@ -69,7 +69,6 @@ import { accordionPage } from './accordion.docs';
             </sanring-accordion>
           </div>
 
-          <ng-container code>{{ codeExample() }}</ng-container>
         </app-component-page-code-previewer>
       </app-component-page-section>
 
@@ -83,14 +82,8 @@ export class AccordionPageComponent {
   protected readonly page = accordionPage;
   protected readonly i18n = inject(I18nService);
 
-  protected section(id: string): ComponentPageSectionDefinition {
-    const section = this.page.sections.find((item) => item.id === id);
-
-    if (!section) {
-      throw new Error(`Missing accordion docs section: ${id}`);
-    }
-
-    return section;
+  protected section(id: string) {
+    return getComponentPageSection(this.page, id);
   }
 
   protected codeExample() {
