@@ -53,6 +53,13 @@ export const routes: Routes = [
                     (m) => m.DividerPageComponent,
                   ),
               },
+              {
+                path: 'link',
+                loadComponent: () =>
+                  import('./pages/components/link/link-page.component').then(
+                    (m) => m.LinkPageComponent,
+                  ),
+              },
             ],
           },
         ],

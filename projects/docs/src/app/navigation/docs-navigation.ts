@@ -17,7 +17,8 @@ export type DocsComponentId =
   | 'badge'
   | 'breadcrumb'
   | 'button'
-  | 'divider';
+  | 'divider'
+  | 'link';
 
 export interface DocsComponentNavItem extends DocsSidebarItem {
   id: DocsComponentId;
@@ -97,6 +98,12 @@ export const docsComponentItems: DocsComponentNavItem[] = [
     id: 'divider',
     labelKey: 'component.divider',
     path: '/components/divider',
+    active: true,
+  },
+  {
+    id: 'link',
+    labelKey: 'component.link',
+    path: '/components/link',
     active: true,
   },
 ];

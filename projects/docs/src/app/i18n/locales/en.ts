@@ -36,6 +36,7 @@ export const en = {
   'component.breadcrumb': 'Breadcrumb',
   'component.button': 'Button',
   'component.divider': 'Divider',
+  'component.link': 'Link',
   'components.description':
     'Here you can find all components currently available in the library. More components will be added as the system grows.',
   'toc.label': 'On this page',
@@ -107,4 +108,30 @@ export const en = {
     'Import Divider from @sanring/ui and place it between related sections or controls.',
   'divider.composition.description':
     'Use the default horizontal divider for stacked content, add inset for aligned list rows, or set vertical to separate inline groups.',
+  'link.description':
+    'A native anchor primitive for external links and Angular router navigation.',
+  'link.demo.basic': 'Sanring UI',
+  'link.demo.external': 'External link',
+  'link.demo.router': 'Router link',
+  'link.demo.active': 'Active route',
+  'link.demo.custom': 'Custom link',
+  'link.examples.description':
+    'Common link patterns for external navigation and Angular router state.',
+  'link.examples.basic.description':
+    'Use the directive on a native anchor so href, target, routerLink, and routerLinkActive keep their native behavior.',
+  'link.usage.description': 'Import Link from @sanring/ui and apply sanringLink to an anchor.',
+  'link.installation.description':
+    'Import Link from @sanring/ui and keep navigation attributes on the native anchor element.',
+  'link.composition.description':
+    'Use href for external links and routerLink with routerLinkActive for application routes.',
+  'link.api.description': 'Inputs supported by the sanringLink directive.',
+  'link.api.property': 'Property',
+  'link.api.type': 'Type',
+  'link.api.default': 'Default',
+  'link.api.descriptionLabel': 'Description',
+  'link.api.class.description': 'Additional classes merged with the base link styles.',
+  'link.api.target.description':
+    'Sets the native anchor target. When target is _blank, rel is filled automatically if omitted.',
+  'link.api.rel.description':
+    'Sets the native anchor rel attribute. Provide this when you need to override the safe default.',
 } as const;
