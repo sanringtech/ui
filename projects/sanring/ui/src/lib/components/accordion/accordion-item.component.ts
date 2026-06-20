@@ -20,7 +20,7 @@ import { cn } from '../../utils';
     </div>
   `,
 })
-export class AccordionItem {
+export class AccordionItemComponent {
   private readonly item = inject(CdkAccordionItem);
   private readonly destroyRef = inject(DestroyRef);
   private readonly expandedState = signal(false);

@@ -1,14 +1,14 @@
 import { Component, inject } from '@angular/core';
 import { LucideActivity, LucideKey, LucidePlus } from '@lucide/angular';
 import {
-  Badge,
-  Button,
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
+  BadgeDirective,
+  ButtonDirective,
+  CardComponent,
+  CardContentComponent,
+  CardDescriptionDirective,
+  CardFooterComponent,
+  CardHeaderComponent,
+  CardTitleDirective,
 } from '@sanring/ui';
 import { getComponentPageSection } from '../../../docs-schema/component-page.utils';
 import { I18nService } from '../../../i18n/i18n.service';
@@ -24,14 +24,14 @@ import { cardPage, cardPageExamples } from './card.docs';
 @Component({
   selector: 'app-card-page',
   imports: [
-    Badge,
-    Button,
-    Card,
-    CardContent,
-    CardDescription,
-    CardFooter,
-    CardHeader,
-    CardTitle,
+    BadgeDirective,
+    ButtonDirective,
+    CardComponent,
+    CardContentComponent,
+    CardDescriptionDirective,
+    CardFooterComponent,
+    CardHeaderComponent,
+    CardTitleDirective,
     ComponentPageCodeBlock,
     ComponentPageCodePreviewer,
     ComponentPageComponent,
@@ -84,9 +84,7 @@ import { cardPage, cardPageExamples } from './card.docs';
         <div class="grid gap-4">
           <p class="m-0 text-sm font-medium text-[var(--docs-fg)]">
             Use the following composition to build a
-            <code class="rounded-md bg-[var(--docs-elevated)] px-1.5 py-1 font-mono text-xs">
-              Card
-            </code>
+            <code class="rounded-md bg-[var(--docs-elevated)] px-1.5 py-1 font-mono text-xs">Card</code>
             :
           </p>
           <div class="overflow-hidden rounded-lg border border-[var(--docs-border)]">
@@ -109,13 +107,13 @@ import { cardPage, cardPageExamples } from './card.docs';
                   <sanring-card-content>
                     <div class="grid w-full items-center gap-4">
                       <div class="flex flex-col space-y-1.5">
-                        <label class="text-sm font-medium">專案名稱</label>
+                        <div class="text-sm font-medium">專案名稱</div>
                         <div
                           class="h-9 w-full rounded-md border border-[var(--docs-border)] px-3 py-1"
                         ></div>
                       </div>
                       <div class="flex flex-col space-y-1.5">
-                        <label class="text-sm font-medium">框架</label>
+                        <div class="text-sm font-medium">框架</div>
                         <div
                           class="h-9 w-full rounded-md border border-[var(--docs-border)] px-3 py-1"
                         ></div>

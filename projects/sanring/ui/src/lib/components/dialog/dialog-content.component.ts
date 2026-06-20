@@ -49,7 +49,7 @@ import { cn } from '../../utils';
     }
   `,
 })
-export class DialogContent {
+export class DialogContentComponent {
   @Input() class = '';
   @Input({ transform: booleanAttribute }) showClose = true;
 

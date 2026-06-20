@@ -1,5 +1,5 @@
 import { Component, inject } from '@angular/core';
-import { Divider } from '@sanring/ui';
+import { DividerComponent } from '@sanring/ui';
 import { getComponentPageSection } from '../../../docs-schema/component-page.utils';
 import { I18nService } from '../../../i18n/i18n.service';
 import {
@@ -14,7 +14,7 @@ import { dividerPage, dividerPageExamples } from './divider.docs';
 @Component({
   selector: 'app-divider-page',
   imports: [
-    Divider,
+    DividerComponent,
     ComponentPageCodeBlock,
     ComponentPageCodePreviewer,
     ComponentPageComponent,

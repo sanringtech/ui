@@ -59,7 +59,7 @@ export const badgePageExamples = {
   basic: `<span sanringBadge>
   Default
 </span>`,
-  usageImport: `import { Badge } from '@sanring/ui';`,
+  usageImport: `import { BadgeDirective } from '@sanring/ui';`,
   usageMain: `<span sanringBadge variant="secondary">
   Badge
 </span>`,

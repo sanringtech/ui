@@ -1,5 +1,5 @@
 import { Component, inject } from '@angular/core';
-import { Input } from '@sanring/ui';
+import { InputDirective } from '@sanring/ui';
 import { getComponentPageSection } from '../../../docs-schema/component-page.utils';
 import { I18nService } from '../../../i18n/i18n.service';
 import {
@@ -14,7 +14,7 @@ import { inputPage, inputPageExamples } from './input.docs';
 @Component({
   selector: 'app-input-page',
   imports: [
-    Input,
+    InputDirective,
     ComponentPageCodeBlock,
     ComponentPageCodePreviewer,
     ComponentPageComponent,

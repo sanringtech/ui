@@ -9,7 +9,7 @@ import { cn } from '../../utils';
     '[class]': 'skeletonClass'
   }
 })
-export class Skeleton {
+export class SkeletonDirective {
   @Input() class = '';
 
   protected get skeletonClass() {

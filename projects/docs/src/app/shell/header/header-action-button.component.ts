@@ -1,9 +1,9 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { Button, ButtonSize } from '@sanring/ui';
+import { ButtonDirective, ButtonSize } from '@sanring/ui';
 
 @Component({
   selector: 'app-header-action-button',
-  imports: [Button],
+  imports: [ButtonDirective],
   template: `
     <button
       sanringBtn

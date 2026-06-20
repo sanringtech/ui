@@ -1,6 +1,6 @@
 import { Component, inject } from '@angular/core';
 import { LucideArrowRight, LucideDownload, LucideSettings } from '@lucide/angular';
-import { Button } from '@sanring/ui';
+import { ButtonDirective } from '@sanring/ui';
 import { getComponentPageSection } from '../../../docs-schema/component-page.utils';
 import { I18nService } from '../../../i18n/i18n.service';
 import {
@@ -15,7 +15,7 @@ import { buttonPage, buttonPageExamples } from './button.docs';
 @Component({
   selector: 'app-button-page',
   imports: [
-    Button,
+    ButtonDirective,
     ComponentPageCodeBlock,
     ComponentPageComponent,
     ComponentPageCodePreviewer,

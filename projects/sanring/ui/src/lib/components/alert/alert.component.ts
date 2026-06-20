@@ -11,7 +11,7 @@ import { AlertVariant } from './alert.type';
     role: 'alert', // 💡 增加無障礙語意
   },
 })
-export class Alert {
+export class AlertComponent {
   @Input() class = '';
   @Input() variant: AlertVariant = 'default';
 

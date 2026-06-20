@@ -1,13 +1,13 @@
 import { Component, inject } from '@angular/core';
 import {
-  Button,
-  DialogClose,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
+  ButtonDirective,
+  DialogCloseDirective,
+  DialogContentComponent,
+  DialogDescriptionDirective,
+  DialogFooterComponent,
+  DialogHeaderComponent,
+  DialogTitleDirective,
+  DialogTriggerDirective,
 } from '@sanring/ui';
 import { getComponentPageSection } from '../../../docs-schema/component-page.utils';
 import { I18nService } from '../../../i18n/i18n.service';
@@ -23,14 +23,14 @@ import { dialogPage, dialogPageExamples } from './dialog.docs';
 @Component({
   selector: 'app-dialog-page',
   imports: [
-    Button,
-    DialogClose,
-    DialogContent,
-    DialogDescription,
-    DialogFooter,
-    DialogHeader,
-    DialogTitle,
-    DialogTrigger,
+    ButtonDirective,
+    DialogCloseDirective,
+    DialogContentComponent,
+    DialogDescriptionDirective,
+    DialogFooterComponent,
+    DialogHeaderComponent,
+    DialogTitleDirective,
+    DialogTriggerDirective,
     ComponentPageCodeBlock,
     ComponentPageCodePreviewer,
     ComponentPageComponent,

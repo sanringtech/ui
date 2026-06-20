@@ -18,4 +18,4 @@ import { CdkAccordion } from '@angular/cdk/accordion';
   `,
   styles: ``,
 })
-export class Accordion {}
+export class AccordionComponent {}

@@ -64,7 +64,7 @@ export const tagPageExamples = {
   basic: `<sanring-tag>
   Tag
 </sanring-tag>`,
-  usageImport: `import { Tag } from '@sanring/ui';`,
+  usageImport: `import { TagComponent } from '@sanring/ui';`,
   usageMain: `<sanring-tag variant="secondary">
   Tag
 </sanring-tag>`,

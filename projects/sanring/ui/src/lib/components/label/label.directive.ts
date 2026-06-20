@@ -6,7 +6,7 @@ import { cn } from '../../utils';
   standalone: true,
   host: { '[class]': 'labelClass' },
 })
-export class Label {
+export class LabelDirective {
   // 💡 補上逃生艙，讓外部可以覆蓋樣式
   @Input() class = '';
 

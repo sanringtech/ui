@@ -1,12 +1,12 @@
 import { booleanAttribute, Component, EventEmitter, Input, Output } from '@angular/core';
 import { LucideX } from '@lucide/angular';
 import { cn } from '../../utils';
-import { Badge, type BadgeVariant } from '../badge';
+import { BadgeDirective, type BadgeVariant } from '../badge';
 
 @Component({
   selector: 'sanring-tag',
   standalone: true,
-  imports: [Badge, LucideX],
+  imports: [BadgeDirective, LucideX],
   template: `
     <span sanringBadge [variant]="variant" [class]="tagClass">
       <ng-content />
@@ -24,7 +24,7 @@ import { Badge, type BadgeVariant } from '../badge';
     </span>
   `,
 })
-export class Tag {
+export class TagComponent {
   @Input() class = '';
   @Input() variant: BadgeVariant = 'secondary';
   @Input({ transform: booleanAttribute }) closable = false;

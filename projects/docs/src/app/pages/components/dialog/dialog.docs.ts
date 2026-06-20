@@ -68,12 +68,12 @@ export const dialogPage = {
 
 export const dialogPageExamples = {
   composition: `Dialog
-├── DialogTrigger
-└── DialogContent
-    ├── DialogHeader
-    │   ├── DialogTitle
-    │   └── DialogDescription
-    └── DialogFooter`,
+├── DialogTriggerDirective
+└── DialogContentComponent
+    ├── DialogHeaderComponent
+    │   ├── DialogTitleDirective
+    │   └── DialogDescriptionDirective
+    └── DialogFooterComponent`,
   basic: `<button sanringBtn [sanringDialogTrigger]="dialog">Open dialog</button>
 
 <ng-template #dialog>
@@ -85,13 +85,13 @@ export const dialogPageExamples = {
   </sanring-dialog-content>
 </ng-template>`,
   usageImport: `import {
-  DialogClose,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
+  DialogCloseDirective,
+  DialogContentComponent,
+  DialogDescriptionDirective,
+  DialogFooterComponent,
+  DialogHeaderComponent,
+  DialogTitleDirective,
+  DialogTriggerDirective,
 } from '@sanring/ui';`,
   usageMain: `<button sanringBtn [sanringDialogTrigger]="dialog">Open dialog</button>
 

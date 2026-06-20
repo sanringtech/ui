@@ -14,7 +14,7 @@ import { LinkTarget } from './link.type';
     '[attr.rel]': 'computedRel',
   },
 })
-export class Link {
+export class LinkDirective {
   @Input() class = '';
   @Input() target?: LinkTarget; // 重新啟用高階型別
   @Input() rel?: string;

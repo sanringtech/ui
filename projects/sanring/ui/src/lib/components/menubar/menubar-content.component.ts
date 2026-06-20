@@ -6,4 +6,4 @@ import { Component } from '@angular/core';
   imports: [],
   template: ``,
 })
-export class MenubarContent {}
+export class MenubarContentComponent {}

@@ -11,7 +11,7 @@ import { DividerInset } from './divider.type';
   },
   template: ``,
 })
-export class Divider {
+export class DividerComponent {
   @Input() vertical = false;
   @Input() inset: DividerInset = 'none';
 

@@ -9,7 +9,7 @@ import { cn } from '../../utils';
     '[class]': 'dialogTitleClass',
   },
 })
-export class DialogTitle {
+export class DialogTitleDirective {
   @Input() class = '';
 
   protected get dialogTitleClass() {

@@ -9,7 +9,7 @@ import { cn } from '../../utils';
     '[class]': 'cardFooterClass',
   },
 })
-export class CardFooter {
+export class CardFooterComponent {
   @Input() class = '';
 
   protected get cardFooterClass() {

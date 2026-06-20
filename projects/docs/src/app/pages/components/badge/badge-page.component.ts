@@ -1,6 +1,6 @@
 import { Component, inject } from '@angular/core';
 import { LucideBadgeCheck, LucideMoveUpRight } from '@lucide/angular';
-import { Badge } from '@sanring/ui';
+import { BadgeDirective } from '@sanring/ui';
 import { getComponentPageSection } from '../../../docs-schema/component-page.utils';
 import { I18nService } from '../../../i18n/i18n.service';
 import {
@@ -15,7 +15,7 @@ import { badgePage, badgePageExamples } from './badge.docs';
 @Component({
   selector: 'app-badge-page',
   imports: [
-    Badge,
+    BadgeDirective,
     ComponentPageCodeBlock,
     ComponentPageCodePreviewer,
     ComponentPageComponent,

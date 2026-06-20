@@ -2,7 +2,7 @@ import { Directive, HostListener, Input, TemplateRef, inject } from '@angular/co
 import { DialogService } from './dialog.service';
 
 @Directive({ selector: '[sanringDialogTrigger]', standalone: true })
-export class DialogTrigger {
+export class DialogTriggerDirective {
   private dialogService = inject(DialogService);
 
   @Input('sanringDialogTrigger') dialogTemplate!: TemplateRef<unknown>;

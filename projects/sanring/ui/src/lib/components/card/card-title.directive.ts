@@ -9,7 +9,7 @@ import { cn } from '../../utils';
     '[class]': 'cardTitleClass',
   },
 })
-export class CardTitle {
+export class CardTitleDirective {
   @Input() class = '';
 
   protected get cardTitleClass() {

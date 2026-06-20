@@ -89,7 +89,7 @@ export const zh: Record<TranslationKey, string> = {
   'alert.examples.description': 'Alert 適合呈現不該自動消失、需要持續被看見的狀態資訊。',
   'alert.examples.basic.description': 'Alert 會保留版面空間，並組合圖示、標題與描述文字。',
   'alert.usage.description': '匯入 Alert primitives，並搭配原生文字與圖示組合。',
-  'alert.installation.description': '從 @sanring/ui 匯入 Alert、AlertTitle 與 AlertDescription。',
+  'alert.installation.description': '從 @sanring/ui 匯入 AlertComponent、AlertTitleDirective 與 AlertDescriptionDirective。',
   'alert.composition.description':
     'Alert 是靜態排版 primitive，適合狀態驅動訊息；短暫事件通知應交給 Toast。',
   'alert.api.description': 'sanring-alert component 支援的 Inputs。',
@@ -112,7 +112,7 @@ export const zh: Record<TranslationKey, string> = {
   'button.examples.basic.description': '外框按鈕適合次要操作；純圖示按鈕需要提供可存取標籤。',
   'button.usage.description': '匯入 directive，並套用在原生 button 元素上。',
   'button.installation.description':
-    '從 @sanring/ui 匯入 Button，並依照操作情境選擇合適的 variant 與 size。',
+    '從 @sanring/ui 匯入 ButtonDirective，並依照操作情境選擇合適的 variant 與 size。',
   'button.composition.description':
     '使用 variant 表達視覺優先級，使用 size 控制密度；純圖示按鈕需提供可存取標籤。',
   'button.api.description': 'sanringBtn directive 支援的 Inputs。',
@@ -134,8 +134,8 @@ export const zh: Record<TranslationKey, string> = {
   'badge.demo.synced': '已同步',
   'badge.examples.description': '常見的徽章變體，適合後設資訊與狀態標籤。',
   'badge.examples.basic.description': '徽章可作為文字、卡片、列表或連結中的精簡 inline 標籤。',
-  'badge.usage.description': '從 @sanring/ui 匯入 Badge，並將 sanringBadge 套用在元素上。',
-  'badge.installation.description': '匯入 Badge，並依後設資訊的優先級選擇合適 variant。',
+  'badge.usage.description': '從 @sanring/ui 匯入 BadgeDirective，並將 sanringBadge 套用在元素上。',
+  'badge.installation.description': '匯入 BadgeDirective，並依後設資訊的優先級選擇合適 variant。',
   'badge.composition.description':
     'Badge 是 directive，可保留 span、div 或 anchor 的原生行為，同時套用一致樣式。',
   'badge.api.description': 'sanringBadge directive 支援的 Inputs。',
@@ -152,7 +152,7 @@ export const zh: Record<TranslationKey, string> = {
     'Card 由 root、header、title、description、content 與 footer 等小型 primitives 組成。',
   'card.usage.description': '匯入需要的 Card primitives，並搭配原生 HTML 與 utility classes 組合。',
   'card.installation.description':
-    '從 @sanring/ui 匯入 Card、CardHeader、CardContent、CardFooter、CardTitle 與 CardDescription。',
+    '從 @sanring/ui 匯入 CardComponent、CardHeaderComponent、CardContentComponent、CardFooterComponent、CardTitleDirective 與 CardDescriptionDirective。',
   'card.composition.description':
     'Card 不綁定業務結構；你可以覆蓋 class、放入任何媒體或表單控制項，並與其他 primitives 組合。',
   'card.api.description': 'Card 家族 primitives 支援的 Inputs。',
@@ -186,7 +186,7 @@ export const zh: Record<TranslationKey, string> = {
   'divider.examples.description': '常見的分隔線模式，適合用來區隔相關內容。',
   'divider.examples.basic.description': '使用分隔線區隔堆疊內容、對齊列表列與 inline 群組。',
   'divider.usage.description': '匯入元件，並將它放在相關內容之間。',
-  'divider.installation.description': '從 @sanring/ui 匯入 Divider，並放在相關區塊或控制項之間。',
+  'divider.installation.description': '從 @sanring/ui 匯入 DividerComponent，並放在相關區塊或控制項之間。',
   'divider.composition.description':
     '預設使用水平分隔線處理堆疊內容；加入 inset 可對齊列表列，設定 vertical 可分隔 inline 群組。',
   'divider.api.description': 'sanring-divider component 支援的 Inputs。',
@@ -199,7 +199,7 @@ export const zh: Record<TranslationKey, string> = {
   'input.examples.description': '常見輸入模式，適合文字欄位、停用狀態、多行文字與檔案上傳。',
   'input.examples.basic.description':
     '將 sanringInput 套用到原生 input，保留瀏覽器行為並取得系統樣式。',
-  'input.usage.description': '從 @sanring/ui 匯入 Input，並將 sanringInput 套用到 input。',
+  'input.usage.description': '從 @sanring/ui 匯入 InputDirective，並將 sanringInput 套用到 input。',
   'input.installation.description':
     '在原生 input 或 textarea 上使用 sanringInput，並保留 type、value、disabled 與表單綁定。',
   'input.composition.description':
@@ -212,7 +212,7 @@ export const zh: Record<TranslationKey, string> = {
   'label.examples.description': '常見 label 模式，適合獨立標籤與表單控制項。',
   'label.examples.basic.description':
     '將 sanringLabel 套用到原生 label，保留 for/id 的可存取關聯。',
-  'label.usage.description': '從 @sanring/ui 匯入 Label，並將 sanringLabel 套用到 label。',
+  'label.usage.description': '從 @sanring/ui 匯入 LabelDirective，並將 sanringLabel 套用到 label。',
   'label.installation.description': '在原生 label 元素上使用 sanringLabel，並透過 for 與 id 連接控制項。',
   'label.composition.description':
     '將 Label 放在 Input 附近的 grid 或 field wrapper 中；peer-disabled 樣式會回應停用控制項。',
@@ -227,9 +227,9 @@ export const zh: Record<TranslationKey, string> = {
   'link.examples.description': '常見的連結模式，適用於外部導覽與 Angular 路由狀態。',
   'link.examples.basic.description':
     '將 directive 套用在原生 anchor 上，讓 href、target、routerLink 與 routerLinkActive 保持原生行為。',
-  'link.usage.description': '從 @sanring/ui 匯入 Link，並將 sanringLink 套用在 anchor 上。',
+  'link.usage.description': '從 @sanring/ui 匯入 LinkDirective，並將 sanringLink 套用在 anchor 上。',
   'link.installation.description':
-    '從 @sanring/ui 匯入 Link，並將導覽屬性保留在原生 anchor 元素上。',
+    '從 @sanring/ui 匯入 LinkDirective，並將導覽屬性保留在原生 anchor 元素上。',
   'link.composition.description':
     '外部連結使用 href；應用程式內路由使用 routerLink 搭配 routerLinkActive。',
   'link.api.description': 'sanringLink directive 支援的 Inputs。',
@@ -272,7 +272,7 @@ export const zh: Record<TranslationKey, string> = {
   'skeleton.demo.table': '表格',
   'skeleton.examples.description': '常見的骨架屏版型，適合頭像、卡片、文字、表單與表格。',
   'skeleton.examples.basic.description': '使用骨架屏在最終內容完成前保留版面空間。',
-  'skeleton.usage.description': '從 @sanring/ui 匯入 Skeleton，並將 sanringSkeleton 套用到任意元素。',
+  'skeleton.usage.description': '從 @sanring/ui 匯入 SkeletonDirective，並將 sanringSkeleton 套用到任意元素。',
   'skeleton.installation.description':
     '將 directive 套用在 div、span 或語意元素上，並透過 class 提供寬度、高度與圓角。',
   'skeleton.composition.description': '組合多個 skeleton block，讓載入狀態貼近實際內容結構。',
@@ -289,8 +289,8 @@ export const zh: Record<TranslationKey, string> = {
   'tag.demo.frontend': '前端開發',
   'tag.examples.description': '常見的標籤模式，適合篩選條件、chip 與分類內容。',
   'tag.examples.basic.description': '標籤適合用於已選值或精簡的內容分類。',
-  'tag.usage.description': '從 @sanring/ui 匯入 Tag，並將標籤內容投影到元件內。',
-  'tag.installation.description': '匯入 Tag；需要移除互動時可啟用 closable 並接收 remove 事件。',
+  'tag.usage.description': '從 @sanring/ui 匯入 TagComponent，並將標籤內容投影到元件內。',
+  'tag.installation.description': '匯入 TagComponent；需要移除互動時可啟用 closable 並接收 remove 事件。',
   'tag.composition.description': 'Tag 組合 Badge 樣式、投影內容與可選的關閉控制。',
   'tag.api.description': 'sanring-tag component 支援的 Inputs 與 Outputs。',
   'tag.api.class.description': '與內層徽章樣式合併的額外 class。',

@@ -1,5 +1,5 @@
 import { Component, inject } from '@angular/core';
-import { Input, Label } from '@sanring/ui';
+import { InputDirective, LabelDirective } from '@sanring/ui';
 import { getComponentPageSection } from '../../../docs-schema/component-page.utils';
 import { I18nService } from '../../../i18n/i18n.service';
 import {
@@ -14,8 +14,8 @@ import { labelPage, labelPageExamples } from './label.docs';
 @Component({
   selector: 'app-label-page',
   imports: [
-    Input,
-    Label,
+    InputDirective,
+    LabelDirective,
     ComponentPageCodeBlock,
     ComponentPageCodePreviewer,
     ComponentPageComponent,

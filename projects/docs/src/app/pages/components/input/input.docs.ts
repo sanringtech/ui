@@ -57,7 +57,7 @@ export const inputPage = {
 
 export const inputPageExamples = {
   basic: `<input sanringInput placeholder="Email" type="email" />`,
-  usageImport: `import { Input } from '@sanring/ui';`,
+  usageImport: `import { InputDirective } from '@sanring/ui';`,
   usageMain: `<input sanringInput placeholder="Email" type="email" />`,
   disabled: `<input sanringInput disabled value="readonly@sanring.dev" />`,
   textarea: `<textarea sanringInput placeholder="Write a note"></textarea>`,

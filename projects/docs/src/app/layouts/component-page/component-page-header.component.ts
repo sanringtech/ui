@@ -1,7 +1,7 @@
 import { Component, inject, Input } from '@angular/core';
 import { Router } from '@angular/router';
 import { LucideArrowLeft, LucideArrowRight, LucideChevronDown, LucideCopy } from '@lucide/angular';
-import { Button } from '@sanring/ui';
+import { ButtonDirective } from '@sanring/ui';
 import {
   DocsComponentId,
   DocsComponentNavItem,
@@ -11,7 +11,7 @@ import { I18nService } from '../../i18n/i18n.service';
 
 @Component({
   selector: 'app-component-page-header',
-  imports: [Button, LucideArrowLeft, LucideArrowRight, LucideChevronDown, LucideCopy],
+  imports: [ButtonDirective, LucideArrowLeft, LucideArrowRight, LucideChevronDown, LucideCopy],
   template: `
     <header
       class="mb-10 flex items-start justify-between gap-6 border-b border-[var(--docs-border)] pb-7 max-[720px]:block"

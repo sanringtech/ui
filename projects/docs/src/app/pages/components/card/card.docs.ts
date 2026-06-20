@@ -68,11 +68,11 @@ export const cardPage = {
 
 export const cardPageExamples = {
   composition: `Card
-├── CardHeader
-│   ├── CardTitle
-│   └── CardDescription
-├── CardContent
-└── CardFooter`,
+├── CardHeaderComponent
+│   ├── CardTitleDirective
+│   └── CardDescriptionDirective
+├── CardContentComponent
+└── CardFooterComponent`,
   basic: `<sanring-card class="w-[350px]">
   <sanring-card-header>
     <h3 sanringCardTitle>Card title</h3>
@@ -86,11 +86,11 @@ export const cardPageExamples = {
 </sanring-card>`,
   usageImport: `import {
   Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
+  CardContentComponent,
+  CardDescriptionDirective,
+  CardFooterComponent,
+  CardHeaderComponent,
+  CardTitleDirective,
 } from '@sanring/ui';`,
   usageMain: `<sanring-card>
   <sanring-card-header>

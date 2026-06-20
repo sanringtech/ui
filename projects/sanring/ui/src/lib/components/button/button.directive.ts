@@ -9,7 +9,7 @@ import type { ButtonSize, ButtonVariant } from './button.types';
     '[class]': 'buttonClass',
   },
 })
-export class Button {
+export class ButtonDirective {
   @Input() class = '';
   @Input() variant: ButtonVariant = 'default';
   @Input() size: ButtonSize = 'md';

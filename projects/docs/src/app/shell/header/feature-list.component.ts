@@ -1,12 +1,12 @@
 import { Component, inject, signal } from '@angular/core';
 import { LucideLanguages, LucideMoon, LucideSun } from '@lucide/angular';
-import { Button } from '@sanring/ui';
+import { ButtonDirective } from '@sanring/ui';
 import { I18nService } from '../../i18n/i18n.service';
 import { HeaderActionButtonComponent } from './header-action-button.component';
 
 @Component({
   selector: 'app-feature-list',
-  imports: [Button, HeaderActionButtonComponent, LucideSun, LucideMoon, LucideLanguages],
+  imports: [ButtonDirective, HeaderActionButtonComponent, LucideSun, LucideMoon, LucideLanguages],
   template: `
     <div class="flex min-w-0 items-center gap-6 max-[860px]:w-full max-[860px]:gap-3">
       <label class="max-[860px]:min-w-0 max-[860px]:flex-1">

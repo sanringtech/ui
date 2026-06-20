@@ -8,7 +8,7 @@ import { cn } from '../../utils';
     '[class]': 'alertDescriptionClass',
   },
 })
-export class AlertDescription {
+export class AlertDescriptionDirective {
   @Input() class = '';
 
   protected get alertDescriptionClass() {

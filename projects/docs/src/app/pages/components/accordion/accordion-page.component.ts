@@ -1,5 +1,5 @@
 import { Component, inject } from '@angular/core';
-import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@sanring/ui';
+import { AccordionComponent, AccordionContentComponent, AccordionItemComponent, AccordionTriggerComponent } from '@sanring/ui';
 import { getComponentPageSection } from '../../../docs-schema/component-page.utils';
 import {
   ComponentPageCodeBlock,
@@ -14,10 +14,10 @@ import { accordionPage } from './accordion.docs';
 @Component({
   selector: 'app-accordion-page',
   imports: [
-    Accordion,
-    AccordionItem,
-    AccordionTrigger,
-    AccordionContent,
+    AccordionComponent,
+    AccordionItemComponent,
+    AccordionTriggerComponent,
+    AccordionContentComponent,
     ComponentPageComponent,
     ComponentPageCodeBlock,
     ComponentPageCodePreviewer,
@@ -80,7 +80,7 @@ import { accordionPage } from './accordion.docs';
           <p class="m-0 text-sm font-medium text-[var(--docs-fg)]">
             Use the following composition to build an
             <code class="rounded-md bg-[var(--docs-elevated)] px-1.5 py-1 font-mono text-xs">
-              Accordion
+              AccordionComponent
             </code>
             :
           </p>
@@ -197,10 +197,10 @@ export class AccordionPageComponent {
 
   protected codeExample() {
     return `import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
+  AccordionComponent,
+  AccordionContentComponent,
+  AccordionItemComponent,
+  AccordionTriggerComponent,
 } from '@sanring/ui';
 
 <sanring-accordion>
@@ -216,15 +216,15 @@ export class AccordionPageComponent {
   }
 
   protected compositionExample() {
-    return `Accordion
-├── AccordionItem
-│   ├── AccordionTrigger
-│   └── AccordionContent
-├── AccordionItem
-│   ├── AccordionTrigger
-│   └── AccordionContent
-└── AccordionItem
-    ├── AccordionTrigger
-    └── AccordionContent`;
+    return `AccordionComponent
+├── AccordionItemComponent
+│   ├── AccordionTriggerComponent
+│   └── AccordionContentComponent
+├── AccordionItemComponent
+│   ├── AccordionTriggerComponent
+│   └── AccordionContentComponent
+└── AccordionItemComponent
+    ├── AccordionTriggerComponent
+    └── AccordionContentComponent`;
   }
 }

@@ -1,7 +1,7 @@
 // accordion-content.component.ts
 import { Component, Input, inject } from '@angular/core';
 import { cn } from '../../utils';
-import { AccordionItem } from './accordion-item.component';
+import { AccordionItemComponent } from './accordion-item.component';
 
 @Component({
   selector: 'sanring-accordion-content',
@@ -20,11 +20,11 @@ import { AccordionItem } from './accordion-item.component';
     </div>
   `,
 })
-export class AccordionContent {
+export class AccordionContentComponent {
   protected cn = cn;
 
   // 透過 optional 注入，如果沒被放在 Item 裡面也不會報錯
-  protected item = inject(AccordionItem, { optional: true });
+  protected item = inject(AccordionItemComponent, { optional: true });
 
   @Input() contentClass?: string;
 

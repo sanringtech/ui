@@ -9,7 +9,7 @@ import { cn } from '../../utils';
     '[class]': 'dialogHeaderClass',
   },
 })
-export class DialogHeader {
+export class DialogHeaderComponent {
   @Input() class = '';
 
   protected get dialogHeaderClass() {

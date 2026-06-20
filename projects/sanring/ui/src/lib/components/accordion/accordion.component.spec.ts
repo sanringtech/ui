@@ -1,13 +1,13 @@
 import { Component } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 
-import { Accordion } from './accordion.component';
-import { AccordionContent } from './accordion-content.component';
-import { AccordionItem } from './accordion-item.component';
-import { AccordionTrigger } from './accordion-trigger.component';
+import { AccordionComponent } from './accordion.component';
+import { AccordionContentComponent } from './accordion-content.component';
+import { AccordionItemComponent } from './accordion-item.component';
+import { AccordionTriggerComponent } from './accordion-trigger.component';
 
 @Component({
-  imports: [Accordion, AccordionItem, AccordionTrigger, AccordionContent],
+  imports: [AccordionComponent, AccordionItemComponent, AccordionTriggerComponent, AccordionContentComponent],
   template: `
     <sanring-accordion>
       <sanring-accordion-item>
@@ -23,7 +23,7 @@ import { AccordionTrigger } from './accordion-trigger.component';
 })
 class AccordionTestHost {}
 
-describe('Accordion', () => {
+describe('AccordionComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [AccordionTestHost],

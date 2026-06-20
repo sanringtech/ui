@@ -64,9 +64,9 @@ export const alertPageExamples = {
   </p>
 </sanring-alert>`,
   usageImport: `import {
-  Alert,
-  AlertDescription,
-  AlertTitle,
+  AlertComponent,
+  AlertDescriptionDirective,
+  AlertTitleDirective,
 } from '@sanring/ui';`,
   usageMain: `<sanring-alert variant="destructive">
   <svg lucideAlertTriangle class="size-4"></svg>

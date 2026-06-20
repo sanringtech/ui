@@ -6,4 +6,4 @@ import { Component } from '@angular/core';
   imports: [],
   template: `<button class=""><ng-content></ng-content></button>`,
 })
-export class MenubarTrigger {}
+export class MenubarTriggerComponent {}

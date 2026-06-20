@@ -1,7 +1,7 @@
 import { Component, inject, Input } from '@angular/core';
 import { cn } from '../../utils';
 import { LucideChevronDown } from '@lucide/angular';
-import { AccordionItem } from './accordion-item.component';
+import { AccordionItemComponent } from './accordion-item.component';
 
 @Component({
   selector: 'sanring-accordion-trigger',
@@ -30,8 +30,8 @@ import { AccordionItem } from './accordion-item.component';
     </button>
   `,
 })
-export class AccordionTrigger {
-  protected item = inject(AccordionItem);
+export class AccordionTriggerComponent {
+  protected item = inject(AccordionItemComponent);
   protected cn = cn;
 
   @Input() headerClass?: string;

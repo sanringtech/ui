@@ -73,7 +73,7 @@ export const skeletonPageExamples = {
     <div sanringSkeleton class="h-4 w-[140px]"></div>
   </div>
 </div>`,
-  usageImport: `import { Skeleton } from '@sanring/ui';`,
+  usageImport: `import { SkeletonDirective } from '@sanring/ui';`,
   usageMain: `<div sanringSkeleton class="h-4 w-[180px]"></div>`,
   avatar: `<div class="flex items-center gap-4">
   <div sanringSkeleton class="size-12 rounded-full"></div>

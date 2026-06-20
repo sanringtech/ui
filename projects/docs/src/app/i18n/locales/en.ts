@@ -98,7 +98,7 @@ export const en = {
   'alert.usage.description':
     'Import Alert primitives and compose them with native text and icons.',
   'alert.installation.description':
-    'Import Alert, AlertTitle, and AlertDescription from @sanring/ui.',
+    'Import AlertComponent, AlertTitleDirective, and AlertDescriptionDirective from @sanring/ui.',
   'alert.composition.description':
     'Alert is a static layout primitive. Use it for state-driven messages, not transient toast notifications.',
   'alert.api.description': 'Inputs supported by the sanring-alert component.',
@@ -124,7 +124,7 @@ export const en = {
     'Use outline buttons for secondary actions and icon-only buttons with an accessible label.',
   'button.usage.description': 'Import the directive and apply it to a native button element.',
   'button.installation.description':
-    'Import Button from @sanring/ui and choose a variant and size that match the action.',
+    'Import ButtonDirective from @sanring/ui and choose a variant and size that match the action.',
   'button.composition.description':
     'Use variants for visual priority and sizes for density, including icon-only controls with accessible labels.',
   'button.api.description': 'Inputs supported by the sanringBtn directive.',
@@ -148,7 +148,7 @@ export const en = {
   'badge.examples.description': 'Common badge variants for metadata and status labels.',
   'badge.examples.basic.description':
     'Use badges as compact inline labels on text, cards, lists, or links.',
-  'badge.usage.description': 'Import Badge from @sanring/ui and apply sanringBadge to an element.',
+  'badge.usage.description': 'Import BadgeDirective from @sanring/ui and apply sanringBadge to an element.',
   'badge.installation.description':
     'Import Badge and choose a variant that matches the metadata priority.',
   'badge.composition.description':
@@ -170,7 +170,7 @@ export const en = {
   'card.usage.description':
     'Import the Card primitives you need and compose them with native HTML and utility classes.',
   'card.installation.description':
-    'Import Card, CardHeader, CardContent, CardFooter, CardTitle, and CardDescription from @sanring/ui.',
+    'Import CardComponent, CardHeaderComponent, CardContentComponent, CardFooterComponent, CardTitleDirective, and CardDescriptionDirective from @sanring/ui.',
   'card.composition.description':
     'Card does not own business structure. Override classes, place any media or form controls inside, and combine it with other primitives.',
   'card.api.description': 'Inputs supported by the Card family primitives.',
@@ -208,7 +208,7 @@ export const en = {
     'Use dividers to separate stacked content, aligned list rows, and inline groups.',
   'divider.usage.description': 'Import the component and place it between related content.',
   'divider.installation.description':
-    'Import Divider from @sanring/ui and place it between related sections or controls.',
+    'Import DividerComponent from @sanring/ui and place it between related sections or controls.',
   'divider.composition.description':
     'Use the default horizontal divider for stacked content, add inset for aligned list rows, or set vertical to separate inline groups.',
   'divider.api.description': 'Inputs supported by the sanring-divider component.',
@@ -223,7 +223,7 @@ export const en = {
     'Common input patterns for editable text, disabled fields, textareas, and file uploads.',
   'input.examples.basic.description':
     'Apply sanringInput to a native input to keep browser behavior while receiving system styling.',
-  'input.usage.description': 'Import Input from @sanring/ui and apply sanringInput to an input.',
+  'input.usage.description': 'Import InputDirective from @sanring/ui and apply sanringInput to an input.',
   'input.installation.description':
     'Use sanringInput on native input or textarea elements and keep type, value, disabled, and form bindings native.',
   'input.composition.description':
@@ -237,7 +237,7 @@ export const en = {
   'label.examples.description': 'Common label patterns for standalone labels and form controls.',
   'label.examples.basic.description':
     'Apply sanringLabel to a native label so for/id association stays intact.',
-  'label.usage.description': 'Import Label from @sanring/ui and apply sanringLabel to a label.',
+  'label.usage.description': 'Import LabelDirective from @sanring/ui and apply sanringLabel to a label.',
   'label.installation.description':
     'Use sanringLabel on native label elements and connect them to controls with for and id.',
   'label.composition.description':
@@ -254,9 +254,9 @@ export const en = {
     'Common link patterns for external navigation and Angular router state.',
   'link.examples.basic.description':
     'Use the directive on a native anchor so href, target, routerLink, and routerLinkActive keep their native behavior.',
-  'link.usage.description': 'Import Link from @sanring/ui and apply sanringLink to an anchor.',
+  'link.usage.description': 'Import LinkDirective from @sanring/ui and apply sanringLink to an anchor.',
   'link.installation.description':
-    'Import Link from @sanring/ui and keep navigation attributes on the native anchor element.',
+    'Import LinkDirective from @sanring/ui and keep navigation attributes on the native anchor element.',
   'link.composition.description':
     'Use href for external links and routerLink with routerLinkActive for application routes.',
   'link.api.description': 'Inputs supported by the sanringLink directive.',
@@ -314,7 +314,7 @@ export const en = {
   'skeleton.examples.basic.description':
     'Use skeletons to reserve space for content before the final UI is ready.',
   'skeleton.usage.description':
-    'Import Skeleton from @sanring/ui and apply sanringSkeleton to any element.',
+    'Import SkeletonDirective from @sanring/ui and apply sanringSkeleton to any element.',
   'skeleton.installation.description':
     'Use the directive on div, span, or semantic elements and provide width, height, and radius classes.',
   'skeleton.composition.description':
@@ -333,7 +333,7 @@ export const en = {
   'tag.demo.frontend': 'Frontend',
   'tag.examples.description': 'Common tag patterns for filters, chips, and categorized content.',
   'tag.examples.basic.description': 'Use tags for selected values or compact content categories.',
-  'tag.usage.description': 'Import Tag from @sanring/ui and project label content inside it.',
+  'tag.usage.description': 'Import TagComponent from @sanring/ui and project label content inside it.',
   'tag.installation.description':
     'Import Tag and optionally enable closable when the tag should emit a remove event.',
   'tag.composition.description':

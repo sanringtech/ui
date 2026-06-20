@@ -7,7 +7,7 @@ import { BadgeVariant } from './badge.type';
   standalone: true,
   host: { '[class]': 'badgeClass' },
 })
-export class Badge {
+export class BadgeDirective {
   @Input() class = '';
   @Input() variant: BadgeVariant = 'default';
 

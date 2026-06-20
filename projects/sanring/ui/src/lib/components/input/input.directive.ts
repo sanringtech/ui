@@ -8,7 +8,7 @@ import { cn } from '../../utils';
     '[class]': 'inputClass',
   },
 })
-export class Input {
+export class InputDirective {
   // 使用 NgInput 避開命名衝突
   @NgInput() class = '';
 

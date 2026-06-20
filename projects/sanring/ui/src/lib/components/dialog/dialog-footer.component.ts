@@ -9,7 +9,7 @@ import { cn } from '../../utils';
     '[class]': 'dialogFooterClass',
   },
 })
-export class DialogFooter {
+export class DialogFooterComponent {
   @Input() class = '';
 
   protected get dialogFooterClass() {

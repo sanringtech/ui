@@ -1,5 +1,5 @@
 import { Component, inject } from '@angular/core';
-import { Tag } from '@sanring/ui';
+import { TagComponent } from '@sanring/ui';
 import { getComponentPageSection } from '../../../docs-schema/component-page.utils';
 import { I18nService } from '../../../i18n/i18n.service';
 import {
@@ -14,7 +14,7 @@ import { tagPage, tagPageExamples } from './tag.docs';
 @Component({
   selector: 'app-tag-page',
   imports: [
-    Tag,
+    TagComponent,
     ComponentPageCodeBlock,
     ComponentPageCodePreviewer,
     ComponentPageComponent,

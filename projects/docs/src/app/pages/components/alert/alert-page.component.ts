@@ -1,14 +1,14 @@
 import { Component, inject } from '@angular/core';
 import { LucideAlertTriangle, LucideInfo, LucideLightbulb } from '@lucide/angular';
 import {
-  Alert,
-  AlertDescription,
-  AlertTitle,
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
+  AlertComponent,
+  AlertDescriptionDirective,
+  AlertTitleDirective,
+  CardComponent,
+  CardContentComponent,
+  CardDescriptionDirective,
+  CardHeaderComponent,
+  CardTitleDirective,
 } from '@sanring/ui';
 import { getComponentPageSection } from '../../../docs-schema/component-page.utils';
 import { I18nService } from '../../../i18n/i18n.service';
@@ -24,14 +24,14 @@ import { alertPage, alertPageExamples } from './alert.docs';
 @Component({
   selector: 'app-alert-page',
   imports: [
-    Alert,
-    AlertDescription,
-    AlertTitle,
-    Card,
-    CardContent,
-    CardDescription,
-    CardHeader,
-    CardTitle,
+    AlertComponent,
+    AlertDescriptionDirective,
+    AlertTitleDirective,
+    CardComponent,
+    CardContentComponent,
+    CardDescriptionDirective,
+    CardHeaderComponent,
+    CardTitleDirective,
     ComponentPageCodeBlock,
     ComponentPageCodePreviewer,
     ComponentPageComponent,
