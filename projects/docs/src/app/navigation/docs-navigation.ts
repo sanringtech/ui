@@ -49,13 +49,12 @@ export const docsComponentItems: DocsComponentNavItem[] = [
     path: '/components/accordion',
     active: true,
   },
-  // {
-  //   id: 'alert',
-  //   labelKey: 'component.alert',
-  //   path: '/components/alert',
-  //   active: true,
-  //   disabled: true,
-  // },
+  {
+    id: 'alert',
+    labelKey: 'component.alert',
+    path: '/components/alert',
+    active: true,
+  },
   // {
   //   id: 'alert-dialog',
   //   labelKey: 'component.alertDialog',

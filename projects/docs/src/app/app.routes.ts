@@ -37,6 +37,13 @@ export const routes: Routes = [
                   ),
               },
               {
+                path: 'alert',
+                loadComponent: () =>
+                  import('./pages/components/alert/alert-page.component').then(
+                    (m) => m.AlertPageComponent,
+                  ),
+              },
+              {
                 path: 'badge',
                 loadComponent: () =>
                   import('./pages/components/badge/badge-page.component').then(
