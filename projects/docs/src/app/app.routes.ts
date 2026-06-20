@@ -100,6 +100,13 @@ export const routes: Routes = [
                   ),
               },
               {
+                path: 'scroll-area',
+                loadComponent: () =>
+                  import('./pages/components/scroll-area/scroll-area-page.component').then(
+                    (m) => m.ScrollAreaPageComponent,
+                  ),
+              },
+              {
                 path: 'skeleton',
                 loadComponent: () =>
                   import('./pages/components/skeleton/skeleton-page.component').then(

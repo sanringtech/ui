@@ -23,6 +23,7 @@ export type DocsComponentId =
   | 'input'
   | 'label'
   | 'link'
+  | 'scroll-area'
   | 'skeleton'
   | 'tag';
 
@@ -132,6 +133,12 @@ export const docsComponentItems: DocsComponentNavItem[] = [
     id: 'link',
     labelKey: 'component.link',
     path: '/components/link',
+    active: true,
+  },
+  {
+    id: 'scroll-area',
+    labelKey: 'component.scrollArea',
+    path: '/components/scroll-area',
     active: true,
   },
   {
