@@ -1,9 +1,22 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
+import { cn } from '../../utils';
 
 @Component({
   selector: 'sanring-card',
-  imports: [],
-  template: ` <p>card works!</p> `,
-  styles: ``,
+  standalone: true,
+  template: `<ng-content></ng-content>`,
+  host: {
+    '[class]': 'cardClass',
+  },
 })
-export class Card {}
+export class Card {
+  @Input() class = '';
+
+  protected get cardClass() {
+    return cn(
+      // 加上 block 確保自定義標籤能佔滿寬度
+      'block rounded-xl border border-[var(--docs-border)] bg-[var(--docs-bg)] text-[var(--docs-fg)] shadow-sm',
+      this.class,
+    );
+  }
+}

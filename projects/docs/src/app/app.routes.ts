@@ -51,6 +51,13 @@ export const routes: Routes = [
                   ),
               },
               {
+                path: 'card',
+                loadComponent: () =>
+                  import('./pages/components/card/card-page.component').then(
+                    (m) => m.CardPageComponent,
+                  ),
+              },
+              {
                 path: 'divider',
                 loadComponent: () =>
                   import('./pages/components/divider/divider-page.component').then(
@@ -62,6 +69,13 @@ export const routes: Routes = [
                 loadComponent: () =>
                   import('./pages/components/link/link-page.component').then(
                     (m) => m.LinkPageComponent,
+                  ),
+              },
+              {
+                path: 'skeleton',
+                loadComponent: () =>
+                  import('./pages/components/skeleton/skeleton-page.component').then(
+                    (m) => m.SkeletonPageComponent,
                   ),
               },
               {

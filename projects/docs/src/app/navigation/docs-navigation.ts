@@ -17,8 +17,10 @@ export type DocsComponentId =
   | 'badge'
   | 'breadcrumb'
   | 'button'
+  | 'card'
   | 'divider'
   | 'link'
+  | 'skeleton'
   | 'tag';
 
 export interface DocsComponentNavItem extends DocsSidebarItem {
@@ -95,6 +97,12 @@ export const docsComponentItems: DocsComponentNavItem[] = [
     active: true,
   },
   {
+    id: 'card',
+    labelKey: 'component.card',
+    path: '/components/card',
+    active: true,
+  },
+  {
     id: 'divider',
     labelKey: 'component.divider',
     path: '/components/divider',
@@ -104,6 +112,12 @@ export const docsComponentItems: DocsComponentNavItem[] = [
     id: 'link',
     labelKey: 'component.link',
     path: '/components/link',
+    active: true,
+  },
+  {
+    id: 'skeleton',
+    labelKey: 'component.skeleton',
+    path: '/components/skeleton',
     active: true,
   },
   {

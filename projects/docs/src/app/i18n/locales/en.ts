@@ -35,8 +35,10 @@ export const en = {
   'component.badge': 'Badge',
   'component.breadcrumb': 'Breadcrumb',
   'component.button': 'Button',
+  'component.card': 'Card',
   'component.divider': 'Divider',
   'component.link': 'Link',
+  'component.skeleton': 'Skeleton',
   'component.tag': 'Tag',
   'components.description':
     'Here you can find all components currently available in the library. More components will be added as the system grows.',
@@ -117,6 +119,22 @@ export const en = {
   'badge.api.class.description': 'Additional classes merged with the base badge styles.',
   'badge.api.variant.description':
     'Controls visual emphasis: default, secondary, destructive, outline, or ghost.',
+  'card.description':
+    'A composable surface primitive for forms, metrics, media, lists, and any structured content.',
+  'card.demo.form': 'Standard form',
+  'card.demo.metric': 'Dashboard metric',
+  'card.demo.image': 'With image',
+  'card.demo.list': 'Complex list',
+  'card.examples.description':
+    'Use Card as a flexible container that adapts to the content and business workflow inside it.',
+  'card.examples.basic.description':
+    'Card is built from small primitives: root, header, title, description, content, and footer.',
+  'card.usage.description':
+    'Import the Card primitives you need and compose them with native HTML and utility classes.',
+  'card.installation.description':
+    'Import Card, CardHeader, CardContent, CardFooter, CardTitle, and CardDescription from @sanring/ui.',
+  'card.composition.description':
+    'Card does not own business structure. Override classes, place any media or form controls inside, and combine it with other primitives.',
   'divider.description': 'A simple separator for grouping content and actions in a layout.',
   'divider.demo.account': 'Account',
   'divider.demo.profile': 'Profile',
@@ -158,6 +176,23 @@ export const en = {
     'Sets the native anchor target. When target is _blank, rel is filled automatically if omitted.',
   'link.api.rel.description':
     'Sets the native anchor rel attribute. Provide this when you need to override the safe default.',
+  'skeleton.description':
+    'A loading placeholder primitive for content that is still being fetched or prepared.',
+  'skeleton.demo.avatar': 'Avatar',
+  'skeleton.demo.card': 'Card',
+  'skeleton.demo.text': 'Text',
+  'skeleton.demo.form': 'Form',
+  'skeleton.demo.table': 'Table',
+  'skeleton.examples.description':
+    'Common skeleton layouts for avatars, cards, text blocks, forms, and tables.',
+  'skeleton.examples.basic.description':
+    'Use skeletons to reserve space for content before the final UI is ready.',
+  'skeleton.usage.description':
+    'Import Skeleton from @sanring/ui and apply sanringSkeleton to any element.',
+  'skeleton.installation.description':
+    'Use the directive on div, span, or semantic elements and provide width, height, and radius classes.',
+  'skeleton.composition.description':
+    'Compose multiple skeleton blocks to mirror the structure of the loading content.',
   'tag.description':
     'A compact removable or static label built on Badge for filters, selections, and categorization.',
   'tag.demo.default': 'Tag',
