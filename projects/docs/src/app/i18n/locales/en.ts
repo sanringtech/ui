@@ -37,6 +37,7 @@ export const en = {
   'component.button': 'Button',
   'component.divider': 'Divider',
   'component.link': 'Link',
+  'component.tag': 'Tag',
   'components.description':
     'Here you can find all components currently available in the library. More components will be added as the system grows.',
   'toc.label': 'On this page',
@@ -92,6 +93,30 @@ export const en = {
     'Import Button from @sanring/ui and choose a variant and size that match the action.',
   'button.composition.description':
     'Use variants for visual priority and sizes for density, including icon-only controls with accessible labels.',
+  'badge.description': 'A compact label for status, counts, metadata, and inline categories.',
+  'badge.demo.default': 'Default',
+  'badge.demo.secondary': 'Secondary',
+  'badge.demo.outline': 'Outline',
+  'badge.demo.ghost': 'Ghost',
+  'badge.demo.destructive': 'Destructive',
+  'badge.demo.variants': 'Variants',
+  'badge.demo.link': 'Link badge',
+  'badge.demo.withIcon': 'With icon',
+  'badge.demo.running': 'Running',
+  'badge.demo.verified': 'Verified',
+  'badge.demo.synced': 'Synced',
+  'badge.examples.description': 'Common badge variants for metadata and status labels.',
+  'badge.examples.basic.description':
+    'Use badges as compact inline labels on text, cards, lists, or links.',
+  'badge.usage.description': 'Import Badge from @sanring/ui and apply sanringBadge to an element.',
+  'badge.installation.description':
+    'Import Badge and choose a variant that matches the metadata priority.',
+  'badge.composition.description':
+    'Badge is a directive, so it keeps native span, div, or anchor behavior while applying consistent styling.',
+  'badge.api.description': 'Inputs supported by the sanringBadge directive.',
+  'badge.api.class.description': 'Additional classes merged with the base badge styles.',
+  'badge.api.variant.description':
+    'Controls visual emphasis: default, secondary, destructive, outline, or ghost.',
   'divider.description': 'A simple separator for grouping content and actions in a layout.',
   'divider.demo.account': 'Account',
   'divider.demo.profile': 'Profile',
@@ -108,8 +133,7 @@ export const en = {
     'Import Divider from @sanring/ui and place it between related sections or controls.',
   'divider.composition.description':
     'Use the default horizontal divider for stacked content, add inset for aligned list rows, or set vertical to separate inline groups.',
-  'link.description':
-    'A native anchor primitive for external links and Angular router navigation.',
+  'link.description': 'A native anchor primitive for external links and Angular router navigation.',
   'link.demo.basic': 'Sanring UI',
   'link.demo.external': 'External link',
   'link.demo.router': 'Router link',
@@ -134,4 +158,26 @@ export const en = {
     'Sets the native anchor target. When target is _blank, rel is filled automatically if omitted.',
   'link.api.rel.description':
     'Sets the native anchor rel attribute. Provide this when you need to override the safe default.',
+  'tag.description':
+    'A compact removable or static label built on Badge for filters, selections, and categorization.',
+  'tag.demo.default': 'Tag',
+  'tag.demo.closable': 'Closable',
+  'tag.demo.variants': 'Variants',
+  'tag.demo.list': 'Tag list',
+  'tag.demo.secondary': 'Secondary',
+  'tag.demo.outline': 'Outline',
+  'tag.demo.destructive': 'Destructive',
+  'tag.demo.frontend': 'Frontend',
+  'tag.examples.description': 'Common tag patterns for filters, chips, and categorized content.',
+  'tag.examples.basic.description': 'Use tags for selected values or compact content categories.',
+  'tag.usage.description': 'Import Tag from @sanring/ui and project label content inside it.',
+  'tag.installation.description':
+    'Import Tag and optionally enable closable when the tag should emit a remove event.',
+  'tag.composition.description':
+    'Tag composes Badge styling with projected content and an optional close affordance.',
+  'tag.api.description': 'Inputs and outputs supported by the sanring-tag component.',
+  'tag.api.class.description': 'Additional classes merged with the inner badge styles.',
+  'tag.api.variant.description': 'Passes the visual variant through to the inner badge.',
+  'tag.api.closable.description': 'Shows a compact remove button and supports attribute shorthand.',
+  'tag.api.remove.description': 'Emits when the remove button is clicked.',
 } as const;

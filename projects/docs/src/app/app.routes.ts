@@ -3,8 +3,7 @@ import { Routes } from '@angular/router';
 export const routes: Routes = [
   {
     path: '',
-    loadComponent: () =>
-      import('./layouts/docs-shell.component').then((m) => m.DocsShellComponent),
+    loadComponent: () => import('./layouts/docs-shell.component').then((m) => m.DocsShellComponent),
     children: [
       {
         path: '',
@@ -14,9 +13,7 @@ export const routes: Routes = [
       {
         path: '',
         loadComponent: () =>
-          import('./layouts/docs-article-shell.component').then(
-            (m) => m.DocsArticleShellComponent,
-          ),
+          import('./layouts/docs-article-shell.component').then((m) => m.DocsArticleShellComponent),
         children: [
           {
             path: 'components',
@@ -40,6 +37,13 @@ export const routes: Routes = [
                   ),
               },
               {
+                path: 'badge',
+                loadComponent: () =>
+                  import('./pages/components/badge/badge-page.component').then(
+                    (m) => m.BadgePageComponent,
+                  ),
+              },
+              {
                 path: 'button',
                 loadComponent: () =>
                   import('./pages/components/button/button-page.component').then(
@@ -58,6 +62,13 @@ export const routes: Routes = [
                 loadComponent: () =>
                   import('./pages/components/link/link-page.component').then(
                     (m) => m.LinkPageComponent,
+                  ),
+              },
+              {
+                path: 'tag',
+                loadComponent: () =>
+                  import('./pages/components/tag/tag-page.component').then(
+                    (m) => m.TagPageComponent,
                   ),
               },
             ],
