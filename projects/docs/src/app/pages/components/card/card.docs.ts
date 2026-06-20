@@ -57,10 +57,22 @@ export const cardPage = {
         },
       ],
     },
+    {
+      id: 'api',
+      titleKey: 'toc.apiReference',
+      descriptionKey: 'card.api.description',
+      level: 2,
+    },
   ],
 } as const satisfies ComponentPageDefinition;
 
 export const cardPageExamples = {
+  composition: `Card
+├── CardHeader
+│   ├── CardTitle
+│   └── CardDescription
+├── CardContent
+└── CardFooter`,
   basic: `<sanring-card class="w-[350px]">
   <sanring-card-header>
     <h3 sanringCardTitle>Card title</h3>

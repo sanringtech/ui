@@ -24,12 +24,6 @@ export const linkPage = {
       level: 2,
     },
     {
-      id: 'composition',
-      titleKey: 'toc.composition',
-      descriptionKey: 'link.composition.description',
-      level: 2,
-    },
-    {
       id: 'example',
       titleKey: 'toc.examples',
       descriptionKey: 'link.examples.description',

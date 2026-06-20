@@ -36,7 +36,10 @@ export const en = {
   'component.breadcrumb': 'Breadcrumb',
   'component.button': 'Button',
   'component.card': 'Card',
+  'component.dialog': 'Dialog',
   'component.divider': 'Divider',
+  'component.input': 'Input',
+  'component.label': 'Label',
   'component.link': 'Link',
   'component.skeleton': 'Skeleton',
   'component.tag': 'Tag',
@@ -73,6 +76,15 @@ export const en = {
     'Import the accordion primitives from @sanring/ui and compose them in your template.',
   'accordion.composition.description':
     'The component is split into root, item, trigger, and content primitives so each part remains reusable.',
+  'accordion.api.description': 'Inputs and outputs supported by the accordion primitives.',
+  'accordion.api.multi.description': 'Allows multiple accordion items to stay open at the same time.',
+  'accordion.api.expanded.description': 'Controls whether an accordion item is open.',
+  'accordion.api.disabled.description': 'Disables interaction for an accordion item.',
+  'accordion.api.headerClass.description': 'Additional classes for the trigger header button.',
+  'accordion.api.contentClass.description': 'Additional classes for the content body.',
+  'accordion.api.opened.description': 'Emits when an accordion item opens.',
+  'accordion.api.closed.description': 'Emits when an accordion item closes.',
+  'accordion.api.expandedChange.description': 'Emits when the expanded state changes.',
   'alert.description':
     'A persistent inline message for important state, warnings, and guidance inside the document flow.',
   'alert.demo.banner': 'Global banner',
@@ -114,6 +126,12 @@ export const en = {
     'Import Button from @sanring/ui and choose a variant and size that match the action.',
   'button.composition.description':
     'Use variants for visual priority and sizes for density, including icon-only controls with accessible labels.',
+  'button.api.description': 'Inputs supported by the sanringBtn directive.',
+  'button.api.class.description': 'Additional classes merged with the base button styles.',
+  'button.api.variant.description':
+    'Controls visual emphasis: default, secondary, outline, ghost, destructive, or link.',
+  'button.api.size.description':
+    'Controls button density: sm, md, icon, toolbar, or toolbarIcon.',
   'badge.description': 'A compact label for status, counts, metadata, and inline categories.',
   'badge.demo.default': 'Default',
   'badge.demo.secondary': 'Secondary',
@@ -154,6 +172,28 @@ export const en = {
     'Import Card, CardHeader, CardContent, CardFooter, CardTitle, and CardDescription from @sanring/ui.',
   'card.composition.description':
     'Card does not own business structure. Override classes, place any media or form controls inside, and combine it with other primitives.',
+  'card.api.description': 'Inputs supported by the Card family primitives.',
+  'card.api.class.description': 'Additional classes merged with each Card primitive.',
+  'dialog.description':
+    'An overlay primitive built on Angular CDK Dialog for modal tasks and focused decisions.',
+  'dialog.demo.open': 'Open dialog',
+  'dialog.demo.customClose': 'Custom Close Button',
+  'dialog.demo.noClose': 'No Close Button',
+  'dialog.demo.stickyFooter': 'Sticky Footer',
+  'dialog.demo.scrollable': 'Scrollable Content',
+  'dialog.examples.description':
+    'Common dialog patterns for custom actions, hidden close controls, sticky actions, and dense scrollable content.',
+  'dialog.examples.basic.description':
+    'Use a trigger with an ng-template and compose the dialog body from content, header, title, description, and footer primitives.',
+  'dialog.usage.description':
+    'Import the dialog primitives and bind sanringDialogTrigger to an ng-template.',
+  'dialog.installation.description':
+    'Dialog is powered by Angular CDK Dialog. Compose the exported primitives from @sanring/ui.',
+  'dialog.composition.description':
+    'Use DialogContent for the panel, DialogHeader and DialogFooter for layout, and sanringDialogClose for custom close actions.',
+  'dialog.api.description': 'Inputs supported by the dialog primitives.',
+  'dialog.api.class.description': 'Additional classes merged with DialogContent layout styles.',
+  'dialog.api.showClose.description': 'Controls whether the built-in close button is rendered.',
   'divider.description': 'A simple separator for grouping content and actions in a layout.',
   'divider.demo.account': 'Account',
   'divider.demo.profile': 'Profile',
@@ -170,6 +210,39 @@ export const en = {
     'Import Divider from @sanring/ui and place it between related sections or controls.',
   'divider.composition.description':
     'Use the default horizontal divider for stacked content, add inset for aligned list rows, or set vertical to separate inline groups.',
+  'divider.api.description': 'Inputs supported by the sanring-divider component.',
+  'divider.api.vertical.description': 'Switches the separator from horizontal to vertical.',
+  'divider.api.inset.description': 'Offsets the horizontal divider: none, start, end, or both.',
+  'input.description':
+    'A form control styling directive for native inputs, textareas, and file fields.',
+  'input.demo.disabled': 'Disabled',
+  'input.demo.textarea': 'Textarea',
+  'input.demo.file': 'File',
+  'input.examples.description':
+    'Common input patterns for editable text, disabled fields, textareas, and file uploads.',
+  'input.examples.basic.description':
+    'Apply sanringInput to a native input to keep browser behavior while receiving system styling.',
+  'input.usage.description': 'Import Input from @sanring/ui and apply sanringInput to an input.',
+  'input.installation.description':
+    'Use sanringInput on native input or textarea elements and keep type, value, disabled, and form bindings native.',
+  'input.composition.description':
+    'Pair Input with Label for accessible forms, or combine it with Card and Alert in larger workflows.',
+  'input.api.description': 'Inputs supported by the sanringInput directive.',
+  'input.api.class.description': 'Additional classes merged with the base input styles.',
+  'label.description':
+    'A native label styling directive for accessible form labels and field captions.',
+  'label.demo.withInput': 'With input',
+  'label.demo.disabled': 'Disabled state',
+  'label.examples.description': 'Common label patterns for standalone labels and form controls.',
+  'label.examples.basic.description':
+    'Apply sanringLabel to a native label so for/id association stays intact.',
+  'label.usage.description': 'Import Label from @sanring/ui and apply sanringLabel to a label.',
+  'label.installation.description':
+    'Use sanringLabel on native label elements and connect them to controls with for and id.',
+  'label.composition.description':
+    'Place Label near Input in a grid or field wrapper; peer-disabled styles respond to disabled controls.',
+  'label.api.description': 'Inputs supported by the sanringLabel directive.',
+  'label.api.class.description': 'Additional classes merged with the base label styles.',
   'link.description': 'A native anchor primitive for external links and Angular router navigation.',
   'link.demo.basic': 'Sanring UI',
   'link.demo.external': 'External link',
@@ -212,6 +285,8 @@ export const en = {
     'Use the directive on div, span, or semantic elements and provide width, height, and radius classes.',
   'skeleton.composition.description':
     'Compose multiple skeleton blocks to mirror the structure of the loading content.',
+  'skeleton.api.description': 'Inputs supported by the sanringSkeleton directive.',
+  'skeleton.api.class.description': 'Additional classes merged with the base skeleton styles.',
   'tag.description':
     'A compact removable or static label built on Badge for filters, selections, and categorization.',
   'tag.demo.default': 'Tag',

@@ -24,12 +24,6 @@ export const alertPage = {
       level: 2,
     },
     {
-      id: 'composition',
-      titleKey: 'toc.composition',
-      descriptionKey: 'alert.composition.description',
-      level: 2,
-    },
-    {
       id: 'example',
       titleKey: 'toc.examples',
       descriptionKey: 'alert.examples.description',

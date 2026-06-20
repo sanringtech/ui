@@ -24,12 +24,6 @@ export const skeletonPage = {
       level: 2,
     },
     {
-      id: 'composition',
-      titleKey: 'toc.composition',
-      descriptionKey: 'skeleton.composition.description',
-      level: 2,
-    },
-    {
       id: 'example',
       titleKey: 'toc.examples',
       descriptionKey: 'skeleton.examples.description',
@@ -61,6 +55,12 @@ export const skeletonPage = {
           level: 3,
         },
       ],
+    },
+    {
+      id: 'api',
+      titleKey: 'toc.apiReference',
+      descriptionKey: 'skeleton.api.description',
+      level: 2,
     },
   ],
 } as const satisfies ComponentPageDefinition;

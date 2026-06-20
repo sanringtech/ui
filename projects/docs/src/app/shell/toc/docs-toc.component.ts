@@ -1,9 +1,11 @@
 import { Component, inject } from '@angular/core';
+import { RouterLink } from '@angular/router';
 import { I18nService } from '../../i18n/i18n.service';
 import { DocsTocItem, DocsTocService } from './docs-toc.service';
 
 @Component({
   selector: 'app-docs-toc',
+  imports: [RouterLink],
   template: `
     <aside
       class="sticky top-[76px] h-[calc(100dvh-76px)] overflow-auto bg-[var(--docs-bg)] pb-12 pl-2.5 pr-8 pt-12 max-[1180px]:hidden"
@@ -13,7 +15,7 @@ import { DocsTocItem, DocsTocService } from './docs-toc.service';
           {{ i18n.t('toc.label') }}
         </p>
         @for (item of items(); track item.id) {
-          <a [class]="itemClass(item)" [href]="'#' + item.id">
+          <a [class]="itemClass(item)" [routerLink]="[]" [fragment]="item.id">
             {{ item.label }}
           </a>
         }

@@ -24,12 +24,6 @@ export const tagPage = {
       level: 2,
     },
     {
-      id: 'composition',
-      titleKey: 'toc.composition',
-      descriptionKey: 'tag.composition.description',
-      level: 2,
-    },
-    {
       id: 'example',
       titleKey: 'toc.examples',
       descriptionKey: 'tag.examples.description',

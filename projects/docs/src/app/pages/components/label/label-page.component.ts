@@ -1,6 +1,5 @@
 import { Component, inject } from '@angular/core';
-import { LucideBadgeCheck, LucideMoveUpRight } from '@lucide/angular';
-import { Badge } from '@sanring/ui';
+import { Input, Label } from '@sanring/ui';
 import { getComponentPageSection } from '../../../docs-schema/component-page.utils';
 import { I18nService } from '../../../i18n/i18n.service';
 import {
@@ -10,19 +9,18 @@ import {
   ComponentPageHeaderComponent,
   ComponentPageSectionComponent,
 } from '../../../layouts/component-page';
-import { badgePage, badgePageExamples } from './badge.docs';
+import { labelPage, labelPageExamples } from './label.docs';
 
 @Component({
-  selector: 'app-badge-page',
+  selector: 'app-label-page',
   imports: [
-    Badge,
+    Input,
+    Label,
     ComponentPageCodeBlock,
     ComponentPageCodePreviewer,
     ComponentPageComponent,
     ComponentPageHeaderComponent,
     ComponentPageSectionComponent,
-    LucideBadgeCheck,
-    LucideMoveUpRight,
   ],
   template: `
     <app-component-page [sections]="page.sections">
@@ -34,8 +32,8 @@ import { badgePage, badgePageExamples } from './badge.docs';
 
       <app-component-page-section [section]="section('basic')">
         <app-component-page-code-previewer [code]="examples.basic" language="angular-html">
-          <div previewer class="flex flex-wrap items-center justify-center gap-3">
-            <span sanringBadge>{{ i18n.t('badge.demo.default') }}</span>
+          <div previewer class="w-[min(360px,100%)]">
+            <label sanringLabel for="label-basic-email">Email</label>
           </div>
         </app-component-page-code-previewer>
       </app-component-page-section>
@@ -56,53 +54,26 @@ import { badgePage, badgePageExamples } from './badge.docs';
 
       <app-component-page-section [section]="section('example')">
         <div class="grid gap-2">
-          <app-component-page-section [section]="section('example-variants')">
-            <app-component-page-code-previewer [code]="examples.variants" language="angular-html">
-              <div previewer class="flex flex-wrap items-center justify-center gap-3">
-                <span sanringBadge>{{ i18n.t('badge.demo.default') }}</span>
-                <span sanringBadge variant="secondary">
-                  {{ i18n.t('badge.demo.secondary') }}
-                </span>
-                <span sanringBadge variant="outline">{{ i18n.t('badge.demo.outline') }}</span>
-                <span sanringBadge variant="ghost">{{ i18n.t('badge.demo.ghost') }}</span>
-                <span sanringBadge variant="destructive">
-                  {{ i18n.t('badge.demo.destructive') }}
-                </span>
+          <app-component-page-section [section]="section('example-with-input')">
+            <app-component-page-code-previewer [code]="examples.withInput" language="angular-html">
+              <div previewer class="grid w-[min(360px,100%)] gap-2">
+                <label sanringLabel for="email">Email</label>
+                <input id="email" sanringInput placeholder="name@sanring.dev" type="email" />
               </div>
             </app-component-page-code-previewer>
           </app-component-page-section>
 
-          <app-component-page-section [section]="section('example-link')">
-            <app-component-page-code-previewer [code]="examples.link" language="angular-html">
-              <div previewer class="flex flex-wrap items-center justify-center gap-3">
-                <a
-                  sanringBadge
-                  class="transition-transform hover:-translate-y-0.5 hover:border-[var(--docs-fg)] hover:bg-[var(--docs-elevated)]"
-                  href="/components/badge"
-                  variant="outline"
-                >
-                  {{ i18n.t('badge.demo.link') }}
-                  <svg class="size-3" lucideMoveUpRight></svg>
-                </a>
-              </div>
-            </app-component-page-code-previewer>
-          </app-component-page-section>
-
-          <app-component-page-section [section]="section('example-with-icon')">
-            <app-component-page-code-previewer [code]="examples.withIcon" language="angular-html">
-              <div previewer class="flex flex-wrap items-center justify-center gap-3">
-                <span sanringBadge variant="outline">
-                  <span class="size-2 shrink-0 rounded-full bg-green-500"></span>
-                  {{ i18n.t('badge.demo.running') }}
-                </span>
-                <span sanringBadge variant="secondary">
-                  <svg class="size-3" lucideBadgeCheck></svg>
-                  {{ i18n.t('badge.demo.verified') }}
-                </span>
-                <span sanringBadge variant="outline">
-                  {{ i18n.t('badge.demo.synced') }}
-                  <svg class="size-3" lucideBadgeCheck></svg>
-                </span>
+          <app-component-page-section [section]="section('example-disabled')">
+            <app-component-page-code-previewer [code]="examples.disabled" language="angular-html">
+              <div previewer class="grid w-[min(360px,100%)] gap-2">
+                <input
+                  id="disabled-email"
+                  sanringInput
+                  class="peer"
+                  disabled
+                  value="readonly@sanring.dev"
+                />
+                <label sanringLabel for="disabled-email">Disabled email</label>
               </div>
             </app-component-page-code-previewer>
           </app-component-page-section>
@@ -129,20 +100,12 @@ import { badgePage, badgePageExamples } from './badge.docs';
               </tr>
             </thead>
             <tbody>
-              <tr class="border-b border-[var(--docs-border)]">
+              <tr>
                 <td class="px-4 py-3 font-mono text-[var(--docs-fg)]">class</td>
                 <td class="px-4 py-3 font-mono text-[var(--docs-muted)]">string</td>
                 <td class="px-4 py-3 font-mono text-[var(--docs-muted)]">''</td>
                 <td class="px-4 py-3 text-[var(--docs-muted)]">
-                  {{ i18n.t('badge.api.class.description') }}
-                </td>
-              </tr>
-              <tr>
-                <td class="px-4 py-3 font-mono text-[var(--docs-fg)]">variant</td>
-                <td class="px-4 py-3 font-mono text-[var(--docs-muted)]">BadgeVariant</td>
-                <td class="px-4 py-3 font-mono text-[var(--docs-muted)]">'default'</td>
-                <td class="px-4 py-3 text-[var(--docs-muted)]">
-                  {{ i18n.t('badge.api.variant.description') }}
+                  {{ i18n.t('label.api.class.description') }}
                 </td>
               </tr>
             </tbody>
@@ -152,9 +115,9 @@ import { badgePage, badgePageExamples } from './badge.docs';
     </app-component-page>
   `,
 })
-export class BadgePageComponent {
-  protected readonly page = badgePage;
-  protected readonly examples = badgePageExamples;
+export class LabelPageComponent {
+  protected readonly page = labelPage;
+  protected readonly examples = labelPageExamples;
   protected readonly i18n = inject(I18nService);
 
   protected section(id: string) {

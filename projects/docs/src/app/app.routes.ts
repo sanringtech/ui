@@ -65,10 +65,31 @@ export const routes: Routes = [
                   ),
               },
               {
+                path: 'dialog',
+                loadComponent: () =>
+                  import('./pages/components/dialog/dialog-page.component').then(
+                    (m) => m.DialogPageComponent,
+                  ),
+              },
+              {
                 path: 'divider',
                 loadComponent: () =>
                   import('./pages/components/divider/divider-page.component').then(
                     (m) => m.DividerPageComponent,
+                  ),
+              },
+              {
+                path: 'input',
+                loadComponent: () =>
+                  import('./pages/components/input/input-page.component').then(
+                    (m) => m.InputPageComponent,
+                  ),
+              },
+              {
+                path: 'label',
+                loadComponent: () =>
+                  import('./pages/components/label/label-page.component').then(
+                    (m) => m.LabelPageComponent,
                   ),
               },
               {

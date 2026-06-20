@@ -19,5 +19,10 @@ export const accordionPage = {
       titleKey: 'toc.composition',
       descriptionKey: 'accordion.composition.description',
     },
+    {
+      id: 'api',
+      titleKey: 'toc.apiReference',
+      descriptionKey: 'accordion.api.description',
+    },
   ],
 } as const satisfies ComponentPageDefinition;

@@ -18,7 +18,10 @@ export type DocsComponentId =
   | 'breadcrumb'
   | 'button'
   | 'card'
+  | 'dialog'
   | 'divider'
+  | 'input'
+  | 'label'
   | 'link'
   | 'skeleton'
   | 'tag';
@@ -102,9 +105,27 @@ export const docsComponentItems: DocsComponentNavItem[] = [
     active: true,
   },
   {
+    id: 'dialog',
+    labelKey: 'component.dialog',
+    path: '/components/dialog',
+    active: true,
+  },
+  {
     id: 'divider',
     labelKey: 'component.divider',
     path: '/components/divider',
+    active: true,
+  },
+  {
+    id: 'input',
+    labelKey: 'component.input',
+    path: '/components/input',
+    active: true,
+  },
+  {
+    id: 'label',
+    labelKey: 'component.label',
+    path: '/components/label',
     active: true,
   },
   {

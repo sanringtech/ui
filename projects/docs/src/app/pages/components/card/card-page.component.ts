@@ -80,7 +80,20 @@ import { cardPage, cardPageExamples } from './card.docs';
 
       <app-component-page-section [section]="section('installation')" />
 
-      <app-component-page-section [section]="section('composition')" />
+      <app-component-page-section [section]="section('composition')">
+        <div class="grid gap-4">
+          <p class="m-0 text-sm font-medium text-[var(--docs-fg)]">
+            Use the following composition to build a
+            <code class="rounded-md bg-[var(--docs-elevated)] px-1.5 py-1 font-mono text-xs">
+              Card
+            </code>
+            :
+          </p>
+          <div class="overflow-hidden rounded-lg border border-[var(--docs-border)]">
+            <app-component-page-code-block [code]="examples.composition" language="bash" />
+          </div>
+        </div>
+      </app-component-page-section>
 
       <app-component-page-section [section]="section('example')">
         <div class="grid gap-2">
@@ -212,6 +225,39 @@ import { cardPage, cardPageExamples } from './card.docs';
               </div>
             </app-component-page-code-previewer>
           </app-component-page-section>
+        </div>
+      </app-component-page-section>
+
+      <app-component-page-section [section]="section('api')">
+        <div class="overflow-hidden rounded-lg border border-[var(--docs-border)]">
+          <table class="w-full border-collapse text-left text-sm">
+            <thead class="bg-[var(--docs-elevated)] text-[var(--docs-muted)]">
+              <tr>
+                <th class="border-b border-[var(--docs-border)] px-4 py-3 font-medium">
+                  {{ i18n.t('link.api.property') }}
+                </th>
+                <th class="border-b border-[var(--docs-border)] px-4 py-3 font-medium">
+                  {{ i18n.t('link.api.type') }}
+                </th>
+                <th class="border-b border-[var(--docs-border)] px-4 py-3 font-medium">
+                  {{ i18n.t('link.api.default') }}
+                </th>
+                <th class="border-b border-[var(--docs-border)] px-4 py-3 font-medium">
+                  {{ i18n.t('link.api.descriptionLabel') }}
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="px-4 py-3 font-mono text-[var(--docs-fg)]">class</td>
+                <td class="px-4 py-3 font-mono text-[var(--docs-muted)]">string</td>
+                <td class="px-4 py-3 font-mono text-[var(--docs-muted)]">''</td>
+                <td class="px-4 py-3 text-[var(--docs-muted)]">
+                  {{ i18n.t('card.api.class.description') }}
+                </td>
+              </tr>
+            </tbody>
+          </table>
         </div>
       </app-component-page-section>
     </app-component-page>

@@ -24,12 +24,6 @@ export const buttonPage = {
       level: 2,
     },
     {
-      id: 'composition',
-      titleKey: 'toc.composition',
-      descriptionKey: 'button.composition.description',
-      level: 2,
-    },
-    {
       id: 'example',
       titleKey: 'toc.examples',
       descriptionKey: 'button.examples.description',
@@ -86,6 +80,12 @@ export const buttonPage = {
           level: 3,
         },
       ],
+    },
+    {
+      id: 'api',
+      titleKey: 'toc.apiReference',
+      descriptionKey: 'button.api.description',
+      level: 2,
     },
   ],
 } as const satisfies ComponentPageDefinition;

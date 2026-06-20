@@ -56,7 +56,6 @@ import { skeletonPage, skeletonPageExamples } from './skeleton.docs';
 
       <app-component-page-section [section]="section('installation')" />
 
-      <app-component-page-section [section]="section('composition')" />
 
       <app-component-page-section [section]="section('example')">
         <div class="grid gap-2">
@@ -148,6 +147,39 @@ import { skeletonPage, skeletonPageExamples } from './skeleton.docs';
               </div>
             </app-component-page-code-previewer>
           </app-component-page-section>
+        </div>
+      </app-component-page-section>
+
+      <app-component-page-section [section]="section('api')">
+        <div class="overflow-hidden rounded-lg border border-[var(--docs-border)]">
+          <table class="w-full border-collapse text-left text-sm">
+            <thead class="bg-[var(--docs-elevated)] text-[var(--docs-muted)]">
+              <tr>
+                <th class="border-b border-[var(--docs-border)] px-4 py-3 font-medium">
+                  {{ i18n.t('link.api.property') }}
+                </th>
+                <th class="border-b border-[var(--docs-border)] px-4 py-3 font-medium">
+                  {{ i18n.t('link.api.type') }}
+                </th>
+                <th class="border-b border-[var(--docs-border)] px-4 py-3 font-medium">
+                  {{ i18n.t('link.api.default') }}
+                </th>
+                <th class="border-b border-[var(--docs-border)] px-4 py-3 font-medium">
+                  {{ i18n.t('link.api.descriptionLabel') }}
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="px-4 py-3 font-mono text-[var(--docs-fg)]">class</td>
+                <td class="px-4 py-3 font-mono text-[var(--docs-muted)]">string</td>
+                <td class="px-4 py-3 font-mono text-[var(--docs-muted)]">''</td>
+                <td class="px-4 py-3 text-[var(--docs-muted)]">
+                  {{ i18n.t('skeleton.api.class.description') }}
+                </td>
+              </tr>
+            </tbody>
+          </table>
         </div>
       </app-component-page-section>
     </app-component-page>

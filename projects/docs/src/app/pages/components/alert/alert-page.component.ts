@@ -76,7 +76,6 @@ import { alertPage, alertPageExamples } from './alert.docs';
 
       <app-component-page-section [section]="section('installation')" />
 
-      <app-component-page-section [section]="section('composition')" />
 
       <app-component-page-section [section]="section('example')">
         <div class="grid gap-2">

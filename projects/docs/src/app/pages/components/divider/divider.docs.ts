@@ -24,12 +24,6 @@ export const dividerPage = {
       level: 2,
     },
     {
-      id: 'composition',
-      titleKey: 'toc.composition',
-      descriptionKey: 'divider.composition.description',
-      level: 2,
-    },
-    {
       id: 'example',
       titleKey: 'toc.examples',
       descriptionKey: 'divider.examples.description',
@@ -51,6 +45,12 @@ export const dividerPage = {
           level: 3,
         },
       ],
+    },
+    {
+      id: 'api',
+      titleKey: 'toc.apiReference',
+      descriptionKey: 'divider.api.description',
+      level: 2,
     },
   ],
 } as const satisfies ComponentPageDefinition;
