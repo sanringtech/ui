@@ -26,8 +26,10 @@ export class Alert {
 
   private get variantClasses() {
     const variants: Record<AlertVariant, string> = {
-      default: 'bg-[var(--docs-bg)] text-[var(--docs-fg)] border-[var(--docs-border)]',
-      destructive: 'border-red-500/50 text-red-500 dark:border-red-500 [&>svg]:text-red-500',
+      default:
+        'border-[var(--docs-border-strong)] bg-[var(--docs-surface)] text-[var(--docs-fg)]',
+      destructive:
+        'border-red-500/60 bg-red-500/10 text-red-400 dark:border-red-500 [&>svg]:text-red-400',
     };
     return variants[this.variant];
   }

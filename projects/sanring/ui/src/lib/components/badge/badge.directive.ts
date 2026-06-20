@@ -22,13 +22,13 @@ export class Badge {
 
   private get variantClasses() {
     const variants: Record<BadgeVariant, string> = {
-      default: 'border-transparent bg-[var(--docs-fg)] text-[var(--docs-bg)] hover:opacity-80',
+      default: 'border-transparent bg-[var(--docs-control)] text-[var(--docs-control-fg)] hover:opacity-80',
       secondary:
-        'border-transparent bg-[var(--docs-elevated)] text-[var(--docs-fg)] hover:bg-[var(--docs-active)]',
+        'border-[var(--docs-border)] bg-[var(--docs-surface-strong)] text-[var(--docs-fg)] hover:bg-[var(--docs-active)]',
       destructive: 'border-transparent bg-red-500 text-white hover:bg-red-600',
-      outline: 'border-[var(--docs-border)] text-[var(--docs-fg)]',
+      outline: 'border-[var(--docs-border-strong)] text-[var(--docs-fg)]',
       ghost:
-        'border-transparent bg-transparent text-[var(--docs-fg)] hover:bg-[var(--docs-elevated)]',
+        'border-transparent bg-transparent text-[var(--docs-fg)] hover:bg-[var(--docs-surface-strong)]',
     };
     return variants[this.variant];
   }

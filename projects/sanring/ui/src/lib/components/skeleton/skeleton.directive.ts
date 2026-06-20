@@ -14,7 +14,7 @@ export class Skeleton {
 
   protected get skeletonClass() {
     return cn(
-      'animate-pulse rounded-md bg-[var(--docs-border)]',
+      'animate-pulse rounded-md bg-[var(--docs-surface-strong)]',
       this.class // 讓使用者可以覆蓋寬高和形狀
     );
   }

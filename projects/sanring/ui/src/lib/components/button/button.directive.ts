@@ -27,13 +27,13 @@ export class Button {
 
   private get variantClasses() {
     const variants: Record<ButtonVariant, string> = {
-      default: 'border-transparent bg-[var(--docs-fg)] text-[var(--docs-bg)]',
+      default: 'border-transparent bg-[var(--docs-control)] text-[var(--docs-control-fg)]',
       secondary:
-        'border-transparent bg-[var(--docs-elevated)] text-[var(--docs-fg)] hover:bg-[var(--docs-active)]',
+        'border-[var(--docs-border)] bg-[var(--docs-surface-strong)] text-[var(--docs-fg)] hover:bg-[var(--docs-active)]',
       outline:
-        'border-[var(--docs-border)] bg-transparent text-[var(--docs-fg)] hover:bg-[var(--docs-elevated)]',
+        'border-[var(--docs-border-strong)] bg-transparent text-[var(--docs-fg)] hover:bg-[var(--docs-surface-strong)]',
       ghost:
-        'border-transparent bg-transparent text-[var(--docs-fg)] hover:bg-[var(--docs-elevated)]',
+        'border-transparent bg-transparent text-[var(--docs-fg)] hover:bg-[var(--docs-surface-strong)]',
       destructive:
         'border-transparent bg-[#dc2626] text-white hover:bg-[#b91c1c] focus-visible:ring-[#ef4444]',
       link: 'border-transparent bg-transparent px-0 text-[var(--docs-fg)] underline-offset-4 hover:underline',
