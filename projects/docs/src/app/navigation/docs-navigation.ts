@@ -18,7 +18,8 @@ export type DocsComponentId =
   | 'breadcrumb'
   | 'button'
   | 'divider'
-  | 'link';
+  | 'link'
+  | 'tag';
 
 export interface DocsComponentNavItem extends DocsSidebarItem {
   id: DocsComponentId;
@@ -74,13 +75,12 @@ export const docsComponentItems: DocsComponentNavItem[] = [
   //   active: true,
   //   disabled: true,
   // },
-  // {
-  //   id: 'badge',
-  //   labelKey: 'component.badge',
-  //   path: '/components/badge',
-  //   active: true,
-  //   disabled: true,
-  // },
+  {
+    id: 'badge',
+    labelKey: 'component.badge',
+    path: '/components/badge',
+    active: true,
+  },
   // {
   //   id: 'breadcrumb',
   //   labelKey: 'component.breadcrumb',
@@ -104,6 +104,12 @@ export const docsComponentItems: DocsComponentNavItem[] = [
     id: 'link',
     labelKey: 'component.link',
     path: '/components/link',
+    active: true,
+  },
+  {
+    id: 'tag',
+    labelKey: 'component.tag',
+    path: '/components/tag',
     active: true,
   },
 ];
