@@ -1,4 +1,3 @@
-// accordion-content.component.ts
 import { Component, Input, inject } from '@angular/core';
 import { cn } from '../../utils';
 import { AccordionItemComponent } from './accordion-item.component';
@@ -9,11 +8,14 @@ import { AccordionItemComponent } from './accordion-item.component';
   template: `
     <div
       data-accordion-content
+      role="region"
+      [id]="item?.id + '-content'"
+      [attr.aria-labelledby]="item?.id + '-header'"
       [attr.data-state]="item?.expanded ? 'open' : 'closed'"
       [class]="contentContainerClass"
     >
       <div class="overflow-hidden">
-        <div [class]="cn('pb-4 pt-0', contentClass)">
+        <div [class]="cn('pb-4 pt-0', class)">
           <ng-content></ng-content>
         </div>
       </div>
@@ -22,11 +24,9 @@ import { AccordionItemComponent } from './accordion-item.component';
 })
 export class AccordionContentComponent {
   protected cn = cn;
-
-  // 透過 optional 注入，如果沒被放在 Item 裡面也不會報錯
   protected item = inject(AccordionItemComponent, { optional: true });
 
-  @Input() contentClass?: string;
+  @Input() class?: string;
 
   protected get contentContainerClass() {
     return cn(

@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { CdkAccordion } from '@angular/cdk/accordion';
 
 @Component({
@@ -18,4 +18,14 @@ import { CdkAccordion } from '@angular/cdk/accordion';
   `,
   styles: ``,
 })
-export class AccordionComponent {}
+export class AccordionComponent {
+  private readonly accordion = inject(CdkAccordion);
+
+  openAll() {
+    this.accordion.openAll();
+  }
+
+  closeAll() {
+    this.accordion.closeAll();
+  }
+}

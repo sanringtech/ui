@@ -69,6 +69,17 @@ export const zh: Record<TranslationKey, string> = {
   'accordion.demo.returns.answer': '未使用且保留原包裝的商品，可在 30 天內退貨。',
   'accordion.demo.support.question': '如何聯絡客服？',
   'accordion.demo.support.answer': '你可以透過控制台聯絡客服，或在營業時間寄信給我們。',
+  'accordion.demo.single': '單一展開',
+  'accordion.demo.multiple': '多個展開',
+  'accordion.demo.defaultOpen': '預設展開',
+  'accordion.demo.controlled': '受控操作',
+  'accordion.demo.openAll': '全部展開',
+  'accordion.demo.closeAll': '全部收合',
+  'accordion.examples.description':
+    '常見 accordion 狀態，包含單一展開、多個展開、預設展開與程式化控制。',
+  'accordion.examples.basic.description': '預設情況下，同一時間只會保留一個 accordion item 展開。',
+  'accordion.usage.description':
+    '從 @sanring/ui 匯入 accordion primitives，並組合 root、item、trigger 與 content。',
   'accordion.installation.description':
     '從 @sanring/ui 匯入手風琴 primitives，並在 template 中組合使用。',
   'accordion.composition.description':
@@ -79,6 +90,8 @@ export const zh: Record<TranslationKey, string> = {
   'accordion.api.disabled.description': '停用 accordion item 的互動。',
   'accordion.api.headerClass.description': '合併到 trigger header button 的額外 class。',
   'accordion.api.contentClass.description': '合併到 content body 的額外 class。',
+  'accordion.api.openAll.description': '在 multi 啟用時展開所有可用項目。',
+  'accordion.api.closeAll.description': '收合 accordion 中所有可用項目。',
   'accordion.api.opened.description': 'accordion item 展開時觸發。',
   'accordion.api.closed.description': 'accordion item 關閉時觸發。',
   'accordion.api.expandedChange.description': 'expanded 狀態變更時觸發。',

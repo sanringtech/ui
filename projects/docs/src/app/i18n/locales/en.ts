@@ -73,6 +73,18 @@ export const en = {
   'accordion.demo.support.question': 'How can I contact customer support?',
   'accordion.demo.support.answer':
     'Contact support through the dashboard or email us during business hours.',
+  'accordion.demo.single': 'Single item',
+  'accordion.demo.multiple': 'Multiple items',
+  'accordion.demo.defaultOpen': 'Default open',
+  'accordion.demo.controlled': 'Controlled',
+  'accordion.demo.openAll': 'Open all',
+  'accordion.demo.closeAll': 'Close all',
+  'accordion.examples.description':
+    'Common accordion states for single selection, multi selection, default open content, and programmatic controls.',
+  'accordion.examples.basic.description':
+    'By default, only one accordion item remains open at a time.',
+  'accordion.usage.description':
+    'Import the accordion primitives from @sanring/ui and compose root, item, trigger, and content together.',
   'accordion.installation.description':
     'Import the accordion primitives from @sanring/ui and compose them in your template.',
   'accordion.composition.description':
@@ -83,6 +95,8 @@ export const en = {
   'accordion.api.disabled.description': 'Disables interaction for an accordion item.',
   'accordion.api.headerClass.description': 'Additional classes for the trigger header button.',
   'accordion.api.contentClass.description': 'Additional classes for the content body.',
+  'accordion.api.openAll.description': 'Opens all enabled items when multi is enabled.',
+  'accordion.api.closeAll.description': 'Closes all enabled items in the accordion.',
   'accordion.api.opened.description': 'Emits when an accordion item opens.',
   'accordion.api.closed.description': 'Emits when an accordion item closes.',
   'accordion.api.expandedChange.description': 'Emits when the expanded state changes.',

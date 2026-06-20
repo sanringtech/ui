@@ -52,7 +52,7 @@ export class ComponentPageSectionComponent {
   }
 
   protected get sectionClass() {
-    return this.level === 2 ? 'mt-16 scroll-mt-[90px]' : 'mt-10 scroll-mt-[90px]';
+    return this.level === 2 ? 'mt-16 scroll-mt-[80px]' : 'mt-10 scroll-mt-[80px]';
   }
 
   protected get headingClass() {

@@ -1,11 +1,11 @@
 import { Component, inject } from '@angular/core';
-import { RouterLink } from '@angular/router';
 import { I18nService } from '../../i18n/i18n.service';
 import { DocsTocItem, DocsTocService } from './docs-toc.service';
 
+const SCROLL_OFFSET = 76;
+
 @Component({
   selector: 'app-docs-toc',
-  imports: [RouterLink],
   template: `
     <aside
       class="sticky top-[76px] h-[calc(100dvh-76px)] overflow-auto bg-[var(--docs-bg)] pb-12 pl-2.5 pr-8 pt-12 max-[1180px]:hidden"
@@ -15,7 +15,7 @@ import { DocsTocItem, DocsTocService } from './docs-toc.service';
           {{ i18n.t('toc.label') }}
         </p>
         @for (item of items(); track item.id) {
-          <a [class]="itemClass(item)" [routerLink]="[]" [fragment]="item.id">
+          <a [class]="itemClass(item)" href="#" (click)="scrollTo(item.id, $event)">
             {{ item.label }}
           </a>
         }
@@ -26,6 +26,16 @@ import { DocsTocItem, DocsTocService } from './docs-toc.service';
 export class DocsTocComponent {
   protected readonly i18n = inject(I18nService);
   private readonly toc = inject(DocsTocService);
+
+  protected scrollTo(id: string, event: Event): void {
+    event.preventDefault();
+    const el = document.getElementById(id);
+    if (!el) return;
+    const marginTop = parseInt(getComputedStyle(el).marginTop) || 0;
+    const top = el.getBoundingClientRect().top + window.scrollY - SCROLL_OFFSET - marginTop;
+    window.scrollTo({ top, behavior: 'smooth' });
+    window.history.pushState(null, '', `#${id}`);
+  }
 
   protected items() {
     return this.toc.items();

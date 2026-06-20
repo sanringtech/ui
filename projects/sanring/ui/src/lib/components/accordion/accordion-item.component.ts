@@ -14,7 +14,7 @@ import { cn } from '../../utils';
     },
   ],
   template: `
-    <div class="border-b border-gray-200">
+    <div [class]="itemClass">
       <ng-content select="sanring-accordion-trigger"></ng-content>
       <ng-content select="sanring-accordion-content"></ng-content>
     </div>
@@ -24,13 +24,8 @@ export class AccordionItemComponent {
   private readonly item = inject(CdkAccordionItem);
   private readonly destroyRef = inject(DestroyRef);
   private readonly expandedState = signal(false);
-  protected cn = cn;
 
-  @Input() headerClass?: string;
-  // 1. 是否顯示 Description 文字
-  @Input() showDescription = false;
-  // 2. 切換模式 (icon 或 text)
-  @Input() triggerType: 'icon' | 'text' = 'icon';
+  @Input() class?: string;
 
   get expanded() {
     return this.expandedState();
@@ -40,9 +35,12 @@ export class AccordionItemComponent {
     return this.item.disabled;
   }
 
-  toggle() {
-    this.item.toggle();
-    this.syncState();
+  get id() {
+    return this.item.id;
+  }
+
+  protected get itemClass() {
+    return cn('border-b border-[var(--docs-border)]', this.class);
   }
 
   constructor() {
@@ -50,6 +48,21 @@ export class AccordionItemComponent {
     this.item.expandedChange
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe(() => this.syncState());
+  }
+
+  toggle() {
+    this.item.toggle();
+    this.syncState();
+  }
+
+  open() {
+    this.item.open();
+    this.syncState();
+  }
+
+  close() {
+    this.item.close();
+    this.syncState();
   }
 
   private syncState() {

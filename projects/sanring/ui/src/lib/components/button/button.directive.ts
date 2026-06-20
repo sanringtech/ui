@@ -17,7 +17,7 @@ export class ButtonDirective {
   protected get buttonClass() {
     return cn(
       'inline-flex cursor-pointer items-center justify-center gap-2 whitespace-nowrap rounded-lg border font-medium',
-      'transition-colors focus-visible:outline-none focus-visible:ring-2',
+      'transition-[background-color,color] focus-visible:outline-none focus-visible:ring-2',
       'focus-visible:ring-[var(--docs-border-strong)] disabled:pointer-events-none disabled:opacity-50',
       this.variantClasses,
       this.sizeClasses,

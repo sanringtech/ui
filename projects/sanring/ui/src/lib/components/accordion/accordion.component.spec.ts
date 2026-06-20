@@ -23,10 +23,34 @@ import { AccordionTriggerComponent } from './accordion-trigger.component';
 })
 class AccordionTestHost {}
 
+@Component({
+  imports: [AccordionComponent, AccordionItemComponent, AccordionTriggerComponent, AccordionContentComponent],
+  template: `
+    <button type="button" (click)="accordion.openAll()">Open all</button>
+    <button type="button" (click)="accordion.closeAll()">Close all</button>
+
+    <sanring-accordion #accordion multi>
+      <sanring-accordion-item>
+        <sanring-accordion-trigger>Question 1</sanring-accordion-trigger>
+        <sanring-accordion-content>
+          <p>Answer 1</p>
+        </sanring-accordion-content>
+      </sanring-accordion-item>
+      <sanring-accordion-item>
+        <sanring-accordion-trigger>Question 2</sanring-accordion-trigger>
+        <sanring-accordion-content>
+          <p>Answer 2</p>
+        </sanring-accordion-content>
+      </sanring-accordion-item>
+    </sanring-accordion>
+  `,
+})
+class AccordionControlledTestHost {}
+
 describe('AccordionComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [AccordionTestHost],
+      imports: [AccordionTestHost, AccordionControlledTestHost],
     }).compileComponents();
   });
 
@@ -48,5 +72,24 @@ describe('AccordionComponent', () => {
     expect(trigger?.getAttribute('aria-expanded')).toBe('true');
     expect(content?.classList.contains('grid-rows-[1fr]'), content?.outerHTML).toBe(true);
     expect(content?.classList.contains('opacity-100')).toBe(true);
+  });
+
+  it('opens and closes all items when multi is enabled', () => {
+    const fixture = TestBed.createComponent(AccordionControlledTestHost);
+    fixture.detectChanges();
+
+    const nativeElement = fixture.nativeElement as HTMLElement;
+    const buttons = nativeElement.querySelectorAll('button');
+    const contents = () => Array.from(nativeElement.querySelectorAll('[data-accordion-content]'));
+
+    buttons[0].click();
+    fixture.detectChanges();
+
+    expect(contents().every((content) => content.classList.contains('grid-rows-[1fr]'))).toBe(true);
+
+    buttons[1].click();
+    fixture.detectChanges();
+
+    expect(contents().every((content) => content.classList.contains('grid-rows-[0fr]'))).toBe(true);
   });
 });

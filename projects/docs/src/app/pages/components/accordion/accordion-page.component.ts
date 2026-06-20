@@ -1,5 +1,11 @@
 import { Component, inject } from '@angular/core';
-import { AccordionComponent, AccordionContentComponent, AccordionItemComponent, AccordionTriggerComponent } from '@sanring/ui';
+import {
+  AccordionComponent,
+  AccordionContentComponent,
+  AccordionItemComponent,
+  AccordionTriggerComponent,
+  ButtonDirective,
+} from '@sanring/ui';
 import { getComponentPageSection } from '../../../docs-schema/component-page.utils';
 import {
   ComponentPageCodeBlock,
@@ -9,7 +15,7 @@ import {
   ComponentPageSectionComponent,
 } from '../../../layouts/component-page';
 import { I18nService } from '../../../i18n/i18n.service';
-import { accordionPage } from './accordion.docs';
+import { accordionPage, accordionPageExamples } from './accordion.docs';
 
 @Component({
   selector: 'app-accordion-page',
@@ -18,6 +24,7 @@ import { accordionPage } from './accordion.docs';
     AccordionItemComponent,
     AccordionTriggerComponent,
     AccordionContentComponent,
+    ButtonDirective,
     ComponentPageComponent,
     ComponentPageCodeBlock,
     ComponentPageCodePreviewer,
@@ -32,61 +39,130 @@ import { accordionPage } from './accordion.docs';
         [description]="i18n.t(page.descriptionKey)"
       />
 
-      <app-component-page-section [section]="section('code')">
-        <app-component-page-code-previewer [code]="codeExample()" language="angular-html">
-          <div previewer class="w-[min(500px,100%)]">
-            <sanring-accordion class="w-[min(500px,100%)]">
-              <sanring-accordion-item>
-                <sanring-accordion-trigger>
-                  <span header>{{ i18n.t('accordion.demo.shipping.question') }}</span>
-                </sanring-accordion-trigger>
-                <sanring-accordion-content>
-                  <p class="mb-0 mt-0 px-4 pb-2 text-sm leading-relaxed text-[var(--docs-muted)]">
-                    {{ i18n.t('accordion.demo.shipping.answer') }}
-                  </p>
-                </sanring-accordion-content>
-              </sanring-accordion-item>
-
-              <sanring-accordion-item>
-                <sanring-accordion-trigger>
-                  <span header>{{ i18n.t('accordion.demo.returns.question') }}</span>
-                </sanring-accordion-trigger>
-                <sanring-accordion-content>
-                  <p class="mb-0 mt-0 px-4 pb-2 text-sm leading-relaxed text-[var(--docs-muted)]">
-                    {{ i18n.t('accordion.demo.returns.answer') }}
-                  </p>
-                </sanring-accordion-content>
-              </sanring-accordion-item>
-
-              <sanring-accordion-item>
-                <sanring-accordion-trigger>
-                  <span header>{{ i18n.t('accordion.demo.support.question') }}</span>
-                </sanring-accordion-trigger>
-                <sanring-accordion-content>
-                  <p class="mb-0 mt-0 px-4 pb-2 text-sm leading-relaxed text-[var(--docs-muted)]">
-                    {{ i18n.t('accordion.demo.support.answer') }}
-                  </p>
-                </sanring-accordion-content>
-              </sanring-accordion-item>
+      <app-component-page-section [section]="section('basic')">
+        <app-component-page-code-previewer [code]="examples.basic" language="angular-html">
+          <div previewer class="w-[min(520px,100%)]">
+            <sanring-accordion class="block w-full">
+              @for (item of demoItems; track item.id) {
+                <sanring-accordion-item>
+                  <sanring-accordion-trigger>{{ item.question }}</sanring-accordion-trigger>
+                  <sanring-accordion-content>
+                    <p class="mb-0 mt-0 pb-4 text-sm leading-relaxed text-[var(--docs-muted)]">
+                      {{ item.answer }}
+                    </p>
+                  </sanring-accordion-content>
+                </sanring-accordion-item>
+              }
             </sanring-accordion>
           </div>
         </app-component-page-code-previewer>
       </app-component-page-section>
 
+      <app-component-page-section [section]="section('usage')">
+        <div class="grid gap-6">
+          <div class="overflow-hidden rounded-lg border border-[var(--docs-border)]">
+            <app-component-page-code-block [code]="examples.usageImport" language="typescript" />
+          </div>
+          <div class="overflow-hidden rounded-lg border border-[var(--docs-border)]">
+            <app-component-page-code-block [code]="examples.usageMain" language="angular-html" />
+          </div>
+        </div>
+      </app-component-page-section>
+
       <app-component-page-section [section]="section('installation')" />
 
       <app-component-page-section [section]="section('composition')">
-        <div class="grid gap-4">
-          <p class="m-0 text-sm font-medium text-[var(--docs-fg)]">
-            Use the following composition to build an
-            <code class="rounded-md bg-[var(--docs-elevated)] px-1.5 py-1 font-mono text-xs">
-              AccordionComponent
-            </code>
-            :
-          </p>
-          <div class="overflow-hidden rounded-lg border border-[var(--docs-border)]">
-            <app-component-page-code-block [code]="compositionExample()" language="bash" />
-          </div>
+        <div class="overflow-hidden rounded-lg border border-[var(--docs-border)]">
+          <app-component-page-code-block [code]="examples.composition" language="bash" />
+        </div>
+      </app-component-page-section>
+
+      <app-component-page-section [section]="section('example')">
+        <div class="grid gap-2">
+          <app-component-page-section [section]="section('example-single')">
+            <app-component-page-code-previewer [code]="examples.single" language="angular-html">
+              <div previewer class="w-[min(520px,100%)]">
+                <sanring-accordion class="block w-full">
+                  @for (item of demoItems; track item.id) {
+                    <sanring-accordion-item>
+                      <sanring-accordion-trigger>{{ item.question }}</sanring-accordion-trigger>
+                      <sanring-accordion-content>
+                        <p class="mb-0 mt-0 pb-4 text-sm leading-relaxed text-[var(--docs-muted)]">
+                          {{ item.answer }}
+                        </p>
+                      </sanring-accordion-content>
+                    </sanring-accordion-item>
+                  }
+                </sanring-accordion>
+              </div>
+            </app-component-page-code-previewer>
+          </app-component-page-section>
+
+          <app-component-page-section [section]="section('example-multiple')">
+            <app-component-page-code-previewer [code]="examples.multiple" language="angular-html">
+              <div previewer class="w-[min(520px,100%)]">
+                <sanring-accordion class="block w-full" multi>
+                  @for (item of demoItems; track item.id) {
+                    <sanring-accordion-item>
+                      <sanring-accordion-trigger>{{ item.question }}</sanring-accordion-trigger>
+                      <sanring-accordion-content>
+                        <p class="mb-0 mt-0 pb-4 text-sm leading-relaxed text-[var(--docs-muted)]">
+                          {{ item.answer }}
+                        </p>
+                      </sanring-accordion-content>
+                    </sanring-accordion-item>
+                  }
+                </sanring-accordion>
+              </div>
+            </app-component-page-code-previewer>
+          </app-component-page-section>
+
+          <app-component-page-section [section]="section('example-default-open')">
+            <app-component-page-code-previewer [code]="examples.defaultOpen" language="angular-html">
+              <div previewer class="w-[min(520px,100%)]">
+                <sanring-accordion class="block w-full">
+                  @for (item of demoItems; track item.id) {
+                    <sanring-accordion-item [expanded]="item.id === 'shipping'">
+                      <sanring-accordion-trigger>{{ item.question }}</sanring-accordion-trigger>
+                      <sanring-accordion-content>
+                        <p class="mb-0 mt-0 pb-4 text-sm leading-relaxed text-[var(--docs-muted)]">
+                          {{ item.answer }}
+                        </p>
+                      </sanring-accordion-content>
+                    </sanring-accordion-item>
+                  }
+                </sanring-accordion>
+              </div>
+            </app-component-page-code-previewer>
+          </app-component-page-section>
+
+          <app-component-page-section [section]="section('example-controlled')">
+            <app-component-page-code-previewer [code]="examples.controlled" language="angular-html">
+              <div previewer class="grid w-[min(560px,100%)] gap-4">
+                <div class="flex flex-wrap justify-end gap-2">
+                  <button sanringBtn type="button" variant="outline" size="sm" (click)="controlled.openAll()">
+                    {{ i18n.t('accordion.demo.openAll') }}
+                  </button>
+                  <button sanringBtn type="button" variant="outline" size="sm" (click)="controlled.closeAll()">
+                    {{ i18n.t('accordion.demo.closeAll') }}
+                  </button>
+                </div>
+
+                <sanring-accordion #controlled class="block w-full" multi>
+                  @for (item of demoItems; track item.id) {
+                    <sanring-accordion-item>
+                      <sanring-accordion-trigger>{{ item.question }}</sanring-accordion-trigger>
+                      <sanring-accordion-content>
+                        <p class="mb-0 mt-0 pb-4 text-sm leading-relaxed text-[var(--docs-muted)]">
+                          {{ item.answer }}
+                        </p>
+                      </sanring-accordion-content>
+                    </sanring-accordion-item>
+                  }
+                </sanring-accordion>
+              </div>
+            </app-component-page-code-previewer>
+          </app-component-page-section>
         </div>
       </app-component-page-section>
 
@@ -135,19 +211,19 @@ import { accordionPage } from './accordion.docs';
                 </td>
               </tr>
               <tr class="border-b border-[var(--docs-border)]">
-                <td class="px-4 py-3 font-mono text-[var(--docs-fg)]">headerClass</td>
-                <td class="px-4 py-3 font-mono text-[var(--docs-muted)]">string</td>
-                <td class="px-4 py-3 font-mono text-[var(--docs-muted)]">undefined</td>
+                <td class="px-4 py-3 font-mono text-[var(--docs-fg)]">openAll()</td>
+                <td class="px-4 py-3 font-mono text-[var(--docs-muted)]">method</td>
+                <td class="px-4 py-3 font-mono text-[var(--docs-muted)]">-</td>
                 <td class="px-4 py-3 text-[var(--docs-muted)]">
-                  {{ i18n.t('accordion.api.headerClass.description') }}
+                  {{ i18n.t('accordion.api.openAll.description') }}
                 </td>
               </tr>
               <tr class="border-b border-[var(--docs-border)]">
-                <td class="px-4 py-3 font-mono text-[var(--docs-fg)]">contentClass</td>
-                <td class="px-4 py-3 font-mono text-[var(--docs-muted)]">string</td>
-                <td class="px-4 py-3 font-mono text-[var(--docs-muted)]">undefined</td>
+                <td class="px-4 py-3 font-mono text-[var(--docs-fg)]">closeAll()</td>
+                <td class="px-4 py-3 font-mono text-[var(--docs-muted)]">method</td>
+                <td class="px-4 py-3 font-mono text-[var(--docs-muted)]">-</td>
                 <td class="px-4 py-3 text-[var(--docs-muted)]">
-                  {{ i18n.t('accordion.api.contentClass.description') }}
+                  {{ i18n.t('accordion.api.closeAll.description') }}
                 </td>
               </tr>
               <tr class="border-b border-[var(--docs-border)]">
@@ -189,42 +265,30 @@ import { accordionPage } from './accordion.docs';
 })
 export class AccordionPageComponent {
   protected readonly page = accordionPage;
+  protected readonly examples = accordionPageExamples;
   protected readonly i18n = inject(I18nService);
+
+  protected get demoItems() {
+    return [
+      {
+        id: 'shipping',
+        question: this.i18n.t('accordion.demo.shipping.question'),
+        answer: this.i18n.t('accordion.demo.shipping.answer'),
+      },
+      {
+        id: 'returns',
+        question: this.i18n.t('accordion.demo.returns.question'),
+        answer: this.i18n.t('accordion.demo.returns.answer'),
+      },
+      {
+        id: 'support',
+        question: this.i18n.t('accordion.demo.support.question'),
+        answer: this.i18n.t('accordion.demo.support.answer'),
+      },
+    ];
+  }
 
   protected section(id: string) {
     return getComponentPageSection(this.page, id);
-  }
-
-  protected codeExample() {
-    return `import {
-  AccordionComponent,
-  AccordionContentComponent,
-  AccordionItemComponent,
-  AccordionTriggerComponent,
-} from '@sanring/ui';
-
-<sanring-accordion>
-  <sanring-accordion-item>
-    <sanring-accordion-trigger>
-      <span header>${this.i18n.t('accordion.demo.shipping.question')}</span>
-    </sanring-accordion-trigger>
-    <sanring-accordion-content>
-      ${this.i18n.t('accordion.demo.shipping.answer')}
-    </sanring-accordion-content>
-  </sanring-accordion-item>
-</sanring-accordion>`;
-  }
-
-  protected compositionExample() {
-    return `AccordionComponent
-├── AccordionItemComponent
-│   ├── AccordionTriggerComponent
-│   └── AccordionContentComponent
-├── AccordionItemComponent
-│   ├── AccordionTriggerComponent
-│   └── AccordionContentComponent
-└── AccordionItemComponent
-    ├── AccordionTriggerComponent
-    └── AccordionContentComponent`;
   }
 }
