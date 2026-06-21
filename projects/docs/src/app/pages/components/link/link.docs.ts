@@ -1,4 +1,4 @@
-import { ComponentPageDefinition } from '../../../docs-schema/component-page.types';
+import { ComponentPageApiRow, ComponentPageDefinition } from '../../../docs-schema/component-page.types';
 
 export const linkPage = {
   componentId: 'link',
@@ -58,6 +58,11 @@ export const linkPage = {
       level: 2,
     },
   ],
+  apiRows: [
+    { property: 'class', type: 'string', defaultValue: "''", descriptionKey: 'link.api.class.description' },
+    { property: 'target', type: 'string', defaultValue: 'undefined', descriptionKey: 'link.api.target.description' },
+    { property: 'rel', type: 'string', defaultValue: 'undefined', descriptionKey: 'link.api.rel.description' },
+  ] satisfies readonly ComponentPageApiRow[],
 } as const satisfies ComponentPageDefinition;
 
 export const linkPageExamples = {

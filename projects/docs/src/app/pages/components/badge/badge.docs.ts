@@ -1,4 +1,4 @@
-import { ComponentPageDefinition } from '../../../docs-schema/component-page.types';
+import { ComponentPageApiRow, ComponentPageDefinition } from '../../../docs-schema/component-page.types';
 
 export const badgePage = {
   componentId: 'badge',
@@ -53,6 +53,10 @@ export const badgePage = {
       level: 2,
     },
   ],
+  apiRows: [
+    { property: 'class', type: 'string', defaultValue: "''", descriptionKey: 'badge.api.class.description' },
+    { property: 'variant', type: 'BadgeVariant', defaultValue: "'default'", descriptionKey: 'badge.api.variant.description' },
+  ] satisfies readonly ComponentPageApiRow[],
 } as const satisfies ComponentPageDefinition;
 
 export const badgePageExamples = {

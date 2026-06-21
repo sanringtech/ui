@@ -1,4 +1,4 @@
-import { ComponentPageDefinition } from '../../../docs-schema/component-page.types';
+import { ComponentPageApiRow, ComponentPageDefinition } from '../../../docs-schema/component-page.types';
 
 export const accordionPage = {
   componentId: 'accordion',
@@ -64,6 +64,16 @@ export const accordionPage = {
       level: 2,
     },
   ],
+  apiRows: [
+    { property: 'multi', type: 'boolean', defaultValue: 'false', descriptionKey: 'accordion.api.multi.description' },
+    { property: 'expanded', type: 'boolean', defaultValue: 'false', descriptionKey: 'accordion.api.expanded.description' },
+    { property: 'disabled', type: 'boolean', defaultValue: 'false', descriptionKey: 'accordion.api.disabled.description' },
+    { property: 'openAll()', type: 'method', defaultValue: '-', descriptionKey: 'accordion.api.openAll.description' },
+    { property: 'closeAll()', type: 'method', defaultValue: '-', descriptionKey: 'accordion.api.closeAll.description' },
+    { property: 'opened', type: 'EventEmitter<void>', defaultValue: '-', descriptionKey: 'accordion.api.opened.description' },
+    { property: 'closed', type: 'EventEmitter<void>', defaultValue: '-', descriptionKey: 'accordion.api.closed.description' },
+    { property: 'expandedChange', type: 'EventEmitter<boolean>', defaultValue: '-', descriptionKey: 'accordion.api.expandedChange.description' },
+  ] satisfies readonly ComponentPageApiRow[],
 } as const satisfies ComponentPageDefinition;
 
 export const accordionPageExamples = {

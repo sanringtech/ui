@@ -1,4 +1,4 @@
-import { ComponentPageDefinition } from '../../../docs-schema/component-page.types';
+import { ComponentPageApiRow, ComponentPageDefinition } from '../../../docs-schema/component-page.types';
 
 export const alertPage = {
   componentId: 'alert',
@@ -53,6 +53,10 @@ export const alertPage = {
       level: 2,
     },
   ],
+  apiRows: [
+    { property: 'class', type: 'string', defaultValue: "''", descriptionKey: 'alert.api.class.description' },
+    { property: 'variant', type: 'AlertVariant', defaultValue: "'default'", descriptionKey: 'alert.api.variant.description' },
+  ] satisfies readonly ComponentPageApiRow[],
 } as const satisfies ComponentPageDefinition;
 
 export const alertPageExamples = {

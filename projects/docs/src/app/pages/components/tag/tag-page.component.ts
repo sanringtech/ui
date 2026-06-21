@@ -3,6 +3,7 @@ import { TagComponent } from '@sanring/ui';
 import { getComponentPageSection } from '../../../docs-schema/component-page.utils';
 import { I18nService } from '../../../i18n/i18n.service';
 import {
+  ComponentPageApiTableComponent,
   ComponentPageCodeBlock,
   ComponentPageCodePreviewer,
   ComponentPageComponent,
@@ -14,6 +15,7 @@ import { tagPage, tagPageExamples } from './tag.docs';
 @Component({
   selector: 'app-tag-page',
   imports: [
+    ComponentPageApiTableComponent,
     TagComponent,
     ComponentPageCodeBlock,
     ComponentPageCodePreviewer,
@@ -97,62 +99,7 @@ import { tagPage, tagPageExamples } from './tag.docs';
       </app-component-page-section>
 
       <app-component-page-section [section]="section('api')">
-        <div class="overflow-hidden rounded-lg border border-[var(--docs-border)]">
-          <table class="w-full border-collapse text-left text-sm">
-            <thead class="bg-[var(--docs-elevated)] text-[var(--docs-muted)]">
-              <tr>
-                <th class="border-b border-[var(--docs-border)] px-4 py-3 font-medium">
-                  {{ i18n.t('link.api.property') }}
-                </th>
-                <th class="border-b border-[var(--docs-border)] px-4 py-3 font-medium">
-                  {{ i18n.t('link.api.type') }}
-                </th>
-                <th class="border-b border-[var(--docs-border)] px-4 py-3 font-medium">
-                  {{ i18n.t('link.api.default') }}
-                </th>
-                <th class="border-b border-[var(--docs-border)] px-4 py-3 font-medium">
-                  {{ i18n.t('link.api.descriptionLabel') }}
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr class="border-b border-[var(--docs-border)]">
-                <td class="px-4 py-3 font-mono text-[var(--docs-fg)]">class</td>
-                <td class="px-4 py-3 font-mono text-[var(--docs-muted)]">string</td>
-                <td class="px-4 py-3 font-mono text-[var(--docs-muted)]">''</td>
-                <td class="px-4 py-3 text-[var(--docs-muted)]">
-                  {{ i18n.t('tag.api.class.description') }}
-                </td>
-              </tr>
-              <tr class="border-b border-[var(--docs-border)]">
-                <td class="px-4 py-3 font-mono text-[var(--docs-fg)]">variant</td>
-                <td class="px-4 py-3 font-mono text-[var(--docs-muted)]">BadgeVariant</td>
-                <td class="px-4 py-3 font-mono text-[var(--docs-muted)]">'secondary'</td>
-                <td class="px-4 py-3 text-[var(--docs-muted)]">
-                  {{ i18n.t('tag.api.variant.description') }}
-                </td>
-              </tr>
-              <tr class="border-b border-[var(--docs-border)]">
-                <td class="px-4 py-3 font-mono text-[var(--docs-fg)]">closable</td>
-                <td class="px-4 py-3 font-mono text-[var(--docs-muted)]">boolean</td>
-                <td class="px-4 py-3 font-mono text-[var(--docs-muted)]">false</td>
-                <td class="px-4 py-3 text-[var(--docs-muted)]">
-                  {{ i18n.t('tag.api.closable.description') }}
-                </td>
-              </tr>
-              <tr>
-                <td class="px-4 py-3 font-mono text-[var(--docs-fg)]">remove</td>
-                <td class="px-4 py-3 font-mono text-[var(--docs-muted)]">
-                  EventEmitter&lt;MouseEvent&gt;
-                </td>
-                <td class="px-4 py-3 font-mono text-[var(--docs-muted)]">-</td>
-                <td class="px-4 py-3 text-[var(--docs-muted)]">
-                  {{ i18n.t('tag.api.remove.description') }}
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
+        <app-component-page-api-table [rows]="page.apiRows!" />
       </app-component-page-section>
     </app-component-page>
   `,

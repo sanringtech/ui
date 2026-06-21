@@ -8,6 +8,7 @@ import {
 } from '@sanring/ui';
 import { getComponentPageSection } from '../../../docs-schema/component-page.utils';
 import {
+  ComponentPageApiTableComponent,
   ComponentPageCodeBlock,
   ComponentPageCodePreviewer,
   ComponentPageComponent,
@@ -20,6 +21,7 @@ import { accordionPage, accordionPageExamples } from './accordion.docs';
 @Component({
   selector: 'app-accordion-page',
   imports: [
+    ComponentPageApiTableComponent,
     AccordionComponent,
     AccordionItemComponent,
     AccordionTriggerComponent,
@@ -167,98 +169,7 @@ import { accordionPage, accordionPageExamples } from './accordion.docs';
       </app-component-page-section>
 
       <app-component-page-section [section]="section('api')">
-        <div class="overflow-hidden rounded-lg border border-[var(--docs-border)]">
-          <table class="w-full border-collapse text-left text-sm">
-            <thead class="bg-[var(--docs-elevated)] text-[var(--docs-muted)]">
-              <tr>
-                <th class="border-b border-[var(--docs-border)] px-4 py-3 font-medium">
-                  {{ i18n.t('link.api.property') }}
-                </th>
-                <th class="border-b border-[var(--docs-border)] px-4 py-3 font-medium">
-                  {{ i18n.t('link.api.type') }}
-                </th>
-                <th class="border-b border-[var(--docs-border)] px-4 py-3 font-medium">
-                  {{ i18n.t('link.api.default') }}
-                </th>
-                <th class="border-b border-[var(--docs-border)] px-4 py-3 font-medium">
-                  {{ i18n.t('link.api.descriptionLabel') }}
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr class="border-b border-[var(--docs-border)]">
-                <td class="px-4 py-3 font-mono text-[var(--docs-fg)]">multi</td>
-                <td class="px-4 py-3 font-mono text-[var(--docs-muted)]">boolean</td>
-                <td class="px-4 py-3 font-mono text-[var(--docs-muted)]">false</td>
-                <td class="px-4 py-3 text-[var(--docs-muted)]">
-                  {{ i18n.t('accordion.api.multi.description') }}
-                </td>
-              </tr>
-              <tr class="border-b border-[var(--docs-border)]">
-                <td class="px-4 py-3 font-mono text-[var(--docs-fg)]">expanded</td>
-                <td class="px-4 py-3 font-mono text-[var(--docs-muted)]">boolean</td>
-                <td class="px-4 py-3 font-mono text-[var(--docs-muted)]">false</td>
-                <td class="px-4 py-3 text-[var(--docs-muted)]">
-                  {{ i18n.t('accordion.api.expanded.description') }}
-                </td>
-              </tr>
-              <tr class="border-b border-[var(--docs-border)]">
-                <td class="px-4 py-3 font-mono text-[var(--docs-fg)]">disabled</td>
-                <td class="px-4 py-3 font-mono text-[var(--docs-muted)]">boolean</td>
-                <td class="px-4 py-3 font-mono text-[var(--docs-muted)]">false</td>
-                <td class="px-4 py-3 text-[var(--docs-muted)]">
-                  {{ i18n.t('accordion.api.disabled.description') }}
-                </td>
-              </tr>
-              <tr class="border-b border-[var(--docs-border)]">
-                <td class="px-4 py-3 font-mono text-[var(--docs-fg)]">openAll()</td>
-                <td class="px-4 py-3 font-mono text-[var(--docs-muted)]">method</td>
-                <td class="px-4 py-3 font-mono text-[var(--docs-muted)]">-</td>
-                <td class="px-4 py-3 text-[var(--docs-muted)]">
-                  {{ i18n.t('accordion.api.openAll.description') }}
-                </td>
-              </tr>
-              <tr class="border-b border-[var(--docs-border)]">
-                <td class="px-4 py-3 font-mono text-[var(--docs-fg)]">closeAll()</td>
-                <td class="px-4 py-3 font-mono text-[var(--docs-muted)]">method</td>
-                <td class="px-4 py-3 font-mono text-[var(--docs-muted)]">-</td>
-                <td class="px-4 py-3 text-[var(--docs-muted)]">
-                  {{ i18n.t('accordion.api.closeAll.description') }}
-                </td>
-              </tr>
-              <tr class="border-b border-[var(--docs-border)]">
-                <td class="px-4 py-3 font-mono text-[var(--docs-fg)]">opened</td>
-                <td class="px-4 py-3 font-mono text-[var(--docs-muted)]">
-                  EventEmitter&lt;void&gt;
-                </td>
-                <td class="px-4 py-3 font-mono text-[var(--docs-muted)]">-</td>
-                <td class="px-4 py-3 text-[var(--docs-muted)]">
-                  {{ i18n.t('accordion.api.opened.description') }}
-                </td>
-              </tr>
-              <tr class="border-b border-[var(--docs-border)]">
-                <td class="px-4 py-3 font-mono text-[var(--docs-fg)]">closed</td>
-                <td class="px-4 py-3 font-mono text-[var(--docs-muted)]">
-                  EventEmitter&lt;void&gt;
-                </td>
-                <td class="px-4 py-3 font-mono text-[var(--docs-muted)]">-</td>
-                <td class="px-4 py-3 text-[var(--docs-muted)]">
-                  {{ i18n.t('accordion.api.closed.description') }}
-                </td>
-              </tr>
-              <tr>
-                <td class="px-4 py-3 font-mono text-[var(--docs-fg)]">expandedChange</td>
-                <td class="px-4 py-3 font-mono text-[var(--docs-muted)]">
-                  EventEmitter&lt;boolean&gt;
-                </td>
-                <td class="px-4 py-3 font-mono text-[var(--docs-muted)]">-</td>
-                <td class="px-4 py-3 text-[var(--docs-muted)]">
-                  {{ i18n.t('accordion.api.expandedChange.description') }}
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
+        <app-component-page-api-table [rows]="page.apiRows!" />
       </app-component-page-section>
     </app-component-page>
   `,

@@ -10,9 +10,17 @@ export interface ComponentPageSectionDefinition {
   children?: readonly ComponentPageSectionDefinition[];
 }
 
+export interface ComponentPageApiRow {
+  property: string;
+  type: string;
+  defaultValue: string;
+  descriptionKey: TranslationKey;
+}
+
 export interface ComponentPageDefinition {
   componentId: DocsComponentId;
   titleKey: TranslationKey;
   descriptionKey: TranslationKey;
   sections: readonly ComponentPageSectionDefinition[];
+  apiRows?: readonly ComponentPageApiRow[];
 }

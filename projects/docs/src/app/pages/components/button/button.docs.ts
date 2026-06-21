@@ -1,4 +1,4 @@
-import { ComponentPageDefinition } from '../../../docs-schema/component-page.types';
+import { ComponentPageApiRow, ComponentPageDefinition } from '../../../docs-schema/component-page.types';
 
 export const buttonPage = {
   componentId: 'button',
@@ -88,6 +88,11 @@ export const buttonPage = {
       level: 2,
     },
   ],
+  apiRows: [
+    { property: 'class', type: 'string', defaultValue: "''", descriptionKey: 'button.api.class.description' },
+    { property: 'variant', type: 'ButtonVariant', defaultValue: "'default'", descriptionKey: 'button.api.variant.description' },
+    { property: 'size', type: 'ButtonSize', defaultValue: "'md'", descriptionKey: 'button.api.size.description' },
+  ] satisfies readonly ComponentPageApiRow[],
 } as const satisfies ComponentPageDefinition;
 
 export const buttonPageExamples = {

@@ -1,4 +1,4 @@
-import { ComponentPageDefinition } from '../../../docs-schema/component-page.types';
+import { ComponentPageApiRow, ComponentPageDefinition } from '../../../docs-schema/component-page.types';
 
 export const dialogPage = {
   componentId: 'dialog',
@@ -64,6 +64,10 @@ export const dialogPage = {
       level: 2,
     },
   ],
+  apiRows: [
+    { property: 'class', type: 'string', defaultValue: "''", descriptionKey: 'dialog.api.class.description' },
+    { property: 'showClose', type: 'boolean', defaultValue: 'true', descriptionKey: 'dialog.api.showClose.description' },
+  ] satisfies readonly ComponentPageApiRow[],
 } as const satisfies ComponentPageDefinition;
 
 export const dialogPageExamples = {

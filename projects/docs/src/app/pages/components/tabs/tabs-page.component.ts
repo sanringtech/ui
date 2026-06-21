@@ -1,4 +1,5 @@
 import { Component, inject } from '@angular/core';
+import { LucideActivity, LucideKey, LucideSettings } from '@lucide/angular';
 import {
   TabsComponent,
   TabsContentComponent,
@@ -8,6 +9,7 @@ import {
 import { getComponentPageSection } from '../../../docs-schema/component-page.utils';
 import { I18nService } from '../../../i18n/i18n.service';
 import {
+  ComponentPageApiTableComponent,
   ComponentPageCodeBlock,
   ComponentPageCodePreviewer,
   ComponentPageComponent,
@@ -19,6 +21,7 @@ import { tabsPage, tabsPageExamples } from './tabs.docs';
 @Component({
   selector: 'app-tabs-page',
   imports: [
+    ComponentPageApiTableComponent,
     TabsComponent,
     TabsContentComponent,
     TabsListComponent,
@@ -28,6 +31,9 @@ import { tabsPage, tabsPageExamples } from './tabs.docs';
     ComponentPageComponent,
     ComponentPageHeaderComponent,
     ComponentPageSectionComponent,
+    LucideActivity,
+    LucideKey,
+    LucideSettings,
   ],
   template: `
     <app-component-page [sections]="page.sections">
@@ -131,6 +137,44 @@ import { tabsPage, tabsPageExamples } from './tabs.docs';
             </app-component-page-code-previewer>
           </app-component-page-section>
 
+          <app-component-page-section [section]="section('example-with-icon')">
+            <app-component-page-code-previewer [code]="examples.withIcon" language="angular-html">
+              <div previewer class="w-[min(560px,100%)]">
+                <sanring-tabs defaultValue="overview">
+                  <sanring-tabs-list>
+                    <sanring-tabs-trigger value="overview">
+                      <svg lucideActivity class="size-4"></svg>
+                      <span>{{ i18n.t('tabs.demo.overview') }}</span>
+                    </sanring-tabs-trigger>
+                    <sanring-tabs-trigger value="security">
+                      <svg lucideKey class="size-4"></svg>
+                      <span>{{ i18n.t('tabs.demo.security') }}</span>
+                    </sanring-tabs-trigger>
+                    <sanring-tabs-trigger value="settings">
+                      <svg lucideSettings class="size-4"></svg>
+                      <span>{{ i18n.t('tabs.demo.settings') }}</span>
+                    </sanring-tabs-trigger>
+                  </sanring-tabs-list>
+                  <sanring-tabs-content value="overview">
+                    <div class="rounded-lg border border-[var(--docs-border)] p-4 text-sm text-[var(--docs-muted)]">
+                      Key metrics and recent activity.
+                    </div>
+                  </sanring-tabs-content>
+                  <sanring-tabs-content value="security">
+                    <div class="rounded-lg border border-[var(--docs-border)] p-4 text-sm text-[var(--docs-muted)]">
+                      Access controls and session policy.
+                    </div>
+                  </sanring-tabs-content>
+                  <sanring-tabs-content value="settings">
+                    <div class="rounded-lg border border-[var(--docs-border)] p-4 text-sm text-[var(--docs-muted)]">
+                      Workspace preferences and defaults.
+                    </div>
+                  </sanring-tabs-content>
+                </sanring-tabs>
+              </div>
+            </app-component-page-code-previewer>
+          </app-component-page-section>
+
           <app-component-page-section [section]="section('example-line')">
             <app-component-page-code-previewer [code]="examples.line" language="angular-html">
               <div previewer class="w-[min(560px,100%)]">
@@ -170,7 +214,7 @@ import { tabsPage, tabsPageExamples } from './tabs.docs';
             <app-component-page-code-previewer [code]="examples.vertical" language="angular-html">
               <div previewer class="w-[min(620px,100%)]">
                 <sanring-tabs defaultValue="account" orientation="vertical">
-                  <sanring-tabs-list class="w-full">
+                  <sanring-tabs-list>
                     <sanring-tabs-trigger value="account">
                       {{ i18n.t('tabs.demo.account') }}
                     </sanring-tabs-trigger>
@@ -239,78 +283,7 @@ import { tabsPage, tabsPageExamples } from './tabs.docs';
       </app-component-page-section>
 
       <app-component-page-section [section]="section('api')">
-        <div class="overflow-hidden rounded-lg border border-[var(--docs-border)]">
-          <table class="w-full border-collapse text-left text-sm">
-            <thead class="bg-[var(--docs-elevated)] text-[var(--docs-muted)]">
-              <tr>
-                <th class="border-b border-[var(--docs-border)] px-4 py-3 font-medium">
-                  {{ i18n.t('link.api.property') }}
-                </th>
-                <th class="border-b border-[var(--docs-border)] px-4 py-3 font-medium">
-                  {{ i18n.t('link.api.type') }}
-                </th>
-                <th class="border-b border-[var(--docs-border)] px-4 py-3 font-medium">
-                  {{ i18n.t('link.api.default') }}
-                </th>
-                <th class="border-b border-[var(--docs-border)] px-4 py-3 font-medium">
-                  {{ i18n.t('link.api.descriptionLabel') }}
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr class="border-b border-[var(--docs-border)]">
-                <td class="px-4 py-3 font-mono text-[var(--docs-fg)]">defaultValue</td>
-                <td class="px-4 py-3 font-mono text-[var(--docs-muted)]">string</td>
-                <td class="px-4 py-3 font-mono text-[var(--docs-muted)]">undefined</td>
-                <td class="px-4 py-3 text-[var(--docs-muted)]">
-                  {{ i18n.t('tabs.api.defaultValue.description') }}
-                </td>
-              </tr>
-              <tr class="border-b border-[var(--docs-border)]">
-                <td class="px-4 py-3 font-mono text-[var(--docs-fg)]">orientation</td>
-                <td class="px-4 py-3 font-mono text-[var(--docs-muted)]">TabsOrientation</td>
-                <td class="px-4 py-3 font-mono text-[var(--docs-muted)]">'horizontal'</td>
-                <td class="px-4 py-3 text-[var(--docs-muted)]">
-                  {{ i18n.t('tabs.api.orientation.description') }}
-                </td>
-              </tr>
-              <tr class="border-b border-[var(--docs-border)]">
-                <td class="px-4 py-3 font-mono text-[var(--docs-fg)]">variant</td>
-                <td class="px-4 py-3 font-mono text-[var(--docs-muted)]">TabsVariant</td>
-                <td class="px-4 py-3 font-mono text-[var(--docs-muted)]">'default'</td>
-                <td class="px-4 py-3 text-[var(--docs-muted)]">
-                  {{ i18n.t('tabs.api.variant.description') }}
-                </td>
-              </tr>
-              <tr class="border-b border-[var(--docs-border)]">
-                <td class="px-4 py-3 font-mono text-[var(--docs-fg)]">value</td>
-                <td class="px-4 py-3 font-mono text-[var(--docs-muted)]">string</td>
-                <td class="px-4 py-3 font-mono text-[var(--docs-muted)]">required</td>
-                <td class="px-4 py-3 text-[var(--docs-muted)]">
-                  {{ i18n.t('tabs.api.value.description') }}
-                </td>
-              </tr>
-              <tr class="border-b border-[var(--docs-border)]">
-                <td class="px-4 py-3 font-mono text-[var(--docs-fg)]">disabled</td>
-                <td class="px-4 py-3 font-mono text-[var(--docs-muted)]">boolean</td>
-                <td class="px-4 py-3 font-mono text-[var(--docs-muted)]">false</td>
-                <td class="px-4 py-3 text-[var(--docs-muted)]">
-                  {{ i18n.t('tabs.api.disabled.description') }}
-                </td>
-              </tr>
-              <tr>
-                <td class="px-4 py-3 font-mono text-[var(--docs-fg)]">valueChange</td>
-                <td class="px-4 py-3 font-mono text-[var(--docs-muted)]">
-                  EventEmitter&lt;string&gt;
-                </td>
-                <td class="px-4 py-3 font-mono text-[var(--docs-muted)]">-</td>
-                <td class="px-4 py-3 text-[var(--docs-muted)]">
-                  {{ i18n.t('tabs.api.valueChange.description') }}
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
+        <app-component-page-api-table [rows]="page.apiRows!" />
       </app-component-page-section>
     </app-component-page>
   `,

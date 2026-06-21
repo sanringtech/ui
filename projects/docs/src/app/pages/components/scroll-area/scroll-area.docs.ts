@@ -1,4 +1,4 @@
-import { ComponentPageDefinition } from '../../../docs-schema/component-page.types';
+import { ComponentPageApiRow, ComponentPageDefinition } from '../../../docs-schema/component-page.types';
 
 export const scrollAreaPage = {
   componentId: 'scroll-area',
@@ -63,6 +63,14 @@ export const scrollAreaPage = {
       level: 2,
     },
   ],
+  apiRows: [
+    { property: 'class', type: 'string', defaultValue: "''", descriptionKey: 'scrollArea.api.class.description' },
+    { property: 'orientation', type: "'vertical' | 'horizontal' | 'both'", defaultValue: "'vertical'", descriptionKey: 'scrollArea.api.orientation.description' },
+    { property: 'loadMore', type: 'EventEmitter<void>', defaultValue: '-', descriptionKey: 'scrollArea.api.loadMore.description' },
+    { property: 'hideScrollbar', type: 'boolean', defaultValue: 'false', descriptionKey: 'scrollArea.api.hideScrollbar.description' },
+    { property: '--scrollbar-thumb', type: 'CSS variable', defaultValue: '#cbd5e1', descriptionKey: 'scrollArea.api.scrollbarThumb.description' },
+    { property: '--scrollbar-track', type: 'CSS variable', defaultValue: 'transparent', descriptionKey: 'scrollArea.api.scrollbarTrack.description' },
+  ] satisfies readonly ComponentPageApiRow[],
 } as const satisfies ComponentPageDefinition;
 
 export const scrollAreaPageExamples = {

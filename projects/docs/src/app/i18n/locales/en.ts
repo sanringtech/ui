@@ -45,6 +45,7 @@ export const en = {
   'component.skeleton': 'Skeleton',
   'component.tag': 'Tag',
   'component.tabs': 'Tabs',
+  'component.tooltip': 'Tooltip',
   'components.description':
     'Here you can find all components currently available in the library. More components will be added as the system grows.',
   'toc.label': 'On this page',
@@ -56,6 +57,10 @@ export const en = {
   'toc.multiple': 'Multiple',
   'toc.disabled': 'Disabled',
   'toc.apiReference': 'API Reference',
+  'docs.api.property': 'Property',
+  'docs.api.type': 'Type',
+  'docs.api.default': 'Default',
+  'docs.api.description': 'Description',
   'toc.card.title': 'Build your Sanring UI app',
   'toc.card.description':
     'Use the docs app to preview components, examples, and API decisions before publishing.',
@@ -366,7 +371,10 @@ export const en = {
   'tabs.demo.overview': 'Overview',
   'tabs.demo.analytics': 'Analytics',
   'tabs.demo.reports': 'Reports',
+  'tabs.demo.security': 'Security',
+  'tabs.demo.settings': 'Settings',
   'tabs.demo.horizontal': 'Horizontal',
+  'tabs.demo.withIcon': 'With icon',
   'tabs.demo.vertical': 'Vertical',
   'tabs.demo.line': 'Line variant',
   'tabs.demo.disabled': 'Disabled tab',
@@ -387,4 +395,38 @@ export const en = {
   'tabs.api.value.description': 'Required value used to pair a trigger with its content panel.',
   'tabs.api.disabled.description': 'Prevents a trigger from being selected or focused by keyboard navigation.',
   'tabs.api.valueChange.description': 'Emits when the selected tab value changes.',
+  'tooltip.description':
+    'A small floating panel that reveals contextual information when a trigger is hovered or focused.',
+  'tooltip.demo.hover': 'Hover me',
+  'tooltip.demo.basicContent': 'Helpful contextual detail.',
+  'tooltip.demo.side': 'Side',
+  'tooltip.demo.top': 'Top',
+  'tooltip.demo.right': 'Right',
+  'tooltip.demo.bottom': 'Bottom',
+  'tooltip.demo.left': 'Left',
+  'tooltip.demo.topContent': 'Top tooltip',
+  'tooltip.demo.rightContent': 'Right tooltip',
+  'tooltip.demo.bottomContent': 'Bottom tooltip',
+  'tooltip.demo.leftContent': 'Left tooltip',
+  'tooltip.demo.delay': 'Delayed tooltip',
+  'tooltip.demo.delayContent': 'Opens after 600ms.',
+  'tooltip.demo.customContent': 'Custom content',
+  'tooltip.demo.status': 'Status',
+  'tooltip.demo.statusTitle': 'Workspace is synced',
+  'tooltip.demo.statusDescription': 'Last updated just now.',
+  'tooltip.examples.description':
+    'Tooltip patterns for simple hints, delayed display, and compact structured content.',
+  'tooltip.examples.basic.description':
+    'Wrap a trigger and content inside sanring-tooltip. The content opens on hover or focus.',
+  'tooltip.usage.description':
+    'Import TooltipComponent, TooltipTriggerDirective, and TooltipContentComponent from @sanring/ui.',
+  'tooltip.installation.description':
+    'Use sanringTooltipTrigger on a focusable element and provide matching tooltip content.',
+  'tooltip.composition.description':
+    'Tooltip is composed from a state root, a trigger directive, and floating content.',
+  'tooltip.api.description': 'Inputs supported by the tooltip primitives.',
+  'tooltip.api.delayDuration.description': 'Delay in milliseconds before the tooltip opens.',
+  'tooltip.api.side.description': 'Preferred side for the tooltip before fallback positions are used.',
+  'tooltip.api.sideOffset.description': 'Distance between the trigger and floating content.',
+  'tooltip.api.class.description': 'Additional classes merged with root or content styles.',
 } as const;

@@ -1,4 +1,4 @@
-import { ComponentPageDefinition } from '../../../docs-schema/component-page.types';
+import { ComponentPageApiRow, ComponentPageDefinition } from '../../../docs-schema/component-page.types';
 
 export const tagPage = {
   componentId: 'tag',
@@ -58,6 +58,12 @@ export const tagPage = {
       level: 2,
     },
   ],
+  apiRows: [
+    { property: 'class', type: 'string', defaultValue: "''", descriptionKey: 'tag.api.class.description' },
+    { property: 'variant', type: 'BadgeVariant', defaultValue: "'secondary'", descriptionKey: 'tag.api.variant.description' },
+    { property: 'closable', type: 'boolean', defaultValue: 'false', descriptionKey: 'tag.api.closable.description' },
+    { property: 'remove', type: 'EventEmitter<MouseEvent>', defaultValue: '-', descriptionKey: 'tag.api.remove.description' },
+  ] satisfies readonly ComponentPageApiRow[],
 } as const satisfies ComponentPageDefinition;
 
 export const tagPageExamples = {
