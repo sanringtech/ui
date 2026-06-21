@@ -120,6 +120,13 @@ export const routes: Routes = [
                     (m) => m.TagPageComponent,
                   ),
               },
+              {
+                path: 'tabs',
+                loadComponent: () =>
+                  import('./pages/components/tabs/tabs-page.component').then(
+                    (m) => m.TabsPageComponent,
+                  ),
+              },
             ],
           },
         ],
