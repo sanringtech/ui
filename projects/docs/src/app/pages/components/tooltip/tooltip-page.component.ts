@@ -8,6 +8,7 @@ import {
   ComponentPageCodePreviewer,
   ComponentPageComponent,
   ComponentPageHeaderComponent,
+  ComponentPageInstallationComponent,
   ComponentPageSectionComponent,
 } from '../../../layouts/component-page';
 import { tooltipPage, tooltipPageExamples } from './tooltip.docs';
@@ -24,6 +25,7 @@ import { tooltipPage, tooltipPageExamples } from './tooltip.docs';
     ComponentPageCodePreviewer,
     ComponentPageComponent,
     ComponentPageHeaderComponent,
+    ComponentPageInstallationComponent,
     ComponentPageSectionComponent,
   ],
   template: `
@@ -60,7 +62,12 @@ import { tooltipPage, tooltipPageExamples } from './tooltip.docs';
         </div>
       </app-component-page-section>
 
-      <app-component-page-section [section]="section('installation')" />
+      <app-component-page-section [section]="section('installation')">
+        <app-component-page-installation
+          componentName="tooltip"
+          manualSnippet="import { TooltipComponent, TooltipContentComponent, TooltipTriggerDirective } from '@sanring/ui';"
+        />
+      </app-component-page-section>
 
       <app-component-page-section [section]="section('composition')">
         <div class="overflow-hidden rounded-lg border border-[var(--docs-border)]">

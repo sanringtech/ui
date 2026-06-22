@@ -8,6 +8,7 @@ import {
   ComponentPageCodePreviewer,
   ComponentPageComponent,
   ComponentPageHeaderComponent,
+  ComponentPageInstallationComponent,
   ComponentPageSectionComponent,
 } from '../../../layouts/component-page';
 import { scrollAreaPage, scrollAreaPageExamples } from './scroll-area.docs';
@@ -30,6 +31,7 @@ interface ScrollAreaDemoItem {
     ComponentPageCodePreviewer,
     ComponentPageComponent,
     ComponentPageHeaderComponent,
+    ComponentPageInstallationComponent,
     ComponentPageSectionComponent,
   ],
   template: `
@@ -69,7 +71,12 @@ interface ScrollAreaDemoItem {
         </div>
       </app-component-page-section>
 
-      <app-component-page-section [section]="section('installation')" />
+      <app-component-page-section [section]="section('installation')">
+        <app-component-page-installation
+          componentName="scroll-area"
+          manualSnippet="import { InfiniteScrollDirective, ScrollAreaComponent, ScrollAreaDirective } from '@sanring/ui';"
+        />
+      </app-component-page-section>
 
       <app-component-page-section [section]="section('example')">
         <div class="grid gap-2">

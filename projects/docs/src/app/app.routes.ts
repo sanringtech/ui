@@ -114,6 +114,13 @@ export const routes: Routes = [
                   ),
               },
               {
+                path: 'switch',
+                loadComponent: () =>
+                  import('./pages/components/switch/switch-page.component').then(
+                    (m) => m.SwitchPageComponent,
+                  ),
+              },
+              {
                 path: 'tag',
                 loadComponent: () =>
                   import('./pages/components/tag/tag-page.component').then(

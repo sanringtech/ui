@@ -18,6 +18,7 @@ import {
   ComponentPageCodePreviewer,
   ComponentPageComponent,
   ComponentPageHeaderComponent,
+  ComponentPageInstallationComponent,
   ComponentPageSectionComponent,
 } from '../../../layouts/component-page';
 import { alertPage, alertPageExamples } from './alert.docs';
@@ -38,6 +39,7 @@ import { alertPage, alertPageExamples } from './alert.docs';
     ComponentPageCodePreviewer,
     ComponentPageComponent,
     ComponentPageHeaderComponent,
+    ComponentPageInstallationComponent,
     ComponentPageSectionComponent,
     LucideAlertTriangle,
     LucideInfo,
@@ -76,7 +78,12 @@ import { alertPage, alertPageExamples } from './alert.docs';
         </div>
       </app-component-page-section>
 
-      <app-component-page-section [section]="section('installation')" />
+      <app-component-page-section [section]="section('installation')">
+        <app-component-page-installation
+          componentName="alert"
+          manualSnippet="import { AlertComponent, AlertDescriptionDirective, AlertTitleDirective } from '@sanring/ui';"
+        />
+      </app-component-page-section>
 
 
       <app-component-page-section [section]="section('example')">

@@ -9,6 +9,7 @@ import {
   ComponentPageCodePreviewer,
   ComponentPageComponent,
   ComponentPageHeaderComponent,
+  ComponentPageInstallationComponent,
   ComponentPageSectionComponent,
 } from '../../../layouts/component-page';
 import { buttonPage, buttonPageExamples } from './button.docs';
@@ -22,6 +23,7 @@ import { buttonPage, buttonPageExamples } from './button.docs';
     ComponentPageComponent,
     ComponentPageCodePreviewer,
     ComponentPageHeaderComponent,
+    ComponentPageInstallationComponent,
     ComponentPageSectionComponent,
     LucideArrowRight,
     LucideDownload,
@@ -67,7 +69,12 @@ import { buttonPage, buttonPageExamples } from './button.docs';
         </div>
       </app-component-page-section>
 
-      <app-component-page-section [section]="section('installation')" />
+      <app-component-page-section [section]="section('installation')">
+        <app-component-page-installation
+          componentName="button"
+          manualSnippet="import { ButtonDirective } from '@sanring/ui';"
+        />
+      </app-component-page-section>
 
 
       <app-component-page-section [section]="section('example')">

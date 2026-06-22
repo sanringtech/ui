@@ -8,6 +8,7 @@ import {
   ComponentPageCodePreviewer,
   ComponentPageComponent,
   ComponentPageHeaderComponent,
+  ComponentPageInstallationComponent,
   ComponentPageSectionComponent,
 } from '../../../layouts/component-page';
 import { labelPage, labelPageExamples } from './label.docs';
@@ -22,6 +23,7 @@ import { labelPage, labelPageExamples } from './label.docs';
     ComponentPageCodePreviewer,
     ComponentPageComponent,
     ComponentPageHeaderComponent,
+    ComponentPageInstallationComponent,
     ComponentPageSectionComponent,
   ],
   template: `
@@ -51,7 +53,12 @@ import { labelPage, labelPageExamples } from './label.docs';
         </div>
       </app-component-page-section>
 
-      <app-component-page-section [section]="section('installation')" />
+      <app-component-page-section [section]="section('installation')">
+        <app-component-page-installation
+          componentName="label"
+          manualSnippet="import { LabelDirective } from '@sanring/ui';"
+        />
+      </app-component-page-section>
 
 
       <app-component-page-section [section]="section('example')">

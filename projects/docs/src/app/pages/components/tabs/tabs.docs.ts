@@ -20,7 +20,6 @@ export const tabsPage = {
     {
       id: 'installation',
       titleKey: 'sidebar.installation',
-      descriptionKey: 'tabs.installation.description',
       level: 2,
     },
     {

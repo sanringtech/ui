@@ -8,6 +8,7 @@ import {
   ComponentPageCodePreviewer,
   ComponentPageComponent,
   ComponentPageHeaderComponent,
+  ComponentPageInstallationComponent,
   ComponentPageSectionComponent,
 } from '../../../layouts/component-page';
 import { tagPage, tagPageExamples } from './tag.docs';
@@ -21,6 +22,7 @@ import { tagPage, tagPageExamples } from './tag.docs';
     ComponentPageCodePreviewer,
     ComponentPageComponent,
     ComponentPageHeaderComponent,
+    ComponentPageInstallationComponent,
     ComponentPageSectionComponent,
   ],
   template: `
@@ -50,7 +52,12 @@ import { tagPage, tagPageExamples } from './tag.docs';
         </div>
       </app-component-page-section>
 
-      <app-component-page-section [section]="section('installation')" />
+      <app-component-page-section [section]="section('installation')">
+        <app-component-page-installation
+          componentName="tag"
+          manualSnippet="import { TagComponent } from '@sanring/ui';"
+        />
+      </app-component-page-section>
 
 
       <app-component-page-section [section]="section('example')">

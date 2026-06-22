@@ -8,6 +8,7 @@ import {
   ComponentPageCodePreviewer,
   ComponentPageComponent,
   ComponentPageHeaderComponent,
+  ComponentPageInstallationComponent,
   ComponentPageSectionComponent,
 } from '../../../layouts/component-page';
 import { dividerPage, dividerPageExamples } from './divider.docs';
@@ -21,6 +22,7 @@ import { dividerPage, dividerPageExamples } from './divider.docs';
     ComponentPageCodePreviewer,
     ComponentPageComponent,
     ComponentPageHeaderComponent,
+    ComponentPageInstallationComponent,
     ComponentPageSectionComponent,
   ],
   template: `
@@ -50,7 +52,12 @@ import { dividerPage, dividerPageExamples } from './divider.docs';
         </div>
       </app-component-page-section>
 
-      <app-component-page-section [section]="section('installation')" />
+      <app-component-page-section [section]="section('installation')">
+        <app-component-page-installation
+          componentName="divider"
+          manualSnippet="import { DividerComponent } from '@sanring/ui';"
+        />
+      </app-component-page-section>
 
 
       <app-component-page-section [section]="section('example')">

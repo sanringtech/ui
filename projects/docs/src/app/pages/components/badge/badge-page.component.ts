@@ -9,6 +9,7 @@ import {
   ComponentPageCodePreviewer,
   ComponentPageComponent,
   ComponentPageHeaderComponent,
+  ComponentPageInstallationComponent,
   ComponentPageSectionComponent,
 } from '../../../layouts/component-page';
 import { badgePage, badgePageExamples } from './badge.docs';
@@ -22,6 +23,7 @@ import { badgePage, badgePageExamples } from './badge.docs';
     ComponentPageCodePreviewer,
     ComponentPageComponent,
     ComponentPageHeaderComponent,
+    ComponentPageInstallationComponent,
     ComponentPageSectionComponent,
     LucideBadgeCheck,
     LucideMoveUpRight,
@@ -53,7 +55,12 @@ import { badgePage, badgePageExamples } from './badge.docs';
         </div>
       </app-component-page-section>
 
-      <app-component-page-section [section]="section('installation')" />
+      <app-component-page-section [section]="section('installation')">
+        <app-component-page-installation
+          componentName="badge"
+          manualSnippet="import { BadgeDirective } from '@sanring/ui';"
+        />
+      </app-component-page-section>
 
 
       <app-component-page-section [section]="section('example')">

@@ -25,6 +25,7 @@ export type DocsComponentId =
   | 'link'
   | 'scroll-area'
   | 'skeleton'
+  | 'switch'
   | 'tag'
   | 'tabs'
   | 'tooltip';
@@ -147,6 +148,12 @@ export const docsComponentItems: DocsComponentNavItem[] = [
     id: 'skeleton',
     labelKey: 'component.skeleton',
     path: '/components/skeleton',
+    active: true,
+  },
+  {
+    id: 'switch',
+    labelKey: 'component.switch',
+    path: '/components/switch',
     active: true,
   },
   {

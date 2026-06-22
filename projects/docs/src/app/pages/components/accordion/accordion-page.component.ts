@@ -13,6 +13,7 @@ import {
   ComponentPageCodePreviewer,
   ComponentPageComponent,
   ComponentPageHeaderComponent,
+  ComponentPageInstallationComponent,
   ComponentPageSectionComponent,
 } from '../../../layouts/component-page';
 import { I18nService } from '../../../i18n/i18n.service';
@@ -31,6 +32,7 @@ import { accordionPage, accordionPageExamples } from './accordion.docs';
     ComponentPageCodeBlock,
     ComponentPageCodePreviewer,
     ComponentPageHeaderComponent,
+    ComponentPageInstallationComponent,
     ComponentPageSectionComponent,
   ],
   template: `
@@ -71,7 +73,12 @@ import { accordionPage, accordionPageExamples } from './accordion.docs';
         </div>
       </app-component-page-section>
 
-      <app-component-page-section [section]="section('installation')" />
+      <app-component-page-section [section]="section('installation')">
+        <app-component-page-installation
+          componentName="accordion"
+          manualSnippet="import { AccordionComponent, AccordionContentComponent, AccordionItemComponent, AccordionTriggerComponent } from '@sanring/ui';"
+        />
+      </app-component-page-section>
 
       <app-component-page-section [section]="section('composition')">
         <div class="overflow-hidden rounded-lg border border-[var(--docs-border)]">

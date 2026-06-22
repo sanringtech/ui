@@ -18,6 +18,7 @@ import {
   ComponentPageCodePreviewer,
   ComponentPageComponent,
   ComponentPageHeaderComponent,
+  ComponentPageInstallationComponent,
   ComponentPageSectionComponent,
 } from '../../../layouts/component-page';
 import { cardPage, cardPageExamples } from './card.docs';
@@ -38,6 +39,7 @@ import { cardPage, cardPageExamples } from './card.docs';
     ComponentPageCodePreviewer,
     ComponentPageComponent,
     ComponentPageHeaderComponent,
+    ComponentPageInstallationComponent,
     ComponentPageSectionComponent,
     LucideActivity,
     LucideKey,
@@ -80,7 +82,12 @@ import { cardPage, cardPageExamples } from './card.docs';
         </div>
       </app-component-page-section>
 
-      <app-component-page-section [section]="section('installation')" />
+      <app-component-page-section [section]="section('installation')">
+        <app-component-page-installation
+          componentName="card"
+          manualSnippet="import { Card, CardContentComponent, CardDescriptionDirective, CardFooterComponent, CardHeaderComponent, CardTitleDirective } from '@sanring/ui';"
+        />
+      </app-component-page-section>
 
       <app-component-page-section [section]="section('composition')">
         <div class="grid gap-4">
