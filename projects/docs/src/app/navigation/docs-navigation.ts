@@ -26,7 +26,8 @@ export type DocsComponentId =
   | 'scroll-area'
   | 'skeleton'
   | 'tag'
-  | 'tabs';
+  | 'tabs'
+  | 'tooltip';
 
 export interface DocsComponentNavItem extends DocsSidebarItem {
   id: DocsComponentId;
@@ -158,6 +159,12 @@ export const docsComponentItems: DocsComponentNavItem[] = [
     id: 'tabs',
     labelKey: 'component.tabs',
     path: '/components/tabs',
+    active: true,
+  },
+  {
+    id: 'tooltip',
+    labelKey: 'component.tooltip',
+    path: '/components/tooltip',
     active: true,
   },
 ];

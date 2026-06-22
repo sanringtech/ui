@@ -127,6 +127,13 @@ export const routes: Routes = [
                     (m) => m.TabsPageComponent,
                   ),
               },
+              {
+                path: 'tooltip',
+                loadComponent: () =>
+                  import('./pages/components/tooltip/tooltip-page.component').then(
+                    (m) => m.TooltipPageComponent,
+                  ),
+              },
             ],
           },
         ],

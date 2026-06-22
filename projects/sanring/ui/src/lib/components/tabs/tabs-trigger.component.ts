@@ -42,11 +42,16 @@ export class TabsTriggerComponent {
   protected get tabsTriggerClass() {
     const variant = this.tabs.variant;
     return cn(
-      'inline-flex items-center justify-center whitespace-nowrap px-3 py-1.5 text-sm font-medium transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--docs-border-strong)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--docs-bg)] data-[disabled]:pointer-events-none data-[disabled]:opacity-50',
+      'inline-flex shrink-0 items-center justify-center gap-1.5 whitespace-nowrap px-3 py-1.5 text-sm font-medium transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--docs-border-strong)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--docs-bg)] data-[disabled]:pointer-events-none data-[disabled]:opacity-50',
       variant === 'default' &&
-        'rounded-sm text-[var(--docs-muted)] data-[state=active]:bg-[var(--docs-bg)] data-[state=active]:text-[var(--docs-fg)] data-[state=active]:shadow-sm',
+        'rounded-md border border-transparent px-2.5 py-1 text-[var(--docs-muted)] hover:bg-[var(--docs-elevated)] hover:text-[var(--docs-fg)] data-[state=active]:border-[var(--docs-border-strong)] data-[state=active]:bg-[var(--docs-active)] data-[state=active]:text-[var(--docs-fg)] data-[state=active]:shadow-sm',
       variant === 'line' &&
-        'rounded-none border-b-2 border-transparent pb-2.5 pt-2 text-[var(--docs-muted)] data-[state=active]:border-[var(--docs-fg)] data-[state=active]:text-[var(--docs-fg)]',
+        cn(
+          'rounded-none border-transparent text-[var(--docs-muted)] data-[state=active]:border-[var(--docs-fg)] data-[state=active]:text-[var(--docs-fg)]',
+          this.tabs.orientation === 'vertical'
+            ? 'justify-start border-l-2 px-3 py-2'
+            : 'border-b-2 pb-2.5 pt-2',
+        ),
       this.class,
     );
   }

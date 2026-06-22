@@ -19,3 +19,4 @@ export * from './lib/components/scrollArea';
 export * from './lib/components/skeleton';
 export * from './lib/components/tag';
 export * from './lib/components/tabs';
+export * from './lib/components/tooltip';

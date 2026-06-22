@@ -32,13 +32,15 @@ export class TabsListComponent implements AfterContentInit {
   protected get tabsListClass() {
     const variant = this.tabs.variant;
     return cn(
-      this.tabs.orientation === 'vertical' ? 'inline-grid items-stretch' : 'inline-flex items-center justify-center',
+      this.tabs.orientation === 'vertical'
+        ? 'inline-grid w-max items-stretch'
+        : 'inline-flex w-max items-center justify-center',
       variant === 'default' &&
-        'rounded-md bg-[var(--docs-elevated)] p-1 text-[var(--docs-muted)]',
+        'rounded-lg border border-[var(--docs-border)] bg-[var(--docs-surface-strong)] p-0.5 text-[var(--docs-muted)] shadow-sm',
       variant === 'line' &&
         (this.tabs.orientation === 'vertical'
           ? 'border-l border-[var(--docs-border)] bg-transparent p-0'
-          : 'w-full justify-start border-b border-[var(--docs-border)] bg-transparent p-0'),
+          : 'justify-start border-b border-[var(--docs-border)] bg-transparent p-0'),
       this.class,
     );
   }
