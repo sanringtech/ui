@@ -26,7 +26,7 @@ export class TabsContentComponent {
 
   protected get tabsContentClass() {
     return cn(
-      'mt-2 ring-offset-[var(--docs-surface)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--docs-border-strong)] focus-visible:ring-offset-2',
+      'mt-2 ring-offset-[var(--sanring-surface)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--sanring-border-strong)] focus-visible:ring-offset-2',
       this.class,
     );
   }

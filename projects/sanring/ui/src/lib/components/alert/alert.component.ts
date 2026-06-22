@@ -18,7 +18,7 @@ export class AlertComponent {
   protected get alertClass() {
     return cn(
       // 💡 關鍵修正：加上 'block'！
-      'relative block w-full rounded-lg border p-4 [&>svg~*]:pl-7 [&>svg+div]:translate-y-[-3px] [&>svg]:absolute [&>svg]:left-4 [&>svg]:top-4 [&>svg]:text-[var(--docs-fg)]',
+      'relative block w-full rounded-lg border p-4 [&>svg~*]:pl-7 [&>svg+div]:translate-y-[-3px] [&>svg]:absolute [&>svg]:left-4 [&>svg]:top-4 [&>svg]:text-[var(--sanring-foreground)]',
       this.variantClasses,
       this.class,
     );
@@ -27,7 +27,7 @@ export class AlertComponent {
   private get variantClasses() {
     const variants: Record<AlertVariant, string> = {
       default:
-        'border-[var(--docs-border-strong)] bg-[var(--docs-surface)] text-[var(--docs-fg)]',
+        'border-[var(--sanring-border-strong)] bg-[var(--sanring-surface)] text-[var(--sanring-foreground)]',
       destructive:
         'border-red-500/60 bg-red-500/10 text-red-400 dark:border-red-500 [&>svg]:text-red-400',
     };

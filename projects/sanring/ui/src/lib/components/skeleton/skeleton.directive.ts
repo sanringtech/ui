@@ -14,7 +14,7 @@ export class SkeletonDirective {
 
   protected get skeletonClass() {
     return cn(
-      'animate-pulse rounded-md bg-[var(--docs-surface-strong)]',
+      'animate-pulse rounded-md bg-[var(--sanring-surface-strong)]',
       this.class // 讓使用者可以覆蓋寬高和形狀
     );
   }

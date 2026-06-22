@@ -40,7 +40,7 @@ export class AccordionItemComponent {
   }
 
   protected get itemClass() {
-    return cn('border-b border-[var(--docs-border)]', this.class);
+    return cn('border-b border-[var(--sanring-border)]', this.class);
   }
 
   constructor() {

@@ -27,6 +27,20 @@
     --docs-active: #3f3f46;
     --docs-control: #fafafa;
     --docs-control-fg: #090909;
+
+    --sanring-background: var(--docs-bg);
+    --sanring-panel: var(--docs-panel);
+    --sanring-surface: var(--docs-surface);
+    --sanring-surface-strong: var(--docs-surface-strong);
+    --sanring-elevated: var(--docs-elevated);
+    --sanring-code: var(--docs-code);
+    --sanring-foreground: var(--docs-fg);
+    --sanring-muted: var(--docs-muted);
+    --sanring-border: var(--docs-border);
+    --sanring-border-strong: var(--docs-border-strong);
+    --sanring-active: var(--docs-active);
+    --sanring-control: var(--docs-control);
+    --sanring-control-foreground: var(--docs-control-fg);
   }
 
   :root[data-theme='light'] {

@@ -121,7 +121,7 @@ export class TooltipContentComponent implements OnChanges, OnInit {
   protected get tooltipContentClass() {
     return cn(
       // 1. 基礎樣式 + 加入 break-words 防止長文字破版
-      'relative z-50 max-w-64 break-words rounded-md border border-[var(--docs-border-strong)] bg-[var(--docs-fg)] px-3 py-1.5 text-xs font-medium leading-5 text-[var(--docs-bg)] shadow-md',
+      'relative z-50 max-w-64 break-words rounded-md border border-[var(--sanring-border-strong)] bg-[var(--sanring-foreground)] px-3 py-1.5 text-xs font-medium leading-5 text-[var(--sanring-background)] shadow-md',
 
       // 2. 結合 tailwindcss-animate 的超滑順進場動畫
       'animate-in fade-in-0 zoom-in-95',
@@ -138,7 +138,7 @@ export class TooltipContentComponent implements OnChanges, OnInit {
 
   protected get tooltipArrowClass() {
     return cn(
-      'pointer-events-none absolute size-2 rotate-45 border border-[var(--docs-border-strong)] bg-[var(--docs-fg)]',
+      'pointer-events-none absolute size-2 rotate-45 border border-[var(--sanring-border-strong)] bg-[var(--sanring-foreground)]',
       this.renderedSide === 'top' && '-bottom-1 left-1/2 -translate-x-1/2 border-l-0 border-t-0',
       this.renderedSide === 'bottom' && '-top-1 left-1/2 -translate-x-1/2 border-b-0 border-r-0',
       this.renderedSide === 'left' && '-right-1 top-1/2 -translate-y-1/2 border-b-0 border-l-0',

@@ -21,9 +21,9 @@ export class LinkDirective {
 
   protected get computedClass() {
     return cn(
-      'inline-flex items-center gap-1 font-medium text-[var(--docs-fg)] underline underline-offset-4',
-      'transition-colors hover:text-[var(--docs-muted)] focus-visible:outline-none',
-      'focus-visible:ring-2 focus-visible:ring-[var(--docs-border-strong)]',
+      'inline-flex items-center gap-1 font-medium text-[var(--sanring-foreground)] underline underline-offset-4',
+      'transition-colors hover:text-[var(--sanring-muted)] focus-visible:outline-none',
+      'focus-visible:ring-2 focus-visible:ring-[var(--sanring-border-strong)]',
       'disabled:pointer-events-none disabled:opacity-50',
       this.class,
     );

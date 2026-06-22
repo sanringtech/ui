@@ -18,7 +18,7 @@ import { cn } from '../../utils';
       <button
         type="button"
         (click)="closeDialog()"
-        class="absolute right-4 top-4 rounded-sm text-[var(--docs-muted)] opacity-70 ring-offset-[var(--docs-surface)] transition-colors transition-opacity hover:text-[var(--docs-fg)] hover:opacity-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--docs-border-strong)] focus-visible:ring-offset-2 disabled:pointer-events-none"
+        class="absolute right-4 top-4 rounded-sm text-[var(--sanring-muted)] opacity-70 ring-offset-[var(--sanring-surface)] transition-colors transition-opacity hover:text-[var(--sanring-foreground)] hover:opacity-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--sanring-border-strong)] focus-visible:ring-offset-2 disabled:pointer-events-none"
       >
         <svg lucideX class="size-4"></svg>
         <span class="sr-only">關閉</span>
@@ -57,7 +57,7 @@ export class DialogContentComponent {
 
   protected get dialogContentClass() {
     return cn(
-      'relative z-50 grid w-full max-w-lg gap-4 border border-[var(--docs-border)] bg-[var(--docs-surface)] p-6 shadow-lg sm:rounded-lg',
+      'relative z-50 grid w-full max-w-lg gap-4 border border-[var(--sanring-border)] bg-[var(--sanring-surface)] p-6 shadow-lg sm:rounded-lg',
       this.class,
     );
   }

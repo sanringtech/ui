@@ -17,10 +17,10 @@ export class DividerComponent {
 
   protected get dividerClass() {
     if (this.vertical) {
-      return 'inline-block min-h-4 w-px shrink-0 self-stretch bg-[var(--docs-border)]';
+      return 'inline-block min-h-4 w-px shrink-0 self-stretch bg-[var(--sanring-border)]';
     }
 
-    return ['block h-px bg-[var(--docs-border)]', this.insetClass].filter(Boolean).join(' ');
+    return ['block h-px bg-[var(--sanring-border)]', this.insetClass].filter(Boolean).join(' ');
   }
 
   private get insetClass() {

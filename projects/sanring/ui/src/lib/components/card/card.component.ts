@@ -15,7 +15,7 @@ export class CardComponent {
   protected get cardClass() {
     return cn(
       // 加上 block 確保自定義標籤能佔滿寬度
-      'block rounded-xl border border-[var(--docs-border)] bg-[var(--docs-surface)] text-[var(--docs-fg)] shadow-sm',
+      'block rounded-xl border border-[var(--sanring-border)] bg-[var(--sanring-surface)] text-[var(--sanring-foreground)] shadow-sm',
       this.class,
     );
   }

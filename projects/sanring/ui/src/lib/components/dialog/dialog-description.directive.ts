@@ -15,7 +15,7 @@ export class DialogDescriptionDirective {
   protected get dialogDescriptionClass() {
     return cn(
       // 縮小字體(text-sm)、使用系統的次要文字顏色
-      'text-sm text-[var(--docs-muted)]',
+      'text-sm text-[var(--sanring-muted)]',
       this.class,
     );
   }

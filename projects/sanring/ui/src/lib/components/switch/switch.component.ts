@@ -74,19 +74,19 @@ export class SwitchComponent implements ControlValueAccessor {
 
   protected get trackClass() {
     return cn(
-      'peer inline-flex shrink-0 cursor-pointer items-center rounded-full border-2 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--docs-border-strong)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--docs-bg)] disabled:cursor-not-allowed disabled:opacity-50',
+      'peer inline-flex shrink-0 cursor-pointer items-center rounded-full border-2 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--sanring-border-strong)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--sanring-background)] disabled:cursor-not-allowed disabled:opacity-50',
       this.size === 'sm' && 'h-5 w-9',
       this.size === 'md' && 'h-6 w-11',
       this.size === 'lg' && 'h-7 w-12',
       this.invalid ? 'border-red-500' : 'border-transparent',
-      this.checked ? 'bg-[var(--docs-fg)]' : 'bg-[var(--docs-border-strong)]',
+      this.checked ? 'bg-[var(--sanring-foreground)]' : 'bg-[var(--sanring-border-strong)]',
       this.class,
     );
   }
 
   protected get thumbClass() {
     return cn(
-      'pointer-events-none block rounded-full bg-[var(--docs-bg)] shadow-lg ring-0 transition-transform duration-200 ease-in-out',
+      'pointer-events-none block rounded-full bg-[var(--sanring-background)] shadow-lg ring-0 transition-transform duration-200 ease-in-out',
       this.size === 'sm' && 'size-4',
       this.size === 'md' && 'size-5',
       this.size === 'lg' && 'size-6',

@@ -14,11 +14,11 @@ export class InputDirective {
 
   protected get inputClass() {
     return cn(
-      'peer flex h-10 w-full rounded-md border border-[var(--docs-border-strong)]',
-      'bg-[var(--docs-surface)] px-3 py-2 text-sm text-[var(--docs-fg)]',
+      'peer flex h-10 w-full rounded-md border border-[var(--sanring-border-strong)]',
+      'bg-[var(--sanring-surface)] px-3 py-2 text-sm text-[var(--sanring-foreground)]',
       'file:border-0 file:bg-transparent file:text-sm file:font-medium',
-      'placeholder:text-[var(--docs-muted)]',
-      'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--docs-border-strong)]',
+      'placeholder:text-[var(--sanring-muted)]',
+      'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--sanring-border-strong)]',
       'disabled:cursor-not-allowed disabled:opacity-50',
       // 精準針對 textarea 的排版
       '[&:is(textarea)]:h-auto [&:is(textarea)]:min-h-[80px]',

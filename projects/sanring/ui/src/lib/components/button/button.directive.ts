@@ -18,7 +18,7 @@ export class ButtonDirective {
     return cn(
       'inline-flex cursor-pointer items-center justify-center gap-2 whitespace-nowrap rounded-lg border font-medium',
       'transition-[background-color,color] focus-visible:outline-none focus-visible:ring-2',
-      'focus-visible:ring-[var(--docs-border-strong)] disabled:pointer-events-none disabled:opacity-50',
+      'focus-visible:ring-[var(--sanring-border-strong)] disabled:pointer-events-none disabled:opacity-50',
       this.variantClasses,
       this.sizeClasses,
       this.class,
@@ -27,16 +27,16 @@ export class ButtonDirective {
 
   private get variantClasses() {
     const variants: Record<ButtonVariant, string> = {
-      default: 'border-transparent bg-[var(--docs-control)] text-[var(--docs-control-fg)]',
+      default: 'border-transparent bg-[var(--sanring-control)] text-[var(--sanring-control-foreground)]',
       secondary:
-        'border-[var(--docs-border)] bg-[var(--docs-surface-strong)] text-[var(--docs-fg)] hover:bg-[var(--docs-active)]',
+        'border-[var(--sanring-border)] bg-[var(--sanring-surface-strong)] text-[var(--sanring-foreground)] hover:bg-[var(--sanring-active)]',
       outline:
-        'border-[var(--docs-border-strong)] bg-transparent text-[var(--docs-fg)] hover:bg-[var(--docs-surface-strong)]',
+        'border-[var(--sanring-border-strong)] bg-transparent text-[var(--sanring-foreground)] hover:bg-[var(--sanring-surface-strong)]',
       ghost:
-        'border-transparent bg-transparent text-[var(--docs-fg)] hover:bg-[var(--docs-surface-strong)]',
+        'border-transparent bg-transparent text-[var(--sanring-foreground)] hover:bg-[var(--sanring-surface-strong)]',
       destructive:
         'border-transparent bg-[#dc2626] text-white hover:bg-[#b91c1c] focus-visible:ring-[#ef4444]',
-      link: 'border-transparent bg-transparent px-0 text-[var(--docs-fg)] underline-offset-4 hover:underline',
+      link: 'border-transparent bg-transparent px-0 text-[var(--sanring-foreground)] underline-offset-4 hover:underline',
     };
     return variants[this.variant];
   }
