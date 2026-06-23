@@ -18,6 +18,7 @@ export type DocsComponentId =
   | 'breadcrumb'
   | 'button'
   | 'card'
+  | 'checkbox'
   | 'dialog'
   | 'divider'
   | 'input'
@@ -106,6 +107,12 @@ export const docsComponentItems: DocsComponentNavItem[] = [
     id: 'card',
     labelKey: 'component.card',
     path: '/components/card',
+    active: true,
+  },
+  {
+    id: 'checkbox',
+    labelKey: 'component.checkbox',
+    path: '/components/checkbox',
     active: true,
   },
   {
