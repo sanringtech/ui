@@ -13,7 +13,8 @@
   "private": true,
   "packageManager": "pnpm@10.33.0",
   "dependencies": {
-    "@angular/cdk": "^22.0.1",
+    "@angular/aria": "^22.0.2",
+    "@angular/cdk": "^22.0.2",
     "@angular/common": "^22.0.0",
     "@angular/compiler": "^22.0.0",
     "@angular/core": "^22.0.0",

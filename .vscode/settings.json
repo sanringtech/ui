@@ -7,6 +7,7 @@
   "eslint.validate": ["typescript", "html"],
   "typescript.tsdk": "node_modules/typescript/lib",
   "prettier.requireConfig": true,
+  "cSpell.words": ["sanring"],
   "[typescript]": {
     "editor.formatOnSave": true,
     "editor.defaultFormatter": "esbenp.prettier-vscode"
