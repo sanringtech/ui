@@ -1,43 +1,31 @@
-import { booleanAttribute, Component, ElementRef, inject, Input } from '@angular/core';
+import { Tab as NgTab } from '@angular/aria/tabs';
+import { Component, inject, Input } from '@angular/core';
 import { cn } from '../../utils';
 import { TabsComponent } from './tabs.component';
 
 @Component({
   selector: 'sanring-tabs-trigger',
   standalone: true,
-  template: `<ng-content></ng-content>`,
+  template: `
+    <ng-content></ng-content>
+  `,
+  hostDirectives: [
+    {
+      directive: NgTab,
+      inputs: ['value', 'disabled'],
+    },
+  ],
   host: {
-    role: 'tab',
-    '[attr.aria-selected]': 'isSelected()',
-    '[attr.aria-disabled]': 'disabled',
-    '[attr.data-state]': "isSelected() ? 'active' : 'inactive'",
-    '[attr.data-disabled]': "disabled ? '' : null",
-    '[tabindex]': "disabled ? '-1' : isSelected() ? '0' : '-1'",
-    '(click)': 'selectTab()',
+    '[attr.data-state]': "tab.selected() ? 'active' : 'inactive'",
+    '[attr.data-disabled]': "tab.disabled() ? '' : null",
     '[class]': 'tabsTriggerClass',
   },
 })
 export class TabsTriggerComponent {
-  @Input({ required: true }) value!: string;
   @Input() class = '';
-  @Input({ transform: booleanAttribute }) disabled = false;
 
-  private elementRef = inject(ElementRef<HTMLElement>);
+  protected tab = inject(NgTab);
   protected tabs = inject(TabsComponent);
-
-  focus() {
-    this.elementRef.nativeElement.focus();
-  }
-
-  isSelected(): boolean {
-    return this.tabs.value() === this.value;
-  }
-
-  selectTab() {
-    if (!this.disabled) {
-      this.tabs.setValue(this.value);
-    }
-  }
 
   protected get tabsTriggerClass() {
     const variant = this.tabs.variant;

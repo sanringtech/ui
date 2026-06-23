@@ -1,28 +1,32 @@
-import { Component, Input, inject } from '@angular/core';
+import { TabContent as NgTabContent, TabPanel as NgTabPanel } from '@angular/aria/tabs';
+import { Component, inject, Input } from '@angular/core';
 import { cn } from '../../utils';
-import { TabsComponent } from './tabs.component';
 
 @Component({
   selector: 'sanring-tabs-content',
   standalone: true,
-  template: `<ng-content></ng-content>`,
+  imports: [NgTabContent, NgTabPanel],
+  template: `
+    <ng-template ngTabContent>
+      <ng-content></ng-content>
+    </ng-template>
+  `,
+  hostDirectives: [
+    {
+      directive: NgTabPanel,
+      inputs: ['value'],
+    },
+  ],
   host: {
-    role: 'tabpanel',
-    tabindex: '0',
-    '[hidden]': '!isActive()',
-    '[attr.data-state]': "isActive() ? 'active' : 'inactive'",
+    '[hidden]': '!panel.visible()',
+    '[attr.data-state]': "panel.visible() ? 'active' : 'inactive'",
     '[class]': 'tabsContentClass',
   },
 })
 export class TabsContentComponent {
-  @Input({ required: true }) value!: string;
   @Input() class = '';
 
-  private tabs = inject(TabsComponent);
-
-  isActive(): boolean {
-    return this.tabs.value() === this.value;
-  }
+  protected panel = inject(NgTabPanel);
 
   protected get tabsContentClass() {
     return cn(

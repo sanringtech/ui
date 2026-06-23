@@ -1,4 +1,5 @@
-import { Component, Input, Output, EventEmitter, OnInit, signal } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, signal } from '@angular/core';
+import { Tabs as NgTabs } from '@angular/aria/tabs';
 import { cn } from '../../utils';
 import { TabsOrientation, TabsVariant } from './tabs.type';
 
@@ -6,6 +7,7 @@ import { TabsOrientation, TabsVariant } from './tabs.type';
   selector: 'sanring-tabs',
   standalone: true,
   template: `<ng-content></ng-content>`,
+  hostDirectives: [NgTabs],
   host: {
     '[attr.data-orientation]': 'orientation',
     '[class]': 'tabsClass',
@@ -27,16 +29,10 @@ export class TabsComponent implements OnInit {
     }
   }
 
-  setValue(newValue: string) {
-    if (this.value() !== newValue) {
+  setValue(newValue: string | undefined) {
+    if (newValue && this.value() !== newValue) {
       this.value.set(newValue);
       this.valueChange.emit(newValue);
-    }
-  }
-
-  setInitialValue(newValue: string) {
-    if (!this.value()) {
-      this.value.set(newValue);
     }
   }
 

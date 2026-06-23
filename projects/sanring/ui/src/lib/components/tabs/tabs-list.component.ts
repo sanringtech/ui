@@ -1,33 +1,45 @@
-import {
-  AfterContentInit,
-  Component,
-  ContentChildren,
-  HostListener,
-  Input,
-  inject,
-  QueryList,
-} from '@angular/core';
-import { FocusKeyManager } from '@angular/cdk/a11y';
+import { AfterContentInit, Component, effect, Input, inject, untracked } from '@angular/core';
+import { TabList as NgTabList } from '@angular/aria/tabs';
 import { cn } from '../../utils';
-import { TabsTriggerComponent } from './tabs-trigger.component';
 import { TabsComponent } from './tabs.component';
 
 @Component({
   selector: 'sanring-tabs-list',
   standalone: true,
   template: `<ng-content></ng-content>`,
+  hostDirectives: [
+    {
+      directive: NgTabList,
+      inputs: ['orientation', 'selectionMode', 'wrap', 'softDisabled', 'focusMode', 'disabled'],
+    },
+  ],
   host: {
-    role: 'tablist',
-    '[attr.aria-orientation]': 'tabs.orientation',
     '[class]': 'tabsListClass',
   },
 })
 export class TabsListComponent implements AfterContentInit {
   @Input() class = '';
 
-  @ContentChildren(TabsTriggerComponent) triggers!: QueryList<TabsTriggerComponent>;
   protected tabs = inject(TabsComponent);
-  private keyManager!: FocusKeyManager<TabsTriggerComponent>;
+  private tabList = inject(NgTabList);
+
+  constructor() {
+    effect(() => {
+      const selectedTab = this.tabList.selectedTab();
+
+      if (selectedTab && selectedTab !== this.tabs.value()) {
+        untracked(() => this.tabs.setValue(selectedTab));
+      }
+    });
+  }
+
+  ngAfterContentInit() {
+    const value = this.tabs.value();
+
+    if (value) {
+      this.tabList.selectedTab.set(value);
+    }
+  }
 
   protected get tabsListClass() {
     const variant = this.tabs.variant;
@@ -43,33 +55,5 @@ export class TabsListComponent implements AfterContentInit {
           : 'justify-start border-b border-[var(--sanring-border)] bg-transparent p-0'),
       this.class,
     );
-  }
-
-  ngAfterContentInit() {
-    const firstEnabledTrigger = this.triggers.find((trigger) => !trigger.disabled);
-
-    if (firstEnabledTrigger) {
-      this.tabs.setInitialValue(firstEnabledTrigger.value);
-    }
-
-    this.keyManager = new FocusKeyManager(this.triggers)
-      .skipPredicate((trigger) => trigger.disabled)
-      .withWrap();
-
-    if (this.tabs.orientation === 'vertical') {
-      this.keyManager.withVerticalOrientation();
-    } else {
-      this.keyManager.withHorizontalOrientation('ltr');
-    }
-  }
-
-  @HostListener('keydown', ['$event'])
-  onKeydown(event: KeyboardEvent) {
-    this.keyManager.onKeydown(event);
-
-    if (event.key === 'Enter' || event.key === ' ') {
-      this.keyManager.activeItem?.selectTab();
-      event.preventDefault();
-    }
   }
 }

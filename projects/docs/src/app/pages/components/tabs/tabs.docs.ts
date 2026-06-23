@@ -160,7 +160,7 @@ export const tabsPageExamples = {
   <sanring-tabs-content value="reports">Reports content</sanring-tabs-content>
 </sanring-tabs>`,
   vertical: `<sanring-tabs defaultValue="account" orientation="vertical">
-  <sanring-tabs-list>
+  <sanring-tabs-list orientation="vertical">
     <sanring-tabs-trigger value="account">Account</sanring-tabs-trigger>
     <sanring-tabs-trigger value="password">Password</sanring-tabs-trigger>
     <sanring-tabs-trigger value="notifications">Notifications</sanring-tabs-trigger>
