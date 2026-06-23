@@ -22,6 +22,7 @@ let nextUniqueId = 0;
       role="switch"
       [id]="id"
       [attr.aria-checked]="checked"
+      [attr.aria-invalid]="invalid ? 'true' : null"
       [attr.data-state]="checked ? 'checked' : 'unchecked'"
       [disabled]="disabled"
       [class]="trackClass"

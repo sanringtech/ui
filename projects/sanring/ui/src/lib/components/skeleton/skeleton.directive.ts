@@ -6,8 +6,9 @@ import { cn } from '../../utils';
   selector: '[sanringSkeleton]',
   standalone: true,
   host: {
-    '[class]': 'skeletonClass'
-  }
+    'aria-hidden': 'true',
+    '[class]': 'skeletonClass',
+  },
 })
 export class SkeletonDirective {
   @Input() class = '';
@@ -15,7 +16,7 @@ export class SkeletonDirective {
   protected get skeletonClass() {
     return cn(
       'animate-pulse rounded-md bg-[var(--sanring-surface-strong)]',
-      this.class // 讓使用者可以覆蓋寬高和形狀
+      this.class, // 讓使用者可以覆蓋寬高和形狀
     );
   }
 }

@@ -62,6 +62,7 @@ export const tagPage = {
     { property: 'class', type: 'string', defaultValue: "''", descriptionKey: 'tag.api.class.description' },
     { property: 'variant', type: 'BadgeVariant', defaultValue: "'secondary'", descriptionKey: 'tag.api.variant.description' },
     { property: 'closable', type: 'boolean', defaultValue: 'false', descriptionKey: 'tag.api.closable.description' },
+    { property: 'removeAriaLabel', type: 'string', defaultValue: "'Remove tag'", descriptionKey: 'tag.api.removeAriaLabel.description' },
     { property: 'remove', type: 'EventEmitter<MouseEvent>', defaultValue: '-', descriptionKey: 'tag.api.remove.description' },
   ] satisfies readonly ComponentPageApiRow[],
 } as const satisfies ComponentPageDefinition;
@@ -77,7 +78,11 @@ export const tagPageExamples = {
   defaultVariant: `<sanring-tag>
   Tag
 </sanring-tag>`,
-  closable: `<sanring-tag closable (remove)="removeTag()">
+  closable: `<sanring-tag
+  closable
+  removeAriaLabel="Remove Filter tag"
+  (remove)="removeTag()"
+>
   Filter
 </sanring-tag>`,
   variants: `<sanring-tag variant="secondary">

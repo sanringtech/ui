@@ -7,16 +7,23 @@ import { CdkScrollable } from '@angular/cdk/scrolling';
   standalone: true,
   hostDirectives: [CdkScrollable],
   host: {
-    role: 'region', // 👈 ARIA 標記
-    'aria-label': '可滾動區域',
+    '[attr.role]': 'scrollAreaRole',
+    '[attr.aria-label]': 'ariaLabel || null',
+    '[attr.aria-labelledby]': 'ariaLabelledby || null',
     '[class]': 'scrollAreaClass',
   },
 })
 export class ScrollAreaDirective {
   @Input() class = '';
+  @Input() ariaLabel?: string;
+  @Input() ariaLabelledby?: string;
 
   protected get scrollAreaClass() {
     // 你可以在這裡加入預設的 overflow-auto 與隱藏捲軸的 CSS
     return cn('relative overflow-auto', this.class);
+  }
+
+  protected get scrollAreaRole() {
+    return this.ariaLabel || this.ariaLabelledby ? 'region' : null;
   }
 }

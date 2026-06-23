@@ -366,7 +366,8 @@ export const en = {
   'switch.api.id.description': 'Native id applied to the switch button for label association.',
   'switch.api.checked.description': 'Initial checked state for the switch.',
   'switch.api.disabled.description': 'Disables interaction and reduces visual emphasis.',
-  'switch.api.invalid.description': 'Applies an invalid visual state for validation feedback.',
+  'switch.api.invalid.description':
+    'Applies an invalid visual state and exposes aria-invalid for validation feedback.',
   'switch.api.size.description': 'Controls switch density: sm, md, or lg.',
   'tag.description':
     'A compact removable or static label built on Badge for filters, selections, and categorization.',
@@ -389,6 +390,7 @@ export const en = {
   'tag.api.class.description': 'Additional classes merged with the inner badge styles.',
   'tag.api.variant.description': 'Passes the visual variant through to the inner badge.',
   'tag.api.closable.description': 'Shows a compact remove button and supports attribute shorthand.',
+  'tag.api.removeAriaLabel.description': 'Accessible label for the remove button.',
   'tag.api.remove.description': 'Emits when the remove button is clicked.',
   'tabs.description':
     'A compound tab primitive for switching between related panels without leaving the page.',

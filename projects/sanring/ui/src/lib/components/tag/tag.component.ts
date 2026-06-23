@@ -15,7 +15,7 @@ import { BadgeDirective, type BadgeVariant } from '../badge';
         <button
           type="button"
           class="ml-1 inline-flex size-3.5 cursor-pointer items-center justify-center rounded-full text-current opacity-60 transition-opacity hover:bg-black/10 hover:opacity-100 dark:hover:bg-white/20 focus-visible:outline-none"
-          aria-label="Remove tag"
+          [attr.aria-label]="removeAriaLabel"
           (click)="onRemove($event)"
         >
           <svg class="size-3" lucideX></svg>
@@ -28,6 +28,7 @@ export class TagComponent {
   @Input() class = '';
   @Input() variant: BadgeVariant = 'secondary';
   @Input({ transform: booleanAttribute }) closable = false;
+  @Input() removeAriaLabel = 'Remove tag';
 
   @Output() remove = new EventEmitter<MouseEvent>();
 

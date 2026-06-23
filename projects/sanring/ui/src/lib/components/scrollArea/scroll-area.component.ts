@@ -10,8 +10,9 @@ export type ScrollAreaOrientation = 'vertical' | 'horizontal' | 'both';
   hostDirectives: [CdkScrollable],
   template: `<ng-content></ng-content>`,
   host: {
-    role: 'region',
-    'aria-label': '可滾動區域',
+    '[attr.role]': 'scrollAreaRole',
+    '[attr.aria-label]': 'ariaLabel || null',
+    '[attr.aria-labelledby]': 'ariaLabelledby || null',
     '[class]': 'scrollAreaClass',
   },
   styles: [
@@ -48,6 +49,8 @@ export class ScrollAreaComponent {
   @Input() class = '';
   @Input() orientation: ScrollAreaOrientation = 'vertical';
   @Input() hideScrollbar = false;
+  @Input() ariaLabel?: string;
+  @Input() ariaLabelledby?: string;
 
   protected get scrollAreaClass() {
     return cn(
@@ -56,6 +59,10 @@ export class ScrollAreaComponent {
       this.hideScrollbar && '[&::-webkit-scrollbar]:hidden [scrollbar-width:none]',
       this.class,
     );
+  }
+
+  protected get scrollAreaRole() {
+    return this.ariaLabel || this.ariaLabelledby ? 'region' : null;
   }
 
   private get orientationClass() {
