@@ -64,6 +64,8 @@ describe('AccordionComponent', () => {
 
     expect(trigger).toBeTruthy();
     expect(content).toBeTruthy();
+    expect(trigger?.getAttribute('aria-controls')).toBe(content?.id);
+    expect(content?.getAttribute('role')).toBe('region');
     expect(content?.classList.contains('grid-rows-[0fr]')).toBe(true);
 
     trigger?.click();

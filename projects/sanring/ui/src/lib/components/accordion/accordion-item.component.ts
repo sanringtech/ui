@@ -1,18 +1,12 @@
-import { Component, DestroyRef, Input, inject, signal } from '@angular/core';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { CdkAccordionItem } from '@angular/cdk/accordion';
+import { booleanAttribute, Component, EventEmitter, Input, Output, signal } from '@angular/core';
+import { AccordionPanel as NgAccordionPanel } from '@angular/aria/accordion';
 import { cn } from '../../utils';
+
+let nextAccordionItemId = 0;
 
 @Component({
   selector: 'sanring-accordion-item',
   standalone: true,
-  hostDirectives: [
-    {
-      directive: CdkAccordionItem,
-      inputs: ['expanded', 'disabled'],
-      outputs: ['opened', 'closed', 'expandedChange'],
-    },
-  ],
   template: `
     <div [class]="itemClass">
       <ng-content select="sanring-accordion-trigger"></ng-content>
@@ -21,51 +15,60 @@ import { cn } from '../../utils';
   `,
 })
 export class AccordionItemComponent {
-  private readonly item = inject(CdkAccordionItem);
-  private readonly destroyRef = inject(DestroyRef);
+  readonly id = `sanring-accordion-item-${nextAccordionItemId++}`;
   private readonly expandedState = signal(false);
+  readonly panel = signal<NgAccordionPanel | null>(null);
 
   @Input() class?: string;
+  @Input({ transform: booleanAttribute }) disabled = false;
+
+  @Input({ transform: booleanAttribute })
+  set expanded(expanded: boolean) {
+    this.setExpanded(expanded);
+  }
 
   get expanded() {
     return this.expandedState();
   }
 
-  get disabled() {
-    return this.item.disabled;
-  }
-
-  get id() {
-    return this.item.id;
-  }
+  @Output() expandedChange = new EventEmitter<boolean>();
+  @Output() opened = new EventEmitter<void>();
+  @Output() closed = new EventEmitter<void>();
 
   protected get itemClass() {
     return cn('border-b border-[var(--sanring-border)]', this.class);
   }
 
-  constructor() {
-    this.syncState();
-    this.item.expandedChange
-      .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe(() => this.syncState());
+  registerPanel(panel: NgAccordionPanel) {
+    this.panel.set(panel);
   }
 
   toggle() {
-    this.item.toggle();
-    this.syncState();
+    this.panel()?.toggle();
   }
 
   open() {
-    this.item.open();
-    this.syncState();
+    this.panel()?.expand();
   }
 
   close() {
-    this.item.close();
-    this.syncState();
+    this.panel()?.collapse();
   }
 
-  private syncState() {
-    this.expandedState.set(this.item.expanded);
+  setExpanded(expanded: boolean) {
+    const previousExpanded = this.expandedState();
+    this.expandedState.set(expanded);
+
+    if (previousExpanded === expanded) {
+      return;
+    }
+
+    this.expandedChange.emit(expanded);
+
+    if (expanded) {
+      this.opened.emit();
+    } else {
+      this.closed.emit();
+    }
   }
 }

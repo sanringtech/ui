@@ -1,13 +1,13 @@
 import { Component, inject } from '@angular/core';
-import { CdkAccordion } from '@angular/cdk/accordion';
+import { AccordionGroup as NgAccordionGroup } from '@angular/aria/accordion';
 
 @Component({
   selector: 'sanring-accordion',
   standalone: true,
   hostDirectives: [
     {
-      directive: CdkAccordion,
-      inputs: ['multi'],
+      directive: NgAccordionGroup,
+      inputs: ['multiExpandable: multi', 'disabled', 'softDisabled', 'wrap'],
     },
   ],
   // 父容器只需要負責接收裡面的 Item 即可
@@ -19,13 +19,13 @@ import { CdkAccordion } from '@angular/cdk/accordion';
   styles: ``,
 })
 export class AccordionComponent {
-  private readonly accordion = inject(CdkAccordion);
+  private readonly accordion = inject(NgAccordionGroup);
 
   openAll() {
-    this.accordion.openAll();
+    this.accordion.expandAll();
   }
 
   closeAll() {
-    this.accordion.closeAll();
+    this.accordion.collapseAll();
   }
 }
