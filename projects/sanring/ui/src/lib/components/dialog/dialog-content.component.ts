@@ -1,8 +1,19 @@
-import { booleanAttribute, Component, Input, inject } from '@angular/core';
+import {
+  AfterContentInit,
+  booleanAttribute,
+  Component,
+  ContentChild,
+  DestroyRef,
+  Input,
+  inject,
+} from '@angular/core';
 import { DialogRef } from '@angular/cdk/dialog';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 // 1. 引入 LucideAngularModule 與需要的 X icon
 import { LucideX } from '@lucide/angular';
 import { cn } from '../../utils';
+import { DialogDescriptionDirective } from './dialog-description.directive';
+import { DialogTitleDirective } from './dialog-title.directive';
 
 @Component({
   selector: 'sanring-dialog-content',
@@ -49,11 +60,15 @@ import { cn } from '../../utils';
     }
   `,
 })
-export class DialogContentComponent {
+export class DialogContentComponent implements AfterContentInit {
   @Input() class = '';
   @Input({ transform: booleanAttribute }) showClose = true;
 
   private dialogRef = inject(DialogRef, { optional: true });
+  private destroyRef = inject(DestroyRef);
+
+  @ContentChild(DialogTitleDirective) private title?: DialogTitleDirective;
+  @ContentChild(DialogDescriptionDirective) private description?: DialogDescriptionDirective;
 
   protected get dialogContentClass() {
     return cn(
@@ -66,5 +81,37 @@ export class DialogContentComponent {
     if (this.dialogRef) {
       this.dialogRef.close();
     }
+  }
+
+  ngAfterContentInit() {
+    this.syncDialogAria();
+    this.dialogRef?.closed.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(() => {
+      this.clearDialogAria();
+    });
+  }
+
+  private syncDialogAria() {
+    const container = this.getDialogContainer();
+
+    if (!container) {
+      return;
+    }
+
+    if (this.title) {
+      container.setAttribute('aria-labelledby', this.title.id);
+    }
+
+    if (this.description) {
+      container.setAttribute('aria-describedby', this.description.id);
+    }
+  }
+
+  private clearDialogAria() {
+    const container = this.getDialogContainer();
+    container?.removeAttribute('aria-describedby');
+  }
+
+  private getDialogContainer() {
+    return this.dialogRef?.overlayRef.overlayElement.querySelector('cdk-dialog-container');
   }
 }

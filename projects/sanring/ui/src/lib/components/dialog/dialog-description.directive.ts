@@ -2,14 +2,18 @@
 import { Directive, Input } from '@angular/core';
 import { cn } from '../../utils';
 
+let nextDialogDescriptionId = 0;
+
 @Directive({
   selector: '[sanringDialogDescription]',
   standalone: true,
   host: {
+    '[id]': 'id',
     '[class]': 'dialogDescriptionClass',
   },
 })
 export class DialogDescriptionDirective {
+  @Input() id = `sanring-dialog-description-${nextDialogDescriptionId++}`;
   @Input() class = '';
 
   protected get dialogDescriptionClass() {
