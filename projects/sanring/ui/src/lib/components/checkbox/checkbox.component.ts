@@ -1,15 +1,38 @@
-import { Component, Input, booleanAttribute, forwardRef } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  EventEmitter,
+  Input,
+  Output,
+  booleanAttribute,
+  forwardRef,
+  signal,
+} from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { LucideCheck, LucideMinus } from '@lucide/angular';
 import { cn } from '../../utils';
 import { CheckedState } from '.';
+import { CheckboxSize } from './checkbox.types';
 
 let nextUniqueId = 0;
+
+const SIZE_CLASSES: Record<CheckboxSize, string> = {
+  [CheckboxSize.Sm]: 'h-3 w-3',
+  [CheckboxSize.Md]: 'h-4 w-4',
+  [CheckboxSize.Lg]: 'h-5 w-5',
+};
+
+const ICON_SIZE_CLASSES: Record<CheckboxSize, string> = {
+  [CheckboxSize.Sm]: 'size-2.5',
+  [CheckboxSize.Md]: 'size-4',
+  [CheckboxSize.Lg]: 'size-5',
+};
 
 @Component({
   selector: 'sanring-checkbox',
   standalone: true,
   imports: [LucideCheck, LucideMinus],
+  changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,
@@ -24,23 +47,28 @@ let nextUniqueId = 0;
       [id]="id"
       [attr.name]="name"
       [attr.value]="value"
-      [attr.aria-checked]="checked === 'indeterminate' ? 'mixed' : checked"
+      [attr.aria-checked]="checkedSignal() === 'indeterminate' ? 'mixed' : checkedSignal()"
       [attr.aria-required]="required"
+      [attr.aria-label]="ariaLabel"
+      [attr.aria-labelledby]="ariaLabelledBy"
+      [attr.aria-describedby]="ariaDescribedBy"
       [attr.data-state]="getState()"
+      [attr.tabindex]="disabled ? -1 : tabIndex"
       [disabled]="disabled"
       [class]="checkboxClass"
       (click)="toggle()"
       (blur)="onBlur()"
+      (keydown.enter)="$event.preventDefault()"
     >
-      @if (checked === true) {
+      @if (checkedSignal() === true) {
         <span class="flex items-center justify-center text-current animate-in zoom-in-50">
-          <svg lucideCheck class="size-4"></svg>
+          <svg lucideCheck [class]="iconSizeClass"></svg>
         </span>
       }
 
-      @if (checked === 'indeterminate') {
+      @if (checkedSignal() === 'indeterminate') {
         <span class="flex items-center justify-center text-current animate-in zoom-in-50">
-          <svg lucideMinus class="size-4"></svg>
+          <svg lucideMinus [class]="iconSizeClass"></svg>
         </span>
       }
     </button>
@@ -50,44 +78,42 @@ export class CheckboxComponent implements ControlValueAccessor {
   @Input() class = '';
   @Input() id = `sanring-checkbox-${nextUniqueId++}`;
   @Input({ transform: booleanAttribute }) disabled = false;
-
-  // 💡 新增：原生表單與無障礙常用屬性
   @Input() name?: string;
   @Input() value?: string;
   @Input({ transform: booleanAttribute }) required = false;
+  @Input() tabIndex = 0;
+  @Input() ariaLabel?: string;
+  @Input() ariaLabelledBy?: string;
+  @Input() ariaDescribedBy?: string;
+  @Input() size: CheckboxSize = CheckboxSize.Md;
 
-  // 核心狀態：支援 true, false, 或 'indeterminate'
-  checked: CheckedState = false;
+  @Input() set checked(v: CheckedState) { this.checkedSignal.set(v); }
+  @Output() checkedChange = new EventEmitter<CheckedState>();
+
+  protected checkedSignal = signal<CheckedState>(false);
 
   private onChange: (value: CheckedState) => void = () => {};
   private onTouched: () => void = () => {};
 
-  // 轉換給 Tailwind 用的 data-state
   getState(): string {
-    if (this.checked === 'indeterminate') return 'indeterminate';
-    return this.checked ? 'checked' : 'unchecked';
+    if (this.checkedSignal() === 'indeterminate') return 'indeterminate';
+    return this.checkedSignal() ? 'checked' : 'unchecked';
   }
 
-  // 點擊邏輯
   toggle() {
     if (this.disabled) return;
-
-    // 如果原本是半選(indeterminate) 或 未選(false)，點擊後通常都會變成已選(true)
-    this.checked = this.checked === true ? false : true;
-
-    this.onChange(this.checked);
+    this.checkedSignal.set(this.checkedSignal() === true ? false : true);
+    this.onChange(this.checkedSignal());
     this.onTouched();
+    this.checkedChange.emit(this.checkedSignal());
   }
 
   onBlur() {
     this.onTouched();
   }
 
-  // --- ControlValueAccessor ---
-
   writeValue(value: CheckedState): void {
-    // 允許外部傳入 true, false 或 'indeterminate'
-    this.checked = value;
+    this.checkedSignal.set(value);
   }
 
   registerOnChange(fn: (value: CheckedState) => void): void {
@@ -102,18 +128,16 @@ export class CheckboxComponent implements ControlValueAccessor {
     this.disabled = isDisabled;
   }
 
-  // --- 樣式設定 ---
+  protected get iconSizeClass() {
+    return ICON_SIZE_CLASSES[this.size] ?? ICON_SIZE_CLASSES['md'];
+  }
 
   protected get checkboxClass() {
     return cn(
-      // 1. 基礎樣式 (包含 unchecked 時的透明背景)
-      'peer flex items-center justify-center h-4 w-4 shrink-0 rounded-sm border border-primary ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50',
-
-      // 2. 利用 data 屬性控制「選取 / 半選」時的顏色 (完全取代 JS 判斷)
+      'peer flex items-center justify-center shrink-0 rounded-sm border border-primary ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50',
+      SIZE_CLASSES[this.size] ?? SIZE_CLASSES['md'],
       'data-[state=checked]:bg-primary data-[state=checked]:text-primary-foreground',
       'data-[state=indeterminate]:bg-primary data-[state=indeterminate]:text-primary-foreground',
-
-      // 3. 外部傳入的客製化 class
       this.class,
     );
   }

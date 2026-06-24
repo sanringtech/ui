@@ -48,6 +48,16 @@ export const checkboxPage = {
           titleKey: 'checkbox.demo.stateSurface',
           level: 3,
         },
+        {
+          id: 'example-size',
+          titleKey: 'checkbox.demo.size',
+          level: 3,
+        },
+        {
+          id: 'example-event-binding',
+          titleKey: 'checkbox.demo.eventBinding',
+          level: 3,
+        },
       ],
     },
     {
@@ -64,6 +74,13 @@ export const checkboxPage = {
     { property: 'value', type: 'string', defaultValue: 'undefined', descriptionKey: 'checkbox.api.value.description' },
     { property: 'disabled', type: 'boolean', defaultValue: 'false', descriptionKey: 'checkbox.api.disabled.description' },
     { property: 'required', type: 'boolean', defaultValue: 'false', descriptionKey: 'checkbox.api.required.description' },
+    { property: 'checked', type: 'CheckedState', defaultValue: 'false', descriptionKey: 'checkbox.api.checked.description' },
+    { property: 'checkedChange', type: 'EventEmitter<CheckedState>', defaultValue: '—', descriptionKey: 'checkbox.api.checkedChange.description' },
+    { property: 'tabIndex', type: 'number', defaultValue: '0', descriptionKey: 'checkbox.api.tabIndex.description' },
+    { property: 'ariaLabel', type: 'string', defaultValue: 'undefined', descriptionKey: 'checkbox.api.ariaLabel.description' },
+    { property: 'ariaLabelledBy', type: 'string', defaultValue: 'undefined', descriptionKey: 'checkbox.api.ariaLabelledBy.description' },
+    { property: 'ariaDescribedBy', type: 'string', defaultValue: 'undefined', descriptionKey: 'checkbox.api.ariaDescribedBy.description' },
+    { property: 'size', type: 'CheckboxSize', defaultValue: 'CheckboxSize.Md', descriptionKey: 'checkbox.api.size.description' },
   ] satisfies readonly ComponentPageApiRow[],
 } as const satisfies ComponentPageDefinition;
 
@@ -108,4 +125,24 @@ export const checkboxPageExamples = {
     </div>
   </div>
 </div>`,
+  size: `<div class="flex items-center gap-6">
+  <div class="flex flex-col items-center gap-2">
+    <sanring-checkbox [size]="CheckboxSize.Sm" [(ngModel)]="checked" />
+    <span class="text-xs text-muted-foreground">Sm</span>
+  </div>
+  <div class="flex flex-col items-center gap-2">
+    <sanring-checkbox [size]="CheckboxSize.Md" [(ngModel)]="checked" />
+    <span class="text-xs text-muted-foreground">Md</span>
+  </div>
+  <div class="flex flex-col items-center gap-2">
+    <sanring-checkbox [size]="CheckboxSize.Lg" [(ngModel)]="checked" />
+    <span class="text-xs text-muted-foreground">Lg</span>
+  </div>
+</div>`,
+  eventBinding: `<!-- [(checked)] works without Angular forms -->
+<sanring-checkbox [(checked)]="isChecked" />
+<span>{{ isChecked ? 'Checked' : 'Unchecked' }}</span>
+
+<!-- or listen to the output directly -->
+<sanring-checkbox (checkedChange)="onCheckedChange($event)" />`,
 } as const;

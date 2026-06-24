@@ -1,6 +1,6 @@
 import { Component, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { CheckboxComponent, CheckedState, LabelDirective } from '@sanring/ui';
+import { CheckboxComponent, CheckboxSize, CheckedState, LabelDirective } from '@sanring/ui';
 import { getComponentPageSection } from '../../../docs-schema/component-page.utils';
 import { I18nService } from '../../../i18n/i18n.service';
 import {
@@ -152,6 +152,36 @@ import { checkboxPage, checkboxPageExamples } from './checkbox.docs';
         </div>
       </app-component-page-section>
 
+          <app-component-page-section [section]="section('example-size')">
+            <app-component-page-code-previewer [code]="examples.size" language="angular-html">
+              <div previewer class="flex items-center justify-center">
+                <div class="flex items-center gap-6">
+                  <div class="flex flex-col items-center gap-2">
+                    <sanring-checkbox [size]="CheckboxSize.Sm" [(ngModel)]="sizeChecked" />
+                    <span class="text-xs text-muted-foreground">{{ i18n.t('checkbox.demo.size.sm') }}</span>
+                  </div>
+                  <div class="flex flex-col items-center gap-2">
+                    <sanring-checkbox [size]="CheckboxSize.Md" [(ngModel)]="sizeChecked" />
+                    <span class="text-xs text-muted-foreground">{{ i18n.t('checkbox.demo.size.md') }}</span>
+                  </div>
+                  <div class="flex flex-col items-center gap-2">
+                    <sanring-checkbox [size]="CheckboxSize.Lg" [(ngModel)]="sizeChecked" />
+                    <span class="text-xs text-muted-foreground">{{ i18n.t('checkbox.demo.size.lg') }}</span>
+                  </div>
+                </div>
+              </div>
+            </app-component-page-code-previewer>
+          </app-component-page-section>
+
+          <app-component-page-section [section]="section('example-event-binding')">
+            <app-component-page-code-previewer [code]="examples.eventBinding" language="angular-html">
+              <div previewer class="flex flex-col items-center gap-3">
+                <sanring-checkbox [(checked)]="eventChecked" (checkedChange)="onCheckedChange()" />
+                <span class="text-sm text-muted-foreground">Changed {{ changeCount }} times</span>
+              </div>
+            </app-component-page-code-previewer>
+          </app-component-page-section>
+
       <app-component-page-section [section]="section('api')">
         <app-component-page-api-table [rows]="page.apiRows!" />
       </app-component-page-section>
@@ -162,11 +192,19 @@ export class CheckboxPageComponent {
   protected readonly page = checkboxPage;
   protected readonly examples = checkboxPageExamples;
   protected readonly i18n = inject(I18nService);
+  protected readonly CheckboxSize = CheckboxSize;
 
   basicChecked: CheckedState = false;
   indeterminate: CheckedState = 'indeterminate';
   accepted: CheckedState = false;
   disabledChecked: CheckedState = true;
+  sizeChecked: CheckedState = false;
+  eventChecked: CheckedState = false;
+  changeCount = 0;
+
+  onCheckedChange() {
+    this.changeCount++;
+  }
 
   protected section(id: string) {
     return getComponentPageSection(this.page, id);
