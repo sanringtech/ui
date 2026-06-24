@@ -107,6 +107,13 @@ export const routes: Routes = [
                   ),
               },
               {
+                path: 'radio',
+                loadComponent: () =>
+                  import('./pages/components/radio/radio-page.component').then(
+                    (m) => m.RadioPageComponent,
+                  ),
+              },
+              {
                 path: 'scroll-area',
                 loadComponent: () =>
                   import('./pages/components/scroll-area/scroll-area-page.component').then(

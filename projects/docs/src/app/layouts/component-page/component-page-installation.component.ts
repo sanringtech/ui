@@ -60,11 +60,11 @@ type PackageManager = 'pnpm' | 'npm' | 'yarn' | 'bun';
 
       <sanring-tabs-content value="manual" class="mt-0">
         <div class="overflow-hidden rounded-xl border border-[var(--docs-border)] bg-[var(--docs-code)]">
-          <div class="flex items-center justify-between border-b border-[var(--docs-border)] px-4 py-2">
-            <span class="text-sm font-medium text-[var(--docs-fg)]">Import</span>
+          <div class="flex min-w-0 items-center gap-2 border-b border-[var(--docs-border)] px-3 py-2">
+            <span class="flex-1 text-sm font-medium text-[var(--docs-fg)]">Import</span>
             <button
               type="button"
-              class="grid size-8 place-items-center rounded-md text-[var(--docs-muted)] transition-colors hover:bg-[var(--docs-elevated)] hover:text-[var(--docs-fg)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--docs-border-strong)]"
+              class="grid size-8 shrink-0 place-items-center rounded-md text-[var(--docs-muted)] transition-colors hover:bg-[var(--docs-elevated)] hover:text-[var(--docs-fg)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--docs-border-strong)]"
               aria-label="Copy import snippet"
               (click)="copyCurrentCode()"
             >

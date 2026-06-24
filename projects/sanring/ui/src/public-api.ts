@@ -16,6 +16,7 @@ export * from './lib/components/input';
 export * from './lib/components/label';
 export * from './lib/components/link';
 export * from './lib/components/menu';
+export * from './lib/components/radio';
 export * from './lib/components/scrollArea';
 export * from './lib/components/skeleton';
 export * from './lib/components/switch';

@@ -24,6 +24,7 @@ export type DocsComponentId =
   | 'input'
   | 'label'
   | 'link'
+  | 'radio'
   | 'scroll-area'
   | 'skeleton'
   | 'switch'
@@ -143,6 +144,12 @@ export const docsComponentItems: DocsComponentNavItem[] = [
     id: 'link',
     labelKey: 'component.link',
     path: '/components/link',
+    active: true,
+  },
+  {
+    id: 'radio',
+    labelKey: 'component.radio',
+    path: '/components/radio',
     active: true,
   },
   {
