@@ -18,11 +18,13 @@ export type DocsComponentId =
   | 'breadcrumb'
   | 'button'
   | 'card'
+  | 'checkbox'
   | 'dialog'
   | 'divider'
   | 'input'
   | 'label'
   | 'link'
+  | 'radio'
   | 'scroll-area'
   | 'skeleton'
   | 'switch'
@@ -109,6 +111,12 @@ export const docsComponentItems: DocsComponentNavItem[] = [
     active: true,
   },
   {
+    id: 'checkbox',
+    labelKey: 'component.checkbox',
+    path: '/components/checkbox',
+    active: true,
+  },
+  {
     id: 'dialog',
     labelKey: 'component.dialog',
     path: '/components/dialog',
@@ -136,6 +144,12 @@ export const docsComponentItems: DocsComponentNavItem[] = [
     id: 'link',
     labelKey: 'component.link',
     path: '/components/link',
+    active: true,
+  },
+  {
+    id: 'radio',
+    labelKey: 'component.radio',
+    path: '/components/radio',
     active: true,
   },
   {

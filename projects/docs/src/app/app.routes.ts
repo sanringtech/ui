@@ -65,6 +65,13 @@ export const routes: Routes = [
                   ),
               },
               {
+                path: 'checkbox',
+                loadComponent: () =>
+                  import('./pages/components/checkbox/checkbox-page.component').then(
+                    (m) => m.CheckboxPageComponent,
+                  ),
+              },
+              {
                 path: 'dialog',
                 loadComponent: () =>
                   import('./pages/components/dialog/dialog-page.component').then(
@@ -97,6 +104,13 @@ export const routes: Routes = [
                 loadComponent: () =>
                   import('./pages/components/link/link-page.component').then(
                     (m) => m.LinkPageComponent,
+                  ),
+              },
+              {
+                path: 'radio',
+                loadComponent: () =>
+                  import('./pages/components/radio/radio-page.component').then(
+                    (m) => m.RadioPageComponent,
                   ),
               },
               {
