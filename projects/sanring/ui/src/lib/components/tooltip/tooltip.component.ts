@@ -1,4 +1,4 @@
-import { Component, Input, OnDestroy, signal } from '@angular/core';
+import { Component, OnDestroy, computed, input, signal } from '@angular/core';
 import { CdkOverlayOrigin } from '@angular/cdk/overlay';
 import { cn } from '../../utils';
 
@@ -10,22 +10,23 @@ let nextTooltipId = 0;
   template: `<ng-content></ng-content>`,
   host: {
     style: 'display: contents',
-    '[class]': 'tooltipClass',
+    '[class]': 'tooltipClass()',
   },
 })
 export class TooltipComponent implements OnDestroy {
-  @Input() class: string = '';
-  @Input() delayDuration = 200;
+  readonly class = input<string | undefined>();
+  readonly delayDuration = input(200);
 
   readonly isOpen = signal(false);
   readonly triggerOrigin = signal<CdkOverlayOrigin | null>(null);
   readonly contentId = `sanring-tooltip-${++nextTooltipId}`;
+  protected readonly tooltipClass = computed(() => cn(this.class()));
 
   private timeoutId?: ReturnType<typeof setTimeout>;
 
   show() {
     clearTimeout(this.timeoutId);
-    this.timeoutId = setTimeout(() => this.isOpen.set(true), this.delayDuration);
+    this.timeoutId = setTimeout(() => this.isOpen.set(true), this.delayDuration());
   }
 
   hide() {
@@ -35,9 +36,5 @@ export class TooltipComponent implements OnDestroy {
 
   ngOnDestroy() {
     clearTimeout(this.timeoutId);
-  }
-
-  protected get tooltipClass() {
-    return cn(this.class);
   }
 }

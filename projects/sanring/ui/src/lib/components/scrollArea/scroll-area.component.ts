@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, booleanAttribute, computed, input } from '@angular/core';
 import { CdkScrollable } from '@angular/cdk/scrolling';
 import { cn } from '../../utils';
 import { ScrollAreaOrientation } from './scroll-area.type';
@@ -9,10 +9,10 @@ import { ScrollAreaOrientation } from './scroll-area.type';
   hostDirectives: [CdkScrollable],
   template: `<ng-content></ng-content>`,
   host: {
-    '[attr.role]': 'scrollAreaRole',
-    '[attr.aria-label]': 'ariaLabel || null',
-    '[attr.aria-labelledby]': 'ariaLabelledby || null',
-    '[class]': 'scrollAreaClass',
+    '[attr.role]': 'scrollAreaRole()',
+    '[attr.aria-label]': 'ariaLabel() || null',
+    '[attr.aria-labelledby]': 'ariaLabelledby() || null',
+    '[class]': 'scrollAreaClass()',
   },
   styles: [
     `
@@ -45,27 +45,27 @@ import { ScrollAreaOrientation } from './scroll-area.type';
   ],
 })
 export class ScrollAreaComponent {
-  @Input() class = '';
-  @Input() orientation: ScrollAreaOrientation = 'vertical';
-  @Input() hideScrollbar = false;
-  @Input() ariaLabel?: string;
-  @Input() ariaLabelledby?: string;
+  readonly class = input<string | undefined>();
+  readonly orientation = input<ScrollAreaOrientation>('vertical');
+  readonly hideScrollbar = input(false, { transform: booleanAttribute });
+  readonly ariaLabel = input<string | undefined>();
+  readonly ariaLabelledby = input<string | undefined>();
 
-  protected get scrollAreaClass() {
-    return cn(
+  protected readonly scrollAreaClass = computed(() =>
+    cn(
       'relative',
-      this.orientationClass,
-      this.hideScrollbar && '[&::-webkit-scrollbar]:hidden [scrollbar-width:none]',
-      this.class,
-    );
-  }
+      this.orientationClass(),
+      this.hideScrollbar() && '[&::-webkit-scrollbar]:hidden [scrollbar-width:none]',
+      this.class(),
+    ),
+  );
 
-  protected get scrollAreaRole() {
-    return this.ariaLabel || this.ariaLabelledby ? 'region' : null;
-  }
+  protected readonly scrollAreaRole = computed(() =>
+    this.ariaLabel() || this.ariaLabelledby() ? 'region' : null,
+  );
 
-  private get orientationClass() {
-    switch (this.orientation) {
+  private readonly orientationClass = computed(() => {
+    switch (this.orientation()) {
       case 'horizontal':
         return 'overflow-x-auto overflow-y-hidden';
       case 'both':
@@ -73,5 +73,5 @@ export class ScrollAreaComponent {
       default:
         return 'overflow-y-auto overflow-x-hidden';
     }
-  }
+  });
 }

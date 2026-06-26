@@ -2,7 +2,7 @@ import {
   Directive,
   ElementRef,
   inject,
-  Input,
+  input,
   ViewContainerRef,
   OnDestroy,
   TemplateRef,
@@ -32,8 +32,8 @@ export class MenubarTriggerDirective<T> implements OnDestroy {
   private viewContainerRef = inject(ViewContainerRef);
 
   // --- 泛型資料與 Template 接收 ---
-  @Input() sanringMenuData!: T;
-  @Input('sanringMenuTrigger') menuTemplateRef!: TemplateRef<SanringMenuContext<T>>;
+  readonly sanringMenuData = input<T | undefined>();
+  readonly sanringMenuTrigger = input.required<TemplateRef<SanringMenuContext<T>>>();
 
   // --- 內部狀態 ---
   private overlayRef: OverlayRef | null = null;
@@ -72,13 +72,13 @@ export class MenubarTriggerDirective<T> implements OnDestroy {
 
     // 處理泛型 Context
     const context: SanringMenuContext<T> = {
-      $implicit: this.sanringMenuData,
+      $implicit: this.sanringMenuData() as T,
       isOpen: true,
       close: () => this.closeMenu(),
     };
 
     // 掛載 Portal
-    this.menuPortal = new TemplatePortal(this.menuTemplateRef, this.viewContainerRef, context);
+    this.menuPortal = new TemplatePortal(this.sanringMenuTrigger(), this.viewContainerRef, context);
     this.overlayRef.attach(this.menuPortal);
 
     // 💡 更新 Signal 狀態

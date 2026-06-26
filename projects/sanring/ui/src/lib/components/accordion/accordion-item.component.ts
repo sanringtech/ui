@@ -4,12 +4,13 @@ import {
   afterNextRender,
   booleanAttribute,
   Component,
-  Input,
   computed,
+  effect,
   inject,
   input,
   output,
   signal,
+  untracked,
 } from '@angular/core';
 import { AccordionPanel as NgAccordionPanel } from '@angular/aria/accordion';
 import { cn } from '../../utils';
@@ -34,18 +35,18 @@ export class AccordionItemComponent {
   readonly panel = signal<NgAccordionPanel | null>(null);
   readonly class = input<string | undefined>();
   readonly disabled = input(false, { transform: booleanAttribute });
+  readonly expanded = input(false, { transform: booleanAttribute });
+  readonly isExpanded = computed(() => this.expandedState());
   readonly state = computed(() => (this.expandedState() ? 'open' : 'closed'));
   readonly expandedChange = output<boolean>();
   readonly opened = output<void>();
   readonly closed = output<void>();
 
-  @Input({ transform: booleanAttribute })
-  set expanded(expanded: boolean) {
-    this.setExpanded(expanded);
-  }
-
-  get expanded() {
-    return this.expandedState();
+  constructor() {
+    effect(() => {
+      const expanded = this.expanded();
+      untracked(() => this.setExpanded(expanded));
+    });
   }
 
   protected readonly itemClass = computed(() => cn('border-b border-[var(--sanring-border)]', this.class()));

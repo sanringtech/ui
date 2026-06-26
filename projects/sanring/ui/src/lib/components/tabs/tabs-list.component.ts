@@ -1,4 +1,4 @@
-import { AfterContentInit, Component, effect, Input, inject, untracked } from '@angular/core';
+import { AfterContentInit, Component, computed, effect, inject, input, untracked } from '@angular/core';
 import { TabList as NgTabList } from '@angular/aria/tabs';
 import { cn } from '../../utils';
 import { TabsComponent } from './tabs.component';
@@ -14,14 +14,30 @@ import { TabsComponent } from './tabs.component';
     },
   ],
   host: {
-    '[class]': 'tabsListClass',
+    '[class]': 'tabsListClass()',
   },
 })
 export class TabsListComponent implements AfterContentInit {
-  @Input() class = '';
+  readonly class = input<string | undefined>();
 
   protected tabs = inject(TabsComponent);
   private tabList = inject(NgTabList);
+  protected readonly tabsListClass = computed(() => {
+    const variant = this.tabs.variant();
+
+    return cn(
+      this.tabs.orientation() === 'vertical'
+        ? 'inline-grid w-max items-stretch'
+        : 'inline-flex w-max items-center justify-center',
+      variant === 'default' &&
+        'rounded-lg border border-[var(--sanring-border)] bg-[var(--sanring-surface-strong)] p-0.5 text-[var(--sanring-muted)] shadow-sm',
+      variant === 'line' &&
+        (this.tabs.orientation() === 'vertical'
+          ? 'border-l border-[var(--sanring-border)] bg-transparent p-0'
+          : 'justify-start border-b border-[var(--sanring-border)] bg-transparent p-0'),
+      this.class(),
+    );
+  });
 
   constructor() {
     effect(() => {
@@ -39,21 +55,5 @@ export class TabsListComponent implements AfterContentInit {
     if (value) {
       this.tabList.selectedTab.set(value);
     }
-  }
-
-  protected get tabsListClass() {
-    const variant = this.tabs.variant;
-    return cn(
-      this.tabs.orientation === 'vertical'
-        ? 'inline-grid w-max items-stretch'
-        : 'inline-flex w-max items-center justify-center',
-      variant === 'default' &&
-        'rounded-lg border border-[var(--sanring-border)] bg-[var(--sanring-surface-strong)] p-0.5 text-[var(--sanring-muted)] shadow-sm',
-      variant === 'line' &&
-        (this.tabs.orientation === 'vertical'
-          ? 'border-l border-[var(--sanring-border)] bg-transparent p-0'
-          : 'justify-start border-b border-[var(--sanring-border)] bg-transparent p-0'),
-      this.class,
-    );
   }
 }

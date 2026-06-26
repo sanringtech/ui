@@ -1,5 +1,5 @@
 import { Tab as NgTab } from '@angular/aria/tabs';
-import { Component, inject, Input } from '@angular/core';
+import { Component, computed, inject, input } from '@angular/core';
 import { cn } from '../../utils';
 import { TabsComponent } from './tabs.component';
 
@@ -18,17 +18,16 @@ import { TabsComponent } from './tabs.component';
   host: {
     '[attr.data-state]': "tab.selected() ? 'active' : 'inactive'",
     '[attr.data-disabled]': "tab.disabled() ? '' : null",
-    '[class]': 'tabsTriggerClass',
+    '[class]': 'tabsTriggerClass()',
   },
 })
 export class TabsTriggerComponent {
-  @Input() class = '';
+  readonly class = input<string | undefined>();
 
   protected tab = inject(NgTab);
   protected tabs = inject(TabsComponent);
-
-  protected get tabsTriggerClass() {
-    const variant = this.tabs.variant;
+  protected readonly tabsTriggerClass = computed(() => {
+    const variant = this.tabs.variant();
     return cn(
       'inline-flex shrink-0 items-center justify-center gap-1.5 whitespace-nowrap px-3 py-1.5 text-sm font-medium transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--sanring-border-strong)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--sanring-background)] data-[disabled]:pointer-events-none data-[disabled]:opacity-50',
       variant === 'default' &&
@@ -36,11 +35,11 @@ export class TabsTriggerComponent {
       variant === 'line' &&
         cn(
           'rounded-none border-transparent text-[var(--sanring-muted)] data-[state=active]:border-[var(--sanring-foreground)] data-[state=active]:text-[var(--sanring-foreground)]',
-          this.tabs.orientation === 'vertical'
+          this.tabs.orientation() === 'vertical'
             ? 'justify-start border-l-2 px-3 py-2'
             : 'border-b-2 pb-2.5 pt-2',
         ),
-      this.class,
+      this.class(),
     );
-  }
+  });
 }

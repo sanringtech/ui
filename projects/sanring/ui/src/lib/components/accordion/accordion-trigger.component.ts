@@ -18,7 +18,7 @@ import { AccordionTriggerVariant } from './accordion.type';
         [panel]="panel"
         [id]="item.id + '-header'"
         [disabled]="item.disabled()"
-        [expanded]="item.expanded"
+        [expanded]="item.isExpanded()"
         (expandedChange)="item.setExpandedFromTrigger($event)"
         [attr.data-state]="item.state()"
         [class]="triggerClass()"

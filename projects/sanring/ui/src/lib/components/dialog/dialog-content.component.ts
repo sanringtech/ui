@@ -4,8 +4,9 @@ import {
   Component,
   ContentChild,
   DestroyRef,
-  Input,
+  computed,
   inject,
+  input,
 } from '@angular/core';
 import { DialogRef } from '@angular/cdk/dialog';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
@@ -20,15 +21,15 @@ import { DialogTitleDirective } from './dialog-title.directive';
   standalone: true,
   imports: [LucideX],
   host: {
-    '[class]': 'dialogContentClass',
+    '[class]': 'dialogContentClass()',
   },
   template: `
     <ng-content></ng-content>
 
-    @if (showClose) {
+    @if (showClose()) {
       <button
         type="button"
-        [attr.aria-label]="closeAriaLabel"
+        [attr.aria-label]="closeAriaLabel()"
         (click)="closeDialog()"
         class="absolute right-4 top-4 rounded-sm text-[var(--sanring-muted)] opacity-70 ring-offset-[var(--sanring-surface)] transition-colors transition-opacity hover:text-[var(--sanring-foreground)] hover:opacity-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--sanring-border-strong)] focus-visible:ring-offset-2 disabled:pointer-events-none"
       >
@@ -62,9 +63,9 @@ import { DialogTitleDirective } from './dialog-title.directive';
   `,
 })
 export class DialogContentComponent implements AfterContentInit {
-  @Input() class = '';
-  @Input({ transform: booleanAttribute }) showClose = true;
-  @Input() closeAriaLabel = '關閉對話框';
+  readonly class = input<string | undefined>();
+  readonly showClose = input(true, { transform: booleanAttribute });
+  readonly closeAriaLabel = input('關閉對話框');
 
   private dialogRef = inject(DialogRef, { optional: true });
   private destroyRef = inject(DestroyRef);
@@ -72,12 +73,12 @@ export class DialogContentComponent implements AfterContentInit {
   @ContentChild(DialogTitleDirective) private title?: DialogTitleDirective;
   @ContentChild(DialogDescriptionDirective) private description?: DialogDescriptionDirective;
 
-  protected get dialogContentClass() {
-    return cn(
+  protected readonly dialogContentClass = computed(() =>
+    cn(
       'relative z-50 grid w-full max-w-lg gap-4 border border-[var(--sanring-border)] bg-[var(--sanring-surface)] p-6 shadow-lg sm:rounded-lg',
-      this.class,
-    );
-  }
+      this.class(),
+    ),
+  );
 
   closeDialog() {
     if (this.dialogRef) {
@@ -100,11 +101,11 @@ export class DialogContentComponent implements AfterContentInit {
     }
 
     if (this.title) {
-      container.setAttribute('aria-labelledby', this.title.id);
+      container.setAttribute('aria-labelledby', this.title.id());
     }
 
     if (this.description) {
-      container.setAttribute('aria-describedby', this.description.id);
+      container.setAttribute('aria-describedby', this.description.id());
     }
   }
 

@@ -1,5 +1,5 @@
 import { TabContent as NgTabContent, TabPanel as NgTabPanel } from '@angular/aria/tabs';
-import { Component, inject, Input } from '@angular/core';
+import { Component, computed, inject, input } from '@angular/core';
 import { cn } from '../../utils';
 
 @Component({
@@ -20,18 +20,17 @@ import { cn } from '../../utils';
   host: {
     '[hidden]': '!panel.visible()',
     '[attr.data-state]': "panel.visible() ? 'active' : 'inactive'",
-    '[class]': 'tabsContentClass',
+    '[class]': 'tabsContentClass()',
   },
 })
 export class TabsContentComponent {
-  @Input() class = '';
+  readonly class = input<string | undefined>();
 
   protected panel = inject(NgTabPanel);
-
-  protected get tabsContentClass() {
-    return cn(
+  protected readonly tabsContentClass = computed(() =>
+    cn(
       'mt-2 ring-offset-[var(--sanring-surface)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--sanring-border-strong)] focus-visible:ring-offset-2',
-      this.class,
-    );
-  }
+      this.class(),
+    ),
+  );
 }

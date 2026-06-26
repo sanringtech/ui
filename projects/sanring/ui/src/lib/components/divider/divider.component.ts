@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, booleanAttribute, computed, input } from '@angular/core';
 import { DividerInset } from './divider.type';
 
 @Component({
@@ -6,24 +6,24 @@ import { DividerInset } from './divider.type';
   standalone: true,
   host: {
     role: 'separator',
-    '[attr.aria-orientation]': "vertical ? 'vertical' : 'horizontal'",
-    '[class]': 'dividerClass',
+    '[attr.aria-orientation]': "vertical() ? 'vertical' : 'horizontal'",
+    '[class]': 'dividerClass()',
   },
   template: ``,
 })
 export class DividerComponent {
-  @Input() vertical = false;
-  @Input() inset: DividerInset = 'none';
+  readonly vertical = input(false, { transform: booleanAttribute });
+  readonly inset = input<DividerInset>('none');
 
-  protected get dividerClass() {
-    if (this.vertical) {
+  protected readonly dividerClass = computed(() => {
+    if (this.vertical()) {
       return 'inline-block min-h-4 w-px shrink-0 self-stretch bg-[var(--sanring-border)]';
     }
 
-    return ['block h-px bg-[var(--sanring-border)]', this.insetClass].filter(Boolean).join(' ');
-  }
+    return ['block h-px bg-[var(--sanring-border)]', this.insetClass()].filter(Boolean).join(' ');
+  });
 
-  private get insetClass() {
+  private readonly insetClass = computed(() => {
     const insetClasses: Record<DividerInset, string> = {
       none: 'w-full',
       start: 'ml-10 w-[calc(100%-2.5rem)]',
@@ -31,6 +31,6 @@ export class DividerComponent {
       both: 'mx-10 w-[calc(100%-5rem)]',
     };
 
-    return insetClasses[this.inset];
-  }
+    return insetClasses[this.inset()];
+  });
 }

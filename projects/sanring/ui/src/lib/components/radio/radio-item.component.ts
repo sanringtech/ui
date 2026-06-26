@@ -2,11 +2,11 @@ import {
   ChangeDetectionStrategy,
   Component,
   ElementRef,
-  Input,
   ViewChild,
   booleanAttribute,
   computed,
   inject,
+  input,
 } from '@angular/core';
 import { LucideCircle } from '@lucide/angular';
 import { cn } from '../../utils';
@@ -25,17 +25,17 @@ let nextUniqueId = 0;
       #btn
       type="button"
       role="radio"
-      [id]="id"
-      [attr.name]="group?.name"
+      [id]="id()"
+      [attr.name]="group?.name()"
       [attr.aria-checked]="isChecked()"
-      [attr.aria-label]="ariaLabel"
-      [attr.aria-labelledby]="ariaLabelledBy"
-      [attr.aria-describedby]="ariaDescribedBy"
+      [attr.aria-label]="ariaLabel()"
+      [attr.aria-labelledby]="ariaLabelledBy()"
+      [attr.aria-describedby]="ariaDescribedBy()"
       [attr.data-state]="isChecked() ? 'checked' : 'unchecked'"
       [attr.data-disabled]="isDisabled() || null"
       [attr.tabindex]="tabIndex()"
       [disabled]="isDisabled()"
-      [class]="itemClass"
+      [class]="itemClass()"
       (click)="select()"
       (focus)="onFocus()"
       (keydown.space)="onSpace($event)"
@@ -50,28 +50,37 @@ let nextUniqueId = 0;
   `,
 })
 export class RadioItemComponent {
-  @Input() class = '';
-  @Input() id = `sanring-radio-${nextUniqueId++}`;
-  @Input() value!: RadioValue;
-  @Input({ transform: booleanAttribute }) disabled = false;
-  @Input() ariaLabel?: string;
-  @Input() ariaLabelledBy?: string;
-  @Input() ariaDescribedBy?: string;
+  readonly class = input<string | undefined>();
+  readonly id = input(`sanring-radio-${nextUniqueId++}`);
+  readonly value = input.required<RadioValue>();
+  readonly disabled = input(false, { transform: booleanAttribute });
+  readonly ariaLabel = input<string | undefined>();
+  readonly ariaLabelledBy = input<string | undefined>();
+  readonly ariaDescribedBy = input<string | undefined>();
 
   @ViewChild('btn') private btnRef!: ElementRef<HTMLButtonElement>;
 
   protected readonly group = inject(RadioGroupComponent, { optional: true });
 
-  protected isChecked = computed(() => this.group?.valueSignal() === this.value);
-  protected isDisabled = computed(() => this.disabled || (this.group?.disabled ?? false));
+  protected isChecked = computed(() => this.group?.valueSignal() === this.value());
+  protected isDisabled = computed(() => this.disabled() || (this.group?.isDisabled() ?? false));
   protected tabIndex = computed(() => {
     if (!this.group) return 0;
     return this.group.activeTabItem() === this ? 0 : -1;
   });
+  protected readonly itemClass = computed(() =>
+    cn(
+      'peer flex items-center justify-center aspect-square h-4 w-4 rounded-full border border-primary text-primary ring-offset-background',
+      'focus:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2',
+      'disabled:cursor-not-allowed disabled:opacity-50',
+      'data-[state=checked]:border-primary',
+      this.class(),
+    ),
+  );
 
   select(): void {
     if (this.isDisabled()) return;
-    this.group?.updateValue(this.value);
+    this.group?.updateValue(this.value());
   }
 
   focusAndSelect(): void {
@@ -86,15 +95,5 @@ export class RadioItemComponent {
   protected onSpace(event: Event): void {
     event.preventDefault();
     this.select();
-  }
-
-  protected get itemClass() {
-    return cn(
-      'peer flex items-center justify-center aspect-square h-4 w-4 rounded-full border border-primary text-primary ring-offset-background',
-      'focus:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2',
-      'disabled:cursor-not-allowed disabled:opacity-50',
-      'data-[state=checked]:border-primary',
-      this.class,
-    );
   }
 }

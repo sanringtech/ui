@@ -2,12 +2,13 @@ import {
   ChangeDetectionStrategy,
   Component,
   EventEmitter,
-  Input,
   Output,
   booleanAttribute,
   computed,
   contentChildren,
+  effect,
   forwardRef,
+  input,
   signal,
 } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
@@ -31,15 +32,15 @@ let nextGroupId = 0;
   template: `
     <div
       role="radiogroup"
-      [attr.aria-label]="ariaLabel"
-      [attr.aria-labelledby]="ariaLabelledBy"
-      [attr.aria-describedby]="ariaDescribedBy"
-      [attr.aria-required]="required || null"
-      [attr.aria-disabled]="disabled || null"
-      [attr.aria-orientation]="orientation"
-      [attr.data-orientation]="orientation"
-      [attr.data-disabled]="disabled || null"
-      [class]="groupClass"
+      [attr.aria-label]="ariaLabel()"
+      [attr.aria-labelledby]="ariaLabelledBy()"
+      [attr.aria-describedby]="ariaDescribedBy()"
+      [attr.aria-required]="required() || null"
+      [attr.aria-disabled]="isDisabled() || null"
+      [attr.aria-orientation]="orientation()"
+      [attr.data-orientation]="orientation()"
+      [attr.data-disabled]="isDisabled() || null"
+      [class]="groupClass()"
       tabindex="-1"
       (keydown)="onKeydown($event)"
       (focusout)="onFocusOut($event)"
@@ -49,34 +50,48 @@ let nextGroupId = 0;
   `,
 })
 export class RadioGroupComponent implements ControlValueAccessor {
-  @Input() class = '';
-  @Input() name = `sanring-radio-group-${nextGroupId++}`;
-  @Input({ transform: booleanAttribute }) required = false;
-  @Input({ transform: booleanAttribute }) disabled = false;
-  @Input() orientation: RadioOrientation = RadioOrientation.Vertical;
-  @Input() ariaLabel?: string;
-  @Input() ariaLabelledBy?: string;
-  @Input() ariaDescribedBy?: string;
+  readonly class = input<string | undefined>();
+  readonly name = input(`sanring-radio-group-${nextGroupId++}`);
+  readonly required = input(false, { transform: booleanAttribute });
+  readonly disabled = input(false, { transform: booleanAttribute });
+  readonly orientation = input<RadioOrientation>(RadioOrientation.Vertical);
+  readonly ariaLabel = input<string | undefined>();
+  readonly ariaLabelledBy = input<string | undefined>();
+  readonly ariaDescribedBy = input<string | undefined>();
+  readonly value = input<RadioValue | null>(null);
 
-  @Input() set value(v: RadioValue | null) { this.valueSignal.set(v); }
   @Output() valueChange = new EventEmitter<RadioValue | null>();
 
   readonly valueSignal = signal<RadioValue | null>(null);
+  readonly isDisabled = computed(() => this.disabled() || this.disabledState());
+  protected readonly groupClass = computed(() =>
+    cn(
+      this.orientation() === RadioOrientation.Horizontal ? 'flex flex-row gap-4' : 'grid gap-2',
+      this.class(),
+    ),
+  );
 
   private readonly _items = contentChildren(RadioItemComponent, { descendants: true });
+  private readonly disabledState = signal(false);
   private _focusedItem: RadioItemComponent | null = null;
 
   readonly activeTabItem = computed(() => {
-    const items = this._items().filter(i => !i.disabled);
-    return items.find(i => i.value === this.valueSignal()) ?? items[0] ?? null;
+    const items = this._items().filter(i => !i.disabled());
+    return items.find(i => i.value() === this.valueSignal()) ?? items[0] ?? null;
   });
+
+  constructor() {
+    effect(() => {
+      this.valueSignal.set(this.value());
+    });
+  }
 
   setFocusedItem(item: RadioItemComponent): void {
     this._focusedItem = item;
   }
 
   updateValue(newValue: RadioValue): void {
-    if (this.disabled) return;
+    if (this.isDisabled()) return;
     this.valueSignal.set(newValue);
     this.onChange(newValue);
     this.onTouched();
@@ -84,7 +99,7 @@ export class RadioGroupComponent implements ControlValueAccessor {
   }
 
   onKeydown(event: KeyboardEvent): void {
-    const items = this._items().filter(i => !i.disabled);
+    const items = this._items().filter(i => !i.disabled());
     if (items.length === 0) return;
 
     const currentIndex = this._focusedItem ? items.indexOf(this._focusedItem) : -1;
@@ -139,13 +154,6 @@ export class RadioGroupComponent implements ControlValueAccessor {
   }
 
   setDisabledState(isDisabled: boolean): void {
-    this.disabled = isDisabled;
-  }
-
-  protected get groupClass() {
-    return cn(
-      this.orientation === RadioOrientation.Horizontal ? 'flex flex-row gap-4' : 'grid gap-2',
-      this.class,
-    );
+    this.disabledState.set(isDisabled);
   }
 }

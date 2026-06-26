@@ -1,4 +1,4 @@
-import { Directive, Input } from '@angular/core';
+import { Directive, computed, input } from '@angular/core';
 import { cn } from '../../utils';
 
 @Directive({
@@ -7,16 +7,16 @@ import { cn } from '../../utils';
   standalone: true,
   host: {
     'aria-hidden': 'true',
-    '[class]': 'skeletonClass',
+    '[class]': 'skeletonClass()',
   },
 })
 export class SkeletonDirective {
-  @Input() class = '';
+  readonly class = input<string | undefined>();
 
-  protected get skeletonClass() {
-    return cn(
+  protected readonly skeletonClass = computed(() =>
+    cn(
       'animate-pulse rounded-md bg-[var(--sanring-surface-strong)]',
-      this.class, // 讓使用者可以覆蓋寬高和形狀
-    );
-  }
+      this.class(), // 讓使用者可以覆蓋寬高和形狀
+    ),
+  );
 }

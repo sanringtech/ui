@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, computed, input } from '@angular/core';
 import { cn } from '../../utils';
 
 @Component({
@@ -6,17 +6,17 @@ import { cn } from '../../utils';
   standalone: true,
   template: `<ng-content></ng-content>`,
   host: {
-    '[class]': 'dialogHeaderClass',
+    '[class]': 'dialogHeaderClass()',
   },
 })
 export class DialogHeaderComponent {
-  @Input() class = '';
+  readonly class = input<string | undefined>();
 
-  protected get dialogHeaderClass() {
-    return cn(
+  protected readonly dialogHeaderClass = computed(() =>
+    cn(
       // 垂直排列、預設置中 (手機版常見)、桌機版靠左對齊
       'flex flex-col space-y-1.5 text-center sm:text-left',
-      this.class,
-    );
-  }
+      this.class(),
+    ),
+  );
 }

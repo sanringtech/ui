@@ -68,13 +68,13 @@ export class AccordionContentComponent implements AfterViewInit {
   protected readonly contentContainerClass = computed(() =>
     cn(
       'grid transition-all duration-200 ease-in-out',
-      this.item?.expanded ? 'grid-rows-[1fr] opacity-100' : 'grid-rows-[0fr] opacity-0',
+      this.item?.isExpanded() ? 'grid-rows-[1fr] opacity-100' : 'grid-rows-[0fr] opacity-0',
     ),
   );
 
   protected readonly contentBodyClass = computed(() => cn('p-3', this.class()));
 
   private syncContentVisibility() {
-    this.deferredContentAware?.contentVisible.set(this.item?.expanded ?? false);
+    this.deferredContentAware?.contentVisible.set(this.item?.isExpanded() ?? false);
   }
 }

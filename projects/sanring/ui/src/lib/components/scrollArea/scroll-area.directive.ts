@@ -1,4 +1,4 @@
-import { Directive, Input } from '@angular/core';
+import { Directive, computed, input } from '@angular/core';
 import { cn } from '../../utils';
 import { CdkScrollable } from '@angular/cdk/scrolling';
 
@@ -7,23 +7,23 @@ import { CdkScrollable } from '@angular/cdk/scrolling';
   standalone: true,
   hostDirectives: [CdkScrollable],
   host: {
-    '[attr.role]': 'scrollAreaRole',
-    '[attr.aria-label]': 'ariaLabel || null',
-    '[attr.aria-labelledby]': 'ariaLabelledby || null',
-    '[class]': 'scrollAreaClass',
+    '[attr.role]': 'scrollAreaRole()',
+    '[attr.aria-label]': 'ariaLabel() || null',
+    '[attr.aria-labelledby]': 'ariaLabelledby() || null',
+    '[class]': 'scrollAreaClass()',
   },
 })
 export class ScrollAreaDirective {
-  @Input() class = '';
-  @Input() ariaLabel?: string;
-  @Input() ariaLabelledby?: string;
+  readonly class = input<string | undefined>();
+  readonly ariaLabel = input<string | undefined>();
+  readonly ariaLabelledby = input<string | undefined>();
 
-  protected get scrollAreaClass() {
+  protected readonly scrollAreaClass = computed(() => {
     // 你可以在這裡加入預設的 overflow-auto 與隱藏捲軸的 CSS
-    return cn('relative overflow-auto', this.class);
-  }
+    return cn('relative overflow-auto', this.class());
+  });
 
-  protected get scrollAreaRole() {
-    return this.ariaLabel || this.ariaLabelledby ? 'region' : null;
-  }
+  protected readonly scrollAreaRole = computed(() =>
+    this.ariaLabel() || this.ariaLabelledby() ? 'region' : null,
+  );
 }

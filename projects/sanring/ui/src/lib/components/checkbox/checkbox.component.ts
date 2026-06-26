@@ -2,10 +2,12 @@ import {
   ChangeDetectionStrategy,
   Component,
   EventEmitter,
-  Input,
   Output,
   booleanAttribute,
+  computed,
+  effect,
   forwardRef,
+  input,
   signal,
 } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
@@ -43,56 +45,76 @@ const ICON_SIZE_CLASSES: Record<CheckboxSize, string> = {
     <button
       type="button"
       role="checkbox"
-      [id]="id"
-      [attr.name]="name"
-      [attr.value]="value"
+      [id]="id()"
+      [attr.name]="name()"
+      [attr.value]="value()"
       [attr.aria-checked]="checkedSignal() === 'indeterminate' ? 'mixed' : checkedSignal()"
-      [attr.aria-required]="required"
-      [attr.aria-label]="ariaLabel"
-      [attr.aria-labelledby]="ariaLabelledBy"
-      [attr.aria-describedby]="ariaDescribedBy"
+      [attr.aria-required]="required()"
+      [attr.aria-label]="ariaLabel()"
+      [attr.aria-labelledby]="ariaLabelledBy()"
+      [attr.aria-describedby]="ariaDescribedBy()"
       [attr.data-state]="getState()"
-      [attr.tabindex]="disabled ? -1 : tabIndex"
-      [disabled]="disabled"
-      [class]="checkboxClass"
+      [attr.tabindex]="isDisabled() ? -1 : tabIndex()"
+      [disabled]="isDisabled()"
+      [class]="checkboxClass()"
       (click)="toggle()"
       (blur)="onBlur()"
       (keydown.enter)="$event.preventDefault()"
     >
       @if (checkedSignal() === true) {
         <span class="flex items-center justify-center text-current animate-in zoom-in-50">
-          <svg lucideCheck [class]="iconSizeClass"></svg>
+          <svg lucideCheck [class]="iconSizeClass()"></svg>
         </span>
       }
 
       @if (checkedSignal() === 'indeterminate') {
         <span class="flex items-center justify-center text-current animate-in zoom-in-50">
-          <svg lucideMinus [class]="iconSizeClass"></svg>
+          <svg lucideMinus [class]="iconSizeClass()"></svg>
         </span>
       }
     </button>
   `,
 })
 export class CheckboxComponent implements ControlValueAccessor {
-  @Input() class = '';
-  @Input() id = `sanring-checkbox-${nextUniqueId++}`;
-  @Input({ transform: booleanAttribute }) disabled = false;
-  @Input() name?: string;
-  @Input() value?: string;
-  @Input({ transform: booleanAttribute }) required = false;
-  @Input() tabIndex = 0;
-  @Input() ariaLabel?: string;
-  @Input() ariaLabelledBy?: string;
-  @Input() ariaDescribedBy?: string;
-  @Input() size: CheckboxSize = CheckboxSize.Md;
+  readonly class = input<string | undefined>();
+  readonly id = input(`sanring-checkbox-${nextUniqueId++}`);
+  readonly disabled = input(false, { transform: booleanAttribute });
+  readonly name = input<string | undefined>();
+  readonly value = input<string | undefined>();
+  readonly required = input(false, { transform: booleanAttribute });
+  readonly tabIndex = input(0);
+  readonly ariaLabel = input<string | undefined>();
+  readonly ariaLabelledBy = input<string | undefined>();
+  readonly ariaDescribedBy = input<string | undefined>();
+  readonly size = input<CheckboxSize>(CheckboxSize.Md);
+  readonly checked = input<CheckedState>(false);
 
-  @Input() set checked(v: CheckedState) { this.checkedSignal.set(v); }
   @Output() checkedChange = new EventEmitter<CheckedState>();
 
   protected checkedSignal = signal<CheckedState>(false);
+  protected readonly isDisabled = computed(() => this.disabled() || this.disabledState());
+  protected readonly iconSizeClass = computed(
+    () => ICON_SIZE_CLASSES[this.size()] ?? ICON_SIZE_CLASSES[CheckboxSize.Md],
+  );
+  protected readonly checkboxClass = computed(() =>
+    cn(
+      'peer flex items-center justify-center shrink-0 rounded-sm border border-primary ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50',
+      SIZE_CLASSES[this.size()] ?? SIZE_CLASSES[CheckboxSize.Md],
+      'data-[state=checked]:bg-primary data-[state=checked]:text-primary-foreground',
+      'data-[state=indeterminate]:bg-primary data-[state=indeterminate]:text-primary-foreground',
+      this.class(),
+    ),
+  );
 
+  private readonly disabledState = signal(false);
   private onChange: (value: CheckedState) => void = () => {};
   private onTouched: () => void = () => {};
+
+  constructor() {
+    effect(() => {
+      this.checkedSignal.set(this.checked());
+    });
+  }
 
   getState(): string {
     if (this.checkedSignal() === 'indeterminate') return 'indeterminate';
@@ -100,7 +122,7 @@ export class CheckboxComponent implements ControlValueAccessor {
   }
 
   toggle() {
-    if (this.disabled) return;
+    if (this.isDisabled()) return;
     this.checkedSignal.set(this.checkedSignal() === true ? false : true);
     this.onChange(this.checkedSignal());
     this.onTouched();
@@ -124,20 +146,6 @@ export class CheckboxComponent implements ControlValueAccessor {
   }
 
   setDisabledState(isDisabled: boolean): void {
-    this.disabled = isDisabled;
-  }
-
-  protected get iconSizeClass() {
-    return ICON_SIZE_CLASSES[this.size] ?? ICON_SIZE_CLASSES['md'];
-  }
-
-  protected get checkboxClass() {
-    return cn(
-      'peer flex items-center justify-center shrink-0 rounded-sm border border-primary ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50',
-      SIZE_CLASSES[this.size] ?? SIZE_CLASSES['md'],
-      'data-[state=checked]:bg-primary data-[state=checked]:text-primary-foreground',
-      'data-[state=indeterminate]:bg-primary data-[state=indeterminate]:text-primary-foreground',
-      this.class,
-    );
+    this.disabledState.set(isDisabled);
   }
 }
