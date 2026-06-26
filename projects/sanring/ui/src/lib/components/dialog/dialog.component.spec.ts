@@ -57,5 +57,6 @@ describe('DialogComponent', () => {
     expect(dialogContainer).toBeTruthy();
     expect(dialogContainer?.getAttribute('aria-labelledby')).toBe(title?.id);
     expect(dialogContainer?.getAttribute('aria-describedby')).toBe(description?.id);
+    expect(dialogContainer?.getAttribute('aria-modal')).toBe('true');
   });
 });

@@ -1,18 +1,19 @@
-import { Component, Input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, input } from '@angular/core';
 import { cn } from '../../utils';
 
 @Component({
   selector: 'sanring-card-content',
   standalone: true,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   template: `<ng-content></ng-content>`,
   host: {
-    '[class]': 'cardContentClass',
+    '[class]': 'cardContentClass()',
   },
 })
 export class CardContentComponent {
-  @Input() class = '';
+  readonly class = input<string | undefined>();
 
-  protected get cardContentClass() {
-    return cn('block p-6 pt-0', this.class);
-  }
+  protected readonly cardContentClass = computed(() =>
+    cn('block p-6 pt-0', this.class()),
+  );
 }

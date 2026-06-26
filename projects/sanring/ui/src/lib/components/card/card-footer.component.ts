@@ -1,18 +1,19 @@
-import { Component, Input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, input } from '@angular/core';
 import { cn } from '../../utils';
 
 @Component({
   selector: 'sanring-card-footer',
   standalone: true,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   template: `<ng-content></ng-content>`,
   host: {
-    '[class]': 'cardFooterClass',
+    '[class]': 'cardFooterClass()',
   },
 })
 export class CardFooterComponent {
-  @Input() class = '';
+  readonly class = input<string | undefined>();
 
-  protected get cardFooterClass() {
-    return cn('flex items-center p-6 pt-0', this.class);
-  }
+  protected readonly cardFooterClass = computed(() =>
+    cn('flex items-center p-6 pt-0', this.class()),
+  );
 }

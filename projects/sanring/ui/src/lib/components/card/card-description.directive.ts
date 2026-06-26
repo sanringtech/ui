@@ -1,17 +1,15 @@
-import { Directive, Input } from '@angular/core';
+import { Directive, computed, input } from '@angular/core';
 import { cn } from '../../utils';
 
 @Directive({
   selector: 'p[sanringCardDescription], div[sanringCardDescription]',
   standalone: true,
   host: {
-    '[class]': 'cardDescriptionClass',
+    '[class]': 'cardDescriptionClass()',
   },
 })
 export class CardDescriptionDirective {
-  @Input() class = '';
+  readonly class = input<string | undefined>();
 
-  protected get cardDescriptionClass() {
-    return cn(this.class);
-  }
+  protected readonly cardDescriptionClass = computed(() => cn(this.class()));
 }

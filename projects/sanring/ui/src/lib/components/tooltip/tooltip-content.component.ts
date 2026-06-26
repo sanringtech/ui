@@ -21,6 +21,7 @@ import { TooltipSide } from './tooltip.type';
         [cdkConnectedOverlayPositions]="positions"
         [cdkConnectedOverlayPush]="true"
         [cdkConnectedOverlayViewportMargin]="8"
+        (overlayKeydown)="handleOverlayKeydown($event)"
         (positionChange)="handlePositionChange($event)"
       >
         <div
@@ -62,6 +63,16 @@ export class TooltipContentComponent implements OnChanges, OnInit {
 
   protected handlePositionChange(event: ConnectedOverlayPositionChange) {
     this.renderedSide = this.getSideFromPosition(event.connectionPair);
+  }
+
+  protected handleOverlayKeydown(event: KeyboardEvent) {
+    if (event.key !== 'Escape') {
+      return;
+    }
+
+    event.preventDefault();
+    event.stopPropagation();
+    this.tooltip.hide();
   }
 
   private getPositions(side: TooltipSide, offset: number): ConnectionPositionPair[] {

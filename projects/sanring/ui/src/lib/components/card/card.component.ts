@@ -1,22 +1,22 @@
-import { Component, Input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, input } from '@angular/core';
 import { cn } from '../../utils';
 
 @Component({
   selector: 'sanring-card',
   standalone: true,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   template: `<ng-content></ng-content>`,
   host: {
-    '[class]': 'cardClass',
+    '[class]': 'cardClass()',
   },
 })
 export class CardComponent {
-  @Input() class = '';
+  readonly class = input<string | undefined>();
 
-  protected get cardClass() {
-    return cn(
-      // 加上 block 確保自定義標籤能佔滿寬度
+  protected readonly cardClass = computed(() =>
+    cn(
       'block rounded-xl border border-[var(--sanring-border)] bg-[var(--sanring-surface)] text-[var(--sanring-foreground)] shadow-sm',
-      this.class,
-    );
-  }
+      this.class(),
+    ),
+  );
 }

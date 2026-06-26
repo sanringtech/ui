@@ -26,7 +26,9 @@ export class DialogService {
     config?: DialogConfig<D, DialogRef<R, C>>,
   ): DialogRef<R, C> {
     return this.cdkDialog.open<R, D, C>(componentOrTemplate, {
-      autoFocus: false,
+      autoFocus: 'first-tabbable',
+      restoreFocus: true,
+      ariaModal: true,
       backdropClass: ['fixed', 'inset-0', 'z-50', 'bg-black/80', 'backdrop-blur-sm'],
       panelClass: ['fixed', 'inset-0', 'z-[51]', 'flex', 'items-center', 'justify-center'],
       ...config,

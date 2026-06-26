@@ -1,4 +1,4 @@
-import { Directive, Input } from '@angular/core';
+import { Directive, computed, input } from '@angular/core';
 import { cn } from '../../utils';
 
 @Directive({
@@ -6,17 +6,13 @@ import { cn } from '../../utils';
     'h1[sanringCardTitle], h2[sanringCardTitle], h3[sanringCardTitle], h4[sanringCardTitle], div[sanringCardTitle]',
   standalone: true,
   host: {
-    '[class]': 'cardTitleClass',
+    '[class]': 'cardTitleClass()',
   },
 })
 export class CardTitleDirective {
-  @Input() class = '';
+  readonly class = input<string | undefined>();
 
-  protected get cardTitleClass() {
-    return cn(
-      // 替換成標題專用的排版樣式
-      'font-semibold leading-none tracking-tight',
-      this.class,
-    );
-  }
+  protected readonly cardTitleClass = computed(() =>
+    cn('font-semibold leading-none tracking-tight', this.class()),
+  );
 }

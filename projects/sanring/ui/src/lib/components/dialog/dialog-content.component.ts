@@ -28,6 +28,7 @@ import { DialogTitleDirective } from './dialog-title.directive';
     @if (showClose) {
       <button
         type="button"
+        [attr.aria-label]="closeAriaLabel"
         (click)="closeDialog()"
         class="absolute right-4 top-4 rounded-sm text-[var(--sanring-muted)] opacity-70 ring-offset-[var(--sanring-surface)] transition-colors transition-opacity hover:text-[var(--sanring-foreground)] hover:opacity-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--sanring-border-strong)] focus-visible:ring-offset-2 disabled:pointer-events-none"
       >
@@ -63,6 +64,7 @@ import { DialogTitleDirective } from './dialog-title.directive';
 export class DialogContentComponent implements AfterContentInit {
   @Input() class = '';
   @Input({ transform: booleanAttribute }) showClose = true;
+  @Input() closeAriaLabel = '關閉對話框';
 
   private dialogRef = inject(DialogRef, { optional: true });
   private destroyRef = inject(DestroyRef);
