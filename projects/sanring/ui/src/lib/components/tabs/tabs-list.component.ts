@@ -40,11 +40,11 @@ export class TabsListComponent implements AfterContentInit {
   });
 
   constructor() {
+    // 只訂閱 NgTabList 的選取變動；讀 tabs.value() 用 untracked 避免 value 變動再次觸發
     effect(() => {
       const selectedTab = this.tabList.selectedTab();
-
-      if (selectedTab && selectedTab !== this.tabs.value()) {
-        untracked(() => this.tabs.setValue(selectedTab));
+      if (selectedTab && selectedTab !== untracked(() => this.tabs.value())) {
+        this.tabs.setValue(selectedTab);
       }
     });
   }

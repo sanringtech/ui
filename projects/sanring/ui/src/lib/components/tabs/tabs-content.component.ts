@@ -5,7 +5,7 @@ import { cn } from '../../utils';
 @Component({
   selector: 'sanring-tabs-content',
   standalone: true,
-  imports: [NgTabContent, NgTabPanel],
+  imports: [NgTabContent], // NgTabPanel 僅用於 hostDirectives，不需加入 imports
   template: `
     <ng-template ngTabContent>
       <ng-content></ng-content>

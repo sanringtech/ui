@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Output, computed, effect, input, signal } from '@angular/core';
+import { Component, computed, input, linkedSignal, output } from '@angular/core';
 import { Tabs as NgTabs } from '@angular/aria/tabs';
 import { cn } from '../../utils';
 import { TabsOrientation, TabsVariant } from './tabs.type';
@@ -19,25 +19,21 @@ export class TabsComponent {
   readonly defaultValue = input<string | undefined>();
   readonly variant = input<TabsVariant>('default');
 
-  @Output() valueChange = new EventEmitter<string>();
+  readonly valueChange = output<string>();
 
-  readonly value = signal<string | undefined>(undefined);
+  // linkedSignal: 初始值從 defaultValue 取，使用者切換後保留手動值
+  readonly value = linkedSignal<string | undefined, string | undefined>({
+    source: this.defaultValue,
+    computation: (defaultValue, previous) =>
+      previous?.value !== undefined ? previous.value : defaultValue,
+  });
+
   protected readonly tabsClass = computed(() =>
     cn(
       this.orientation() === 'vertical' ? 'grid gap-4 sm:grid-cols-[180px_1fr]' : 'grid gap-3',
       this.class(),
     ),
   );
-
-  constructor() {
-    effect(() => {
-      const defaultValue = this.defaultValue();
-
-      if (defaultValue && this.value() === undefined) {
-        this.value.set(defaultValue);
-      }
-    });
-  }
 
   setValue(newValue: string | undefined) {
     if (newValue && this.value() !== newValue) {
