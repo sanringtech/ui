@@ -145,6 +145,25 @@ import { accordionPage, accordionPageExamples } from './accordion.docs';
             </app-component-page-code-previewer>
           </app-component-page-section>
 
+          <app-component-page-section [section]="section('example-underline')">
+            <app-component-page-code-previewer [code]="examples.underline" language="angular-html">
+              <div previewer class="w-[min(520px,100%)]">
+                <sanring-accordion class="block w-full">
+                  @for (item of demoItems; track item.id) {
+                    <sanring-accordion-item>
+                      <sanring-accordion-trigger variant="underline">{{ item.question }}</sanring-accordion-trigger>
+                      <sanring-accordion-content>
+                        <p class="mb-0 mt-0 pb-4 text-sm leading-relaxed text-[var(--docs-muted)]">
+                          {{ item.answer }}
+                        </p>
+                      </sanring-accordion-content>
+                    </sanring-accordion-item>
+                  }
+                </sanring-accordion>
+              </div>
+            </app-component-page-code-previewer>
+          </app-component-page-section>
+
           <app-component-page-section [section]="section('example-controlled')">
             <app-component-page-code-previewer [code]="examples.controlled" language="angular-html">
               <div previewer class="grid w-[min(560px,100%)] gap-4">

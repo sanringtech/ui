@@ -51,6 +51,11 @@ export const accordionPage = {
           level: 3,
         },
         {
+          id: 'example-underline',
+          titleKey: 'accordion.demo.underline',
+          level: 3,
+        },
+        {
           id: 'example-controlled',
           titleKey: 'accordion.demo.controlled',
           level: 3,
@@ -68,11 +73,22 @@ export const accordionPage = {
     { property: 'multi', type: 'boolean', defaultValue: 'false', descriptionKey: 'accordion.api.multi.description' },
     { property: 'expanded', type: 'boolean', defaultValue: 'false', descriptionKey: 'accordion.api.expanded.description' },
     { property: 'disabled', type: 'boolean', defaultValue: 'false', descriptionKey: 'accordion.api.disabled.description' },
+    {
+      property: 'variant',
+      type: "'default' | 'underline'",
+      defaultValue: "'default'",
+      descriptionKey: 'accordion.api.variant.description',
+    },
     { property: 'openAll()', type: 'method', defaultValue: '-', descriptionKey: 'accordion.api.openAll.description' },
     { property: 'closeAll()', type: 'method', defaultValue: '-', descriptionKey: 'accordion.api.closeAll.description' },
-    { property: 'opened', type: 'EventEmitter<void>', defaultValue: '-', descriptionKey: 'accordion.api.opened.description' },
-    { property: 'closed', type: 'EventEmitter<void>', defaultValue: '-', descriptionKey: 'accordion.api.closed.description' },
-    { property: 'expandedChange', type: 'EventEmitter<boolean>', defaultValue: '-', descriptionKey: 'accordion.api.expandedChange.description' },
+    { property: 'opened', type: 'OutputEmitterRef<void>', defaultValue: '-', descriptionKey: 'accordion.api.opened.description' },
+    { property: 'closed', type: 'OutputEmitterRef<void>', defaultValue: '-', descriptionKey: 'accordion.api.closed.description' },
+    {
+      property: 'expandedChange',
+      type: 'OutputEmitterRef<boolean>',
+      defaultValue: '-',
+      descriptionKey: 'accordion.api.expandedChange.description',
+    },
   ] satisfies readonly ComponentPageApiRow[],
 } as const satisfies ComponentPageDefinition;
 
@@ -134,6 +150,16 @@ export const accordionPageExamples = {
   <sanring-accordion-item>
     <sanring-accordion-trigger>Return policy</sanring-accordion-trigger>
     <sanring-accordion-content>Return details...</sanring-accordion-content>
+  </sanring-accordion-item>
+</sanring-accordion>`,
+  underline: `<sanring-accordion>
+  <sanring-accordion-item>
+    <sanring-accordion-trigger variant="underline">
+      Shipping options
+    </sanring-accordion-trigger>
+    <sanring-accordion-content>
+      Shipping details...
+    </sanring-accordion-content>
   </sanring-accordion-item>
 </sanring-accordion>`,
   controlled: `<button type="button" (click)="accordion.openAll()">Open all</button>

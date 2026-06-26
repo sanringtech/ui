@@ -84,6 +84,7 @@ export const en = {
   'accordion.demo.single': 'Single item',
   'accordion.demo.multiple': 'Multiple items',
   'accordion.demo.defaultOpen': 'Default open',
+  'accordion.demo.underline': 'Underline trigger',
   'accordion.demo.controlled': 'Controlled',
   'accordion.demo.openAll': 'Open all',
   'accordion.demo.closeAll': 'Close all',
@@ -101,6 +102,8 @@ export const en = {
   'accordion.api.multi.description': 'Allows multiple accordion items to stay open at the same time.',
   'accordion.api.expanded.description': 'Controls whether an accordion item is open.',
   'accordion.api.disabled.description': 'Disables interaction for an accordion item.',
+  'accordion.api.variant.description':
+    'Sets the trigger visual variant. The default uses a hover background; underline uses text underline.',
   'accordion.api.headerClass.description': 'Additional classes for the trigger header button.',
   'accordion.api.contentClass.description': 'Additional classes for the content body.',
   'accordion.api.openAll.description': 'Opens all enabled items when multi is enabled.',

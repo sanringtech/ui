@@ -2,11 +2,11 @@ import {
   AfterViewInit,
   ChangeDetectionStrategy,
   Component,
-  Input,
   ViewChild,
   afterRenderEffect,
   computed,
   inject,
+  input,
 } from '@angular/core';
 import {
   AccordionContent as NgAccordionContent,
@@ -27,12 +27,12 @@ import { AccordionItemComponent } from './accordion-item.component';
       #panel="ngAccordionPanel"
       data-accordion-content
       [id]="item?.id + '-content'"
-      [attr.data-state]="item?.expanded ? 'open' : 'closed'"
+      [attr.data-state]="item?.state() ?? 'closed'"
       [class]="contentContainerClass()"
     >
       <div class="overflow-hidden">
         <ng-template ngAccordionContent>
-          <div [class]="cn('pb-4 pt-0', class)">
+          <div [class]="contentBodyClass()">
             <ng-content></ng-content>
           </div>
         </ng-template>
@@ -47,7 +47,7 @@ export class AccordionContentComponent implements AfterViewInit {
   @ViewChild(NgAccordionPanel) private panel?: NgAccordionPanel;
   @ViewChild(DeferredContentAware) private deferredContentAware?: DeferredContentAware;
 
-  @Input() class?: string;
+  readonly class = input<string | undefined>();
 
   constructor() {
     afterRenderEffect({
@@ -71,6 +71,8 @@ export class AccordionContentComponent implements AfterViewInit {
       this.item?.expanded ? 'grid-rows-[1fr] opacity-100' : 'grid-rows-[0fr] opacity-0',
     ),
   );
+
+  protected readonly contentBodyClass = computed(() => cn('p-3', this.class()));
 
   private syncContentVisibility() {
     this.deferredContentAware?.contentVisible.set(this.item?.expanded ?? false);

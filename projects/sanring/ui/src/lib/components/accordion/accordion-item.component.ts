@@ -4,10 +4,11 @@ import {
   afterNextRender,
   booleanAttribute,
   Component,
-  EventEmitter,
   Input,
-  Output,
+  computed,
   inject,
+  input,
+  output,
   signal,
 } from '@angular/core';
 import { AccordionPanel as NgAccordionPanel } from '@angular/aria/accordion';
@@ -20,7 +21,7 @@ let nextAccordionItemId = 0;
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
-    <div [class]="itemClass">
+    <div [class]="itemClass()">
       <ng-content select="sanring-accordion-trigger"></ng-content>
       <ng-content select="sanring-accordion-content"></ng-content>
     </div>
@@ -31,9 +32,12 @@ export class AccordionItemComponent {
   readonly id = `sanring-accordion-item-${nextAccordionItemId++}`;
   private readonly expandedState = signal(false);
   readonly panel = signal<NgAccordionPanel | null>(null);
-
-  @Input() class?: string;
-  @Input({ transform: booleanAttribute }) disabled = false;
+  readonly class = input<string | undefined>();
+  readonly disabled = input(false, { transform: booleanAttribute });
+  readonly state = computed(() => (this.expandedState() ? 'open' : 'closed'));
+  readonly expandedChange = output<boolean>();
+  readonly opened = output<void>();
+  readonly closed = output<void>();
 
   @Input({ transform: booleanAttribute })
   set expanded(expanded: boolean) {
@@ -44,13 +48,7 @@ export class AccordionItemComponent {
     return this.expandedState();
   }
 
-  @Output() expandedChange = new EventEmitter<boolean>();
-  @Output() opened = new EventEmitter<void>();
-  @Output() closed = new EventEmitter<void>();
-
-  protected get itemClass() {
-    return cn('border-b border-[var(--sanring-border)]', this.class);
-  }
+  protected readonly itemClass = computed(() => cn('border-b border-[var(--sanring-border)]', this.class()));
 
   registerPanel(panel: NgAccordionPanel) {
     this.panel.set(panel);

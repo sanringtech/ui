@@ -1,8 +1,10 @@
-import { ChangeDetectionStrategy, Component, inject, Input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject, input } from '@angular/core';
 import { AccordionTrigger as NgAccordionTrigger } from '@angular/aria/accordion';
 import { LucideChevronDown } from '@lucide/angular';
 import { cn } from '../../utils';
 import { AccordionItemComponent } from './accordion-item.component';
+
+export type AccordionTriggerVariant = 'default' | 'underline';
 
 @Component({
   selector: 'sanring-accordion-trigger',
@@ -16,16 +18,11 @@ import { AccordionItemComponent } from './accordion-item.component';
         type="button"
         [panel]="panel"
         [id]="item.id + '-header'"
-        [disabled]="item.disabled"
+        [disabled]="item.disabled()"
         [expanded]="item.expanded"
         (expandedChange)="item.setExpandedFromTrigger($event)"
-        [attr.data-state]="item.expanded ? 'open' : 'closed'"
-        [class]="
-          cn(
-            'flex w-full flex-1 items-center justify-between py-4 text-left font-medium transition-all hover:underline [&[data-state=open]>svg]:rotate-180',
-            class
-          )
-        "
+        [attr.data-state]="item.state()"
+        [class]="triggerClass()"
       >
         <ng-content></ng-content>
 
@@ -39,7 +36,17 @@ import { AccordionItemComponent } from './accordion-item.component';
 })
 export class AccordionTriggerComponent {
   protected item = inject(AccordionItemComponent);
-  protected cn = cn;
 
-  @Input() class?: string;
+  readonly class = input<string | undefined>();
+  readonly variant = input<AccordionTriggerVariant>('default');
+
+  protected readonly triggerClass = computed(() =>
+    cn(
+      'flex w-full flex-1 items-center justify-between rounded-md py-4 text-left font-medium transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--sanring-border-strong)] [&[data-state=open]>svg]:rotate-180',
+      this.variant() === 'underline'
+        ? 'hover:underline'
+        : 'px-3 hover:bg-[var(--sanring-surface-strong)]',
+      this.class(),
+    ),
+  );
 }
