@@ -35,7 +35,7 @@ export class AvatarBadgeDirective {
     const sideClass = isVisualEnd !== isRtl ? 'right-0' : 'left-0';
 
     return cn(
-      'absolute bottom-0 z-10 block size-3 rounded-full ring-2 ring-[var(--sanring-background)]',
+      'absolute bottom-0 z-10 flex size-3 items-center justify-center rounded-full text-white ring-2 ring-[var(--sanring-background)]',
       sideClass,
       statusColors[this.status()],
       this.class(),

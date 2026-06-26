@@ -12,7 +12,7 @@ const SIZE_CLASSES: Record<AvatarSize, string> = {
 @Component({
   selector: 'sanring-avatar-group-count',
   standalone: true,
-  template: `{{ label() }}`,
+  template: `<ng-content></ng-content>{{ label() }}`,
   changeDetection: ChangeDetectionStrategy.OnPush,
   host: {
     '[class]': 'countClass()',

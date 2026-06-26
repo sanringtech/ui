@@ -46,8 +46,18 @@ export const avatarPage = {
           level: 3,
         },
         {
+          id: 'example-badge-with-icon',
+          titleKey: 'avatar.demo.badgeWithIcon',
+          level: 3,
+        },
+        {
           id: 'example-group',
           titleKey: 'avatar.demo.group',
+          level: 3,
+        },
+        {
+          id: 'example-group-with-icon',
+          titleKey: 'avatar.demo.groupWithIcon',
           level: 3,
         },
       ],
@@ -89,18 +99,14 @@ export const avatarPageExamples = {
   <img sanringAvatarImage src="https://i.pravatar.cc/96?img=5" alt="Ada Lovelace" />
   <sanring-avatar-fallback>AL</sanring-avatar-fallback>
 </sanring-avatar>`,
-  composition: `<sanring-avatar ariaLabel="Ada Lovelace">
-  <img sanringAvatarImage src="https://i.pravatar.cc/96?img=5" alt="Ada Lovelace" />
-  <sanring-avatar-fallback delayMs="150">AL</sanring-avatar-fallback>
-  <span sanringAvatarBadge status="online" ariaLabel="Online"></span>
-</sanring-avatar>
+  composition: `AvatarComponent
+├── AvatarImageDirective
+├── AvatarFallbackComponent
+└── AvatarBadgeDirective
 
-<sanring-avatar-group ariaLabel="Project members" [overlap]="0.75">
-  <sanring-avatar ariaLabel="Grace Hopper">
-    <sanring-avatar-fallback>GH</sanring-avatar-fallback>
-  </sanring-avatar>
-  <sanring-avatar-group-count [count]="3" ariaLabel="3 more members" />
-</sanring-avatar-group>`,
+AvatarGroupComponent
+├── AvatarComponent
+└── AvatarGroupCountComponent`,
   sizes: `<sanring-avatar size="sm" ariaLabel="Small avatar">
   <sanring-avatar-fallback>SM</sanring-avatar-fallback>
 </sanring-avatar>
@@ -117,6 +123,13 @@ export const avatarPageExamples = {
   <sanring-avatar-fallback>OU</sanring-avatar-fallback>
   <span sanringAvatarBadge status="online" ariaLabel="Online"></span>
 </sanring-avatar>`,
+  badgeWithIcon: `<sanring-avatar ariaLabel="Verified user">
+  <img sanringAvatarImage src="https://i.pravatar.cc/96?img=21" alt="Verified user" />
+  <sanring-avatar-fallback>VU</sanring-avatar-fallback>
+  <span sanringAvatarBadge status="online" ariaLabel="Verified">
+    <svg lucideCheck class="size-2"></svg>
+  </span>
+</sanring-avatar>`,
   group: `<sanring-avatar-group ariaLabel="Project members">
   <sanring-avatar ariaLabel="Ada Lovelace">
     <sanring-avatar-fallback>AL</sanring-avatar-fallback>
@@ -128,5 +141,16 @@ export const avatarPageExamples = {
     <sanring-avatar-fallback>KJ</sanring-avatar-fallback>
   </sanring-avatar>
   <sanring-avatar-group-count [count]="3" ariaLabel="3 more members" />
+</sanring-avatar-group>`,
+  groupWithIcon: `<sanring-avatar-group ariaLabel="Project members">
+  <sanring-avatar ariaLabel="Ada Lovelace">
+    <sanring-avatar-fallback>AL</sanring-avatar-fallback>
+  </sanring-avatar>
+  <sanring-avatar ariaLabel="Grace Hopper">
+    <sanring-avatar-fallback>GH</sanring-avatar-fallback>
+  </sanring-avatar>
+  <sanring-avatar-group-count ariaLabel="Add member">
+    <svg lucidePlus class="size-4"></svg>
+  </sanring-avatar-group-count>
 </sanring-avatar-group>`,
 } as const;

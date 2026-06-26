@@ -1,4 +1,5 @@
 import { Component, inject } from '@angular/core';
+import { LucideCheck, LucidePlus } from '@lucide/angular';
 import {
   AvatarBadgeDirective,
   AvatarComponent,
@@ -36,6 +37,8 @@ import { avatarPage, avatarPageExamples } from './avatar.docs';
     ComponentPageHeaderComponent,
     ComponentPageInstallationComponent,
     ComponentPageSectionComponent,
+    LucideCheck,
+    LucidePlus,
   ],
   template: `
     <app-component-page [sections]="page.sections">
@@ -80,7 +83,7 @@ import { avatarPage, avatarPageExamples } from './avatar.docs';
 
       <app-component-page-section [section]="section('composition')">
         <div class="overflow-hidden rounded-lg border border-[var(--docs-border)]">
-          <app-component-page-code-block [code]="examples.composition" language="angular-html" />
+          <app-component-page-code-block [code]="examples.composition" language="bash" />
         </div>
       </app-component-page-section>
 
@@ -126,6 +129,24 @@ import { avatarPage, avatarPageExamples } from './avatar.docs';
             </app-component-page-code-previewer>
           </app-component-page-section>
 
+          <app-component-page-section [section]="section('example-badge-with-icon')">
+            <app-component-page-code-previewer [code]="examples.badgeWithIcon" language="angular-html">
+              <div previewer class="flex items-center justify-center">
+                <sanring-avatar ariaLabel="Verified user">
+                  <img
+                    sanringAvatarImage
+                    src="https://i.pravatar.cc/96?img=21"
+                    alt="Verified user"
+                  />
+                  <sanring-avatar-fallback>VU</sanring-avatar-fallback>
+                  <span sanringAvatarBadge status="online" ariaLabel="Verified">
+                    <svg lucideCheck class="size-2"></svg>
+                  </span>
+                </sanring-avatar>
+              </div>
+            </app-component-page-code-previewer>
+          </app-component-page-section>
+
           <app-component-page-section [section]="section('example-group')">
             <app-component-page-code-previewer [code]="examples.group" language="angular-html">
               <div previewer class="flex items-center justify-center">
@@ -140,6 +161,24 @@ import { avatarPage, avatarPageExamples } from './avatar.docs';
                     <sanring-avatar-fallback>KJ</sanring-avatar-fallback>
                   </sanring-avatar>
                   <sanring-avatar-group-count [count]="3" ariaLabel="3 more members" />
+                </sanring-avatar-group>
+              </div>
+            </app-component-page-code-previewer>
+          </app-component-page-section>
+
+          <app-component-page-section [section]="section('example-group-with-icon')">
+            <app-component-page-code-previewer [code]="examples.groupWithIcon" language="angular-html">
+              <div previewer class="flex items-center justify-center">
+                <sanring-avatar-group ariaLabel="Project members">
+                  <sanring-avatar ariaLabel="Ada Lovelace">
+                    <sanring-avatar-fallback>AL</sanring-avatar-fallback>
+                  </sanring-avatar>
+                  <sanring-avatar ariaLabel="Grace Hopper">
+                    <sanring-avatar-fallback>GH</sanring-avatar-fallback>
+                  </sanring-avatar>
+                  <sanring-avatar-group-count ariaLabel="Add member">
+                    <svg lucidePlus class="size-4"></svg>
+                  </sanring-avatar-group-count>
                 </sanring-avatar-group>
               </div>
             </app-component-page-code-previewer>

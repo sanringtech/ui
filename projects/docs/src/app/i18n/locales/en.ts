@@ -186,7 +186,9 @@ export const en = {
     'A composable avatar primitive for profile images, fallbacks, status badges, and stacked groups.',
   'avatar.demo.sizes': 'Sizes',
   'avatar.demo.statusBadge': 'Status badge',
+  'avatar.demo.badgeWithIcon': 'Badge with icon',
   'avatar.demo.group': 'Avatar group',
+  'avatar.demo.groupWithIcon': 'Avatar group with icon',
   'avatar.examples.description':
     'Common avatar patterns for fallbacks, presence indicators, and compact member groups.',
   'avatar.examples.basic.description':
