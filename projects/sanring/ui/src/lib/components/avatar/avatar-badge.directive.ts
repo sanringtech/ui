@@ -24,11 +24,11 @@ export class AvatarBadgeDirective {
 
   protected readonly badgeClass = computed(() => {
     const statusColors: Record<AvatarBadgeStatus, string> = {
-      online: 'bg-green-500',
-      offline: 'bg-gray-400',
-      away: 'bg-yellow-400',
-      busy: 'bg-red-500',
-      default: 'bg-[var(--sanring-muted-foreground)]',
+      online: 'bg-[var(--sanring-badge-online)]',
+      offline: 'bg-[var(--sanring-badge-offline)]',
+      away: 'bg-[var(--sanring-badge-away)]',
+      busy: 'bg-[var(--sanring-badge-busy)]',
+      default: 'bg-[var(--sanring-badge-default)]',
     };
     const isRtl = this.directionality?.value === 'rtl';
     const isVisualEnd = this.placement() === 'end';

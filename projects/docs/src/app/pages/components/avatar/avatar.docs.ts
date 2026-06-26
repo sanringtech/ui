@@ -1,4 +1,7 @@
-import { ComponentPageApiRow, ComponentPageDefinition } from '../../../docs-schema/component-page.types';
+import {
+  ComponentPageApiRow,
+  ComponentPageDefinition,
+} from '../../../docs-schema/component-page.types';
 
 export const avatarPage = {
   componentId: 'avatar',
@@ -70,14 +73,54 @@ export const avatarPage = {
     },
   ],
   apiRows: [
-    { property: 'class', type: 'string', defaultValue: "''", descriptionKey: 'avatar.api.class.description' },
-    { property: 'size', type: 'AvatarSize', defaultValue: "'md'", descriptionKey: 'avatar.api.size.description' },
-    { property: 'ariaLabel', type: 'string', defaultValue: 'undefined', descriptionKey: 'avatar.api.ariaLabel.description' },
-    { property: 'delayMs', type: 'number', defaultValue: '0', descriptionKey: 'avatar.api.delayMs.description' },
-    { property: 'status', type: 'AvatarBadgeStatus', defaultValue: "'default'", descriptionKey: 'avatar.api.status.description' },
-    { property: 'placement', type: 'AvatarBadgePlacement', defaultValue: "'end'", descriptionKey: 'avatar.api.placement.description' },
-    { property: 'overlap', type: 'number', defaultValue: '0.75', descriptionKey: 'avatar.api.overlap.description' },
-    { property: 'count', type: 'number', defaultValue: 'undefined', descriptionKey: 'avatar.api.count.description' },
+    {
+      property: 'class',
+      type: 'string',
+      defaultValue: "''",
+      descriptionKey: 'avatar.api.class.description',
+    },
+    {
+      property: 'size',
+      type: 'AvatarSize',
+      defaultValue: "'md'",
+      descriptionKey: 'avatar.api.size.description',
+    },
+    {
+      property: 'ariaLabel',
+      type: 'string',
+      defaultValue: 'undefined',
+      descriptionKey: 'avatar.api.ariaLabel.description',
+    },
+    {
+      property: 'delayMs',
+      type: 'number',
+      defaultValue: '0',
+      descriptionKey: 'avatar.api.delayMs.description',
+    },
+    {
+      property: 'status',
+      type: 'AvatarBadgeStatus',
+      defaultValue: "'default'",
+      descriptionKey: 'avatar.api.status.description',
+    },
+    {
+      property: 'placement',
+      type: 'AvatarBadgePlacement',
+      defaultValue: "'end'",
+      descriptionKey: 'avatar.api.placement.description',
+    },
+    {
+      property: 'overlap',
+      type: 'number',
+      defaultValue: '0.75',
+      descriptionKey: 'avatar.api.overlap.description',
+    },
+    {
+      property: 'count',
+      type: 'number',
+      defaultValue: 'undefined',
+      descriptionKey: 'avatar.api.count.description',
+    },
   ] satisfies readonly ComponentPageApiRow[],
 } as const satisfies ComponentPageDefinition;
 
@@ -99,14 +142,16 @@ export const avatarPageExamples = {
   <img sanringAvatarImage src="https://i.pravatar.cc/96?img=5" alt="Ada Lovelace" />
   <sanring-avatar-fallback>AL</sanring-avatar-fallback>
 </sanring-avatar>`,
-  composition: `AvatarComponent
-├── AvatarImageDirective
-├── AvatarFallbackComponent
-└── AvatarBadgeDirective
-
-AvatarGroupComponent
-├── AvatarComponent
-└── AvatarGroupCountComponent`,
+  composition: `AvatarGroup
+├── Avatar
+│   ├── AvatarImage
+│   ├── AvatarFallback
+│   └── AvatarBadge
+├── Avatar
+│   ├── AvatarImage
+│   ├── AvatarFallback
+│   └── AvatarBadge
+└── AvatarGroupCount`,
   sizes: `<sanring-avatar size="sm" ariaLabel="Small avatar">
   <sanring-avatar-fallback>SM</sanring-avatar-fallback>
 </sanring-avatar>

@@ -28,6 +28,13 @@
     --docs-control: #fafafa;
     --docs-control-fg: #090909;
 
+    /* avatar badge status colors — override to theme your own brand */
+    --sanring-badge-online: #22c55e;
+    --sanring-badge-offline: #9ca3af;
+    --sanring-badge-away: #facc15;
+    --sanring-badge-busy: #ef4444;
+    --sanring-badge-default: var(--docs-muted);
+
     --sanring-background: var(--docs-bg);
     --sanring-panel: var(--docs-panel);
     --sanring-surface: var(--docs-surface);
