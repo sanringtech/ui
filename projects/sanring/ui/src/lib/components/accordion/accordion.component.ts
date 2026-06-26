@@ -1,9 +1,10 @@
-import { Component, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { AccordionGroup as NgAccordionGroup } from '@angular/aria/accordion';
 
 @Component({
   selector: 'sanring-accordion',
   standalone: true,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   hostDirectives: [
     {
       directive: NgAccordionGroup,

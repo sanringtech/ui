@@ -74,6 +74,7 @@ describe('AccordionComponent', () => {
     expect(trigger?.getAttribute('aria-expanded')).toBe('true');
     expect(content?.classList.contains('grid-rows-[1fr]'), content?.outerHTML).toBe(true);
     expect(content?.classList.contains('opacity-100')).toBe(true);
+    expect(content?.textContent).toContain('Answer');
   });
 
   it('opens and closes all items when multi is enabled', () => {

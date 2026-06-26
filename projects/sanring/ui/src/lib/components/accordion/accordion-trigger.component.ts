@@ -1,4 +1,4 @@
-import { Component, inject, Input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, Input } from '@angular/core';
 import { AccordionTrigger as NgAccordionTrigger } from '@angular/aria/accordion';
 import { LucideChevronDown } from '@lucide/angular';
 import { cn } from '../../utils';
@@ -8,6 +8,7 @@ import { AccordionItemComponent } from './accordion-item.component';
   selector: 'sanring-accordion-trigger',
   standalone: true,
   imports: [LucideChevronDown, NgAccordionTrigger],
+  changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     @if (item.panel(); as panel) {
       <button
@@ -17,7 +18,7 @@ import { AccordionItemComponent } from './accordion-item.component';
         [id]="item.id + '-header'"
         [disabled]="item.disabled"
         [expanded]="item.expanded"
-        (expandedChange)="item.setExpanded($event)"
+        (expandedChange)="item.setExpandedFromTrigger($event)"
         [attr.data-state]="item.expanded ? 'open' : 'closed'"
         [class]="
           cn(

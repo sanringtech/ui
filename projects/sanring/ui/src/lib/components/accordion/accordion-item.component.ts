@@ -1,4 +1,15 @@
-import { booleanAttribute, Component, EventEmitter, Input, Output, signal } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Injector,
+  afterNextRender,
+  booleanAttribute,
+  Component,
+  EventEmitter,
+  Input,
+  Output,
+  inject,
+  signal,
+} from '@angular/core';
 import { AccordionPanel as NgAccordionPanel } from '@angular/aria/accordion';
 import { cn } from '../../utils';
 
@@ -7,6 +18,7 @@ let nextAccordionItemId = 0;
 @Component({
   selector: 'sanring-accordion-item',
   standalone: true,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <div [class]="itemClass">
       <ng-content select="sanring-accordion-trigger"></ng-content>
@@ -15,6 +27,7 @@ let nextAccordionItemId = 0;
   `,
 })
 export class AccordionItemComponent {
+  private readonly injector = inject(Injector);
   readonly id = `sanring-accordion-item-${nextAccordionItemId++}`;
   private readonly expandedState = signal(false);
   readonly panel = signal<NgAccordionPanel | null>(null);
@@ -41,6 +54,7 @@ export class AccordionItemComponent {
 
   registerPanel(panel: NgAccordionPanel) {
     this.panel.set(panel);
+    this.syncPanelWithState();
   }
 
   toggle() {
@@ -48,14 +62,23 @@ export class AccordionItemComponent {
   }
 
   open() {
-    this.panel()?.expand();
+    this.setExpanded(true);
   }
 
   close() {
-    this.panel()?.collapse();
+    this.setExpanded(false);
   }
 
   setExpanded(expanded: boolean) {
+    this.updateExpandedState(expanded);
+    this.syncPanelWithState();
+  }
+
+  setExpandedFromTrigger(expanded: boolean) {
+    this.updateExpandedState(expanded);
+  }
+
+  private updateExpandedState(expanded: boolean) {
     const previousExpanded = this.expandedState();
     this.expandedState.set(expanded);
 
@@ -70,5 +93,19 @@ export class AccordionItemComponent {
     } else {
       this.closed.emit();
     }
+  }
+
+  private syncPanelWithState() {
+    const panel = this.panel();
+
+    if (!panel) {
+      return;
+    }
+
+    const expanded = this.expandedState();
+    const sync = () => (expanded ? panel.expand() : panel.collapse());
+
+    sync();
+    afterNextRender(sync, { injector: this.injector });
   }
 }

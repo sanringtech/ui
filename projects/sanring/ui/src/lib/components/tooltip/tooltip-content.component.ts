@@ -66,7 +66,6 @@ export class TooltipContentComponent implements OnChanges, OnInit {
   }
 
   private getPositions(side: TooltipSide, offset: number): ConnectionPositionPair[] {
-    // ... (維持你原本完美的座標計算邏輯，完全不用動) ...
     const topPair: ConnectionPositionPair = {
       originX: 'center',
       originY: 'top',

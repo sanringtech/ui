@@ -1,7 +1,17 @@
-import { AfterViewInit, Component, Input, ViewChild, inject } from '@angular/core';
+import {
+  AfterViewInit,
+  ChangeDetectionStrategy,
+  Component,
+  Input,
+  ViewChild,
+  afterRenderEffect,
+  computed,
+  inject,
+} from '@angular/core';
 import {
   AccordionContent as NgAccordionContent,
   AccordionPanel as NgAccordionPanel,
+  ɵɵDeferredContentAware as DeferredContentAware,
 } from '@angular/aria/accordion';
 import { cn } from '../../utils';
 import { AccordionItemComponent } from './accordion-item.component';
@@ -10,6 +20,7 @@ import { AccordionItemComponent } from './accordion-item.component';
   selector: 'sanring-accordion-content',
   standalone: true,
   imports: [NgAccordionContent, NgAccordionPanel],
+  changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <div
       ngAccordionPanel
@@ -17,7 +28,7 @@ import { AccordionItemComponent } from './accordion-item.component';
       data-accordion-content
       [id]="item?.id + '-content'"
       [attr.data-state]="item?.expanded ? 'open' : 'closed'"
-      [class]="contentContainerClass"
+      [class]="contentContainerClass()"
     >
       <div class="overflow-hidden">
         <ng-template ngAccordionContent>
@@ -34,19 +45,34 @@ export class AccordionContentComponent implements AfterViewInit {
   protected item = inject(AccordionItemComponent, { optional: true });
 
   @ViewChild(NgAccordionPanel) private panel?: NgAccordionPanel;
+  @ViewChild(DeferredContentAware) private deferredContentAware?: DeferredContentAware;
 
   @Input() class?: string;
+
+  constructor() {
+    afterRenderEffect({
+      write: () => {
+        this.syncContentVisibility();
+      },
+    });
+  }
 
   ngAfterViewInit() {
     if (this.item && this.panel) {
       this.item.registerPanel(this.panel);
     }
+
+    this.syncContentVisibility();
   }
 
-  protected get contentContainerClass() {
-    return cn(
+  protected readonly contentContainerClass = computed(() =>
+    cn(
       'grid transition-all duration-200 ease-in-out',
       this.item?.expanded ? 'grid-rows-[1fr] opacity-100' : 'grid-rows-[0fr] opacity-0',
-    );
+    ),
+  );
+
+  private syncContentVisibility() {
+    this.deferredContentAware?.contentVisible.set(this.item?.expanded ?? false);
   }
 }
