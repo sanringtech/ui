@@ -78,13 +78,12 @@ export const docsComponentItems: DocsComponentNavItem[] = [
   //   active: true,
   //   disabled: true,
   // },
-  // {
-  //   id: 'avatar',
-  //   labelKey: 'component.avatar',
-  //   path: '/components/avatar',
-  //   active: true,
-  //   disabled: true,
-  // },
+  {
+    id: 'avatar',
+    labelKey: 'component.avatar',
+    path: '/components/avatar',
+    active: true,
+  },
   {
     id: 'badge',
     labelKey: 'component.badge',

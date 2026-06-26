@@ -44,6 +44,13 @@ export const routes: Routes = [
                   ),
               },
               {
+                path: 'avatar',
+                loadComponent: () =>
+                  import('./pages/components/avatar/avatar-page.component').then(
+                    (m) => m.AvatarPageComponent,
+                  ),
+              },
+              {
                 path: 'badge',
                 loadComponent: () =>
                   import('./pages/components/badge/badge-page.component').then(
