@@ -3,8 +3,7 @@ import { AccordionTrigger as NgAccordionTrigger } from '@angular/aria/accordion'
 import { LucideChevronDown } from '@lucide/angular';
 import { cn } from '../../utils';
 import { AccordionItemComponent } from './accordion-item.component';
-
-export type AccordionTriggerVariant = 'default' | 'underline';
+import { AccordionTriggerVariant } from './accordion.type';
 
 @Component({
   selector: 'sanring-accordion-trigger',

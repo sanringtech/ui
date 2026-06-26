@@ -1,36 +1,32 @@
-import { Component, Input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, input } from '@angular/core';
 import { cn } from '../../utils';
 import { AlertVariant } from './alert.type';
 
 @Component({
   selector: 'sanring-alert',
   standalone: true,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   template: `<ng-content></ng-content>`,
   host: {
-    '[class]': 'alertClass',
-    role: 'alert', // 💡 增加無障礙語意
+    '[class]': 'alertClass()',
+    role: 'alert',
   },
 })
 export class AlertComponent {
-  @Input() class = '';
-  @Input() variant: AlertVariant = 'default';
+  readonly class = input<string | undefined>();
+  readonly variant = input<AlertVariant>('default');
 
-  protected get alertClass() {
-    return cn(
-      // 💡 關鍵修正：加上 'block'！
-      'relative block w-full rounded-lg border p-4 [&>svg~*]:pl-7 [&>svg+div]:translate-y-[-3px] [&>svg]:absolute [&>svg]:left-4 [&>svg]:top-4 [&>svg]:text-[var(--sanring-foreground)]',
-      this.variantClasses,
-      this.class,
-    );
-  }
-
-  private get variantClasses() {
+  protected readonly alertClass = computed(() => {
     const variants: Record<AlertVariant, string> = {
       default:
         'border-[var(--sanring-border-strong)] bg-[var(--sanring-surface)] text-[var(--sanring-foreground)]',
       destructive:
         'border-red-500/60 bg-red-500/10 text-red-400 dark:border-red-500 [&>svg]:text-red-400',
     };
-    return variants[this.variant];
-  }
+    return cn(
+      'relative block w-full rounded-lg border p-4 [&>svg~*]:pl-7 [&>svg+div]:translate-y-[-3px] [&>svg]:absolute [&>svg]:left-4 [&>svg]:top-4 [&>svg]:text-[var(--sanring-foreground)]',
+      variants[this.variant()],
+      this.class(),
+    );
+  });
 }

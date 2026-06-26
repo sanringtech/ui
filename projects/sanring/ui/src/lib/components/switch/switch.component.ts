@@ -1,8 +1,7 @@
 import { booleanAttribute, Component, Input, forwardRef } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { cn } from '../../utils';
-
-export type SwitchSize = 'sm' | 'md' | 'lg';
+import { SwitchSize } from './switch.type';
 
 let nextUniqueId = 0;
 

@@ -6,8 +6,7 @@ import {
 } from '@angular/cdk/overlay';
 import { cn } from '../../utils';
 import { TooltipComponent } from './tooltip.component';
-
-export type TooltipSide = 'top' | 'right' | 'bottom' | 'left';
+import { TooltipSide } from './tooltip.type';
 
 @Component({
   selector: 'sanring-tooltip-content',

@@ -11,8 +11,7 @@ import {
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { LucideCheck, LucideMinus } from '@lucide/angular';
 import { cn } from '../../utils';
-import { CheckedState } from '.';
-import { CheckboxSize } from './checkbox.types';
+import { CheckedState, CheckboxSize } from './checkbox.types';
 
 let nextUniqueId = 0;
 

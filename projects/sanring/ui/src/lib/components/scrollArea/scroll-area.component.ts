@@ -1,8 +1,7 @@
 import { Component, Input } from '@angular/core';
 import { CdkScrollable } from '@angular/cdk/scrolling';
 import { cn } from '../../utils';
-
-export type ScrollAreaOrientation = 'vertical' | 'horizontal' | 'both';
+import { ScrollAreaOrientation } from './scroll-area.type';
 
 @Component({
   selector: 'sanring-scroll-area',

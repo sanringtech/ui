@@ -11,7 +11,7 @@ import {
 import { Overlay, OverlayRef } from '@angular/cdk/overlay';
 import { TemplatePortal } from '@angular/cdk/portal';
 import { FocusMonitor } from '@angular/cdk/a11y';
-import { SanringMenuContext } from '.';
+import { SanringMenuContext } from './menu.type';
 import { MenuTrigger as ngMenuTrigger } from '@angular/aria/menu';
 
 @Directive({

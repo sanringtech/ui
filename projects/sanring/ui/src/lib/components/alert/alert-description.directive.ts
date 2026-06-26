@@ -1,17 +1,17 @@
-import { Directive, Input } from '@angular/core';
+import { Directive, computed, input } from '@angular/core';
 import { cn } from '../../utils';
 
 @Directive({
   selector: '[sanringAlertDescription]',
   standalone: true,
   host: {
-    '[class]': 'alertDescriptionClass',
+    '[class]': 'alertDescriptionClass()',
   },
 })
 export class AlertDescriptionDirective {
-  @Input() class = '';
+  readonly class = input<string | undefined>();
 
-  protected get alertDescriptionClass() {
-    return cn('text-sm [&_p]:leading-relaxed opacity-90', this.class);
-  }
+  protected readonly alertDescriptionClass = computed(() =>
+    cn('text-sm [&_p]:leading-relaxed opacity-90', this.class()),
+  );
 }
