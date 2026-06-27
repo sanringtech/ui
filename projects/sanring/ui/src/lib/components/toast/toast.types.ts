@@ -26,6 +26,8 @@ export interface Toast {
   closable: boolean;
   action?: ToastAction;
   class?: string;
+  /** 內部狀態：true 表示退場動畫播放中，DOM 尚未移除。不可由 ToastOptions 設定。 */
+  leaving?: boolean;
 }
 
 /** 呼叫端可傳入的欄位。不暴露 id（由 service 自動產生）。 */

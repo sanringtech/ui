@@ -84,10 +84,8 @@ export class ToastComponent {
    * 進場動畫 class，由 ToasterComponent 根據 position 動態注入。
    * 預設對應 bottom-right（底部滑入）；單獨使用時可自行覆蓋。
    */
-  readonly enterClass = input<string>(
-    // 從 4 改成 full 或 8，大幅提升滑入的視覺距離
-    'animate-in slide-in-from-bottom-full fade-in-0 duration-300 ease-out',
-  );
+  /** 進場動畫 class，由 ToasterComponent 依 position 注入；單獨使用時可覆蓋 */
+  readonly enterClass = input<string>('animate-toast-in-bottom');
   /** 關閉按鈕 aria-label，由 ToasterComponent 從 TOAST_CONFIG 注入以支援 i18n */
   readonly dismissLabel = input<string>('Dismiss notification');
 
@@ -97,7 +95,8 @@ export class ToastComponent {
     cn(
       'pointer-events-auto flex w-full items-start gap-3 rounded-lg border p-4 shadow-lg',
       'bg-[var(--sanring-elevated)] border-[var(--sanring-border)] text-[var(--sanring-foreground)]',
-      this.enterClass(),
+      // leaving 時套退場動畫，否則套進場動畫（兩者互斥）
+      this.toast().leaving ? 'animate-toast-leave' : this.enterClass(),
       this.toast().class,
     ),
   );

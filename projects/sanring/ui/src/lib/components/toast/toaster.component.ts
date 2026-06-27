@@ -14,16 +14,14 @@ const POSITION_CLASSES: Record<ToastPosition, string> = {
   'bottom-center': 'bottom-4 left-1/2 -translate-x-1/2',
 };
 
-// top-* 從畫面上方滑入、bottom-* 從底部滑入
-// ease-out 讓末段減速，視覺上最平滑自然
-// slide-in-from-{direction}-4 = 16px 位移，存在感明顯但不過度
+// 使用 styles.css @theme 定義的自定義動畫（不依賴 tailwindcss-animate）
 const ENTER_CLASS: Record<ToastPosition, string> = {
-  'top-right': 'animate-in slide-in-from-top-4 fade-in-0 duration-300 ease-out',
-  'top-left': 'animate-in slide-in-from-top-4 fade-in-0 duration-300 ease-out',
-  'top-center': 'animate-in slide-in-from-top-4 fade-in-0 duration-300 ease-out',
-  'bottom-right': 'animate-in slide-in-from-bottom-4 fade-in-0 duration-300 ease-out',
-  'bottom-left': 'animate-in slide-in-from-bottom-4 fade-in-0 duration-300 ease-out',
-  'bottom-center': 'animate-in slide-in-from-bottom-4 fade-in-0 duration-300 ease-out',
+  'top-right':     'animate-toast-in-top',
+  'top-left':      'animate-toast-in-top',
+  'top-center':    'animate-toast-in-top',
+  'bottom-right':  'animate-toast-in-bottom',
+  'bottom-left':   'animate-toast-in-bottom',
+  'bottom-center': 'animate-toast-in-bottom',
 };
 
 const DEFAULT_TOAST_HEIGHT = 72;
@@ -55,7 +53,7 @@ const PEEK_PX = 12;
           >
             <sanring-toast
               [toast]="toast"
-              [enterClass]="getEnterAnimation()"
+              [enterClass]="enterClass()"
               [dismissLabel]="dismissLabel()"
               (dismissed)="toastSvc.dismiss(toast.id)"
             />
@@ -71,7 +69,7 @@ const PEEK_PX = 12;
         @for (toast of listToasts(); track toast.id) {
           <sanring-toast
             [toast]="toast"
-            [enterClass]="getEnterAnimation()"
+            [enterClass]="enterClass()"
             (dismissed)="toastSvc.dismiss(toast.id)"
           />
         }
@@ -128,21 +126,4 @@ export class ToasterComponent {
   protected stackOpacity(i: number): number {
     return i === 0 ? 1 : Math.max(0.4, 1 - i * 0.2);
   }
-
-  // 在 ToasterComponent 中加入這個 computed
-  protected readonly getEnterAnimation = computed(() => {
-    const pos = this.position(); // 例如 'top-right' 或 'bottom-left'
-
-    // 共用的平滑進場基底設定
-    const baseAnimation = 'animate-in fade-in-0 duration-300 ease-out';
-
-    if (pos.startsWith('top')) {
-      // Top 系列：從上方自身高度 100% 的位置滑入 (需要 tailwindcss-animate 支援)
-      // 或者使用自訂距離 slide-in-from-top-8 (32px)
-      return `${baseAnimation} slide-in-from-top-full`;
-    } else {
-      // Bottom 系列：從下方自身高度 100% 的位置滑入
-      return `${baseAnimation} slide-in-from-bottom-full`;
-    }
-  });
 }
