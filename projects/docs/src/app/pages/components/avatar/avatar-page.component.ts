@@ -82,8 +82,13 @@ import { avatarPage, avatarPageExamples } from './avatar.docs';
       </app-component-page-section>
 
       <app-component-page-section [section]="section('composition')">
-        <div class="overflow-hidden rounded-lg border border-[var(--docs-border)]">
-          <app-component-page-code-block [code]="examples.composition" language="bash" />
+        <div class="grid gap-4">
+          <div class="overflow-hidden rounded-lg border border-[var(--docs-border)]">
+            <app-component-page-code-block [code]="examples.composition" language="bash" />
+          </div>
+          <div class="overflow-hidden rounded-lg border border-[var(--docs-border)]">
+            <app-component-page-code-block [code]="examples.compositionTemplate" language="angular-html" />
+          </div>
         </div>
       </app-component-page-section>
 

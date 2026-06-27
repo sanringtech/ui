@@ -88,9 +88,10 @@ export const collapsiblePageExamples = {
     Collapsible content
   </div>
 </sanring-collapsible>`,
-  composition: `CollapsibleComponent
-├── [sanringCollapsibleTrigger]
-└── [sanringCollapsibleContent]`,
+  composition: `<sanring-collapsible>
+  <button sanringCollapsibleTrigger>Toggle</button>
+  <div sanringCollapsibleContent>Hidden content</div>
+</sanring-collapsible>`,
   controlledState: `<button type="button" (click)="open = !open">
   Toggle externally
 </button>

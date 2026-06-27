@@ -111,12 +111,14 @@ export const tabsPageExamples = {
     Password settings
   </sanring-tabs-content>
 </sanring-tabs>`,
-  composition: `TabsComponent
-├── TabsListComponent
-│   ├── TabsTriggerComponent
-│   └── TabsTriggerComponent
-├── TabsContentComponent
-└── TabsContentComponent`,
+  composition: `<sanring-tabs defaultValue="a">
+  <sanring-tabs-list>
+    <sanring-tabs-trigger value="a">Tab A</sanring-tabs-trigger>
+    <sanring-tabs-trigger value="b">Tab B</sanring-tabs-trigger>
+  </sanring-tabs-list>
+  <sanring-tabs-content value="a">Content A</sanring-tabs-content>
+  <sanring-tabs-content value="b">Content B</sanring-tabs-content>
+</sanring-tabs>`,
   horizontal: `<sanring-tabs defaultValue="overview">
   <sanring-tabs-list>
     <sanring-tabs-trigger value="overview">Overview</sanring-tabs-trigger>

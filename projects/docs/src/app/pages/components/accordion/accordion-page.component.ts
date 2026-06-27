@@ -82,7 +82,7 @@ import { accordionPage, accordionPageExamples } from './accordion.docs';
 
       <app-component-page-section [section]="section('composition')">
         <div class="overflow-hidden rounded-lg border border-[var(--docs-border)]">
-          <app-component-page-code-block [code]="examples.composition" language="bash" />
+          <app-component-page-code-block [code]="examples.composition" language="angular-html" />
         </div>
       </app-component-page-section>
 

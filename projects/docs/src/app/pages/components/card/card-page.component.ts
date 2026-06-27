@@ -90,15 +90,8 @@ import { cardPage, cardPageExamples } from './card.docs';
       </app-component-page-section>
 
       <app-component-page-section [section]="section('composition')">
-        <div class="grid gap-4">
-          <p class="m-0 text-sm font-medium text-[var(--docs-fg)]">
-            Use the following composition to build a
-            <code class="rounded-md bg-[var(--docs-elevated)] px-1.5 py-1 font-mono text-xs">Card</code>
-            :
-          </p>
-          <div class="overflow-hidden rounded-lg border border-[var(--docs-border)]">
-            <app-component-page-code-block [code]="examples.composition" language="bash" />
-          </div>
+        <div class="overflow-hidden rounded-lg border border-[var(--docs-border)]">
+          <app-component-page-code-block [code]="examples.composition" language="angular-html" />
         </div>
       </app-component-page-section>
 

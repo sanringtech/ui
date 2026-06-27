@@ -70,12 +70,14 @@ export const cardPage = {
 } as const satisfies ComponentPageDefinition;
 
 export const cardPageExamples = {
-  composition: `Card
-├── CardHeaderComponent
-│   ├── CardTitleDirective
-│   └── CardDescriptionDirective
-├── CardContentComponent
-└── CardFooterComponent`,
+  composition: `<sanring-card>
+  <sanring-card-header>
+    <h3 sanringCardTitle>Card title</h3>
+    <p sanringCardDescription>Card description</p>
+  </sanring-card-header>
+  <sanring-card-content>Content</sanring-card-content>
+  <sanring-card-footer>Footer</sanring-card-footer>
+</sanring-card>`,
   basic: `<sanring-card class="w-[350px]">
   <sanring-card-header>
     <h3 sanringCardTitle>Card title</h3>

@@ -71,13 +71,17 @@ export const dialogPage = {
 } as const satisfies ComponentPageDefinition;
 
 export const dialogPageExamples = {
-  composition: `Dialog
-├── DialogTriggerDirective
-└── DialogContentComponent
-    ├── DialogHeaderComponent
-    │   ├── DialogTitleDirective
-    │   └── DialogDescriptionDirective
-    └── DialogFooterComponent`,
+  composition: `<button sanringBtn [sanringDialogTrigger]="myDialog">Open</button>
+
+<ng-template #myDialog>
+  <sanring-dialog-content>
+    <sanring-dialog-header>
+      <h2 sanringDialogTitle>Dialog title</h2>
+      <p sanringDialogDescription>Description</p>
+    </sanring-dialog-header>
+    <sanring-dialog-footer>Footer</sanring-dialog-footer>
+  </sanring-dialog-content>
+</ng-template>`,
   basic: `<button sanringBtn [sanringDialogTrigger]="dialog">Open dialog</button>
 
 <ng-template #dialog>
