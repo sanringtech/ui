@@ -149,6 +149,13 @@ export const routes: Routes = [
                   ),
               },
               {
+                path: 'spinner',
+                loadComponent: () =>
+                  import('./pages/components/spinner/spinner-page.component').then(
+                    (m) => m.SpinnerPageComponent,
+                  ),
+              },
+              {
                 path: 'switch',
                 loadComponent: () =>
                   import('./pages/components/switch/switch-page.component').then(

@@ -22,6 +22,7 @@ export * from './lib/components/progress';
 export * from './lib/components/radio';
 export * from './lib/components/scrollArea';
 export * from './lib/components/skeleton';
+export * from './lib/components/spinner';
 export * from './lib/components/switch';
 export * from './lib/components/tag';
 export * from './lib/components/toggle';

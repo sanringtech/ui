@@ -29,6 +29,7 @@ export type DocsComponentId =
   | 'radio'
   | 'scroll-area'
   | 'skeleton'
+  | 'spinner'
   | 'switch'
   | 'tag'
   | 'tabs'
@@ -176,6 +177,12 @@ export const docsComponentItems: DocsComponentNavItem[] = [
     id: 'skeleton',
     labelKey: 'component.skeleton',
     path: '/components/skeleton',
+    active: true,
+  },
+  {
+    id: 'spinner',
+    labelKey: 'component.spinner',
+    path: '/components/spinner',
     active: true,
   },
   {
