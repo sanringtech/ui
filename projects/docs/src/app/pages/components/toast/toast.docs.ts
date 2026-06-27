@@ -85,6 +85,16 @@ save() {
     onClick: () => this.openReview(),
   },
 });`,
-  position: `<sanring-toaster position="top-right" />
-<sanring-toaster position="bottom-center" />`,
+  position: `<!-- Each position gets its own toaster with an isolated ToastService -->
+@Component({
+  providers: [ToastService],
+  template: \`
+    <sanring-toaster [position]="position" />
+    <button (click)="toast.info('Hello from ' + position)">Show</button>
+  \`,
+})
+class PositionDemo {
+  position = input.required<ToastPosition>();
+  toast    = inject(ToastService);
+}`,
 } as const;

@@ -1,5 +1,10 @@
-import { Component, inject, signal } from '@angular/core';
-import { ButtonDirective, ToasterComponent, ToastPosition, ToastService } from '@sanring/ui';
+import { ChangeDetectionStrategy, Component, inject, input } from '@angular/core';
+import {
+  ButtonDirective,
+  ToasterComponent,
+  ToastPosition,
+  ToastService,
+} from '@sanring/ui';
 import { getComponentPageSection } from '../../../docs-schema/component-page.utils';
 import { I18nService } from '../../../i18n/i18n.service';
 import {
@@ -13,6 +18,44 @@ import {
 } from '../../../layouts/component-page';
 import { toastPage, toastPageExamples } from './toast.docs';
 
+/**
+ * 每個位置 Demo 有自己獨立的 ToastService 實例（透過 providers: [ToastService]），
+ * 確保各位置的 toast 互相隔離，不共用同一個 queue。
+ */
+@Component({
+  selector: 'app-toast-position-demo',
+  standalone: true,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [ToastService],
+  imports: [ToasterComponent, ButtonDirective],
+  template: `
+    <!-- 每個 demo 有自己的 toaster，注入到本地隔離的 ToastService -->
+    <sanring-toaster [position]="position()" [maxToasts]="2" />
+    <button
+      sanringBtn
+      type="button"
+      size="sm"
+      variant="outline"
+      class="w-full"
+      (click)="trigger()"
+    >
+      {{ label() }}
+    </button>
+  `,
+})
+export class ToastPositionDemoComponent {
+  readonly position = input.required<ToastPosition>();
+  readonly label    = input.required<string>();
+
+  private readonly toast = inject(ToastService);
+
+  trigger(): void {
+    this.toast.info(this.position(), { description: 'Toast shown here', duration: 3000 });
+  }
+}
+
+// ---------------------------------------------------------------------------
+
 @Component({
   selector: 'app-toast-page',
   imports: [
@@ -25,9 +68,11 @@ import { toastPage, toastPageExamples } from './toast.docs';
     ComponentPageInstallationComponent,
     ComponentPageSectionComponent,
     ToasterComponent,
+    ToastPositionDemoComponent,
   ],
   template: `
-    <sanring-toaster [position]="position()" [maxToasts]="3" />
+    <!-- 全域 toaster 供 basic / variant / action 範例使用（注入 root ToastService） -->
+    <sanring-toaster position="bottom-right" [maxToasts]="3" />
 
     <app-component-page [sections]="page.sections">
       <app-component-page-header
@@ -36,6 +81,7 @@ import { toastPage, toastPageExamples } from './toast.docs';
         [description]="i18n.t(page.descriptionKey)"
       />
 
+      <!-- Basic -->
       <app-component-page-section [section]="section('basic')">
         <app-component-page-code-previewer [code]="examples.basic" language="angular-html">
           <div previewer class="flex items-center justify-center">
@@ -46,6 +92,7 @@ import { toastPage, toastPageExamples } from './toast.docs';
         </app-component-page-code-previewer>
       </app-component-page-section>
 
+      <!-- Usage -->
       <app-component-page-section [section]="section('usage')">
         <div class="grid gap-6">
           <div class="overflow-hidden rounded-lg border border-[var(--docs-border)]">
@@ -57,6 +104,7 @@ import { toastPage, toastPageExamples } from './toast.docs';
         </div>
       </app-component-page-section>
 
+      <!-- Installation -->
       <app-component-page-section [section]="section('installation')">
         <app-component-page-installation
           componentName="toast"
@@ -64,8 +112,11 @@ import { toastPage, toastPageExamples } from './toast.docs';
         />
       </app-component-page-section>
 
+      <!-- Examples -->
       <app-component-page-section [section]="section('example')">
         <div class="grid gap-2">
+
+          <!-- Variants -->
           <app-component-page-section [section]="section('example-variant')">
             <app-component-page-code-previewer [code]="examples.variant" language="angular-html">
               <div previewer class="flex flex-wrap items-center justify-center gap-3">
@@ -85,6 +136,7 @@ import { toastPage, toastPageExamples } from './toast.docs';
             </app-component-page-code-previewer>
           </app-component-page-section>
 
+          <!-- Action -->
           <app-component-page-section [section]="section('example-action')">
             <app-component-page-code-previewer [code]="examples.action" language="typescript">
               <div previewer class="flex items-center justify-center">
@@ -95,31 +147,24 @@ import { toastPage, toastPageExamples } from './toast.docs';
             </app-component-page-code-previewer>
           </app-component-page-section>
 
+          <!-- Position: 6 個獨立 demo，各有自己的 ToastService -->
           <app-component-page-section [section]="section('example-position')">
+            <p class="mb-4 text-sm text-[var(--docs-muted)]">
+              {{ i18n.t('toast.demo.positionDescription') }}
+            </p>
             <app-component-page-code-previewer [code]="examples.position" language="angular-html">
-              <div previewer class="grid w-[min(520px,100%)] gap-4">
-                <div class="grid grid-cols-2 gap-2 sm:grid-cols-3">
-                  @for (item of positions; track item.value) {
-                    <button
-                      sanringBtn
-                      type="button"
-                      size="sm"
-                      [variant]="position() === item.value ? 'secondary' : 'outline'"
-                      (click)="setPosition(item.value)"
-                    >
-                      {{ item.label }}
-                    </button>
-                  }
-                </div>
-                <p class="m-0 text-center text-sm text-[var(--docs-muted)]">
-                  {{ i18n.t('toast.demo.positionDescription') }}
-                </p>
+              <div previewer class="grid w-[min(520px,100%)] grid-cols-2 gap-3 sm:grid-cols-3">
+                @for (item of positions; track item.value) {
+                  <app-toast-position-demo [position]="item.value" [label]="item.label" />
+                }
               </div>
             </app-component-page-code-previewer>
           </app-component-page-section>
+
         </div>
       </app-component-page-section>
 
+      <!-- API -->
       <app-component-page-section [section]="section('api')">
         <app-component-page-api-table [rows]="page.apiRows!" />
       </app-component-page-section>
@@ -127,19 +172,18 @@ import { toastPage, toastPageExamples } from './toast.docs';
   `,
 })
 export class ToastPageComponent {
-  protected readonly page = toastPage;
+  protected readonly page     = toastPage;
   protected readonly examples = toastPageExamples;
-  protected readonly i18n = inject(I18nService);
-  protected readonly position = signal<ToastPosition>('bottom-right');
-  private readonly toast = inject(ToastService);
+  protected readonly i18n     = inject(I18nService);
+  private   readonly toast    = inject(ToastService);
 
   protected readonly positions: readonly { label: string; value: ToastPosition }[] = [
-    { label: 'Top left', value: 'top-left' },
-    { label: 'Top center', value: 'top-center' },
-    { label: 'Top right', value: 'top-right' },
-    { label: 'Bottom left', value: 'bottom-left' },
+    { label: 'Top left',      value: 'top-left'      },
+    { label: 'Top center',    value: 'top-center'    },
+    { label: 'Top right',     value: 'top-right'     },
+    { label: 'Bottom left',   value: 'bottom-left'   },
     { label: 'Bottom center', value: 'bottom-center' },
-    { label: 'Bottom right', value: 'bottom-right' },
+    { label: 'Bottom right',  value: 'bottom-right'  },
   ];
 
   protected showBasic() {
@@ -182,13 +226,6 @@ export class ToastPageComponent {
           this.toast.success(this.i18n.t('toast.demo.reviewedTitle'));
         },
       },
-    });
-  }
-
-  protected setPosition(position: ToastPosition) {
-    this.position.set(position);
-    this.toast.info(this.i18n.t('toast.demo.positionTitle'), {
-      description: position,
     });
   }
 
