@@ -5,7 +5,18 @@ import type { Toast, ToastOptions } from './toast.types';
 
 let _nextId = 0;
 
-@Injectable({ providedIn: 'root' })
+/**
+ * Headless 設計：不帶 providedIn，由消費端決定 scope。
+ *
+ * 全域 toast（最常見）：
+ *   // app.config.ts
+ *   providers: [ToastService]
+ *
+ * 局部 toast（功能模組/獨立 widget）：
+ *   @Component({ providers: [ToastService] })
+ *   export class FeatureComponent { }
+ */
+@Injectable()
 export class ToastService {
   private readonly announcer  = inject(LiveAnnouncer);
   private readonly config     = inject(TOAST_CONFIG);

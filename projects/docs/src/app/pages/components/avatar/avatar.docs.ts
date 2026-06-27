@@ -142,24 +142,12 @@ export const avatarPageExamples = {
   <img sanringAvatarImage src="https://i.pravatar.cc/96?img=5" alt="Ada Lovelace" />
   <sanring-avatar-fallback>AL</sanring-avatar-fallback>
 </sanring-avatar>`,
-  composition: `sanring-avatar-group              (optional)
+  composition: `sanring-avatar-group
 ├── sanring-avatar
-│   ├── img[sanringAvatarImage]   (optional)
-│   ├── sanring-avatar-fallback   (optional)
-│   └── [sanringAvatarBadge]      (optional)
-└── sanring-avatar-group-count    (optional)`,
-  compositionTemplate: `<!-- Standalone -->
-<sanring-avatar>
-  <img sanringAvatarImage src="…" alt="…" />
-  <sanring-avatar-fallback>AB</sanring-avatar-fallback>
-  <span sanringAvatarBadge status="online"></span>
-</sanring-avatar>
-
-<!-- Group -->
-<sanring-avatar-group>
-  <sanring-avatar>…</sanring-avatar>
-  <sanring-avatar-group-count [count]="3" />
-</sanring-avatar-group>`,
+│   ├── img[sanringAvatarImage]
+│   ├── sanring-avatar-fallback
+│   └── [sanringAvatarBadge]
+└── sanring-avatar-group-count`,
   sizes: `<sanring-avatar size="sm" ariaLabel="Small avatar">
   <sanring-avatar-fallback>SM</sanring-avatar-fallback>
 </sanring-avatar>

@@ -79,7 +79,7 @@ import { dialogPage, dialogPageExamples } from './dialog.docs';
 
       <app-component-page-section [section]="section('composition')">
         <div class="overflow-hidden rounded-lg border border-[var(--docs-border)]">
-          <app-component-page-code-block [code]="examples.composition" language="angular-html" />
+          <app-component-page-code-block [code]="examples.composition" language="bash" />
         </div>
       </app-component-page-section>
 

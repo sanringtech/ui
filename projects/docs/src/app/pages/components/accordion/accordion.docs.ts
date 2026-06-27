@@ -176,10 +176,8 @@ export const accordionPageExamples = {
     <sanring-accordion-content>Return details...</sanring-accordion-content>
   </sanring-accordion-item>
 </sanring-accordion>`,
-  composition: `<sanring-accordion>
-  <sanring-accordion-item>
-    <sanring-accordion-trigger>Section title</sanring-accordion-trigger>
-    <sanring-accordion-content>Section content</sanring-accordion-content>
-  </sanring-accordion-item>
-</sanring-accordion>`,
+  composition: `sanring-accordion
+└── sanring-accordion-item
+    ├── sanring-accordion-trigger
+    └── sanring-accordion-content`,
 } as const;

@@ -89,10 +89,9 @@ export const tooltipPageExamples = {
     Tooltip content
   </sanring-tooltip-content>
 </sanring-tooltip>`,
-  composition: `<sanring-tooltip>
-  <button sanringTooltipTrigger type="button">Hover me</button>
-  <sanring-tooltip-content>Tooltip text</sanring-tooltip-content>
-</sanring-tooltip>`,
+  composition: `sanring-tooltip
+├── [sanringTooltipTrigger]
+└── sanring-tooltip-content`,
   side: `<div class="grid grid-cols-2 gap-4">
   <sanring-tooltip>
     <button sanringTooltipTrigger type="button">Top</button>

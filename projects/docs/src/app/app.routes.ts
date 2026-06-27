@@ -142,6 +142,13 @@ export const routes: Routes = [
                   ),
               },
               {
+                path: 'sheet',
+                loadComponent: () =>
+                  import('./pages/components/sheet/sheet-page.component').then(
+                    (m) => m.SheetPageComponent,
+                  ),
+              },
+              {
                 path: 'skeleton',
                 loadComponent: () =>
                   import('./pages/components/skeleton/skeleton-page.component').then(

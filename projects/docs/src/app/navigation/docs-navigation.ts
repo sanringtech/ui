@@ -28,6 +28,7 @@ export type DocsComponentId =
   | 'progress'
   | 'radio'
   | 'scroll-area'
+  | 'sheet'
   | 'skeleton'
   | 'spinner'
   | 'switch'
@@ -172,6 +173,12 @@ export const docsComponentItems: DocsComponentNavItem[] = [
     id: 'scroll-area',
     labelKey: 'component.scrollArea',
     path: '/components/scroll-area',
+    active: true,
+  },
+  {
+    id: 'sheet',
+    labelKey: 'component.sheet',
+    path: '/components/sheet',
     active: true,
   },
   {

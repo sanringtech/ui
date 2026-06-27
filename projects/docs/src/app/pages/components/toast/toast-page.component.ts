@@ -58,6 +58,9 @@ export class ToastPositionDemoComponent {
 
 @Component({
   selector: 'app-toast-page',
+  // ToastService 移除 providedIn:'root'，消費端必須明確 provide。
+  // 全域 toast（basic / variant / action demo）由此層提供。
+  providers: [ToastService],
   imports: [
     ButtonDirective,
     ComponentPageApiTableComponent,
