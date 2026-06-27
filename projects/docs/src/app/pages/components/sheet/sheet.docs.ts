@@ -17,14 +17,16 @@ export const sheetPage = {
       children: [
         { id: 'example-side',      titleKey: 'sheet.demo.side',     level: 3 },
         { id: 'example-with-form', titleKey: 'sheet.demo.withForm', level: 3 },
+        { id: 'example-no-close',  titleKey: 'sheet.demo.noClose',  level: 3 },
       ],
     },
     { id: 'api', titleKey: 'toc.apiReference', descriptionKey: 'sheet.api.description', level: 2 },
   ],
   apiRows: [
-    { property: 'isOpen',  type: 'boolean',                                    defaultValue: 'false',     descriptionKey: 'sheet.api.isOpen.description' },
-    { property: 'side',    type: "'top' | 'right' | 'bottom' | 'left'",        defaultValue: "'right'",   descriptionKey: 'sheet.api.side.description'   },
-    { property: 'class',   type: 'string',                                     defaultValue: "''",        descriptionKey: 'sheet.api.class.description'  },
+    { property: 'isOpen',    type: 'boolean',                             defaultValue: 'false',    descriptionKey: 'sheet.api.isOpen.description'    },
+    { property: 'side',      type: "'top' | 'right' | 'bottom' | 'left'", defaultValue: "'right'",  descriptionKey: 'sheet.api.side.description'      },
+    { property: 'showClose', type: 'boolean',                             defaultValue: 'true',     descriptionKey: 'sheet.api.showClose.description' },
+    { property: 'class',     type: 'string',                              defaultValue: "''",       descriptionKey: 'sheet.api.class.description'     },
   ] satisfies readonly ComponentPageApiRow[],
 } as const satisfies ComponentPageDefinition;
 
@@ -45,16 +47,17 @@ export const sheetPageExamples = {
   </sanring-sheet-content>
 </sanring-sheet>`,
 
-  usageImport: `import {
-  SheetComponent,
-  SheetContentComponent,
-  SheetHeaderComponent,
-  SheetFooterComponent,
-  SheetTitleComponent,
-  SheetDescriptionComponent,
-  SheetTriggerDirective,
-  SheetCloseDirective,
-} from '@sanring/ui';`,
+  usageImport: `// Import individually
+import {
+  SheetComponent, SheetContentComponent,
+  SheetHeaderComponent, SheetFooterComponent,
+  SheetTitleComponent, SheetDescriptionComponent,
+  SheetTriggerDirective, SheetCloseDirective,
+} from '@sanring/ui';
+
+// Or import everything at once
+import { SANRING_SHEET_IMPORTS } from '@sanring/ui';
+// then: imports: [SANRING_SHEET_IMPORTS]`,
 
   usageMain: `<sanring-sheet>
   <button sanringBtn sanringSheetTrigger>Open</button>
@@ -79,25 +82,26 @@ export const sheetPageExamples = {
 │   └── sanring-sheet-footer
 └── [sanringSheetClose]`,
 
-  side: `<!-- All four positions use the same structure, just change [side] -->
+  side: `<!-- Change [side] to move the sheet; the close pattern is the same for all four. -->
 <sanring-sheet>
   <button sanringBtn sanringSheetTrigger>Top</button>
-  <sanring-sheet-content side="top">…</sanring-sheet-content>
-</sanring-sheet>
 
-<sanring-sheet>
-  <button sanringBtn sanringSheetTrigger>Right</button>
-  <sanring-sheet-content side="right">…</sanring-sheet-content>
-</sanring-sheet>
+  <sanring-sheet-content side="top">
+    <!-- X close: use sanringSheetClose on any element -->
+    <button type="button" sanringSheetClose aria-label="Close"
+      class="absolute right-4 top-4 ...">
+      <svg lucideX class="size-4"></svg>
+    </button>
 
-<sanring-sheet>
-  <button sanringBtn sanringSheetTrigger>Bottom</button>
-  <sanring-sheet-content side="bottom">…</sanring-sheet-content>
-</sanring-sheet>
+    <sanring-sheet-header class="pr-10">
+      <sanring-sheet-title>Top Sheet</sanring-sheet-title>
+      <sanring-sheet-description>Slides in from the top edge.</sanring-sheet-description>
+    </sanring-sheet-header>
 
-<sanring-sheet>
-  <button sanringBtn sanringSheetTrigger>Left</button>
-  <sanring-sheet-content side="left">…</sanring-sheet-content>
+    <sanring-sheet-footer>
+      <button sanringBtn variant="outline" sanringSheetClose>Close</button>
+    </sanring-sheet-footer>
+  </sanring-sheet-content>
 </sanring-sheet>`,
 
   withForm: `<sanring-sheet>
@@ -125,6 +129,24 @@ export const sheetPageExamples = {
     <sanring-sheet-footer>
       <button sanringBtn variant="outline" sanringSheetClose>Cancel</button>
       <button sanringBtn sanringSheetClose>Save changes</button>
+    </sanring-sheet-footer>
+  </sanring-sheet-content>
+</sanring-sheet>`,
+  noClose: `<!-- [showClose]="false" hides the built-in × button;
+     use sanringSheetClose on any element to close instead -->
+<sanring-sheet>
+  <button sanringBtn sanringSheetTrigger>Open</button>
+
+  <sanring-sheet-content [showClose]="false">
+    <sanring-sheet-header>
+      <sanring-sheet-title>Confirm deletion</sanring-sheet-title>
+      <sanring-sheet-description>
+        This action cannot be undone.
+      </sanring-sheet-description>
+    </sanring-sheet-header>
+    <sanring-sheet-footer>
+      <button sanringBtn variant="outline" sanringSheetClose>Cancel</button>
+      <button sanringBtn variant="destructive" sanringSheetClose>Delete</button>
     </sanring-sheet-footer>
   </sanring-sheet-content>
 </sanring-sheet>`,

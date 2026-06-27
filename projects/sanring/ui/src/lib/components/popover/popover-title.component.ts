@@ -1,21 +1,21 @@
 import { ChangeDetectionStrategy, Component, computed, inject, input } from '@angular/core';
 import { cn } from '../../utils';
-import { SheetComponent } from './sheet.component';
+import { PopoverComponent } from './popover.component';
 
 @Component({
-  selector: 'sanring-sheet-title',
+  selector: 'sanring-popover-title',
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
   host: {
     '[class]': 'hostClass()',
-    '[id]': 'sheet?.titleId',
+    '[id]': 'popover?.titleId',
   },
   template: `<ng-content></ng-content>`,
 })
-export class SheetTitleComponent {
-  protected readonly sheet = inject(SheetComponent, { optional: true });
+export class PopoverTitleComponent {
+  protected readonly popover = inject(PopoverComponent, { optional: true });
   readonly class = input<string | undefined>();
   protected readonly hostClass = computed(() =>
-    cn('text-lg font-semibold leading-none text-[var(--sanring-foreground)]', this.class()),
+    cn('text-sm font-semibold leading-none tracking-tight', this.class()),
   );
 }

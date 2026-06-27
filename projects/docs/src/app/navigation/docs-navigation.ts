@@ -25,6 +25,7 @@ export type DocsComponentId =
   | 'input'
   | 'label'
   | 'link'
+  | 'popover'
   | 'progress'
   | 'radio'
   | 'scroll-area'
@@ -155,6 +156,12 @@ export const docsComponentItems: DocsComponentNavItem[] = [
     id: 'link',
     labelKey: 'component.link',
     path: '/components/link',
+    active: true,
+  },
+  {
+    id: 'popover',
+    labelKey: 'component.popover',
+    path: '/components/popover',
     active: true,
   },
   {

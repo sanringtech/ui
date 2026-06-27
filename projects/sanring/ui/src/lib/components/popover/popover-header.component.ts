@@ -2,15 +2,15 @@ import { ChangeDetectionStrategy, Component, computed, input } from '@angular/co
 import { cn } from '../../utils';
 
 @Component({
-  selector: 'sanring-sheet-header',
+  selector: 'sanring-popover-header',
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
   host: { '[class]': 'hostClass()' },
   template: `<ng-content></ng-content>`,
 })
-export class SheetHeaderComponent {
+export class PopoverHeaderComponent {
   readonly class = input<string | undefined>();
   protected readonly hostClass = computed(() =>
-    cn('flex flex-col gap-1.5', this.class()),
+    cn('flex flex-col gap-1 pb-2', this.class()),
   );
 }

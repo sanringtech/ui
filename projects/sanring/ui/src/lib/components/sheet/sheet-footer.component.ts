@@ -11,6 +11,6 @@ import { cn } from '../../utils';
 export class SheetFooterComponent {
   readonly class = input<string | undefined>();
   protected readonly hostClass = computed(() =>
-    cn('flex flex-col-reverse gap-2 p-6 pt-0 sm:flex-row sm:justify-end', this.class()),
+    cn('flex flex-col gap-2', this.class()),
   );
 }

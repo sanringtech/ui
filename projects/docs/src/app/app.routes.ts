@@ -121,6 +121,13 @@ export const routes: Routes = [
                   ),
               },
               {
+                path: 'popover',
+                loadComponent: () =>
+                  import('./pages/components/popover/popover-page.component').then(
+                    (m) => m.PopoverPageComponent,
+                  ),
+              },
+              {
                 path: 'progress',
                 loadComponent: () =>
                   import('./pages/components/progress/progress-page.component').then(

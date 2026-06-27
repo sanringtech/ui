@@ -86,7 +86,7 @@ import { badgePage, badgePageExamples } from './badge.docs';
               <div previewer class="flex flex-wrap items-center justify-center gap-3">
                 <a
                   sanringBadge
-                  class="transition-transform hover:-translate-y-0.5 hover:border-[var(--docs-fg)] hover:bg-[var(--docs-elevated)]"
+                  class="hover:border-[var(--docs-fg)] hover:bg-[var(--docs-elevated)]"
                   href="/components/badge"
                   variant="outline"
                 >
