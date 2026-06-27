@@ -1,4 +1,4 @@
-import { booleanAttribute, Component, EventEmitter, Output, computed, input } from '@angular/core';
+import { booleanAttribute, Component, computed, input, output } from '@angular/core';
 import { LucideX } from '@lucide/angular';
 import { cn } from '../../utils';
 import { BadgeDirective, type BadgeVariant } from '../badge';
@@ -30,7 +30,7 @@ export class TagComponent {
   readonly closable = input(false, { transform: booleanAttribute });
   readonly removeAriaLabel = input('Remove tag');
 
-  @Output() remove = new EventEmitter<MouseEvent>();
+  readonly remove = output<MouseEvent>();
 
   protected readonly tagClass = computed(() =>
     cn('pl-2.5', this.closable() ? 'pr-1' : 'pr-2.5', this.class()),

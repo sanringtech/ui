@@ -1,14 +1,13 @@
 import {
   ChangeDetectionStrategy,
   Component,
-  EventEmitter,
-  Output,
   booleanAttribute,
   computed,
   contentChildren,
   effect,
   forwardRef,
   input,
+  output,
   signal,
 } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
@@ -60,7 +59,7 @@ export class RadioGroupComponent implements ControlValueAccessor {
   readonly ariaDescribedBy = input<string | undefined>();
   readonly value = input<RadioValue | null>(null);
 
-  @Output() valueChange = new EventEmitter<RadioValue | null>();
+  readonly valueChange = output<RadioValue | null>();
 
   readonly valueSignal = signal<RadioValue | null>(null);
   readonly isDisabled = computed(() => this.disabled() || this.disabledState());

@@ -3,23 +3,18 @@ import {
   ChangeDetectionStrategy,
   Component,
   ViewChild,
-  afterRenderEffect,
   computed,
   inject,
   input,
 } from '@angular/core';
-import {
-  AccordionContent as NgAccordionContent,
-  AccordionPanel as NgAccordionPanel,
-  ɵɵDeferredContentAware as DeferredContentAware,
-} from '@angular/aria/accordion';
+import { AccordionPanel as NgAccordionPanel } from '@angular/aria/accordion';
 import { cn } from '../../utils';
 import { AccordionItemComponent } from './accordion-item.component';
 
 @Component({
   selector: 'sanring-accordion-content',
   standalone: true,
-  imports: [NgAccordionContent, NgAccordionPanel],
+  imports: [NgAccordionPanel],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <div
@@ -31,38 +26,24 @@ import { AccordionItemComponent } from './accordion-item.component';
       [class]="contentContainerClass()"
     >
       <div class="overflow-hidden">
-        <ng-template ngAccordionContent>
-          <div [class]="contentBodyClass()">
-            <ng-content></ng-content>
-          </div>
-        </ng-template>
+        <div [class]="contentBodyClass()">
+          <ng-content></ng-content>
+        </div>
       </div>
     </div>
   `,
 })
 export class AccordionContentComponent implements AfterViewInit {
-  protected cn = cn;
-  protected item = inject(AccordionItemComponent, { optional: true });
+  protected readonly item = inject(AccordionItemComponent, { optional: true });
 
   @ViewChild(NgAccordionPanel) private panel?: NgAccordionPanel;
-  @ViewChild(DeferredContentAware) private deferredContentAware?: DeferredContentAware;
 
   readonly class = input<string | undefined>();
-
-  constructor() {
-    afterRenderEffect({
-      write: () => {
-        this.syncContentVisibility();
-      },
-    });
-  }
 
   ngAfterViewInit() {
     if (this.item && this.panel) {
       this.item.registerPanel(this.panel);
     }
-
-    this.syncContentVisibility();
   }
 
   protected readonly contentContainerClass = computed(() =>
@@ -73,8 +54,4 @@ export class AccordionContentComponent implements AfterViewInit {
   );
 
   protected readonly contentBodyClass = computed(() => cn('p-3', this.class()));
-
-  private syncContentVisibility() {
-    this.deferredContentAware?.contentVisible.set(this.item?.isExpanded() ?? false);
-  }
 }

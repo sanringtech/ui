@@ -1,5 +1,6 @@
 import { CdkScrollable } from '@angular/cdk/scrolling';
-import { Directive, EventEmitter, inject, Output } from '@angular/core';
+import { Directive, inject, output } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { debounceTime, filter } from 'rxjs/operators';
 
 @Directive({
@@ -7,20 +8,19 @@ import { debounceTime, filter } from 'rxjs/operators';
   standalone: true,
 })
 export class InfiniteScrollDirective {
-  private scrollable = inject(CdkScrollable);
+  private readonly scrollable = inject(CdkScrollable);
 
-  @Output() loadMore = new EventEmitter<void>();
+  readonly loadMore = output<void>();
 
   constructor() {
     this.scrollable
       .elementScrolled()
       .pipe(
         filter(() => this.isAtBottom()),
-        debounceTime(200), // 防抖動，避免觸發太多次
+        debounceTime(200),
+        takeUntilDestroyed(), // DestroyRef auto-injected from constructor injection context
       )
-      .subscribe(() => {
-        this.loadMore.emit(); // 只發出訊號，不處理 API
-      });
+      .subscribe(() => this.loadMore.emit());
   }
 
   private isAtBottom(): boolean {

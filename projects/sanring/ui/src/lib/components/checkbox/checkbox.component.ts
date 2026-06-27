@@ -1,13 +1,12 @@
 import {
   ChangeDetectionStrategy,
   Component,
-  EventEmitter,
-  Output,
   booleanAttribute,
   computed,
   effect,
   forwardRef,
   input,
+  output,
   signal,
 } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
@@ -89,7 +88,7 @@ export class CheckboxComponent implements ControlValueAccessor {
   readonly size = input<CheckboxSize>(CheckboxSize.Md);
   readonly checked = input<CheckedState>(false);
 
-  @Output() checkedChange = new EventEmitter<CheckedState>();
+  readonly checkedChange = output<CheckedState>();
 
   protected checkedSignal = signal<CheckedState>(false);
   protected readonly isDisabled = computed(() => this.disabled() || this.disabledState());
