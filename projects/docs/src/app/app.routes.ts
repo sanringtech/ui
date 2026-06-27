@@ -184,6 +184,13 @@ export const routes: Routes = [
                   ),
               },
               {
+                path: 'toast',
+                loadComponent: () =>
+                  import('./pages/components/toast/toast-page.component').then(
+                    (m) => m.ToastPageComponent,
+                  ),
+              },
+              {
                 path: 'tooltip',
                 loadComponent: () =>
                   import('./pages/components/tooltip/tooltip-page.component').then(

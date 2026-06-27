@@ -34,6 +34,7 @@ export type DocsComponentId =
   | 'tag'
   | 'tabs'
   | 'toggle'
+  | 'toast'
   | 'tooltip';
 
 export interface DocsComponentNavItem extends DocsSidebarItem {
@@ -207,6 +208,12 @@ export const docsComponentItems: DocsComponentNavItem[] = [
     id: 'toggle',
     labelKey: 'component.toggle',
     path: '/components/toggle',
+    active: true,
+  },
+  {
+    id: 'toast',
+    labelKey: 'component.toast',
+    path: '/components/toast',
     active: true,
   },
   {

@@ -27,4 +27,5 @@ export * from './lib/components/switch';
 export * from './lib/components/tag';
 export * from './lib/components/toggle';
 export * from './lib/components/tabs';
+export * from './lib/components/toast';
 export * from './lib/components/tooltip';
