@@ -19,17 +19,20 @@ export type DocsComponentId =
   | 'button'
   | 'card'
   | 'checkbox'
+  | 'collapsible'
   | 'dialog'
   | 'divider'
   | 'input'
   | 'label'
   | 'link'
+  | 'progress'
   | 'radio'
   | 'scroll-area'
   | 'skeleton'
   | 'switch'
   | 'tag'
   | 'tabs'
+  | 'toggle'
   | 'tooltip';
 
 export interface DocsComponentNavItem extends DocsSidebarItem {
@@ -116,6 +119,12 @@ export const docsComponentItems: DocsComponentNavItem[] = [
     active: true,
   },
   {
+    id: 'collapsible',
+    labelKey: 'component.collapsible',
+    path: '/components/collapsible',
+    active: true,
+  },
+  {
     id: 'dialog',
     labelKey: 'component.dialog',
     path: '/components/dialog',
@@ -143,6 +152,12 @@ export const docsComponentItems: DocsComponentNavItem[] = [
     id: 'link',
     labelKey: 'component.link',
     path: '/components/link',
+    active: true,
+  },
+  {
+    id: 'progress',
+    labelKey: 'component.progress',
+    path: '/components/progress',
     active: true,
   },
   {
@@ -179,6 +194,12 @@ export const docsComponentItems: DocsComponentNavItem[] = [
     id: 'tabs',
     labelKey: 'component.tabs',
     path: '/components/tabs',
+    active: true,
+  },
+  {
+    id: 'toggle',
+    labelKey: 'component.toggle',
+    path: '/components/toggle',
     active: true,
   },
   {

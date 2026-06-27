@@ -79,6 +79,13 @@ export const routes: Routes = [
                   ),
               },
               {
+                path: 'collapsible',
+                loadComponent: () =>
+                  import('./pages/components/collapsible/collapsible-page.component').then(
+                    (m) => m.CollapsiblePageComponent,
+                  ),
+              },
+              {
                 path: 'dialog',
                 loadComponent: () =>
                   import('./pages/components/dialog/dialog-page.component').then(
@@ -111,6 +118,13 @@ export const routes: Routes = [
                 loadComponent: () =>
                   import('./pages/components/link/link-page.component').then(
                     (m) => m.LinkPageComponent,
+                  ),
+              },
+              {
+                path: 'progress',
+                loadComponent: () =>
+                  import('./pages/components/progress/progress-page.component').then(
+                    (m) => m.ProgressPageComponent,
                   ),
               },
               {
@@ -153,6 +167,13 @@ export const routes: Routes = [
                 loadComponent: () =>
                   import('./pages/components/tabs/tabs-page.component').then(
                     (m) => m.TabsPageComponent,
+                  ),
+              },
+              {
+                path: 'toggle',
+                loadComponent: () =>
+                  import('./pages/components/toggle/toggle-page.component').then(
+                    (m) => m.TogglePageComponent,
                   ),
               },
               {
