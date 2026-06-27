@@ -11,7 +11,10 @@ export type ToastPosition =
 export interface ToastAction {
   label: string;
   class?: string;
-  onClick: () => void;
+  /** 支援 async action（例如 retry API）；promise settle 後再 dismiss */
+  onClick: () => void | Promise<void>;
+  /** 點擊 action 後是否自動關閉 toast。預設 true */
+  dismissOnAction?: boolean;
 }
 
 export interface Toast {

@@ -74,7 +74,9 @@ export class ToastService {
   }
 
   dismissAll(): void {
-    [...this._timers.keys()].forEach(id => this._clearTimer(id));
+    // 合併 _timers 與 _remaining 的 id，確保 paused 狀態下也能全部清除
+    const allIds = new Set([...this._timers.keys(), ...this._remaining.keys()]);
+    allIds.forEach(id => this._clearTimer(id));
     this._toasts.set([]);
   }
 
