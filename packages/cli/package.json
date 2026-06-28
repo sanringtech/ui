@@ -9,9 +9,11 @@
   },
   "main": "./dist/index.js",
   "files": [
-    "dist"
+    "dist",
+    "registry"
   ],
   "scripts": {
+    "prebuild": "node -e \"const{cpSync,rmSync}=require('fs');rmSync('registry',{recursive:true,force:true});cpSync('../../registry','registry',{recursive:true});\"",
     "build": "tsc",
     "dev": "tsc --watch"
   },

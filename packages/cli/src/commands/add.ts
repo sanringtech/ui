@@ -71,9 +71,10 @@ export const addCommand = new Command('add')
       console.log(pc.cyan(`\nAdding ${pc.bold(componentName)}...\n`));
 
       const selfDir = new URL('.', import.meta.url).pathname;
+      // dist/commands/ → ../../registry/registry.json (works in both dev and published installs)
       const registryPath = options.registry
         ? resolve(process.cwd(), options.registry)
-        : join(selfDir, '../../../../registry/registry.json');
+        : join(selfDir, '../../registry/registry.json');
 
       const registry = loadRegistry(registryPath);
       const registryDir = dirname(registryPath);
