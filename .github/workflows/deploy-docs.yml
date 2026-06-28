@@ -42,7 +42,7 @@ jobs:
         run: pnpm install --frozen-lockfile
 
       - name: Build docs
-        run: pnpm ng build docs --configuration production --base-href /ui/
+        run: pnpm ng build docs --configuration production --base-href /
 
       - name: Setup Pages
         uses: actions/configure-pages@v5
