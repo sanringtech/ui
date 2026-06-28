@@ -5,12 +5,12 @@
     "packageManager": "pnpm",
     "analytics": false
   },
-  "newProjectRoot": "projects",
+  "newProjectRoot": "packages",
   "projects": {
     "@sanring/ui": {
       "projectType": "library",
-      "root": "projects/sanring/ui",
-      "sourceRoot": "projects/sanring/ui/src",
+      "root": "packages/ui",
+      "sourceRoot": "packages/ui/src",
       "prefix": "sanring",
       "schematics": {
         "@schematics/angular:component": {
@@ -25,10 +25,10 @@
           "builder": "@angular/build:ng-packagr",
           "configurations": {
             "production": {
-              "tsConfig": "projects/sanring/ui/tsconfig.lib.prod.json"
+              "tsConfig": "packages/ui/tsconfig.lib.prod.json"
             },
             "development": {
-              "tsConfig": "projects/sanring/ui/tsconfig.lib.json"
+              "tsConfig": "packages/ui/tsconfig.lib.json"
             }
           },
           "defaultConfiguration": "production"
@@ -36,13 +36,13 @@
         "test": {
           "builder": "@angular/build:unit-test",
           "options": {
-            "tsConfig": "projects/sanring/ui/tsconfig.spec.json"
+            "tsConfig": "packages/ui/tsconfig.spec.json"
           }
         },
         "lint": {
           "builder": "@angular-eslint/builder:lint",
           "options": {
-            "lintFilePatterns": ["projects/sanring/ui/**/*.ts", "projects/sanring/ui/**/*.html"]
+            "lintFilePatterns": ["packages/ui/**/*.ts", "packages/ui/**/*.html"]
           }
         }
       }
@@ -57,23 +57,23 @@
           "skipTests": true
         }
       },
-      "root": "projects/docs",
-      "sourceRoot": "projects/docs/src",
+      "root": "apps/docs",
+      "sourceRoot": "apps/docs/src",
       "prefix": "app",
       "architect": {
         "build": {
           "builder": "@angular/build:application",
           "options": {
-            "browser": "projects/docs/src/main.ts",
-            "tsConfig": "projects/docs/tsconfig.app.json",
+            "browser": "apps/docs/src/main.ts",
+            "tsConfig": "apps/docs/tsconfig.app.json",
             "inlineStyleLanguage": "css",
             "assets": [
               {
                 "glob": "**/*",
-                "input": "projects/docs/public"
+                "input": "apps/docs/public"
               }
             ],
-            "styles": ["projects/docs/src/styles.css"]
+            "styles": ["apps/docs/src/styles.css"]
           },
           "configurations": {
             "production": {
@@ -117,7 +117,7 @@
         "lint": {
           "builder": "@angular-eslint/builder:lint",
           "options": {
-            "lintFilePatterns": ["projects/docs/**/*.ts", "projects/docs/**/*.html"]
+            "lintFilePatterns": ["apps/docs/**/*.ts", "apps/docs/**/*.html"]
           }
         }
       }

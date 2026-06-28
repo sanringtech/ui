@@ -1,6 +1,6 @@
 {
-  "$schema": "../../../node_modules/ng-packagr/ng-package.schema.json",
-  "dest": "../../../dist/sanring/ui",
+  "$schema": "../../node_modules/ng-packagr/ng-package.schema.json",
+  "dest": "../../dist/sanring/ui",
   "allowedNonPeerDependencies": ["clsx", "tailwind-merge"],
   "lib": {
     "entryFile": "src/public-api.ts"
