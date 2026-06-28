@@ -1,18 +1,14 @@
 import { Command } from 'commander';
-import { resolve } from 'node:path';
 import pc from 'picocolors';
-import { getDefaultRegistryPath, loadRegistry } from '../registry.js';
+import { REGISTRY_URL, fetchRegistry } from '../registry.js';
 
 export const listCommand = new Command('list')
   .alias('ls')
   .description('List all available components')
-  .option('--registry <path>', 'path to local registry.json (for development)')
-  .action((options: { registry?: string }) => {
-    const registryPath = options.registry
-      ? resolve(process.cwd(), options.registry)
-      : getDefaultRegistryPath(import.meta.url);
-
-    const registry = loadRegistry(registryPath);
+  .option('--registry <url>', 'custom registry URL')
+  .action(async (options: { registry?: string }) => {
+    const registryUrl = options.registry ?? REGISTRY_URL;
+    const registry = await fetchRegistry(registryUrl);
     const { components } = registry;
 
     console.log(pc.cyan(`\nAvailable components`) + pc.dim(` (${components.length} total)\n`));

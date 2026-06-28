@@ -1,6 +1,8 @@
-import { readFileSync } from 'node:fs';
-import { join } from 'node:path';
 import pc from 'picocolors';
+
+const REGISTRY_BASE = 'https://raw.githubusercontent.com/sanringtech/ui/main/registry';
+
+export const REGISTRY_URL = `${REGISTRY_BASE}/registry.json`;
 
 export interface RegistryShared {
   name: string;
@@ -13,6 +15,7 @@ export interface RegistryComponent {
   name: string;
   description: string;
   sharedDeps?: string[];
+  componentDeps?: string[];
   peerDependencies?: Record<string, string>;
   files: string[];
 }
@@ -23,17 +26,22 @@ export interface Registry {
   components: RegistryComponent[];
 }
 
-export function getDefaultRegistryPath(importMetaUrl: string): string {
-  const selfDir = new URL('.', importMetaUrl).pathname;
-  // dist/commands/ → ../../registry/registry.json
-  return join(selfDir, '../../registry/registry.json');
-}
-
-export function loadRegistry(registryPath: string): Registry {
+export async function fetchRegistry(registryUrl = REGISTRY_URL): Promise<Registry> {
   try {
-    return JSON.parse(readFileSync(registryPath, 'utf-8')) as Registry;
-  } catch {
-    console.error(pc.red(`✖ Cannot read registry: ${registryPath}`));
+    const res = await fetch(registryUrl);
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    return (await res.json()) as Registry;
+  } catch (e) {
+    console.error(pc.red(`✖ Cannot fetch registry: ${registryUrl}`));
+    console.error(pc.dim(`  ${e instanceof Error ? e.message : String(e)}`));
     process.exit(1);
   }
+}
+
+export async function fetchFile(relativePath: string, registryUrl: string): Promise<string> {
+  const base = registryUrl.replace('/registry.json', '');
+  const url = `${base}/${relativePath}`;
+  const res = await fetch(url);
+  if (!res.ok) throw new Error(`HTTP ${res.status} fetching ${url}`);
+  return res.text();
 }

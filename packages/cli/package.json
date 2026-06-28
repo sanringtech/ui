@@ -1,5 +1,5 @@
 {
-  "name": "@sanring/cli",
+  "name": "sanring",
   "version": "0.0.1",
   "description": "CLI for adding Sanring UI components to your Angular project",
   "license": "MIT",
@@ -9,11 +9,9 @@
   },
   "main": "./dist/index.js",
   "files": [
-    "dist",
-    "registry"
+    "dist"
   ],
   "scripts": {
-    "prebuild": "node -e \"const{cpSync,rmSync}=require('fs');rmSync('registry',{recursive:true,force:true});cpSync('../../registry','registry',{recursive:true});\"",
     "build": "tsc",
     "dev": "tsc --watch"
   },
