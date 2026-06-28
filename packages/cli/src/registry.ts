@@ -1,4 +1,25 @@
+import { existsSync } from 'node:fs';
+import { join } from 'node:path';
 import pc from 'picocolors';
+
+type PackageManager = 'npm' | 'pnpm' | 'yarn' | 'bun';
+
+export function detectPackageManager(cwd = process.cwd()): PackageManager {
+  if (existsSync(join(cwd, 'pnpm-lock.yaml'))) return 'pnpm';
+  if (existsSync(join(cwd, 'yarn.lock'))) return 'yarn';
+  if (existsSync(join(cwd, 'bun.lockb'))) return 'bun';
+  return 'npm';
+}
+
+export function installCommand(pm: PackageManager, packages: string[]): string {
+  const pkgs = packages.join(' ');
+  switch (pm) {
+    case 'pnpm': return `pnpm add ${pkgs}`;
+    case 'yarn': return `yarn add ${pkgs}`;
+    case 'bun':  return `bun add ${pkgs}`;
+    default:     return `npm install ${pkgs}`;
+  }
+}
 
 const REGISTRY_BASE = 'https://raw.githubusercontent.com/sanringtech/ui/main/registry';
 

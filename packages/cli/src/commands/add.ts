@@ -4,8 +4,10 @@ import { dirname, join, resolve } from 'node:path';
 import pc from 'picocolors';
 import {
   REGISTRY_URL,
+  detectPackageManager,
   fetchFile,
   fetchRegistry,
+  installCommand,
   type RegistryComponent,
   type RegistryShared,
 } from '../registry.js';
@@ -105,10 +107,10 @@ export const addCommand = new Command('add')
       // Peer dependencies
       const allPeerDeps = collectPeerDeps(component, registry.shared);
       if (Object.keys(allPeerDeps).length > 0) {
-        const deps = Object.entries(allPeerDeps)
-          .map(([pkg, ver]) => `${pkg}@"${ver}"`)
-          .join(' ');
-        console.log(pc.dim(`\n  Peer dependencies:\n  ${pc.cyan(`npm install ${deps}`)}`));
+        const pm = detectPackageManager();
+        const pkgs = Object.entries(allPeerDeps).map(([pkg, ver]) => `${pkg}@"${ver}"`);
+        const cmd = installCommand(pm, pkgs);
+        console.log(pc.dim(`\n  Peer dependencies:\n  ${pc.cyan(cmd)}`));
       }
 
       // Component dependencies notice
