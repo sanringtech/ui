@@ -1,6 +1,12 @@
 import { Component, computed, inject, input, signal } from '@angular/core';
 import { LucideClipboard } from '@lucide/angular';
-import { TabsComponent, TabsContentComponent, TabsListComponent, TabsTriggerComponent, ToastService } from '@sanring/ui';
+import {
+  TabsComponent,
+  TabsContentComponent,
+  TabsListComponent,
+  TabsTriggerComponent,
+  ToastService,
+} from '@sanring/ui';
 import { I18nService } from '../../i18n/i18n.service';
 
 type InstallMode = 'command' | 'manual';
@@ -9,7 +15,13 @@ type PackageManager = 'pnpm' | 'npm' | 'yarn' | 'bun';
 @Component({
   selector: 'app-component-page-installation',
   standalone: true,
-  imports: [LucideClipboard, TabsComponent, TabsContentComponent, TabsListComponent, TabsTriggerComponent],
+  imports: [
+    LucideClipboard,
+    TabsComponent,
+    TabsContentComponent,
+    TabsListComponent,
+    TabsTriggerComponent,
+  ],
   template: `
     <sanring-tabs
       class="w-full"
@@ -21,15 +33,19 @@ type PackageManager = 'pnpm' | 'npm' | 'yarn' | 'bun';
         <sanring-tabs-trigger value="command" class="px-0 text-base">
           Command
         </sanring-tabs-trigger>
-        <sanring-tabs-trigger value="manual" class="px-0 text-base">
-          Manual
-        </sanring-tabs-trigger>
+        <sanring-tabs-trigger value="manual" class="px-0 text-base"> Manual </sanring-tabs-trigger>
       </sanring-tabs-list>
 
       <sanring-tabs-content value="command" class="mt-0">
-        <div class="w-full overflow-hidden rounded-xl border border-[var(--docs-border)] bg-[var(--docs-code)]">
-          <div class="flex min-w-0 items-center gap-2 border-b border-[var(--docs-border)] px-3 py-2">
-            <span class="grid size-6 shrink-0 place-items-center rounded-md border border-[var(--docs-border)] bg-[var(--docs-bg)] font-mono text-xs text-[var(--docs-fg)]">
+        <div
+          class="w-full overflow-hidden rounded-xl border border-[var(--docs-border)] bg-[var(--docs-code)]"
+        >
+          <div
+            class="flex min-w-0 items-center gap-2 border-b border-[var(--docs-border)] px-3 py-2"
+          >
+            <span
+              class="grid size-6 shrink-0 place-items-center rounded-md border border-[var(--docs-border)] bg-[var(--docs-bg)] font-mono text-xs text-[var(--docs-fg)]"
+            >
               &gt;_
             </span>
 
@@ -55,13 +71,19 @@ type PackageManager = 'pnpm' | 'npm' | 'yarn' | 'bun';
             </button>
           </div>
 
-          <pre class="m-0 overflow-x-auto px-4 py-4 font-mono text-sm leading-7 text-[#cbd5e1]"><code>{{ command() }}</code></pre>
+          <pre
+            class="m-0 overflow-x-auto px-4 py-4 font-mono text-sm leading-7 text-[#cbd5e1]"
+          ><code>{{ command() }}</code></pre>
         </div>
       </sanring-tabs-content>
 
       <sanring-tabs-content value="manual" class="mt-0">
-        <div class="w-full overflow-hidden rounded-xl border border-[var(--docs-border)] bg-[var(--docs-code)]">
-          <div class="flex min-w-0 items-center gap-2 border-b border-[var(--docs-border)] px-3 py-2">
+        <div
+          class="w-full overflow-hidden rounded-xl border border-[var(--docs-border)] bg-[var(--docs-code)]"
+        >
+          <div
+            class="flex min-w-0 items-center gap-2 border-b border-[var(--docs-border)] px-3 py-2"
+          >
             <span class="flex-1 text-sm font-medium text-[var(--docs-fg)]">Import</span>
             <button
               type="button"
@@ -73,7 +95,9 @@ type PackageManager = 'pnpm' | 'npm' | 'yarn' | 'bun';
             </button>
           </div>
 
-          <pre class="m-0 overflow-x-auto px-4 py-4 font-mono text-sm leading-7 text-[#cbd5e1]"><code>{{ manualSnippet() }}</code></pre>
+          <pre
+            class="m-0 overflow-x-auto px-4 py-4 font-mono text-sm leading-7 text-[#cbd5e1]"
+          ><code>{{ manualSnippet() }}</code></pre>
         </div>
       </sanring-tabs-content>
     </sanring-tabs>
@@ -83,8 +107,8 @@ export class ComponentPageInstallationComponent {
   readonly componentName = input.required<string>();
   readonly manualSnippet = input('import { } from "@sanring/ui";');
 
-  protected readonly i18n   = inject(I18nService);
-  private  readonly toast   = inject(ToastService);
+  protected readonly i18n = inject(I18nService);
+  private readonly toast = inject(ToastService);
 
   protected readonly packageManagers: PackageManager[] = ['pnpm', 'npm', 'yarn', 'bun'];
   protected readonly selectedPackageManager = signal<PackageManager>('pnpm');
@@ -94,11 +118,15 @@ export class ComponentPageInstallationComponent {
     const name = this.componentName();
 
     switch (this.selectedPackageManager()) {
-      case 'npm':   return `npx @sanring/cli@latest add ${name}`;
-      case 'yarn':  return `yarn dlx @sanring/cli@latest add ${name}`;
-      case 'bun':   return `bunx @sanring/cli@latest add ${name}`;
+      case 'npm':
+        return `npx @sanring/cli@latest add ${name}`;
+      case 'yarn':
+        return `yarn dlx @sanring/cli@latest add ${name}`;
+      case 'bun':
+        return `bunx @sanring/cli@latest add ${name}`;
       case 'pnpm':
-      default:      return `pnpm dlx @sanring/cli@latest add ${name}`;
+      default:
+        return `pnpm dlx @sanring/cli@latest add ${name}`;
     }
   });
 
@@ -122,9 +150,19 @@ export class ComponentPageInstallationComponent {
 
     try {
       await navigator.clipboard.writeText(code);
-      this.toast.show({ type: 'success', title: this.i18n.t('actions.copied'), duration: 2000, closable: false });
+      this.toast.show({
+        type: 'success',
+        title: this.i18n.t('actions.copied'),
+        duration: 2000,
+        closable: false,
+      });
     } catch {
-      this.toast.show({ type: 'error', title: this.i18n.t('actions.copyFailed'), duration: 3000, closable: true });
+      this.toast.show({
+        type: 'error',
+        title: this.i18n.t('actions.copyFailed'),
+        duration: 3000,
+        closable: true,
+      });
     }
   }
 }
