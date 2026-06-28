@@ -4,6 +4,7 @@
 
 export * from './lib/ui';
 export * from './lib/utils';
+export * from './lib/components/breadcrumb';
 export * from './lib/components/accordion';
 export * from './lib/components/alert';
 export * from './lib/components/avatar';

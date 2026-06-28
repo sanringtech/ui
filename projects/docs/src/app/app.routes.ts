@@ -37,6 +37,13 @@ export const routes: Routes = [
                   ),
               },
               {
+                path: 'breadcrumb',
+                loadComponent: () =>
+                  import('./pages/components/breadcrumb/breadcrumb-page.component').then(
+                    (m) => m.BreadcrumbPageComponent,
+                  ),
+              },
+              {
                 path: 'alert',
                 loadComponent: () =>
                   import('./pages/components/alert/alert-page.component').then(

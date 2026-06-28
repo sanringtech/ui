@@ -1,0 +1,23 @@
+import { ChangeDetectionStrategy, Component, computed, input } from '@angular/core';
+import { cn } from '../../utils';
+
+@Component({
+  selector: 'sanring-breadcrumb-list',
+  standalone: true,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  host: {
+    role: 'list', // 確保語意
+    '[class]': 'breadcrumbListClass()',
+  },
+  template: `<ng-content></ng-content>`,
+})
+export class BreadcrumbListComponent {
+  readonly class = input<string | undefined>();
+
+  protected readonly breadcrumbListClass = computed(() =>
+    cn(
+      'flex flex-wrap items-center gap-1.5 break-words text-sm text-[var(--sanring-muted)] sm:gap-2.5',
+      this.class(),
+    ),
+  );
+}

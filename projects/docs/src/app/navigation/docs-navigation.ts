@@ -97,13 +97,12 @@ export const docsComponentItems: DocsComponentNavItem[] = [
     path: '/components/badge',
     active: true,
   },
-  // {
-  //   id: 'breadcrumb',
-  //   labelKey: 'component.breadcrumb',
-  //   path: '/components/breadcrumb',
-  //   active: true,
-  //   disabled: true,
-  // },
+  {
+    id: 'breadcrumb',
+    labelKey: 'component.breadcrumb',
+    path: '/components/breadcrumb',
+    active: true,
+  },
   {
     id: 'button',
     labelKey: 'component.button',
