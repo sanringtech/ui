@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 import { Command } from 'commander';
 import { addCommand } from './commands/add.js';
+import { listCommand } from './commands/list.js';
 
 const program = new Command();
 
@@ -9,6 +10,7 @@ program
   .description('Add Sanring UI components to your Angular project')
   .version('0.0.1');
 
+program.addCommand(listCommand);
 program.addCommand(addCommand);
 
 program.parse();

@@ -2,36 +2,12 @@ import { Command } from 'commander';
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { dirname, join, resolve } from 'node:path';
 import pc from 'picocolors';
-
-interface RegistryShared {
-  name: string;
-  description: string;
-  file: string;
-  peerDependencies?: Record<string, string>;
-}
-
-interface RegistryComponent {
-  name: string;
-  description: string;
-  sharedDeps?: string[];
-  peerDependencies?: Record<string, string>;
-  files: string[];
-}
-
-interface Registry {
-  name: string;
-  shared: RegistryShared[];
-  components: RegistryComponent[];
-}
-
-function loadRegistry(registryPath: string): Registry {
-  try {
-    return JSON.parse(readFileSync(registryPath, 'utf-8')) as Registry;
-  } catch (e) {
-    console.error(pc.red(`✖ Cannot read registry: ${registryPath}`));
-    process.exit(1);
-  }
-}
+import {
+  type RegistryComponent,
+  type RegistryShared,
+  getDefaultRegistryPath,
+  loadRegistry,
+} from '../registry.js';
 
 function copyFile(src: string, dest: string, force: boolean): 'copied' | 'skipped' | 'missing' {
   if (!existsSync(src)) return 'missing';
@@ -70,11 +46,9 @@ export const addCommand = new Command('add')
     ) => {
       console.log(pc.cyan(`\nAdding ${pc.bold(componentName)}...\n`));
 
-      const selfDir = new URL('.', import.meta.url).pathname;
-      // dist/commands/ → ../../registry/registry.json (works in both dev and published installs)
       const registryPath = options.registry
         ? resolve(process.cwd(), options.registry)
-        : join(selfDir, '../../registry/registry.json');
+        : getDefaultRegistryPath(import.meta.url);
 
       const registry = loadRegistry(registryPath);
       const registryDir = dirname(registryPath);
@@ -90,14 +64,12 @@ export const addCommand = new Command('add')
 
       const componentBasePath = resolve(process.cwd(), options.path);
       const destDir = join(componentBasePath, componentName);
-      // shared-path: explicit override OR sibling `shared/` next to the component base
       const sharedDestDir = options.sharedPath
         ? resolve(process.cwd(), options.sharedPath)
         : join(componentBasePath, 'shared');
 
       let copied = 0, skipped = 0, missing = 0;
 
-      // Install shared dependencies first
       if (component.sharedDeps && component.sharedDeps.length > 0) {
         console.log(pc.dim('  Shared utilities:'));
         for (const depName of component.sharedDeps) {
@@ -111,21 +83,13 @@ export const addCommand = new Command('add')
           const destFile = join(sharedDestDir, fileName);
           const result = copyFile(srcFile, destFile, options.force);
 
-          if (result === 'copied') {
-            console.log(pc.green(`  ✔ shared/${fileName}`));
-            copied++;
-          } else if (result === 'skipped') {
-            console.log(pc.dim(`  – shared/${fileName} (exists, use --force to overwrite)`));
-            skipped++;
-          } else {
-            console.warn(pc.yellow(`  ⚠ shared/${fileName} (source not found)`));
-            missing++;
-          }
+          if (result === 'copied') { console.log(pc.green(`  ✔ shared/${fileName}`)); copied++; }
+          else if (result === 'skipped') { console.log(pc.dim(`  – shared/${fileName} (exists, use --force to overwrite)`)); skipped++; }
+          else { console.warn(pc.yellow(`  ⚠ shared/${fileName} (source not found)`)); missing++; }
         }
         console.log('');
       }
 
-      // Install component files
       console.log(pc.dim('  Component files:'));
       for (const file of component.files) {
         const fileName = file.split('/').pop()!;
@@ -133,19 +97,11 @@ export const addCommand = new Command('add')
         const destFile = join(destDir, fileName);
         const result = copyFile(srcFile, destFile, options.force);
 
-        if (result === 'copied') {
-          console.log(pc.green(`  ✔ ${fileName}`));
-          copied++;
-        } else if (result === 'skipped') {
-          console.log(pc.dim(`  – ${fileName} (exists, use --force to overwrite)`));
-          skipped++;
-        } else {
-          console.warn(pc.yellow(`  ⚠ ${fileName} (source not found)`));
-          missing++;
-        }
+        if (result === 'copied') { console.log(pc.green(`  ✔ ${fileName}`)); copied++; }
+        else if (result === 'skipped') { console.log(pc.dim(`  – ${fileName} (exists, use --force to overwrite)`)); skipped++; }
+        else { console.warn(pc.yellow(`  ⚠ ${fileName} (source not found)`)); missing++; }
       }
 
-      // Peer dependency summary
       const allPeerDeps = collectPeerDeps(component, registry.shared);
       if (Object.keys(allPeerDeps).length > 0) {
         const deps = Object.entries(allPeerDeps)
@@ -154,12 +110,10 @@ export const addCommand = new Command('add')
         console.log(pc.dim(`\n  Peer dependencies:\n  ${pc.cyan(`npm install ${deps}`)}`));
       }
 
-      // Summary line
       const parts: string[] = [];
       if (copied > 0) parts.push(pc.green(`${copied} added`));
       if (skipped > 0) parts.push(pc.dim(`${skipped} skipped`));
       if (missing > 0) parts.push(pc.yellow(`${missing} missing`));
-
       console.log(`\n${pc.bold(componentName)} — ${parts.join(', ')}\n`);
 
       if (skipped > 0) {
