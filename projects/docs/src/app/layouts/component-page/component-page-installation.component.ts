@@ -1,6 +1,7 @@
-import { Component, computed, input, signal } from '@angular/core';
+import { Component, computed, inject, input, signal } from '@angular/core';
 import { LucideClipboard } from '@lucide/angular';
-import { TabsComponent, TabsContentComponent, TabsListComponent, TabsTriggerComponent } from '@sanring/ui';
+import { TabsComponent, TabsContentComponent, TabsListComponent, TabsTriggerComponent, ToastService } from '@sanring/ui';
+import { I18nService } from '../../i18n/i18n.service';
 
 type InstallMode = 'command' | 'manual';
 type PackageManager = 'pnpm' | 'npm' | 'yarn' | 'bun';
@@ -26,7 +27,7 @@ type PackageManager = 'pnpm' | 'npm' | 'yarn' | 'bun';
       </sanring-tabs-list>
 
       <sanring-tabs-content value="command" class="mt-0">
-        <div class="overflow-hidden rounded-xl border border-[var(--docs-border)] bg-[var(--docs-code)]">
+        <div class="w-full overflow-hidden rounded-xl border border-[var(--docs-border)] bg-[var(--docs-code)]">
           <div class="flex min-w-0 items-center gap-2 border-b border-[var(--docs-border)] px-3 py-2">
             <span class="grid size-6 shrink-0 place-items-center rounded-md border border-[var(--docs-border)] bg-[var(--docs-bg)] font-mono text-xs text-[var(--docs-fg)]">
               &gt;_
@@ -47,7 +48,7 @@ type PackageManager = 'pnpm' | 'npm' | 'yarn' | 'bun';
             <button
               type="button"
               class="grid size-8 shrink-0 place-items-center rounded-md text-[var(--docs-muted)] transition-colors hover:bg-[var(--docs-elevated)] hover:text-[var(--docs-fg)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--docs-border-strong)]"
-              aria-label="Copy install command"
+              [attr.aria-label]="i18n.t('actions.copyCode')"
               (click)="copyCurrentCode()"
             >
               <svg lucideClipboard class="size-4"></svg>
@@ -59,13 +60,13 @@ type PackageManager = 'pnpm' | 'npm' | 'yarn' | 'bun';
       </sanring-tabs-content>
 
       <sanring-tabs-content value="manual" class="mt-0">
-        <div class="overflow-hidden rounded-xl border border-[var(--docs-border)] bg-[var(--docs-code)]">
+        <div class="w-full overflow-hidden rounded-xl border border-[var(--docs-border)] bg-[var(--docs-code)]">
           <div class="flex min-w-0 items-center gap-2 border-b border-[var(--docs-border)] px-3 py-2">
             <span class="flex-1 text-sm font-medium text-[var(--docs-fg)]">Import</span>
             <button
               type="button"
               class="grid size-8 shrink-0 place-items-center rounded-md text-[var(--docs-muted)] transition-colors hover:bg-[var(--docs-elevated)] hover:text-[var(--docs-fg)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--docs-border-strong)]"
-              aria-label="Copy import snippet"
+              [attr.aria-label]="i18n.t('actions.copyCode')"
               (click)="copyCurrentCode()"
             >
               <svg lucideClipboard class="size-4"></svg>
@@ -82,6 +83,9 @@ export class ComponentPageInstallationComponent {
   readonly componentName = input.required<string>();
   readonly manualSnippet = input('import { } from "@sanring/ui";');
 
+  protected readonly i18n   = inject(I18nService);
+  private  readonly toast   = inject(ToastService);
+
   protected readonly packageManagers: PackageManager[] = ['pnpm', 'npm', 'yarn', 'bun'];
   protected readonly selectedPackageManager = signal<PackageManager>('pnpm');
   protected readonly selectedMode = signal<InstallMode>('command');
@@ -90,15 +94,11 @@ export class ComponentPageInstallationComponent {
     const name = this.componentName();
 
     switch (this.selectedPackageManager()) {
-      case 'npm':
-        return `npx shadcn@latest add ${name}`;
-      case 'yarn':
-        return `yarn dlx shadcn@latest add ${name}`;
-      case 'bun':
-        return `bunx shadcn@latest add ${name}`;
+      case 'npm':   return `npx shadcn@latest add ${name}`;
+      case 'yarn':  return `yarn dlx shadcn@latest add ${name}`;
+      case 'bun':   return `bunx shadcn@latest add ${name}`;
       case 'pnpm':
-      default:
-        return `pnpm dlx shadcn@latest add ${name}`;
+      default:      return `pnpm dlx shadcn@latest add ${name}`;
     }
   });
 
@@ -122,8 +122,9 @@ export class ComponentPageInstallationComponent {
 
     try {
       await navigator.clipboard.writeText(code);
+      this.toast.show({ type: 'success', title: this.i18n.t('actions.copied'), duration: 2000, closable: false });
     } catch {
-      // Clipboard permissions are browser/runtime dependent; the UI remains usable without copy.
+      this.toast.show({ type: 'error', title: this.i18n.t('actions.copyFailed'), duration: 3000, closable: true });
     }
   }
 }

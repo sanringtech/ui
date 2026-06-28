@@ -10,6 +10,8 @@ export const en = {
   'search.placeholder': 'Search documentation...',
   'actions.new': '+ New',
   'actions.copyCode': 'Copy code',
+  'actions.copied': 'Copied!',
+  'actions.copyFailed': 'Copy failed',
   'actions.copyPage': 'Copy Page',
   'actions.previousPage': 'Previous page',
   'actions.nextPage': 'Next page',

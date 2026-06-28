@@ -1,10 +1,12 @@
 import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
+import { ToasterComponent, ToastService } from '@sanring/ui';
 import { HeaderComponent } from '../shell/header/header.component';
 
 @Component({
   selector: 'app-docs-shell',
-  imports: [RouterOutlet, HeaderComponent],
+  imports: [RouterOutlet, HeaderComponent, ToasterComponent],
+  providers: [ToastService],
   template: `
     <div class="min-h-dvh bg-[var(--docs-bg)] text-[var(--docs-fg)]">
       <app-header />
@@ -15,6 +17,8 @@ import { HeaderComponent } from '../shell/header/header.component';
 
       <!-- <app-footer /> -->
     </div>
+
+    <sanring-toaster position="bottom-right" [maxToasts]="3" />
   `,
 })
 export class DocsShellComponent {}

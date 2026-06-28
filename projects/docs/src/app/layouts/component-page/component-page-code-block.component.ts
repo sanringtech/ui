@@ -1,5 +1,6 @@
 import { Component, effect, EventEmitter, inject, input, Output, signal } from '@angular/core';
 import { LucideClipboard } from '@lucide/angular';
+import { ToastService } from '@sanring/ui';
 
 import { I18nService } from '../../i18n/i18n.service';
 
@@ -87,6 +88,7 @@ export class ComponentPageCodeBlock {
   @Output() codeCopy = new EventEmitter<ComponentPageCodeCopyEvent>();
 
   protected readonly i18n = inject(I18nService);
+  private readonly toast = inject(ToastService);
   protected readonly highlightedLines = signal<CodeLine[]>([]);
 
   private currentCode = '';
@@ -105,8 +107,10 @@ export class ComponentPageCodeBlock {
     try {
       await navigator.clipboard.writeText(code);
       this.codeCopy.emit({ code, success: true });
+      this.toast.show({ type: 'success', title: this.i18n.t('actions.copied'), duration: 2000, closable: false });
     } catch (error) {
       this.codeCopy.emit({ code, success: false, error });
+      this.toast.show({ type: 'error', title: this.i18n.t('actions.copyFailed'), duration: 3000, closable: true });
     }
   }
 

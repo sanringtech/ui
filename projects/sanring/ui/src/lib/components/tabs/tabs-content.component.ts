@@ -29,7 +29,7 @@ export class TabsContentComponent {
   protected panel = inject(NgTabPanel);
   protected readonly tabsContentClass = computed(() =>
     cn(
-      'mt-2 ring-offset-[var(--sanring-surface)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--sanring-border-strong)] focus-visible:ring-offset-2',
+      'block min-w-0 mt-2 ring-offset-[var(--sanring-surface)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--sanring-border-strong)] focus-visible:ring-offset-2',
       this.class(),
     ),
   );

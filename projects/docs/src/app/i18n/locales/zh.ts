@@ -12,6 +12,8 @@ export const zh: Record<TranslationKey, string> = {
   'search.placeholder': '搜尋文件...',
   'actions.new': '+ 新增',
   'actions.copyCode': '複製程式碼',
+  'actions.copied': '已複製！',
+  'actions.copyFailed': '複製失敗',
   'actions.copyPage': '複製頁面',
   'actions.previousPage': '上一頁',
   'actions.nextPage': '下一頁',
