@@ -94,11 +94,11 @@ export class ComponentPageInstallationComponent {
     const name = this.componentName();
 
     switch (this.selectedPackageManager()) {
-      case 'npm':   return `npx shadcn@latest add ${name}`;
-      case 'yarn':  return `yarn dlx shadcn@latest add ${name}`;
-      case 'bun':   return `bunx shadcn@latest add ${name}`;
+      case 'npm':   return `npx @sanring/cli@latest add ${name}`;
+      case 'yarn':  return `yarn dlx @sanring/cli@latest add ${name}`;
+      case 'bun':   return `bunx @sanring/cli@latest add ${name}`;
       case 'pnpm':
-      default:      return `pnpm dlx shadcn@latest add ${name}`;
+      default:      return `pnpm dlx @sanring/cli@latest add ${name}`;
     }
   });
 
