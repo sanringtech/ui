@@ -8,7 +8,7 @@ import {
   input,
 } from '@angular/core';
 import { AccordionPanel as NgAccordionPanel } from '@angular/aria/accordion';
-import { cn } from '../../utils';
+import { cn } from '../shared/utils';
 import { AccordionItemComponent } from './accordion-item.component';
 
 @Component({

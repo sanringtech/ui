@@ -13,7 +13,7 @@ import {
   untracked,
 } from '@angular/core';
 import { AccordionPanel as NgAccordionPanel } from '@angular/aria/accordion';
-import { cn } from '../../utils';
+import { cn } from '../shared/utils';
 
 let nextAccordionItemId = 0;
 

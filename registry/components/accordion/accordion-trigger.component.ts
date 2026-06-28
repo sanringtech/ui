@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, computed, inject, input } from '@angular/core';
 import { AccordionTrigger as NgAccordionTrigger } from '@angular/aria/accordion';
 import { LucideChevronDown } from '@lucide/angular';
-import { cn } from '../../utils';
+import { cn } from '../shared/utils';
 import { AccordionItemComponent } from './accordion-item.component';
 import { AccordionTriggerVariant } from './accordion.type';
 
