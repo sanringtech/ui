@@ -1,0 +1,16 @@
+import { ChangeDetectionStrategy, Component, computed, input } from '@angular/core';
+import { cn } from '../shared/utils';
+
+@Component({
+  selector: 'sanring-sheet-header',
+  standalone: true,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  host: { '[class]': 'hostClass()' },
+  template: `<ng-content></ng-content>`,
+})
+export class SheetHeaderComponent {
+  readonly class = input<string | undefined>();
+  protected readonly hostClass = computed(() =>
+    cn('flex flex-col gap-1.5', this.class()),
+  );
+}

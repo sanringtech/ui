@@ -35,6 +35,383 @@
         "accordion/accordion.type.ts",
         "accordion/index.ts"
       ]
+    },
+    {
+      "name": "alert",
+      "description": "Displays a callout for user attention.",
+      "sharedDeps": ["utils", "component-styles"],
+      "files": [
+        "alert/alert.component.ts",
+        "alert/alert-title.directive.ts",
+        "alert/alert-description.directive.ts",
+        "alert/alert.type.ts",
+        "alert/index.ts"
+      ]
+    },
+    {
+      "name": "avatar",
+      "description": "An image element with a fallback for representing the user.",
+      "sharedDeps": ["utils"],
+      "peerDependencies": {
+        "@angular/cdk": "^22.0.0"
+      },
+      "files": [
+        "avatar/avatar.component.ts",
+        "avatar/avatar-image.directive.ts",
+        "avatar/avatar-fallback.component.ts",
+        "avatar/avatar-badge.directive.ts",
+        "avatar/avatar-group.component.ts",
+        "avatar/avatar-group-count.component.ts",
+        "avatar/avatar.types.ts",
+        "avatar/index.ts"
+      ]
+    },
+    {
+      "name": "badge",
+      "description": "Displays a badge or a component that looks like a badge.",
+      "sharedDeps": ["utils", "component-styles"],
+      "files": [
+        "badge/badge.directive.ts",
+        "badge/badge.type.ts",
+        "badge/index.ts"
+      ]
+    },
+    {
+      "name": "breadcrumb",
+      "description": "Displays the path to the current resource using a hierarchy of links.",
+      "sharedDeps": ["utils", "component-styles"],
+      "peerDependencies": {
+        "@angular/router": "^22.0.0",
+        "@lucide/angular": "^1.0.0"
+      },
+      "files": [
+        "breadcrumb/breadcrumb.component.ts",
+        "breadcrumb/breadcrumb-list.component.ts",
+        "breadcrumb/breadcrumb-item.component.ts",
+        "breadcrumb/breadcrumb-link.component.ts",
+        "breadcrumb/breadcrumb-page.component.ts",
+        "breadcrumb/breadcrumb-divider.component.ts",
+        "breadcrumb/breadcrumb-ellipsis.component.ts",
+        "breadcrumb/breadcrumb.type.ts",
+        "breadcrumb/index.ts"
+      ]
+    },
+    {
+      "name": "button",
+      "description": "Displays a button or a component that looks like a button.",
+      "sharedDeps": ["utils", "component-styles"],
+      "files": [
+        "button/button.directive.ts",
+        "button/button.types.ts",
+        "button/index.ts"
+      ]
+    },
+    {
+      "name": "card",
+      "description": "Displays a card with header, content, and footer.",
+      "sharedDeps": ["utils", "component-styles"],
+      "files": [
+        "card/card.component.ts",
+        "card/card-header.component.ts",
+        "card/card-title.directive.ts",
+        "card/card-description.directive.ts",
+        "card/card-content.component.ts",
+        "card/card-footer.component.ts",
+        "card/card.type.ts",
+        "card/index.ts"
+      ]
+    },
+    {
+      "name": "checkbox",
+      "description": "A control that allows the user to toggle between checked and not checked.",
+      "sharedDeps": ["utils", "component-styles"],
+      "peerDependencies": {
+        "@angular/forms": "^22.0.0",
+        "@lucide/angular": "^1.0.0"
+      },
+      "files": [
+        "checkbox/checkbox.component.ts",
+        "checkbox/checkbox.types.ts",
+        "checkbox/index.ts"
+      ]
+    },
+    {
+      "name": "collapsible",
+      "description": "An interactive component which expands/collapses a panel.",
+      "sharedDeps": ["utils"],
+      "files": [
+        "collapsible/collapsible.component.ts",
+        "collapsible/collapsible-trigger.directive.ts",
+        "collapsible/collapsible-content.directive.ts",
+        "collapsible/index.ts"
+      ]
+    },
+    {
+      "name": "dialog",
+      "description": "A window overlaid on either the primary window, rendering the content underneath inert.",
+      "sharedDeps": ["utils", "component-styles"],
+      "peerDependencies": {
+        "@angular/cdk": "^22.0.0",
+        "@lucide/angular": "^1.0.0"
+      },
+      "files": [
+        "dialog/dialog.service.ts",
+        "dialog/dialog-content.component.ts",
+        "dialog/dialog-header.component.ts",
+        "dialog/dialog-footer.component.ts",
+        "dialog/dialog-title.directive.ts",
+        "dialog/dialog-description.directive.ts",
+        "dialog/dialog-trigger.directive.ts",
+        "dialog/dialog-close.directive.ts",
+        "dialog/index.ts"
+      ]
+    },
+    {
+      "name": "divider",
+      "description": "Visually or semantically separates content.",
+      "files": [
+        "divider/divider.component.ts",
+        "divider/divider.type.ts",
+        "divider/index.ts"
+      ]
+    },
+    {
+      "name": "field",
+      "description": "A form field wrapper that manages label, input, and helper text layout.",
+      "files": [
+        "field/index.ts"
+      ]
+    },
+    {
+      "name": "input",
+      "description": "Displays a form input field.",
+      "sharedDeps": ["utils", "component-styles"],
+      "files": [
+        "input/input.directive.ts",
+        "input/index.ts"
+      ]
+    },
+    {
+      "name": "label",
+      "description": "Renders an accessible label associated with controls.",
+      "sharedDeps": ["utils"],
+      "files": [
+        "label/label.directive.ts",
+        "label/index.ts"
+      ]
+    },
+    {
+      "name": "link",
+      "description": "A styled anchor element.",
+      "sharedDeps": ["utils", "component-styles"],
+      "files": [
+        "link/link.directive.ts",
+        "link/link.type.ts",
+        "link/index.ts"
+      ]
+    },
+    {
+      "name": "menu",
+      "description": "Displays a menu to the user — such as a set of actions or functions.",
+      "sharedDeps": ["utils", "component-styles"],
+      "peerDependencies": {
+        "@angular/aria": "^22.0.0",
+        "@angular/cdk": "^22.0.0"
+      },
+      "files": [
+        "menu/menu.component.ts",
+        "menu/menu-trigger.directive.ts",
+        "menu/menu-content.component.ts",
+        "menu/menu-content.directive.ts",
+        "menu/menu-item.directive.ts",
+        "menu/menu-label.component.ts",
+        "menu/menu.type.ts",
+        "menu/index.ts"
+      ]
+    },
+    {
+      "name": "popover",
+      "description": "Displays rich content in a portal, triggered by a button.",
+      "sharedDeps": ["utils", "component-styles"],
+      "peerDependencies": {
+        "@angular/cdk": "^22.0.0"
+      },
+      "files": [
+        "popover/popover.component.ts",
+        "popover/popover-trigger.directive.ts",
+        "popover/popover-content.component.ts",
+        "popover/popover-header.component.ts",
+        "popover/popover-title.component.ts",
+        "popover/popover-description.component.ts",
+        "popover/popover.type.ts",
+        "popover/index.ts"
+      ]
+    },
+    {
+      "name": "progress",
+      "description": "Displays an indicator showing the completion progress of a task.",
+      "sharedDeps": ["utils"],
+      "files": [
+        "progress/progress.component.ts",
+        "progress/progress.directive.ts",
+        "progress/progress.types.ts",
+        "progress/index.ts"
+      ]
+    },
+    {
+      "name": "radio",
+      "description": "A set of checkable buttons where no more than one can be checked at a time.",
+      "sharedDeps": ["utils", "component-styles"],
+      "peerDependencies": {
+        "@angular/forms": "^22.0.0",
+        "@lucide/angular": "^1.0.0"
+      },
+      "files": [
+        "radio/radio-group.component.ts",
+        "radio/radio-item.component.ts",
+        "radio/radio.types.ts",
+        "radio/index.ts"
+      ]
+    },
+    {
+      "name": "scrollArea",
+      "description": "Augments native scroll functionality for custom, cross-browser styling.",
+      "sharedDeps": ["utils"],
+      "peerDependencies": {
+        "@angular/cdk": "^22.0.0"
+      },
+      "files": [
+        "scrollArea/scroll-area.component.ts",
+        "scrollArea/scroll-area.directive.ts",
+        "scrollArea/infinite-scroll.directive.ts",
+        "scrollArea/scroll-area.type.ts",
+        "scrollArea/index.ts"
+      ]
+    },
+    {
+      "name": "sheet",
+      "description": "Extends the dialog component to display content that complements the main content of the screen.",
+      "sharedDeps": ["utils", "component-styles"],
+      "peerDependencies": {
+        "@angular/cdk": "^22.0.0"
+      },
+      "files": [
+        "sheet/sheet.component.ts",
+        "sheet/sheet-trigger.directive.ts",
+        "sheet/sheet-content.component.ts",
+        "sheet/sheet-close.directive.ts",
+        "sheet/sheet-header.component.ts",
+        "sheet/sheet-footer.component.ts",
+        "sheet/sheet-title.component.ts",
+        "sheet/sheet-description.component.ts",
+        "sheet/sheet.type.ts",
+        "sheet/index.ts"
+      ]
+    },
+    {
+      "name": "skeleton",
+      "description": "Use to show a placeholder while content is loading.",
+      "sharedDeps": ["utils"],
+      "files": [
+        "skeleton/skeleton.directive.ts",
+        "skeleton/index.ts"
+      ]
+    },
+    {
+      "name": "spinner",
+      "description": "Displays an animated loading indicator.",
+      "sharedDeps": ["utils"],
+      "peerDependencies": {
+        "@lucide/angular": "^1.0.0"
+      },
+      "files": [
+        "spinner/spinner.component.ts",
+        "spinner/index.ts"
+      ]
+    },
+    {
+      "name": "switch",
+      "description": "A control that allows the user to toggle between checked and not checked.",
+      "sharedDeps": ["utils", "component-styles"],
+      "peerDependencies": {
+        "@angular/forms": "^22.0.0"
+      },
+      "files": [
+        "switch/switch.component.ts",
+        "switch/switch.type.ts",
+        "switch/index.ts"
+      ]
+    },
+    {
+      "name": "tabs",
+      "description": "A set of layered sections of content—known as tab panels—that are displayed one at a time.",
+      "sharedDeps": ["utils", "component-styles"],
+      "peerDependencies": {
+        "@angular/aria": "^22.0.0"
+      },
+      "files": [
+        "tabs/tabs.component.ts",
+        "tabs/tabs-list.component.ts",
+        "tabs/tabs-trigger.component.ts",
+        "tabs/tabs-content.component.ts",
+        "tabs/tabs.type.ts",
+        "tabs/index.ts"
+      ]
+    },
+    {
+      "name": "tag",
+      "description": "Displays a tag with optional dismiss button. Requires badge component.",
+      "sharedDeps": ["utils", "component-styles"],
+      "componentDeps": ["badge"],
+      "peerDependencies": {
+        "@lucide/angular": "^1.0.0"
+      },
+      "files": [
+        "tag/tag.component.ts",
+        "tag/index.ts"
+      ]
+    },
+    {
+      "name": "toast",
+      "description": "A succinct message that is displayed temporarily.",
+      "sharedDeps": ["utils", "component-styles"],
+      "peerDependencies": {
+        "@angular/cdk": "^22.0.0",
+        "@lucide/angular": "^1.0.0"
+      },
+      "files": [
+        "toast/toast.service.ts",
+        "toast/toast.component.ts",
+        "toast/toaster.component.ts",
+        "toast/toast.config.ts",
+        "toast/toast.types.ts",
+        "toast/index.ts"
+      ]
+    },
+    {
+      "name": "toggle",
+      "description": "A two-state button that can be either on or off.",
+      "sharedDeps": ["utils", "component-styles"],
+      "files": [
+        "toggle/toggle.directive.ts",
+        "toggle/toggle.types.ts",
+        "toggle/index.ts"
+      ]
+    },
+    {
+      "name": "tooltip",
+      "description": "A popup that displays information related to an element when the element receives keyboard focus or the mouse hovers over it.",
+      "sharedDeps": ["utils", "component-styles"],
+      "peerDependencies": {
+        "@angular/cdk": "^22.0.0"
+      },
+      "files": [
+        "tooltip/tooltip.component.ts",
+        "tooltip/tooltip-trigger.directive.ts",
+        "tooltip/tooltip-content.component.ts",
+        "tooltip/tooltip.type.ts",
+        "tooltip/index.ts"
+      ]
     }
   ]
 }
