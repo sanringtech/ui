@@ -5,13 +5,15 @@
 /tmp
 /out-tsc
 /bazel-out
+packages/*/dist/
 
 # Node
-/node_modules
+node_modules/
 npm-debug.log
 yarn-error.log
 pnpm-debug.log
 /.pnpm-store
+packages/*/pnpm-lock.yaml
 
 # IDEs and editors
 .idea/

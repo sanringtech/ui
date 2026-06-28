@@ -1,0 +1,40 @@
+{
+  "$schema": "./registry.schema.json",
+  "name": "sanring-ui",
+  "homepage": "https://sanring.dev",
+  "shared": [
+    {
+      "name": "utils",
+      "description": "cn() utility built on clsx + tailwind-merge",
+      "file": "shared/utils.ts",
+      "peerDependencies": {
+        "clsx": "^2.0.0",
+        "tailwind-merge": "^3.0.0"
+      }
+    },
+    {
+      "name": "component-styles",
+      "description": "Design-token constants used across components",
+      "file": "shared/component-styles.ts"
+    }
+  ],
+  "components": [
+    {
+      "name": "accordion",
+      "description": "A vertically stacked set of interactive headings that each reveal a section of content.",
+      "sharedDeps": ["utils"],
+      "peerDependencies": {
+        "@angular/aria": "^22.0.0",
+        "@lucide/angular": "^1.0.0"
+      },
+      "files": [
+        "accordion/accordion.component.ts",
+        "accordion/accordion-item.component.ts",
+        "accordion/accordion-trigger.component.ts",
+        "accordion/accordion-content.component.ts",
+        "accordion/accordion.type.ts",
+        "accordion/index.ts"
+      ]
+    }
+  ]
+}
