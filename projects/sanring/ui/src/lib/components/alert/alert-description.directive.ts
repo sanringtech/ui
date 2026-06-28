@@ -1,5 +1,6 @@
 import { Directive, computed, input } from '@angular/core';
 import { cn } from '../../utils';
+import { ALERT_DESCRIPTION_TEXT_CLASS } from '../component-styles';
 
 @Directive({
   selector: '[sanringAlertDescription]',
@@ -12,6 +13,6 @@ export class AlertDescriptionDirective {
   readonly class = input<string | undefined>();
 
   protected readonly alertDescriptionClass = computed(() =>
-    cn('text-sm [&_p]:leading-relaxed opacity-90', this.class()),
+    cn(ALERT_DESCRIPTION_TEXT_CLASS, this.class()),
   );
 }

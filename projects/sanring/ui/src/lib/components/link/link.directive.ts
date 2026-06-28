@@ -1,5 +1,6 @@
 import { Directive, computed, input } from '@angular/core';
 import { cn } from '../../utils';
+import { LINK_TEXT_CLASS } from '../component-styles';
 import { LinkTarget } from './link.type';
 
 // 1. 神級型別：既有自動提示，又能相容所有字串
@@ -21,7 +22,8 @@ export class LinkDirective {
 
   protected readonly computedClass = computed(() =>
     cn(
-      'inline-flex items-center gap-1 font-medium text-[var(--sanring-foreground)] underline underline-offset-4',
+      'inline-flex items-center gap-1 text-[var(--sanring-foreground)] underline underline-offset-4',
+      LINK_TEXT_CLASS,
       'transition-colors hover:text-[var(--sanring-muted)] focus-visible:outline-none',
       'focus-visible:ring-2 focus-visible:ring-[var(--sanring-border-strong)]',
       'disabled:pointer-events-none disabled:opacity-50',

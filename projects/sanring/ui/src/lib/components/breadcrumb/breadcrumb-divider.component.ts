@@ -1,6 +1,7 @@
 import { ChangeDetectionStrategy, Component, computed, input } from '@angular/core';
 import { LucideChevronRight, LucideDot } from '@lucide/angular';
 import { cn } from '../../utils';
+import { BREADCRUMB_SEPARATOR_ICON_CLASS } from '../component-styles';
 import { BreadcrumbDividerType } from './breadcrumb.type';
 
 @Component({
@@ -26,14 +27,16 @@ import { BreadcrumbDividerType } from './breadcrumb.type';
   template: `
     <ng-content>
       @if (type() === 'dot') {
-        <svg lucideDot class="size-4"></svg>
+        <svg lucideDot [class]="separatorIconClass"></svg>
       } @else {
-        <svg lucideChevronRight class="size-4"></svg>
+        <svg lucideChevronRight [class]="separatorIconClass"></svg>
       }
     </ng-content>
   `,
 })
 export class BreadcrumbDividerComponent {
+  protected readonly separatorIconClass = BREADCRUMB_SEPARATOR_ICON_CLASS;
+
   /** 預設圖示類型：`'chevron'`（預設，>）或 `'dot'`（·）*/
   readonly type = input<BreadcrumbDividerType>('chevron');
 

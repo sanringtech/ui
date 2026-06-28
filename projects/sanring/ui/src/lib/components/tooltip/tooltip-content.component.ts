@@ -5,6 +5,7 @@ import {
   OverlayModule,
 } from '@angular/cdk/overlay';
 import { cn } from '../../utils';
+import { TOOLTIP_ARROW_CLASS, TOOLTIP_SURFACE_CLASS } from '../component-styles';
 import { TooltipComponent } from './tooltip.component';
 import { TooltipSide } from './tooltip.type';
 
@@ -50,13 +51,8 @@ export class TooltipContentComponent {
 
   protected readonly tooltipContentClass = computed(() =>
     cn(
-      // 1. 基礎樣式 + 加入 break-words 防止長文字破版
-      'relative z-50 max-w-64 break-words rounded-md border border-[var(--sanring-border-strong)] bg-[var(--sanring-foreground)] px-3 py-1.5 text-xs font-medium leading-5 text-[var(--sanring-background)] shadow-md',
-
-      // 2. 結合 tailwindcss-animate 的超滑順進場動畫
+      TOOLTIP_SURFACE_CLASS,
       'animate-in fade-in-0 zoom-in-95',
-
-      // 3. 根據目前渲染的邊，決定它從哪個方向「滑入」
       'data-[side=bottom]:slide-in-from-top-2',
       'data-[side=left]:slide-in-from-right-2',
       'data-[side=right]:slide-in-from-left-2',
@@ -67,7 +63,7 @@ export class TooltipContentComponent {
   );
   protected readonly tooltipArrowClass = computed(() =>
     cn(
-      'pointer-events-none absolute size-2 rotate-45 border border-[var(--sanring-border-strong)] bg-[var(--sanring-foreground)]',
+      TOOLTIP_ARROW_CLASS,
       this.renderedSide() === 'top' && '-bottom-1 left-1/2 -translate-x-1/2 border-l-0 border-t-0',
       this.renderedSide() === 'bottom' && '-top-1 left-1/2 -translate-x-1/2 border-b-0 border-r-0',
       this.renderedSide() === 'left' && '-right-1 top-1/2 -translate-y-1/2 border-b-0 border-l-0',

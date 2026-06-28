@@ -1,6 +1,7 @@
 // dialog-description.directive.ts
 import { Directive, computed, input } from '@angular/core';
 import { cn } from '../../utils';
+import { DESCRIPTION_TEXT_CLASS } from '../component-styles';
 
 let nextDialogDescriptionId = 0;
 
@@ -18,8 +19,7 @@ export class DialogDescriptionDirective {
 
   protected readonly dialogDescriptionClass = computed(() =>
     cn(
-      // 縮小字體(text-sm)、使用系統的次要文字顏色
-      'text-sm text-[var(--sanring-muted)]',
+      DESCRIPTION_TEXT_CLASS,
       this.class(),
     ),
   );

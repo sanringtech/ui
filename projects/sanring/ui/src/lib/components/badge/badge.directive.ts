@@ -1,5 +1,6 @@
 import { Directive, computed, input } from '@angular/core';
 import { cn } from '../../utils';
+import { BADGE_SIZE_CLASS, BADGE_TEXT_CLASS } from '../component-styles';
 import { BadgeVariant } from './badge.type';
 
 @Directive({
@@ -22,7 +23,9 @@ export class BadgeDirective {
         'border-transparent bg-transparent text-[var(--sanring-foreground)] hover:bg-[var(--sanring-surface-strong)]',
     };
     return cn(
-      'inline-flex items-center justify-center gap-1 rounded-full border px-2.5 py-0.5 text-xs font-semibold',
+      'inline-flex items-center justify-center gap-1 rounded-full border',
+      BADGE_SIZE_CLASS,
+      BADGE_TEXT_CLASS,
       'transition-colors focus:outline-none focus:ring-2 focus:ring-[var(--sanring-border-strong)] focus:ring-offset-2',
       variants[this.variant()],
       this.class(),

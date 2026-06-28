@@ -13,6 +13,12 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 // 1. 引入 LucideAngularModule 與需要的 X icon
 import { LucideX } from '@lucide/angular';
 import { cn } from '../../utils';
+import {
+  DIALOG_SURFACE_CLASS,
+  OVERLAY_ABSOLUTE_CLOSE_BUTTON_CLASS,
+  OVERLAY_CLOSE_ICON_CLASS,
+  OVERLAY_SURFACE_CLASS,
+} from '../component-styles';
 import { DialogDescriptionDirective } from './dialog-description.directive';
 import { DialogTitleDirective } from './dialog-title.directive';
 
@@ -31,9 +37,9 @@ import { DialogTitleDirective } from './dialog-title.directive';
         type="button"
         [attr.aria-label]="closeAriaLabel()"
         (click)="closeDialog()"
-        class="absolute right-4 top-4 rounded-sm text-[var(--sanring-muted)] opacity-70 ring-offset-[var(--sanring-surface)] transition-colors transition-opacity hover:text-[var(--sanring-foreground)] hover:opacity-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--sanring-border-strong)] focus-visible:ring-offset-2 disabled:pointer-events-none"
+        [class]="closeButtonClass"
       >
-        <svg lucideX class="size-4"></svg>
+        <svg lucideX [class]="closeIconClass"></svg>
         <span class="sr-only">關閉</span>
       </button>
     }
@@ -63,6 +69,9 @@ import { DialogTitleDirective } from './dialog-title.directive';
   `,
 })
 export class DialogContentComponent implements AfterContentInit {
+  protected readonly closeButtonClass = OVERLAY_ABSOLUTE_CLOSE_BUTTON_CLASS;
+  protected readonly closeIconClass = OVERLAY_CLOSE_ICON_CLASS;
+
   readonly class = input<string | undefined>();
   readonly showClose = input(true, { transform: booleanAttribute });
   readonly closeAriaLabel = input('關閉對話框');
@@ -75,7 +84,9 @@ export class DialogContentComponent implements AfterContentInit {
 
   protected readonly dialogContentClass = computed(() =>
     cn(
-      'relative z-50 grid w-full max-w-lg gap-4 border border-[var(--sanring-border)] bg-[var(--sanring-surface)] p-6 shadow-lg sm:rounded-lg',
+      OVERLAY_SURFACE_CLASS,
+      DIALOG_SURFACE_CLASS,
+      'bg-[var(--sanring-surface)]',
       this.class(),
     ),
   );

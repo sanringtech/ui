@@ -7,18 +7,23 @@ import {
 import {
   ChangeDetectionStrategy,
   Component,
+  DestroyRef,
   Signal,
   computed,
   effect,
   inject,
   input,
   signal,
+  untracked,
 } from '@angular/core';
 import { cn } from '../../utils';
+import { OVERLAY_SURFACE_CLASS, POPOVER_SURFACE_CLASS } from '../component-styles';
 import { PopoverComponent } from './popover.component';
 import type { PopoverAlign } from './popover.type';
 
 const GAP = 8;
+const LEAVE_DURATION_MS = 150;
+
 type PopoverPlacement = 'top' | 'bottom';
 
 const FALLBACK_PLACEMENTS: readonly PopoverPlacement[] = ['bottom', 'top'];
@@ -58,15 +63,13 @@ function getPlacementFromPosition(position: ConnectionPositionPair): PopoverPlac
       <ng-template
         cdkConnectedOverlay
         [cdkConnectedOverlayOrigin]="origin"
-        [cdkConnectedOverlayOpen]="popover.isOpen()"
+        [cdkConnectedOverlayOpen]="visuallyOpen()"
         [cdkConnectedOverlayPositions]="positions()"
         [cdkConnectedOverlayPush]="true"
         [cdkConnectedOverlayViewportMargin]="16"
         [cdkConnectedOverlayScrollStrategy]="scrollStrategy"
-        [cdkConnectedOverlayHasBackdrop]="true"
-        cdkConnectedOverlayBackdropClass="cdk-overlay-transparent-backdrop"
-        (backdropClick)="close()"
-        (detach)="close()"
+        (overlayOutsideClick)="requestClose()"
+        (detach)="onDetach()"
         (overlayKeydown)="handleOverlayKeydown($event)"
         (positionChange)="handlePositionChange($event)"
       >
@@ -93,11 +96,21 @@ function getPlacementFromPosition(position: ConnectionPositionPair): PopoverPlac
 export class PopoverContentComponent {
   protected readonly popover = inject(PopoverComponent);
   private readonly overlay = inject(Overlay);
+  private readonly destroyRef = inject(DestroyRef);
 
   readonly class = input<string | undefined>();
 
   protected readonly scrollStrategy = this.overlay.scrollStrategies.close();
   protected readonly renderedPlacement = signal<PopoverPlacement>('bottom');
+
+  private readonly _leaving = signal(false);
+  private _leaveTimer: ReturnType<typeof setTimeout> | undefined;
+
+  /** Keep overlay in DOM during leave animation */
+  protected readonly visuallyOpen = computed(
+    () => this.popover.isOpen() || this._leaving(),
+  );
+
   protected readonly positions: Signal<ConnectionPositionPair[]> = computed(() => {
     const align = this.popover.align();
     return FALLBACK_PLACEMENTS.map(placement => positionFor(placement, align));
@@ -108,34 +121,58 @@ export class PopoverContentComponent {
       this.popover.align();
       this.renderedPlacement.set('bottom');
     });
+
+    // Watch for external isOpen → false transitions and play leave animation
+    let prevOpen = false;
+    effect(() => {
+      const isOpen = this.popover.isOpen();
+      untracked(() => {
+        if (prevOpen && !isOpen && !this._leaving()) {
+          this._startLeave();
+        }
+        prevOpen = isOpen;
+      });
+    });
+
+    this.destroyRef.onDestroy(() => clearTimeout(this._leaveTimer));
   }
 
   protected readonly panelClass = computed(() =>
     cn(
-      'z-50 w-72 rounded-md border p-4 shadow-md outline-none',
-      'bg-[var(--sanring-elevated)] border-[var(--sanring-border)] text-[var(--sanring-foreground)]',
-      'animate-in fade-in-0 zoom-in-95',
-      'data-[placement=bottom]:slide-in-from-top-2 data-[placement=bottom]:origin-top',
-      'data-[placement=top]:slide-in-from-bottom-2 data-[placement=top]:origin-bottom',
+      OVERLAY_SURFACE_CLASS,
+      POPOVER_SURFACE_CLASS,
+      this._leaving() ? 'animate-popover-out' : 'animate-popover-in',
       this.class(),
     ),
   );
 
-  protected close(): void {
+  protected requestClose(): void {
+    if (this._leaving() || !this.popover.isOpen()) return;
     this.popover.setOpen(false);
+    // isOpen change triggers the effect which calls _startLeave
+  }
+
+  protected onDetach(): void {
+    clearTimeout(this._leaveTimer);
+    this._leaving.set(false);
+    if (this.popover.isOpen()) {
+      this.popover.setOpen(false);
+    }
   }
 
   protected handleOverlayKeydown(event: KeyboardEvent): void {
-    if (event.key !== 'Escape') {
-      return;
-    }
-
+    if (event.key !== 'Escape') return;
     event.preventDefault();
     event.stopPropagation();
-    this.close();
+    this.requestClose();
   }
 
   protected handlePositionChange(event: ConnectedOverlayPositionChange): void {
     this.renderedPlacement.set(getPlacementFromPosition(event.connectionPair));
+  }
+
+  private _startLeave(): void {
+    this._leaving.set(true);
+    this._leaveTimer = setTimeout(() => this._leaving.set(false), LEAVE_DURATION_MS);
   }
 }

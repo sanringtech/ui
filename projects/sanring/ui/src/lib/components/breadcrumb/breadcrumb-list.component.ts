@@ -1,5 +1,6 @@
 import { ChangeDetectionStrategy, Component, computed, input } from '@angular/core';
 import { cn } from '../../utils';
+import { BREADCRUMB_TEXT_CLASS } from '../component-styles';
 
 @Component({
   selector: 'sanring-breadcrumb-list',
@@ -16,7 +17,8 @@ export class BreadcrumbListComponent {
 
   protected readonly breadcrumbListClass = computed(() =>
     cn(
-      'flex flex-wrap items-center gap-1.5 break-words text-sm text-[var(--sanring-muted)] sm:gap-2.5',
+      'flex flex-wrap items-center gap-1.5 break-words text-[var(--sanring-muted)] sm:gap-2.5',
+      BREADCRUMB_TEXT_CLASS,
       this.class(),
     ),
   );

@@ -1,5 +1,6 @@
 import { ChangeDetectionStrategy, Component, computed, inject, input } from '@angular/core';
 import { cn } from '../../utils';
+import { TITLE_TEXT_CLASS } from '../component-styles';
 import { SheetComponent } from './sheet.component';
 
 @Component({
@@ -16,6 +17,6 @@ export class SheetTitleComponent {
   protected readonly sheet = inject(SheetComponent, { optional: true });
   readonly class = input<string | undefined>();
   protected readonly hostClass = computed(() =>
-    cn('text-lg font-semibold leading-none text-[var(--sanring-foreground)]', this.class()),
+    cn(TITLE_TEXT_CLASS, 'text-[var(--sanring-foreground)]', this.class()),
   );
 }

@@ -1,6 +1,7 @@
 import { Tab as NgTab } from '@angular/aria/tabs';
 import { Component, computed, inject, input } from '@angular/core';
 import { cn } from '../../utils';
+import { NAV_ITEM_TEXT_CLASS } from '../component-styles';
 import { TabsComponent } from './tabs.component';
 
 @Component({
@@ -29,7 +30,8 @@ export class TabsTriggerComponent {
   protected readonly tabsTriggerClass = computed(() => {
     const variant = this.tabs.variant();
     return cn(
-      'inline-flex shrink-0 items-center justify-center gap-1.5 whitespace-nowrap px-3 py-1.5 text-sm font-medium transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--sanring-border-strong)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--sanring-background)] data-[disabled]:pointer-events-none data-[disabled]:opacity-50',
+      'inline-flex shrink-0 items-center justify-center gap-1.5 whitespace-nowrap px-3 py-1.5 transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--sanring-border-strong)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--sanring-background)] data-[disabled]:pointer-events-none data-[disabled]:opacity-50',
+      NAV_ITEM_TEXT_CLASS,
       variant === 'default' &&
         'rounded-md border border-transparent px-2.5 py-1 text-[var(--sanring-muted)] hover:bg-[var(--sanring-elevated)] hover:text-[var(--sanring-foreground)] data-[state=active]:border-[var(--sanring-border-strong)] data-[state=active]:bg-[var(--sanring-active)] data-[state=active]:text-[var(--sanring-foreground)] data-[state=active]:shadow-sm',
       variant === 'line' &&

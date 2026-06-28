@@ -1,5 +1,6 @@
 import { Directive, computed, input } from '@angular/core';
 import { cn } from '../../utils';
+import { ALERT_TITLE_TEXT_CLASS } from '../component-styles';
 
 @Directive({
   selector: '[sanringAlertTitle]',
@@ -12,6 +13,6 @@ export class AlertTitleDirective {
   readonly class = input<string | undefined>();
 
   protected readonly alertTitleClass = computed(() =>
-    cn('mb-1 font-medium leading-none tracking-tight', this.class()),
+    cn(ALERT_TITLE_TEXT_CLASS, this.class()),
   );
 }

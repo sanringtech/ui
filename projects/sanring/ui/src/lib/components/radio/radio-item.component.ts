@@ -10,6 +10,12 @@ import {
 } from '@angular/core';
 import { LucideCircle } from '@lucide/angular';
 import { cn } from '../../utils';
+import {
+  RADIO_INDICATOR_ICON_CLASS,
+  RADIO_SIZE_CLASS,
+  SELECTION_CONTROL_BASE_CLASS,
+  SELECTION_CONTROL_FOCUS_CLASS,
+} from '../component-styles';
 import { RadioGroupComponent } from './radio-group.component';
 import { RadioValue } from './radio.types';
 
@@ -43,13 +49,15 @@ let nextUniqueId = 0;
     >
       @if (isChecked()) {
         <span class="flex items-center justify-center text-current animate-in zoom-in-50">
-          <svg lucideCircle class="h-2.5 w-2.5 fill-current text-current"></svg>
+          <svg lucideCircle [class]="radioIndicatorIconClass"></svg>
         </span>
       }
     </button>
   `,
 })
 export class RadioItemComponent {
+  protected readonly radioIndicatorIconClass = RADIO_INDICATOR_ICON_CLASS;
+
   readonly class = input<string | undefined>();
   readonly id = input(`sanring-radio-${nextUniqueId++}`);
   readonly value = input.required<RadioValue>();
@@ -70,9 +78,10 @@ export class RadioItemComponent {
   });
   protected readonly itemClass = computed(() =>
     cn(
-      'peer flex items-center justify-center aspect-square h-4 w-4 rounded-full border border-primary text-primary ring-offset-background',
-      'focus:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2',
-      'disabled:cursor-not-allowed disabled:opacity-50',
+      SELECTION_CONTROL_BASE_CLASS,
+      SELECTION_CONTROL_FOCUS_CLASS,
+      RADIO_SIZE_CLASS,
+      'rounded-full border border-primary text-primary',
       'data-[state=checked]:border-primary',
       this.class(),
     ),

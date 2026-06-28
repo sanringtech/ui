@@ -1,5 +1,6 @@
 import { Directive, computed, input } from '@angular/core';
 import { cn } from '../../utils';
+import { SECTION_TITLE_TEXT_CLASS } from '../component-styles';
 
 @Directive({
   selector:
@@ -13,6 +14,6 @@ export class CardTitleDirective {
   readonly class = input<string | undefined>();
 
   protected readonly cardTitleClass = computed(() =>
-    cn('font-semibold leading-none tracking-tight', this.class()),
+    cn(SECTION_TITLE_TEXT_CLASS, this.class()),
   );
 }

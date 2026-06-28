@@ -7,6 +7,16 @@ import {
   LucideX,
 } from '@lucide/angular';
 import { cn } from '../../utils';
+import {
+  OVERLAY_CLOSE_BUTTON_CLASS,
+  OVERLAY_CLOSE_ICON_CLASS,
+  OVERLAY_SURFACE_CLASS,
+  TOAST_ACTION_BUTTON_CLASS,
+  TOAST_DESCRIPTION_TEXT_CLASS,
+  TOAST_ICON_CLASS,
+  TOAST_SURFACE_CLASS,
+  TOAST_TITLE_TEXT_CLASS,
+} from '../component-styles';
 import type { Toast, ToastAction, ToastType } from './toast.types';
 
 const TYPE_ICON_CLASS: Partial<Record<ToastType, string>> = {
@@ -48,10 +58,10 @@ const TYPE_ICON_CLASS: Partial<Record<ToastType, string>> = {
       <!-- Text content -->
       <div class="flex min-w-0 flex-1 flex-col gap-0.5">
         @if (toast().title) {
-          <p class="m-0 text-sm font-semibold leading-snug">{{ toast().title }}</p>
+          <p [class]="toastTitleClass">{{ toast().title }}</p>
         }
         @if (toast().description) {
-          <p class="m-0 text-sm leading-snug text-[var(--sanring-muted)]">
+          <p [class]="toastDescriptionClass">
             {{ toast().description }}
           </p>
         }
@@ -68,17 +78,22 @@ const TYPE_ICON_CLASS: Partial<Record<ToastType, string>> = {
       @if (toast().closable) {
         <button
           type="button"
-          class="shrink-0 rounded-md p-1 opacity-60 transition-opacity hover:opacity-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--sanring-border-strong)]"
+          [class]="toastCloseButtonClass"
           [attr.aria-label]="dismissLabel()"
           (click)="dismissed.emit()"
         >
-          <svg lucideX class="size-4"></svg>
+          <svg lucideX [class]="toastCloseIconClass"></svg>
         </button>
       }
     </div>
   `,
 })
 export class ToastComponent {
+  protected readonly toastTitleClass = TOAST_TITLE_TEXT_CLASS;
+  protected readonly toastDescriptionClass = TOAST_DESCRIPTION_TEXT_CLASS;
+  protected readonly toastCloseButtonClass = OVERLAY_CLOSE_BUTTON_CLASS;
+  protected readonly toastCloseIconClass = OVERLAY_CLOSE_ICON_CLASS;
+
   readonly toast = input.required<Toast>();
   /**
    * 進場動畫 class，由 ToasterComponent 根據 position 動態注入。
@@ -93,8 +108,8 @@ export class ToastComponent {
 
   protected readonly cardClass = computed(() =>
     cn(
-      'pointer-events-auto flex w-full items-start gap-3 rounded-lg border p-4 shadow-lg',
-      'bg-[var(--sanring-elevated)] border-[var(--sanring-border)] text-[var(--sanring-foreground)]',
+      OVERLAY_SURFACE_CLASS,
+      TOAST_SURFACE_CLASS,
       // leaving 時套退場動畫，否則套進場動畫（兩者互斥）
       this.toast().leaving ? 'animate-toast-leave' : this.enterClass(),
       this.toast().class,
@@ -102,14 +117,12 @@ export class ToastComponent {
   );
 
   protected readonly iconClass = computed(() =>
-    cn('mt-0.5 size-5 shrink-0', TYPE_ICON_CLASS[this.toast().type] ?? ''),
+    cn(TOAST_ICON_CLASS, TYPE_ICON_CLASS[this.toast().type] ?? ''),
   );
 
   protected actionBtnClass(extra?: string) {
     return cn(
-      'ml-auto shrink-0 rounded-md border border-[var(--sanring-border)] px-3 py-1.5',
-      'text-xs font-medium transition-colors hover:bg-[var(--sanring-surface-strong)]',
-      'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--sanring-border-strong)]',
+      TOAST_ACTION_BUTTON_CLASS,
       extra,
     );
   }

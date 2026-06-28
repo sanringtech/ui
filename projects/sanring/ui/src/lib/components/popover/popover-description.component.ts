@@ -1,5 +1,6 @@
 import { ChangeDetectionStrategy, Component, computed, inject, input } from '@angular/core';
 import { cn } from '../../utils';
+import { DESCRIPTION_TEXT_CLASS } from '../component-styles';
 import { PopoverComponent } from './popover.component';
 
 @Component({
@@ -16,6 +17,6 @@ export class PopoverDescriptionComponent {
   protected readonly popover = inject(PopoverComponent, { optional: true });
   readonly class = input<string | undefined>();
   protected readonly hostClass = computed(() =>
-    cn('text-sm text-[var(--sanring-muted)]', this.class()),
+    cn(DESCRIPTION_TEXT_CLASS, this.class()),
   );
 }

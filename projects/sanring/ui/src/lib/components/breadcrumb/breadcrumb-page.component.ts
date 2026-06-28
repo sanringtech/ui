@@ -1,5 +1,6 @@
 import { ChangeDetectionStrategy, Component, computed, input } from '@angular/core';
 import { cn } from '../../utils';
+import { BREADCRUMB_CURRENT_PAGE_CLASS } from '../component-styles';
 
 @Component({
   selector: 'sanring-breadcrumb-page',
@@ -17,6 +18,6 @@ export class BreadcrumbPageComponent {
   readonly class = input<string | undefined>();
 
   protected readonly breadcrumbPageClass = computed(() =>
-    cn('font-normal text-[var(--sanring-foreground)]', this.class()),
+    cn(BREADCRUMB_CURRENT_PAGE_CLASS, this.class()),
   );
 }

@@ -1,5 +1,6 @@
 import { Directive, ElementRef, HostListener, booleanAttribute, computed, inject, input } from '@angular/core';
 import { cn } from '../../utils';
+import { CONTROL_SIZE_CLASSES, CONTROL_TEXT_CLASS } from '../component-styles';
 import type { ButtonSize, ButtonVariant } from './button.types';
 
 @Directive({
@@ -35,19 +36,13 @@ export class ButtonDirective {
         'border-transparent bg-[#dc2626] text-white hover:bg-[#b91c1c] focus-visible:ring-[#ef4444]',
       link: 'border-transparent bg-transparent px-0 text-[var(--sanring-foreground)] underline-offset-4 hover:underline',
     };
-    const sizes: Record<ButtonSize, string> = {
-      sm: 'h-8 px-3 text-sm',
-      md: 'h-10 px-4 text-sm',
-      icon: 'size-9 p-0',
-      toolbar: 'h-[38px] min-w-[76px] px-3.5 text-sm',
-      toolbarIcon: 'size-[38px] p-0',
-    };
     return cn(
-      'inline-flex cursor-pointer items-center justify-center gap-2 whitespace-nowrap rounded-lg border font-medium',
+      'inline-flex cursor-pointer items-center justify-center gap-2 whitespace-nowrap rounded-lg border',
+      CONTROL_TEXT_CLASS,
       'transition-[background-color,color] focus-visible:outline-none focus-visible:ring-2',
       'focus-visible:ring-[var(--sanring-border-strong)] disabled:pointer-events-none disabled:opacity-50 aria-disabled:pointer-events-none aria-disabled:opacity-50',
       variants[this.variant()],
-      sizes[this.size()],
+      CONTROL_SIZE_CLASSES[this.size()],
       this.class(),
     );
   });

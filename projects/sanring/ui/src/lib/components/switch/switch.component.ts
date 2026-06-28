@@ -1,6 +1,12 @@
 import { booleanAttribute, Component, computed, effect, forwardRef, input, signal } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { cn } from '../../utils';
+import {
+  SELECTION_CONTROL_FOCUS_CLASS,
+  SWITCH_THUMB_SIZE_CLASSES,
+  SWITCH_THUMB_TRANSLATE_CLASSES,
+  SWITCH_TRACK_SIZE_CLASSES,
+} from '../component-styles';
 import { SwitchSize } from './switch.type';
 
 let nextUniqueId = 0;
@@ -44,10 +50,9 @@ export class SwitchComponent implements ControlValueAccessor {
   protected readonly isDisabled = computed(() => this.disabled() || this.disabledState());
   protected readonly trackClass = computed(() =>
     cn(
-      'peer inline-flex shrink-0 cursor-pointer items-center rounded-full border-2 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--sanring-border-strong)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--sanring-background)] disabled:cursor-not-allowed disabled:opacity-50',
-      this.size() === 'sm' && 'h-5 w-9',
-      this.size() === 'md' && 'h-6 w-11',
-      this.size() === 'lg' && 'h-7 w-12',
+      'peer inline-flex shrink-0 cursor-pointer items-center rounded-full border-2 transition-colors disabled:cursor-not-allowed disabled:opacity-50',
+      SELECTION_CONTROL_FOCUS_CLASS,
+      SWITCH_TRACK_SIZE_CLASSES[this.size()],
       this.invalid() ? 'border-red-500' : 'border-transparent',
       this.checkedSignal() ? 'bg-[var(--sanring-foreground)]' : 'bg-[var(--sanring-border-strong)]',
       this.class(),
@@ -56,12 +61,8 @@ export class SwitchComponent implements ControlValueAccessor {
   protected readonly thumbClass = computed(() =>
     cn(
       'pointer-events-none block rounded-full bg-[var(--sanring-background)] shadow-lg ring-0 transition-transform duration-200 ease-in-out',
-      this.size() === 'sm' && 'size-4',
-      this.size() === 'md' && 'size-5',
-      this.size() === 'lg' && 'size-6',
-      this.checkedSignal() && this.size() === 'sm' && 'translate-x-4',
-      this.checkedSignal() && this.size() === 'md' && 'translate-x-5',
-      this.checkedSignal() && this.size() === 'lg' && 'translate-x-5',
+      SWITCH_THUMB_SIZE_CLASSES[this.size()],
+      this.checkedSignal() && SWITCH_THUMB_TRANSLATE_CLASSES[this.size()],
       !this.checkedSignal() && 'translate-x-0',
     ),
   );

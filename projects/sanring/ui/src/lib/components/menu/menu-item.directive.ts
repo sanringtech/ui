@@ -1,5 +1,6 @@
 import { Directive, booleanAttribute, computed, input, output } from '@angular/core';
 import { cn } from '../../utils';
+import { MENU_ITEM_SIZE_CLASS } from '../component-styles';
 
 @Directive({
   selector: '[sanringMenuItem]',
@@ -23,7 +24,8 @@ export class MenuItemDirective {
 
   protected readonly itemClass = computed(() =>
     cn(
-      'relative flex cursor-default select-none items-center rounded-sm px-2 py-1.5 text-sm outline-none',
+      'relative flex cursor-default select-none items-center rounded-sm outline-none',
+      MENU_ITEM_SIZE_CLASS,
       'text-[var(--sanring-foreground)] transition-colors',
       'hover:bg-[var(--sanring-surface-strong)] focus:bg-[var(--sanring-surface-strong)]',
       'data-[disabled]:pointer-events-none data-[disabled]:opacity-50',

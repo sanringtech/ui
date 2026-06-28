@@ -1,5 +1,6 @@
 import { Directive, booleanAttribute, computed, input, model } from '@angular/core';
 import { cn } from '../../utils';
+import { COMPACT_CONTROL_SIZE_CLASSES, CONTROL_TEXT_CLASS } from '../component-styles';
 import type { ToggleSize, ToggleVariant } from './toggle.types';
 
 @Directive({
@@ -39,18 +40,17 @@ export class ToggleDirective {
         'data-[state=on]:bg-[var(--sanring-surface-strong)]',
       ),
     };
-    const sizes: Record<ToggleSize, string> = {
-      sm: 'h-8 px-2 text-sm gap-1',
-      md: 'h-9 px-3 text-sm gap-1.5',
-      lg: 'h-10 px-4 text-base gap-2',
-    };
     return cn(
-      'inline-flex cursor-pointer items-center justify-center whitespace-nowrap rounded-md border font-medium',
+      'inline-flex cursor-pointer items-center justify-center whitespace-nowrap rounded-md border',
+      CONTROL_TEXT_CLASS,
       'transition-colors focus-visible:outline-none focus-visible:ring-2',
       'focus-visible:ring-[var(--sanring-border-strong)]',
       'disabled:pointer-events-none disabled:opacity-50',
       variants[this.variant()],
-      sizes[this.size()],
+      COMPACT_CONTROL_SIZE_CLASSES[this.size()],
+      this.size() === 'sm' && 'gap-1',
+      this.size() === 'md' && 'gap-1.5',
+      this.size() === 'lg' && 'gap-2',
       this.class(),
     );
   });

@@ -12,21 +12,16 @@ import {
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { LucideCheck, LucideMinus } from '@lucide/angular';
 import { cn } from '../../utils';
+import {
+  CHECKBOX_ICON_SIZE_CLASSES,
+  CHECKBOX_SIZE_CLASSES,
+  CHECKBOX_STATE_CLASS,
+  SELECTION_CONTROL_BASE_CLASS,
+  SELECTION_CONTROL_FOCUS_CLASS,
+} from '../component-styles';
 import { CheckedState, CheckboxSize } from './checkbox.types';
 
 let nextUniqueId = 0;
-
-const SIZE_CLASSES: Record<CheckboxSize, string> = {
-  [CheckboxSize.Sm]: 'h-3 w-3',
-  [CheckboxSize.Md]: 'h-4 w-4',
-  [CheckboxSize.Lg]: 'h-5 w-5',
-};
-
-const ICON_SIZE_CLASSES: Record<CheckboxSize, string> = {
-  [CheckboxSize.Sm]: 'size-2.5',
-  [CheckboxSize.Md]: 'size-4',
-  [CheckboxSize.Lg]: 'size-5',
-};
 
 @Component({
   selector: 'sanring-checkbox',
@@ -93,14 +88,15 @@ export class CheckboxComponent implements ControlValueAccessor {
   protected checkedSignal = signal<CheckedState>(false);
   protected readonly isDisabled = computed(() => this.disabled() || this.disabledState());
   protected readonly iconSizeClass = computed(
-    () => ICON_SIZE_CLASSES[this.size()] ?? ICON_SIZE_CLASSES[CheckboxSize.Md],
+    () => CHECKBOX_ICON_SIZE_CLASSES[this.size()] ?? CHECKBOX_ICON_SIZE_CLASSES[CheckboxSize.Md],
   );
   protected readonly checkboxClass = computed(() =>
     cn(
-      'peer flex items-center justify-center shrink-0 rounded-sm border border-primary ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50',
-      SIZE_CLASSES[this.size()] ?? SIZE_CLASSES[CheckboxSize.Md],
-      'data-[state=checked]:bg-primary data-[state=checked]:text-primary-foreground',
-      'data-[state=indeterminate]:bg-primary data-[state=indeterminate]:text-primary-foreground',
+      SELECTION_CONTROL_BASE_CLASS,
+      SELECTION_CONTROL_FOCUS_CLASS,
+      'rounded-sm border border-primary',
+      CHECKBOX_SIZE_CLASSES[this.size()] ?? CHECKBOX_SIZE_CLASSES[CheckboxSize.Md],
+      CHECKBOX_STATE_CLASS,
       this.class(),
     ),
   );

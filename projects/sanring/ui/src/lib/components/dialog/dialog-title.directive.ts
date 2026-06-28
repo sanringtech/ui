@@ -1,6 +1,7 @@
 // dialog-title.directive.ts
 import { Directive, computed, input } from '@angular/core';
 import { cn } from '../../utils';
+import { TITLE_TEXT_CLASS } from '../component-styles';
 
 let nextDialogTitleId = 0;
 
@@ -18,8 +19,7 @@ export class DialogTitleDirective {
 
   protected readonly dialogTitleClass = computed(() =>
     cn(
-      // 放大字體(text-lg)、半粗體(font-semibold)、緊湊行高與字距
-      'text-lg font-semibold leading-none tracking-tight',
+      TITLE_TEXT_CLASS,
       this.class(),
     ),
   );

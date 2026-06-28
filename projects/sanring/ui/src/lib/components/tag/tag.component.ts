@@ -2,6 +2,7 @@ import { booleanAttribute, Component, computed, input, output } from '@angular/c
 import { LucideX } from '@lucide/angular';
 import { cn } from '../../utils';
 import { BadgeDirective, type BadgeVariant } from '../badge';
+import { TAG_CLOSE_BUTTON_CLASS, TAG_CLOSE_ICON_CLASS } from '../component-styles';
 
 @Component({
   selector: 'sanring-tag',
@@ -14,17 +15,20 @@ import { BadgeDirective, type BadgeVariant } from '../badge';
       @if (closable()) {
         <button
           type="button"
-          class="ml-1 inline-flex size-3.5 cursor-pointer items-center justify-center rounded-full text-current opacity-60 transition-opacity hover:bg-black/10 hover:opacity-100 dark:hover:bg-white/20 focus-visible:outline-none"
+          [class]="tagCloseButtonClass"
           [attr.aria-label]="removeAriaLabel()"
           (click)="onRemove($event)"
         >
-          <svg class="size-3" lucideX></svg>
+          <svg [class]="tagCloseIconClass" lucideX></svg>
         </button>
       }
     </span>
   `,
 })
 export class TagComponent {
+  protected readonly tagCloseButtonClass = TAG_CLOSE_BUTTON_CLASS;
+  protected readonly tagCloseIconClass = TAG_CLOSE_ICON_CLASS;
+
   readonly class = input<string | undefined>();
   readonly variant = input<BadgeVariant>('secondary');
   readonly closable = input(false, { transform: booleanAttribute });
