@@ -1,14 +1,16 @@
 import { Command } from 'commander';
+import ora from 'ora';
 import pc from 'picocolors';
-import { REGISTRY_URL, fetchRegistry } from '../registry.js';
+import { fetchRegistry } from '../registry.js';
 
 export const listCommand = new Command('list')
   .alias('ls')
   .description('List all available components')
   .option('--registry <url>', 'custom registry URL')
   .action(async (options: { registry?: string }) => {
-    const registryUrl = options.registry ?? REGISTRY_URL;
-    const registry = await fetchRegistry(registryUrl);
+    const spinner = ora('Loading components...').start();
+    const registry = await fetchRegistry(options.registry);
+    spinner.stop();
     const { components } = registry;
 
     console.log(pc.cyan(`\nAvailable components`) + pc.dim(` (${components.length} total)\n`));

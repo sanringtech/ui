@@ -2,9 +2,9 @@ import { Command } from 'commander';
 import { spawnSync } from 'node:child_process';
 import { existsSync, mkdirSync, writeFileSync } from 'node:fs';
 import { dirname, join, resolve } from 'node:path';
+import ora from 'ora';
 import pc from 'picocolors';
 import {
-  REGISTRY_URL,
   detectPackageManager,
   fetchFile,
   fetchRegistry,
@@ -42,14 +42,14 @@ export const addCommand = new Command('add')
   .option('-p, --path <path>', 'destination path relative to cwd')
   .option('-s, --shared-path <path>', 'destination for shared utilities (default: <path>/shared)')
   .option('-f, --force', 'overwrite existing files', false)
-  .option('--registry <url>', 'custom registry URL')
+  .option('--registry <source>', 'custom registry (URL or local path)')
   .action(
     async (
       componentName: string,
       options: { path?: string; sharedPath?: string; force: boolean; registry?: string },
     ) => {
       const cwd = process.cwd();
-      const registryUrl = options.registry ?? REGISTRY_URL;
+      const registrySource = options.registry;
 
       // Angular project guard
       if (!isAngularProject(cwd)) {
@@ -64,7 +64,11 @@ export const addCommand = new Command('add')
 
       console.log(pc.cyan(`\nAdding ${pc.bold(componentName)}...\n`));
 
-      const registry = await fetchRegistry(registryUrl);
+      // Fetch registry
+      const registrySpinner = ora('Loading registry...').start();
+      const registry = await fetchRegistry(registrySource);
+      registrySpinner.stop();
+
       const component = registry.components.find((c) => c.name === componentName);
 
       if (!component) {
@@ -90,13 +94,19 @@ export const addCommand = new Command('add')
           if (!shared) { console.warn(pc.yellow(`  ⚠ Unknown shared dep "${depName}"`)); continue; }
           const fileName = shared.file.split('/').pop()!;
           const dest = join(sharedDestDir, fileName);
+          const spinner = ora({ text: pc.dim(`shared/${fileName}`), prefixText: ' ' }).start();
           try {
-            const content = await fetchFile(shared.file, registryUrl);
+            const content = await fetchFile(shared.file, registrySource);
             const result = writeFile(dest, content, options.force);
-            if (result === 'written') { console.log(pc.green(`  ✔ shared/${fileName}`)); written++; }
-            else { console.log(pc.dim(`  – shared/${fileName} (exists, use --force to overwrite)`)); skipped++; }
+            if (result === 'written') {
+              spinner.stopAndPersist({ symbol: pc.green('✔'), text: `shared/${fileName}` });
+              written++;
+            } else {
+              spinner.stopAndPersist({ symbol: pc.dim('–'), text: pc.dim(`shared/${fileName} (exists, use --force to overwrite)`) });
+              skipped++;
+            }
           } catch {
-            console.warn(pc.yellow(`  ⚠ shared/${fileName} (fetch failed)`));
+            spinner.fail(pc.yellow(`shared/${fileName} (fetch failed)`));
             failed++;
           }
         }
@@ -108,13 +118,19 @@ export const addCommand = new Command('add')
       for (const file of component.files) {
         const fileName = file.split('/').pop()!;
         const dest = join(destDir, fileName);
+        const spinner = ora({ text: pc.dim(fileName), prefixText: ' ' }).start();
         try {
-          const content = await fetchFile(`components/${file}`, registryUrl);
+          const content = await fetchFile(`components/${file}`, registrySource);
           const result = writeFile(dest, content, options.force);
-          if (result === 'written') { console.log(pc.green(`  ✔ ${fileName}`)); written++; }
-          else { console.log(pc.dim(`  – ${fileName} (exists, use --force to overwrite)`)); skipped++; }
+          if (result === 'written') {
+            spinner.stopAndPersist({ symbol: pc.green('✔'), text: fileName });
+            written++;
+          } else {
+            spinner.stopAndPersist({ symbol: pc.dim('–'), text: pc.dim(`${fileName} (exists, use --force to overwrite)`) });
+            skipped++;
+          }
         } catch {
-          console.warn(pc.yellow(`  ⚠ ${fileName} (fetch failed)`));
+          spinner.fail(pc.yellow(`${fileName} (fetch failed)`));
           failed++;
         }
       }
