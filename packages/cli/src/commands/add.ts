@@ -1,4 +1,5 @@
 import { Command } from 'commander';
+import { spawnSync } from 'node:child_process';
 import { existsSync, mkdirSync, writeFileSync } from 'node:fs';
 import { dirname, join, resolve } from 'node:path';
 import pc from 'picocolors';
@@ -11,6 +12,7 @@ import {
   type RegistryComponent,
   type RegistryShared,
 } from '../registry.js';
+import { getInstalledPackages, isAngularProject, readConfig } from '../utils.js';
 
 function writeFile(dest: string, content: string, force: boolean): 'written' | 'skipped' {
   if (existsSync(dest) && !force) return 'skipped';
@@ -32,19 +34,33 @@ function collectPeerDeps(
   return deps;
 }
 
+const DEFAULT_PATH = 'src/app/components/ui';
+
 export const addCommand = new Command('add')
   .description('Add a component to your project')
   .argument('<component>', 'component name (e.g. accordion)')
-  .option('-p, --path <path>', 'destination path relative to cwd', 'src/app/components/ui')
+  .option('-p, --path <path>', 'destination path relative to cwd')
   .option('-s, --shared-path <path>', 'destination for shared utilities (default: <path>/shared)')
   .option('-f, --force', 'overwrite existing files', false)
   .option('--registry <url>', 'custom registry URL')
   .action(
     async (
       componentName: string,
-      options: { path: string; sharedPath?: string; force: boolean; registry?: string },
+      options: { path?: string; sharedPath?: string; force: boolean; registry?: string },
     ) => {
+      const cwd = process.cwd();
       const registryUrl = options.registry ?? REGISTRY_URL;
+
+      // Angular project guard
+      if (!isAngularProject(cwd)) {
+        console.error(pc.red('✖ No angular.json found.'));
+        console.error(pc.dim('  Run from the root of an Angular project, or run `sanring init` first.'));
+        process.exit(1);
+      }
+
+      // Resolve component path: CLI option > sanring.config.json > default
+      const config = readConfig(cwd);
+      const componentBasePath = resolve(cwd, options.path ?? config?.componentPath ?? DEFAULT_PATH);
 
       console.log(pc.cyan(`\nAdding ${pc.bold(componentName)}...\n`));
 
@@ -59,10 +75,9 @@ export const addCommand = new Command('add')
         return;
       }
 
-      const componentBasePath = resolve(process.cwd(), options.path);
       const destDir = join(componentBasePath, componentName);
       const sharedDestDir = options.sharedPath
-        ? resolve(process.cwd(), options.sharedPath)
+        ? resolve(cwd, options.sharedPath)
         : join(componentBasePath, 'shared');
 
       let written = 0, skipped = 0, failed = 0;
@@ -80,7 +95,7 @@ export const addCommand = new Command('add')
             const result = writeFile(dest, content, options.force);
             if (result === 'written') { console.log(pc.green(`  ✔ shared/${fileName}`)); written++; }
             else { console.log(pc.dim(`  – shared/${fileName} (exists, use --force to overwrite)`)); skipped++; }
-          } catch (e) {
+          } catch {
             console.warn(pc.yellow(`  ⚠ shared/${fileName} (fetch failed)`));
             failed++;
           }
@@ -98,7 +113,7 @@ export const addCommand = new Command('add')
           const result = writeFile(dest, content, options.force);
           if (result === 'written') { console.log(pc.green(`  ✔ ${fileName}`)); written++; }
           else { console.log(pc.dim(`  – ${fileName} (exists, use --force to overwrite)`)); skipped++; }
-        } catch (e) {
+        } catch {
           console.warn(pc.yellow(`  ⚠ ${fileName} (fetch failed)`));
           failed++;
         }
@@ -107,10 +122,26 @@ export const addCommand = new Command('add')
       // Peer dependencies
       const allPeerDeps = collectPeerDeps(component, registry.shared);
       if (Object.keys(allPeerDeps).length > 0) {
-        const pm = detectPackageManager();
-        const pkgs = Object.entries(allPeerDeps).map(([pkg, ver]) => `${pkg}@"${ver}"`);
-        const cmd = installCommand(pm, pkgs);
-        console.log(pc.dim(`\n  Peer dependencies:\n  ${pc.cyan(cmd)}`));
+        const installed = getInstalledPackages(cwd);
+        const missing = Object.entries(allPeerDeps).filter(([pkg]) => !installed.has(pkg));
+        const already = Object.keys(allPeerDeps).filter((pkg) => installed.has(pkg));
+
+        console.log('');
+        if (already.length > 0) {
+          console.log(pc.dim(`  Already installed: ${already.map((p) => pc.green(p)).join(', ')}`));
+        }
+
+        if (missing.length > 0) {
+          const pm = detectPackageManager(cwd);
+          const pkgs = missing.map(([pkg, ver]) => `${pkg}@${ver}`);
+          const cmd = installCommand(pm, pkgs);
+          console.log(pc.dim(`  Installing: ${pc.cyan(cmd)}\n`));
+          const [bin, ...args] = cmd.split(' ');
+          const result = spawnSync(bin, args, { stdio: 'inherit', shell: true });
+          if (result.status !== 0) {
+            console.warn(pc.yellow(`  ⚠ Install failed. Run manually:\n  ${pc.white(cmd)}`));
+          }
+        }
       }
 
       // Component dependencies notice
