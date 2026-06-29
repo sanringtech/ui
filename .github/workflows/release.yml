@@ -8,6 +8,7 @@ on:
       - 'packages/cli/**'
       - 'registry/**'
       - '.changeset/**'
+  workflow_dispatch:
 
 concurrency: ${{ github.workflow }}-${{ github.ref }}
 
