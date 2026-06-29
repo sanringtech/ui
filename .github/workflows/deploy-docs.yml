@@ -47,6 +47,9 @@ jobs:
       - name: Setup Pages
         uses: actions/configure-pages@v5
 
+      - name: Fix SPA routing for GitHub Pages
+        run: cp dist/docs/browser/index.html dist/docs/browser/404.html
+
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
