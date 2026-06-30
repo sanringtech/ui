@@ -66,7 +66,7 @@ export const en = {
   'home.snapshot.registry.label': 'Registry',
   'home.snapshot.registry.description': 'Installable source managed as files.',
   'home.snapshot.cli.label': 'CLI',
-  'home.snapshot.cli.description': 'Add component source by command.',
+  'home.snapshot.cli.description': 'Install selected component source by command.',
   'home.install.label': 'install components',
   'home.highlights.eyebrow': 'Highlights',
   'home.highlights.title': 'Key features',
@@ -86,6 +86,7 @@ export const en = {
     'Component source lives in the registry, so the CLI can install selected pieces without coupling products to the full system.',
   'home.components.eyebrow': 'Components',
   'home.components.title': 'Curated component entry points',
+  'home.components.panelTitle': 'All components',
   'home.components.descriptionPrefix': 'The docs currently include',
   'home.components.descriptionSuffix':
     'available components covering core actions, feedback, overlays, navigation, and data display.',

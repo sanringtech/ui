@@ -25,6 +25,7 @@ interface HomeHighlight {
   labelKey: TranslationKey;
   value: string;
   descriptionKey: TranslationKey;
+  kind?: 'package';
 }
 
 @Component({
@@ -100,18 +101,28 @@ interface HomeHighlight {
             </div>
           </div>
 
-          <div class="grid grid-cols-3 gap-3 py-5 max-[1180px]:grid-cols-2 max-[520px]:grid-cols-1">
+          <div class="grid grid-cols-3 gap-3 py-5 max-[1180px]:grid-cols-1">
             @for (highlight of highlights; track highlight.labelKey) {
-              <div class="rounded-[8px] border border-[var(--docs-border)] bg-[var(--docs-surface)] p-4">
-                <p
-                  class="m-0 min-w-0 whitespace-nowrap text-[22px] font-semibold leading-tight text-[var(--docs-accent-strong)]"
-                >
-                  {{ highlight.value }}
-                </p>
-                <p class="m-0 mt-1 text-sm font-medium text-[var(--docs-fg)]">
-                  {{ i18n.t(highlight.labelKey) }}
-                </p>
-                <p class="m-0 mt-2 text-sm leading-6 text-[var(--docs-muted)]">
+              <div class="min-w-0 rounded-[8px] border border-[var(--docs-border)] bg-[var(--docs-surface)] p-4">
+                @if (highlight.kind === 'package') {
+                  <p class="m-0 text-sm font-medium text-[var(--docs-fg)]">
+                    {{ i18n.t(highlight.labelKey) }}
+                  </p>
+                  <p
+                    class="m-0 mt-2 min-w-0 overflow-hidden text-ellipsis whitespace-nowrap font-mono text-sm font-semibold leading-tight text-[var(--docs-accent-strong)]"
+                    [title]="highlight.value"
+                  >
+                    {{ highlight.value }}
+                  </p>
+                } @else {
+                  <p class="m-0 min-w-0 whitespace-nowrap text-[22px] font-semibold leading-tight text-[var(--docs-accent-strong)]">
+                    {{ highlight.value }}
+                  </p>
+                  <p class="m-0 mt-1 text-sm font-medium text-[var(--docs-fg)]">
+                    {{ i18n.t(highlight.labelKey) }}
+                  </p>
+                }
+                <p class="m-0 mt-3 text-sm leading-6 text-[var(--docs-muted)]">
                   {{ i18n.t(highlight.descriptionKey) }}
                 </p>
               </div>
@@ -187,16 +198,30 @@ interface HomeHighlight {
           </p>
         </div>
 
-        <nav class="grid grid-cols-3 gap-3 max-[760px]:grid-cols-2 max-[480px]:grid-cols-1" aria-label="Component shortcuts">
-          @for (item of componentItems; track item.id) {
-            <a
-              class="rounded-[8px] border border-[var(--docs-border)] bg-[var(--docs-surface)] px-4 py-3 text-sm font-semibold text-[var(--docs-fg)] no-underline transition-colors hover:border-[var(--docs-border-strong)] hover:bg-[var(--docs-elevated)]"
-              [routerLink]="item.path"
-            >
-              {{ i18n.t(item.labelKey) }}
-            </a>
-          }
-        </nav>
+        <div class="rounded-[8px] border border-[var(--docs-border)] bg-[var(--docs-panel)] p-4">
+          <div class="mb-4 flex items-center justify-between gap-4 border-b border-[var(--docs-border)] pb-4">
+            <p class="m-0 text-sm font-semibold text-[var(--docs-fg)]">
+              {{ i18n.t('home.components.panelTitle') }}
+            </p>
+            <p class="m-0 text-sm text-[var(--docs-muted)]">
+              {{ componentCount }}
+            </p>
+          </div>
+
+          <nav
+            class="grid max-h-[360px] grid-cols-3 gap-3 overflow-y-auto pr-1 max-[760px]:grid-cols-2 max-[480px]:grid-cols-1"
+            aria-label="Component shortcuts"
+          >
+            @for (item of componentItems; track item.id) {
+              <a
+                class="rounded-[8px] border border-[var(--docs-border)] bg-[var(--docs-surface)] px-4 py-3 text-sm font-semibold text-[var(--docs-fg)] no-underline transition-colors hover:border-[var(--docs-border-strong)] hover:bg-[var(--docs-elevated)]"
+                [routerLink]="item.path"
+              >
+                {{ i18n.t(item.labelKey) }}
+              </a>
+            }
+          </nav>
+        </div>
       </section>
     </section>
   `,
@@ -204,7 +229,7 @@ interface HomeHighlight {
 export class HomePageComponent {
   protected readonly i18n = inject(I18nService);
   protected readonly componentCount = docsComponentItems.length;
-  protected readonly componentItems = docsComponentItems.slice(0, 12).map((item) => ({
+  protected readonly componentItems = docsComponentItems.map((item) => ({
     id: item.id,
     path: item.path,
     labelKey: item.labelKey,
@@ -225,6 +250,7 @@ export class HomePageComponent {
       labelKey: 'home.snapshot.cli.label',
       value: '@sanring/cli',
       descriptionKey: 'home.snapshot.cli.description',
+      kind: 'package',
     },
   ];
 
