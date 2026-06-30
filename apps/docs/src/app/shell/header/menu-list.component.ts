@@ -7,7 +7,15 @@ import { menuItems, type MenuItem } from '../../navigation/menu-navigation';
   selector: 'app-menu-list',
   imports: [RouterLink, RouterLinkActive],
   template: `
-    <nav class="flex min-w-0 items-center" aria-label="Primary">
+    <nav class="flex min-w-0 items-center gap-3" aria-label="Primary">
+      <a
+        class="mr-1 inline-flex size-10 flex-none items-center justify-center rounded-[8px] border border-[color-mix(in_srgb,var(--docs-accent)_36%,var(--docs-border))] bg-[color-mix(in_srgb,var(--docs-accent)_8%,var(--docs-surface))] transition-colors hover:bg-[color-mix(in_srgb,var(--docs-accent)_14%,var(--docs-elevated))]"
+        routerLink="/"
+        [attr.aria-label]="i18n.t('nav.home')"
+      >
+        <img class="size-6" src="sanring_ui.svg" alt="" />
+      </a>
+
       @for (item of items; track item.labelKey) {
         <a
           class="inline-flex justify-center whitespace-nowrap rounded-[5px] px-4 py-1.5 text-center text-[15px] font-medium text-[var(--docs-fg)] no-underline transition-colors hover:bg-[var(--docs-elevated)] hover:text-[var(--docs-fg)] max-[980px]:hidden"

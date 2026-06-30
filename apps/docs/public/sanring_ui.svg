@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128">
+  <!-- 外框與主色: 使用 docs-accent 與 docs-accent-fg -->
+  <polygon points="64,8 76,52 120,64 76,76 64,120 52,76 8,64 52,52" 
+           fill="#8bd3dd" 
+           stroke="#062f35" 
+           stroke-width="8" 
+           stroke-linejoin="round"/>
+           
+  <!-- 內層亮部中心: 使用 docs-accent-strong -->
+  <polygon points="64,28 70,58 100,64 70,70 64,100 58,70 28,64 58,58" 
+           fill="#b7f4e8" />
+</svg>

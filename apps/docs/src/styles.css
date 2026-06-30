@@ -3,6 +3,12 @@
 @source "./app";
 @source "../../sanring/ui/src";
 
+@theme inline {
+  /* 主色綁定 docs-accent，讓 light/dark 切換時 bg-primary 等 utility 跟著變動 */
+  --color-primary: var(--docs-accent);
+  --color-primary-foreground: var(--docs-accent-fg);
+}
+
 @theme {
   /* progress shimmer */
   --animate-progress-shimmer: progress-shimmer 1.5s linear infinite;
@@ -88,12 +94,6 @@
   @keyframes sheet-out-bottom{ from { transform: translateY(0);      } to { transform: translateY(100%); } }
 
   :root {
-    --primary: 142.1 76.2% 80%;
-    --primary-foreground: 142.1 76.2% 20%;
-    --secondary: 60 45% 85%;
-    --error: 0 84% 60%;
-    --success: 142 70% 30%;
-
     --docs-bg: #090909;
     --docs-panel: #0b0b0b;
     --docs-surface: #111113;
