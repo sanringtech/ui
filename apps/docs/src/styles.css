@@ -107,6 +107,9 @@
     --docs-active: #3f3f46;
     --docs-control: #fafafa;
     --docs-control-fg: #090909;
+    --docs-accent: #8bd3dd;
+    --docs-accent-strong: #b7f4e8;
+    --docs-accent-fg: #062f35;
 
     /* progress bar colors — override to theme your own brand */
     --sanring-progress-track: var(--docs-surface-strong);
@@ -150,6 +153,9 @@
     --docs-active: #e4e4e7;
     --docs-control: #18181b;
     --docs-control-fg: #ffffff;
+    --docs-accent: #0f766e;
+    --docs-accent-strong: #115e59;
+    --docs-accent-fg: #ecfeff;
     /* light theme: bar 是深色，用白色半透明掃光帶製造對比 */
     --sanring-progress-shimmer: rgba(255, 255, 255, 0.45);
   }

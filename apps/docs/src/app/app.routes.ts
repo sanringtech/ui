@@ -7,8 +7,7 @@ export const routes: Routes = [
     children: [
       {
         path: '',
-        pathMatch: 'full',
-        redirectTo: 'components/accordion',
+        loadComponent: () => import('./pages/home/home-page.component').then((m) => m.HomePageComponent),
       },
       {
         path: '',
@@ -226,6 +225,6 @@ export const routes: Routes = [
   },
   {
     path: '**',
-    redirectTo: 'components/accordion',
+    redirectTo: '',
   },
 ];
