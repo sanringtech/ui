@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import {
   LucideBlocks,
@@ -11,18 +11,20 @@ import {
   LucideTerminalSquare,
 } from '@lucide/angular';
 import { ButtonDirective } from '@sanring/ui';
+import { I18nService } from '../../i18n/i18n.service';
+import { TranslationKey } from '../../i18n/translations';
 import { docsComponentItems } from '../../navigation/docs-navigation';
 
 interface HomeFeature {
-  title: string;
-  description: string;
+  titleKey: TranslationKey;
+  descriptionKey: TranslationKey;
   icon: 'layers' | 'palette' | 'code' | 'box';
 }
 
 interface HomeHighlight {
-  label: string;
+  labelKey: TranslationKey;
   value: string;
-  description: string;
+  descriptionKey: TranslationKey;
 }
 
 @Component({
@@ -47,30 +49,36 @@ interface HomeHighlight {
             class="mb-6 inline-flex items-center gap-2 rounded-full border border-[color-mix(in_srgb,var(--docs-accent)_42%,var(--docs-border))] bg-[color-mix(in_srgb,var(--docs-accent)_9%,var(--docs-surface))] px-3 py-1 text-sm font-medium text-[var(--docs-muted)]"
           >
             <svg class="size-4 text-[var(--docs-accent-strong)]" lucideSparkles></svg>
-            Angular component primitives
+            {{ i18n.t('home.eyebrow') }}
           </div>
 
           <h1 class="m-0 max-w-[760px] text-[56px] font-semibold leading-[1.04] tracking-normal text-[var(--docs-fg)] max-[860px]:text-[40px] max-[520px]:text-[34px]">
-            Sanring UI
+            {{ i18n.t('home.title') }}
           </h1>
 
           <p class="mb-0 mt-6 max-w-[680px] text-[18px] leading-[1.75] text-[var(--docs-muted)] max-[520px]:text-base">
-            一套為 Angular 應用打造的元件 primitives、文件站與 registry 工作流。你可以直接組合低耦合元件、覆寫樣式，並透過 CLI 把需要的片段帶進產品。
+            {{ i18n.t('home.description') }}
           </p>
 
           <div class="mt-8 flex flex-wrap items-center gap-3">
             <a
               sanringBtn
-              class="border-[var(--docs-accent)] bg-[var(--docs-accent)] text-[var(--docs-accent-fg)] hover:bg-[var(--docs-accent-strong)]"
+              class="min-w-[124px] border-[var(--docs-accent)] bg-[var(--docs-accent)] font-semibold text-[var(--docs-accent-fg)] hover:bg-[var(--docs-accent-strong)]"
               routerLink="/components"
               variant="default"
               size="md"
             >
-              瀏覽元件
+              {{ i18n.t('home.actions.browseComponents') }}
               <svg class="size-4" lucideChevronRight></svg>
             </a>
-            <a sanringBtn routerLink="/components/button" variant="outline" size="md">
-              查看範例
+            <a
+              sanringBtn
+              class="min-w-[112px] font-semibold"
+              routerLink="/components/button"
+              variant="outline"
+              size="md"
+            >
+              {{ i18n.t('home.actions.viewExample') }}
             </a>
           </div>
         </div>
@@ -80,8 +88,12 @@ interface HomeHighlight {
         >
           <div class="flex items-center justify-between border-b border-[var(--docs-border)] pb-4">
             <div>
-              <p class="m-0 text-sm font-medium text-[var(--docs-muted)]">Registry snapshot</p>
-              <h2 class="m-0 mt-1 text-xl font-semibold text-[var(--docs-fg)]">可用元件與工具</h2>
+              <p class="m-0 text-sm font-medium text-[var(--docs-muted)]">
+                {{ i18n.t('home.snapshot.eyebrow') }}
+              </p>
+              <h2 class="m-0 mt-1 text-xl font-semibold text-[var(--docs-fg)]">
+                {{ i18n.t('home.snapshot.title') }}
+              </h2>
             </div>
             <div class="rounded-[6px] border border-[color-mix(in_srgb,var(--docs-accent)_35%,var(--docs-border))] bg-[color-mix(in_srgb,var(--docs-accent)_10%,var(--docs-surface))] p-2 text-[var(--docs-accent-strong)]">
               <svg class="size-5" lucideBlocks></svg>
@@ -89,15 +101,19 @@ interface HomeHighlight {
           </div>
 
           <div class="grid grid-cols-3 gap-3 py-5 max-[1180px]:grid-cols-2 max-[520px]:grid-cols-1">
-            @for (highlight of highlights; track highlight.label) {
+            @for (highlight of highlights; track highlight.labelKey) {
               <div class="rounded-[8px] border border-[var(--docs-border)] bg-[var(--docs-surface)] p-4">
                 <p
                   class="m-0 min-w-0 whitespace-nowrap text-[22px] font-semibold leading-tight text-[var(--docs-accent-strong)]"
                 >
                   {{ highlight.value }}
                 </p>
-                <p class="m-0 mt-1 text-sm font-medium text-[var(--docs-fg)]">{{ highlight.label }}</p>
-                <p class="m-0 mt-2 text-sm leading-6 text-[var(--docs-muted)]">{{ highlight.description }}</p>
+                <p class="m-0 mt-1 text-sm font-medium text-[var(--docs-fg)]">
+                  {{ i18n.t(highlight.labelKey) }}
+                </p>
+                <p class="m-0 mt-2 text-sm leading-6 text-[var(--docs-muted)]">
+                  {{ i18n.t(highlight.descriptionKey) }}
+                </p>
               </div>
             }
           </div>
@@ -105,7 +121,7 @@ interface HomeHighlight {
           <div class="rounded-[8px] border border-[var(--docs-border)] bg-[var(--docs-code)] p-4 font-mono text-sm leading-7 text-[var(--docs-fg)]">
             <div class="flex items-center gap-2 text-[var(--docs-muted)]">
               <svg class="size-4" lucideTerminalSquare></svg>
-              install components
+              {{ i18n.t('home.install.label') }}
             </div>
             <pre class="m-0 mt-3 overflow-x-auto"><code>pnpm dlx &#64;sanring/cli add button dialog toast</code></pre>
           </div>
@@ -115,16 +131,20 @@ interface HomeHighlight {
       <section>
         <div class="mb-6 flex items-end justify-between gap-6 max-[720px]:block">
           <div>
-            <p class="m-0 text-sm font-semibold uppercase text-[var(--docs-muted)]">Highlights</p>
-            <h2 class="m-0 mt-2 text-[30px] font-semibold leading-tight text-[var(--docs-fg)]">重點特色</h2>
+            <p class="m-0 text-sm font-semibold uppercase text-[var(--docs-muted)]">
+              {{ i18n.t('home.highlights.eyebrow') }}
+            </p>
+            <h2 class="m-0 mt-2 text-[30px] font-semibold leading-tight text-[var(--docs-fg)]">
+              {{ i18n.t('home.highlights.title') }}
+            </h2>
           </div>
           <p class="m-0 max-w-[520px] text-base leading-7 text-[var(--docs-muted)] max-[720px]:mt-3">
-            從互動狀態、樣式擴充到發佈流程，Sanring UI 將常見產品介面拆成可預期、可維護的組合單元。
+            {{ i18n.t('home.highlights.description') }}
           </p>
         </div>
 
         <div class="grid grid-cols-4 gap-4 max-[980px]:grid-cols-2 max-[620px]:grid-cols-1">
-          @for (feature of features; track feature.title) {
+          @for (feature of features; track feature.titleKey) {
             <article class="rounded-[8px] border border-[var(--docs-border)] bg-[var(--docs-surface)] p-5">
               <div class="mb-5 inline-flex rounded-[6px] border border-[color-mix(in_srgb,var(--docs-accent)_28%,var(--docs-border))] bg-[color-mix(in_srgb,var(--docs-accent)_8%,var(--docs-elevated))] p-2 text-[var(--docs-accent-strong)]">
                 @switch (feature.icon) {
@@ -142,8 +162,12 @@ interface HomeHighlight {
                   }
                 }
               </div>
-              <h3 class="m-0 text-lg font-semibold text-[var(--docs-fg)]">{{ feature.title }}</h3>
-              <p class="m-0 mt-3 text-sm leading-6 text-[var(--docs-muted)]">{{ feature.description }}</p>
+              <h3 class="m-0 text-lg font-semibold text-[var(--docs-fg)]">
+                {{ i18n.t(feature.titleKey) }}
+              </h3>
+              <p class="m-0 mt-3 text-sm leading-6 text-[var(--docs-muted)]">
+                {{ i18n.t(feature.descriptionKey) }}
+              </p>
             </article>
           }
         </div>
@@ -151,10 +175,15 @@ interface HomeHighlight {
 
       <section class="grid gap-8 lg:grid-cols-[minmax(0,0.85fr)_minmax(0,1.15fr)]">
         <div>
-          <p class="m-0 text-sm font-semibold uppercase text-[var(--docs-muted)]">Components</p>
-          <h2 class="m-0 mt-2 text-[30px] font-semibold leading-tight text-[var(--docs-fg)]">已整理的元件入口</h2>
+          <p class="m-0 text-sm font-semibold uppercase text-[var(--docs-muted)]">
+            {{ i18n.t('home.components.eyebrow') }}
+          </p>
+          <h2 class="m-0 mt-2 text-[30px] font-semibold leading-tight text-[var(--docs-fg)]">
+            {{ i18n.t('home.components.title') }}
+          </h2>
           <p class="m-0 mt-4 text-base leading-7 text-[var(--docs-muted)]">
-            文件站目前收錄 {{ componentCount }} 個可用元件，涵蓋基礎操作、回饋訊息、overlay、導覽與資料呈現。
+            {{ i18n.t('home.components.descriptionPrefix') }} {{ componentCount }}
+            {{ i18n.t('home.components.descriptionSuffix') }}
           </p>
         </div>
 
@@ -164,7 +193,7 @@ interface HomeHighlight {
               class="rounded-[8px] border border-[var(--docs-border)] bg-[var(--docs-surface)] px-4 py-3 text-sm font-semibold text-[var(--docs-fg)] no-underline transition-colors hover:border-[var(--docs-border-strong)] hover:bg-[var(--docs-elevated)]"
               [routerLink]="item.path"
             >
-              {{ item.name }}
+              {{ i18n.t(item.labelKey) }}
             </a>
           }
         </nav>
@@ -173,58 +202,52 @@ interface HomeHighlight {
   `,
 })
 export class HomePageComponent {
+  protected readonly i18n = inject(I18nService);
   protected readonly componentCount = docsComponentItems.length;
   protected readonly componentItems = docsComponentItems.slice(0, 12).map((item) => ({
     id: item.id,
     path: item.path,
-    name: this.toTitle(item.id),
+    labelKey: item.labelKey,
   }));
 
   protected readonly highlights: HomeHighlight[] = [
     {
-      label: 'Components',
+      labelKey: 'home.snapshot.components.label',
       value: String(this.componentCount),
-      description: '目前文件站已收錄的 primitives。',
+      descriptionKey: 'home.snapshot.components.description',
     },
     {
-      label: 'Registry',
+      labelKey: 'home.snapshot.registry.label',
       value: '1',
-      description: '以檔案 registry 管理可安裝片段。',
+      descriptionKey: 'home.snapshot.registry.description',
     },
     {
-      label: 'CLI',
+      labelKey: 'home.snapshot.cli.label',
       value: '@sanring/cli',
-      description: '用指令加入需要的元件來源碼。',
+      descriptionKey: 'home.snapshot.cli.description',
     },
   ];
 
   protected readonly features: HomeFeature[] = [
     {
-      title: 'Composable primitives',
-      description: '每個元件保留清楚的 root、trigger、content 或 directive 邊界，適合依產品需求自由組合。',
+      titleKey: 'home.feature.composable.title',
+      descriptionKey: 'home.feature.composable.description',
       icon: 'layers',
     },
     {
-      title: 'Theme friendly',
-      description: '文件站與元件共享 CSS variables，可在深色、淺色與品牌樣式之間穩定覆寫。',
+      titleKey: 'home.feature.theme.title',
+      descriptionKey: 'home.feature.theme.description',
       icon: 'palette',
     },
     {
-      title: 'Angular first',
-      description: '以 standalone component、directive、Angular CDK 與 template control flow 建構，貼近現代 Angular 專案。',
+      titleKey: 'home.feature.angular.title',
+      descriptionKey: 'home.feature.angular.description',
       icon: 'code',
     },
     {
-      title: 'Registry workflow',
-      description: '元件來源碼集中在 registry，搭配 CLI 可挑選式安裝，不必把整套設計系統綁進產品。',
+      titleKey: 'home.feature.registry.title',
+      descriptionKey: 'home.feature.registry.description',
       icon: 'box',
     },
   ];
-
-  private toTitle(value: string) {
-    return value
-      .split('-')
-      .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
-      .join(' ');
-  }
 }
