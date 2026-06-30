@@ -1,12 +1,12 @@
 import { Component, inject, signal } from '@angular/core';
-import { LucideLanguages, LucideMoon, LucideSun } from '@lucide/angular';
+import { LucideMoon, LucideSun } from '@lucide/angular';
 import { ButtonDirective } from '@sanring/ui';
 import { I18nService } from '../../i18n/i18n.service';
 import { HeaderActionButtonComponent } from './header-action-button.component';
 
 @Component({
   selector: 'app-feature-list',
-  imports: [ButtonDirective, HeaderActionButtonComponent, LucideSun, LucideMoon, LucideLanguages],
+  imports: [ButtonDirective, HeaderActionButtonComponent, LucideSun, LucideMoon],
   template: `
     <div class="flex min-w-0 items-center gap-6 max-[860px]:w-full max-[860px]:gap-3">
       <label class="max-[860px]:min-w-0 max-[860px]:flex-1">
@@ -41,15 +41,6 @@ import { HeaderActionButtonComponent } from './header-action-button.component';
           } @else {
             <svg class="size-4" lucideSun></svg>
           }
-        </app-header-action-button>
-
-        <app-header-action-button
-          size="toolbar"
-          [ariaLabel]="i18n.t('actions.selectLanguage')"
-          (clicked)="i18n.toggleLocale()"
-        >
-          <svg class="size-4" lucideLanguages></svg>
-          <span>{{ i18n.localeLabels[i18n.locale()].shortLabel }}</span>
         </app-header-action-button>
 
         <button sanringBtn class="flex-none" type="button" variant="default" size="toolbar">

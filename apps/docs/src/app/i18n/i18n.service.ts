@@ -12,8 +12,7 @@ import {
 @Injectable({ providedIn: 'root' })
 export class I18nService {
   private readonly document = inject(DOCUMENT);
-  private readonly storageKey = 'sanring-docs-locale';
-  private readonly localeState = signal<Locale>(this.resolveInitialLocale());
+  private readonly localeState = signal<Locale>(defaultLocale);
 
   readonly locale = this.localeState.asReadonly();
   readonly localeLabels = localeLabels;
@@ -25,7 +24,6 @@ export class I18nService {
 
       this.document.documentElement.lang = localeLabels[locale].htmlLang;
       this.document.documentElement.dataset['locale'] = locale;
-      this.writeStoredLocale(locale);
     });
   }
 
@@ -39,40 +37,5 @@ export class I18nService {
 
   t(key: TranslationKey) {
     return translations[this.locale()][key];
-  }
-
-  private resolveInitialLocale(): Locale {
-    const storedLocale = this.readStoredLocale();
-
-    if (storedLocale) {
-      return storedLocale;
-    }
-
-    if (typeof navigator !== 'undefined' && navigator.language.toLowerCase().startsWith('zh')) {
-      return 'zh';
-    }
-
-    return defaultLocale;
-  }
-
-  private readStoredLocale(): Locale | null {
-    try {
-      const locale = localStorage.getItem(this.storageKey);
-      return this.isSupportedLocale(locale) ? locale : null;
-    } catch {
-      return null;
-    }
-  }
-
-  private writeStoredLocale(locale: Locale) {
-    try {
-      localStorage.setItem(this.storageKey, locale);
-    } catch {
-      return;
-    }
-  }
-
-  private isSupportedLocale(locale: string | null): locale is Locale {
-    return supportedLocales.some((supportedLocale) => supportedLocale === locale);
   }
 }
