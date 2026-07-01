@@ -2,6 +2,8 @@ import { Component, forwardRef, model, signal } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { SelectValue } from './select.type';
 
+let nextSelectId = 0;
+
 @Component({
   selector: 'sanring-select',
   standalone: true,
@@ -15,6 +17,8 @@ import { SelectValue } from './select.type';
   ],
 })
 export class SelectComponent<T extends SelectValue = SelectValue> implements ControlValueAccessor {
+  readonly contentId = `sanring-select-content-${nextSelectId++}`;
+
   // 🧠 元件的核心狀態
   readonly isOpen = model<boolean>(false); // 選單開關狀態
   readonly value = signal<T | null>(null); // 當前選中的數值
