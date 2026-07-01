@@ -1,3 +1,24 @@
+/*
+  Sanring docs theme rules
+
+  Token layers:
+  - --sanring-*-10..90 are brand palette tokens. They are raw color scales and
+    should stay independent from any single app surface. 10 is the lightest tint,
+    50 is the base color, and 90 is the deepest shade.
+  - --docs-* are docs app semantic tokens. Components and pages should use these
+    tokens for UI intent, such as background, foreground, border, accent, muted,
+    and status surfaces.
+  - Tailwind theme aliases map to semantic tokens, not raw palette tokens. This
+    keeps light/dark theme switching centralized in this file.
+
+  Usage:
+  - Use --docs-* in docs templates and docs-only CSS.
+  - Use --sanring-* only when defining or remapping semantic tokens.
+  - Keep @sanring/ui component defaults generic; docs can theme those defaults by
+    mapping --sanring-background, --sanring-foreground, --sanring-border, and
+    other library-facing variables here.
+*/
+
 @import 'tailwindcss';
 
 @source "./app";
@@ -19,33 +40,37 @@
     fill-mode: both — 進場前維持初始狀態，退場後維持最終狀態直到 DOM 移除。
   */
   --animate-toast-in-bottom: toast-in-bottom 350ms cubic-bezier(0.16, 1, 0.3, 1) both;
-  --animate-toast-in-top:    toast-in-top    350ms cubic-bezier(0.16, 1, 0.3, 1) both;
-  --animate-toast-leave:     toast-leave     200ms ease-in both;
+  --animate-toast-in-top: toast-in-top 350ms cubic-bezier(0.16, 1, 0.3, 1) both;
+  --animate-toast-leave: toast-leave 200ms ease-in both;
 
   /* Popover */
-  --animate-popover-in:  popover-in  200ms cubic-bezier(0.16, 1, 0.3, 1) both;
+  --animate-popover-in: popover-in 200ms cubic-bezier(0.16, 1, 0.3, 1) both;
   --animate-popover-out: popover-out 150ms ease-in both;
 
   /* Sheet backdrop */
-  --animate-sheet-backdrop-in:  sheet-backdrop-in  300ms ease both;
+  --animate-sheet-backdrop-in: sheet-backdrop-in 300ms ease both;
   --animate-sheet-backdrop-out: sheet-backdrop-out 200ms ease-in both;
 
   /* Sheet panel — 4 directions × enter/leave */
-  --animate-sheet-in-right:  sheet-in-right  350ms cubic-bezier(0.16, 1, 0.3, 1) both;
+  --animate-sheet-in-right: sheet-in-right 350ms cubic-bezier(0.16, 1, 0.3, 1) both;
   --animate-sheet-out-right: sheet-out-right 200ms ease-in both;
-  --animate-sheet-in-left:   sheet-in-left   350ms cubic-bezier(0.16, 1, 0.3, 1) both;
-  --animate-sheet-out-left:  sheet-out-left  200ms ease-in both;
-  --animate-sheet-in-top:    sheet-in-top    350ms cubic-bezier(0.16, 1, 0.3, 1) both;
-  --animate-sheet-out-top:   sheet-out-top   200ms ease-in both;
+  --animate-sheet-in-left: sheet-in-left 350ms cubic-bezier(0.16, 1, 0.3, 1) both;
+  --animate-sheet-out-left: sheet-out-left 200ms ease-in both;
+  --animate-sheet-in-top: sheet-in-top 350ms cubic-bezier(0.16, 1, 0.3, 1) both;
+  --animate-sheet-out-top: sheet-out-top 200ms ease-in both;
   --animate-sheet-in-bottom: sheet-in-bottom 350ms cubic-bezier(0.16, 1, 0.3, 1) both;
-  --animate-sheet-out-bottom:sheet-out-bottom 200ms ease-in both;
+  --animate-sheet-out-bottom: sheet-out-bottom 200ms ease-in both;
 }
 
 @layer base {
   /* progress shimmer */
   @keyframes progress-shimmer {
-    from { transform: translateX(-300%); }
-    to   { transform: translateX(400%); }
+    from {
+      transform: translateX(-300%);
+    }
+    to {
+      transform: translateX(400%);
+    }
   }
 
   /*
@@ -53,63 +78,260 @@
     確保 toast 完全退到螢幕外：100% = 自身高度，1.5rem = bottom-4 容器邊距 + buffer。
   */
   @keyframes toast-in-bottom {
-    from { opacity: 0; transform: translateY(calc(100% + 1.5rem)); }
-    to   { opacity: 1; transform: translateY(0); }
+    from {
+      opacity: 0;
+      transform: translateY(calc(100% + 1.5rem));
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
   }
 
   /* Toast 進場（頂部）：對稱的向下負值 */
   @keyframes toast-in-top {
-    from { opacity: 0; transform: translateY(calc(-100% - 1.5rem)); }
-    to   { opacity: 1; transform: translateY(0); }
+    from {
+      opacity: 0;
+      transform: translateY(calc(-100% - 1.5rem));
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
   }
 
   /* Toast 退場：淡出 + 微縮，讓消失不那麼突兀 */
   @keyframes toast-leave {
-    from { opacity: 1; transform: translateY(0) scale(1); }
-    to   { opacity: 0; transform: translateY(0.5rem) scale(0.95); }
+    from {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+    to {
+      opacity: 0;
+      transform: translateY(0.5rem) scale(0.95);
+    }
   }
 
   /* Popover */
   @keyframes popover-in {
-    from { opacity: 0; transform: scale(0.95); }
-    to   { opacity: 1; transform: scale(1); }
+    from {
+      opacity: 0;
+      transform: scale(0.95);
+    }
+    to {
+      opacity: 1;
+      transform: scale(1);
+    }
   }
   @keyframes popover-out {
-    from { opacity: 1; transform: scale(1); }
-    to   { opacity: 0; transform: scale(0.95); }
+    from {
+      opacity: 1;
+      transform: scale(1);
+    }
+    to {
+      opacity: 0;
+      transform: scale(0.95);
+    }
   }
 
   /* Sheet backdrop */
-  @keyframes sheet-backdrop-in  { from { opacity: 0; } to { opacity: 1; } }
-  @keyframes sheet-backdrop-out { from { opacity: 1; } to { opacity: 0; } }
+  @keyframes sheet-backdrop-in {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+  @keyframes sheet-backdrop-out {
+    from {
+      opacity: 1;
+    }
+    to {
+      opacity: 0;
+    }
+  }
 
   /* Sheet panel */
-  @keyframes sheet-in-right  { from { transform: translateX(100%);  } to { transform: translateX(0); } }
-  @keyframes sheet-out-right { from { transform: translateX(0);      } to { transform: translateX(100%); } }
-  @keyframes sheet-in-left   { from { transform: translateX(-100%); } to { transform: translateX(0); } }
-  @keyframes sheet-out-left  { from { transform: translateX(0);      } to { transform: translateX(-100%); } }
-  @keyframes sheet-in-top    { from { transform: translateY(-100%); } to { transform: translateY(0); } }
-  @keyframes sheet-out-top   { from { transform: translateY(0);      } to { transform: translateY(-100%); } }
-  @keyframes sheet-in-bottom { from { transform: translateY(100%);  } to { transform: translateY(0); } }
-  @keyframes sheet-out-bottom{ from { transform: translateY(0);      } to { transform: translateY(100%); } }
+  @keyframes sheet-in-right {
+    from {
+      transform: translateX(100%);
+    }
+    to {
+      transform: translateX(0);
+    }
+  }
+  @keyframes sheet-out-right {
+    from {
+      transform: translateX(0);
+    }
+    to {
+      transform: translateX(100%);
+    }
+  }
+  @keyframes sheet-in-left {
+    from {
+      transform: translateX(-100%);
+    }
+    to {
+      transform: translateX(0);
+    }
+  }
+  @keyframes sheet-out-left {
+    from {
+      transform: translateX(0);
+    }
+    to {
+      transform: translateX(-100%);
+    }
+  }
+  @keyframes sheet-in-top {
+    from {
+      transform: translateY(-100%);
+    }
+    to {
+      transform: translateY(0);
+    }
+  }
+  @keyframes sheet-out-top {
+    from {
+      transform: translateY(0);
+    }
+    to {
+      transform: translateY(-100%);
+    }
+  }
+  @keyframes sheet-in-bottom {
+    from {
+      transform: translateY(100%);
+    }
+    to {
+      transform: translateY(0);
+    }
+  }
+  @keyframes sheet-out-bottom {
+    from {
+      transform: translateY(0);
+    }
+    to {
+      transform: translateY(100%);
+    }
+  }
 
   :root {
-    --docs-bg: #070a0b;
-    --docs-panel: #080b0c;
-    --docs-surface: #0d1213;
-    --docs-surface-strong: #1a2123;
-    --docs-elevated: #121718;
-    --docs-code: #0e1516;
-    --docs-fg: #f1f5f5;
-    --docs-muted: #94a3a6;
-    --docs-border: #1f2729;
-    --docs-border-strong: #38454a;
-    --docs-active: #38454a;
-    --docs-control: #f4faf9;
-    --docs-control-fg: #070a0b;
-    --docs-accent: #8bd3dd;
-    --docs-accent-strong: #b7f4e8;
-    --docs-accent-fg: #062f35;
+    /*
+      Sanring brand palette.
+      Semantic docs tokens below map this palette into light/dark themes.
+    */
+    --sanring-primary-10: #e8f6f8;
+    --sanring-primary-20: #d0edf1;
+    --sanring-primary-30: #b9e4ea;
+    --sanring-primary-40: #a2dbe3;
+    --sanring-primary-50: #8bd3dd;
+    --sanring-primary-60: #6fa9b1;
+    --sanring-primary-70: #537f85;
+    --sanring-primary-80: #385458;
+    --sanring-primary-90: #1c2a2c;
+
+    --sanring-coral-10: #fff0ee;
+    --sanring-coral-20: #ffe0dc;
+    --sanring-coral-30: #ffd0ca;
+    --sanring-coral-40: #ffc0b8;
+    --sanring-coral-50: #ffafa3;
+    --sanring-coral-60: #cc8c82;
+    --sanring-coral-70: #996962;
+    --sanring-coral-80: #664641;
+    --sanring-coral-90: #332321;
+
+    --sanring-sun-10: #fef9e9;
+    --sanring-sun-20: #fdf2d2;
+    --sanring-sun-30: #fcecbc;
+    --sanring-sun-40: #fce6a5;
+    --sanring-sun-50: #fce08f;
+    --sanring-sun-60: #c9b372;
+    --sanring-sun-70: #978656;
+    --sanring-sun-80: #655a39;
+    --sanring-sun-90: #322d1d;
+
+    --sanring-neutral-10: #edf1f2;
+    --sanring-neutral-20: #dce3e5;
+    --sanring-neutral-30: #c8d4d6;
+    --sanring-neutral-40: #b4c3c6;
+    --sanring-neutral-50: #a1b2b5;
+    --sanring-neutral-60: #818e91;
+    --sanring-neutral-70: #606b6d;
+    --sanring-neutral-80: #404748;
+    --sanring-neutral-90: #202424;
+
+    --sanring-info-10: #e0f0fe;
+    --sanring-info-20: #c2e2fd;
+    --sanring-info-30: #a3d3fb;
+    --sanring-info-40: #83c4fa;
+    --sanring-info-50: #64b5f6;
+    --sanring-info-60: #5091c5;
+    --sanring-info-70: #3c6d94;
+    --sanring-info-80: #284862;
+    --sanring-info-90: #142431;
+
+    --sanring-success-10: #e6f4e7;
+    --sanring-success-20: #cde9cf;
+    --sanring-success-30: #b3deb6;
+    --sanring-success-40: #9ad39e;
+    --sanring-success-50: #81c784;
+    --sanring-success-60: #679f6a;
+    --sanring-success-70: #4d7750;
+    --sanring-success-80: #345035;
+    --sanring-success-90: #1a281a;
+
+    --sanring-warn-10: #fff7dc;
+    --sanring-warn-20: #ffefb9;
+    --sanring-warn-30: #ffe796;
+    --sanring-warn-40: #ffde72;
+    --sanring-warn-50: #ffd54f;
+    --sanring-warn-60: #cca133;
+    --sanring-warn-70: #997526;
+    --sanring-warn-80: #664e19;
+    --sanring-warn-90: #33270c;
+
+    --sanring-error-10: #fae3e3;
+    --sanring-error-20: #f5c6c6;
+    --sanring-error-30: #f0a9a9;
+    --sanring-error-40: #eb8c8c;
+    --sanring-error-50: #e57373;
+    --sanring-error-60: #b75c5c;
+    --sanring-error-70: #894545;
+    --sanring-error-80: #5c2e2e;
+    --sanring-error-90: #2e1717;
+
+    --docs-bg: var(--sanring-neutral-90);
+    --docs-panel: #182021;
+    --docs-surface: #232a2b;
+    --docs-surface-strong: var(--sanring-neutral-80);
+    --docs-elevated: #2b3334;
+    --docs-code: #161d1e;
+    --docs-fg: var(--sanring-neutral-10);
+    --docs-muted: var(--sanring-neutral-40);
+    --docs-border: #354042;
+    --docs-border-strong: var(--sanring-neutral-60);
+    --docs-active: var(--sanring-primary-80);
+    --docs-control: var(--sanring-neutral-10);
+    --docs-control-fg: var(--sanring-neutral-90);
+    --docs-accent: var(--sanring-primary-50);
+    --docs-accent-strong: var(--sanring-primary-30);
+    --docs-accent-fg: var(--sanring-neutral-90);
+
+    --docs-info: var(--sanring-info-50);
+    --docs-info-bg: var(--sanring-info-10);
+    --docs-info-fg: var(--sanring-info-90);
+    --docs-success: var(--sanring-success-50);
+    --docs-success-bg: var(--sanring-success-10);
+    --docs-success-fg: var(--sanring-success-90);
+    --docs-warn: var(--sanring-warn-50);
+    --docs-warn-bg: var(--sanring-warn-10);
+    --docs-warn-fg: var(--sanring-warn-90);
+    --docs-error: var(--sanring-error-50);
+    --docs-error-bg: var(--sanring-error-10);
+    --docs-error-fg: var(--sanring-error-90);
 
     /* progress bar colors — override to theme your own brand */
     --sanring-progress-track: var(--docs-surface-strong);
@@ -118,10 +340,10 @@
     --sanring-progress-shimmer: rgba(0, 0, 0, 0.18);
 
     /* avatar badge status colors — override to theme your own brand */
-    --sanring-badge-online: #22c55e;
-    --sanring-badge-offline: #9ca3af;
-    --sanring-badge-away: #facc15;
-    --sanring-badge-busy: #ef4444;
+    --sanring-badge-online: var(--sanring-success-50);
+    --sanring-badge-offline: var(--sanring-neutral-50);
+    --sanring-badge-away: var(--sanring-warn-50);
+    --sanring-badge-busy: var(--sanring-error-50);
     --sanring-badge-default: var(--docs-muted);
 
     --sanring-background: var(--docs-bg);
@@ -140,21 +362,22 @@
   }
 
   :root[data-theme='light'] {
-    --docs-bg: #ffffff;
+    --docs-bg: var(--sanring-neutral-10);
     --docs-panel: #ffffff;
-    --docs-surface: #f7fafa;
-    --docs-surface-strong: #eef4f4;
-    --docs-elevated: #eef4f4;
-    --docs-fg: #0f1b1b;
-    --docs-muted: #5c7373;
-    --docs-border: #dde7e7;
-    --docs-border-strong: #93acac;
-    --docs-active: #dde7e7;
-    --docs-control: #0f1b1b;
+    --docs-surface: #f8fbfb;
+    --docs-surface-strong: var(--sanring-primary-10);
+    --docs-elevated: var(--sanring-primary-10);
+    --docs-code: #f3f7f8;
+    --docs-fg: var(--sanring-neutral-90);
+    --docs-muted: var(--sanring-neutral-70);
+    --docs-border: var(--sanring-neutral-30);
+    --docs-border-strong: var(--sanring-neutral-50);
+    --docs-active: var(--sanring-primary-20);
+    --docs-control: var(--sanring-neutral-90);
     --docs-control-fg: #ffffff;
-    --docs-accent: #0f766e;
-    --docs-accent-strong: #115e59;
-    --docs-accent-fg: #ecfeff;
+    --docs-accent: var(--sanring-primary-50);
+    --docs-accent-strong: var(--sanring-primary-70);
+    --docs-accent-fg: var(--sanring-neutral-90);
     /* light theme: bar 是深色，用白色半透明掃光帶製造對比 */
     --sanring-progress-shimmer: rgba(255, 255, 255, 0.45);
   }

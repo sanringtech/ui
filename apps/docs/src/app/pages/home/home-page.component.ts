@@ -10,7 +10,7 @@ import {
   LucideSparkles,
   LucideTerminalSquare,
 } from '@lucide/angular';
-import { ButtonDirective } from '@sanring/ui';
+import { ButtonDirective, ScrollAreaDirective } from '@sanring/ui';
 import { I18nService } from '../../i18n/i18n.service';
 import { TranslationKey } from '../../i18n/translations';
 import { docsComponentItems } from '../../navigation/docs-navigation';
@@ -33,6 +33,7 @@ interface HomeHighlight {
   imports: [
     RouterLink,
     ButtonDirective,
+    ScrollAreaDirective,
     LucideBlocks,
     LucideBox,
     LucideChevronRight,
@@ -209,7 +210,9 @@ interface HomeHighlight {
           </div>
 
           <nav
-            class="grid max-h-[360px] grid-cols-3 gap-3 overflow-y-auto pr-1 max-[760px]:grid-cols-2 max-[480px]:grid-cols-1"
+            sanringScrollArea
+            [hideScrollbar]="true"
+            class="grid max-h-[360px] grid-cols-3 gap-3 pr-1 max-[760px]:grid-cols-2 max-[480px]:grid-cols-1"
             aria-label="Component shortcuts"
           >
             @for (item of componentItems; track item.id) {
