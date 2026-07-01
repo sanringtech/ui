@@ -33,7 +33,7 @@ export class TabsTriggerComponent {
       'inline-flex shrink-0 items-center justify-center gap-1.5 whitespace-nowrap px-3 py-1.5 transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--sanring-border-strong)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--sanring-background)] data-[disabled]:pointer-events-none data-[disabled]:opacity-50',
       NAV_ITEM_TEXT_CLASS,
       variant === 'default' &&
-        'rounded-md border border-transparent px-2.5 py-1 text-[var(--sanring-muted)] hover:bg-[var(--sanring-elevated)] hover:text-[var(--sanring-foreground)] data-[state=active]:border-[var(--sanring-border-strong)] data-[state=active]:bg-[var(--sanring-active)] data-[state=active]:text-[var(--sanring-foreground)] data-[state=active]:shadow-sm',
+        'rounded-[var(--sanring-radius-sm)] border border-transparent px-2.5 py-1 text-[var(--sanring-muted)] hover:bg-[var(--sanring-elevated)] hover:text-[var(--sanring-foreground)] data-[state=active]:border-[var(--sanring-border-strong)] data-[state=active]:bg-[var(--sanring-active)] data-[state=active]:text-[var(--sanring-foreground)] data-[state=active]:shadow-sm',
       variant === 'line' &&
         cn(
           'rounded-none border-transparent text-[var(--sanring-muted)] data-[state=active]:border-[var(--sanring-foreground)] data-[state=active]:text-[var(--sanring-foreground)]',

@@ -41,7 +41,7 @@ export class ToggleDirective {
       ),
     };
     return cn(
-      'inline-flex cursor-pointer items-center justify-center whitespace-nowrap rounded-md border',
+      'inline-flex cursor-pointer items-center justify-center whitespace-nowrap rounded-[var(--sanring-radius)] border',
       CONTROL_TEXT_CLASS,
       'transition-colors focus-visible:outline-none focus-visible:ring-2',
       'focus-visible:ring-[var(--sanring-border-strong)]',

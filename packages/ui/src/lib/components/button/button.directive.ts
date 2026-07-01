@@ -33,11 +33,11 @@ export class ButtonDirective {
       ghost:
         'border-transparent bg-transparent text-[var(--sanring-foreground)] hover:bg-[var(--sanring-surface-strong)]',
       destructive:
-        'border-transparent bg-[#dc2626] text-white hover:bg-[#b91c1c] focus-visible:ring-[#ef4444]',
+        'border-transparent bg-[var(--sanring-error-50)] text-white hover:bg-[var(--sanring-error-60)] focus-visible:ring-[var(--sanring-error-40)]',
       link: 'border-transparent bg-transparent px-0 text-[var(--sanring-foreground)] underline-offset-4 hover:underline',
     };
     return cn(
-      'inline-flex cursor-pointer items-center justify-center gap-2 whitespace-nowrap rounded-lg border',
+      'inline-flex cursor-pointer items-center justify-center gap-2 whitespace-nowrap rounded-[var(--sanring-radius)] border',
       CONTROL_TEXT_CLASS,
       'transition-[background-color,color] focus-visible:outline-none focus-visible:ring-2',
       'focus-visible:ring-[var(--sanring-border-strong)] disabled:pointer-events-none disabled:opacity-50 aria-disabled:pointer-events-none aria-disabled:opacity-50',

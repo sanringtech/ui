@@ -24,7 +24,7 @@ export class MenuItemDirective {
 
   protected readonly itemClass = computed(() =>
     cn(
-      'relative flex cursor-default select-none items-center rounded-sm outline-none',
+      'relative flex cursor-default select-none items-center rounded-[var(--sanring-radius-xs)] outline-none',
       MENU_ITEM_SIZE_CLASS,
       'text-[var(--sanring-foreground)] transition-colors',
       'hover:bg-[var(--sanring-surface-strong)] focus:bg-[var(--sanring-surface-strong)]',

@@ -14,7 +14,7 @@ export class InputDirective {
 
   protected readonly inputClass = computed(() =>
     cn(
-      'peer flex h-10 w-full rounded-md border border-[var(--sanring-border-strong)]',
+      'peer flex h-10 w-full rounded-[var(--sanring-radius)] border border-[var(--sanring-border-strong)]',
       'bg-[var(--sanring-surface)] text-[var(--sanring-foreground)]',
       FIELD_SIZE_CLASS,
       'file:border-0 file:bg-transparent file:text-sm file:font-medium',

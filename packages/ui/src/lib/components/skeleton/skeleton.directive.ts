@@ -15,7 +15,7 @@ export class SkeletonDirective {
 
   protected readonly skeletonClass = computed(() =>
     cn(
-      'animate-pulse rounded-md bg-[var(--sanring-surface-strong)]',
+      'animate-pulse rounded-[var(--sanring-radius-sm)] bg-[var(--sanring-surface-strong)]',
       this.class(), // 讓使用者可以覆蓋寬高和形狀
     ),
   );

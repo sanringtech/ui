@@ -40,28 +40,28 @@ export const LINK_TEXT_CLASS = 'font-medium';
 
 export const OVERLAY_SURFACE_CLASS =
   'border border-[var(--sanring-border)] bg-[var(--sanring-elevated)] text-[var(--sanring-foreground)] shadow-lg';
-export const DIALOG_SURFACE_CLASS = 'relative z-50 grid w-full max-w-lg gap-4 p-6 sm:rounded-lg';
+export const DIALOG_SURFACE_CLASS = 'relative z-50 grid w-full max-w-lg gap-4 p-6 sm:rounded-[var(--sanring-radius-lg)]';
 export const SHEET_SURFACE_CLASS = 'fixed z-50 flex flex-col gap-4 p-6';
-export const POPOVER_SURFACE_CLASS = 'z-50 w-72 rounded-md p-4 shadow-md outline-none';
+export const POPOVER_SURFACE_CLASS = 'z-50 w-72 rounded-[var(--sanring-radius-sm)] p-4 shadow-md outline-none';
 export const OVERLAY_BACKDROP_CLASS = 'fixed inset-0 z-50 bg-black/50 backdrop-blur-sm';
 export const OVERLAY_CLOSE_BUTTON_CLASS =
-  'shrink-0 rounded-md p-1 opacity-60 transition-opacity hover:opacity-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--sanring-border-strong)]';
+  'shrink-0 rounded-[var(--sanring-radius-sm)] p-1 opacity-60 transition-opacity hover:opacity-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--sanring-border-strong)]';
 export const OVERLAY_ABSOLUTE_CLOSE_BUTTON_CLASS =
-  'absolute right-4 top-4 rounded-sm text-[var(--sanring-muted)] opacity-70 ring-offset-[var(--sanring-surface)] transition-colors transition-opacity hover:text-[var(--sanring-foreground)] hover:opacity-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--sanring-border-strong)] focus-visible:ring-offset-2 disabled:pointer-events-none';
+  'absolute right-4 top-4 rounded-[var(--sanring-radius-xs)] text-[var(--sanring-muted)] opacity-70 ring-offset-[var(--sanring-surface)] transition-colors transition-opacity hover:text-[var(--sanring-foreground)] hover:opacity-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--sanring-border-strong)] focus-visible:ring-offset-2 disabled:pointer-events-none';
 export const OVERLAY_CLOSE_ICON_CLASS = 'size-4';
 
 export const TOOLTIP_SURFACE_CLASS =
-  'relative z-50 max-w-64 break-words rounded-md border border-[var(--sanring-border-strong)] bg-[var(--sanring-foreground)] px-3 py-1.5 text-xs font-medium leading-5 text-[var(--sanring-background)] shadow-md';
+  'relative z-50 max-w-64 break-words rounded-[var(--sanring-radius-sm)] border border-[var(--sanring-border-strong)] bg-[var(--sanring-foreground)] px-3 py-1.5 text-xs font-medium leading-5 text-[var(--sanring-background)] shadow-md';
 export const TOOLTIP_ARROW_CLASS =
   'pointer-events-none absolute size-2 rotate-45 border border-[var(--sanring-border-strong)] bg-[var(--sanring-foreground)]';
 
 export const TOAST_SURFACE_CLASS =
-  'pointer-events-auto flex w-full items-start gap-3 rounded-lg p-4';
+  'pointer-events-auto flex w-full items-start gap-3 rounded-[var(--sanring-radius-lg)] p-4';
 export const TOAST_TITLE_TEXT_CLASS = 'm-0 text-sm font-semibold leading-snug';
 export const TOAST_DESCRIPTION_TEXT_CLASS = 'm-0 text-sm leading-snug text-[var(--sanring-muted)]';
 export const TOAST_ICON_CLASS = 'mt-0.5 size-5 shrink-0';
 export const TOAST_ACTION_BUTTON_CLASS =
-  'ml-auto shrink-0 rounded-md border border-[var(--sanring-border)] px-3 py-1.5 text-xs font-medium transition-colors hover:bg-[var(--sanring-surface-strong)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--sanring-border-strong)]';
+  'ml-auto shrink-0 rounded-[var(--sanring-radius-sm)] border border-[var(--sanring-border)] px-3 py-1.5 text-xs font-medium transition-colors hover:bg-[var(--sanring-surface-strong)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--sanring-border-strong)]';
 
 export const SELECTION_CONTROL_BASE_CLASS =
   'peer flex shrink-0 items-center justify-center transition-colors disabled:cursor-not-allowed disabled:opacity-50';

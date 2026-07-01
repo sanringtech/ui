@@ -94,7 +94,7 @@ export class CheckboxComponent implements ControlValueAccessor {
     cn(
       SELECTION_CONTROL_BASE_CLASS,
       SELECTION_CONTROL_FOCUS_CLASS,
-      'rounded-sm border border-primary',
+      'rounded-[var(--sanring-radius-xs)] border border-primary',
       CHECKBOX_SIZE_CLASSES[this.size()] ?? CHECKBOX_SIZE_CLASSES[CheckboxSize.Md],
       CHECKBOX_STATE_CLASS,
       this.class(),

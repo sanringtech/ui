@@ -41,7 +41,7 @@ export class AccordionTriggerComponent {
 
   protected readonly triggerClass = computed(() =>
     cn(
-      'flex w-full flex-1 items-center justify-between rounded-md py-4 text-left font-medium transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--sanring-border-strong)] [&[data-state=open]>svg]:rotate-180',
+      'flex w-full flex-1 items-center justify-between rounded-[var(--sanring-radius-sm)] py-4 text-left font-medium transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--sanring-border-strong)] [&[data-state=open]>svg]:rotate-180',
       this.variant() === 'underline'
         ? 'hover:underline'
         : 'px-3 hover:bg-[var(--sanring-surface-strong)]',
