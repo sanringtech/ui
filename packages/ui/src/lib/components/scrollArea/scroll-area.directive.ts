@@ -1,6 +1,6 @@
-import { Directive, computed, input } from '@angular/core';
-import { cn } from '../../utils';
+import { Directive, booleanAttribute, computed, input } from '@angular/core';
 import { CdkScrollable } from '@angular/cdk/scrolling';
+import { cn } from '../../utils';
 
 @Directive({
   selector: '[sanringScrollArea]',
@@ -15,13 +15,17 @@ import { CdkScrollable } from '@angular/cdk/scrolling';
 })
 export class ScrollAreaDirective {
   readonly class = input<string | undefined>();
+  readonly hideScrollbar = input(false, { transform: booleanAttribute });
   readonly ariaLabel = input<string | undefined>();
   readonly ariaLabelledby = input<string | undefined>();
 
-  protected readonly scrollAreaClass = computed(() => {
-    // 你可以在這裡加入預設的 overflow-auto 與隱藏捲軸的 CSS
-    return cn('relative overflow-auto', this.class());
-  });
+  protected readonly scrollAreaClass = computed(() =>
+    cn(
+      'relative overflow-auto',
+      this.hideScrollbar() && '[&::-webkit-scrollbar]:hidden [scrollbar-width:none]',
+      this.class(),
+    ),
+  );
 
   protected readonly scrollAreaRole = computed(() =>
     this.ariaLabel() || this.ariaLabelledby() ? 'region' : null,
