@@ -34,6 +34,13 @@ export const routes: Routes = [
               import('./pages/cli/cli-page.component').then((m) => m.CliPageComponent),
           },
           {
+            path: 'changelog',
+            loadComponent: () =>
+              import('./pages/changelog/changelog-page.component').then(
+                (m) => m.ChangelogPageComponent,
+              ),
+          },
+          {
             path: 'components',
             loadComponent: () =>
               import('./layouts/component-docs-layout.component').then(

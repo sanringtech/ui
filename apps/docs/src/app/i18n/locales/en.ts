@@ -55,6 +55,11 @@ export const en = {
   'component.tooltip': 'Tooltip',
   'components.description':
     'Here you can find all components currently available in the library. More components will be added as the system grows.',
+  'components.updatedTitle': 'Updated components',
+  'components.updatedDescription':
+    'Recently added or changed components will appear here after each update.',
+  'components.updatedEmpty': 'No updated components yet.',
+  'components.allTitle': 'All components',
   'home.eyebrow': 'Angular component primitives',
   'home.title': 'Sanring UI',
   'home.description':
@@ -648,6 +653,17 @@ export const en = {
   'cli.list.title': 'list',
   'cli.list.body':
     'Prints every component available in the registry, along with its peer dependencies. Aliased as ls.',
+
+  'changelog.page.description':
+    'What changed, and where the record comes from — CLI releases are generated straight from Changesets, component updates are curated by hand.',
+  'changelog.cli.title': 'CLI',
+  'changelog.cli.body':
+    '@sanring/cli is versioned with Changesets. This list is parsed directly from the package\'s CHANGELOG.md at load time, so it always matches the published record.',
+  'changelog.cli.loading': 'Loading CLI changelog…',
+  'changelog.cli.error': 'Could not load the CLI changelog right now.',
+  'changelog.component.title': 'Components',
+  'changelog.component.body':
+    '@sanring/ui is intentionally excluded from Changesets — components are copied into your project as source, not published as a versioned package. This list is maintained by hand instead.',
 
   'component.radio': 'Radio Group',
   'radio.description': 'A set of radio buttons backed by ControlValueAccessor, with full keyboard navigation (roving tabindex) and WAI-ARIA compliance.',

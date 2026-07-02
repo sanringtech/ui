@@ -71,6 +71,11 @@
               {
                 "glob": "**/*",
                 "input": "apps/docs/public"
+              },
+              {
+                "glob": "CHANGELOG.md",
+                "input": "packages/cli",
+                "output": "/data/cli-changelog"
               }
             ],
             "styles": ["apps/docs/src/styles.css"]
