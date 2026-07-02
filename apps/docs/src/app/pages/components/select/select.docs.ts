@@ -148,7 +148,7 @@ import { SANRING_SELECT_IMPORTS } from '@sanring/ui';`,
   </sanring-select-content>
 </sanring-select>`,
   groups: `<sanring-select [(ngModel)]="region">
-  <button sanringSelectTrigger class="w-[120px]">
+  <button sanringSelectTrigger class="w-[240px]">
     <sanring-select-value placeholder="Choose a region" />
   </button>
   <sanring-select-content matchTriggerWidth>

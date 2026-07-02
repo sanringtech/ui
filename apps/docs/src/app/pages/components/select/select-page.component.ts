@@ -47,7 +47,9 @@ import { selectPage, selectPageExamples } from './select.docs';
               <sanring-select-content matchTriggerWidth>
                 <sanring-select-item value="design">Design</sanring-select-item>
                 <sanring-select-item value="engineering">Engineering</sanring-select-item>
-                <sanring-select-item value="support">Customer support operations</sanring-select-item>
+                <sanring-select-item value="support"
+                  >Customer support operations</sanring-select-item
+                >
               </sanring-select-content>
             </sanring-select>
           </div>
@@ -56,10 +58,14 @@ import { selectPage, selectPageExamples } from './select.docs';
 
       <app-component-page-section [section]="section('usage')">
         <div class="grid gap-6">
-          <div class="overflow-hidden rounded-[var(--sanring-radius)] border border-[var(--docs-border)]">
+          <div
+            class="overflow-hidden rounded-[var(--sanring-radius)] border border-[var(--docs-border)]"
+          >
             <app-component-page-code-block [code]="examples.usageImport" language="typescript" />
           </div>
-          <div class="overflow-hidden rounded-[var(--sanring-radius)] border border-[var(--docs-border)]">
+          <div
+            class="overflow-hidden rounded-[var(--sanring-radius)] border border-[var(--docs-border)]"
+          >
             <app-component-page-code-block [code]="examples.usageMain" language="angular-html" />
           </div>
         </div>
@@ -78,7 +84,7 @@ import { selectPage, selectPageExamples } from './select.docs';
             <app-component-page-code-previewer [code]="examples.groups" language="angular-html">
               <div previewer class="flex items-start justify-center pt-8">
                 <sanring-select [(ngModel)]="region">
-                  <button sanringSelectTrigger class="w-[240px]">
+                  <button sanringSelectTrigger class="w-[180px]">
                     <sanring-select-value placeholder="Choose a region" />
                   </button>
                   <sanring-select-content matchTriggerWidth>
