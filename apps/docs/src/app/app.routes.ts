@@ -15,6 +15,13 @@ export const routes: Routes = [
           import('./layouts/docs-article-shell.component').then((m) => m.DocsArticleShellComponent),
         children: [
           {
+            path: 'introduction',
+            loadComponent: () =>
+              import('./pages/introduction/introduction-page.component').then(
+                (m) => m.IntroductionPageComponent,
+              ),
+          },
+          {
             path: 'components',
             loadComponent: () =>
               import('./layouts/component-docs-layout.component').then(

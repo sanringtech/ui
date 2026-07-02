@@ -599,6 +599,20 @@ export const en = {
   'collapsible.api.toggle.description': 'Toggles the open state unless the collapsible is disabled.',
   'collapsible.api.openChange.description': 'Emits whenever the open state changes through the model binding.',
 
+  'intro.page.description':
+    'Angular component primitives, a documentation site, and a registry workflow — built for teams that need composable building blocks without framework lock-in.',
+  'intro.whatIs.title': 'What is Sanring UI?',
+  'intro.whatIs.body':
+    'Sanring UI is a collection of Angular component primitives. Unlike traditional npm-only packages, each component\'s source lives in a registry — you copy exactly the pieces you need into your project, own the code, and override styles freely with Tailwind.',
+  'intro.requirements.title': 'Requirements',
+  'intro.installation.title': 'Installation',
+  'intro.installation.body': 'Install the base package from npm to get access to the component primitives.',
+  'intro.installation.tailwind':
+    'Then tell Tailwind to scan the package source so utility classes from the components are included in your build. Add this to your CSS entry file:',
+  'intro.firstComponent.title': 'Add your first component',
+  'intro.firstComponent.body':
+    'Import the directive or component you need from @sanring/ui and add it to your Angular component\'s imports array.',
+
   'component.radio': 'Radio Group',
   'radio.description': 'A set of radio buttons backed by ControlValueAccessor, with full keyboard navigation (roving tabindex) and WAI-ARIA compliance.',
   'radio.examples.basic.description': 'A RadioGroup backed by ControlValueAccessor — use ngModel or reactive forms to bind the selected value.',

@@ -529,6 +529,20 @@ export const zh: Record<TranslationKey, string> = {
   'collapsible.api.toggle.description': '在未停用時切換 open 狀態。',
   'collapsible.api.openChange.description': '透過 model binding 變更 open 狀態時觸發。',
 
+  'intro.page.description':
+    'Angular 元件 primitives、文件站與 registry 工作流——為需要可組合建構模組的團隊打造，不綁定特定框架版本。',
+  'intro.whatIs.title': 'Sanring UI 是什麼？',
+  'intro.whatIs.body':
+    'Sanring UI 是一套 Angular 元件 primitives。與傳統只靠 npm 的套件不同，每個元件的原始碼存放在 registry 裡——你把需要的部分複製進自己的專案、擁有程式碼，並可以用 Tailwind 自由覆寫樣式。',
+  'intro.requirements.title': '需求',
+  'intro.installation.title': '安裝',
+  'intro.installation.body': '從 npm 安裝基礎套件，取得元件 primitives 的使用權。',
+  'intro.installation.tailwind':
+    '接著讓 Tailwind 掃描套件原始碼，確保元件用到的 utility class 都被納入 build。在你的 CSS 入口檔加入以下設定：',
+  'intro.firstComponent.title': '加入第一個元件',
+  'intro.firstComponent.body':
+    '從 @sanring/ui 匯入需要的 directive 或 component，加入 Angular 元件的 imports 陣列即可使用。',
+
   'component.radio': 'Radio 群組',
   'radio.description': '一組單選按鈕，透過 ControlValueAccessor 相容 Angular 表單，內建 Roving Tabindex 鍵盤導航與完整 WAI-ARIA 規範。',
   'radio.examples.basic.description': 'RadioGroup 實作 ControlValueAccessor，使用 ngModel 或 reactive form 綁定選取值。',
