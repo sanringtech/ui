@@ -151,17 +151,34 @@ import { selectPage, selectPageExamples } from './select.docs';
               [code]="examples.itemAligned"
               language="angular-html"
             >
-              <div previewer class="flex min-h-[220px] items-start justify-center pt-8">
-                <sanring-select [(ngModel)]="theme">
-                  <button sanringSelectTrigger class="w-[240px]">
-                    <sanring-select-value placeholder="Theme" />
-                  </button>
-                  <sanring-select-content position="item-aligned" matchTriggerWidth>
-                    <sanring-select-item value="light">Light</sanring-select-item>
-                    <sanring-select-item value="dark">Dark</sanring-select-item>
-                    <sanring-select-item value="system">System</sanring-select-item>
-                  </sanring-select-content>
-                </sanring-select>
+              <div previewer class="flex min-h-[220px] flex-wrap items-start justify-center gap-10 pt-8">
+                <div class="flex flex-col items-center gap-2">
+                  <span class="text-xs text-[var(--docs-muted)]">position="item-aligned"</span>
+                  <sanring-select [(ngModel)]="theme">
+                    <button sanringSelectTrigger class="w-[200px]">
+                      <sanring-select-value placeholder="Theme" />
+                    </button>
+                    <sanring-select-content position="item-aligned" matchTriggerWidth>
+                      <sanring-select-item value="light">Light</sanring-select-item>
+                      <sanring-select-item value="dark">Dark</sanring-select-item>
+                      <sanring-select-item value="system">System</sanring-select-item>
+                    </sanring-select-content>
+                  </sanring-select>
+                </div>
+
+                <div class="flex flex-col items-center gap-2">
+                  <span class="text-xs text-[var(--docs-muted)]">position="popper"（預設）</span>
+                  <sanring-select [(ngModel)]="themePopper">
+                    <button sanringSelectTrigger class="w-[200px]">
+                      <sanring-select-value placeholder="Theme" />
+                    </button>
+                    <sanring-select-content matchTriggerWidth>
+                      <sanring-select-item value="light">Light</sanring-select-item>
+                      <sanring-select-item value="dark">Dark</sanring-select-item>
+                      <sanring-select-item value="system">System</sanring-select-item>
+                    </sanring-select-content>
+                  </sanring-select>
+                </div>
               </div>
             </app-component-page-code-previewer>
           </app-component-page-section>
@@ -204,6 +221,7 @@ export class SelectPageComponent {
   workspace: SelectValue = 'engineering';
   region: SelectValue = 'taipei';
   theme: SelectValue = 'dark';
+  themePopper: SelectValue = 'dark';
   plan: SelectValue = 'pro';
   reviewState: SelectValue = 'approved';
 

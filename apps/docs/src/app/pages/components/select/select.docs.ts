@@ -184,11 +184,24 @@ import { SANRING_SELECT_IMPORTS } from '@sanring/ui';`,
     </sanring-select-item>
   </sanring-select-content>
 </sanring-select>`,
-  itemAligned: `<sanring-select [(ngModel)]="theme">
-  <button sanringSelectTrigger class="w-[240px]">
+  itemAligned: `<!-- position="item-aligned"：展開時選中的項目會對齊 trigger -->
+<sanring-select [(ngModel)]="theme">
+  <button sanringSelectTrigger class="w-[200px]">
     <sanring-select-value placeholder="Theme" />
   </button>
   <sanring-select-content position="item-aligned" matchTriggerWidth>
+    <sanring-select-item value="light">Light</sanring-select-item>
+    <sanring-select-item value="dark">Dark</sanring-select-item>
+    <sanring-select-item value="system">System</sanring-select-item>
+  </sanring-select-content>
+</sanring-select>
+
+<!-- position="popper"（預設）：固定貼齊 trigger 下緣展開 -->
+<sanring-select [(ngModel)]="themePopper">
+  <button sanringSelectTrigger class="w-[200px]">
+    <sanring-select-value placeholder="Theme" />
+  </button>
+  <sanring-select-content matchTriggerWidth>
     <sanring-select-item value="light">Light</sanring-select-item>
     <sanring-select-item value="dark">Dark</sanring-select-item>
     <sanring-select-item value="system">System</sanring-select-item>

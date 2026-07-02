@@ -14,5 +14,5 @@ import { cn } from '../../utils';
 export class SelectGroupComponent {
   readonly class = input<string | undefined>();
 
-  protected readonly groupClass = computed(() => cn('py-0.5', this.class()));
+  protected readonly groupClass = computed(() => cn('py-1', this.class()));
 }
