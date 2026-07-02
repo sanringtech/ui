@@ -1,5 +1,5 @@
 import { Component, inject } from '@angular/core';
-import { InfiniteScrollDirective, ScrollAreaComponent, ScrollAreaDirective } from '@sanring/ui';
+import { SANRING_SCROLL_AREA_IMPORTS } from '@sanring/ui';
 import { getComponentPageSection } from '../../../docs-schema/component-page.utils';
 import { I18nService } from '../../../i18n/i18n.service';
 import {
@@ -24,9 +24,7 @@ interface ScrollAreaDemoItem {
   selector: 'app-scroll-area-page',
   imports: [
     ComponentPageApiTableComponent,
-    InfiniteScrollDirective,
-    ScrollAreaComponent,
-    ScrollAreaDirective,
+    SANRING_SCROLL_AREA_IMPORTS,
     ComponentPageCodeBlock,
     ComponentPageCodePreviewer,
     ComponentPageComponent,
@@ -74,7 +72,7 @@ interface ScrollAreaDemoItem {
       <app-component-page-section [section]="section('installation')">
         <app-component-page-installation
           componentName="scroll-area"
-          manualSnippet="import { InfiniteScrollDirective, ScrollAreaComponent, ScrollAreaDirective } from '@sanring/ui';"
+          manualSnippet="import { SANRING_SCROLL_AREA_IMPORTS } from '@sanring/ui';"
         />
       </app-component-page-section>
 

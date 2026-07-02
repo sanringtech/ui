@@ -67,11 +67,7 @@ export const alertPageExamples = {
     系統將於本週日凌晨 02:00 進行升級，屆時將暫停服務 30 分鐘。
   </p>
 </sanring-alert>`,
-  usageImport: `import {
-  AlertComponent,
-  AlertDescriptionDirective,
-  AlertTitleDirective,
-} from '@sanring/ui';`,
+  usageImport: `import { SANRING_ALERT_IMPORTS } from '@sanring/ui';`,
   usageMain: `<sanring-alert variant="destructive">
   <svg lucideAlertTriangle class="size-4"></svg>
   <h5 sanringAlertTitle>危險操作</h5>

@@ -41,12 +41,7 @@ export const popoverPageExamples = {
   </sanring-popover-content>
 </sanring-popover>`,
 
-  usageImport: `// Import individually
-import { PopoverComponent, PopoverContentComponent, PopoverTriggerDirective } from '@sanring/ui';
-
-// Or import everything at once
-import { SANRING_POPOVER_IMPORTS } from '@sanring/ui';
-// then: imports: [SANRING_POPOVER_IMPORTS]`,
+  usageImport: `import { SANRING_POPOVER_IMPORTS } from '@sanring/ui';`,
 
   usageMain: `<sanring-popover align="center">
   <button sanringBtn sanringPopoverTrigger>Open</button>

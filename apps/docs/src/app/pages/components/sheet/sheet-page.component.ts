@@ -4,14 +4,7 @@ import {
   ButtonDirective,
   InputDirective,
   LabelDirective,
-  SheetCloseDirective,
-  SheetComponent,
-  SheetContentComponent,
-  SheetDescriptionComponent,
-  SheetFooterComponent,
-  SheetHeaderComponent,
-  SheetTitleComponent,
-  SheetTriggerDirective,
+  SANRING_SHEET_IMPORTS,
 } from '@sanring/ui';
 import { getComponentPageSection } from '../../../docs-schema/component-page.utils';
 import { I18nService } from '../../../i18n/i18n.service';
@@ -39,14 +32,7 @@ import { sheetPage, sheetPageExamples } from './sheet.docs';
     ButtonDirective,
     InputDirective,
     LabelDirective,
-    SheetComponent,
-    SheetContentComponent,
-    SheetHeaderComponent,
-    SheetFooterComponent,
-    SheetTitleComponent,
-    SheetDescriptionComponent,
-    SheetTriggerDirective,
-    SheetCloseDirective,
+    SANRING_SHEET_IMPORTS,
     LucideX,
   ],
   template: `
@@ -111,7 +97,7 @@ import { sheetPage, sheetPageExamples } from './sheet.docs';
       <app-component-page-section [section]="section('installation')">
         <app-component-page-installation
           componentName="sheet"
-          manualSnippet="import { SheetComponent, SheetContentComponent, SheetTriggerDirective, SheetCloseDirective } from '@sanring/ui';"
+          manualSnippet="import { SANRING_SHEET_IMPORTS } from '@sanring/ui';"
         />
       </app-component-page-section>
 

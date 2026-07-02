@@ -2,8 +2,7 @@ import { Component, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import {
   LabelDirective,
-  RadioGroupComponent,
-  RadioItemComponent,
+  SANRING_RADIO_IMPORTS,
   RadioOrientation,
   RadioValue,
 } from '@sanring/ui';
@@ -36,8 +35,7 @@ import {
     ComponentPageHeaderComponent,
     ComponentPageInstallationComponent,
     ComponentPageSectionComponent,
-    RadioGroupComponent,
-    RadioItemComponent,
+    SANRING_RADIO_IMPORTS,
     LabelDirective,
   ],
   template: `
@@ -74,7 +72,7 @@ import {
       <app-component-page-section [section]="section('installation')">
         <app-component-page-installation
           componentName="radio"
-          manualSnippet="import { RadioGroupComponent, RadioItemComponent } from '@sanring/ui';"
+          manualSnippet="import { SANRING_RADIO_IMPORTS } from '@sanring/ui';"
         />
       </app-component-page-section>
 

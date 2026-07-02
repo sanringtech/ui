@@ -1,13 +1,5 @@
 import { Component, inject } from '@angular/core';
-import {
-  ButtonDirective,
-  PopoverComponent,
-  PopoverContentComponent,
-  PopoverDescriptionComponent,
-  PopoverHeaderComponent,
-  PopoverTitleComponent,
-  PopoverTriggerDirective,
-} from '@sanring/ui';
+import { ButtonDirective, SANRING_POPOVER_IMPORTS } from '@sanring/ui';
 import { getComponentPageSection } from '../../../docs-schema/component-page.utils';
 import { I18nService } from '../../../i18n/i18n.service';
 import {
@@ -32,12 +24,7 @@ import { popoverPage, popoverPageExamples } from './popover.docs';
     ComponentPageInstallationComponent,
     ComponentPageSectionComponent,
     ButtonDirective,
-    PopoverComponent,
-    PopoverContentComponent,
-    PopoverHeaderComponent,
-    PopoverTitleComponent,
-    PopoverDescriptionComponent,
-    PopoverTriggerDirective,
+    SANRING_POPOVER_IMPORTS,
   ],
   template: `
     <app-component-page [sections]="page.sections">

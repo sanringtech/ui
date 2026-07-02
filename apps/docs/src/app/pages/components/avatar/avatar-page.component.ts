@@ -1,13 +1,6 @@
 import { Component, inject } from '@angular/core';
 import { LucideCheck, LucidePlus } from '@lucide/angular';
-import {
-  AvatarBadgeDirective,
-  AvatarComponent,
-  AvatarFallbackComponent,
-  AvatarGroupComponent,
-  AvatarGroupCountComponent,
-  AvatarImageDirective,
-} from '@sanring/ui';
+import { SANRING_AVATAR_IMPORTS } from '@sanring/ui';
 import { getComponentPageSection } from '../../../docs-schema/component-page.utils';
 import { I18nService } from '../../../i18n/i18n.service';
 import {
@@ -24,12 +17,7 @@ import { avatarPage, avatarPageExamples } from './avatar.docs';
 @Component({
   selector: 'app-avatar-page',
   imports: [
-    AvatarBadgeDirective,
-    AvatarComponent,
-    AvatarFallbackComponent,
-    AvatarGroupComponent,
-    AvatarGroupCountComponent,
-    AvatarImageDirective,
+    SANRING_AVATAR_IMPORTS,
     ComponentPageApiTableComponent,
     ComponentPageCodeBlock,
     ComponentPageCodePreviewer,
@@ -77,7 +65,7 @@ import { avatarPage, avatarPageExamples } from './avatar.docs';
       <app-component-page-section [section]="section('installation')">
         <app-component-page-installation
           componentName="avatar"
-          manualSnippet="import { AvatarComponent, AvatarImageDirective, AvatarFallbackComponent } from '@sanring/ui';"
+          manualSnippet="import { SANRING_AVATAR_IMPORTS } from '@sanring/ui';"
         />
       </app-component-page-section>
 

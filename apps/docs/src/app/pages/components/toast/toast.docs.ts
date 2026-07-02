@@ -65,7 +65,7 @@ export const toastPageExamples = {
 <button sanringBtn type="button" (click)="toast.success('Saved')">
   Show toast
 </button>`,
-  usageImport: `import { ToasterComponent, ToastService } from '@sanring/ui';`,
+  usageImport: `import { SANRING_TOAST_IMPORTS, ToastService } from '@sanring/ui';`,
   usageMain: `private readonly toast = inject(ToastService);
 
 save() {

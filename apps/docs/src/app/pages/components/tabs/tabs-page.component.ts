@@ -1,11 +1,6 @@
 import { Component, inject } from '@angular/core';
 import { LucideActivity, LucideKey, LucideSettings } from '@lucide/angular';
-import {
-  TabsComponent,
-  TabsContentComponent,
-  TabsListComponent,
-  TabsTriggerComponent,
-} from '@sanring/ui';
+import { SANRING_TABS_IMPORTS } from '@sanring/ui';
 import { getComponentPageSection } from '../../../docs-schema/component-page.utils';
 import { I18nService } from '../../../i18n/i18n.service';
 import {
@@ -23,10 +18,7 @@ import { tabsPage, tabsPageExamples } from './tabs.docs';
   selector: 'app-tabs-page',
   imports: [
     ComponentPageApiTableComponent,
-    TabsComponent,
-    TabsContentComponent,
-    TabsListComponent,
-    TabsTriggerComponent,
+    SANRING_TABS_IMPORTS,
     ComponentPageCodeBlock,
     ComponentPageCodePreviewer,
     ComponentPageComponent,
@@ -97,7 +89,7 @@ import { tabsPage, tabsPageExamples } from './tabs.docs';
       <app-component-page-section [section]="section('installation')">
         <app-component-page-installation
           componentName="tabs"
-          manualSnippet="import { TabsComponent, TabsContentComponent, TabsListComponent, TabsTriggerComponent } from '@sanring/ui';"
+          manualSnippet="import { SANRING_TABS_IMPORTS } from '@sanring/ui';"
         />
       </app-component-page-section>
 

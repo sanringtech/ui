@@ -90,7 +90,7 @@ export const radioPageExamples = {
   <sanring-radio-item value="option3" />
 </sanring-radio-group>`,
 
-  usageImport: `import { RadioGroupComponent, RadioItemComponent } from '@sanring/ui';`,
+  usageImport: `import { SANRING_RADIO_IMPORTS } from '@sanring/ui';`,
   usageMain: `<sanring-radio-group [(ngModel)]="value">
   <sanring-radio-item value="a" />
   <sanring-radio-item value="b" />

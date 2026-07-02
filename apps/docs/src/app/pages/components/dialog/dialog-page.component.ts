@@ -1,14 +1,5 @@
 import { Component, inject } from '@angular/core';
-import {
-  ButtonDirective,
-  DialogCloseDirective,
-  DialogContentComponent,
-  DialogDescriptionDirective,
-  DialogFooterComponent,
-  DialogHeaderComponent,
-  DialogTitleDirective,
-  DialogTriggerDirective,
-} from '@sanring/ui';
+import { ButtonDirective, SANRING_DIALOG_IMPORTS } from '@sanring/ui';
 import { getComponentPageSection } from '../../../docs-schema/component-page.utils';
 import { I18nService } from '../../../i18n/i18n.service';
 import {
@@ -27,13 +18,7 @@ import { dialogPage, dialogPageExamples } from './dialog.docs';
   imports: [
     ComponentPageApiTableComponent,
     ButtonDirective,
-    DialogCloseDirective,
-    DialogContentComponent,
-    DialogDescriptionDirective,
-    DialogFooterComponent,
-    DialogHeaderComponent,
-    DialogTitleDirective,
-    DialogTriggerDirective,
+    SANRING_DIALOG_IMPORTS,
     ComponentPageCodeBlock,
     ComponentPageCodePreviewer,
     ComponentPageComponent,
@@ -73,7 +58,7 @@ import { dialogPage, dialogPageExamples } from './dialog.docs';
       <app-component-page-section [section]="section('installation')">
         <app-component-page-installation
           componentName="dialog"
-          manualSnippet="import { DialogCloseDirective, DialogContentComponent, DialogDescriptionDirective, DialogFooterComponent, DialogHeaderComponent, DialogTitleDirective, DialogTriggerDirective } from '@sanring/ui';"
+          manualSnippet="import { SANRING_DIALOG_IMPORTS } from '@sanring/ui';"
         />
       </app-component-page-section>
 

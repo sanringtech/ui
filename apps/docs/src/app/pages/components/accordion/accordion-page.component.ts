@@ -1,9 +1,6 @@
 import { Component, inject } from '@angular/core';
 import {
-  AccordionComponent,
-  AccordionContentComponent,
-  AccordionItemComponent,
-  AccordionTriggerComponent,
+  SANRING_ACCORDION_IMPORTS,
   ButtonDirective,
 } from '@sanring/ui';
 import { getComponentPageSection } from '../../../docs-schema/component-page.utils';
@@ -23,10 +20,7 @@ import { accordionPage, accordionPageExamples } from './accordion.docs';
   selector: 'app-accordion-page',
   imports: [
     ComponentPageApiTableComponent,
-    AccordionComponent,
-    AccordionItemComponent,
-    AccordionTriggerComponent,
-    AccordionContentComponent,
+    SANRING_ACCORDION_IMPORTS,
     ButtonDirective,
     ComponentPageComponent,
     ComponentPageCodeBlock,
@@ -76,7 +70,7 @@ import { accordionPage, accordionPageExamples } from './accordion.docs';
       <app-component-page-section [section]="section('installation')">
         <app-component-page-installation
           componentName="accordion"
-          manualSnippet="import { AccordionComponent, AccordionContentComponent, AccordionItemComponent, AccordionTriggerComponent } from '@sanring/ui';"
+          manualSnippet="import { SANRING_ACCORDION_IMPORTS } from '@sanring/ui';"
         />
       </app-component-page-section>
 

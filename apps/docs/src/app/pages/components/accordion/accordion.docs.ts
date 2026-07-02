@@ -103,12 +103,7 @@ export const accordionPageExamples = {
     </sanring-accordion-content>
   </sanring-accordion-item>
 </sanring-accordion>`,
-  usageImport: `import {
-  AccordionComponent,
-  AccordionContentComponent,
-  AccordionItemComponent,
-  AccordionTriggerComponent,
-} from '@sanring/ui';`,
+  usageImport: `import { SANRING_ACCORDION_IMPORTS } from '@sanring/ui';`,
   usageMain: `<sanring-accordion>
   <sanring-accordion-item>
     <sanring-accordion-trigger>

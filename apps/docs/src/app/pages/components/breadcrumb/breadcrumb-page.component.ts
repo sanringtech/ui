@@ -1,13 +1,5 @@
 import { Component, inject } from '@angular/core';
-import {
-  BreadcrumbComponent,
-  BreadcrumbDividerComponent,
-  BreadcrumbEllipsisComponent,
-  BreadcrumbItemComponent,
-  BreadcrumbLinkComponent,
-  BreadcrumbListComponent,
-  BreadcrumbPageComponent as SanringBreadcrumbPage,
-} from '@sanring/ui';
+import { SANRING_BREADCRUMB_IMPORTS } from '@sanring/ui';
 import { getComponentPageSection } from '../../../docs-schema/component-page.utils';
 import { I18nService } from '../../../i18n/i18n.service';
 import {
@@ -31,13 +23,7 @@ import { breadcrumbPage, breadcrumbPageExamples } from './breadcrumb.docs';
     ComponentPageHeaderComponent,
     ComponentPageInstallationComponent,
     ComponentPageSectionComponent,
-    BreadcrumbComponent,
-    BreadcrumbItemComponent,
-    BreadcrumbListComponent,
-    BreadcrumbLinkComponent,
-    SanringBreadcrumbPage,
-    BreadcrumbDividerComponent,
-    BreadcrumbEllipsisComponent,
+    SANRING_BREADCRUMB_IMPORTS,
   ],
   template: `
     <app-component-page [sections]="page.sections">

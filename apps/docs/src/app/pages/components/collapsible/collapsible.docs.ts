@@ -74,11 +74,7 @@ export const collapsiblePage = {
 } as const satisfies ComponentPageDefinition;
 
 export const collapsiblePageExamples = {
-  usageImport: `import {
-  CollapsibleComponent,
-  CollapsibleContentDirective,
-  CollapsibleTriggerDirective,
-} from '@sanring/ui';`,
+  usageImport: `import { SANRING_COLLAPSIBLE_IMPORTS } from '@sanring/ui';`,
   usageMain: `<sanring-collapsible>
   <button sanringCollapsibleTrigger type="button">
     Toggle details

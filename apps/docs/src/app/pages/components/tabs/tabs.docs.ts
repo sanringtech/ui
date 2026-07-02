@@ -92,12 +92,7 @@ export const tabsPageExamples = {
     Password settings
   </sanring-tabs-content>
 </sanring-tabs>`,
-  usageImport: `import {
-  TabsComponent,
-  TabsContentComponent,
-  TabsListComponent,
-  TabsTriggerComponent,
-} from '@sanring/ui';`,
+  usageImport: `import { SANRING_TABS_IMPORTS } from '@sanring/ui';`,
   usageMain: `<sanring-tabs defaultValue="account">
   <sanring-tabs-list>
     <sanring-tabs-trigger value="account">Account</sanring-tabs-trigger>

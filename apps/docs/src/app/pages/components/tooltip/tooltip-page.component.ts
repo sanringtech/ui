@@ -1,5 +1,5 @@
 import { Component, inject } from '@angular/core';
-import { ButtonDirective, TooltipComponent, TooltipContentComponent, TooltipTriggerDirective } from '@sanring/ui';
+import { ButtonDirective, SANRING_TOOLTIP_IMPORTS } from '@sanring/ui';
 import { getComponentPageSection } from '../../../docs-schema/component-page.utils';
 import { I18nService } from '../../../i18n/i18n.service';
 import {
@@ -18,9 +18,7 @@ import { tooltipPage, tooltipPageExamples } from './tooltip.docs';
   imports: [
     ButtonDirective,
     ComponentPageApiTableComponent,
-    TooltipComponent,
-    TooltipContentComponent,
-    TooltipTriggerDirective,
+    SANRING_TOOLTIP_IMPORTS,
     ComponentPageCodeBlock,
     ComponentPageCodePreviewer,
     ComponentPageComponent,
@@ -65,7 +63,7 @@ import { tooltipPage, tooltipPageExamples } from './tooltip.docs';
       <app-component-page-section [section]="section('installation')">
         <app-component-page-installation
           componentName="tooltip"
-          manualSnippet="import { TooltipComponent, TooltipContentComponent, TooltipTriggerDirective } from '@sanring/ui';"
+          manualSnippet="import { SANRING_TOOLTIP_IMPORTS } from '@sanring/ui';"
         />
       </app-component-page-section>
 

@@ -133,11 +133,7 @@ export const avatarPageExamples = {
   />
   <sanring-avatar-fallback>AL</sanring-avatar-fallback>
 </sanring-avatar>`,
-  usageImport: `import {
-  AvatarComponent,
-  AvatarImageDirective,
-  AvatarFallbackComponent,
-} from '@sanring/ui';`,
+  usageImport: `import { SANRING_AVATAR_IMPORTS } from '@sanring/ui';`,
   usageMain: `<sanring-avatar ariaLabel="Ada Lovelace">
   <img sanringAvatarImage src="https://i.pravatar.cc/96?img=5" alt="Ada Lovelace" />
   <sanring-avatar-fallback>AL</sanring-avatar-fallback>

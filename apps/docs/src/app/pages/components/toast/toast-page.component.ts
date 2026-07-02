@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, inject, input } from '@angular/core';
 import {
   ButtonDirective,
-  ToasterComponent,
+  SANRING_TOAST_IMPORTS,
   ToastPosition,
   ToastService,
 } from '@sanring/ui';
@@ -27,7 +27,7 @@ import { toastPage, toastPageExamples } from './toast.docs';
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [ToastService],
-  imports: [ToasterComponent, ButtonDirective],
+  imports: [SANRING_TOAST_IMPORTS, ButtonDirective],
   template: `
     <!-- 每個 demo 有自己的 toaster，注入到本地隔離的 ToastService -->
     <sanring-toaster [position]="position()" [maxToasts]="2" />
@@ -70,7 +70,7 @@ export class ToastPositionDemoComponent {
     ComponentPageHeaderComponent,
     ComponentPageInstallationComponent,
     ComponentPageSectionComponent,
-    ToasterComponent,
+    SANRING_TOAST_IMPORTS,
     ToastPositionDemoComponent,
   ],
   template: `
@@ -111,7 +111,7 @@ export class ToastPositionDemoComponent {
       <app-component-page-section [section]="section('installation')">
         <app-component-page-installation
           componentName="toast"
-          manualSnippet="import { ToasterComponent, ToastService } from '@sanring/ui';"
+          manualSnippet="import { SANRING_TOAST_IMPORTS, ToastService } from '@sanring/ui';"
         />
       </app-component-page-section>
 

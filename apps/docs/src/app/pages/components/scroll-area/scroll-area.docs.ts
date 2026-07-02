@@ -81,11 +81,7 @@ export const scrollAreaPageExamples = {
     </div>
   }
 </sanring-scroll-area>`,
-  usageImport: `import {
-  InfiniteScrollDirective,
-  ScrollAreaComponent,
-  ScrollAreaDirective,
-} from '@sanring/ui';`,
+  usageImport: `import { SANRING_SCROLL_AREA_IMPORTS } from '@sanring/ui';`,
   usageMain: `<div
   sanringScrollArea
   sanringInfiniteScroll

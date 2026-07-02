@@ -1,14 +1,8 @@
 import { Component, inject } from '@angular/core';
 import { LucideAlertTriangle, LucideInfo, LucideLightbulb } from '@lucide/angular';
 import {
-  AlertComponent,
-  AlertDescriptionDirective,
-  AlertTitleDirective,
-  CardComponent,
-  CardContentComponent,
-  CardDescriptionDirective,
-  CardHeaderComponent,
-  CardTitleDirective,
+  SANRING_ALERT_IMPORTS,
+  SANRING_CARD_IMPORTS,
 } from '@sanring/ui';
 import { getComponentPageSection } from '../../../docs-schema/component-page.utils';
 import { I18nService } from '../../../i18n/i18n.service';
@@ -27,14 +21,8 @@ import { alertPage, alertPageExamples } from './alert.docs';
   selector: 'app-alert-page',
   imports: [
     ComponentPageApiTableComponent,
-    AlertComponent,
-    AlertDescriptionDirective,
-    AlertTitleDirective,
-    CardComponent,
-    CardContentComponent,
-    CardDescriptionDirective,
-    CardHeaderComponent,
-    CardTitleDirective,
+    SANRING_ALERT_IMPORTS,
+    SANRING_CARD_IMPORTS,
     ComponentPageCodeBlock,
     ComponentPageCodePreviewer,
     ComponentPageComponent,
@@ -81,7 +69,7 @@ import { alertPage, alertPageExamples } from './alert.docs';
       <app-component-page-section [section]="section('installation')">
         <app-component-page-installation
           componentName="alert"
-          manualSnippet="import { AlertComponent, AlertDescriptionDirective, AlertTitleDirective } from '@sanring/ui';"
+          manualSnippet="import { SANRING_ALERT_IMPORTS } from '@sanring/ui';"
         />
       </app-component-page-section>
 

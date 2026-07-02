@@ -1,10 +1,5 @@
 import { Component, inject, signal } from '@angular/core';
-import {
-  ButtonDirective,
-  CollapsibleComponent,
-  CollapsibleContentDirective,
-  CollapsibleTriggerDirective,
-} from '@sanring/ui';
+import { ButtonDirective, SANRING_COLLAPSIBLE_IMPORTS } from '@sanring/ui';
 import { getComponentPageSection } from '../../../docs-schema/component-page.utils';
 import { I18nService } from '../../../i18n/i18n.service';
 import {
@@ -22,9 +17,7 @@ import { collapsiblePage, collapsiblePageExamples } from './collapsible.docs';
   selector: 'app-collapsible-page',
   imports: [
     ButtonDirective,
-    CollapsibleComponent,
-    CollapsibleContentDirective,
-    CollapsibleTriggerDirective,
+    SANRING_COLLAPSIBLE_IMPORTS,
     ComponentPageApiTableComponent,
     ComponentPageCodeBlock,
     ComponentPageCodePreviewer,
@@ -44,7 +37,7 @@ import { collapsiblePage, collapsiblePageExamples } from './collapsible.docs';
       <app-component-page-section [section]="section('installation')">
         <app-component-page-installation
           componentName="collapsible"
-          manualSnippet="import { CollapsibleComponent, CollapsibleContentDirective, CollapsibleTriggerDirective } from '@sanring/ui';"
+          manualSnippet="import { SANRING_COLLAPSIBLE_IMPORTS } from '@sanring/ui';"
         />
       </app-component-page-section>
 

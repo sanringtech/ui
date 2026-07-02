@@ -50,19 +50,7 @@ export const breadcrumbPageExamples = {
   </sanring-breadcrumb-list>
 </sanring-breadcrumb>`,
 
-  usageImport: `// Import individually
-import {
-  BreadcrumbComponent,
-  BreadcrumbItemComponent,
-  BreadcrumbListComponent,
-  BreadcrumbLinkComponent,
-  BreadcrumbPageComponent,
-  BreadcrumbDividerComponent,
-} from '@sanring/ui';
-
-// Or import everything at once
-import { SANRING_BREADCRUMB_IMPORTS } from '@sanring/ui';
-// then: imports: [SANRING_BREADCRUMB_IMPORTS]`,
+  usageImport: `import { SANRING_BREADCRUMB_IMPORTS } from '@sanring/ui';`,
 
   usageMain: `<sanring-breadcrumb>
   <sanring-breadcrumb-list>

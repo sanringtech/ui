@@ -87,15 +87,7 @@ sanring-dialog-content
     </sanring-dialog-header>
   </sanring-dialog-content>
 </ng-template>`,
-  usageImport: `import {
-  DialogCloseDirective,
-  DialogContentComponent,
-  DialogDescriptionDirective,
-  DialogFooterComponent,
-  DialogHeaderComponent,
-  DialogTitleDirective,
-  DialogTriggerDirective,
-} from '@sanring/ui';`,
+  usageImport: `import { SANRING_DIALOG_IMPORTS } from '@sanring/ui';`,
   usageMain: `<button sanringBtn [sanringDialogTrigger]="dialog">Open dialog</button>
 
 <ng-template #dialog>

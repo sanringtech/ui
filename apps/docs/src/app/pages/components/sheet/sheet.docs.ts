@@ -47,17 +47,7 @@ export const sheetPageExamples = {
   </sanring-sheet-content>
 </sanring-sheet>`,
 
-  usageImport: `// Import individually
-import {
-  SheetComponent, SheetContentComponent,
-  SheetHeaderComponent, SheetFooterComponent,
-  SheetTitleComponent, SheetDescriptionComponent,
-  SheetTriggerDirective, SheetCloseDirective,
-} from '@sanring/ui';
-
-// Or import everything at once
-import { SANRING_SHEET_IMPORTS } from '@sanring/ui';
-// then: imports: [SANRING_SHEET_IMPORTS]`,
+  usageImport: `import { SANRING_SHEET_IMPORTS } from '@sanring/ui';`,
 
   usageMain: `<sanring-sheet>
   <button sanringBtn sanringSheetTrigger>Open</button>

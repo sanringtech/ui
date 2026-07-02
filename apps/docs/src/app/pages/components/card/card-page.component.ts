@@ -3,12 +3,7 @@ import { LucideActivity, LucideKey, LucidePlus } from '@lucide/angular';
 import {
   BadgeDirective,
   ButtonDirective,
-  CardComponent,
-  CardContentComponent,
-  CardDescriptionDirective,
-  CardFooterComponent,
-  CardHeaderComponent,
-  CardTitleDirective,
+  SANRING_CARD_IMPORTS,
 } from '@sanring/ui';
 import { getComponentPageSection } from '../../../docs-schema/component-page.utils';
 import { I18nService } from '../../../i18n/i18n.service';
@@ -29,12 +24,7 @@ import { cardPage, cardPageExamples } from './card.docs';
     ComponentPageApiTableComponent,
     BadgeDirective,
     ButtonDirective,
-    CardComponent,
-    CardContentComponent,
-    CardDescriptionDirective,
-    CardFooterComponent,
-    CardHeaderComponent,
-    CardTitleDirective,
+    SANRING_CARD_IMPORTS,
     ComponentPageCodeBlock,
     ComponentPageCodePreviewer,
     ComponentPageComponent,
@@ -85,7 +75,7 @@ import { cardPage, cardPageExamples } from './card.docs';
       <app-component-page-section [section]="section('installation')">
         <app-component-page-installation
           componentName="card"
-          manualSnippet="import { Card, CardContentComponent, CardDescriptionDirective, CardFooterComponent, CardHeaderComponent, CardTitleDirective } from '@sanring/ui';"
+          manualSnippet="import { SANRING_CARD_IMPORTS } from '@sanring/ui';"
         />
       </app-component-page-section>
 

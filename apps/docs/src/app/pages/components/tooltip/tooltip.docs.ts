@@ -76,11 +76,7 @@ export const tooltipPageExamples = {
     Tooltip content
   </sanring-tooltip-content>
 </sanring-tooltip>`,
-  usageImport: `import {
-  TooltipComponent,
-  TooltipContentComponent,
-  TooltipTriggerDirective,
-} from '@sanring/ui';`,
+  usageImport: `import { SANRING_TOOLTIP_IMPORTS } from '@sanring/ui';`,
   usageMain: `<sanring-tooltip>
   <button sanringTooltipTrigger type="button">
     Hover me

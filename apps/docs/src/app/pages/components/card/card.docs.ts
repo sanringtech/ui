@@ -87,14 +87,7 @@ export const cardPageExamples = {
     </p>
   </sanring-card-content>
 </sanring-card>`,
-  usageImport: `import {
-  Card,
-  CardContentComponent,
-  CardDescriptionDirective,
-  CardFooterComponent,
-  CardHeaderComponent,
-  CardTitleDirective,
-} from '@sanring/ui';`,
+  usageImport: `import { SANRING_CARD_IMPORTS } from '@sanring/ui';`,
   usageMain: `<sanring-card>
   <sanring-card-header>
     <h3 sanringCardTitle>建立新專案</h3>
