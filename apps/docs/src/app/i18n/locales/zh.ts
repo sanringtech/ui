@@ -44,6 +44,7 @@ export const zh: Record<TranslationKey, string> = {
   'component.collapsible': 'Collapsible',
   'component.dialog': '對話框',
   'component.divider': '分隔線',
+  'component.dropdownMenu': '下拉選單',
   'component.input': '輸入框',
   'component.label': '標籤文字',
   'component.link': '連結',
@@ -769,6 +770,29 @@ export const zh: Record<TranslationKey, string> = {
   'breadcrumb.api.type.description': "分隔符圖示：'chevron'（預設，›）或 'dot'（·）。透過 ng-content 傳入自訂內容可完全覆寫。",
   'breadcrumb.api.routerLink.description': '傳遞給內部 anchor 元素的 Angular RouterLink 值。',
   'breadcrumb.api.class.description': '合併到 host 元素的額外 class。',
+
+  'dropdownMenu.description': '從觸發器展開的浮動選單，適合承載情境操作。',
+  'dropdownMenu.examples.basic.description': '包含 label、separator 與危險操作項目的基礎操作選單。',
+  'dropdownMenu.usage.description':
+    '將 sanringDropdownMenuTrigger 綁定到 ng-template，再組合 content、group、label、item 與 separator。',
+  'dropdownMenu.installation.description':
+    '安裝 @sanring/ui，並匯入 SANRING_DROPDOWN_MENU_IMPORTS 取得完整 dropdown menu primitives。',
+  'dropdownMenu.examples.description':
+    '常見 dropdown menu 模式，包含可勾選選項、radio 樣式選擇、巢狀選項與帶圖示項目。',
+  'dropdownMenu.demo.checkbox': 'Checkbox',
+  'dropdownMenu.demo.radio': 'Radio',
+  'dropdownMenu.demo.submenu': 'Submenu',
+  'dropdownMenu.demo.withIcons': '包含圖示',
+  'dropdownMenu.api.description': 'Dropdown menu primitives 支援的 Inputs、Outputs 與 class。',
+  'dropdownMenu.api.trigger.description': '選單開啟時渲染到 floating overlay 內的 template。',
+  'dropdownMenu.api.triggerData.description': '透過 template context 傳入選單 template 的可選資料。',
+  'dropdownMenu.api.isOpen.description': '反映 trigger overlay 是否開啟的 Signal。',
+  'dropdownMenu.api.state.description': '供 content animation classes 使用的視覺狀態。',
+  'dropdownMenu.api.disabled.description': '停用 menu item，並移除鍵盤啟用行為。',
+  'dropdownMenu.api.variant.description':
+    '控制 item 語氣；移除資料或高風險操作可使用 destructive。',
+  'dropdownMenu.api.selected.description': 'item 被點擊、按下 Enter 或按下 Space 時觸發。',
+  'dropdownMenu.api.class.description': '與對應 dropdown menu primitive 樣式合併的額外 class。',
 
   'select.description': '可組合的選取 primitive，用於從浮動 listbox 中選擇單一值。',
   'select.examples.basic.description': '透過 trigger 開啟定位選單，並在 trigger 中顯示已選項目的標籤。',

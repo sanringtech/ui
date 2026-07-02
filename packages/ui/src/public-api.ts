@@ -18,7 +18,7 @@ export * from './lib/components/divider';
 export * from './lib/components/input';
 export * from './lib/components/label';
 export * from './lib/components/link';
-export * from './lib/components/menu';
+export * from './lib/components/dropdown-menu';
 export * from './lib/components/popover';
 export * from './lib/components/progress';
 export * from './lib/components/radio';

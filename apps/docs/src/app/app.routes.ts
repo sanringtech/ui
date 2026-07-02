@@ -120,6 +120,13 @@ export const routes: Routes = [
                   ),
               },
               {
+                path: 'dropdown-menu',
+                loadComponent: () =>
+                  import('./pages/components/dropdown-menu/dropdown-menu-page.component').then(
+                    (m) => m.DropdownMenuPageComponent,
+                  ),
+              },
+              {
                 path: 'input',
                 loadComponent: () =>
                   import('./pages/components/input/input-page.component').then(

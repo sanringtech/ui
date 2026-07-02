@@ -22,6 +22,7 @@ export type DocsComponentId =
   | 'collapsible'
   | 'dialog'
   | 'divider'
+  | 'dropdown-menu'
   | 'input'
   | 'label'
   | 'link'
@@ -130,6 +131,12 @@ export const docsComponentItems: DocsComponentNavItem[] = [
     id: 'divider',
     labelKey: 'component.divider',
     path: '/components/divider',
+    active: true,
+  },
+  {
+    id: 'dropdown-menu',
+    labelKey: 'component.dropdownMenu',
+    path: '/components/dropdown-menu',
     active: true,
   },
   {

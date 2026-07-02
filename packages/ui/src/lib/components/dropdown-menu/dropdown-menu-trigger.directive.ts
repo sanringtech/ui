@@ -11,11 +11,11 @@ import {
 import { Overlay, OverlayRef } from '@angular/cdk/overlay';
 import { TemplatePortal } from '@angular/cdk/portal';
 import { FocusMonitor } from '@angular/cdk/a11y';
-import { SanringMenuContext } from './menu.type';
+import { DropdownMenuContext } from './dropdown-menu.type';
 import { MenuTrigger as ngMenuTrigger } from '@angular/aria/menu';
 
 @Directive({
-  selector: `[sanringMenuTrigger]`,
+  selector: `[sanringDropdownMenuTrigger]`,
   standalone: true,
   hostDirectives: [ngMenuTrigger],
   host: {
@@ -24,30 +24,25 @@ import { MenuTrigger as ngMenuTrigger } from '@angular/aria/menu';
     '(click)': 'toggle()',
   },
 })
-export class MenubarTriggerDirective<T> implements OnDestroy {
-  // --- 依賴注入 ---
-  private elementRef = inject(ElementRef);
-  private overlay = inject(Overlay);
-  private focusMonitor = inject(FocusMonitor);
-  private viewContainerRef = inject(ViewContainerRef);
+export class DropdownMenuTriggerDirective<T> implements OnDestroy {
+  private readonly elementRef = inject(ElementRef);
+  private readonly overlay = inject(Overlay);
+  private readonly focusMonitor = inject(FocusMonitor);
+  private readonly viewContainerRef = inject(ViewContainerRef);
 
-  // --- 泛型資料與 Template 接收 ---
-  readonly sanringMenuData = input<T | undefined>();
-  readonly sanringMenuTrigger = input.required<TemplateRef<SanringMenuContext<T>>>();
+  readonly sanringDropdownMenuData = input<T | undefined>();
+  readonly sanringDropdownMenuTrigger = input.required<TemplateRef<DropdownMenuContext<T>>>();
 
-  // --- 內部狀態 ---
   private overlayRef: OverlayRef | null = null;
-  private menuPortal!: TemplatePortal<SanringMenuContext<T>>;
+  private menuPortal!: TemplatePortal<DropdownMenuContext<T>>;
 
-  // 💡 升級 2：將 boolean 改為 WritableSignal
-  isOpen = signal(false);
+  readonly isOpen = signal(false);
 
   constructor() {
     this.focusMonitor.monitor(this.elementRef);
   }
 
-  // 💡 升級 3：修復 Linter 報錯，並透過 Signal 讀取狀態
-  toggle() {
+  toggle(): void {
     if (this.isOpen()) {
       this.closeMenu();
     } else {
@@ -55,8 +50,7 @@ export class MenubarTriggerDirective<T> implements OnDestroy {
     }
   }
 
-  openMenu() {
-    // 建立 Overlay (保持你原本的邏輯)
+  openMenu(): void {
     const positionStrategy = this.overlay
       .position()
       .flexibleConnectedTo(this.elementRef)
@@ -70,31 +64,27 @@ export class MenubarTriggerDirective<T> implements OnDestroy {
 
     this.overlayRef.backdropClick().subscribe(() => this.closeMenu());
 
-    // 處理泛型 Context
-    const context: SanringMenuContext<T> = {
-      $implicit: this.sanringMenuData() as T,
+    const context: DropdownMenuContext<T> = {
+      $implicit: this.sanringDropdownMenuData() as T,
       isOpen: true,
       close: () => this.closeMenu(),
     };
 
-    // 掛載 Portal
-    this.menuPortal = new TemplatePortal(this.sanringMenuTrigger(), this.viewContainerRef, context);
+    this.menuPortal = new TemplatePortal(this.sanringDropdownMenuTrigger(), this.viewContainerRef, context);
     this.overlayRef.attach(this.menuPortal);
 
-    // 💡 更新 Signal 狀態
     this.isOpen.set(true);
   }
 
-  closeMenu() {
+  closeMenu(): void {
     if (this.overlayRef) {
       this.overlayRef.dispose();
       this.overlayRef = null;
     }
-    // 💡 更新 Signal 狀態
     this.isOpen.set(false);
   }
 
-  ngOnDestroy() {
+  ngOnDestroy(): void {
     this.focusMonitor.stopMonitoring(this.elementRef);
     this.closeMenu();
   }

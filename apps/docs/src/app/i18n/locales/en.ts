@@ -42,6 +42,7 @@ export const en = {
   'component.collapsible': 'Collapsible',
   'component.dialog': 'Dialog',
   'component.divider': 'Divider',
+  'component.dropdownMenu': 'Dropdown Menu',
   'component.input': 'Input',
   'component.label': 'Label',
   'component.link': 'Link',
@@ -840,6 +841,34 @@ export const en = {
   'breadcrumb.api.type.description': "Divider icon: 'chevron' (default, ›) or 'dot' (·). Pass custom content via ng-content to override entirely.",
   'breadcrumb.api.routerLink.description': 'Angular RouterLink value passed to the inner anchor element.',
   'breadcrumb.api.class.description': 'Additional classes merged onto the host element.',
+
+  'dropdownMenu.description': 'A floating menu for contextual actions opened from a trigger.',
+  'dropdownMenu.examples.basic.description': 'A basic action menu with a label, separator, and destructive item.',
+  'dropdownMenu.usage.description':
+    'Bind sanringDropdownMenuTrigger to an ng-template, then compose content, groups, labels, items, and separators.',
+  'dropdownMenu.installation.description':
+    'Install @sanring/ui and import SANRING_DROPDOWN_MENU_IMPORTS for the full dropdown menu primitive set.',
+  'dropdownMenu.examples.description':
+    'Common dropdown menu patterns inspired by menubar examples: checkable options, radio-style selection, nested choices, and icon items.',
+  'dropdownMenu.demo.checkbox': 'Checkbox',
+  'dropdownMenu.demo.radio': 'Radio',
+  'dropdownMenu.demo.submenu': 'Submenu',
+  'dropdownMenu.demo.withIcons': 'With Icons',
+  'dropdownMenu.api.description': 'Inputs, outputs, and classes supported by the dropdown menu primitives.',
+  'dropdownMenu.api.trigger.description':
+    'Template rendered inside the floating overlay when the trigger opens the menu.',
+  'dropdownMenu.api.triggerData.description':
+    'Optional data passed to the menu template through the template context.',
+  'dropdownMenu.api.isOpen.description': 'Signal that reflects whether the trigger overlay is open.',
+  'dropdownMenu.api.state.description':
+    'Visual state used by the content animation classes.',
+  'dropdownMenu.api.disabled.description': 'Disables a menu item and removes it from keyboard activation.',
+  'dropdownMenu.api.variant.description':
+    'Controls item tone. Use destructive for actions that remove data or have serious consequences.',
+  'dropdownMenu.api.selected.description':
+    'Emits when the item is clicked, Enter is pressed, or Space is pressed.',
+  'dropdownMenu.api.class.description':
+    'Additional classes merged with the corresponding dropdown menu primitive.',
 
   'select.description': 'A composable select primitive for choosing one value from a floating listbox.',
   'select.examples.basic.description': 'A select trigger that opens a positioned listbox and displays the selected item label.',
