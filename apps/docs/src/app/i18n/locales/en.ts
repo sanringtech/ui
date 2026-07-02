@@ -614,6 +614,25 @@ export const en = {
   'intro.firstComponent.body':
     'Import the directive or component you need from @sanring/ui and add it to your Angular component\'s imports array.',
 
+  'theming.page.description':
+    'How Sanring UI handles color, typography, and spacing — and how to override them for your brand.',
+  'theming.tokens.title': 'Design tokens',
+  'theming.tokens.body':
+    'Sanring UI exposes a set of CSS custom properties (--sanring-*) that components use internally. You set these once in :root and everything updates.',
+  'theming.tailwind.title': 'Tailwind v4 integration',
+  'theming.tailwind.body':
+    'Tailwind v4 reads token values from @theme blocks in your CSS. Using @theme inline keeps the var() reference alive at runtime so theme switching works without a rebuild.',
+  'theming.tailwind.note':
+    'The inline keyword is the key difference — without it Tailwind resolves the value once at build time and dark/light switching stops working.',
+  'theming.brand.title': 'Customising your brand',
+  'theming.brand.body':
+    'Override any --sanring-* or --docs-accent token in :root. Components immediately pick up the new values — no configuration files to change.',
+  'theming.darkMode.title': 'Dark / light mode',
+  'theming.darkMode.body':
+    'Dark is the default — the base :root block defines all dark values. Light mode is a shallow override on :root[data-theme=\'light\']. Toggle it by setting the attribute on <html>.',
+  'theming.darkMode.note':
+    'This differs from shadcn/ui, which adds a .dark class to <body>. The attribute approach lets you scope light/dark to any subtree, not just the whole document.',
+
   'component.radio': 'Radio Group',
   'radio.description': 'A set of radio buttons backed by ControlValueAccessor, with full keyboard navigation (roving tabindex) and WAI-ARIA compliance.',
   'radio.examples.basic.description': 'A RadioGroup backed by ControlValueAccessor — use ngModel or reactive forms to bind the selected value.',

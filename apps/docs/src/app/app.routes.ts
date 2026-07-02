@@ -22,6 +22,13 @@ export const routes: Routes = [
               ),
           },
           {
+            path: 'theming',
+            loadComponent: () =>
+              import('./pages/theming/theming-page.component').then(
+                (m) => m.ThemingPageComponent,
+              ),
+          },
+          {
             path: 'components',
             loadComponent: () =>
               import('./layouts/component-docs-layout.component').then(
