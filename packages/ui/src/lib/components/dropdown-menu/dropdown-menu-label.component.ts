@@ -16,7 +16,7 @@ export class DropdownMenuLabelComponent {
 
   protected readonly labelClass = computed(() =>
     cn(
-      'block px-2 py-1.5 text-xs font-medium text-[var(--sanring-muted-foreground)]',
+      'block px-2 py-1.5 text-xs font-medium text-[var(--sanring-muted)]',
       this.inset() && 'pl-8',
       this.class(),
     ),

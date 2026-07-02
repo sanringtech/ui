@@ -63,28 +63,22 @@ export const dropdownMenuPage = {
   ],
   apiRows: [
     {
-      property: 'DropdownMenuTriggerDirective.sanringDropdownMenuTrigger',
-      type: 'TemplateRef<DropdownMenuContext<T>>',
+      property: 'DropdownMenuTriggerDirective.menu',
+      type: 'Menu | undefined',
       defaultValue: 'required',
-      descriptionKey: 'dropdownMenu.api.trigger.description',
+      descriptionKey: 'dropdownMenu.api.menu.description',
     },
     {
-      property: 'DropdownMenuTriggerDirective.sanringDropdownMenuData',
-      type: 'T | undefined',
-      defaultValue: 'undefined',
-      descriptionKey: 'dropdownMenu.api.triggerData.description',
+      property: 'DropdownMenuContentComponent.itemSelected',
+      type: 'Output<unknown>',
+      defaultValue: '-',
+      descriptionKey: 'dropdownMenu.api.itemSelected.description',
     },
     {
-      property: 'DropdownMenuTriggerDirective.isOpen',
-      type: 'Signal<boolean>',
-      defaultValue: 'false',
-      descriptionKey: 'dropdownMenu.api.isOpen.description',
-    },
-    {
-      property: 'DropdownMenuContentComponent.state',
-      type: "'open' | 'closed'",
-      defaultValue: "'open'",
-      descriptionKey: 'dropdownMenu.api.state.description',
+      property: 'DropdownMenuItemDirective.value',
+      type: 'unknown',
+      defaultValue: 'required',
+      descriptionKey: 'dropdownMenu.api.value.description',
     },
     {
       property: 'DropdownMenuItemDirective.disabled',
@@ -99,12 +93,6 @@ export const dropdownMenuPage = {
       descriptionKey: 'dropdownMenu.api.variant.description',
     },
     {
-      property: 'DropdownMenuItemDirective.selected',
-      type: 'Output<void>',
-      defaultValue: '-',
-      descriptionKey: 'dropdownMenu.api.selected.description',
-    },
-    {
       property: 'class',
       type: 'string',
       defaultValue: 'undefined',
@@ -115,147 +103,147 @@ export const dropdownMenuPage = {
 
 export const dropdownMenuPageExamples = {
   basic: `<sanring-dropdown-menu>
-  <button sanringBtn variant="outline" [sanringDropdownMenuTrigger]="menu">
+  <button sanringBtn variant="outline" sanringDropdownMenuTrigger [menu]="menu.menu">
     Open
   </button>
 
-  <ng-template #menu let-close="close">
-    <sanring-dropdown-menu-content class="w-56">
-      <sanring-dropdown-menu-label>Actions</sanring-dropdown-menu-label>
-      <button sanringDropdownMenuItem type="button" (selected)="close()">New tab</button>
-      <button sanringDropdownMenuItem type="button" (selected)="close()">New window</button>
-      <sanring-dropdown-menu-separator />
-      <button sanringDropdownMenuItem type="button" variant="destructive" (selected)="close()">
-        Delete
-      </button>
-    </sanring-dropdown-menu-content>
-  </ng-template>
+  <sanring-dropdown-menu-content #menu="sanringDropdownMenuContent" class="w-56">
+    <sanring-dropdown-menu-label>Actions</sanring-dropdown-menu-label>
+    <button sanringDropdownMenuItem type="button" value="new-tab">New tab</button>
+    <button sanringDropdownMenuItem type="button" value="new-window">New window</button>
+    <sanring-dropdown-menu-separator />
+    <button sanringDropdownMenuItem type="button" value="delete" variant="destructive">
+      Delete
+    </button>
+  </sanring-dropdown-menu-content>
 </sanring-dropdown-menu>`,
   usageImport: `import { ButtonDirective, SANRING_DROPDOWN_MENU_IMPORTS } from '@sanring/ui';`,
   usageMain: `<sanring-dropdown-menu>
-  <button sanringBtn [sanringDropdownMenuTrigger]="menu">Open menu</button>
+  <button sanringBtn sanringDropdownMenuTrigger [menu]="menu.menu">Open menu</button>
 
-  <ng-template #menu let-close="close">
-    <sanring-dropdown-menu-content>
-      <button sanringDropdownMenuItem type="button" (selected)="close()">Profile</button>
-      <button sanringDropdownMenuItem type="button" (selected)="close()">Settings</button>
-    </sanring-dropdown-menu-content>
-  </ng-template>
+  <sanring-dropdown-menu-content #menu="sanringDropdownMenuContent" (itemSelected)="onAction($event)">
+    <button sanringDropdownMenuItem type="button" value="profile">Profile</button>
+    <button sanringDropdownMenuItem type="button" value="settings">Settings</button>
+  </sanring-dropdown-menu-content>
 </sanring-dropdown-menu>`,
   checkbox: `<sanring-dropdown-menu>
-  <button sanringBtn variant="outline" [sanringDropdownMenuTrigger]="viewMenu">
+  <button sanringBtn variant="outline" sanringDropdownMenuTrigger [menu]="viewMenu.menu">
     View
   </button>
 
-  <ng-template #viewMenu let-close="close">
-    <sanring-dropdown-menu-content class="w-56">
-      <sanring-dropdown-menu-label>Panels</sanring-dropdown-menu-label>
-      <button sanringDropdownMenuItem type="button" (selected)="showStatusBar = !showStatusBar">
-        <span class="flex size-4 items-center justify-center">
-          @if (showStatusBar) {
-            <svg lucideCheck class="size-4"></svg>
-          }
-        </span>
-        <span>Status bar</span>
-      </button>
-      <button sanringDropdownMenuItem type="button" (selected)="showActivityBar = !showActivityBar">
-        <span class="flex size-4 items-center justify-center">
-          @if (showActivityBar) {
-            <svg lucideCheck class="size-4"></svg>
-          }
-        </span>
-        <span>Activity bar</span>
-      </button>
-      <sanring-dropdown-menu-separator />
-      <button sanringDropdownMenuItem type="button" (selected)="close()">Reset layout</button>
-    </sanring-dropdown-menu-content>
-  </ng-template>
+  <sanring-dropdown-menu-content
+    #viewMenu="sanringDropdownMenuContent"
+    class="w-56"
+    (itemSelected)="onViewAction($event)"
+  >
+    <sanring-dropdown-menu-label>Panels</sanring-dropdown-menu-label>
+    <button sanringDropdownMenuItem type="button" value="status-bar">
+      <span class="flex size-4 items-center justify-center">
+        @if (showStatusBar) {
+          <svg lucideCheck class="size-4"></svg>
+        }
+      </span>
+      <span>Status bar</span>
+    </button>
+    <button sanringDropdownMenuItem type="button" value="activity-bar">
+      <span class="flex size-4 items-center justify-center">
+        @if (showActivityBar) {
+          <svg lucideCheck class="size-4"></svg>
+        }
+      </span>
+      <span>Activity bar</span>
+    </button>
+    <sanring-dropdown-menu-separator />
+    <button sanringDropdownMenuItem type="button" value="reset">Reset layout</button>
+  </sanring-dropdown-menu-content>
 </sanring-dropdown-menu>`,
   radio: `<sanring-dropdown-menu>
-  <button sanringBtn variant="outline" [sanringDropdownMenuTrigger]="densityMenu">
+  <button sanringBtn variant="outline" sanringDropdownMenuTrigger [menu]="densityMenu.menu">
     Density
   </button>
 
-  <ng-template #densityMenu let-close="close">
-    <sanring-dropdown-menu-content class="w-56">
-      <sanring-dropdown-menu-label>Density</sanring-dropdown-menu-label>
-      <button sanringDropdownMenuItem type="button" (selected)="density = 'compact'; close()">
-        <span class="flex size-4 items-center justify-center">
-          @if (density === 'compact') {
-            <svg lucideCircle class="size-2 fill-current"></svg>
-          }
-        </span>
-        <span>Compact</span>
-      </button>
-      <button sanringDropdownMenuItem type="button" (selected)="density = 'comfortable'; close()">
-        <span class="flex size-4 items-center justify-center">
-          @if (density === 'comfortable') {
-            <svg lucideCircle class="size-2 fill-current"></svg>
-          }
-        </span>
-        <span>Comfortable</span>
-      </button>
-    </sanring-dropdown-menu-content>
-  </ng-template>
+  <sanring-dropdown-menu-content
+    #densityMenu="sanringDropdownMenuContent"
+    class="w-56"
+    (itemSelected)="onDensityAction($event)"
+  >
+    <sanring-dropdown-menu-label>Density</sanring-dropdown-menu-label>
+    <button sanringDropdownMenuItem type="button" value="compact">
+      <span class="flex size-4 items-center justify-center">
+        @if (density === 'compact') {
+          <svg lucideCircle class="size-2 fill-current"></svg>
+        }
+      </span>
+      <span>Compact</span>
+    </button>
+    <button sanringDropdownMenuItem type="button" value="comfortable">
+      <span class="flex size-4 items-center justify-center">
+        @if (density === 'comfortable') {
+          <svg lucideCircle class="size-2 fill-current"></svg>
+        }
+      </span>
+      <span>Comfortable</span>
+    </button>
+  </sanring-dropdown-menu-content>
 </sanring-dropdown-menu>`,
   submenu: `<sanring-dropdown-menu>
-  <button sanringBtn variant="outline" [sanringDropdownMenuTrigger]="fileMenu">
+  <button sanringBtn variant="outline" sanringDropdownMenuTrigger [menu]="fileMenu.menu">
     File
   </button>
 
-  <ng-template #fileMenu let-close="close">
-    <sanring-dropdown-menu-content class="grid w-[420px] grid-cols-[180px_1fr] gap-1">
-      <div>
-        <sanring-dropdown-menu-label>File</sanring-dropdown-menu-label>
-        <button sanringDropdownMenuItem type="button" (mouseenter)="submenu = 'share'" (selected)="submenu = 'share'">
-          <span class="flex-1 text-left">Share</span>
-          <svg lucideChevronRight class="size-4"></svg>
-        </button>
-        <button sanringDropdownMenuItem type="button" (mouseenter)="submenu = 'export'" (selected)="submenu = 'export'">
-          <span class="flex-1 text-left">Export</span>
-          <svg lucideChevronRight class="size-4"></svg>
-        </button>
-        <sanring-dropdown-menu-separator />
-        <button sanringDropdownMenuItem type="button" (selected)="close()">Close file</button>
-      </div>
+  <sanring-dropdown-menu-content
+    #fileMenu="sanringDropdownMenuContent"
+    class="grid w-[420px] grid-cols-[180px_1fr] gap-1"
+    (itemSelected)="onFileAction($event)"
+  >
+    <div>
+      <sanring-dropdown-menu-label>File</sanring-dropdown-menu-label>
+      <button sanringDropdownMenuItem type="button" value="share" (mouseenter)="submenu = 'share'">
+        <span class="flex-1 text-left">Share</span>
+        <svg lucideChevronRight class="size-4"></svg>
+      </button>
+      <button sanringDropdownMenuItem type="button" value="export" (mouseenter)="submenu = 'export'">
+        <span class="flex-1 text-left">Export</span>
+        <svg lucideChevronRight class="size-4"></svg>
+      </button>
+      <sanring-dropdown-menu-separator />
+      <button sanringDropdownMenuItem type="button" value="close-file">Close file</button>
+    </div>
 
-      <div class="border-l border-[var(--sanring-border)] pl-1">
-        <sanring-dropdown-menu-label>
-          {{ submenu === 'share' ? 'Share' : 'Export' }}
-        </sanring-dropdown-menu-label>
-        @if (submenu === 'share') {
-          <button sanringDropdownMenuItem type="button" (selected)="close()">Copy link</button>
-          <button sanringDropdownMenuItem type="button" (selected)="close()">Invite people</button>
-        } @else {
-          <button sanringDropdownMenuItem type="button" (selected)="close()">PDF</button>
-          <button sanringDropdownMenuItem type="button" (selected)="close()">Markdown</button>
-        }
-      </div>
-    </sanring-dropdown-menu-content>
-  </ng-template>
+    <div class="border-l border-[var(--sanring-border)] pl-1">
+      <sanring-dropdown-menu-label>
+        {{ submenu === 'share' ? 'Share' : 'Export' }}
+      </sanring-dropdown-menu-label>
+      @if (submenu === 'share') {
+        <button sanringDropdownMenuItem type="button" value="copy-link">Copy link</button>
+        <button sanringDropdownMenuItem type="button" value="invite-people">Invite people</button>
+      } @else {
+        <button sanringDropdownMenuItem type="button" value="export-pdf">PDF</button>
+        <button sanringDropdownMenuItem type="button" value="export-markdown">Markdown</button>
+      }
+    </div>
+  </sanring-dropdown-menu-content>
 </sanring-dropdown-menu>`,
   withIcons: `<sanring-dropdown-menu>
-  <button sanringBtn variant="outline" [sanringDropdownMenuTrigger]="moreMenu">
+  <button sanringBtn variant="outline" sanringDropdownMenuTrigger [menu]="moreMenu.menu">
     <svg lucideEllipsis class="size-4"></svg>
     More
   </button>
 
-  <ng-template #moreMenu let-close="close">
-    <sanring-dropdown-menu-content class="w-56">
-      <button sanringDropdownMenuItem type="button" (selected)="close()">
-        <svg lucideFile class="size-4"></svg>
-        <span>New file</span>
-      </button>
-      <button sanringDropdownMenuItem type="button" (selected)="close()">
-        <svg lucideFolder class="size-4"></svg>
-        <span>New folder</span>
-      </button>
-      <sanring-dropdown-menu-separator />
-      <button sanringDropdownMenuItem type="button" (selected)="close()">
-        <svg lucideSettings class="size-4"></svg>
-        <span>Preferences</span>
-      </button>
-    </sanring-dropdown-menu-content>
-  </ng-template>
+  <sanring-dropdown-menu-content #moreMenu="sanringDropdownMenuContent" class="w-56">
+    <button sanringDropdownMenuItem type="button" value="new-file">
+      <svg lucideFile class="size-4"></svg>
+      <span>New file</span>
+    </button>
+    <button sanringDropdownMenuItem type="button" value="new-folder">
+      <svg lucideFolder class="size-4"></svg>
+      <span>New folder</span>
+    </button>
+    <sanring-dropdown-menu-separator />
+    <button sanringDropdownMenuItem type="button" value="preferences">
+      <svg lucideSettings class="size-4"></svg>
+      <span>Preferences</span>
+    </button>
+  </sanring-dropdown-menu-content>
 </sanring-dropdown-menu>`,
 } as const;

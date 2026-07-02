@@ -876,7 +876,7 @@ export const en = {
   'dropdownMenu.description': 'A floating menu for contextual actions opened from a trigger.',
   'dropdownMenu.examples.basic.description': 'A basic action menu with a label, separator, and destructive item.',
   'dropdownMenu.usage.description':
-    'Bind sanringDropdownMenuTrigger to an ng-template, then compose content, groups, labels, items, and separators.',
+    'Reference the content with a template variable (#menu="sanringDropdownMenuContent"), then bind it to the trigger\'s [menu] input. Built on Angular\'s @angular/aria/menu ARIA primitives, so keyboard navigation, focus management, and roving tabindex come for free.',
   'dropdownMenu.installation.description':
     'Install @sanring/ui and import SANRING_DROPDOWN_MENU_IMPORTS for the full dropdown menu primitive set.',
   'dropdownMenu.examples.description':
@@ -886,18 +886,15 @@ export const en = {
   'dropdownMenu.demo.submenu': 'Submenu',
   'dropdownMenu.demo.withIcons': 'With Icons',
   'dropdownMenu.api.description': 'Inputs, outputs, and classes supported by the dropdown menu primitives.',
-  'dropdownMenu.api.trigger.description':
-    'Template rendered inside the floating overlay when the trigger opens the menu.',
-  'dropdownMenu.api.triggerData.description':
-    'Optional data passed to the menu template through the template context.',
-  'dropdownMenu.api.isOpen.description': 'Signal that reflects whether the trigger overlay is open.',
-  'dropdownMenu.api.state.description':
-    'Visual state used by the content animation classes.',
+  'dropdownMenu.api.menu.description':
+    'The menu to open, bound to the content\'s exported reference (#ref="sanringDropdownMenuContent", then [menu]="ref.menu"). Selecting any item closes the menu automatically.',
+  'dropdownMenu.api.itemSelected.description':
+    'Emits the value of whichever item was activated (click, Enter, or Space), right before the menu closes.',
+  'dropdownMenu.api.value.description':
+    'The value reported to itemSelected when this item is activated. Required by the underlying ARIA menu pattern.',
   'dropdownMenu.api.disabled.description': 'Disables a menu item and removes it from keyboard activation.',
   'dropdownMenu.api.variant.description':
     'Controls item tone. Use destructive for actions that remove data or have serious consequences.',
-  'dropdownMenu.api.selected.description':
-    'Emits when the item is clicked, Enter is pressed, or Space is pressed.',
   'dropdownMenu.api.class.description':
     'Additional classes merged with the corresponding dropdown menu primitive.',
 

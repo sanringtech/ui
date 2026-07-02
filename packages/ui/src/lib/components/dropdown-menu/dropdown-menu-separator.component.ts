@@ -16,7 +16,7 @@ export class DropdownMenuSeparatorComponent {
 
   protected readonly separatorClass = computed(() =>
     cn(
-      '-mx-1 my-1 h-px bg-[var(--sanring-border)]',
+      'block -mx-1 my-1 h-px bg-[var(--sanring-border)]',
       this.class(),
     ),
   );

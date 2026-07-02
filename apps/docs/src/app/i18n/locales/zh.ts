@@ -804,7 +804,7 @@ export const zh: Record<TranslationKey, string> = {
   'dropdownMenu.description': '從觸發器展開的浮動選單，適合承載情境操作。',
   'dropdownMenu.examples.basic.description': '包含 label、separator 與危險操作項目的基礎操作選單。',
   'dropdownMenu.usage.description':
-    '將 sanringDropdownMenuTrigger 綁定到 ng-template，再組合 content、group、label、item 與 separator。',
+    '用 template 變數參照 content（#menu="sanringDropdownMenuContent"），再綁到 trigger 的 [menu] input。底層建構在 Angular 官方的 @angular/aria/menu ARIA primitives 上，鍵盤導覽、focus 管理、roving tabindex 都內建處理好了。',
   'dropdownMenu.installation.description':
     '安裝 @sanring/ui，並匯入 SANRING_DROPDOWN_MENU_IMPORTS 取得完整 dropdown menu primitives。',
   'dropdownMenu.examples.description':
@@ -814,14 +814,15 @@ export const zh: Record<TranslationKey, string> = {
   'dropdownMenu.demo.submenu': 'Submenu',
   'dropdownMenu.demo.withIcons': '包含圖示',
   'dropdownMenu.api.description': 'Dropdown menu primitives 支援的 Inputs、Outputs 與 class。',
-  'dropdownMenu.api.trigger.description': '選單開啟時渲染到 floating overlay 內的 template。',
-  'dropdownMenu.api.triggerData.description': '透過 template context 傳入選單 template 的可選資料。',
-  'dropdownMenu.api.isOpen.description': '反映 trigger overlay 是否開啟的 Signal。',
-  'dropdownMenu.api.state.description': '供 content animation classes 使用的視覺狀態。',
+  'dropdownMenu.api.menu.description':
+    '要開啟的選單，綁定到 content 匯出的參照（#ref="sanringDropdownMenuContent"，再用 [menu]="ref.menu"）。選中任一 item 都會自動關閉選單。',
+  'dropdownMenu.api.itemSelected.description':
+    '被啟用的 item（點擊、按 Enter 或 Space）觸發時送出對應的 value，緊接著選單就會關閉。',
+  'dropdownMenu.api.value.description':
+    'item 被啟用時透過 itemSelected 送出的值。底層 ARIA menu pattern 要求必填。',
   'dropdownMenu.api.disabled.description': '停用 menu item，並移除鍵盤啟用行為。',
   'dropdownMenu.api.variant.description':
     '控制 item 語氣；移除資料或高風險操作可使用 destructive。',
-  'dropdownMenu.api.selected.description': 'item 被點擊、按下 Enter 或按下 Space 時觸發。',
   'dropdownMenu.api.class.description': '與對應 dropdown menu primitive 樣式合併的額外 class。',
 
   'select.description': '可組合的選取 primitive，用於從浮動 listbox 中選擇單一值。',
