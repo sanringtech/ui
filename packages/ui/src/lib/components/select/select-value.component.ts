@@ -14,7 +14,7 @@ import { cn } from '../../utils';
   template: `
     <ng-content>
       @if (select.value() === null || select.value() === undefined) {
-        <span class="text-[var(--sanring-muted-foreground)]">{{ placeholder() }}</span>
+        <span class="text-[var(--sanring-muted)]">{{ placeholder() }}</span>
       } @else {
         <span>{{ select.selectedLabel() ?? select.value() }}</span>
       }

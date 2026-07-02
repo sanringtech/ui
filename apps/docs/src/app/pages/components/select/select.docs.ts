@@ -1,4 +1,7 @@
-import { ComponentPageApiRow, ComponentPageDefinition } from '../../../docs-schema/component-page.types';
+import {
+  ComponentPageApiRow,
+  ComponentPageDefinition,
+} from '../../../docs-schema/component-page.types';
 
 export const selectPage = {
   componentId: 'select',
@@ -59,16 +62,66 @@ export const selectPage = {
     },
   ],
   apiRows: [
-    { property: 'SelectComponent.value', type: 'SelectValue | null', defaultValue: 'null', descriptionKey: 'select.api.value.description' },
-    { property: 'SelectComponent.isOpen', type: 'boolean', defaultValue: 'false', descriptionKey: 'select.api.isOpen.description' },
-    { property: 'SelectContentComponent.position', type: "'popper' | 'item-aligned'", defaultValue: "'popper'", descriptionKey: 'select.api.contentPosition.description' },
-    { property: 'SelectContentComponent.matchTriggerWidth', type: 'boolean', defaultValue: 'false', descriptionKey: 'select.api.matchTriggerWidth.description' },
-    { property: 'SelectItemComponent.value', type: 'SelectValue', defaultValue: 'required', descriptionKey: 'select.api.itemValue.description' },
-    { property: 'SelectItemComponent.disabled', type: 'boolean', defaultValue: 'false', descriptionKey: 'select.api.itemDisabled.description' },
-    { property: 'SelectItemComponent.indicatorPosition', type: "'start' | 'end'", defaultValue: "'start'", descriptionKey: 'select.api.indicatorPosition.description' },
-    { property: 'SelectItemComponent.showIndicator', type: 'boolean', defaultValue: 'true', descriptionKey: 'select.api.showIndicator.description' },
-    { property: '[sanringSelectItemIndicator]', type: 'projected content', defaultValue: 'LucideCheck', descriptionKey: 'select.api.customIndicator.description' },
-    { property: 'class', type: 'string', defaultValue: 'undefined', descriptionKey: 'select.api.class.description' },
+    {
+      property: 'SelectComponent.value',
+      type: 'SelectValue | null',
+      defaultValue: 'null',
+      descriptionKey: 'select.api.value.description',
+    },
+    {
+      property: 'SelectComponent.isOpen',
+      type: 'boolean',
+      defaultValue: 'false',
+      descriptionKey: 'select.api.isOpen.description',
+    },
+    {
+      property: 'SelectContentComponent.position',
+      type: "'popper' | 'item-aligned'",
+      defaultValue: "'popper'",
+      descriptionKey: 'select.api.contentPosition.description',
+    },
+    {
+      property: 'SelectContentComponent.matchTriggerWidth',
+      type: 'boolean',
+      defaultValue: 'false',
+      descriptionKey: 'select.api.matchTriggerWidth.description',
+    },
+    {
+      property: 'SelectItemComponent.value',
+      type: 'SelectValue',
+      defaultValue: 'required',
+      descriptionKey: 'select.api.itemValue.description',
+    },
+    {
+      property: 'SelectItemComponent.disabled',
+      type: 'boolean',
+      defaultValue: 'false',
+      descriptionKey: 'select.api.itemDisabled.description',
+    },
+    {
+      property: 'SelectItemComponent.indicatorPosition',
+      type: "'start' | 'end'",
+      defaultValue: "'start'",
+      descriptionKey: 'select.api.indicatorPosition.description',
+    },
+    {
+      property: 'SelectItemComponent.showIndicator',
+      type: 'boolean',
+      defaultValue: 'true',
+      descriptionKey: 'select.api.showIndicator.description',
+    },
+    {
+      property: '[sanringSelectItemIndicator]',
+      type: 'projected content',
+      defaultValue: 'LucideCheck',
+      descriptionKey: 'select.api.customIndicator.description',
+    },
+    {
+      property: 'class',
+      type: 'string',
+      defaultValue: 'undefined',
+      descriptionKey: 'select.api.class.description',
+    },
   ] satisfies readonly ComponentPageApiRow[],
 } as const satisfies ComponentPageDefinition;
 
@@ -95,7 +148,7 @@ import { SANRING_SELECT_IMPORTS } from '@sanring/ui';`,
   </sanring-select-content>
 </sanring-select>`,
   groups: `<sanring-select [(ngModel)]="region">
-  <button sanringSelectTrigger class="w-[240px]">
+  <button sanringSelectTrigger class="w-[120px]">
     <sanring-select-value placeholder="Choose a region" />
   </button>
   <sanring-select-content matchTriggerWidth>

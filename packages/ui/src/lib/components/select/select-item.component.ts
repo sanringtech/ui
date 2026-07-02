@@ -68,6 +68,7 @@ export class SelectItemComponent implements AfterViewInit {
       SELECT_ITEM_SIZE_CLASS,
       'text-[var(--sanring-foreground)] transition-colors',
       'hover:bg-[var(--sanring-surface-strong)] focus:bg-[var(--sanring-surface-strong)]',
+      'data-[state=checked]:bg-[var(--sanring-active)] data-[state=checked]:hover:bg-[var(--sanring-active)]',
       'data-[state=checked]:font-medium data-[disabled]:pointer-events-none data-[disabled]:opacity-50',
       this.class(),
     ),

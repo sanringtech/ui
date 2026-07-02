@@ -20,7 +20,7 @@ export class SelectLabelComponent {
 
   protected readonly labelClass = computed(() =>
     cn(
-      'pointer-events-none block px-2 py-1 text-xs font-medium text-[var(--sanring-muted-foreground)]',
+      'pointer-events-none block px-2 py-1 text-xs font-medium text-[var(--sanring-muted)]',
       this.class(),
     ),
   );
