@@ -1,3 +1,4 @@
+import { CdkOverlayOrigin } from '@angular/cdk/overlay';
 import { Component, forwardRef, model, signal } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { SelectValue } from './select.type';
@@ -23,6 +24,7 @@ export class SelectComponent<T extends SelectValue = SelectValue> implements Con
   readonly isOpen = model<boolean>(false); // 選單開關狀態
   readonly value = signal<T | null>(null); // 當前選中的數值
   readonly disabled = signal<boolean>(false); // 禁用狀態
+  triggerOrigin?: CdkOverlayOrigin;
 
   // Angular 表單的控制回呼函式
   protected onChange: (value: T | null) => void = () => {};

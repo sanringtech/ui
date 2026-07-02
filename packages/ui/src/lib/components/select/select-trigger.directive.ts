@@ -1,3 +1,4 @@
+import { CdkOverlayOrigin } from '@angular/cdk/overlay';
 import { Directive, computed, inject, input } from '@angular/core';
 import { cn } from '../../utils';
 import { SelectComponent } from './select.component';
@@ -5,6 +6,7 @@ import { SelectComponent } from './select.component';
 @Directive({
   selector: 'button[sanringSelectTrigger]',
   standalone: true,
+  hostDirectives: [CdkOverlayOrigin],
   host: {
     type: 'button',
     role: 'combobox',
@@ -24,7 +26,12 @@ import { SelectComponent } from './select.component';
 })
 export class SelectTriggerDirective {
   protected readonly select = inject(SelectComponent);
+  private readonly origin = inject(CdkOverlayOrigin);
   readonly class = input<string | undefined>();
+
+  constructor() {
+    this.select.triggerOrigin = this.origin;
+  }
 
   protected readonly triggerClass = computed(() =>
     cn(
