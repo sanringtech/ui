@@ -62,7 +62,8 @@ const SELECT_ITEM_ALIGNED_POSITIONS: ConnectionPositionPair[] = [
         [cdkConnectedOverlayOpen]="select.isOpen()"
         [cdkConnectedOverlayPositions]="positions()"
         [cdkConnectedOverlayOffsetY]="offsetY()"
-        [cdkConnectedOverlayWidth]="overlayWidth()"
+        [cdkConnectedOverlayMatchWidth]="matchTriggerWidth()"
+        [cdkConnectedOverlayUsePopover]="null"
         [cdkConnectedOverlayPush]="true"
         [cdkConnectedOverlayViewportMargin]="8"
         [cdkConnectedOverlayScrollStrategy]="scrollStrategy"
@@ -109,15 +110,13 @@ export class SelectContentComponent {
   protected readonly offsetY = computed(() =>
     this.position() === 'item-aligned' ? -this.itemAlignedOffsetY() : 0,
   );
-  protected readonly overlayWidth = computed(() =>
-    this.matchTriggerWidth() ? this.select.triggerOrigin?.elementRef.nativeElement.getBoundingClientRect().width : undefined,
-  );
   protected readonly scrollStrategy = this.overlay.scrollStrategies.close();
 
   protected readonly contentClass = computed(() =>
     cn(
       OVERLAY_SURFACE_CLASS,
-      'z-50 max-h-96 min-w-32 overflow-y-auto rounded-[var(--sanring-radius-sm)] p-1 outline-none',
+      'z-50 max-h-96 min-w-32 overflow-y-auto rounded-[var(--sanring-radius-sm)] p-1.5 outline-none',
+      this.matchTriggerWidth() ? 'w-full' : undefined,
       'animate-popover-in',
       this.class(),
     ),
