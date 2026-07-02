@@ -1,4 +1,4 @@
-import { Directive, ElementRef, OnDestroy, afterNextRender, effect, inject } from '@angular/core';
+import { Directive, ElementRef, OnDestroy, effect, inject } from '@angular/core';
 import { ConnectionPositionPair, Overlay, OverlayRef } from '@angular/cdk/overlay';
 import { DomPortal } from '@angular/cdk/portal';
 import { FocusMonitor } from '@angular/cdk/a11y';
@@ -56,7 +56,7 @@ export class DropdownMenuTriggerDirective implements OnDestroy {
     effect(() => {
       const menu = this.ngTrigger.menu();
       if (menu && !this.overlayRef) {
-        afterNextRender(() => this.attachOverlay(menu.element));
+        this.attachOverlay(menu.element);
       }
     });
 
