@@ -29,6 +29,11 @@ export const routes: Routes = [
               ),
           },
           {
+            path: 'cli',
+            loadComponent: () =>
+              import('./pages/cli/cli-page.component').then((m) => m.CliPageComponent),
+          },
+          {
             path: 'components',
             loadComponent: () =>
               import('./layouts/component-docs-layout.component').then(

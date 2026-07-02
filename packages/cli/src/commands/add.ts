@@ -43,10 +43,11 @@ export const addCommand = new Command('add')
   .option('-s, --shared-path <path>', 'destination for shared utilities (default: <path>/shared)')
   .option('-f, --force', 'overwrite existing files', false)
   .option('--registry <source>', 'custom registry (URL or local path)')
+  .option('--dry-run', 'preview changes without writing files', false)
   .action(
     async (
       componentName: string,
-      options: { path?: string; sharedPath?: string; force: boolean; registry?: string },
+      options: { path?: string; sharedPath?: string; force: boolean; registry?: string; dryRun: boolean },
     ) => {
       const cwd = process.cwd();
       const registrySource = options.registry;
@@ -63,6 +64,9 @@ export const addCommand = new Command('add')
       const componentBasePath = resolve(cwd, options.path ?? config?.componentPath ?? DEFAULT_PATH);
 
       console.log(pc.cyan(`\nAdding ${pc.bold(componentName)}...\n`));
+      if (options.dryRun) {
+        console.log(pc.dim('  Dry run — no files will be written.\n'));
+      }
 
       // Fetch registry
       const registrySpinner = ora('Loading registry...').start();
@@ -94,6 +98,19 @@ export const addCommand = new Command('add')
           if (!shared) { console.warn(pc.yellow(`  ⚠ Unknown shared dep "${depName}"`)); continue; }
           const fileName = shared.file.split('/').pop()!;
           const dest = join(sharedDestDir, fileName);
+
+          if (options.dryRun) {
+            const exists = existsSync(dest);
+            if (exists && !options.force) {
+              console.log(pc.dim(`  – shared/${fileName} (exists, would skip)`));
+              skipped++;
+            } else {
+              console.log(pc.cyan(`  + shared/${fileName}${exists ? pc.dim(' (would overwrite)') : ''}`));
+              written++;
+            }
+            continue;
+          }
+
           const spinner = ora({ text: pc.dim(`shared/${fileName}`), prefixText: ' ' }).start();
           try {
             const content = await fetchFile(shared.file, registrySource);
@@ -118,6 +135,19 @@ export const addCommand = new Command('add')
       for (const file of component.files) {
         const fileName = file.split('/').pop()!;
         const dest = join(destDir, fileName);
+
+        if (options.dryRun) {
+          const exists = existsSync(dest);
+          if (exists && !options.force) {
+            console.log(pc.dim(`  – ${fileName} (exists, would skip)`));
+            skipped++;
+          } else {
+            console.log(pc.cyan(`  + ${fileName}${exists ? pc.dim(' (would overwrite)') : ''}`));
+            written++;
+          }
+          continue;
+        }
+
         const spinner = ora({ text: pc.dim(fileName), prefixText: ' ' }).start();
         try {
           const content = await fetchFile(`components/${file}`, registrySource);
@@ -151,11 +181,16 @@ export const addCommand = new Command('add')
           const pm = detectPackageManager(cwd);
           const pkgs = missing.map(([pkg, ver]) => `${pkg}@${ver}`);
           const cmd = installCommand(pm, pkgs);
-          console.log(pc.dim(`  Installing: ${pc.cyan(cmd)}\n`));
-          const [bin, ...args] = cmd.split(' ');
-          const result = spawnSync(bin, args, { stdio: 'inherit', shell: true });
-          if (result.status !== 0) {
-            console.warn(pc.yellow(`  ⚠ Install failed. Run manually:\n  ${pc.white(cmd)}`));
+
+          if (options.dryRun) {
+            console.log(pc.dim(`  Would install: ${pc.cyan(cmd)}`));
+          } else {
+            console.log(pc.dim(`  Installing: ${pc.cyan(cmd)}\n`));
+            const [bin, ...args] = cmd.split(' ');
+            const result = spawnSync(bin, args, { stdio: 'inherit', shell: true });
+            if (result.status !== 0) {
+              console.warn(pc.yellow(`  ⚠ Install failed. Run manually:\n  ${pc.white(cmd)}`));
+            }
           }
         }
       }
@@ -166,12 +201,13 @@ export const addCommand = new Command('add')
       }
 
       const parts: string[] = [];
-      if (written > 0) parts.push(pc.green(`${written} added`));
+      if (written > 0) parts.push(pc.green(`${written} ${options.dryRun ? 'to add' : 'added'}`));
       if (skipped > 0) parts.push(pc.dim(`${skipped} skipped`));
       if (failed > 0) parts.push(pc.yellow(`${failed} failed`));
-      console.log(`\n${pc.bold(componentName)} — ${parts.join(', ')}\n`);
+      const suffix = options.dryRun ? pc.dim(' (dry run, no files written)') : '';
+      console.log(`\n${pc.bold(componentName)} — ${parts.join(', ')}${suffix}\n`);
 
-      if (skipped > 0) {
+      if (skipped > 0 && !options.dryRun) {
         console.log(pc.dim(`  Run with ${pc.white('--force')} to overwrite existing files.\n`));
       }
     },

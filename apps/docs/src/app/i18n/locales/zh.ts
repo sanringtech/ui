@@ -563,6 +563,21 @@ export const zh: Record<TranslationKey, string> = {
   'theming.darkMode.note':
     '這與 shadcn/ui 不同——shadcn 在 <body> 加上 .dark class。屬性方式讓你可以將亮暗主題限定在任意子樹，而不只是整份文件。',
 
+  'cli.page.description':
+    '一個命令列工具，能直接把 Sanring UI 元件的原始碼複製進你的專案——順便處理依賴安裝，程式碼完全歸你掌控。',
+  'cli.overview.title': '概覽',
+  'cli.overview.body':
+    '@sanring/cli 套件提供三個指令——init、add、list，讀取跟這個文件站相同的元件 registry。建議用 npx 執行，隨時拿到最新版本。',
+  'cli.init.title': 'init',
+  'cli.init.body':
+    '每個專案只需執行一次。會確認目前是否在 Angular 專案中，寫入 sanring.config.json 記錄你選擇的元件路徑，並安裝基礎的 peer dependencies（clsx、tailwind-merge）。',
+  'cli.add.title': 'add',
+  'cli.add.body':
+    '把指定元件的原始碼複製進你的專案，並安裝缺少的 peer dependencies。加上 --dry-run 可以在不動任何檔案的情況下，預覽哪些檔案會被新增或覆寫。',
+  'cli.list.title': 'list',
+  'cli.list.body':
+    '列出 registry 裡所有可用的元件與其 peer dependencies。指令別名為 ls。',
+
   'component.radio': 'Radio 群組',
   'radio.description': '一組單選按鈕，透過 ControlValueAccessor 相容 Angular 表單，內建 Roving Tabindex 鍵盤導航與完整 WAI-ARIA 規範。',
   'radio.examples.basic.description': 'RadioGroup 實作 ControlValueAccessor，使用 ngModel 或 reactive form 綁定選取值。',

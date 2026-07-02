@@ -634,6 +634,21 @@ export const en = {
   'theming.darkMode.note':
     'This differs from shadcn/ui, which adds a .dark class to <body>. The attribute approach lets you scope light/dark to any subtree, not just the whole document.',
 
+  'cli.page.description':
+    'A command-line tool for scaffolding Sanring UI components directly into your project — copy the source, wire up dependencies, and stay in control of the code.',
+  'cli.overview.title': 'Overview',
+  'cli.overview.body':
+    'The @sanring/cli package exposes three commands — init, add, and list — that read from the same component registry used by this documentation site. Run it with npx so you always get the latest version.',
+  'cli.init.title': 'init',
+  'cli.init.body':
+    'Run once per project. Verifies you\'re in an Angular project, writes a sanring.config.json with your chosen component path, and installs the base peer dependencies (clsx, tailwind-merge).',
+  'cli.add.title': 'add',
+  'cli.add.body':
+    'Copies a component\'s source files into your project and installs any missing peer dependencies. Pass --dry-run to preview exactly which files would be created or overwritten without touching your filesystem.',
+  'cli.list.title': 'list',
+  'cli.list.body':
+    'Prints every component available in the registry, along with its peer dependencies. Aliased as ls.',
+
   'component.radio': 'Radio Group',
   'radio.description': 'A set of radio buttons backed by ControlValueAccessor, with full keyboard navigation (roving tabindex) and WAI-ARIA compliance.',
   'radio.examples.basic.description': 'A RadioGroup backed by ControlValueAccessor — use ngModel or reactive forms to bind the selected value.',
