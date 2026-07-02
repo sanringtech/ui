@@ -23,6 +23,7 @@ export * from './lib/components/popover';
 export * from './lib/components/progress';
 export * from './lib/components/radio';
 export * from './lib/components/scrollArea';
+export * from './lib/components/select';
 export * from './lib/components/sheet';
 export * from './lib/components/skeleton';
 export * from './lib/components/spinner';

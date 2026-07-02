@@ -1,7 +1,20 @@
-import { ChangeDetectionStrategy, Component, computed, inject, input } from '@angular/core';
+import {
+  AfterViewInit,
+  ChangeDetectionStrategy,
+  Component,
+  ElementRef,
+  ViewChild,
+  booleanAttribute,
+  computed,
+  effect,
+  inject,
+  input,
+} from '@angular/core';
 import { LucideCheck } from '@lucide/angular';
 import { SelectComponent } from './select.component';
 import { cn } from '../../utils';
+import { MENU_ITEM_SIZE_CLASS } from '../component-styles';
+import { SelectIndicatorPosition, SelectValue } from './select.type';
 
 @Component({
   selector: 'sanring-select-item',
@@ -9,65 +22,102 @@ import { cn } from '../../utils';
   imports: [LucideCheck],
   changeDetection: ChangeDetectionStrategy.OnPush,
   host: {
-    role: 'option', // 💡 W3C 標準：宣告這是清單內的一個可選項
+    role: 'option',
     '[attr.aria-selected]': 'isSelected()',
-    '[attr.data-state]': 'isSelected() ? "selected" : "not-selected"',
-    '[attr.aria-disabled]': 'disabled() ? "true" : "false"',
+    '[attr.aria-disabled]': 'isDisabled() ? "true" : null',
+    '[attr.data-state]': 'isSelected() ? "checked" : "unchecked"',
+    '[attr.data-disabled]': 'isDisabled() ? "" : null',
+    '[attr.tabindex]': 'isDisabled() ? "-1" : "0"',
     '[class]': 'itemClass()',
-    '(click)': 'onClick()', // 監聽點擊
+    '(click)': 'selectItem()',
+    '(keydown.enter)': 'handleKeyActivation($event)',
+    '(keydown.space)': 'handleKeyActivation($event)',
   },
   template: `
-    <!-- 預設左側留出一個空間放 Check 圖示 -->
-    <span class="absolute left-2 flex h-3.5 w-3.5 items-center justify-center">
-      @if (isSelected()) {
-        <svg lucideCheck class="size-4" strokeWidth="3"></svg>
+    <span [class]="indicatorClass()">
+      @if (isSelected() && showIndicator()) {
+        <ng-content select="[sanringSelectItemIndicator]">
+          <svg lucideCheck class="size-4 animate-in zoom-in-50" strokeWidth="3"></svg>
+        </ng-content>
       }
     </span>
 
-    <!-- 顯示選項內部的文字或自訂投影 -->
-    <span class="block truncate">
+    <span #label [class]="labelClass()">
       <ng-content></ng-content>
     </span>
   `,
 })
-export class SelectItemComponent {
-  // 🧠 注入大腦（因為大腦可能有泛型，這裡預設對接）
+export class SelectItemComponent implements AfterViewInit {
   protected readonly select = inject(SelectComponent);
+  private readonly elementRef = inject<ElementRef<HTMLElement>>(ElementRef);
 
-  // 接收這個選項代表的真正數值（例如 'apple', 123, 或是一整隻物件）
-  readonly value = input.required<any>();
+  @ViewChild('label') private labelRef?: ElementRef<HTMLElement>;
 
-  // 允許單個選項禁用
-  readonly disabled = input<boolean>(false);
-
-  // 允許外部擴充樣式
+  readonly value = input.required<SelectValue>();
+  readonly disabled = input(false, { transform: booleanAttribute });
+  readonly showIndicator = input(true, { transform: booleanAttribute });
+  readonly indicatorPosition = input<SelectIndicatorPosition>('start');
   readonly class = input<string | undefined>();
 
-  // 💡 動態計算：當大腦目前的 value() 等於自己傳入的 value() 時，就是被選中狀態
-  protected readonly isSelected = computed(() => {
-    const registryValue = this.select.value();
-    const myValue = this.value();
-
-    // 如果是物件型別，實務上可能需要深比較（Deep Equal），這裡先做基礎相等性檢查
-    return registryValue === myValue;
-  });
+  protected readonly isSelected = computed(() => this.select.value() === this.value());
+  protected readonly isDisabled = computed(() => this.disabled() || this.select.disabled());
 
   protected readonly itemClass = computed(() =>
     cn(
-      // 基底排版：相對定位、留出左邊給對勾圖示的 padding (pl-8)
-      'relative flex w-full cursor-default select-none items-center rounded-[var(--sanring-radius-sm)] py-1.5 pl-8 pr-2 text-sm text-[var(--sanring-foreground)] outline-none',
-      // 互動狀態：滑鼠移入、或是未來鍵盤聚焦時的背景色 (bg-accent)
-      'hover:bg-[var(--sanring-accent)] hover:text-[var(--sanring-accent-foreground)]',
-      // 禁用狀態
-      'pointer-events-none opacity-50',
+      'relative flex w-full cursor-default select-none items-center gap-2 rounded-[var(--sanring-radius-xs)] px-2 outline-none',
+      MENU_ITEM_SIZE_CLASS,
+      'text-[var(--sanring-foreground)] transition-colors',
+      'hover:bg-[var(--sanring-surface-strong)] focus:bg-[var(--sanring-surface-strong)]',
+      'data-[state=checked]:font-medium data-[disabled]:pointer-events-none data-[disabled]:opacity-50',
       this.class(),
     ),
   );
 
-  protected onClick(): void {
-    if (this.disabled() || this.select.disabled()) return;
+  protected readonly indicatorClass = computed(() =>
+    cn(
+      'flex size-4 shrink-0 items-center justify-center text-current',
+      this.isSelected() && this.showIndicator() ? 'opacity-100' : 'opacity-0',
+      this.indicatorPosition() === 'end' ? 'order-2' : 'order-1',
+    ),
+  );
 
-    // 💡 核心動作：告訴大腦我被選中了，把我的值傳回去！
-    this.select.selectValue(this.value());
+  protected readonly labelClass = computed(() =>
+    cn(
+      'min-w-0 flex-1 truncate',
+      this.indicatorPosition() === 'end' ? 'order-1' : 'order-2',
+    ),
+  );
+
+  constructor() {
+    effect(() => {
+      if (this.isSelected()) {
+        this.select.setSelectedLabel(this.itemText());
+      }
+    });
+  }
+
+  ngAfterViewInit(): void {
+    if (this.isSelected()) {
+      this.select.setSelectedLabel(this.itemText());
+    }
+  }
+
+  protected selectItem(): void {
+    if (this.isDisabled()) return;
+    this.select.selectValue(this.value(), this.itemText());
+  }
+
+  protected handleKeyActivation(event: Event): void {
+    if (this.isDisabled()) return;
+    event.preventDefault();
+    this.selectItem();
+  }
+
+  private itemText(): string {
+    return (
+      this.labelRef?.nativeElement.textContent?.trim() ??
+      this.elementRef.nativeElement.textContent?.trim() ??
+      ''
+    );
   }
 }

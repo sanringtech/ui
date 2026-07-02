@@ -14,7 +14,5 @@ import { cn } from '../../utils';
 export class SelectGroupComponent {
   readonly class = input<string | undefined>();
 
-  protected readonly groupClass = computed(
-    () => cn('p-1-exclude', this.class()), // 通常不需要太多複雜樣式，主要作為容器
-  );
+  protected readonly groupClass = computed(() => cn('p-1', this.class()));
 }

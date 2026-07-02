@@ -44,6 +44,7 @@ const SELECT_CONTENT_POSITIONS: ConnectionPositionPair[] = [
       >
         <div
           role="listbox"
+          tabindex="-1"
           [id]="select.contentId"
           [attr.data-state]="select.isOpen() ? 'open' : 'closed'"
           [class]="contentClass()"

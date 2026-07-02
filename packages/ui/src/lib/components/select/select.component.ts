@@ -23,6 +23,7 @@ export class SelectComponent<T extends SelectValue = SelectValue> implements Con
   // 🧠 元件的核心狀態
   readonly isOpen = model<boolean>(false); // 選單開關狀態
   readonly value = signal<T | null>(null); // 當前選中的數值
+  readonly selectedLabel = signal<string | null>(null);
   readonly disabled = signal<boolean>(false); // 禁用狀態
   triggerOrigin?: CdkOverlayOrigin;
 
@@ -36,17 +37,23 @@ export class SelectComponent<T extends SelectValue = SelectValue> implements Con
     this.isOpen.set(open);
   }
 
-  selectValue(val: T | null): void {
+  selectValue(val: T | null, label?: string): void {
     if (this.disabled()) return;
     this.value.set(val);
+    this.selectedLabel.set(label ?? null);
     this.onChange(val);
     this.onTouched();
     this.isOpen.set(false); // 選完自動關閉
   }
 
+  setSelectedLabel(label: string | null): void {
+    this.selectedLabel.set(label);
+  }
+
   // --- ControlValueAccessor 介面實作 ---
   writeValue(value: T | null): void {
     this.value.set(value);
+    this.selectedLabel.set(null);
   }
 
   registerOnChange(fn: (value: T | null) => void): void {

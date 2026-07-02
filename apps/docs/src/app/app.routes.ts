@@ -162,6 +162,13 @@ export const routes: Routes = [
                   ),
               },
               {
+                path: 'select',
+                loadComponent: () =>
+                  import('./pages/components/select/select-page.component').then(
+                    (m) => m.SelectPageComponent,
+                  ),
+              },
+              {
                 path: 'sheet',
                 loadComponent: () =>
                   import('./pages/components/sheet/sheet-page.component').then(
