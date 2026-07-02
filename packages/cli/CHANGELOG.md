@@ -1,5 +1,11 @@
 # @sanring/cli
 
+## 0.2.0
+
+### Minor Changes
+
+- edee46d: Add `--dry-run` to `add`, previewing which files would be created or overwritten without writing to disk or installing dependencies.
+
 ## 0.1.0
 
 ### Minor Changes
