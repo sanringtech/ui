@@ -74,7 +74,7 @@ export const scrollAreaPage = {
 } as const satisfies ComponentPageDefinition;
 
 export const scrollAreaPageExamples = {
-  basic: `<sanring-scroll-area class="h-64 rounded-lg border p-4">
+  basic: `<sanring-scroll-area class="h-64 rounded-[var(--sanring-radius)] border p-4">
   @for (item of items; track item.id) {
     <div class="border-b py-3">
       {{ item.title }}
@@ -89,7 +89,7 @@ export const scrollAreaPageExamples = {
   usageMain: `<div
   sanringScrollArea
   sanringInfiniteScroll
-  class="h-72 rounded-lg border p-4"
+  class="h-72 rounded-[var(--sanring-radius)] border p-4"
   (loadMore)="loadMore()"
 >
   @for (item of items; track item.id) {
@@ -99,19 +99,19 @@ export const scrollAreaPageExamples = {
   }
 </div>`,
   direction: `<sanring-scroll-area
-  class="h-48 w-full rounded-lg border"
+  class="h-48 w-full rounded-[var(--sanring-radius)] border"
   orientation="horizontal"
 >
   <div class="flex w-max gap-3 p-4 pr-6">
     @for (item of items; track item.id) {
-      <article class="w-48 rounded-lg border p-4">
+      <article class="w-48 rounded-[var(--sanring-radius)] border p-4">
         {{ item.title }}
       </article>
     }
   </div>
 </sanring-scroll-area>`,
   hideScrollbar: `<sanring-scroll-area
-  class="h-64 rounded-lg border p-4"
+  class="h-64 rounded-[var(--sanring-radius)] border p-4"
   [hideScrollbar]="true"
 >
   @for (item of items; track item.id) {
@@ -120,7 +120,7 @@ export const scrollAreaPageExamples = {
 </sanring-scroll-area>`,
   customScrollbar: `<!-- Custom thumb color -->
 <sanring-scroll-area
-  class="h-64 rounded-lg border p-4"
+  class="h-64 rounded-[var(--sanring-radius)] border p-4"
   style="--scrollbar-thumb: #6366f1"
 >
   ...
@@ -128,7 +128,7 @@ export const scrollAreaPageExamples = {
 
 <!-- Custom thumb + track -->
 <sanring-scroll-area
-  class="h-64 rounded-lg border p-4"
+  class="h-64 rounded-[var(--sanring-radius)] border p-4"
   style="--scrollbar-thumb: #94a3b8; --scrollbar-track: #f1f5f9"
 >
   ...
@@ -136,7 +136,7 @@ export const scrollAreaPageExamples = {
   infinite: `<div
   sanringScrollArea
   sanringInfiniteScroll
-  class="h-72 rounded-lg border p-4"
+  class="h-72 rounded-[var(--sanring-radius)] border p-4"
   (loadMore)="loadMore()"
 >
   @for (item of visibleItems; track item.id) {

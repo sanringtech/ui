@@ -70,7 +70,7 @@ import { sheetPage, sheetPageExamples } from './sheet.docs';
                   type="button"
                   sanringSheetClose
                   aria-label="Close"
-                  class="absolute right-4 top-4 rounded-sm p-0.5 opacity-70 transition-opacity hover:opacity-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--sanring-border-strong)]"
+                  class="absolute right-4 top-4 rounded-[var(--sanring-radius-xs)] p-0.5 opacity-70 transition-opacity hover:opacity-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--sanring-border-strong)]"
                 >
                   <svg lucideX class="size-4"></svg>
                 </button>
@@ -98,10 +98,10 @@ import { sheetPage, sheetPageExamples } from './sheet.docs';
       <!-- Usage -->
       <app-component-page-section [section]="section('usage')">
         <div class="grid gap-6">
-          <div class="overflow-hidden rounded-lg border border-[var(--docs-border)]">
+          <div class="overflow-hidden rounded-[var(--sanring-radius)] border border-[var(--docs-border)]">
             <app-component-page-code-block [code]="examples.usageImport" language="typescript" />
           </div>
-          <div class="overflow-hidden rounded-lg border border-[var(--docs-border)]">
+          <div class="overflow-hidden rounded-[var(--sanring-radius)] border border-[var(--docs-border)]">
             <app-component-page-code-block [code]="examples.usageMain" language="angular-html" />
           </div>
         </div>
@@ -117,7 +117,7 @@ import { sheetPage, sheetPageExamples } from './sheet.docs';
 
       <!-- Composition -->
       <app-component-page-section [section]="section('composition')">
-        <div class="overflow-hidden rounded-lg border border-[var(--docs-border)]">
+        <div class="overflow-hidden rounded-[var(--sanring-radius)] border border-[var(--docs-border)]">
           <app-component-page-code-block [code]="examples.composition" language="bash" />
         </div>
       </app-component-page-section>
@@ -138,7 +138,7 @@ import { sheetPage, sheetPageExamples } from './sheet.docs';
                       type="button"
                       sanringSheetClose
                       aria-label="Close"
-                      class="absolute right-4 top-4 rounded-sm p-0.5 opacity-70 transition-opacity hover:opacity-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--sanring-border-strong)]"
+                      class="absolute right-4 top-4 rounded-[var(--sanring-radius-xs)] p-0.5 opacity-70 transition-opacity hover:opacity-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--sanring-border-strong)]"
                     >
                       <svg lucideX class="size-4"></svg>
                     </button>
@@ -181,7 +181,7 @@ import { sheetPage, sheetPageExamples } from './sheet.docs';
                       type="button"
                       sanringSheetClose
                       aria-label="Close"
-                      class="absolute right-4 top-4 rounded-sm p-0.5 opacity-70 transition-opacity hover:opacity-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--sanring-border-strong)]"
+                      class="absolute right-4 top-4 rounded-[var(--sanring-radius-xs)] p-0.5 opacity-70 transition-opacity hover:opacity-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--sanring-border-strong)]"
                     >
                       <svg lucideX class="size-4"></svg>
                     </button>
@@ -231,7 +231,7 @@ import { sheetPage, sheetPageExamples } from './sheet.docs';
                       type="button"
                       sanringSheetClose
                       aria-label="Close"
-                      class="absolute right-4 top-4 rounded-sm p-0.5 opacity-70 transition-opacity hover:opacity-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--sanring-border-strong)]"
+                      class="absolute right-4 top-4 rounded-[var(--sanring-radius-xs)] p-0.5 opacity-70 transition-opacity hover:opacity-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--sanring-border-strong)]"
                     >
                       <svg lucideX class="size-4"></svg>
                     </button>
@@ -274,7 +274,7 @@ import { sheetPage, sheetPageExamples } from './sheet.docs';
                       type="button"
                       sanringSheetClose
                       aria-label="Close"
-                      class="absolute right-4 top-4 rounded-sm p-0.5 opacity-70 transition-opacity hover:opacity-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--sanring-border-strong)]"
+                      class="absolute right-4 top-4 rounded-[var(--sanring-radius-xs)] p-0.5 opacity-70 transition-opacity hover:opacity-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--sanring-border-strong)]"
                     >
                       <svg lucideX class="size-4"></svg>
                     </button>
@@ -331,7 +331,7 @@ import { sheetPage, sheetPageExamples } from './sheet.docs';
                       type="button"
                       sanringSheetClose
                       aria-label="Close"
-                      class="absolute right-4 top-4 rounded-sm p-0.5 opacity-70 transition-opacity hover:opacity-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--sanring-border-strong)]"
+                      class="absolute right-4 top-4 rounded-[var(--sanring-radius-xs)] p-0.5 opacity-70 transition-opacity hover:opacity-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--sanring-border-strong)]"
                     >
                       <svg lucideX class="size-4"></svg>
                     </button>

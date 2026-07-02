@@ -12,7 +12,7 @@ import { HeaderActionButtonComponent } from './header-action-button.component';
       <label class="max-[860px]:min-w-0 max-[860px]:flex-1">
         <span class="sr-only">{{ i18n.t('search.label') }}</span>
         <input
-          class="h-10 w-[330px] rounded-lg border border-transparent bg-[var(--docs-elevated)] px-4 text-[var(--docs-fg)] outline-none focus:border-[var(--docs-border-strong)] max-[980px]:w-[min(46vw,300px)] max-[860px]:w-full"
+          class="h-10 w-[330px] rounded-[var(--sanring-radius)] border border-transparent bg-[var(--docs-elevated)] px-4 text-[var(--docs-fg)] outline-none focus:border-[var(--docs-border-strong)] max-[980px]:w-[min(46vw,300px)] max-[860px]:w-full"
           type="search"
           [placeholder]="i18n.t('search.placeholder')"
         />

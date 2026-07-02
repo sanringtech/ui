@@ -50,7 +50,7 @@ const codeTheme = 'vitesse-dark';
     <div class="relative bg-[var(--docs-code)]">
       <button
         type="button"
-        class="absolute right-3 top-3 grid size-8 cursor-pointer place-items-center rounded-md border border-[var(--docs-border)] bg-[var(--docs-elevated)] text-[var(--docs-muted)] transition-colors hover:text-[var(--docs-fg)]"
+        class="absolute right-3 top-3 grid size-8 cursor-pointer place-items-center rounded-[var(--sanring-radius-sm)] border border-[var(--docs-border)] bg-[var(--docs-elevated)] text-[var(--docs-muted)] transition-colors hover:text-[var(--docs-fg)]"
         [attr.aria-label]="i18n.t('actions.copyCode')"
         (click)="copyCode()"
       >

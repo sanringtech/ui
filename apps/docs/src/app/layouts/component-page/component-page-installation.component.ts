@@ -38,13 +38,13 @@ type PackageManager = 'pnpm' | 'npm' | 'yarn' | 'bun';
 
       <sanring-tabs-content value="command" class="mt-0">
         <div
-          class="w-full overflow-hidden rounded-xl border border-[var(--docs-border)] bg-[var(--docs-code)]"
+          class="w-full overflow-hidden rounded-[var(--sanring-radius-lg)] border border-[var(--docs-border)] bg-[var(--docs-code)]"
         >
           <div
             class="flex min-w-0 items-center gap-2 border-b border-[var(--docs-border)] px-3 py-2"
           >
             <span
-              class="grid size-6 shrink-0 place-items-center rounded-md border border-[var(--docs-border)] bg-[var(--docs-bg)] font-mono text-xs text-[var(--docs-fg)]"
+              class="grid size-6 shrink-0 place-items-center rounded-[var(--sanring-radius-sm)] border border-[var(--docs-border)] bg-[var(--docs-bg)] font-mono text-xs text-[var(--docs-fg)]"
             >
               &gt;_
             </span>
@@ -63,7 +63,7 @@ type PackageManager = 'pnpm' | 'npm' | 'yarn' | 'bun';
 
             <button
               type="button"
-              class="grid size-8 shrink-0 place-items-center rounded-md text-[var(--docs-muted)] transition-colors hover:bg-[var(--docs-elevated)] hover:text-[var(--docs-fg)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--docs-border-strong)]"
+              class="grid size-8 shrink-0 place-items-center rounded-[var(--sanring-radius-sm)] text-[var(--docs-muted)] transition-colors hover:bg-[var(--docs-elevated)] hover:text-[var(--docs-fg)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--docs-border-strong)]"
               [attr.aria-label]="i18n.t('actions.copyCode')"
               (click)="copyCurrentCode()"
             >
@@ -79,7 +79,7 @@ type PackageManager = 'pnpm' | 'npm' | 'yarn' | 'bun';
 
       <sanring-tabs-content value="manual" class="mt-0">
         <div
-          class="w-full overflow-hidden rounded-xl border border-[var(--docs-border)] bg-[var(--docs-code)]"
+          class="w-full overflow-hidden rounded-[var(--sanring-radius-lg)] border border-[var(--docs-border)] bg-[var(--docs-code)]"
         >
           <div
             class="flex min-w-0 items-center gap-2 border-b border-[var(--docs-border)] px-3 py-2"
@@ -87,7 +87,7 @@ type PackageManager = 'pnpm' | 'npm' | 'yarn' | 'bun';
             <span class="flex-1 text-sm font-medium text-[var(--docs-fg)]">Import</span>
             <button
               type="button"
-              class="grid size-8 shrink-0 place-items-center rounded-md text-[var(--docs-muted)] transition-colors hover:bg-[var(--docs-elevated)] hover:text-[var(--docs-fg)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--docs-border-strong)]"
+              class="grid size-8 shrink-0 place-items-center rounded-[var(--sanring-radius-sm)] text-[var(--docs-muted)] transition-colors hover:bg-[var(--docs-elevated)] hover:text-[var(--docs-fg)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--docs-border-strong)]"
               [attr.aria-label]="i18n.t('actions.copyCode')"
               (click)="copyCurrentCode()"
             >
@@ -132,7 +132,7 @@ export class ComponentPageInstallationComponent {
 
   protected packageManagerClass(manager: PackageManager) {
     return [
-      'rounded-md px-2 py-1 font-mono text-sm transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--docs-border-strong)]',
+      'rounded-[var(--sanring-radius-sm)] px-2 py-1 font-mono text-sm transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--docs-border-strong)]',
       this.selectedPackageManager() === manager
         ? 'bg-[var(--docs-bg)] text-[var(--docs-fg)] shadow-sm'
         : 'text-[var(--docs-muted)] hover:text-[var(--docs-fg)]',

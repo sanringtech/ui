@@ -46,10 +46,10 @@ import { checkboxPage, checkboxPageExamples } from './checkbox.docs';
 
       <app-component-page-section [section]="section('usage')">
         <div class="grid gap-6">
-          <div class="overflow-hidden rounded-lg border border-[var(--docs-border)]">
+          <div class="overflow-hidden rounded-[var(--sanring-radius)] border border-[var(--docs-border)]">
             <app-component-page-code-block [code]="examples.usageImport" language="typescript" />
           </div>
-          <div class="overflow-hidden rounded-lg border border-[var(--docs-border)]">
+          <div class="overflow-hidden rounded-[var(--sanring-radius)] border border-[var(--docs-border)]">
             <app-component-page-code-block [code]="examples.usageMain" language="angular-html" />
           </div>
         </div>
@@ -106,7 +106,7 @@ import { checkboxPage, checkboxPageExamples } from './checkbox.docs';
               language="angular-html"
             >
               <div previewer class="w-[min(520px,100%)]">
-                <div class="rounded-lg bg-slate-100 p-5 dark:bg-slate-800/70">
+                <div class="rounded-[var(--sanring-radius)] bg-slate-100 p-5 dark:bg-slate-800/70">
                   <div class="grid gap-4 sm:grid-cols-3">
                     <div class="flex items-center gap-2">
                       <sanring-checkbox [ngModel]="false" />

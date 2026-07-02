@@ -11,7 +11,7 @@ import {
   standalone: true,
   template: `
     <div
-      class="mt-9 overflow-hidden rounded-2xl border border-[var(--docs-border)] bg-[var(--docs-panel)] shadow-2xl"
+      class="mt-9 overflow-hidden rounded-[var(--sanring-radius-lg)] border border-[var(--docs-border)] bg-[var(--docs-panel)] shadow-2xl"
     >
       <div class="grid min-h-[390px] place-items-center p-11 max-[720px]:min-h-80 max-[720px]:p-6">
         <ng-content select="[previewer]" />

@@ -22,7 +22,7 @@ import { ComponentPageComponent, ComponentPageSectionComponent } from '../../lay
         <p class="mt-0 text-base leading-[1.7] text-[var(--docs-muted)]">
           {{ i18n.t('theming.tokens.body') }}
         </p>
-        <div class="mt-6 overflow-hidden rounded-lg border border-[var(--docs-border)]">
+        <div class="mt-6 overflow-hidden rounded-[var(--sanring-radius)] border border-[var(--docs-border)]">
           <div class="flex items-center gap-2 border-b border-[var(--docs-border)] bg-[var(--docs-surface)] px-4 py-2.5">
             <span class="text-xs font-medium text-[var(--docs-muted)]">styles.css</span>
           </div>
@@ -49,7 +49,7 @@ import { ComponentPageComponent, ComponentPageSectionComponent } from '../../lay
         <p class="mt-0 text-base leading-[1.7] text-[var(--docs-muted)]">
           {{ i18n.t('theming.tailwind.body') }}
         </p>
-        <div class="mt-6 overflow-hidden rounded-lg border border-[var(--docs-border)]">
+        <div class="mt-6 overflow-hidden rounded-[var(--sanring-radius)] border border-[var(--docs-border)]">
           <div class="flex items-center gap-2 border-b border-[var(--docs-border)] bg-[var(--docs-surface)] px-4 py-2.5">
             <span class="text-xs font-medium text-[var(--docs-muted)]">styles.css</span>
           </div>
@@ -76,7 +76,7 @@ import { ComponentPageComponent, ComponentPageSectionComponent } from '../../lay
         <p class="mt-0 text-base leading-[1.7] text-[var(--docs-muted)]">
           {{ i18n.t('theming.brand.body') }}
         </p>
-        <div class="mt-6 overflow-hidden rounded-lg border border-[var(--docs-border)]">
+        <div class="mt-6 overflow-hidden rounded-[var(--sanring-radius)] border border-[var(--docs-border)]">
           <div class="flex items-center gap-2 border-b border-[var(--docs-border)] bg-[var(--docs-surface)] px-4 py-2.5">
             <span class="text-xs font-medium text-[var(--docs-muted)]">your-app/styles.css</span>
           </div>
@@ -105,7 +105,7 @@ import { ComponentPageComponent, ComponentPageSectionComponent } from '../../lay
         <p class="mt-0 text-base leading-[1.7] text-[var(--docs-muted)]">
           {{ i18n.t('theming.darkMode.body') }}
         </p>
-        <div class="mt-6 overflow-hidden rounded-lg border border-[var(--docs-border)]">
+        <div class="mt-6 overflow-hidden rounded-[var(--sanring-radius)] border border-[var(--docs-border)]">
           <div class="flex items-center gap-2 border-b border-[var(--docs-border)] bg-[var(--docs-surface)] px-4 py-2.5">
             <span class="text-xs font-medium text-[var(--docs-muted)]">CSS</span>
           </div>
@@ -115,7 +115,7 @@ import { ComponentPageComponent, ComponentPageSectionComponent } from '../../lay
 /* light overrides scoped to the attribute */
 :root[data-theme='light'] &#123; --sanring-background: #ffffff; &#125;</pre>
         </div>
-        <div class="mt-6 overflow-hidden rounded-lg border border-[var(--docs-border)]">
+        <div class="mt-6 overflow-hidden rounded-[var(--sanring-radius)] border border-[var(--docs-border)]">
           <div class="flex items-center gap-2 border-b border-[var(--docs-border)] bg-[var(--docs-surface)] px-4 py-2.5">
             <span class="text-xs font-medium text-[var(--docs-muted)]">TypeScript</span>
           </div>

@@ -86,7 +86,7 @@ interface HomeHighlight {
         </div>
 
         <div
-          class="min-w-0 rounded-[8px] border border-[var(--docs-border)] bg-[var(--docs-panel)] p-5 shadow-[0_24px_80px_color-mix(in_srgb,var(--docs-bg)_72%,transparent)]"
+          class="min-w-0 rounded-[var(--sanring-radius)] border border-[var(--docs-border)] bg-[var(--docs-panel)] p-5 shadow-[0_24px_80px_color-mix(in_srgb,var(--docs-bg)_72%,transparent)]"
         >
           <div class="flex items-center justify-between border-b border-[var(--docs-border)] pb-4">
             <div>
@@ -97,14 +97,14 @@ interface HomeHighlight {
                 {{ i18n.t('home.snapshot.title') }}
               </h2>
             </div>
-            <div class="rounded-[6px] border border-[color-mix(in_srgb,var(--docs-accent)_35%,var(--docs-border))] bg-[color-mix(in_srgb,var(--docs-accent)_10%,var(--docs-surface))] p-2 text-[var(--docs-accent-strong)]">
+            <div class="rounded-[var(--sanring-radius-sm)] border border-[color-mix(in_srgb,var(--docs-accent)_35%,var(--docs-border))] bg-[color-mix(in_srgb,var(--docs-accent)_10%,var(--docs-surface))] p-2 text-[var(--docs-accent-strong)]">
               <svg class="size-5" lucideBlocks></svg>
             </div>
           </div>
 
           <div class="grid grid-cols-3 gap-3 py-5 max-[1180px]:grid-cols-1">
             @for (highlight of highlights; track highlight.labelKey) {
-              <div class="min-w-0 rounded-[8px] border border-[var(--docs-border)] bg-[var(--docs-surface)] p-4">
+              <div class="min-w-0 rounded-[var(--sanring-radius)] border border-[var(--docs-border)] bg-[var(--docs-surface)] p-4">
                 @if (highlight.kind === 'package') {
                   <p class="m-0 text-sm font-medium text-[var(--docs-fg)]">
                     {{ i18n.t(highlight.labelKey) }}
@@ -130,7 +130,7 @@ interface HomeHighlight {
             }
           </div>
 
-          <div class="rounded-[8px] border border-[var(--docs-border)] bg-[var(--docs-code)] p-4 font-mono text-sm leading-7 text-[var(--docs-fg)]">
+          <div class="rounded-[var(--sanring-radius)] border border-[var(--docs-border)] bg-[var(--docs-code)] p-4 font-mono text-sm leading-7 text-[var(--docs-fg)]">
             <div class="flex items-center gap-2 text-[var(--docs-muted)]">
               <svg class="size-4" lucideTerminalSquare></svg>
               {{ i18n.t('home.install.label') }}
@@ -157,8 +157,8 @@ interface HomeHighlight {
 
         <div class="grid grid-cols-4 gap-4 max-[980px]:grid-cols-2 max-[620px]:grid-cols-1">
           @for (feature of features; track feature.titleKey) {
-            <article class="rounded-[8px] border border-[var(--docs-border)] bg-[var(--docs-surface)] p-5">
-              <div class="mb-5 inline-flex rounded-[6px] border border-[color-mix(in_srgb,var(--docs-accent)_28%,var(--docs-border))] bg-[color-mix(in_srgb,var(--docs-accent)_8%,var(--docs-elevated))] p-2 text-[var(--docs-accent-strong)]">
+            <article class="rounded-[var(--sanring-radius)] border border-[var(--docs-border)] bg-[var(--docs-surface)] p-5">
+              <div class="mb-5 inline-flex rounded-[var(--sanring-radius-sm)] border border-[color-mix(in_srgb,var(--docs-accent)_28%,var(--docs-border))] bg-[color-mix(in_srgb,var(--docs-accent)_8%,var(--docs-elevated))] p-2 text-[var(--docs-accent-strong)]">
                 @switch (feature.icon) {
                   @case ('layers') {
                     <svg class="size-5" lucideLayers3></svg>
@@ -199,7 +199,7 @@ interface HomeHighlight {
           </p>
         </div>
 
-        <div class="rounded-[8px] border border-[var(--docs-border)] bg-[var(--docs-panel)] p-4">
+        <div class="rounded-[var(--sanring-radius)] border border-[var(--docs-border)] bg-[var(--docs-panel)] p-4">
           <div class="mb-4 flex items-center justify-between gap-4 border-b border-[var(--docs-border)] pb-4">
             <p class="m-0 text-sm font-semibold text-[var(--docs-fg)]">
               {{ i18n.t('home.components.panelTitle') }}
@@ -217,7 +217,7 @@ interface HomeHighlight {
           >
             @for (item of componentItems; track item.id) {
               <a
-                class="rounded-[8px] border border-[var(--docs-border)] bg-[var(--docs-surface)] px-4 py-3 text-sm font-semibold text-[var(--docs-fg)] no-underline transition-colors hover:border-[var(--docs-border-strong)] hover:bg-[var(--docs-elevated)]"
+                class="rounded-[var(--sanring-radius)] border border-[var(--docs-border)] bg-[var(--docs-surface)] px-4 py-3 text-sm font-semibold text-[var(--docs-fg)] no-underline transition-colors hover:border-[var(--docs-border-strong)] hover:bg-[var(--docs-elevated)]"
                 [routerLink]="item.path"
               >
                 {{ i18n.t(item.labelKey) }}

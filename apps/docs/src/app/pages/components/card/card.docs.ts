@@ -114,11 +114,11 @@ export const cardPageExamples = {
     <div class="grid w-full items-center gap-4">
       <div class="flex flex-col space-y-1.5">
         <label class="text-sm font-medium">專案名稱</label>
-        <div class="h-9 w-full rounded-md border border-[var(--docs-border)] px-3 py-1"></div>
+        <div class="h-9 w-full rounded-[var(--sanring-radius-sm)] border border-[var(--docs-border)] px-3 py-1"></div>
       </div>
       <div class="flex flex-col space-y-1.5">
         <label class="text-sm font-medium">框架</label>
-        <div class="h-9 w-full rounded-md border border-[var(--docs-border)] px-3 py-1"></div>
+        <div class="h-9 w-full rounded-[var(--sanring-radius-sm)] border border-[var(--docs-border)] px-3 py-1"></div>
       </div>
     </div>
   </sanring-card-content>
@@ -166,7 +166,7 @@ export const cardPageExamples = {
   </sanring-card-header>
 
   <sanring-card-content class="grid gap-4">
-    <div class="flex items-center space-x-4 rounded-md border border-[var(--docs-border)] p-4">
+    <div class="flex items-center space-x-4 rounded-[var(--sanring-radius-sm)] border border-[var(--docs-border)] p-4">
       <svg lucideKey class="size-5 text-[var(--docs-fg)]"></svg>
       <div class="flex-1 space-y-1">
         <p class="text-sm font-medium leading-none">Production Key</p>
@@ -178,7 +178,7 @@ export const cardPageExamples = {
       </span>
     </div>
 
-    <div class="flex items-center space-x-4 rounded-md border border-[var(--docs-border)] p-4">
+    <div class="flex items-center space-x-4 rounded-[var(--sanring-radius-sm)] border border-[var(--docs-border)] p-4">
       <svg lucideKey class="size-5 text-[var(--docs-muted)]"></svg>
       <div class="flex-1 space-y-1">
         <p class="text-sm font-medium leading-none text-[var(--docs-muted)]">Test Key</p>

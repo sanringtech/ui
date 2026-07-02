@@ -46,7 +46,7 @@ interface ScrollAreaDemoItem {
         <app-component-page-code-previewer [code]="examples.basic" language="angular-html">
           <div previewer class="flex w-full justify-center">
             <sanring-scroll-area
-              class="h-64 w-[min(460px,100%)] rounded-lg border border-[var(--docs-border)] bg-[var(--docs-bg)] p-4"
+              class="h-64 w-[min(460px,100%)] rounded-[var(--sanring-radius)] border border-[var(--docs-border)] bg-[var(--docs-bg)] p-4"
               orientation="vertical"
             >
               @for (item of compactItems; track item.id) {
@@ -62,10 +62,10 @@ interface ScrollAreaDemoItem {
 
       <app-component-page-section [section]="section('usage')">
         <div class="grid gap-6">
-          <div class="overflow-hidden rounded-lg border border-[var(--docs-border)]">
+          <div class="overflow-hidden rounded-[var(--sanring-radius)] border border-[var(--docs-border)]">
             <app-component-page-code-block [code]="examples.usageImport" language="typescript" />
           </div>
-          <div class="overflow-hidden rounded-lg border border-[var(--docs-border)]">
+          <div class="overflow-hidden rounded-[var(--sanring-radius)] border border-[var(--docs-border)]">
             <app-component-page-code-block [code]="examples.usageMain" language="angular-html" />
           </div>
         </div>
@@ -84,7 +84,7 @@ interface ScrollAreaDemoItem {
             <app-component-page-code-previewer [code]="examples.basic" language="angular-html">
               <div previewer class="flex w-full justify-center">
                 <sanring-scroll-area
-                  class="h-64 w-[min(460px,100%)] rounded-lg border border-[var(--docs-border)] bg-[var(--docs-bg)] p-4"
+                  class="h-64 w-[min(460px,100%)] rounded-[var(--sanring-radius)] border border-[var(--docs-border)] bg-[var(--docs-bg)] p-4"
                   orientation="vertical"
                 >
                   @for (item of compactItems; track item.id) {
@@ -103,13 +103,13 @@ interface ScrollAreaDemoItem {
               <div previewer class="grid w-full min-w-0 justify-items-center overflow-hidden">
                 <div class="grid w-full max-w-[640px] min-w-0 gap-4">
                   <sanring-scroll-area
-                    class="h-48 w-full min-w-0 rounded-lg border border-[var(--docs-border)] bg-[var(--docs-bg)]"
+                    class="h-48 w-full min-w-0 rounded-[var(--sanring-radius)] border border-[var(--docs-border)] bg-[var(--docs-bg)]"
                     orientation="horizontal"
                   >
                     <div class="flex w-max gap-3 p-4 pr-6">
                       @for (item of directionItems; track item.id) {
                         <article
-                          class="w-48 rounded-lg border border-[var(--docs-border)] bg-[var(--docs-panel)] p-4"
+                          class="w-48 rounded-[var(--sanring-radius)] border border-[var(--docs-border)] bg-[var(--docs-panel)] p-4"
                         >
                           <div class="text-xs uppercase text-[var(--docs-muted)]">{{ item.meta }}</div>
                           <h3 class="mb-0 mt-3 text-sm font-semibold text-[var(--docs-fg)]">
@@ -124,7 +124,7 @@ interface ScrollAreaDemoItem {
                   </sanring-scroll-area>
 
                   <sanring-scroll-area
-                    class="h-40 w-full min-w-0 rounded-lg border border-[var(--docs-border)] bg-[var(--docs-bg)]"
+                    class="h-40 w-full min-w-0 rounded-[var(--sanring-radius)] border border-[var(--docs-border)] bg-[var(--docs-bg)]"
                     orientation="both"
                   >
                     <div class="grid w-[720px] grid-cols-6 gap-px bg-[var(--docs-border)] p-px">
@@ -147,7 +147,7 @@ interface ScrollAreaDemoItem {
                 <div
                   sanringScrollArea
                   sanringInfiniteScroll
-                  class="h-72 w-[min(520px,100%)] rounded-lg border border-[var(--docs-border)] bg-[var(--docs-bg)] p-4"
+                  class="h-72 w-[min(520px,100%)] rounded-[var(--sanring-radius)] border border-[var(--docs-border)] bg-[var(--docs-bg)] p-4"
                   (loadMore)="loadMore()"
                 >
                   @for (item of visibleItems; track item.id) {
@@ -179,7 +179,7 @@ interface ScrollAreaDemoItem {
             <app-component-page-code-previewer [code]="examples.hideScrollbar" language="angular-html">
               <div previewer class="flex w-full justify-center">
                 <sanring-scroll-area
-                  class="h-64 w-[min(460px,100%)] rounded-lg border border-[var(--docs-border)] bg-[var(--docs-bg)] p-4"
+                  class="h-64 w-[min(460px,100%)] rounded-[var(--sanring-radius)] border border-[var(--docs-border)] bg-[var(--docs-bg)] p-4"
                   [hideScrollbar]="true"
                 >
                   @for (item of compactItems; track item.id) {
@@ -197,7 +197,7 @@ interface ScrollAreaDemoItem {
             <app-component-page-code-previewer [code]="examples.customScrollbar" language="angular-html">
               <div previewer class="flex w-full flex-wrap justify-center gap-4">
                 <sanring-scroll-area
-                  class="h-64 w-[min(200px,100%)] rounded-lg border border-[var(--docs-border)] bg-[var(--docs-bg)] p-4"
+                  class="h-64 w-[min(200px,100%)] rounded-[var(--sanring-radius)] border border-[var(--docs-border)] bg-[var(--docs-bg)] p-4"
                   style="--scrollbar-thumb: #6366f1"
                 >
                   @for (item of compactItems; track item.id) {
@@ -208,7 +208,7 @@ interface ScrollAreaDemoItem {
                 </sanring-scroll-area>
 
                 <sanring-scroll-area
-                  class="h-64 w-[min(200px,100%)] rounded-lg border border-[var(--docs-border)] bg-[var(--docs-bg)] p-4"
+                  class="h-64 w-[min(200px,100%)] rounded-[var(--sanring-radius)] border border-[var(--docs-border)] bg-[var(--docs-bg)] p-4"
                   style="--scrollbar-thumb: #94a3b8; --scrollbar-track: #f1f5f9"
                 >
                   @for (item of compactItems; track item.id) {

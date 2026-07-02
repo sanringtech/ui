@@ -82,7 +82,7 @@ export const linkPageExamples = {
   active: `<a
   sanringLink
   routerLink="/components/link"
-  routerLinkActive="rounded-md bg-[var(--docs-active)] px-2 py-1 no-underline"
+  routerLinkActive="rounded-[var(--sanring-radius-sm)] bg-[var(--docs-active)] px-2 py-1 no-underline"
   [routerLinkActiveOptions]="{ exact: true }"
 >
   Active route

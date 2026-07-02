@@ -43,10 +43,10 @@ import { dividerPage, dividerPageExamples } from './divider.docs';
 
       <app-component-page-section [section]="section('usage')">
         <div class="grid gap-6">
-          <div class="overflow-hidden rounded-lg border border-[var(--docs-border)]">
+          <div class="overflow-hidden rounded-[var(--sanring-radius)] border border-[var(--docs-border)]">
             <app-component-page-code-block [code]="examples.usageImport" language="typescript" />
           </div>
-          <div class="overflow-hidden rounded-lg border border-[var(--docs-border)]">
+          <div class="overflow-hidden rounded-[var(--sanring-radius)] border border-[var(--docs-border)]">
             <app-component-page-code-block [code]="examples.usageMain" language="angular-html" />
           </div>
         </div>
@@ -64,7 +64,7 @@ import { dividerPage, dividerPageExamples } from './divider.docs';
         <div class="grid gap-2">
           <app-component-page-section [section]="section('example-horizontal')">
             <app-component-page-code-previewer [code]="examples.horizontal" language="angular-html">
-              <div previewer class="w-[min(420px,100%)] rounded-lg border border-[var(--docs-border)] p-5">
+              <div previewer class="w-[min(420px,100%)] rounded-[var(--sanring-radius)] border border-[var(--docs-border)] p-5">
                 <p class="m-0 text-sm font-semibold">{{ i18n.t('divider.demo.account') }}</p>
                 <p class="mb-4 mt-1 text-sm text-[var(--docs-muted)]">
                   {{ i18n.t('divider.demo.profile') }}
@@ -79,7 +79,7 @@ import { dividerPage, dividerPageExamples } from './divider.docs';
 
           <app-component-page-section [section]="section('example-inset')">
             <app-component-page-code-previewer [code]="examples.inset" language="angular-html">
-              <div previewer class="w-[min(420px,100%)] rounded-lg border border-[var(--docs-border)] py-3">
+              <div previewer class="w-[min(420px,100%)] rounded-[var(--sanring-radius)] border border-[var(--docs-border)] py-3">
                 <div class="flex items-center gap-3 px-5 py-3">
                   <div
                     class="grid size-7 place-items-center rounded-full bg-[var(--docs-elevated)] text-xs font-semibold"
@@ -105,7 +105,7 @@ import { dividerPage, dividerPageExamples } from './divider.docs';
             <app-component-page-code-previewer [code]="examples.vertical" language="angular-html">
               <div
                 previewer
-                class="flex h-10 items-center rounded-lg border border-[var(--docs-border)] px-5 text-sm"
+                class="flex h-10 items-center rounded-[var(--sanring-radius)] border border-[var(--docs-border)] px-5 text-sm"
               >
                 <span>{{ i18n.t('divider.demo.profile') }}</span>
                 <sanring-divider class="mx-4" [vertical]="true" />

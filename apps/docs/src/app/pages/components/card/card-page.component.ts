@@ -73,10 +73,10 @@ import { cardPage, cardPageExamples } from './card.docs';
 
       <app-component-page-section [section]="section('usage')">
         <div class="grid gap-6">
-          <div class="overflow-hidden rounded-lg border border-[var(--docs-border)]">
+          <div class="overflow-hidden rounded-[var(--sanring-radius)] border border-[var(--docs-border)]">
             <app-component-page-code-block [code]="examples.usageImport" language="typescript" />
           </div>
-          <div class="overflow-hidden rounded-lg border border-[var(--docs-border)]">
+          <div class="overflow-hidden rounded-[var(--sanring-radius)] border border-[var(--docs-border)]">
             <app-component-page-code-block [code]="examples.usageMain" language="angular-html" />
           </div>
         </div>
@@ -90,7 +90,7 @@ import { cardPage, cardPageExamples } from './card.docs';
       </app-component-page-section>
 
       <app-component-page-section [section]="section('composition')">
-        <div class="overflow-hidden rounded-lg border border-[var(--docs-border)]">
+        <div class="overflow-hidden rounded-[var(--sanring-radius)] border border-[var(--docs-border)]">
           <app-component-page-code-block [code]="examples.composition" language="bash" />
         </div>
       </app-component-page-section>
@@ -111,13 +111,13 @@ import { cardPage, cardPageExamples } from './card.docs';
                       <div class="flex flex-col space-y-1.5">
                         <div class="text-sm font-medium">專案名稱</div>
                         <div
-                          class="h-9 w-full rounded-md border border-[var(--docs-border)] px-3 py-1"
+                          class="h-9 w-full rounded-[var(--sanring-radius-sm)] border border-[var(--docs-border)] px-3 py-1"
                         ></div>
                       </div>
                       <div class="flex flex-col space-y-1.5">
                         <div class="text-sm font-medium">框架</div>
                         <div
-                          class="h-9 w-full rounded-md border border-[var(--docs-border)] px-3 py-1"
+                          class="h-9 w-full rounded-[var(--sanring-radius-sm)] border border-[var(--docs-border)] px-3 py-1"
                         ></div>
                       </div>
                     </div>
@@ -188,7 +188,7 @@ import { cardPage, cardPageExamples } from './card.docs';
 
                   <sanring-card-content class="grid gap-4">
                     <div
-                      class="flex items-center space-x-4 rounded-md border border-[var(--docs-border)] p-4"
+                      class="flex items-center space-x-4 rounded-[var(--sanring-radius-sm)] border border-[var(--docs-border)] p-4"
                     >
                       <svg lucideKey class="size-5 text-[var(--docs-fg)]"></svg>
                       <div class="flex-1 space-y-1">
@@ -202,7 +202,7 @@ import { cardPage, cardPageExamples } from './card.docs';
                     </div>
 
                     <div
-                      class="flex items-center space-x-4 rounded-md border border-[var(--docs-border)] p-4"
+                      class="flex items-center space-x-4 rounded-[var(--sanring-radius-sm)] border border-[var(--docs-border)] p-4"
                     >
                       <svg lucideKey class="size-5 text-[var(--docs-muted)]"></svg>
                       <div class="flex-1 space-y-1">

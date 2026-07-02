@@ -44,10 +44,10 @@ import { switchPage, switchPageExamples } from './switch.docs';
 
       <app-component-page-section [section]="section('usage')">
         <div class="grid gap-6">
-          <div class="overflow-hidden rounded-lg border border-[var(--docs-border)]">
+          <div class="overflow-hidden rounded-[var(--sanring-radius)] border border-[var(--docs-border)]">
             <app-component-page-code-block [code]="examples.usageImport" language="typescript" />
           </div>
-          <div class="overflow-hidden rounded-lg border border-[var(--docs-border)]">
+          <div class="overflow-hidden rounded-[var(--sanring-radius)] border border-[var(--docs-border)]">
             <app-component-page-code-block [code]="examples.usageMain" language="angular-html" />
           </div>
         </div>
@@ -90,7 +90,7 @@ import { switchPage, switchPageExamples } from './switch.docs';
             >
               <div previewer class="w-[min(480px,100%)]">
                 <div
-                  class="flex items-center justify-between gap-4 rounded-lg border border-[var(--docs-border)] bg-[var(--docs-surface)] p-4"
+                  class="flex items-center justify-between gap-4 rounded-[var(--sanring-radius)] border border-[var(--docs-border)] bg-[var(--docs-surface)] p-4"
                 >
                   <span class="grid gap-1">
                     <span class="text-sm font-medium text-[var(--docs-fg)]">

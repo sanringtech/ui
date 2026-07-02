@@ -33,14 +33,14 @@ import { ComponentPageComponent, ComponentPageSectionComponent } from '../../lay
 
       <app-component-page-section [section]="sections[2]">
         <p class="mt-0 text-sm text-[var(--docs-muted)]">{{ i18n.t('intro.installation.body') }}</p>
-        <pre class="mt-4 overflow-x-auto rounded-lg bg-[var(--docs-code)] px-5 py-4 text-sm leading-7 text-[var(--docs-fg)]">npm install &#64;sanring/ui</pre>
+        <pre class="mt-4 overflow-x-auto rounded-[var(--sanring-radius)] bg-[var(--docs-code)] px-5 py-4 text-sm leading-7 text-[var(--docs-fg)]">npm install &#64;sanring/ui</pre>
         <p class="mt-6 text-sm text-[var(--docs-muted)]">{{ i18n.t('intro.installation.tailwind') }}</p>
-        <pre class="mt-4 overflow-x-auto rounded-lg bg-[var(--docs-code)] px-5 py-4 text-sm leading-7 text-[var(--docs-fg)]">&#64;source "../../node_modules/&#64;sanring/ui/src";</pre>
+        <pre class="mt-4 overflow-x-auto rounded-[var(--sanring-radius)] bg-[var(--docs-code)] px-5 py-4 text-sm leading-7 text-[var(--docs-fg)]">&#64;source "../../node_modules/&#64;sanring/ui/src";</pre>
       </app-component-page-section>
 
       <app-component-page-section [section]="sections[3]">
         <p class="mt-0 text-sm text-[var(--docs-muted)]">{{ i18n.t('intro.firstComponent.body') }}</p>
-        <pre class="mt-4 overflow-x-auto rounded-lg bg-[var(--docs-code)] px-5 py-4 text-sm leading-7 text-[var(--docs-fg)]">import &#123; ButtonDirective &#125; from '&#64;sanring/ui';
+        <pre class="mt-4 overflow-x-auto rounded-[var(--sanring-radius)] bg-[var(--docs-code)] px-5 py-4 text-sm leading-7 text-[var(--docs-fg)]">import &#123; ButtonDirective &#125; from '&#64;sanring/ui';
 
 &#64;Component(&#123;
   imports: [ButtonDirective],

@@ -97,7 +97,7 @@ export const checkboxPageExamples = {
   <sanring-checkbox disabled />
   <sanring-checkbox disabled [(ngModel)]="checked" />
 </div>`,
-  stateSurface: `<div class="rounded-lg bg-slate-100 p-5 dark:bg-slate-800/70">
+  stateSurface: `<div class="rounded-[var(--sanring-radius)] bg-slate-100 p-5 dark:bg-slate-800/70">
   <div class="grid gap-4 sm:grid-cols-3">
     <div class="flex items-center gap-2">
       <sanring-checkbox [ngModel]="false" />

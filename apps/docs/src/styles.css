@@ -412,4 +412,34 @@
   *::after {
     box-sizing: border-box;
   }
+
+  /*
+    Custom scrollbar，顏色綁定 --docs-accent（主題色），跟著 light/dark 切換自動變色。
+    scrollbar-color 給 Firefox / 新版 Chromium；::-webkit-scrollbar-* 給 Safari / 舊版 Chromium。
+    設在 :root 讓所有 overflow 區塊（code block、TOC 等）預設繼承，個別元件仍可用更高特異度覆寫（如 sidebar 隱藏捲軸）。
+  */
+  :root {
+    scrollbar-width: thin;
+    scrollbar-color: var(--docs-accent) transparent;
+  }
+
+  ::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background-color: var(--docs-accent);
+    border: 2px solid transparent;
+    border-radius: 999px;
+    background-clip: content-box;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background-color: var(--docs-accent-strong);
+  }
 }

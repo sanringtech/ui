@@ -48,10 +48,10 @@ import { linkPage, linkPageExamples } from './link.docs';
 
       <app-component-page-section [section]="section('usage')">
         <div class="grid gap-6">
-          <div class="overflow-hidden rounded-lg border border-[var(--docs-border)]">
+          <div class="overflow-hidden rounded-[var(--sanring-radius)] border border-[var(--docs-border)]">
             <app-component-page-code-block [code]="examples.usageImport" language="typescript" />
           </div>
-          <div class="overflow-hidden rounded-lg border border-[var(--docs-border)]">
+          <div class="overflow-hidden rounded-[var(--sanring-radius)] border border-[var(--docs-border)]">
             <app-component-page-code-block [code]="examples.usageMain" language="angular-html" />
           </div>
         </div>
@@ -93,7 +93,7 @@ import { linkPage, linkPageExamples } from './link.docs';
                 <a
                   sanringLink
                   routerLink="/components/link"
-                  routerLinkActive="rounded-md bg-[var(--docs-active)] px-2 py-1 no-underline"
+                  routerLinkActive="rounded-[var(--sanring-radius-sm)] bg-[var(--docs-active)] px-2 py-1 no-underline"
                   [routerLinkActiveOptions]="{ exact: true }"
                 >
                   {{ i18n.t('link.demo.active') }}

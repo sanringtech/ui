@@ -65,10 +65,10 @@ import { avatarPage, avatarPageExamples } from './avatar.docs';
 
       <app-component-page-section [section]="section('usage')">
         <div class="grid gap-6">
-          <div class="overflow-hidden rounded-lg border border-[var(--docs-border)]">
+          <div class="overflow-hidden rounded-[var(--sanring-radius)] border border-[var(--docs-border)]">
             <app-component-page-code-block [code]="examples.usageImport" language="typescript" />
           </div>
-          <div class="overflow-hidden rounded-lg border border-[var(--docs-border)]">
+          <div class="overflow-hidden rounded-[var(--sanring-radius)] border border-[var(--docs-border)]">
             <app-component-page-code-block [code]="examples.usageMain" language="angular-html" />
           </div>
         </div>
@@ -82,7 +82,7 @@ import { avatarPage, avatarPageExamples } from './avatar.docs';
       </app-component-page-section>
 
       <app-component-page-section [section]="section('composition')">
-        <div class="overflow-hidden rounded-lg border border-[var(--docs-border)]">
+        <div class="overflow-hidden rounded-[var(--sanring-radius)] border border-[var(--docs-border)]">
           <app-component-page-code-block [code]="examples.composition" language="bash" />
         </div>
       </app-component-page-section>

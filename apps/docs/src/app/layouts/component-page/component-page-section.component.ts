@@ -5,6 +5,14 @@ import { I18nService } from '../../i18n/i18n.service';
 @Component({
   selector: 'app-component-page-section',
   standalone: true,
+  host: {
+    /*
+      當這個元件被放進 grid 容器（例如各頁面 EXAMPLE 區塊的 grid gap-2）當 grid item 時，
+      預設 min-width: auto 會被內部 code block 的 min-w-max 長行撐開，造成該區塊比其他
+      非 grid 排列的區塊還寬。明確設 min-width: 0 讓內容改用自身的 overflow-auto 捲動。
+    */
+    class: 'block min-w-0',
+  },
   template: `
     <section [id]="sectionId" [class]="sectionClass">
       <div class="mb-3.5">

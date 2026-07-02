@@ -69,10 +69,10 @@ import { alertPage, alertPageExamples } from './alert.docs';
 
       <app-component-page-section [section]="section('usage')">
         <div class="grid gap-6">
-          <div class="overflow-hidden rounded-lg border border-[var(--docs-border)]">
+          <div class="overflow-hidden rounded-[var(--sanring-radius)] border border-[var(--docs-border)]">
             <app-component-page-code-block [code]="examples.usageImport" language="typescript" />
           </div>
-          <div class="overflow-hidden rounded-lg border border-[var(--docs-border)]">
+          <div class="overflow-hidden rounded-[var(--sanring-radius)] border border-[var(--docs-border)]">
             <app-component-page-code-block [code]="examples.usageMain" language="angular-html" />
           </div>
         </div>
@@ -90,7 +90,7 @@ import { alertPage, alertPageExamples } from './alert.docs';
         <div class="grid gap-2">
           <app-component-page-section [section]="section('example-banner')">
             <app-component-page-code-previewer [code]="examples.banner" language="angular-html">
-              <div previewer class="w-full overflow-hidden rounded-lg border border-[var(--docs-border)]">
+              <div previewer class="w-full overflow-hidden rounded-[var(--sanring-radius)] border border-[var(--docs-border)]">
                 <sanring-alert class="mb-0 rounded-none border-x-0 border-t-0">
                   <svg lucideInfo class="size-4"></svg>
                   <h5 sanringAlertTitle>系統維護通知</h5>

@@ -85,7 +85,7 @@ export const skeletonPageExamples = {
     <div sanringSkeleton class="h-3 w-[120px]"></div>
   </div>
 </div>`,
-  card: `<div class="w-[min(360px,100%)] rounded-lg border border-[var(--docs-border)] p-5">
+  card: `<div class="w-[min(360px,100%)] rounded-[var(--sanring-radius)] border border-[var(--docs-border)] p-5">
   <div sanringSkeleton class="h-40 w-full"></div>
   <div class="mt-4 grid gap-2">
     <div sanringSkeleton class="h-4 w-3/4"></div>

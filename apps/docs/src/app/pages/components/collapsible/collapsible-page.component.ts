@@ -50,17 +50,17 @@ import { collapsiblePage, collapsiblePageExamples } from './collapsible.docs';
 
       <app-component-page-section [section]="section('usage')">
         <div class="grid gap-6">
-          <div class="overflow-hidden rounded-lg border border-[var(--docs-border)]">
+          <div class="overflow-hidden rounded-[var(--sanring-radius)] border border-[var(--docs-border)]">
             <app-component-page-code-block [code]="examples.usageImport" language="typescript" />
           </div>
-          <div class="overflow-hidden rounded-lg border border-[var(--docs-border)]">
+          <div class="overflow-hidden rounded-[var(--sanring-radius)] border border-[var(--docs-border)]">
             <app-component-page-code-block [code]="examples.usageMain" language="angular-html" />
           </div>
         </div>
       </app-component-page-section>
 
       <app-component-page-section [section]="section('composition')">
-        <div class="overflow-hidden rounded-lg border border-[var(--docs-border)]">
+        <div class="overflow-hidden rounded-[var(--sanring-radius)] border border-[var(--docs-border)]">
           <app-component-page-code-block [code]="examples.composition" language="bash" />
         </div>
       </app-component-page-section>
@@ -120,7 +120,7 @@ import { collapsiblePage, collapsiblePageExamples } from './collapsible.docs';
           <app-component-page-section [section]="section('example-settings-panel')">
             <app-component-page-code-previewer [code]="examples.settingsPanel" language="angular-html">
               <div previewer class="w-[min(560px,100%)]">
-                <sanring-collapsible [open]="true" class="block rounded-lg border border-[var(--docs-border)] bg-[var(--docs-surface)]">
+                <sanring-collapsible [open]="true" class="block rounded-[var(--sanring-radius)] border border-[var(--docs-border)] bg-[var(--docs-surface)]">
                   <button
                     sanringBtn
                     sanringCollapsibleTrigger
@@ -154,7 +154,7 @@ import { collapsiblePage, collapsiblePageExamples } from './collapsible.docs';
                   <button
                     sanringCollapsibleTrigger
                     type="button"
-                    class="flex w-full items-center gap-2 rounded-md px-2 py-1.5 text-left hover:bg-[var(--docs-hover)]"
+                    class="flex w-full items-center gap-2 rounded-[var(--sanring-radius-sm)] px-2 py-1.5 text-left hover:bg-[var(--docs-hover)]"
                   >
                     <span class="text-[var(--docs-muted)]">-</span>
                     <span>src</span>

@@ -13,13 +13,13 @@ import { I18nService } from '../../i18n/i18n.service';
       @for (item of items; track item.labelKey) {
         @if (item.disabled) {
           <a
-            class="my-[3px] flex min-h-8 w-fit cursor-not-allowed items-center rounded-lg px-3 text-sm text-[color-mix(in_srgb,var(--docs-muted)_45%,transparent)] no-underline"
+            class="my-[3px] flex min-h-8 w-fit cursor-not-allowed items-center rounded-[var(--sanring-radius)] px-3 text-sm text-[color-mix(in_srgb,var(--docs-muted)_45%,transparent)] no-underline"
           >
             {{ i18n.t(item.labelKey) }}
           </a>
         } @else {
           <a
-            class="my-[3px] flex min-h-8 w-fit items-center rounded-lg px-3 text-sm text-[var(--docs-fg)] no-underline"
+            class="my-[3px] flex min-h-8 w-fit items-center rounded-[var(--sanring-radius)] px-3 text-sm text-[var(--docs-fg)] no-underline transition-colors duration-200 ease-in-out"
             [routerLink]="item.path"
             [routerLinkActive]="item.active ? 'bg-[var(--docs-active)]' : ''"
           >

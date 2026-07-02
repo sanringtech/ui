@@ -59,7 +59,7 @@ import { tabsPage, tabsPageExamples } from './tabs.docs';
               </sanring-tabs-list>
 
               <sanring-tabs-content value="account">
-                <div class="rounded-lg border border-[var(--docs-border)] p-4">
+                <div class="rounded-[var(--sanring-radius)] border border-[var(--docs-border)] p-4">
                   <h3 class="m-0 text-sm font-semibold text-[var(--docs-fg)]">
                     {{ i18n.t('tabs.demo.account') }}
                   </h3>
@@ -69,7 +69,7 @@ import { tabsPage, tabsPageExamples } from './tabs.docs';
                 </div>
               </sanring-tabs-content>
               <sanring-tabs-content value="password">
-                <div class="rounded-lg border border-[var(--docs-border)] p-4">
+                <div class="rounded-[var(--sanring-radius)] border border-[var(--docs-border)] p-4">
                   <h3 class="m-0 text-sm font-semibold text-[var(--docs-fg)]">
                     {{ i18n.t('tabs.demo.password') }}
                   </h3>
@@ -85,10 +85,10 @@ import { tabsPage, tabsPageExamples } from './tabs.docs';
 
       <app-component-page-section [section]="section('usage')">
         <div class="grid gap-6">
-          <div class="overflow-hidden rounded-lg border border-[var(--docs-border)]">
+          <div class="overflow-hidden rounded-[var(--sanring-radius)] border border-[var(--docs-border)]">
             <app-component-page-code-block [code]="examples.usageImport" language="typescript" />
           </div>
-          <div class="overflow-hidden rounded-lg border border-[var(--docs-border)]">
+          <div class="overflow-hidden rounded-[var(--sanring-radius)] border border-[var(--docs-border)]">
             <app-component-page-code-block [code]="examples.usageMain" language="angular-html" />
           </div>
         </div>
@@ -102,7 +102,7 @@ import { tabsPage, tabsPageExamples } from './tabs.docs';
       </app-component-page-section>
 
       <app-component-page-section [section]="section('composition')">
-        <div class="overflow-hidden rounded-lg border border-[var(--docs-border)]">
+        <div class="overflow-hidden rounded-[var(--sanring-radius)] border border-[var(--docs-border)]">
           <app-component-page-code-block [code]="examples.composition" language="bash" />
         </div>
       </app-component-page-section>
@@ -126,21 +126,21 @@ import { tabsPage, tabsPageExamples } from './tabs.docs';
                   </sanring-tabs-list>
                   <sanring-tabs-content value="overview">
                     <div
-                      class="rounded-lg border border-[var(--docs-border)] p-4 text-sm text-[var(--docs-muted)]"
+                      class="rounded-[var(--sanring-radius)] border border-[var(--docs-border)] p-4 text-sm text-[var(--docs-muted)]"
                     >
                       Revenue and user activity summary.
                     </div>
                   </sanring-tabs-content>
                   <sanring-tabs-content value="analytics">
                     <div
-                      class="rounded-lg border border-[var(--docs-border)] p-4 text-sm text-[var(--docs-muted)]"
+                      class="rounded-[var(--sanring-radius)] border border-[var(--docs-border)] p-4 text-sm text-[var(--docs-muted)]"
                     >
                       Conversion, retention, and engagement signals.
                     </div>
                   </sanring-tabs-content>
                   <sanring-tabs-content value="reports">
                     <div
-                      class="rounded-lg border border-[var(--docs-border)] p-4 text-sm text-[var(--docs-muted)]"
+                      class="rounded-[var(--sanring-radius)] border border-[var(--docs-border)] p-4 text-sm text-[var(--docs-muted)]"
                     >
                       Scheduled exports and stakeholder reports.
                     </div>
@@ -170,21 +170,21 @@ import { tabsPage, tabsPageExamples } from './tabs.docs';
                   </sanring-tabs-list>
                   <sanring-tabs-content value="overview">
                     <div
-                      class="rounded-lg border border-[var(--docs-border)] p-4 text-sm text-[var(--docs-muted)]"
+                      class="rounded-[var(--sanring-radius)] border border-[var(--docs-border)] p-4 text-sm text-[var(--docs-muted)]"
                     >
                       Key metrics and recent activity.
                     </div>
                   </sanring-tabs-content>
                   <sanring-tabs-content value="security">
                     <div
-                      class="rounded-lg border border-[var(--docs-border)] p-4 text-sm text-[var(--docs-muted)]"
+                      class="rounded-[var(--sanring-radius)] border border-[var(--docs-border)] p-4 text-sm text-[var(--docs-muted)]"
                     >
                       Access controls and session policy.
                     </div>
                   </sanring-tabs-content>
                   <sanring-tabs-content value="settings">
                     <div
-                      class="rounded-lg border border-[var(--docs-border)] p-4 text-sm text-[var(--docs-muted)]"
+                      class="rounded-[var(--sanring-radius)] border border-[var(--docs-border)] p-4 text-sm text-[var(--docs-muted)]"
                     >
                       Workspace preferences and defaults.
                     </div>
@@ -246,21 +246,21 @@ import { tabsPage, tabsPageExamples } from './tabs.docs';
                   </sanring-tabs-list>
                   <sanring-tabs-content value="account" class="mt-0">
                     <div
-                      class="rounded-lg border border-[var(--docs-border)] p-4 text-sm leading-6 text-[var(--docs-muted)]"
+                      class="rounded-[var(--sanring-radius)] border border-[var(--docs-border)] p-4 text-sm leading-6 text-[var(--docs-muted)]"
                     >
                       Account preferences and profile controls.
                     </div>
                   </sanring-tabs-content>
                   <sanring-tabs-content value="password" class="mt-0">
                     <div
-                      class="rounded-lg border border-[var(--docs-border)] p-4 text-sm leading-6 text-[var(--docs-muted)]"
+                      class="rounded-[var(--sanring-radius)] border border-[var(--docs-border)] p-4 text-sm leading-6 text-[var(--docs-muted)]"
                     >
                       Password and two-factor settings.
                     </div>
                   </sanring-tabs-content>
                   <sanring-tabs-content value="notifications" class="mt-0">
                     <div
-                      class="rounded-lg border border-[var(--docs-border)] p-4 text-sm leading-6 text-[var(--docs-muted)]"
+                      class="rounded-[var(--sanring-radius)] border border-[var(--docs-border)] p-4 text-sm leading-6 text-[var(--docs-muted)]"
                     >
                       Email, digest, and product notification settings.
                     </div>
@@ -287,21 +287,21 @@ import { tabsPage, tabsPageExamples } from './tabs.docs';
                   </sanring-tabs-list>
                   <sanring-tabs-content value="account">
                     <div
-                      class="rounded-lg border border-[var(--docs-border)] p-4 text-sm text-[var(--docs-muted)]"
+                      class="rounded-[var(--sanring-radius)] border border-[var(--docs-border)] p-4 text-sm text-[var(--docs-muted)]"
                     >
                       Account settings remain available.
                     </div>
                   </sanring-tabs-content>
                   <sanring-tabs-content value="password">
                     <div
-                      class="rounded-lg border border-[var(--docs-border)] p-4 text-sm text-[var(--docs-muted)]"
+                      class="rounded-[var(--sanring-radius)] border border-[var(--docs-border)] p-4 text-sm text-[var(--docs-muted)]"
                     >
                       Password settings remain available.
                     </div>
                   </sanring-tabs-content>
                   <sanring-tabs-content value="notifications">
                     <div
-                      class="rounded-lg border border-[var(--docs-border)] p-4 text-sm text-[var(--docs-muted)]"
+                      class="rounded-[var(--sanring-radius)] border border-[var(--docs-border)] p-4 text-sm text-[var(--docs-muted)]"
                     >
                       Notifications are not available for this plan.
                     </div>

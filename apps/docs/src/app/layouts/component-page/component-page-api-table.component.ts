@@ -6,7 +6,7 @@ import { I18nService } from '../../i18n/i18n.service';
   selector: 'app-component-page-api-table',
   standalone: true,
   template: `
-    <div class="overflow-hidden rounded-lg border border-[var(--docs-border)]">
+    <div class="overflow-hidden rounded-[var(--sanring-radius)] border border-[var(--docs-border)]">
       <table class="w-full border-collapse text-left text-sm">
         <thead class="bg-[var(--docs-elevated)] text-[var(--docs-muted)]">
           <tr>

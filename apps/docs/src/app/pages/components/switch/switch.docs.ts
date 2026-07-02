@@ -83,7 +83,7 @@ export const switchPageExamples = {
   </div>
   <sanring-switch id="marketing-emails" checked />
 </div>`,
-  choiceCard: `<div class="flex items-center justify-between gap-4 rounded-lg border p-4">
+  choiceCard: `<div class="flex items-center justify-between gap-4 rounded-[var(--sanring-radius)] border p-4">
   <span>
     <span class="block font-medium">Enable notifications</span>
     <span class="block text-sm opacity-70">Get alerts for account activity.</span>
