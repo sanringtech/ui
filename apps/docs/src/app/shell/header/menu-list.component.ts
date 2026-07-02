@@ -35,13 +35,7 @@ export class MenuListComponent {
   protected readonly i18n = inject(I18nService);
 
   private readonly itemMinWidths: Partial<Record<MenuItem['labelKey'], number>> = {
-    'nav.home': 72,
-    'nav.docs': 64,
     'nav.components': 120,
-    'nav.blocks': 84,
-    'nav.charts': 84,
-    'nav.directory': 108,
-    'nav.create': 84,
   };
 
   protected itemMinWidth(item: MenuItem) {

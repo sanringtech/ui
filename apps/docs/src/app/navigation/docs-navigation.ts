@@ -47,15 +47,6 @@ export interface DocsComponentNavItem extends DocsSidebarItem {
 export const docsSectionItems: DocsSidebarItem[] = [
   { labelKey: 'sidebar.introduction', path: '/' },
   { labelKey: 'nav.components', path: '/components', active: true },
-  { labelKey: 'sidebar.installation', path: '/' },
-  { labelKey: 'sidebar.theming', path: '/' },
-  { labelKey: 'sidebar.cli', path: '/' },
-  { labelKey: 'sidebar.rtl', path: '/' },
-  { labelKey: 'sidebar.skills', path: '/' },
-  { labelKey: 'sidebar.mcpServer', path: '/' },
-  { labelKey: 'sidebar.registry', path: '/' },
-  { labelKey: 'sidebar.forms', path: '/' },
-  { labelKey: 'sidebar.changelog', path: '/', badge: true },
 ];
 
 export const docsComponentItems: DocsComponentNavItem[] = [
