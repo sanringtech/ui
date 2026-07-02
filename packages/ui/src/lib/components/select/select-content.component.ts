@@ -1,6 +1,17 @@
-import { ChangeDetectionStrategy, Component, computed, inject, input } from '@angular/core';
-import { ConnectionPositionPair, Overlay, OverlayModule } from '@angular/cdk/overlay';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  ElementRef,
+  ViewChild,
+  booleanAttribute,
+  computed,
+  inject,
+  input,
+  signal,
+} from '@angular/core';
+import { CdkConnectedOverlay, ConnectionPositionPair, Overlay, OverlayModule } from '@angular/cdk/overlay';
 import { SelectComponent } from './select.component';
+import { SelectContentPosition } from './select.type';
 import { cn } from '../../utils';
 import { OVERLAY_SURFACE_CLASS } from '../component-styles';
 
@@ -23,6 +34,21 @@ const SELECT_CONTENT_POSITIONS: ConnectionPositionPair[] = [
   },
 ];
 
+const SELECT_ITEM_ALIGNED_POSITIONS: ConnectionPositionPair[] = [
+  {
+    originX: 'start',
+    originY: 'top',
+    overlayX: 'start',
+    overlayY: 'top',
+  },
+  {
+    originX: 'start',
+    originY: 'bottom',
+    overlayX: 'start',
+    overlayY: 'bottom',
+  },
+];
+
 @Component({
   selector: 'sanring-select-content',
   standalone: true,
@@ -34,15 +60,19 @@ const SELECT_CONTENT_POSITIONS: ConnectionPositionPair[] = [
         cdkConnectedOverlay
         [cdkConnectedOverlayOrigin]="origin"
         [cdkConnectedOverlayOpen]="select.isOpen()"
-        [cdkConnectedOverlayPositions]="positions"
+        [cdkConnectedOverlayPositions]="positions()"
+        [cdkConnectedOverlayOffsetY]="offsetY()"
+        [cdkConnectedOverlayWidth]="overlayWidth()"
         [cdkConnectedOverlayPush]="true"
         [cdkConnectedOverlayViewportMargin]="8"
         [cdkConnectedOverlayScrollStrategy]="scrollStrategy"
+        (attach)="handleAttach()"
         (overlayOutsideClick)="close()"
         (detach)="close()"
         (overlayKeydown)="handleOverlayKeydown($event)"
       >
         <div
+          #content
           role="listbox"
           tabindex="-1"
           [id]="select.contentId"
@@ -64,9 +94,24 @@ export class SelectContentComponent {
   protected readonly select = inject(SelectComponent);
   private readonly overlay = inject(Overlay);
 
-  readonly class = input<string | undefined>();
+  @ViewChild(CdkConnectedOverlay) private connectedOverlay?: CdkConnectedOverlay;
+  @ViewChild('content') private contentRef?: ElementRef<HTMLElement>;
 
-  protected readonly positions = SELECT_CONTENT_POSITIONS;
+  readonly class = input<string | undefined>();
+  readonly position = input<SelectContentPosition>('popper');
+  readonly matchTriggerWidth = input(false, { transform: booleanAttribute });
+
+  private readonly itemAlignedOffsetY = signal(0);
+
+  protected readonly positions = computed(() =>
+    this.position() === 'item-aligned' ? SELECT_ITEM_ALIGNED_POSITIONS : SELECT_CONTENT_POSITIONS,
+  );
+  protected readonly offsetY = computed(() =>
+    this.position() === 'item-aligned' ? -this.itemAlignedOffsetY() : 0,
+  );
+  protected readonly overlayWidth = computed(() =>
+    this.matchTriggerWidth() ? this.select.triggerOrigin?.elementRef.nativeElement.getBoundingClientRect().width : undefined,
+  );
   protected readonly scrollStrategy = this.overlay.scrollStrategies.close();
 
   protected readonly contentClass = computed(() =>
@@ -80,6 +125,17 @@ export class SelectContentComponent {
 
   protected close(): void {
     this.select.setOpen(false);
+    this.itemAlignedOffsetY.set(0);
+  }
+
+  protected handleAttach(): void {
+    if (this.position() !== 'item-aligned') return;
+
+    queueMicrotask(() => {
+      const selectedItem = this.contentRef?.nativeElement.querySelector<HTMLElement>('[data-state="checked"]');
+      this.itemAlignedOffsetY.set(selectedItem?.offsetTop ?? 0);
+      this.connectedOverlay?.overlayRef.updatePosition();
+    });
   }
 
   protected handleOverlayKeydown(event: KeyboardEvent): void {

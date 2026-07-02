@@ -35,13 +35,18 @@ export const selectPage = {
           level: 3,
         },
         {
-          id: 'example-disabled-item',
-          titleKey: 'select.demo.disabledItem',
+          id: 'example-custom-icon',
+          titleKey: 'select.demo.customIcon',
           level: 3,
         },
         {
-          id: 'example-indicator',
-          titleKey: 'select.demo.indicator',
+          id: 'example-item-aligned',
+          titleKey: 'select.demo.itemAligned',
+          level: 3,
+        },
+        {
+          id: 'example-disabled-item',
+          titleKey: 'select.demo.disabledItem',
           level: 3,
         },
       ],
@@ -56,6 +61,8 @@ export const selectPage = {
   apiRows: [
     { property: 'SelectComponent.value', type: 'SelectValue | null', defaultValue: 'null', descriptionKey: 'select.api.value.description' },
     { property: 'SelectComponent.isOpen', type: 'boolean', defaultValue: 'false', descriptionKey: 'select.api.isOpen.description' },
+    { property: 'SelectContentComponent.position', type: "'popper' | 'item-aligned'", defaultValue: "'popper'", descriptionKey: 'select.api.contentPosition.description' },
+    { property: 'SelectContentComponent.matchTriggerWidth', type: 'boolean', defaultValue: 'false', descriptionKey: 'select.api.matchTriggerWidth.description' },
     { property: 'SelectItemComponent.value', type: 'SelectValue', defaultValue: 'required', descriptionKey: 'select.api.itemValue.description' },
     { property: 'SelectItemComponent.disabled', type: 'boolean', defaultValue: 'false', descriptionKey: 'select.api.itemDisabled.description' },
     { property: 'SelectItemComponent.indicatorPosition', type: "'start' | 'end'", defaultValue: "'start'", descriptionKey: 'select.api.indicatorPosition.description' },
@@ -67,13 +74,13 @@ export const selectPage = {
 
 export const selectPageExamples = {
   basic: `<sanring-select [(ngModel)]="value">
-  <button sanringSelectTrigger>
+  <button sanringSelectTrigger class="w-[240px]">
     <sanring-select-value placeholder="Choose a workspace" />
   </button>
-  <sanring-select-content>
+  <sanring-select-content matchTriggerWidth>
     <sanring-select-item value="design">Design</sanring-select-item>
     <sanring-select-item value="engineering">Engineering</sanring-select-item>
-    <sanring-select-item value="support">Support</sanring-select-item>
+    <sanring-select-item value="support">Customer support operations</sanring-select-item>
   </sanring-select-content>
 </sanring-select>`,
   usageImport: `import { FormsModule } from '@angular/forms';
@@ -88,10 +95,10 @@ import { SANRING_SELECT_IMPORTS } from '@sanring/ui';`,
   </sanring-select-content>
 </sanring-select>`,
   groups: `<sanring-select [(ngModel)]="region">
-  <button sanringSelectTrigger>
+  <button sanringSelectTrigger class="w-[240px]">
     <sanring-select-value placeholder="Choose a region" />
   </button>
-  <sanring-select-content>
+  <sanring-select-content matchTriggerWidth>
     <sanring-select-group>
       <sanring-select-label>Asia Pacific</sanring-select-label>
       <sanring-select-item value="taipei">Taipei</sanring-select-item>
@@ -105,33 +112,43 @@ import { SANRING_SELECT_IMPORTS } from '@sanring/ui';`,
     </sanring-select-group>
   </sanring-select-content>
 </sanring-select>`,
+  customIcon: `<sanring-select [(ngModel)]="reviewState">
+  <button sanringSelectTrigger class="w-[240px]">
+    <sanring-select-value placeholder="Review state" />
+  </button>
+  <sanring-select-content matchTriggerWidth>
+    <sanring-select-item value="approved" indicatorPosition="end">
+      Approved
+      <svg sanringSelectItemIndicator lucideCircleCheck class="size-4 text-primary" strokeWidth="2.5"></svg>
+    </sanring-select-item>
+    <sanring-select-item value="pending" indicatorPosition="end">
+      Pending
+      <svg sanringSelectItemIndicator lucideCircleCheck class="size-4 text-[var(--sanring-muted)]" strokeWidth="2.5"></svg>
+    </sanring-select-item>
+    <sanring-select-item value="blocked" indicatorPosition="end">
+      Blocked
+      <svg sanringSelectItemIndicator lucideCircleCheck class="size-4 text-[var(--sanring-border-strong)]" strokeWidth="2.5"></svg>
+    </sanring-select-item>
+  </sanring-select-content>
+</sanring-select>`,
+  itemAligned: `<sanring-select [(ngModel)]="theme">
+  <button sanringSelectTrigger class="w-[240px]">
+    <sanring-select-value placeholder="Theme" />
+  </button>
+  <sanring-select-content position="item-aligned" matchTriggerWidth>
+    <sanring-select-item value="light">Light</sanring-select-item>
+    <sanring-select-item value="dark">Dark</sanring-select-item>
+    <sanring-select-item value="system">System</sanring-select-item>
+  </sanring-select-content>
+</sanring-select>`,
   disabledItem: `<sanring-select [(ngModel)]="plan">
-  <button sanringSelectTrigger>
+  <button sanringSelectTrigger class="w-[240px]">
     <sanring-select-value placeholder="Choose a plan" />
   </button>
-  <sanring-select-content>
+  <sanring-select-content matchTriggerWidth>
     <sanring-select-item value="starter">Starter</sanring-select-item>
     <sanring-select-item value="pro">Pro</sanring-select-item>
     <sanring-select-item value="enterprise" disabled>Enterprise</sanring-select-item>
-  </sanring-select-content>
-</sanring-select>`,
-  indicator: `<sanring-select [(ngModel)]="status">
-  <button sanringSelectTrigger>
-    <sanring-select-value placeholder="Choose a status" />
-  </button>
-  <sanring-select-content>
-    <sanring-select-item value="draft" indicatorPosition="end">
-      Draft
-      <span sanringSelectItemIndicator class="size-2 rounded-full bg-[var(--sanring-muted)]"></span>
-    </sanring-select-item>
-    <sanring-select-item value="live" indicatorPosition="end">
-      Live
-      <span sanringSelectItemIndicator class="size-2 rounded-full bg-primary"></span>
-    </sanring-select-item>
-    <sanring-select-item value="archived" indicatorPosition="end">
-      Archived
-      <span sanringSelectItemIndicator class="size-2 rounded-full bg-[var(--sanring-border-strong)]"></span>
-    </sanring-select-item>
   </sanring-select-content>
 </sanring-select>`,
 } as const;

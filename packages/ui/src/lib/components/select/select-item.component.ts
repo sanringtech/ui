@@ -13,7 +13,7 @@ import {
 import { LucideCheck } from '@lucide/angular';
 import { SelectComponent } from './select.component';
 import { cn } from '../../utils';
-import { MENU_ITEM_SIZE_CLASS } from '../component-styles';
+import { SELECT_ITEM_SIZE_CLASS } from '../component-styles';
 import { SelectIndicatorPosition, SelectValue } from './select.type';
 
 @Component({
@@ -65,7 +65,7 @@ export class SelectItemComponent implements AfterViewInit {
   protected readonly itemClass = computed(() =>
     cn(
       'relative flex w-full cursor-default select-none items-center gap-2 rounded-[var(--sanring-radius-xs)] px-2 outline-none',
-      MENU_ITEM_SIZE_CLASS,
+      SELECT_ITEM_SIZE_CLASS,
       'text-[var(--sanring-foreground)] transition-colors',
       'hover:bg-[var(--sanring-surface-strong)] focus:bg-[var(--sanring-surface-strong)]',
       'data-[state=checked]:font-medium data-[disabled]:pointer-events-none data-[disabled]:opacity-50',

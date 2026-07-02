@@ -1,5 +1,6 @@
 import { Component, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { LucideCircleCheck } from '@lucide/angular';
 import { SANRING_SELECT_IMPORTS, SelectValue } from '@sanring/ui';
 import { getComponentPageSection } from '../../../docs-schema/component-page.utils';
 import { I18nService } from '../../../i18n/i18n.service';
@@ -18,6 +19,7 @@ import { selectPage, selectPageExamples } from './select.docs';
   selector: 'app-select-page',
   imports: [
     FormsModule,
+    LucideCircleCheck,
     SANRING_SELECT_IMPORTS,
     ComponentPageApiTableComponent,
     ComponentPageCodeBlock,
@@ -39,13 +41,13 @@ import { selectPage, selectPageExamples } from './select.docs';
         <app-component-page-code-previewer [code]="examples.basic" language="angular-html">
           <div previewer class="flex min-h-[180px] items-start justify-center pt-8">
             <sanring-select [(ngModel)]="workspace">
-              <button sanringSelectTrigger class="w-[min(320px,100%)]">
+              <button sanringSelectTrigger class="w-[240px]">
                 <sanring-select-value placeholder="Choose a workspace" />
               </button>
-              <sanring-select-content>
+              <sanring-select-content matchTriggerWidth>
                 <sanring-select-item value="design">Design</sanring-select-item>
                 <sanring-select-item value="engineering">Engineering</sanring-select-item>
-                <sanring-select-item value="support">Support</sanring-select-item>
+                <sanring-select-item value="support">Customer support operations</sanring-select-item>
               </sanring-select-content>
             </sanring-select>
           </div>
@@ -54,10 +56,10 @@ import { selectPage, selectPageExamples } from './select.docs';
 
       <app-component-page-section [section]="section('usage')">
         <div class="grid gap-6">
-          <div class="overflow-hidden rounded-lg border border-[var(--docs-border)]">
+          <div class="overflow-hidden rounded-[var(--sanring-radius)] border border-[var(--docs-border)]">
             <app-component-page-code-block [code]="examples.usageImport" language="typescript" />
           </div>
-          <div class="overflow-hidden rounded-lg border border-[var(--docs-border)]">
+          <div class="overflow-hidden rounded-[var(--sanring-radius)] border border-[var(--docs-border)]">
             <app-component-page-code-block [code]="examples.usageMain" language="angular-html" />
           </div>
         </div>
@@ -74,12 +76,12 @@ import { selectPage, selectPageExamples } from './select.docs';
         <div class="grid gap-2">
           <app-component-page-section [section]="section('example-groups')">
             <app-component-page-code-previewer [code]="examples.groups" language="angular-html">
-              <div previewer class="flex min-h-[220px] items-start justify-center pt-8">
+              <div previewer class="flex items-start justify-center pt-8">
                 <sanring-select [(ngModel)]="region">
-                  <button sanringSelectTrigger class="w-[min(320px,100%)]">
+                  <button sanringSelectTrigger class="w-[240px]">
                     <sanring-select-value placeholder="Choose a region" />
                   </button>
-                  <sanring-select-content>
+                  <sanring-select-content matchTriggerWidth>
                     <sanring-select-group>
                       <sanring-select-label>Asia Pacific</sanring-select-label>
                       <sanring-select-item value="taipei">Taipei</sanring-select-item>
@@ -97,46 +99,83 @@ import { selectPage, selectPageExamples } from './select.docs';
             </app-component-page-code-previewer>
           </app-component-page-section>
 
-          <app-component-page-section [section]="section('example-disabled-item')">
-            <app-component-page-code-previewer [code]="examples.disabledItem" language="angular-html">
+          <app-component-page-section [section]="section('example-custom-icon')">
+            <app-component-page-code-previewer [code]="examples.customIcon" language="angular-html">
               <div previewer class="flex min-h-[180px] items-start justify-center pt-8">
-                <sanring-select [(ngModel)]="plan">
-                  <button sanringSelectTrigger class="w-[min(320px,100%)]">
-                    <sanring-select-value placeholder="Choose a plan" />
+                <sanring-select [(ngModel)]="reviewState">
+                  <button sanringSelectTrigger class="w-[240px]">
+                    <sanring-select-value placeholder="Review state" />
                   </button>
-                  <sanring-select-content>
-                    <sanring-select-item value="starter">Starter</sanring-select-item>
-                    <sanring-select-item value="pro">Pro</sanring-select-item>
-                    <sanring-select-item value="enterprise" disabled>Enterprise</sanring-select-item>
+                  <sanring-select-content matchTriggerWidth>
+                    <sanring-select-item value="approved" indicatorPosition="end">
+                      Approved
+                      <svg
+                        sanringSelectItemIndicator
+                        lucideCircleCheck
+                        class="size-4 text-primary"
+                        strokeWidth="2.5"
+                      ></svg>
+                    </sanring-select-item>
+                    <sanring-select-item value="pending" indicatorPosition="end">
+                      Pending
+                      <svg
+                        sanringSelectItemIndicator
+                        lucideCircleCheck
+                        class="size-4 text-[var(--sanring-muted)]"
+                        strokeWidth="2.5"
+                      ></svg>
+                    </sanring-select-item>
+                    <sanring-select-item value="blocked" indicatorPosition="end">
+                      Blocked
+                      <svg
+                        sanringSelectItemIndicator
+                        lucideCircleCheck
+                        class="size-4 text-[var(--sanring-border-strong)]"
+                        strokeWidth="2.5"
+                      ></svg>
+                    </sanring-select-item>
                   </sanring-select-content>
                 </sanring-select>
               </div>
             </app-component-page-code-previewer>
           </app-component-page-section>
 
-          <app-component-page-section [section]="section('example-indicator')">
-            <app-component-page-code-previewer [code]="examples.indicator" language="angular-html">
-              <div previewer class="flex min-h-[180px] items-start justify-center pt-8">
-                <sanring-select [(ngModel)]="status">
-                  <button sanringSelectTrigger class="w-[min(320px,100%)]">
-                    <sanring-select-value placeholder="Choose a status" />
+          <app-component-page-section [section]="section('example-item-aligned')">
+            <app-component-page-code-previewer
+              [code]="examples.itemAligned"
+              language="angular-html"
+            >
+              <div previewer class="flex min-h-[220px] items-start justify-center pt-8">
+                <sanring-select [(ngModel)]="theme">
+                  <button sanringSelectTrigger class="w-[240px]">
+                    <sanring-select-value placeholder="Theme" />
                   </button>
-                  <sanring-select-content>
-                    <sanring-select-item value="draft" indicatorPosition="end">
-                      Draft
-                      <span sanringSelectItemIndicator class="size-2 rounded-full bg-[var(--sanring-muted)]"></span>
-                    </sanring-select-item>
-                    <sanring-select-item value="live" indicatorPosition="end">
-                      Live
-                      <span sanringSelectItemIndicator class="size-2 rounded-full bg-primary"></span>
-                    </sanring-select-item>
-                    <sanring-select-item value="archived" indicatorPosition="end">
-                      Archived
-                      <span
-                        sanringSelectItemIndicator
-                        class="size-2 rounded-full bg-[var(--sanring-border-strong)]"
-                      ></span>
-                    </sanring-select-item>
+                  <sanring-select-content position="item-aligned" matchTriggerWidth>
+                    <sanring-select-item value="light">Light</sanring-select-item>
+                    <sanring-select-item value="dark">Dark</sanring-select-item>
+                    <sanring-select-item value="system">System</sanring-select-item>
+                  </sanring-select-content>
+                </sanring-select>
+              </div>
+            </app-component-page-code-previewer>
+          </app-component-page-section>
+
+          <app-component-page-section [section]="section('example-disabled-item')">
+            <app-component-page-code-previewer
+              [code]="examples.disabledItem"
+              language="angular-html"
+            >
+              <div previewer class="flex min-h-[180px] items-start justify-center pt-8">
+                <sanring-select [(ngModel)]="plan">
+                  <button sanringSelectTrigger class="w-[240px]">
+                    <sanring-select-value placeholder="Choose a plan" />
+                  </button>
+                  <sanring-select-content matchTriggerWidth>
+                    <sanring-select-item value="starter">Starter</sanring-select-item>
+                    <sanring-select-item value="pro">Pro</sanring-select-item>
+                    <sanring-select-item value="enterprise" disabled
+                      >Enterprise</sanring-select-item
+                    >
                   </sanring-select-content>
                 </sanring-select>
               </div>
@@ -158,8 +197,9 @@ export class SelectPageComponent {
 
   workspace: SelectValue = 'engineering';
   region: SelectValue = 'taipei';
+  theme: SelectValue = 'dark';
   plan: SelectValue = 'pro';
-  status: SelectValue = 'live';
+  reviewState: SelectValue = 'approved';
 
   protected section(id: string) {
     return getComponentPageSection(this.page, id);
