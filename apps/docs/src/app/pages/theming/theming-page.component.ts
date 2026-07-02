@@ -1,11 +1,15 @@
 import { Component, inject } from '@angular/core';
 import { ComponentPageSectionDefinition } from '../../docs-schema/component-page.types';
 import { I18nService } from '../../i18n/i18n.service';
-import { ComponentPageComponent, ComponentPageSectionComponent } from '../../layouts/component-page';
+import {
+  ComponentPageCodeBlock,
+  ComponentPageComponent,
+  ComponentPageSectionComponent,
+} from '../../layouts/component-page';
 
 @Component({
   selector: 'app-theming-page',
-  imports: [ComponentPageComponent, ComponentPageSectionComponent],
+  imports: [ComponentPageCodeBlock, ComponentPageComponent, ComponentPageSectionComponent],
   template: `
     <app-component-page [sections]="sections">
       <header class="border-b border-[var(--docs-border)] pb-10">
@@ -26,21 +30,7 @@ import { ComponentPageComponent, ComponentPageSectionComponent } from '../../lay
           <div class="flex items-center gap-2 border-b border-[var(--docs-border)] bg-[var(--docs-surface)] px-4 py-2.5">
             <span class="text-xs font-medium text-[var(--docs-muted)]">styles.css</span>
           </div>
-          <pre class="overflow-x-auto bg-[var(--docs-code)] px-5 py-4 text-sm leading-7 text-[var(--docs-fg)]">:root &#123;
-  /* surface &amp; typography */
-  --sanring-background:    #070a0b;
-  --sanring-foreground:    #f1f5f5;
-  --sanring-muted:         #94a3a6;
-  --sanring-border:        #1f2729;
-  --sanring-border-strong: #38454a;
-  --sanring-surface:       #0d1213;
-  --sanring-elevated:      #121718;
-  --sanring-control:       #f4faf9;
-
-  /* primary color — drives bg-primary, text-primary, border-primary */
-  --sanring-primary:    #8bd3dd;
-  --sanring-primary-fg: #062f35;
-&#125;</pre>
+          <app-component-page-code-block [code]="tokensSource" language="css" />
         </div>
       </app-component-page-section>
 
@@ -53,20 +43,7 @@ import { ComponentPageComponent, ComponentPageSectionComponent } from '../../lay
           <div class="flex items-center gap-2 border-b border-[var(--docs-border)] bg-[var(--docs-surface)] px-4 py-2.5">
             <span class="text-xs font-medium text-[var(--docs-muted)]">styles.css</span>
           </div>
-          <pre class="overflow-x-auto bg-[var(--docs-code)] px-5 py-4 text-sm leading-7 text-[var(--docs-fg)]">&#64;import 'tailwindcss';
-
-/* tell Tailwind to scan component source for utility classes */
-&#64;source "../../node_modules/&#64;sanring/ui/src";
-
-/* wire --sanring-* tokens to Tailwind utilities
-   inline = keeps the var() reference live at runtime,
-   so dark/light theme switching updates bg-primary etc. */
-&#64;theme inline &#123;
-  --color-background:         var(--sanring-background);
-  --color-foreground:         var(--sanring-foreground);
-  --color-primary:            var(--sanring-primary);
-  --color-primary-foreground: var(--sanring-primary-fg);
-&#125;</pre>
+          <app-component-page-code-block [code]="tailwindSource" language="css" />
         </div>
         <p class="mt-4 text-sm text-[var(--docs-muted)]">{{ i18n.t('theming.tailwind.note') }}</p>
       </app-component-page-section>
@@ -80,23 +57,7 @@ import { ComponentPageComponent, ComponentPageSectionComponent } from '../../lay
           <div class="flex items-center gap-2 border-b border-[var(--docs-border)] bg-[var(--docs-surface)] px-4 py-2.5">
             <span class="text-xs font-medium text-[var(--docs-muted)]">your-app/styles.css</span>
           </div>
-          <pre class="overflow-x-auto bg-[var(--docs-code)] px-5 py-4 text-sm leading-7 text-[var(--docs-fg)]">/* override Sanring UI tokens with your brand */
-:root &#123;
-  --sanring-background: #0a0a0f;
-  --sanring-foreground: #f0f0ff;
-  --sanring-border:     #2a2a40;
-
-  /* swap the primary to your brand color */
-  --sanring-primary:    #a78bfa;   /* purple */
-  --sanring-primary-fg: #1e1033;
-&#125;
-
-:root[data-theme='light'] &#123;
-  --sanring-background: #ffffff;
-  --sanring-foreground: #0f0a1e;
-  --sanring-primary:    #7c3aed;
-  --sanring-primary-fg: #ede9fe;
-&#125;</pre>
+          <app-component-page-code-block [code]="brandSource" language="css" />
         </div>
       </app-component-page-section>
 
@@ -109,21 +70,13 @@ import { ComponentPageComponent, ComponentPageSectionComponent } from '../../lay
           <div class="flex items-center gap-2 border-b border-[var(--docs-border)] bg-[var(--docs-surface)] px-4 py-2.5">
             <span class="text-xs font-medium text-[var(--docs-muted)]">CSS</span>
           </div>
-          <pre class="overflow-x-auto bg-[var(--docs-code)] px-5 py-4 text-sm leading-7 text-[var(--docs-fg)]">/* dark is default — no selector needed */
-:root &#123; --sanring-background: #070a0b; &#125;
-
-/* light overrides scoped to the attribute */
-:root[data-theme='light'] &#123; --sanring-background: #ffffff; &#125;</pre>
+          <app-component-page-code-block [code]="darkModeCss" language="css" />
         </div>
         <div class="mt-6 overflow-hidden rounded-[var(--sanring-radius)] border border-[var(--docs-border)]">
           <div class="flex items-center gap-2 border-b border-[var(--docs-border)] bg-[var(--docs-surface)] px-4 py-2.5">
             <span class="text-xs font-medium text-[var(--docs-muted)]">TypeScript</span>
           </div>
-          <pre class="overflow-x-auto bg-[var(--docs-code)] px-5 py-4 text-sm leading-7 text-[var(--docs-fg)]">// switch to light
-document.documentElement.setAttribute('data-theme', 'light');
-
-// switch to dark (explicit setAttribute is safer if you add a third theme later)
-document.documentElement.setAttribute('data-theme', 'dark');</pre>
+          <app-component-page-code-block [code]="darkModeToggle" language="typescript" />
         </div>
         <p class="mt-4 text-sm text-[var(--docs-muted)]">{{ i18n.t('theming.darkMode.note') }}</p>
       </app-component-page-section>
@@ -139,4 +92,65 @@ export class ThemingPageComponent {
     { id: 'brand-override', titleKey: 'theming.brand.title' },
     { id: 'dark-light-mode', titleKey: 'theming.darkMode.title' },
   ];
+
+  protected readonly tokensSource = `:root {
+  /* surface & typography */
+  --sanring-background:    #070a0b;
+  --sanring-foreground:    #f1f5f5;
+  --sanring-muted:         #94a3a6;
+  --sanring-border:        #1f2729;
+  --sanring-border-strong: #38454a;
+  --sanring-surface:       #0d1213;
+  --sanring-elevated:      #121718;
+  --sanring-control:       #f4faf9;
+
+  /* primary color — drives bg-primary, text-primary, border-primary */
+  --sanring-primary:    #8bd3dd;
+  --sanring-primary-fg: #062f35;
+}`;
+
+  protected readonly tailwindSource = `@import 'tailwindcss';
+
+/* tell Tailwind to scan component source for utility classes */
+@source "../../node_modules/@sanring/ui/src";
+
+/* wire --sanring-* tokens to Tailwind utilities
+   inline = keeps the var() reference live at runtime,
+   so dark/light theme switching updates bg-primary etc. */
+@theme inline {
+  --color-background:         var(--sanring-background);
+  --color-foreground:         var(--sanring-foreground);
+  --color-primary:            var(--sanring-primary);
+  --color-primary-foreground: var(--sanring-primary-fg);
+}`;
+
+  protected readonly brandSource = `/* override Sanring UI tokens with your brand */
+:root {
+  --sanring-background: #0a0a0f;
+  --sanring-foreground: #f0f0ff;
+  --sanring-border:     #2a2a40;
+
+  /* swap the primary to your brand color */
+  --sanring-primary:    #a78bfa;   /* purple */
+  --sanring-primary-fg: #1e1033;
+}
+
+:root[data-theme='light'] {
+  --sanring-background: #ffffff;
+  --sanring-foreground: #0f0a1e;
+  --sanring-primary:    #7c3aed;
+  --sanring-primary-fg: #ede9fe;
+}`;
+
+  protected readonly darkModeCss = `/* dark is default — no selector needed */
+:root { --sanring-background: #070a0b; }
+
+/* light overrides scoped to the attribute */
+:root[data-theme='light'] { --sanring-background: #ffffff; }`;
+
+  protected readonly darkModeToggle = `// switch to light
+document.documentElement.setAttribute('data-theme', 'light');
+
+// switch to dark (explicit setAttribute is safer if you add a third theme later)
+document.documentElement.setAttribute('data-theme', 'dark');`;
 }
