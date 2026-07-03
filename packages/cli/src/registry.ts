@@ -43,19 +43,23 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 const LOCAL_REGISTRY_DIR = join(__dirname, '../registry');
 const LOCAL_REGISTRY_JSON = join(LOCAL_REGISTRY_DIR, 'registry.json');
 
-function getCLIVersion(): string {
+// Changesets tags releases as `<package-name>@<version>` (e.g. `@sanring/cli@0.2.0`),
+// not `v<version>` — and the ref must be URL-encoded since it contains `/` and `@`.
+function getRemoteRef(): string {
   try {
     const pkg = JSON.parse(readFileSync(join(__dirname, '../package.json'), 'utf-8'));
-    return pkg.version as string;
+    return `refs/tags/${encodeURIComponent(`${pkg.name}@${pkg.version}`)}`;
   } catch {
     return 'main';
   }
 }
 
 // Version-pinned remote URL — used only when the local bundle is absent
-// (e.g. in monorepo dev before the package is built/published)
+// (e.g. in monorepo dev before the package is built/published). Points at
+// the repo-root `registry/` (source of truth), not `packages/cli/registry`,
+// since the latter is gitignored and never exists in any git tag.
 const REMOTE_BASE =
-  `https://raw.githubusercontent.com/sanringtech/ui/v${getCLIVersion()}/packages/cli/registry`;
+  `https://raw.githubusercontent.com/sanringtech/ui/${getRemoteRef()}/registry`;
 
 function isUrl(s: string): boolean {
   return s.startsWith('http://') || s.startsWith('https://');
