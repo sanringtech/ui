@@ -41,14 +41,14 @@ Options:
 
 ---
 
-### `add <component>`
+### `add <components...>`
 
-Copy a component into your project and install its peer dependencies.
+Copy one or more components into your project and install their peer dependencies. If a component depends on another (e.g. `tag` depends on `badge`), the dependency is added automatically and labeled `(dependency)` in the output — no need to run `add` again.
 
 ```bash
 npx @sanring/cli@latest add accordion
-npx @sanring/cli@latest add button
-npx @sanring/cli@latest add dialog
+npx @sanring/cli@latest add button dialog
+npx @sanring/cli@latest add tag   # also adds badge automatically
 ```
 
 Options:

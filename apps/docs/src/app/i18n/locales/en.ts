@@ -651,7 +651,7 @@ export const en = {
     'Run once per project. Verifies you\'re in an Angular project, writes a sanring.config.json with your chosen component path, and installs the base peer dependencies (clsx, tailwind-merge).',
   'cli.add.title': 'add',
   'cli.add.body':
-    'Copies a component\'s source files into your project and installs any missing peer dependencies. Pass --dry-run to preview exactly which files would be created or overwritten without touching your filesystem.',
+    'Copies one or more components\' source files into your project and installs any missing peer dependencies. If a component depends on another (e.g. tag depends on badge), the dependency is added automatically. Pass --dry-run to preview exactly which files would be created or overwritten without touching your filesystem.',
   'cli.list.title': 'list',
   'cli.list.body':
     'Prints every component available in the registry, along with its peer dependencies. Aliased as ls.',

@@ -65,6 +65,14 @@ function isUrl(s: string): boolean {
   return s.startsWith('http://') || s.startsWith('https://');
 }
 
+function die(message: string, detail?: unknown): never {
+  console.error(pc.red(`✖ ${message}`));
+  if (detail !== undefined) {
+    console.error(pc.dim(`  ${detail instanceof Error ? detail.message : String(detail)}`));
+  }
+  process.exit(1);
+}
+
 // ---------------------------------------------------------------------------
 // Registry types
 // ---------------------------------------------------------------------------
@@ -105,8 +113,7 @@ export async function fetchRegistry(source?: string): Promise<Registry> {
     try {
       return JSON.parse(readFileSync(localJson, 'utf-8')) as Registry;
     } catch {
-      console.error(pc.red(`✖ Cannot read registry at: ${localJson}`));
-      process.exit(1);
+      die(`Cannot read registry at: ${localJson}`);
     }
   }
 
@@ -135,9 +142,7 @@ async function fetchRegistryFromUrl(url: string): Promise<Registry> {
     if (!res.ok) throw new Error(`HTTP ${res.status}`);
     return (await res.json()) as Registry;
   } catch (e) {
-    console.error(pc.red(`✖ Cannot fetch registry: ${url}`));
-    console.error(pc.dim(`  ${e instanceof Error ? e.message : String(e)}`));
-    process.exit(1);
+    die(`Cannot fetch registry: ${url}`, e);
   }
 }
 

@@ -121,6 +121,9 @@ npx @sanring/cli add button`,
     init: `npx @sanring/cli init`,
     add: `npx @sanring/cli add button
 
+# add multiple components at once
+npx @sanring/cli add button dialog
+
 # preview what would change, without writing any files
 npx @sanring/cli add button --dry-run`,
     list: `npx @sanring/cli list`,

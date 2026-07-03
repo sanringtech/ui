@@ -579,7 +579,7 @@ export const zh: Record<TranslationKey, string> = {
     '每個專案只需執行一次。會確認目前是否在 Angular 專案中，寫入 sanring.config.json 記錄你選擇的元件路徑，並安裝基礎的 peer dependencies（clsx、tailwind-merge）。',
   'cli.add.title': 'add',
   'cli.add.body':
-    '把指定元件的原始碼複製進你的專案，並安裝缺少的 peer dependencies。加上 --dry-run 可以在不動任何檔案的情況下，預覽哪些檔案會被新增或覆寫。',
+    '把一個或多個元件的原始碼複製進你的專案，並安裝缺少的 peer dependencies。如果某個元件依賴其他元件（例如 tag 依賴 badge），依賴會自動一併安裝。加上 --dry-run 可以在不動任何檔案的情況下，預覽哪些檔案會被新增或覆寫。',
   'cli.list.title': 'list',
   'cli.list.body':
     '列出 registry 裡所有可用的元件與其 peer dependencies。指令別名為 ls。',
