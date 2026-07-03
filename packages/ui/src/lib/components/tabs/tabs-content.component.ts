@@ -1,32 +1,34 @@
 import { TabContent as NgTabContent, TabPanel as NgTabPanel } from '@angular/aria/tabs';
-import { Component, computed, inject, input } from '@angular/core';
+import { Component, computed, input } from '@angular/core';
 import { cn } from '../../utils';
 
 @Component({
   selector: 'sanring-tabs-content',
   standalone: true,
-  imports: [NgTabContent], // NgTabPanel 僅用於 hostDirectives，不需加入 imports
+  imports: [NgTabContent, NgTabPanel],
   template: `
-    <ng-template ngTabContent>
-      <ng-content></ng-content>
-    </ng-template>
+    <div
+      ngTabPanel
+      #panel="ngTabPanel"
+      [value]="value()"
+      [preserveContent]="true"
+      [hidden]="!panel.visible()"
+      [attr.data-state]="panel.visible() ? 'active' : 'inactive'"
+      [class]="tabsContentClass()"
+    >
+      <ng-template ngTabContent>
+        <ng-content></ng-content>
+      </ng-template>
+    </div>
   `,
-  hostDirectives: [
-    {
-      directive: NgTabPanel,
-      inputs: ['value'],
-    },
-  ],
   host: {
-    '[hidden]': '!panel.visible()',
-    '[attr.data-state]': "panel.visible() ? 'active' : 'inactive'",
-    '[class]': 'tabsContentClass()',
+    class: 'contents',
   },
 })
 export class TabsContentComponent {
+  readonly value = input.required<string>();
   readonly class = input<string | undefined>();
 
-  protected panel = inject(NgTabPanel);
   protected readonly tabsContentClass = computed(() =>
     cn(
       'block min-w-0 mt-2 ring-offset-[var(--sanring-surface)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--sanring-border-strong)] focus-visible:ring-offset-2',
