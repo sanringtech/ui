@@ -4,4 +4,5 @@ export * from './component-page-code-previewer.component';
 export * from './component-page-header.component';
 export * from './component-page-installation.component';
 export * from './component-page-section.component';
+export * from './component-page-usage-imports.component';
 export * from './component-page.component';

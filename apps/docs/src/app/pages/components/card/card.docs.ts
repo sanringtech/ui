@@ -1,4 +1,7 @@
-import { ComponentPageApiRow, ComponentPageDefinition } from '../../../docs-schema/component-page.types';
+import {
+  ComponentPageApiRow,
+  ComponentPageDefinition,
+} from '../../../docs-schema/component-page.types';
 
 export const cardPage = {
   componentId: 'card',
@@ -32,7 +35,6 @@ export const cardPage = {
     {
       id: 'example',
       titleKey: 'toc.examples',
-      descriptionKey: 'card.examples.description',
       level: 2,
       children: [
         {
@@ -65,7 +67,12 @@ export const cardPage = {
     },
   ],
   apiRows: [
-    { property: 'class', type: 'string', defaultValue: "''", descriptionKey: 'card.api.class.description' },
+    {
+      property: 'class',
+      type: 'string',
+      defaultValue: "''",
+      descriptionKey: 'card.api.class.description',
+    },
   ] satisfies readonly ComponentPageApiRow[],
 } as const satisfies ComponentPageDefinition;
 
@@ -87,7 +94,13 @@ export const cardPageExamples = {
     </p>
   </sanring-card-content>
 </sanring-card>`,
-  usageImport: `import { SANRING_CARD_IMPORTS } from '@sanring/ui';`,
+  usageImport: `import { Component } from '@angular/core';
+import { SANRING_CARD_IMPORTS } from '@sanring/ui';
+
+@Component({
+  imports: [SANRING_CARD_IMPORTS],
+})
+export class ExampleComponent {}`,
   usageMain: `<sanring-card>
   <sanring-card-header>
     <h3 sanringCardTitle>建立新專案</h3>
@@ -97,6 +110,27 @@ export const cardPageExamples = {
     Content
   </sanring-card-content>
 </sanring-card>`,
+  usageIndividualImports: `import { Component } from '@angular/core';
+import {
+  CardComponent,
+  CardContentComponent,
+  CardDescriptionDirective,
+  CardFooterComponent,
+  CardHeaderComponent,
+  CardTitleDirective,
+} from '@sanring/ui';
+
+@Component({
+  imports: [
+    CardComponent,
+    CardHeaderComponent,
+    CardTitleDirective,
+    CardDescriptionDirective,
+    CardContentComponent,
+    CardFooterComponent,
+  ],
+})
+export class ExampleComponent {}`,
   form: `<sanring-card class="w-[350px]">
   <sanring-card-header>
     <h3 sanringCardTitle>建立新專案</h3>

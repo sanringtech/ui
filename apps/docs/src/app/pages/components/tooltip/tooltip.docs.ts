@@ -1,4 +1,7 @@
-import { ComponentPageApiRow, ComponentPageDefinition } from '../../../docs-schema/component-page.types';
+import {
+  ComponentPageApiRow,
+  ComponentPageDefinition,
+} from '../../../docs-schema/component-page.types';
 
 export const tooltipPage = {
   componentId: 'tooltip',
@@ -32,7 +35,6 @@ export const tooltipPage = {
     {
       id: 'example',
       titleKey: 'toc.examples',
-      descriptionKey: 'tooltip.examples.description',
       level: 2,
       children: [
         {
@@ -60,10 +62,30 @@ export const tooltipPage = {
     },
   ],
   apiRows: [
-    { property: 'delayDuration', type: 'number', defaultValue: '200', descriptionKey: 'tooltip.api.delayDuration.description' },
-    { property: 'side', type: "'top' | 'right' | 'bottom' | 'left'", defaultValue: "'top'", descriptionKey: 'tooltip.api.side.description' },
-    { property: 'sideOffset', type: 'number', defaultValue: '6', descriptionKey: 'tooltip.api.sideOffset.description' },
-    { property: 'class', type: 'string', defaultValue: "''", descriptionKey: 'tooltip.api.class.description' },
+    {
+      property: 'delayDuration',
+      type: 'number',
+      defaultValue: '200',
+      descriptionKey: 'tooltip.api.delayDuration.description',
+    },
+    {
+      property: 'side',
+      type: "'top' | 'right' | 'bottom' | 'left'",
+      defaultValue: "'top'",
+      descriptionKey: 'tooltip.api.side.description',
+    },
+    {
+      property: 'sideOffset',
+      type: 'number',
+      defaultValue: '6',
+      descriptionKey: 'tooltip.api.sideOffset.description',
+    },
+    {
+      property: 'class',
+      type: 'string',
+      defaultValue: "''",
+      descriptionKey: 'tooltip.api.class.description',
+    },
   ] satisfies readonly ComponentPageApiRow[],
 } as const satisfies ComponentPageDefinition;
 
@@ -76,7 +98,13 @@ export const tooltipPageExamples = {
     Tooltip content
   </sanring-tooltip-content>
 </sanring-tooltip>`,
-  usageImport: `import { SANRING_TOOLTIP_IMPORTS } from '@sanring/ui';`,
+  usageImport: `import { Component } from '@angular/core';
+import { ButtonDirective, SANRING_TOOLTIP_IMPORTS } from '@sanring/ui';
+
+@Component({
+  imports: [ButtonDirective, SANRING_TOOLTIP_IMPORTS],
+})
+export class ExampleComponent {}`,
   usageMain: `<sanring-tooltip>
   <button sanringTooltipTrigger type="button">
     Hover me
@@ -85,6 +113,18 @@ export const tooltipPageExamples = {
     Tooltip content
   </sanring-tooltip-content>
 </sanring-tooltip>`,
+  usageIndividualImports: `import { Component } from '@angular/core';
+import {
+  ButtonDirective,
+  TooltipComponent,
+  TooltipContentComponent,
+  TooltipTriggerDirective,
+} from '@sanring/ui';
+
+@Component({
+  imports: [ButtonDirective, TooltipComponent, TooltipTriggerDirective, TooltipContentComponent],
+})
+export class ExampleComponent {}`,
   composition: `sanring-tooltip
 ├── [sanringTooltipTrigger]
 └── sanring-tooltip-content`,

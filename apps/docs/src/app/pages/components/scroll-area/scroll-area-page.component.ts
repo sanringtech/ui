@@ -9,6 +9,7 @@ import {
   ComponentPageComponent,
   ComponentPageHeaderComponent,
   ComponentPageInstallationComponent,
+  ComponentPageUsageImportsComponent,
   ComponentPageSectionComponent,
 } from '../../../layouts/component-page';
 import { scrollAreaPage, scrollAreaPageExamples } from './scroll-area.docs';
@@ -30,6 +31,7 @@ interface ScrollAreaDemoItem {
     ComponentPageComponent,
     ComponentPageHeaderComponent,
     ComponentPageInstallationComponent,
+    ComponentPageUsageImportsComponent,
     ComponentPageSectionComponent,
   ],
   template: `
@@ -60,10 +62,13 @@ interface ScrollAreaDemoItem {
 
       <app-component-page-section [section]="section('usage')">
         <div class="grid gap-6">
-          <div class="overflow-hidden rounded-[var(--sanring-radius)] border border-[var(--docs-border)]">
-            <app-component-page-code-block [code]="examples.usageImport" language="typescript" />
-          </div>
-          <div class="overflow-hidden rounded-[var(--sanring-radius)] border border-[var(--docs-border)]">
+          <app-component-page-usage-imports
+            [code]="examples.usageImport"
+            [individualCode]="examples.usageIndividualImports"
+          />
+          <div
+            class="overflow-hidden rounded-[var(--sanring-radius)] border border-[var(--docs-border)]"
+          >
             <app-component-page-code-block [code]="examples.usageMain" language="angular-html" />
           </div>
         </div>
@@ -109,7 +114,9 @@ interface ScrollAreaDemoItem {
                         <article
                           class="w-48 rounded-[var(--sanring-radius)] border border-[var(--docs-border)] bg-[var(--docs-panel)] p-4"
                         >
-                          <div class="text-xs uppercase text-[var(--docs-muted)]">{{ item.meta }}</div>
+                          <div class="text-xs uppercase text-[var(--docs-muted)]">
+                            {{ item.meta }}
+                          </div>
                           <h3 class="mb-0 mt-3 text-sm font-semibold text-[var(--docs-fg)]">
                             {{ item.title }}
                           </h3>
@@ -174,7 +181,10 @@ interface ScrollAreaDemoItem {
           </app-component-page-section>
 
           <app-component-page-section [section]="section('example-hide-scrollbar')">
-            <app-component-page-code-previewer [code]="examples.hideScrollbar" language="angular-html">
+            <app-component-page-code-previewer
+              [code]="examples.hideScrollbar"
+              language="angular-html"
+            >
               <div previewer class="flex w-full justify-center">
                 <sanring-scroll-area
                   class="h-64 w-[min(460px,100%)] rounded-[var(--sanring-radius)] border border-[var(--docs-border)] bg-[var(--docs-bg)] p-4"
@@ -192,7 +202,10 @@ interface ScrollAreaDemoItem {
           </app-component-page-section>
 
           <app-component-page-section [section]="section('example-custom-scrollbar')">
-            <app-component-page-code-previewer [code]="examples.customScrollbar" language="angular-html">
+            <app-component-page-code-previewer
+              [code]="examples.customScrollbar"
+              language="angular-html"
+            >
               <div previewer class="flex w-full flex-wrap justify-center gap-4">
                 <sanring-scroll-area
                   class="h-64 w-[min(200px,100%)] rounded-[var(--sanring-radius)] border border-[var(--docs-border)] bg-[var(--docs-bg)] p-4"

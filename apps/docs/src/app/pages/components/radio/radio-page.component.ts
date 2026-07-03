@@ -1,11 +1,6 @@
 import { Component, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import {
-  LabelDirective,
-  SANRING_RADIO_IMPORTS,
-  RadioOrientation,
-  RadioValue,
-} from '@sanring/ui';
+import { LabelDirective, SANRING_RADIO_IMPORTS, RadioOrientation, RadioValue } from '@sanring/ui';
 import { getComponentPageSection } from '../../../docs-schema/component-page.utils';
 import { I18nService } from '../../../i18n/i18n.service';
 import {
@@ -15,14 +10,10 @@ import {
   ComponentPageComponent,
   ComponentPageHeaderComponent,
   ComponentPageInstallationComponent,
+  ComponentPageUsageImportsComponent,
   ComponentPageSectionComponent,
 } from '../../../layouts/component-page';
-import {
-  radioGroupApiRows,
-  radioItemApiRows,
-  radioPage,
-  radioPageExamples,
-} from './radio.docs';
+import { radioGroupApiRows, radioItemApiRows, radioPage, radioPageExamples } from './radio.docs';
 
 @Component({
   selector: 'app-radio-page',
@@ -34,6 +25,7 @@ import {
     ComponentPageComponent,
     ComponentPageHeaderComponent,
     ComponentPageInstallationComponent,
+    ComponentPageUsageImportsComponent,
     ComponentPageSectionComponent,
     SANRING_RADIO_IMPORTS,
     LabelDirective,
@@ -60,10 +52,13 @@ import {
 
       <app-component-page-section [section]="section('usage')">
         <div class="grid gap-6">
-          <div class="overflow-hidden rounded-[var(--sanring-radius)] border border-[var(--docs-border)]">
-            <app-component-page-code-block [code]="examples.usageImport" language="typescript" />
-          </div>
-          <div class="overflow-hidden rounded-[var(--sanring-radius)] border border-[var(--docs-border)]">
+          <app-component-page-usage-imports
+            [code]="examples.usageImport"
+            [individualCode]="examples.usageIndividualImports"
+          />
+          <div
+            class="overflow-hidden rounded-[var(--sanring-radius)] border border-[var(--docs-border)]"
+          >
             <app-component-page-code-block [code]="examples.usageMain" language="angular-html" />
           </div>
         </div>
@@ -102,7 +97,10 @@ import {
           <app-component-page-section [section]="section('example-horizontal')">
             <app-component-page-code-previewer [code]="examples.horizontal" language="angular-html">
               <div previewer class="flex items-center justify-center">
-                <sanring-radio-group [(ngModel)]="horizontalValue" [orientation]="RadioOrientation.Horizontal">
+                <sanring-radio-group
+                  [(ngModel)]="horizontalValue"
+                  [orientation]="RadioOrientation.Horizontal"
+                >
                   <div class="flex items-center gap-2">
                     <sanring-radio-item id="h-left" value="left" />
                     <label sanringLabel for="h-left">Left</label>

@@ -9,6 +9,7 @@ import {
   ComponentPageComponent,
   ComponentPageHeaderComponent,
   ComponentPageInstallationComponent,
+  ComponentPageUsageImportsComponent,
   ComponentPageSectionComponent,
 } from '../../../layouts/component-page';
 import { spinnerPage, spinnerPageExamples } from './spinner.docs';
@@ -22,6 +23,7 @@ import { spinnerPage, spinnerPageExamples } from './spinner.docs';
     ComponentPageComponent,
     ComponentPageHeaderComponent,
     ComponentPageInstallationComponent,
+    ComponentPageUsageImportsComponent,
     ComponentPageSectionComponent,
     SpinnerComponent,
     ButtonDirective,
@@ -46,10 +48,10 @@ import { spinnerPage, spinnerPageExamples } from './spinner.docs';
       <!-- Usage -->
       <app-component-page-section [section]="section('usage')">
         <div class="grid gap-6">
-          <div class="overflow-hidden rounded-[var(--sanring-radius)] border border-[var(--docs-border)]">
-            <app-component-page-code-block [code]="examples.usageImport" language="typescript" />
-          </div>
-          <div class="overflow-hidden rounded-[var(--sanring-radius)] border border-[var(--docs-border)]">
+          <app-component-page-usage-imports [code]="examples.usageImport" />
+          <div
+            class="overflow-hidden rounded-[var(--sanring-radius)] border border-[var(--docs-border)]"
+          >
             <app-component-page-code-block [code]="examples.usageMain" language="angular-html" />
           </div>
         </div>
@@ -66,7 +68,6 @@ import { spinnerPage, spinnerPageExamples } from './spinner.docs';
       <!-- Examples -->
       <app-component-page-section [section]="section('example')">
         <div class="grid gap-2">
-
           <!-- Variant -->
           <app-component-page-section [section]="section('example-variant')">
             <app-component-page-code-previewer [code]="examples.variant" language="angular-html">
@@ -166,7 +167,6 @@ import { spinnerPage, spinnerPageExamples } from './spinner.docs';
               </div>
             </app-component-page-code-previewer>
           </app-component-page-section>
-
         </div>
       </app-component-page-section>
 

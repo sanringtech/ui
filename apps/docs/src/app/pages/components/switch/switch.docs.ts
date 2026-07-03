@@ -1,4 +1,7 @@
-import { ComponentPageApiRow, ComponentPageDefinition } from '../../../docs-schema/component-page.types';
+import {
+  ComponentPageApiRow,
+  ComponentPageDefinition,
+} from '../../../docs-schema/component-page.types';
 
 export const switchPage = {
   componentId: 'switch',
@@ -25,7 +28,6 @@ export const switchPage = {
     {
       id: 'example',
       titleKey: 'toc.examples',
-      descriptionKey: 'switch.examples.description',
       level: 2,
       children: [
         {
@@ -63,12 +65,42 @@ export const switchPage = {
     },
   ],
   apiRows: [
-    { property: 'class', type: 'string', defaultValue: "''", descriptionKey: 'switch.api.class.description' },
-    { property: 'id', type: 'string', defaultValue: 'generated', descriptionKey: 'switch.api.id.description' },
-    { property: 'checked', type: 'boolean', defaultValue: 'false', descriptionKey: 'switch.api.checked.description' },
-    { property: 'disabled', type: 'boolean', defaultValue: 'false', descriptionKey: 'switch.api.disabled.description' },
-    { property: 'invalid', type: 'boolean', defaultValue: 'false', descriptionKey: 'switch.api.invalid.description' },
-    { property: 'size', type: "'sm' | 'md' | 'lg'", defaultValue: "'md'", descriptionKey: 'switch.api.size.description' },
+    {
+      property: 'class',
+      type: 'string',
+      defaultValue: "''",
+      descriptionKey: 'switch.api.class.description',
+    },
+    {
+      property: 'id',
+      type: 'string',
+      defaultValue: 'generated',
+      descriptionKey: 'switch.api.id.description',
+    },
+    {
+      property: 'checked',
+      type: 'boolean',
+      defaultValue: 'false',
+      descriptionKey: 'switch.api.checked.description',
+    },
+    {
+      property: 'disabled',
+      type: 'boolean',
+      defaultValue: 'false',
+      descriptionKey: 'switch.api.disabled.description',
+    },
+    {
+      property: 'invalid',
+      type: 'boolean',
+      defaultValue: 'false',
+      descriptionKey: 'switch.api.invalid.description',
+    },
+    {
+      property: 'size',
+      type: "'sm' | 'md' | 'lg'",
+      defaultValue: "'md'",
+      descriptionKey: 'switch.api.size.description',
+    },
   ] satisfies readonly ComponentPageApiRow[],
 } as const satisfies ComponentPageDefinition;
 

@@ -1,4 +1,7 @@
-import { ComponentPageApiRow, ComponentPageDefinition } from '../../../docs-schema/component-page.types';
+import {
+  ComponentPageApiRow,
+  ComponentPageDefinition,
+} from '../../../docs-schema/component-page.types';
 
 export const togglePage = {
   componentId: 'toggle',
@@ -26,7 +29,6 @@ export const togglePage = {
     {
       id: 'example',
       titleKey: 'toc.examples',
-      descriptionKey: 'toggle.examples.description',
       level: 2,
       children: [
         { id: 'example-outline', titleKey: 'toggle.demo.outline', level: 3 },
@@ -43,11 +45,36 @@ export const togglePage = {
     },
   ],
   apiRows: [
-    { property: 'class', type: 'string', defaultValue: "''", descriptionKey: 'toggle.api.class.description' },
-    { property: 'variant', type: "'default' | 'outline'", defaultValue: "'default'", descriptionKey: 'toggle.api.variant.description' },
-    { property: 'size', type: "'sm' | 'md' | 'lg'", defaultValue: "'md'", descriptionKey: 'toggle.api.size.description' },
-    { property: 'pressed', type: 'boolean', defaultValue: 'false', descriptionKey: 'toggle.api.pressed.description' },
-    { property: 'disabled', type: 'boolean', defaultValue: 'false', descriptionKey: 'toggle.api.disabled.description' },
+    {
+      property: 'class',
+      type: 'string',
+      defaultValue: "''",
+      descriptionKey: 'toggle.api.class.description',
+    },
+    {
+      property: 'variant',
+      type: "'default' | 'outline'",
+      defaultValue: "'default'",
+      descriptionKey: 'toggle.api.variant.description',
+    },
+    {
+      property: 'size',
+      type: "'sm' | 'md' | 'lg'",
+      defaultValue: "'md'",
+      descriptionKey: 'toggle.api.size.description',
+    },
+    {
+      property: 'pressed',
+      type: 'boolean',
+      defaultValue: 'false',
+      descriptionKey: 'toggle.api.pressed.description',
+    },
+    {
+      property: 'disabled',
+      type: 'boolean',
+      defaultValue: 'false',
+      descriptionKey: 'toggle.api.disabled.description',
+    },
   ] satisfies readonly ComponentPageApiRow[],
 } as const satisfies ComponentPageDefinition;
 

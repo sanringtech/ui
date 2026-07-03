@@ -1,4 +1,7 @@
-import { ComponentPageApiRow, ComponentPageDefinition } from '../../../docs-schema/component-page.types';
+import {
+  ComponentPageApiRow,
+  ComponentPageDefinition,
+} from '../../../docs-schema/component-page.types';
 
 export const alertPage = {
   componentId: 'alert',
@@ -26,7 +29,6 @@ export const alertPage = {
     {
       id: 'example',
       titleKey: 'toc.examples',
-      descriptionKey: 'alert.examples.description',
       level: 2,
       children: [
         {
@@ -54,8 +56,18 @@ export const alertPage = {
     },
   ],
   apiRows: [
-    { property: 'class', type: 'string', defaultValue: "''", descriptionKey: 'alert.api.class.description' },
-    { property: 'variant', type: 'AlertVariant', defaultValue: "'default'", descriptionKey: 'alert.api.variant.description' },
+    {
+      property: 'class',
+      type: 'string',
+      defaultValue: "''",
+      descriptionKey: 'alert.api.class.description',
+    },
+    {
+      property: 'variant',
+      type: 'AlertVariant',
+      defaultValue: "'default'",
+      descriptionKey: 'alert.api.variant.description',
+    },
   ] satisfies readonly ComponentPageApiRow[],
 } as const satisfies ComponentPageDefinition;
 
@@ -67,7 +79,13 @@ export const alertPageExamples = {
     系統將於本週日凌晨 02:00 進行升級，屆時將暫停服務 30 分鐘。
   </p>
 </sanring-alert>`,
-  usageImport: `import { SANRING_ALERT_IMPORTS } from '@sanring/ui';`,
+  usageImport: `import { Component } from '@angular/core';
+import { SANRING_ALERT_IMPORTS } from '@sanring/ui';
+
+@Component({
+  imports: [SANRING_ALERT_IMPORTS],
+})
+export class ExampleComponent {}`,
   usageMain: `<sanring-alert variant="destructive">
   <svg lucideAlertTriangle class="size-4"></svg>
   <h5 sanringAlertTitle>危險操作</h5>
@@ -75,6 +93,13 @@ export const alertPageExamples = {
     此操作無法復原，請確認後再繼續。
   </p>
 </sanring-alert>`,
+  usageIndividualImports: `import { Component } from '@angular/core';
+import { AlertComponent, AlertDescriptionDirective, AlertTitleDirective } from '@sanring/ui';
+
+@Component({
+  imports: [AlertComponent, AlertTitleDirective, AlertDescriptionDirective],
+})
+export class ExampleComponent {}`,
   banner: `<sanring-alert class="mb-6 rounded-none border-x-0 border-t-0">
   <svg lucideInfo class="size-4"></svg>
   <h5 sanringAlertTitle>系統維護通知</h5>

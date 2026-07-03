@@ -1,4 +1,7 @@
-import { ComponentPageApiRow, ComponentPageDefinition } from '../../../docs-schema/component-page.types';
+import {
+  ComponentPageApiRow,
+  ComponentPageDefinition,
+} from '../../../docs-schema/component-page.types';
 
 export const checkboxPage = {
   componentId: 'checkbox',
@@ -25,7 +28,6 @@ export const checkboxPage = {
     {
       id: 'example',
       titleKey: 'toc.examples',
-      descriptionKey: 'checkbox.examples.description',
       level: 2,
       children: [
         {
@@ -68,19 +70,84 @@ export const checkboxPage = {
     },
   ],
   apiRows: [
-    { property: 'class', type: 'string', defaultValue: "''", descriptionKey: 'checkbox.api.class.description' },
-    { property: 'id', type: 'string', defaultValue: 'generated', descriptionKey: 'checkbox.api.id.description' },
-    { property: 'name', type: 'string', defaultValue: 'undefined', descriptionKey: 'checkbox.api.name.description' },
-    { property: 'value', type: 'string', defaultValue: 'undefined', descriptionKey: 'checkbox.api.value.description' },
-    { property: 'disabled', type: 'boolean', defaultValue: 'false', descriptionKey: 'checkbox.api.disabled.description' },
-    { property: 'required', type: 'boolean', defaultValue: 'false', descriptionKey: 'checkbox.api.required.description' },
-    { property: 'checked', type: 'CheckedState', defaultValue: 'false', descriptionKey: 'checkbox.api.checked.description' },
-    { property: 'checkedChange', type: 'EventEmitter<CheckedState>', defaultValue: '—', descriptionKey: 'checkbox.api.checkedChange.description' },
-    { property: 'tabIndex', type: 'number', defaultValue: '0', descriptionKey: 'checkbox.api.tabIndex.description' },
-    { property: 'ariaLabel', type: 'string', defaultValue: 'undefined', descriptionKey: 'checkbox.api.ariaLabel.description' },
-    { property: 'ariaLabelledBy', type: 'string', defaultValue: 'undefined', descriptionKey: 'checkbox.api.ariaLabelledBy.description' },
-    { property: 'ariaDescribedBy', type: 'string', defaultValue: 'undefined', descriptionKey: 'checkbox.api.ariaDescribedBy.description' },
-    { property: 'size', type: 'CheckboxSize', defaultValue: 'CheckboxSize.Md', descriptionKey: 'checkbox.api.size.description' },
+    {
+      property: 'class',
+      type: 'string',
+      defaultValue: "''",
+      descriptionKey: 'checkbox.api.class.description',
+    },
+    {
+      property: 'id',
+      type: 'string',
+      defaultValue: 'generated',
+      descriptionKey: 'checkbox.api.id.description',
+    },
+    {
+      property: 'name',
+      type: 'string',
+      defaultValue: 'undefined',
+      descriptionKey: 'checkbox.api.name.description',
+    },
+    {
+      property: 'value',
+      type: 'string',
+      defaultValue: 'undefined',
+      descriptionKey: 'checkbox.api.value.description',
+    },
+    {
+      property: 'disabled',
+      type: 'boolean',
+      defaultValue: 'false',
+      descriptionKey: 'checkbox.api.disabled.description',
+    },
+    {
+      property: 'required',
+      type: 'boolean',
+      defaultValue: 'false',
+      descriptionKey: 'checkbox.api.required.description',
+    },
+    {
+      property: 'checked',
+      type: 'CheckedState',
+      defaultValue: 'false',
+      descriptionKey: 'checkbox.api.checked.description',
+    },
+    {
+      property: 'checkedChange',
+      type: 'EventEmitter<CheckedState>',
+      defaultValue: '—',
+      descriptionKey: 'checkbox.api.checkedChange.description',
+    },
+    {
+      property: 'tabIndex',
+      type: 'number',
+      defaultValue: '0',
+      descriptionKey: 'checkbox.api.tabIndex.description',
+    },
+    {
+      property: 'ariaLabel',
+      type: 'string',
+      defaultValue: 'undefined',
+      descriptionKey: 'checkbox.api.ariaLabel.description',
+    },
+    {
+      property: 'ariaLabelledBy',
+      type: 'string',
+      defaultValue: 'undefined',
+      descriptionKey: 'checkbox.api.ariaLabelledBy.description',
+    },
+    {
+      property: 'ariaDescribedBy',
+      type: 'string',
+      defaultValue: 'undefined',
+      descriptionKey: 'checkbox.api.ariaDescribedBy.description',
+    },
+    {
+      property: 'size',
+      type: 'CheckboxSize',
+      defaultValue: 'CheckboxSize.Md',
+      descriptionKey: 'checkbox.api.size.description',
+    },
   ] satisfies readonly ComponentPageApiRow[],
 } as const satisfies ComponentPageDefinition;
 

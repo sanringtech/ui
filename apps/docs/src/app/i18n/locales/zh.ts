@@ -109,6 +109,8 @@ export const zh: Record<TranslationKey, string> = {
   'docs.api.type': '型別',
   'docs.api.default': '預設值',
   'docs.api.description': '說明',
+  'docs.usage.imports.convenience': '便利整包匯入',
+  'docs.usage.imports.individual': '個別匯入',
   'toc.card.title': '打造你的 Sanring UI 應用',
   'toc.card.description': '使用文件應用預覽元件、範例與 API 決策，再進行發布。',
   'toc.card.action': '開啟 Registry',
@@ -804,9 +806,9 @@ export const zh: Record<TranslationKey, string> = {
   'dropdownMenu.description': '從觸發器展開的浮動選單，適合承載情境操作。',
   'dropdownMenu.examples.basic.description': '包含 label、separator 與危險操作項目的基礎操作選單。',
   'dropdownMenu.usage.description':
-    '用 template 變數參照 content（#menu="sanringDropdownMenuContent"），再綁到 trigger 的 [menu] input。底層建構在 Angular 官方的 @angular/aria/menu ARIA primitives 上，鍵盤導覽、focus 管理、roving tabindex 都內建處理好了。',
+    '先匯入 ButtonDirective 與 dropdown menu primitives，再用 content 的 template 變數（#menu="sanringDropdownMenuContent"）提供 trigger 的 [menu]。SANRING_DROPDOWN_MENU_IMPORTS 是便利整包匯入，適合一般使用；若只需要部分 primitive，也可以個別匯入以讓依賴更明確。',
   'dropdownMenu.installation.description':
-    '安裝 @sanring/ui，並匯入 SANRING_DROPDOWN_MENU_IMPORTS 取得完整 dropdown menu primitives。',
+    '安裝 @sanring/ui，並匯入 SANRING_DROPDOWN_MENU_IMPORTS 取得完整 dropdown menu primitive set；需要更細的 imports 控制時，也可改用個別 primitive。',
   'dropdownMenu.examples.description':
     '常見 dropdown menu 模式，包含可勾選選項、radio 樣式選擇、巢狀選項與帶圖示項目。',
   'dropdownMenu.demo.checkbox': 'Checkbox',

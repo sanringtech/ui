@@ -9,6 +9,7 @@ import {
   ComponentPageComponent,
   ComponentPageHeaderComponent,
   ComponentPageInstallationComponent,
+  ComponentPageUsageImportsComponent,
   ComponentPageSectionComponent,
 } from '../../../layouts/component-page';
 import { popoverPage, popoverPageExamples } from './popover.docs';
@@ -22,6 +23,7 @@ import { popoverPage, popoverPageExamples } from './popover.docs';
     ComponentPageComponent,
     ComponentPageHeaderComponent,
     ComponentPageInstallationComponent,
+    ComponentPageUsageImportsComponent,
     ComponentPageSectionComponent,
     ButtonDirective,
     SANRING_POPOVER_IMPORTS,
@@ -59,10 +61,13 @@ import { popoverPage, popoverPageExamples } from './popover.docs';
       <!-- Usage -->
       <app-component-page-section [section]="section('usage')">
         <div class="grid gap-6">
-          <div class="overflow-hidden rounded-[var(--sanring-radius)] border border-[var(--docs-border)]">
-            <app-component-page-code-block [code]="examples.usageImport" language="typescript" />
-          </div>
-          <div class="overflow-hidden rounded-[var(--sanring-radius)] border border-[var(--docs-border)]">
+          <app-component-page-usage-imports
+            [code]="examples.usageImport"
+            [individualCode]="examples.usageIndividualImports"
+          />
+          <div
+            class="overflow-hidden rounded-[var(--sanring-radius)] border border-[var(--docs-border)]"
+          >
             <app-component-page-code-block [code]="examples.usageMain" language="angular-html" />
           </div>
         </div>
@@ -78,7 +83,9 @@ import { popoverPage, popoverPageExamples } from './popover.docs';
 
       <!-- Composition -->
       <app-component-page-section [section]="section('composition')">
-        <div class="overflow-hidden rounded-[var(--sanring-radius)] border border-[var(--docs-border)]">
+        <div
+          class="overflow-hidden rounded-[var(--sanring-radius)] border border-[var(--docs-border)]"
+        >
           <app-component-page-code-block [code]="examples.composition" language="bash" />
         </div>
       </app-component-page-section>
@@ -86,12 +93,13 @@ import { popoverPage, popoverPageExamples } from './popover.docs';
       <!-- Examples -->
       <app-component-page-section [section]="section('example')">
         <div class="grid gap-2">
-
           <!-- Align -->
           <app-component-page-section [section]="section('example-align')">
             <app-component-page-code-previewer [code]="examples.align" language="angular-html">
-              <div previewer class="flex min-h-[200px] flex-wrap items-center justify-center gap-3 pt-6">
-
+              <div
+                previewer
+                class="flex min-h-[200px] flex-wrap items-center justify-center gap-3 pt-6"
+              >
                 @for (align of aligns; track align) {
                   <sanring-popover [align]="align">
                     <button sanringBtn size="sm" variant="outline" sanringPopoverTrigger>
@@ -103,7 +111,6 @@ import { popoverPage, popoverPageExamples } from './popover.docs';
                     </sanring-popover-content>
                   </sanring-popover>
                 }
-
               </div>
             </app-component-page-code-previewer>
           </app-component-page-section>
@@ -132,7 +139,6 @@ import { popoverPage, popoverPageExamples } from './popover.docs';
               </div>
             </app-component-page-code-previewer>
           </app-component-page-section>
-
         </div>
       </app-component-page-section>
 
@@ -144,9 +150,9 @@ import { popoverPage, popoverPageExamples } from './popover.docs';
   `,
 })
 export class PopoverPageComponent {
-  protected readonly page     = popoverPage;
+  protected readonly page = popoverPage;
   protected readonly examples = popoverPageExamples;
-  protected readonly i18n     = inject(I18nService);
+  protected readonly i18n = inject(I18nService);
 
   protected readonly aligns = ['start', 'center', 'end'] as const;
 

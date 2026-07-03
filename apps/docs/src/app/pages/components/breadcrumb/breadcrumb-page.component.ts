@@ -9,6 +9,7 @@ import {
   ComponentPageComponent,
   ComponentPageHeaderComponent,
   ComponentPageInstallationComponent,
+  ComponentPageUsageImportsComponent,
   ComponentPageSectionComponent,
 } from '../../../layouts/component-page';
 import { breadcrumbPage, breadcrumbPageExamples } from './breadcrumb.docs';
@@ -22,6 +23,7 @@ import { breadcrumbPage, breadcrumbPageExamples } from './breadcrumb.docs';
     ComponentPageComponent,
     ComponentPageHeaderComponent,
     ComponentPageInstallationComponent,
+    ComponentPageUsageImportsComponent,
     ComponentPageSectionComponent,
     SANRING_BREADCRUMB_IMPORTS,
   ],
@@ -44,7 +46,9 @@ import { breadcrumbPage, breadcrumbPageExamples } from './breadcrumb.docs';
                 </sanring-breadcrumb-item>
                 <sanring-breadcrumb-divider />
                 <sanring-breadcrumb-item>
-                  <sanring-breadcrumb-link routerLink="/components">Components</sanring-breadcrumb-link>
+                  <sanring-breadcrumb-link routerLink="/components"
+                    >Components</sanring-breadcrumb-link
+                  >
                 </sanring-breadcrumb-item>
                 <sanring-breadcrumb-divider />
                 <sanring-breadcrumb-item>
@@ -59,10 +63,13 @@ import { breadcrumbPage, breadcrumbPageExamples } from './breadcrumb.docs';
       <!-- Usage -->
       <app-component-page-section [section]="section('usage')">
         <div class="grid gap-6">
-          <div class="overflow-hidden rounded-[var(--sanring-radius)] border border-[var(--docs-border)]">
-            <app-component-page-code-block [code]="examples.usageImport" language="typescript" />
-          </div>
-          <div class="overflow-hidden rounded-[var(--sanring-radius)] border border-[var(--docs-border)]">
+          <app-component-page-usage-imports
+            [code]="examples.usageImport"
+            [individualCode]="examples.usageIndividualImports"
+          />
+          <div
+            class="overflow-hidden rounded-[var(--sanring-radius)] border border-[var(--docs-border)]"
+          >
             <app-component-page-code-block [code]="examples.usageMain" language="angular-html" />
           </div>
         </div>
@@ -78,7 +85,9 @@ import { breadcrumbPage, breadcrumbPageExamples } from './breadcrumb.docs';
 
       <!-- Composition -->
       <app-component-page-section [section]="section('composition')">
-        <div class="overflow-hidden rounded-[var(--sanring-radius)] border border-[var(--docs-border)]">
+        <div
+          class="overflow-hidden rounded-[var(--sanring-radius)] border border-[var(--docs-border)]"
+        >
           <app-component-page-code-block [code]="examples.composition" language="bash" />
         </div>
       </app-component-page-section>
@@ -86,12 +95,13 @@ import { breadcrumbPage, breadcrumbPageExamples } from './breadcrumb.docs';
       <!-- Examples -->
       <app-component-page-section [section]="section('example')">
         <div class="grid gap-2">
-
           <!-- Divider -->
           <app-component-page-section [section]="section('example-divider')">
             <app-component-page-code-previewer [code]="examples.divider" language="angular-html">
-              <div previewer class="flex min-h-[120px] flex-col items-center justify-center gap-4 p-6">
-
+              <div
+                previewer
+                class="flex min-h-[120px] flex-col items-center justify-center gap-4 p-6"
+              >
                 <!-- Chevron -->
                 <sanring-breadcrumb>
                   <sanring-breadcrumb-list>
@@ -117,7 +127,6 @@ import { breadcrumbPage, breadcrumbPageExamples } from './breadcrumb.docs';
                     </sanring-breadcrumb-item>
                   </sanring-breadcrumb-list>
                 </sanring-breadcrumb>
-
               </div>
             </app-component-page-code-previewer>
           </app-component-page-section>
@@ -137,7 +146,9 @@ import { breadcrumbPage, breadcrumbPageExamples } from './breadcrumb.docs';
                     </sanring-breadcrumb-item>
                     <sanring-breadcrumb-divider />
                     <sanring-breadcrumb-item>
-                      <sanring-breadcrumb-link routerLink="/components">Components</sanring-breadcrumb-link>
+                      <sanring-breadcrumb-link routerLink="/components"
+                        >Components</sanring-breadcrumb-link
+                      >
                     </sanring-breadcrumb-item>
                     <sanring-breadcrumb-divider />
                     <sanring-breadcrumb-item>
@@ -169,7 +180,6 @@ import { breadcrumbPage, breadcrumbPageExamples } from './breadcrumb.docs';
               </div>
             </app-component-page-code-previewer>
           </app-component-page-section>
-
         </div>
       </app-component-page-section>
 
@@ -181,9 +191,9 @@ import { breadcrumbPage, breadcrumbPageExamples } from './breadcrumb.docs';
   `,
 })
 export class BreadcrumbPageComponent {
-  protected readonly page     = breadcrumbPage;
+  protected readonly page = breadcrumbPage;
   protected readonly examples = breadcrumbPageExamples;
-  protected readonly i18n     = inject(I18nService);
+  protected readonly i18n = inject(I18nService);
 
   protected section(id: string) {
     return getComponentPageSection(this.page, id);

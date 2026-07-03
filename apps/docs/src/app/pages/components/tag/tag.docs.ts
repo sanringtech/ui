@@ -1,4 +1,7 @@
-import { ComponentPageApiRow, ComponentPageDefinition } from '../../../docs-schema/component-page.types';
+import {
+  ComponentPageApiRow,
+  ComponentPageDefinition,
+} from '../../../docs-schema/component-page.types';
 
 export const tagPage = {
   componentId: 'tag',
@@ -26,7 +29,6 @@ export const tagPage = {
     {
       id: 'example',
       titleKey: 'toc.examples',
-      descriptionKey: 'tag.examples.description',
       level: 2,
       children: [
         {
@@ -59,11 +61,36 @@ export const tagPage = {
     },
   ],
   apiRows: [
-    { property: 'class', type: 'string', defaultValue: "''", descriptionKey: 'tag.api.class.description' },
-    { property: 'variant', type: 'BadgeVariant', defaultValue: "'secondary'", descriptionKey: 'tag.api.variant.description' },
-    { property: 'closable', type: 'boolean', defaultValue: 'false', descriptionKey: 'tag.api.closable.description' },
-    { property: 'removeAriaLabel', type: 'string', defaultValue: "'Remove tag'", descriptionKey: 'tag.api.removeAriaLabel.description' },
-    { property: 'remove', type: 'EventEmitter<MouseEvent>', defaultValue: '-', descriptionKey: 'tag.api.remove.description' },
+    {
+      property: 'class',
+      type: 'string',
+      defaultValue: "''",
+      descriptionKey: 'tag.api.class.description',
+    },
+    {
+      property: 'variant',
+      type: 'BadgeVariant',
+      defaultValue: "'secondary'",
+      descriptionKey: 'tag.api.variant.description',
+    },
+    {
+      property: 'closable',
+      type: 'boolean',
+      defaultValue: 'false',
+      descriptionKey: 'tag.api.closable.description',
+    },
+    {
+      property: 'removeAriaLabel',
+      type: 'string',
+      defaultValue: "'Remove tag'",
+      descriptionKey: 'tag.api.removeAriaLabel.description',
+    },
+    {
+      property: 'remove',
+      type: 'EventEmitter<MouseEvent>',
+      defaultValue: '-',
+      descriptionKey: 'tag.api.remove.description',
+    },
   ] satisfies readonly ComponentPageApiRow[],
 } as const satisfies ComponentPageDefinition;
 

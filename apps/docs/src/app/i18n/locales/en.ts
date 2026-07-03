@@ -110,6 +110,8 @@ export const en = {
   'docs.api.type': 'Type',
   'docs.api.default': 'Default',
   'docs.api.description': 'Description',
+  'docs.usage.imports.convenience': 'Convenience import',
+  'docs.usage.imports.individual': 'Individual imports',
   'toc.card.title': 'Build your Sanring UI app',
   'toc.card.description':
     'Use the docs app to preview components, examples, and API decisions before publishing.',
@@ -876,9 +878,9 @@ export const en = {
   'dropdownMenu.description': 'A floating menu for contextual actions opened from a trigger.',
   'dropdownMenu.examples.basic.description': 'A basic action menu with a label, separator, and destructive item.',
   'dropdownMenu.usage.description':
-    'Reference the content with a template variable (#menu="sanringDropdownMenuContent"), then bind it to the trigger\'s [menu] input. Built on Angular\'s @angular/aria/menu ARIA primitives, so keyboard navigation, focus management, and roving tabindex come for free.',
+    'Import ButtonDirective and the dropdown menu primitives first, then expose the content with a template variable (#menu="sanringDropdownMenuContent") and pass it to the trigger\'s [menu]. SANRING_DROPDOWN_MENU_IMPORTS is a convenience import for the full set; import individual primitives when you want the component dependencies to stay explicit.',
   'dropdownMenu.installation.description':
-    'Install @sanring/ui and import SANRING_DROPDOWN_MENU_IMPORTS for the full dropdown menu primitive set.',
+    'Install @sanring/ui and import SANRING_DROPDOWN_MENU_IMPORTS for the full dropdown menu primitive set, or import individual primitives when you need finer control.',
   'dropdownMenu.examples.description':
     'Common dropdown menu patterns inspired by menubar examples: checkable options, radio-style selection, nested choices, and icon items.',
   'dropdownMenu.demo.checkbox': 'Checkbox',

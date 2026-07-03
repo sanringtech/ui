@@ -1,4 +1,7 @@
-import { ComponentPageApiRow, ComponentPageDefinition } from '../../../docs-schema/component-page.types';
+import {
+  ComponentPageApiRow,
+  ComponentPageDefinition,
+} from '../../../docs-schema/component-page.types';
 
 export const collapsiblePage = {
   componentId: 'collapsible',
@@ -32,7 +35,6 @@ export const collapsiblePage = {
     {
       id: 'examples',
       titleKey: 'toc.examples',
-      descriptionKey: 'collapsible.examples.description',
       level: 2,
       children: [
         {
@@ -60,10 +62,30 @@ export const collapsiblePage = {
     },
   ],
   apiRows: [
-    { property: 'class', type: 'string', defaultValue: "''", descriptionKey: 'collapsible.api.class.description' },
-    { property: 'open', type: 'boolean', defaultValue: 'false', descriptionKey: 'collapsible.api.open.description' },
-    { property: 'disabled', type: 'boolean', defaultValue: 'false', descriptionKey: 'collapsible.api.disabled.description' },
-    { property: 'toggle()', type: 'method', defaultValue: '-', descriptionKey: 'collapsible.api.toggle.description' },
+    {
+      property: 'class',
+      type: 'string',
+      defaultValue: "''",
+      descriptionKey: 'collapsible.api.class.description',
+    },
+    {
+      property: 'open',
+      type: 'boolean',
+      defaultValue: 'false',
+      descriptionKey: 'collapsible.api.open.description',
+    },
+    {
+      property: 'disabled',
+      type: 'boolean',
+      defaultValue: 'false',
+      descriptionKey: 'collapsible.api.disabled.description',
+    },
+    {
+      property: 'toggle()',
+      type: 'method',
+      defaultValue: '-',
+      descriptionKey: 'collapsible.api.toggle.description',
+    },
     {
       property: 'openChange',
       type: 'OutputEmitterRef<boolean>',
@@ -74,7 +96,13 @@ export const collapsiblePage = {
 } as const satisfies ComponentPageDefinition;
 
 export const collapsiblePageExamples = {
-  usageImport: `import { SANRING_COLLAPSIBLE_IMPORTS } from '@sanring/ui';`,
+  usageImport: `import { Component } from '@angular/core';
+import { ButtonDirective, SANRING_COLLAPSIBLE_IMPORTS } from '@sanring/ui';
+
+@Component({
+  imports: [ButtonDirective, SANRING_COLLAPSIBLE_IMPORTS],
+})
+export class ExampleComponent {}`,
   usageMain: `<sanring-collapsible>
   <button sanringCollapsibleTrigger type="button">
     Toggle details
@@ -84,6 +112,23 @@ export const collapsiblePageExamples = {
     Collapsible content
   </div>
 </sanring-collapsible>`,
+  usageIndividualImports: `import { Component } from '@angular/core';
+import {
+  ButtonDirective,
+  CollapsibleComponent,
+  CollapsibleContentDirective,
+  CollapsibleTriggerDirective,
+} from '@sanring/ui';
+
+@Component({
+  imports: [
+    ButtonDirective,
+    CollapsibleComponent,
+    CollapsibleTriggerDirective,
+    CollapsibleContentDirective,
+  ],
+})
+export class ExampleComponent {}`,
   composition: `sanring-collapsible
 ├── [sanringCollapsibleTrigger]
 └── [sanringCollapsibleContent]`,

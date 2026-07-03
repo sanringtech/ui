@@ -1,10 +1,5 @@
 import { ChangeDetectionStrategy, Component, inject, input } from '@angular/core';
-import {
-  ButtonDirective,
-  SANRING_TOAST_IMPORTS,
-  ToastPosition,
-  ToastService,
-} from '@sanring/ui';
+import { ButtonDirective, SANRING_TOAST_IMPORTS, ToastPosition, ToastService } from '@sanring/ui';
 import { getComponentPageSection } from '../../../docs-schema/component-page.utils';
 import { I18nService } from '../../../i18n/i18n.service';
 import {
@@ -14,6 +9,7 @@ import {
   ComponentPageComponent,
   ComponentPageHeaderComponent,
   ComponentPageInstallationComponent,
+  ComponentPageUsageImportsComponent,
   ComponentPageSectionComponent,
 } from '../../../layouts/component-page';
 import { toastPage, toastPageExamples } from './toast.docs';
@@ -31,21 +27,14 @@ import { toastPage, toastPageExamples } from './toast.docs';
   template: `
     <!-- 每個 demo 有自己的 toaster，注入到本地隔離的 ToastService -->
     <sanring-toaster [position]="position()" [maxToasts]="2" />
-    <button
-      sanringBtn
-      type="button"
-      size="sm"
-      variant="outline"
-      class="w-full"
-      (click)="trigger()"
-    >
+    <button sanringBtn type="button" size="sm" variant="outline" class="w-full" (click)="trigger()">
       {{ label() }}
     </button>
   `,
 })
 export class ToastPositionDemoComponent {
   readonly position = input.required<ToastPosition>();
-  readonly label    = input.required<string>();
+  readonly label = input.required<string>();
 
   private readonly toast = inject(ToastService);
 
@@ -69,6 +58,7 @@ export class ToastPositionDemoComponent {
     ComponentPageComponent,
     ComponentPageHeaderComponent,
     ComponentPageInstallationComponent,
+    ComponentPageUsageImportsComponent,
     ComponentPageSectionComponent,
     SANRING_TOAST_IMPORTS,
     ToastPositionDemoComponent,
@@ -98,10 +88,13 @@ export class ToastPositionDemoComponent {
       <!-- Usage -->
       <app-component-page-section [section]="section('usage')">
         <div class="grid gap-6">
-          <div class="overflow-hidden rounded-[var(--sanring-radius)] border border-[var(--docs-border)]">
-            <app-component-page-code-block [code]="examples.usageImport" language="typescript" />
-          </div>
-          <div class="overflow-hidden rounded-[var(--sanring-radius)] border border-[var(--docs-border)]">
+          <app-component-page-usage-imports
+            [code]="examples.usageImport"
+            [individualCode]="examples.usageIndividualImports"
+          />
+          <div
+            class="overflow-hidden rounded-[var(--sanring-radius)] border border-[var(--docs-border)]"
+          >
             <app-component-page-code-block [code]="examples.usageMain" language="typescript" />
           </div>
         </div>
@@ -118,7 +111,6 @@ export class ToastPositionDemoComponent {
       <!-- Examples -->
       <app-component-page-section [section]="section('example')">
         <div class="grid gap-2">
-
           <!-- Variants -->
           <app-component-page-section [section]="section('example-variant')">
             <app-component-page-code-previewer [code]="examples.variant" language="angular-html">
@@ -163,7 +155,6 @@ export class ToastPositionDemoComponent {
               </div>
             </app-component-page-code-previewer>
           </app-component-page-section>
-
         </div>
       </app-component-page-section>
 
@@ -175,18 +166,18 @@ export class ToastPositionDemoComponent {
   `,
 })
 export class ToastPageComponent {
-  protected readonly page     = toastPage;
+  protected readonly page = toastPage;
   protected readonly examples = toastPageExamples;
-  protected readonly i18n     = inject(I18nService);
-  private   readonly toast    = inject(ToastService);
+  protected readonly i18n = inject(I18nService);
+  private readonly toast = inject(ToastService);
 
   protected readonly positions: readonly { label: string; value: ToastPosition }[] = [
-    { label: 'Top left',      value: 'top-left'      },
-    { label: 'Top center',    value: 'top-center'    },
-    { label: 'Top right',     value: 'top-right'     },
-    { label: 'Bottom left',   value: 'bottom-left'   },
+    { label: 'Top left', value: 'top-left' },
+    { label: 'Top center', value: 'top-center' },
+    { label: 'Top right', value: 'top-right' },
+    { label: 'Bottom left', value: 'bottom-left' },
     { label: 'Bottom center', value: 'bottom-center' },
-    { label: 'Bottom right',  value: 'bottom-right'  },
+    { label: 'Bottom right', value: 'bottom-right' },
   ];
 
   protected showBasic() {

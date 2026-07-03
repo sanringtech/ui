@@ -1,4 +1,7 @@
-import { ComponentPageApiRow, ComponentPageDefinition } from '../../../docs-schema/component-page.types';
+import {
+  ComponentPageApiRow,
+  ComponentPageDefinition,
+} from '../../../docs-schema/component-page.types';
 
 export const scrollAreaPage = {
   componentId: 'scroll-area',
@@ -26,7 +29,6 @@ export const scrollAreaPage = {
     {
       id: 'example',
       titleKey: 'toc.examples',
-      descriptionKey: 'scrollArea.examples.description',
       level: 2,
       children: [
         {
@@ -64,12 +66,42 @@ export const scrollAreaPage = {
     },
   ],
   apiRows: [
-    { property: 'class', type: 'string', defaultValue: "''", descriptionKey: 'scrollArea.api.class.description' },
-    { property: 'orientation', type: "'vertical' | 'horizontal' | 'both'", defaultValue: "'vertical'", descriptionKey: 'scrollArea.api.orientation.description' },
-    { property: 'loadMore', type: 'EventEmitter<void>', defaultValue: '-', descriptionKey: 'scrollArea.api.loadMore.description' },
-    { property: 'hideScrollbar', type: 'boolean', defaultValue: 'false', descriptionKey: 'scrollArea.api.hideScrollbar.description' },
-    { property: '--scrollbar-thumb', type: 'CSS variable', defaultValue: '#cbd5e1', descriptionKey: 'scrollArea.api.scrollbarThumb.description' },
-    { property: '--scrollbar-track', type: 'CSS variable', defaultValue: 'transparent', descriptionKey: 'scrollArea.api.scrollbarTrack.description' },
+    {
+      property: 'class',
+      type: 'string',
+      defaultValue: "''",
+      descriptionKey: 'scrollArea.api.class.description',
+    },
+    {
+      property: 'orientation',
+      type: "'vertical' | 'horizontal' | 'both'",
+      defaultValue: "'vertical'",
+      descriptionKey: 'scrollArea.api.orientation.description',
+    },
+    {
+      property: 'loadMore',
+      type: 'EventEmitter<void>',
+      defaultValue: '-',
+      descriptionKey: 'scrollArea.api.loadMore.description',
+    },
+    {
+      property: 'hideScrollbar',
+      type: 'boolean',
+      defaultValue: 'false',
+      descriptionKey: 'scrollArea.api.hideScrollbar.description',
+    },
+    {
+      property: '--scrollbar-thumb',
+      type: 'CSS variable',
+      defaultValue: '#cbd5e1',
+      descriptionKey: 'scrollArea.api.scrollbarThumb.description',
+    },
+    {
+      property: '--scrollbar-track',
+      type: 'CSS variable',
+      defaultValue: 'transparent',
+      descriptionKey: 'scrollArea.api.scrollbarTrack.description',
+    },
   ] satisfies readonly ComponentPageApiRow[],
 } as const satisfies ComponentPageDefinition;
 
@@ -81,7 +113,13 @@ export const scrollAreaPageExamples = {
     </div>
   }
 </sanring-scroll-area>`,
-  usageImport: `import { SANRING_SCROLL_AREA_IMPORTS } from '@sanring/ui';`,
+  usageImport: `import { Component } from '@angular/core';
+import { SANRING_SCROLL_AREA_IMPORTS } from '@sanring/ui';
+
+@Component({
+  imports: [SANRING_SCROLL_AREA_IMPORTS],
+})
+export class ExampleComponent {}`,
   usageMain: `<div
   sanringScrollArea
   sanringInfiniteScroll
@@ -94,6 +132,13 @@ export const scrollAreaPageExamples = {
     </article>
   }
 </div>`,
+  usageIndividualImports: `import { Component } from '@angular/core';
+import { InfiniteScrollDirective, ScrollAreaComponent, ScrollAreaDirective } from '@sanring/ui';
+
+@Component({
+  imports: [ScrollAreaComponent, ScrollAreaDirective, InfiniteScrollDirective],
+})
+export class ExampleComponent {}`,
   direction: `<sanring-scroll-area
   class="h-48 w-full rounded-[var(--sanring-radius)] border"
   orientation="horizontal"

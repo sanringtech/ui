@@ -1,9 +1,6 @@
 import { Component, inject } from '@angular/core';
 import { LucideAlertTriangle, LucideInfo, LucideLightbulb } from '@lucide/angular';
-import {
-  SANRING_ALERT_IMPORTS,
-  SANRING_CARD_IMPORTS,
-} from '@sanring/ui';
+import { SANRING_ALERT_IMPORTS, SANRING_CARD_IMPORTS } from '@sanring/ui';
 import { getComponentPageSection } from '../../../docs-schema/component-page.utils';
 import { I18nService } from '../../../i18n/i18n.service';
 import {
@@ -13,6 +10,7 @@ import {
   ComponentPageComponent,
   ComponentPageHeaderComponent,
   ComponentPageInstallationComponent,
+  ComponentPageUsageImportsComponent,
   ComponentPageSectionComponent,
 } from '../../../layouts/component-page';
 import { alertPage, alertPageExamples } from './alert.docs';
@@ -28,6 +26,7 @@ import { alertPage, alertPageExamples } from './alert.docs';
     ComponentPageComponent,
     ComponentPageHeaderComponent,
     ComponentPageInstallationComponent,
+    ComponentPageUsageImportsComponent,
     ComponentPageSectionComponent,
     LucideAlertTriangle,
     LucideInfo,
@@ -57,10 +56,13 @@ import { alertPage, alertPageExamples } from './alert.docs';
 
       <app-component-page-section [section]="section('usage')">
         <div class="grid gap-6">
-          <div class="overflow-hidden rounded-[var(--sanring-radius)] border border-[var(--docs-border)]">
-            <app-component-page-code-block [code]="examples.usageImport" language="typescript" />
-          </div>
-          <div class="overflow-hidden rounded-[var(--sanring-radius)] border border-[var(--docs-border)]">
+          <app-component-page-usage-imports
+            [code]="examples.usageImport"
+            [individualCode]="examples.usageIndividualImports"
+          />
+          <div
+            class="overflow-hidden rounded-[var(--sanring-radius)] border border-[var(--docs-border)]"
+          >
             <app-component-page-code-block [code]="examples.usageMain" language="angular-html" />
           </div>
         </div>
@@ -73,12 +75,14 @@ import { alertPage, alertPageExamples } from './alert.docs';
         />
       </app-component-page-section>
 
-
       <app-component-page-section [section]="section('example')">
         <div class="grid gap-2">
           <app-component-page-section [section]="section('example-banner')">
             <app-component-page-code-previewer [code]="examples.banner" language="angular-html">
-              <div previewer class="w-full overflow-hidden rounded-[var(--sanring-radius)] border border-[var(--docs-border)]">
+              <div
+                previewer
+                class="w-full overflow-hidden rounded-[var(--sanring-radius)] border border-[var(--docs-border)]"
+              >
                 <sanring-alert class="mb-0 rounded-none border-x-0 border-t-0">
                   <svg lucideInfo class="size-4"></svg>
                   <h5 sanringAlertTitle>系統維護通知</h5>
@@ -92,7 +96,10 @@ import { alertPage, alertPageExamples } from './alert.docs';
           </app-component-page-section>
 
           <app-component-page-section [section]="section('example-destructive')">
-            <app-component-page-code-previewer [code]="examples.destructive" language="angular-html">
+            <app-component-page-code-previewer
+              [code]="examples.destructive"
+              language="angular-html"
+            >
               <div previewer class="w-full">
                 <sanring-card>
                   <sanring-card-header>

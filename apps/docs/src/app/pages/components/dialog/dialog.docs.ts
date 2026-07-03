@@ -1,4 +1,7 @@
-import { ComponentPageApiRow, ComponentPageDefinition } from '../../../docs-schema/component-page.types';
+import {
+  ComponentPageApiRow,
+  ComponentPageDefinition,
+} from '../../../docs-schema/component-page.types';
 
 export const dialogPage = {
   componentId: 'dialog',
@@ -32,7 +35,6 @@ export const dialogPage = {
     {
       id: 'example',
       titleKey: 'toc.examples',
-      descriptionKey: 'dialog.examples.description',
       level: 2,
       children: [
         {
@@ -65,8 +67,18 @@ export const dialogPage = {
     },
   ],
   apiRows: [
-    { property: 'class', type: 'string', defaultValue: "''", descriptionKey: 'dialog.api.class.description' },
-    { property: 'showClose', type: 'boolean', defaultValue: 'true', descriptionKey: 'dialog.api.showClose.description' },
+    {
+      property: 'class',
+      type: 'string',
+      defaultValue: "''",
+      descriptionKey: 'dialog.api.class.description',
+    },
+    {
+      property: 'showClose',
+      type: 'boolean',
+      defaultValue: 'true',
+      descriptionKey: 'dialog.api.showClose.description',
+    },
   ] satisfies readonly ComponentPageApiRow[],
 } as const satisfies ComponentPageDefinition;
 
@@ -87,7 +99,13 @@ sanring-dialog-content
     </sanring-dialog-header>
   </sanring-dialog-content>
 </ng-template>`,
-  usageImport: `import { SANRING_DIALOG_IMPORTS } from '@sanring/ui';`,
+  usageImport: `import { Component } from '@angular/core';
+import { ButtonDirective, SANRING_DIALOG_IMPORTS } from '@sanring/ui';
+
+@Component({
+  imports: [ButtonDirective, SANRING_DIALOG_IMPORTS],
+})
+export class ExampleComponent {}`,
   usageMain: `<button sanringBtn [sanringDialogTrigger]="dialog">Open dialog</button>
 
 <ng-template #dialog>
@@ -98,6 +116,31 @@ sanring-dialog-content
     </sanring-dialog-header>
   </sanring-dialog-content>
 </ng-template>`,
+  usageIndividualImports: `import { Component } from '@angular/core';
+import {
+  ButtonDirective,
+  DialogCloseDirective,
+  DialogContentComponent,
+  DialogDescriptionDirective,
+  DialogFooterComponent,
+  DialogHeaderComponent,
+  DialogTitleDirective,
+  DialogTriggerDirective,
+} from '@sanring/ui';
+
+@Component({
+  imports: [
+    ButtonDirective,
+    DialogTriggerDirective,
+    DialogContentComponent,
+    DialogHeaderComponent,
+    DialogTitleDirective,
+    DialogDescriptionDirective,
+    DialogFooterComponent,
+    DialogCloseDirective,
+  ],
+})
+export class ExampleComponent {}`,
   customClose: `<button sanringBtn [sanringDialogTrigger]="dialog">Open dialog</button>
 
 <ng-template #dialog>

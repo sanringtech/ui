@@ -1,4 +1,7 @@
-import { ComponentPageApiRow, ComponentPageDefinition } from '../../../docs-schema/component-page.types';
+import {
+  ComponentPageApiRow,
+  ComponentPageDefinition,
+} from '../../../docs-schema/component-page.types';
 
 export const tabsPage = {
   componentId: 'tabs',
@@ -31,7 +34,6 @@ export const tabsPage = {
     {
       id: 'example',
       titleKey: 'toc.examples',
-      descriptionKey: 'tabs.examples.description',
       level: 2,
       children: [
         {
@@ -69,12 +71,42 @@ export const tabsPage = {
     },
   ],
   apiRows: [
-    { property: 'defaultValue', type: 'string', defaultValue: 'undefined', descriptionKey: 'tabs.api.defaultValue.description' },
-    { property: 'orientation', type: 'TabsOrientation', defaultValue: "'horizontal'", descriptionKey: 'tabs.api.orientation.description' },
-    { property: 'variant', type: 'TabsVariant', defaultValue: "'default'", descriptionKey: 'tabs.api.variant.description' },
-    { property: 'value', type: 'string', defaultValue: 'required', descriptionKey: 'tabs.api.value.description' },
-    { property: 'disabled', type: 'boolean', defaultValue: 'false', descriptionKey: 'tabs.api.disabled.description' },
-    { property: 'valueChange', type: 'EventEmitter<string>', defaultValue: '-', descriptionKey: 'tabs.api.valueChange.description' },
+    {
+      property: 'defaultValue',
+      type: 'string',
+      defaultValue: 'undefined',
+      descriptionKey: 'tabs.api.defaultValue.description',
+    },
+    {
+      property: 'orientation',
+      type: 'TabsOrientation',
+      defaultValue: "'horizontal'",
+      descriptionKey: 'tabs.api.orientation.description',
+    },
+    {
+      property: 'variant',
+      type: 'TabsVariant',
+      defaultValue: "'default'",
+      descriptionKey: 'tabs.api.variant.description',
+    },
+    {
+      property: 'value',
+      type: 'string',
+      defaultValue: 'required',
+      descriptionKey: 'tabs.api.value.description',
+    },
+    {
+      property: 'disabled',
+      type: 'boolean',
+      defaultValue: 'false',
+      descriptionKey: 'tabs.api.disabled.description',
+    },
+    {
+      property: 'valueChange',
+      type: 'EventEmitter<string>',
+      defaultValue: '-',
+      descriptionKey: 'tabs.api.valueChange.description',
+    },
   ] satisfies readonly ComponentPageApiRow[],
 } as const satisfies ComponentPageDefinition;
 
@@ -92,7 +124,13 @@ export const tabsPageExamples = {
     Password settings
   </sanring-tabs-content>
 </sanring-tabs>`,
-  usageImport: `import { SANRING_TABS_IMPORTS } from '@sanring/ui';`,
+  usageImport: `import { Component } from '@angular/core';
+import { SANRING_TABS_IMPORTS } from '@sanring/ui';
+
+@Component({
+  imports: [SANRING_TABS_IMPORTS],
+})
+export class ExampleComponent {}`,
   usageMain: `<sanring-tabs defaultValue="account">
   <sanring-tabs-list>
     <sanring-tabs-trigger value="account">Account</sanring-tabs-trigger>
@@ -106,6 +144,18 @@ export const tabsPageExamples = {
     Password settings
   </sanring-tabs-content>
 </sanring-tabs>`,
+  usageIndividualImports: `import { Component } from '@angular/core';
+import {
+  TabsComponent,
+  TabsContentComponent,
+  TabsListComponent,
+  TabsTriggerComponent,
+} from '@sanring/ui';
+
+@Component({
+  imports: [TabsComponent, TabsListComponent, TabsTriggerComponent, TabsContentComponent],
+})
+export class ExampleComponent {}`,
   composition: `sanring-tabs
 ├── sanring-tabs-list
 │   └── sanring-tabs-trigger

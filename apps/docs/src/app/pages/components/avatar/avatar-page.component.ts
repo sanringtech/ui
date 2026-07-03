@@ -10,6 +10,7 @@ import {
   ComponentPageComponent,
   ComponentPageHeaderComponent,
   ComponentPageInstallationComponent,
+  ComponentPageUsageImportsComponent,
   ComponentPageSectionComponent,
 } from '../../../layouts/component-page';
 import { avatarPage, avatarPageExamples } from './avatar.docs';
@@ -24,6 +25,7 @@ import { avatarPage, avatarPageExamples } from './avatar.docs';
     ComponentPageComponent,
     ComponentPageHeaderComponent,
     ComponentPageInstallationComponent,
+    ComponentPageUsageImportsComponent,
     ComponentPageSectionComponent,
     LucideCheck,
     LucidePlus,
@@ -40,11 +42,7 @@ import { avatarPage, avatarPageExamples } from './avatar.docs';
         <app-component-page-code-previewer [code]="examples.basic" language="angular-html">
           <div previewer class="flex items-center justify-center">
             <sanring-avatar ariaLabel="Ada Lovelace">
-              <img
-                sanringAvatarImage
-                src="https://i.pravatar.cc/96?img=5"
-                alt="Ada Lovelace"
-              />
+              <img sanringAvatarImage src="https://i.pravatar.cc/96?img=5" alt="Ada Lovelace" />
               <sanring-avatar-fallback>AL</sanring-avatar-fallback>
             </sanring-avatar>
           </div>
@@ -53,10 +51,13 @@ import { avatarPage, avatarPageExamples } from './avatar.docs';
 
       <app-component-page-section [section]="section('usage')">
         <div class="grid gap-6">
-          <div class="overflow-hidden rounded-[var(--sanring-radius)] border border-[var(--docs-border)]">
-            <app-component-page-code-block [code]="examples.usageImport" language="typescript" />
-          </div>
-          <div class="overflow-hidden rounded-[var(--sanring-radius)] border border-[var(--docs-border)]">
+          <app-component-page-usage-imports
+            [code]="examples.usageImport"
+            [individualCode]="examples.usageIndividualImports"
+          />
+          <div
+            class="overflow-hidden rounded-[var(--sanring-radius)] border border-[var(--docs-border)]"
+          >
             <app-component-page-code-block [code]="examples.usageMain" language="angular-html" />
           </div>
         </div>
@@ -70,7 +71,9 @@ import { avatarPage, avatarPageExamples } from './avatar.docs';
       </app-component-page-section>
 
       <app-component-page-section [section]="section('composition')">
-        <div class="overflow-hidden rounded-[var(--sanring-radius)] border border-[var(--docs-border)]">
+        <div
+          class="overflow-hidden rounded-[var(--sanring-radius)] border border-[var(--docs-border)]"
+        >
           <app-component-page-code-block [code]="examples.composition" language="bash" />
         </div>
       </app-component-page-section>
@@ -97,11 +100,7 @@ import { avatarPage, avatarPageExamples } from './avatar.docs';
             <app-component-page-code-previewer [code]="examples.badge" language="angular-html">
               <div previewer class="flex items-center justify-center gap-4">
                 <sanring-avatar ariaLabel="Online user">
-                  <img
-                    sanringAvatarImage
-                    src="https://i.pravatar.cc/96?img=12"
-                    alt="Online user"
-                  />
+                  <img sanringAvatarImage src="https://i.pravatar.cc/96?img=12" alt="Online user" />
                   <sanring-avatar-fallback>OU</sanring-avatar-fallback>
                   <span sanringAvatarBadge status="online" ariaLabel="Online"></span>
                 </sanring-avatar>
@@ -118,7 +117,10 @@ import { avatarPage, avatarPageExamples } from './avatar.docs';
           </app-component-page-section>
 
           <app-component-page-section [section]="section('example-badge-with-icon')">
-            <app-component-page-code-previewer [code]="examples.badgeWithIcon" language="angular-html">
+            <app-component-page-code-previewer
+              [code]="examples.badgeWithIcon"
+              language="angular-html"
+            >
               <div previewer class="flex items-center justify-center">
                 <sanring-avatar ariaLabel="Verified user">
                   <img
@@ -155,7 +157,10 @@ import { avatarPage, avatarPageExamples } from './avatar.docs';
           </app-component-page-section>
 
           <app-component-page-section [section]="section('example-group-with-icon')">
-            <app-component-page-code-previewer [code]="examples.groupWithIcon" language="angular-html">
+            <app-component-page-code-previewer
+              [code]="examples.groupWithIcon"
+              language="angular-html"
+            >
               <div previewer class="flex items-center justify-center">
                 <sanring-avatar-group ariaLabel="Project members">
                   <sanring-avatar ariaLabel="Ada Lovelace">

@@ -10,6 +10,7 @@ import {
   ComponentPageComponent,
   ComponentPageHeaderComponent,
   ComponentPageInstallationComponent,
+  ComponentPageUsageImportsComponent,
   ComponentPageSectionComponent,
 } from '../../../layouts/component-page';
 import { checkboxPage, checkboxPageExamples } from './checkbox.docs';
@@ -26,6 +27,7 @@ import { checkboxPage, checkboxPageExamples } from './checkbox.docs';
     ComponentPageComponent,
     ComponentPageHeaderComponent,
     ComponentPageInstallationComponent,
+    ComponentPageUsageImportsComponent,
     ComponentPageSectionComponent,
   ],
   template: `
@@ -46,10 +48,10 @@ import { checkboxPage, checkboxPageExamples } from './checkbox.docs';
 
       <app-component-page-section [section]="section('usage')">
         <div class="grid gap-6">
-          <div class="overflow-hidden rounded-[var(--sanring-radius)] border border-[var(--docs-border)]">
-            <app-component-page-code-block [code]="examples.usageImport" language="typescript" />
-          </div>
-          <div class="overflow-hidden rounded-[var(--sanring-radius)] border border-[var(--docs-border)]">
+          <app-component-page-usage-imports [code]="examples.usageImport" />
+          <div
+            class="overflow-hidden rounded-[var(--sanring-radius)] border border-[var(--docs-border)]"
+          >
             <app-component-page-code-block [code]="examples.usageMain" language="angular-html" />
           </div>
         </div>
@@ -76,10 +78,7 @@ import { checkboxPage, checkboxPageExamples } from './checkbox.docs';
           </app-component-page-section>
 
           <app-component-page-section [section]="section('example-with-label')">
-            <app-component-page-code-previewer
-              [code]="examples.withLabel"
-              language="angular-html"
-            >
+            <app-component-page-code-previewer [code]="examples.withLabel" language="angular-html">
               <div previewer class="flex items-center justify-center">
                 <div class="flex items-center gap-2">
                   <sanring-checkbox id="terms" [(ngModel)]="accepted" />
@@ -152,35 +151,41 @@ import { checkboxPage, checkboxPageExamples } from './checkbox.docs';
         </div>
       </app-component-page-section>
 
-          <app-component-page-section [section]="section('example-size')">
-            <app-component-page-code-previewer [code]="examples.size" language="angular-html">
-              <div previewer class="flex items-center justify-center">
-                <div class="flex items-center gap-6">
-                  <div class="flex flex-col items-center gap-2">
-                    <sanring-checkbox [size]="CheckboxSize.Sm" [(ngModel)]="sizeChecked" />
-                    <span class="text-xs text-muted-foreground">{{ i18n.t('checkbox.demo.size.sm') }}</span>
-                  </div>
-                  <div class="flex flex-col items-center gap-2">
-                    <sanring-checkbox [size]="CheckboxSize.Md" [(ngModel)]="sizeChecked" />
-                    <span class="text-xs text-muted-foreground">{{ i18n.t('checkbox.demo.size.md') }}</span>
-                  </div>
-                  <div class="flex flex-col items-center gap-2">
-                    <sanring-checkbox [size]="CheckboxSize.Lg" [(ngModel)]="sizeChecked" />
-                    <span class="text-xs text-muted-foreground">{{ i18n.t('checkbox.demo.size.lg') }}</span>
-                  </div>
-                </div>
+      <app-component-page-section [section]="section('example-size')">
+        <app-component-page-code-previewer [code]="examples.size" language="angular-html">
+          <div previewer class="flex items-center justify-center">
+            <div class="flex items-center gap-6">
+              <div class="flex flex-col items-center gap-2">
+                <sanring-checkbox [size]="CheckboxSize.Sm" [(ngModel)]="sizeChecked" />
+                <span class="text-xs text-muted-foreground">{{
+                  i18n.t('checkbox.demo.size.sm')
+                }}</span>
               </div>
-            </app-component-page-code-previewer>
-          </app-component-page-section>
+              <div class="flex flex-col items-center gap-2">
+                <sanring-checkbox [size]="CheckboxSize.Md" [(ngModel)]="sizeChecked" />
+                <span class="text-xs text-muted-foreground">{{
+                  i18n.t('checkbox.demo.size.md')
+                }}</span>
+              </div>
+              <div class="flex flex-col items-center gap-2">
+                <sanring-checkbox [size]="CheckboxSize.Lg" [(ngModel)]="sizeChecked" />
+                <span class="text-xs text-muted-foreground">{{
+                  i18n.t('checkbox.demo.size.lg')
+                }}</span>
+              </div>
+            </div>
+          </div>
+        </app-component-page-code-previewer>
+      </app-component-page-section>
 
-          <app-component-page-section [section]="section('example-event-binding')">
-            <app-component-page-code-previewer [code]="examples.eventBinding" language="angular-html">
-              <div previewer class="flex flex-col items-center gap-3">
-                <sanring-checkbox [(checked)]="eventChecked" (checkedChange)="onCheckedChange()" />
-                <span class="text-sm text-muted-foreground">Changed {{ changeCount }} times</span>
-              </div>
-            </app-component-page-code-previewer>
-          </app-component-page-section>
+      <app-component-page-section [section]="section('example-event-binding')">
+        <app-component-page-code-previewer [code]="examples.eventBinding" language="angular-html">
+          <div previewer class="flex flex-col items-center gap-3">
+            <sanring-checkbox [(checked)]="eventChecked" (checkedChange)="onCheckedChange()" />
+            <span class="text-sm text-muted-foreground">Changed {{ changeCount }} times</span>
+          </div>
+        </app-component-page-code-previewer>
+      </app-component-page-section>
 
       <app-component-page-section [section]="section('api')">
         <app-component-page-api-table [rows]="page.apiRows!" />

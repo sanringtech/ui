@@ -1,32 +1,69 @@
-import { ComponentPageApiRow, ComponentPageDefinition } from '../../../docs-schema/component-page.types';
+import {
+  ComponentPageApiRow,
+  ComponentPageDefinition,
+} from '../../../docs-schema/component-page.types';
 
 export const sheetPage = {
   componentId: 'sheet',
   titleKey: 'component.sheet',
   descriptionKey: 'sheet.description',
   sections: [
-    { id: 'basic',        titleKey: 'toc.basic',        descriptionKey: 'sheet.examples.basic.description', level: 2 },
-    { id: 'usage',        titleKey: 'toc.usage',        descriptionKey: 'sheet.usage.description',          level: 2 },
-    { id: 'installation', titleKey: 'sidebar.installation', descriptionKey: 'sheet.installation.description', level: 2 },
-    { id: 'composition',  titleKey: 'toc.composition',  descriptionKey: 'sheet.composition.description',    level: 2 },
+    {
+      id: 'basic',
+      titleKey: 'toc.basic',
+      descriptionKey: 'sheet.examples.basic.description',
+      level: 2,
+    },
+    { id: 'usage', titleKey: 'toc.usage', descriptionKey: 'sheet.usage.description', level: 2 },
+    {
+      id: 'installation',
+      titleKey: 'sidebar.installation',
+      descriptionKey: 'sheet.installation.description',
+      level: 2,
+    },
+    {
+      id: 'composition',
+      titleKey: 'toc.composition',
+      descriptionKey: 'sheet.composition.description',
+      level: 2,
+    },
     {
       id: 'example',
       titleKey: 'toc.examples',
-      descriptionKey: 'sheet.examples.description',
       level: 2,
       children: [
-        { id: 'example-side',      titleKey: 'sheet.demo.side',     level: 3 },
+        { id: 'example-side', titleKey: 'sheet.demo.side', level: 3 },
         { id: 'example-with-form', titleKey: 'sheet.demo.withForm', level: 3 },
-        { id: 'example-no-close',  titleKey: 'sheet.demo.noClose',  level: 3 },
+        { id: 'example-no-close', titleKey: 'sheet.demo.noClose', level: 3 },
       ],
     },
     { id: 'api', titleKey: 'toc.apiReference', descriptionKey: 'sheet.api.description', level: 2 },
   ],
   apiRows: [
-    { property: 'isOpen',    type: 'boolean',                             defaultValue: 'false',    descriptionKey: 'sheet.api.isOpen.description'    },
-    { property: 'side',      type: "'top' | 'right' | 'bottom' | 'left'", defaultValue: "'right'",  descriptionKey: 'sheet.api.side.description'      },
-    { property: 'showClose', type: 'boolean',                             defaultValue: 'true',     descriptionKey: 'sheet.api.showClose.description' },
-    { property: 'class',     type: 'string',                              defaultValue: "''",       descriptionKey: 'sheet.api.class.description'     },
+    {
+      property: 'isOpen',
+      type: 'boolean',
+      defaultValue: 'false',
+      descriptionKey: 'sheet.api.isOpen.description',
+    },
+    {
+      property: 'side',
+      type: "'top' | 'right' | 'bottom' | 'left'",
+      defaultValue: "'right'",
+      descriptionKey: 'sheet.api.side.description',
+    },
+    {
+      property: 'showClose',
+      type: 'boolean',
+      defaultValue: 'true',
+      descriptionKey: 'sheet.api.showClose.description',
+    },
+    {
+      property: 'class',
+      type: 'string',
+      defaultValue: "''",
+      descriptionKey: 'sheet.api.class.description',
+    },
   ] satisfies readonly ComponentPageApiRow[],
 } as const satisfies ComponentPageDefinition;
 
@@ -47,8 +84,13 @@ export const sheetPageExamples = {
   </sanring-sheet-content>
 </sanring-sheet>`,
 
-  usageImport: `import { SANRING_SHEET_IMPORTS } from '@sanring/ui';`,
+  usageImport: `import { Component } from '@angular/core';
+import { ButtonDirective, SANRING_SHEET_IMPORTS } from '@sanring/ui';
 
+@Component({
+  imports: [ButtonDirective, SANRING_SHEET_IMPORTS],
+})
+export class ExampleComponent {}`,
   usageMain: `<sanring-sheet>
   <button sanringBtn sanringSheetTrigger>Open</button>
 
@@ -62,6 +104,33 @@ export const sheetPageExamples = {
     </sanring-sheet-footer>
   </sanring-sheet-content>
 </sanring-sheet>`,
+  usageIndividualImports: `import { Component } from '@angular/core';
+import {
+  ButtonDirective,
+  SheetCloseDirective,
+  SheetComponent,
+  SheetContentComponent,
+  SheetDescriptionComponent,
+  SheetFooterComponent,
+  SheetHeaderComponent,
+  SheetTitleComponent,
+  SheetTriggerDirective,
+} from '@sanring/ui';
+
+@Component({
+  imports: [
+    ButtonDirective,
+    SheetComponent,
+    SheetTriggerDirective,
+    SheetContentComponent,
+    SheetHeaderComponent,
+    SheetTitleComponent,
+    SheetDescriptionComponent,
+    SheetFooterComponent,
+    SheetCloseDirective,
+  ],
+})
+export class ExampleComponent {}`,
 
   composition: `sanring-sheet
 ├── [sanringSheetTrigger]

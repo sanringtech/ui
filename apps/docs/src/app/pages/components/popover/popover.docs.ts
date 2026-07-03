@@ -1,30 +1,67 @@
-import { ComponentPageApiRow, ComponentPageDefinition } from '../../../docs-schema/component-page.types';
+import {
+  ComponentPageApiRow,
+  ComponentPageDefinition,
+} from '../../../docs-schema/component-page.types';
 
 export const popoverPage = {
   componentId: 'popover',
   titleKey: 'component.popover',
   descriptionKey: 'popover.description',
   sections: [
-    { id: 'basic',        titleKey: 'toc.basic',           descriptionKey: 'popover.examples.basic.description', level: 2 },
-    { id: 'usage',        titleKey: 'toc.usage',           descriptionKey: 'popover.usage.description',          level: 2 },
-    { id: 'installation', titleKey: 'sidebar.installation', descriptionKey: 'popover.installation.description',   level: 2 },
-    { id: 'composition',  titleKey: 'toc.composition',     descriptionKey: 'popover.composition.description',    level: 2 },
+    {
+      id: 'basic',
+      titleKey: 'toc.basic',
+      descriptionKey: 'popover.examples.basic.description',
+      level: 2,
+    },
+    { id: 'usage', titleKey: 'toc.usage', descriptionKey: 'popover.usage.description', level: 2 },
+    {
+      id: 'installation',
+      titleKey: 'sidebar.installation',
+      descriptionKey: 'popover.installation.description',
+      level: 2,
+    },
+    {
+      id: 'composition',
+      titleKey: 'toc.composition',
+      descriptionKey: 'popover.composition.description',
+      level: 2,
+    },
     {
       id: 'example',
       titleKey: 'toc.examples',
-      descriptionKey: 'popover.examples.description',
       level: 2,
       children: [
-        { id: 'example-align',       titleKey: 'popover.demo.align',      level: 3 },
+        { id: 'example-align', titleKey: 'popover.demo.align', level: 3 },
         { id: 'example-with-header', titleKey: 'popover.demo.withHeader', level: 3 },
       ],
     },
-    { id: 'api', titleKey: 'toc.apiReference', descriptionKey: 'popover.api.description', level: 2 },
+    {
+      id: 'api',
+      titleKey: 'toc.apiReference',
+      descriptionKey: 'popover.api.description',
+      level: 2,
+    },
   ],
   apiRows: [
-    { property: 'isOpen', type: 'boolean',                          defaultValue: 'false',      descriptionKey: 'popover.api.isOpen.description' },
-    { property: 'align',  type: "'start' | 'center' | 'end'",      defaultValue: "'center'",   descriptionKey: 'popover.api.align.description'  },
-    { property: 'class',  type: 'string',                          defaultValue: "''",         descriptionKey: 'popover.api.class.description'  },
+    {
+      property: 'isOpen',
+      type: 'boolean',
+      defaultValue: 'false',
+      descriptionKey: 'popover.api.isOpen.description',
+    },
+    {
+      property: 'align',
+      type: "'start' | 'center' | 'end'",
+      defaultValue: "'center'",
+      descriptionKey: 'popover.api.align.description',
+    },
+    {
+      property: 'class',
+      type: 'string',
+      defaultValue: "''",
+      descriptionKey: 'popover.api.class.description',
+    },
   ] satisfies readonly ComponentPageApiRow[],
 } as const satisfies ComponentPageDefinition;
 
@@ -41,8 +78,13 @@ export const popoverPageExamples = {
   </sanring-popover-content>
 </sanring-popover>`,
 
-  usageImport: `import { SANRING_POPOVER_IMPORTS } from '@sanring/ui';`,
+  usageImport: `import { Component } from '@angular/core';
+import { ButtonDirective, SANRING_POPOVER_IMPORTS } from '@sanring/ui';
 
+@Component({
+  imports: [ButtonDirective, SANRING_POPOVER_IMPORTS],
+})
+export class ExampleComponent {}`,
   usageMain: `<sanring-popover align="center">
   <button sanringBtn sanringPopoverTrigger>Open</button>
 
@@ -51,6 +93,29 @@ export const popoverPageExamples = {
     <p class="text-sm mt-2">Content goes here.</p>
   </sanring-popover-content>
 </sanring-popover>`,
+  usageIndividualImports: `import { Component } from '@angular/core';
+import {
+  ButtonDirective,
+  PopoverComponent,
+  PopoverContentComponent,
+  PopoverDescriptionComponent,
+  PopoverHeaderComponent,
+  PopoverTitleComponent,
+  PopoverTriggerDirective,
+} from '@sanring/ui';
+
+@Component({
+  imports: [
+    ButtonDirective,
+    PopoverComponent,
+    PopoverTriggerDirective,
+    PopoverContentComponent,
+    PopoverHeaderComponent,
+    PopoverTitleComponent,
+    PopoverDescriptionComponent,
+  ],
+})
+export class ExampleComponent {}`,
 
   composition: `sanring-popover
 ├── [sanringPopoverTrigger]

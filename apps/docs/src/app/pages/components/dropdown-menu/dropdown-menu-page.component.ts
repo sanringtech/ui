@@ -18,6 +18,7 @@ import {
   ComponentPageComponent,
   ComponentPageHeaderComponent,
   ComponentPageInstallationComponent,
+  ComponentPageUsageImportsComponent,
   ComponentPageSectionComponent,
 } from '../../../layouts/component-page';
 import { dropdownMenuPage, dropdownMenuPageExamples } from './dropdown-menu.docs';
@@ -40,6 +41,7 @@ import { dropdownMenuPage, dropdownMenuPageExamples } from './dropdown-menu.docs
     ComponentPageComponent,
     ComponentPageHeaderComponent,
     ComponentPageInstallationComponent,
+    ComponentPageUsageImportsComponent,
     ComponentPageSectionComponent,
   ],
   template: `
@@ -74,11 +76,11 @@ import { dropdownMenuPage, dropdownMenuPageExamples } from './dropdown-menu.docs
 
       <app-component-page-section [section]="section('usage')">
         <div class="grid gap-6">
-          <div
-            class="overflow-hidden rounded-[var(--sanring-radius)] border border-[var(--docs-border)]"
-          >
-            <app-component-page-code-block [code]="examples.usageImport" language="typescript" />
-          </div>
+          <app-component-page-usage-imports
+            [code]="examples.usageImport"
+            [individualCode]="examples.usageIndividualImports"
+          />
+
           <div
             class="overflow-hidden rounded-[var(--sanring-radius)] border border-[var(--docs-border)]"
           >
@@ -266,7 +268,10 @@ import { dropdownMenuPage, dropdownMenuPageExamples } from './dropdown-menu.docs
                     More
                   </button>
 
-                  <sanring-dropdown-menu-content #moreMenu="sanringDropdownMenuContent" class="w-56">
+                  <sanring-dropdown-menu-content
+                    #moreMenu="sanringDropdownMenuContent"
+                    class="w-56"
+                  >
                     <button sanringDropdownMenuItem type="button" value="new-file">
                       <svg lucideFile class="size-4"></svg>
                       <span>New file</span>

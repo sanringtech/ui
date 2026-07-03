@@ -9,6 +9,7 @@ import {
   ComponentPageComponent,
   ComponentPageHeaderComponent,
   ComponentPageInstallationComponent,
+  ComponentPageUsageImportsComponent,
   ComponentPageSectionComponent,
 } from '../../../layouts/component-page';
 import { progressPage, progressPageExamples } from './progress.docs';
@@ -22,6 +23,7 @@ import { progressPage, progressPageExamples } from './progress.docs';
     ComponentPageComponent,
     ComponentPageHeaderComponent,
     ComponentPageInstallationComponent,
+    ComponentPageUsageImportsComponent,
     ComponentPageSectionComponent,
     ProgressComponent,
   ],
@@ -45,10 +47,10 @@ import { progressPage, progressPageExamples } from './progress.docs';
       <!-- Usage -->
       <app-component-page-section [section]="section('usage')">
         <div class="grid gap-6">
-          <div class="overflow-hidden rounded-[var(--sanring-radius)] border border-[var(--docs-border)]">
-            <app-component-page-code-block [code]="examples.usageImport" language="typescript" />
-          </div>
-          <div class="overflow-hidden rounded-[var(--sanring-radius)] border border-[var(--docs-border)]">
+          <app-component-page-usage-imports [code]="examples.usageImport" />
+          <div
+            class="overflow-hidden rounded-[var(--sanring-radius)] border border-[var(--docs-border)]"
+          >
             <app-component-page-code-block [code]="examples.usageMain" language="angular-html" />
           </div>
         </div>
@@ -65,7 +67,6 @@ import { progressPage, progressPageExamples } from './progress.docs';
       <!-- Examples -->
       <app-component-page-section [section]="section('example')">
         <div class="grid gap-2">
-
           <!-- Q1: Shimmer sprint effect -->
           <app-component-page-section [section]="section('example-shimmer')">
             <p class="mb-4 text-sm text-[var(--docs-muted)]">
@@ -108,7 +109,12 @@ import { progressPage, progressPageExamples } from './progress.docs';
                   <span class="text-xs text-[var(--docs-muted)]">
                     {{ i18n.t('progress.demo.trapezoid') }}
                   </span>
-                  <sanring-progress [value]="60" shape="trapezoid" ariaLabel="Trapezoid" class="w-full" />
+                  <sanring-progress
+                    [value]="60"
+                    shape="trapezoid"
+                    ariaLabel="Trapezoid"
+                    class="w-full"
+                  />
                 </div>
               </div>
             </app-component-page-code-previewer>
@@ -152,7 +158,6 @@ import { progressPage, progressPageExamples } from './progress.docs';
               </div>
             </app-component-page-code-previewer>
           </app-component-page-section>
-
         </div>
       </app-component-page-section>
 

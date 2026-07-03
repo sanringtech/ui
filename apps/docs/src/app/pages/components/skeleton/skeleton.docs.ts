@@ -1,4 +1,7 @@
-import { ComponentPageApiRow, ComponentPageDefinition } from '../../../docs-schema/component-page.types';
+import {
+  ComponentPageApiRow,
+  ComponentPageDefinition,
+} from '../../../docs-schema/component-page.types';
 
 export const skeletonPage = {
   componentId: 'skeleton',
@@ -26,7 +29,6 @@ export const skeletonPage = {
     {
       id: 'example',
       titleKey: 'toc.examples',
-      descriptionKey: 'skeleton.examples.description',
       level: 2,
       children: [
         {
@@ -64,7 +66,12 @@ export const skeletonPage = {
     },
   ],
   apiRows: [
-    { property: 'class', type: 'string', defaultValue: "''", descriptionKey: 'skeleton.api.class.description' },
+    {
+      property: 'class',
+      type: 'string',
+      defaultValue: "''",
+      descriptionKey: 'skeleton.api.class.description',
+    },
   ] satisfies readonly ComponentPageApiRow[],
 } as const satisfies ComponentPageDefinition;
 

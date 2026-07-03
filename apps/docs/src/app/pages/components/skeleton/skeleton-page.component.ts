@@ -9,6 +9,7 @@ import {
   ComponentPageComponent,
   ComponentPageHeaderComponent,
   ComponentPageInstallationComponent,
+  ComponentPageUsageImportsComponent,
   ComponentPageSectionComponent,
 } from '../../../layouts/component-page';
 import { skeletonPage, skeletonPageExamples } from './skeleton.docs';
@@ -23,6 +24,7 @@ import { skeletonPage, skeletonPageExamples } from './skeleton.docs';
     ComponentPageComponent,
     ComponentPageHeaderComponent,
     ComponentPageInstallationComponent,
+    ComponentPageUsageImportsComponent,
     ComponentPageSectionComponent,
   ],
   template: `
@@ -49,10 +51,10 @@ import { skeletonPage, skeletonPageExamples } from './skeleton.docs';
 
       <app-component-page-section [section]="section('usage')">
         <div class="grid gap-6">
-          <div class="overflow-hidden rounded-[var(--sanring-radius)] border border-[var(--docs-border)]">
-            <app-component-page-code-block [code]="examples.usageImport" language="typescript" />
-          </div>
-          <div class="overflow-hidden rounded-[var(--sanring-radius)] border border-[var(--docs-border)]">
+          <app-component-page-usage-imports [code]="examples.usageImport" />
+          <div
+            class="overflow-hidden rounded-[var(--sanring-radius)] border border-[var(--docs-border)]"
+          >
             <app-component-page-code-block [code]="examples.usageMain" language="angular-html" />
           </div>
         </div>
@@ -64,7 +66,6 @@ import { skeletonPage, skeletonPageExamples } from './skeleton.docs';
           manualSnippet="import { SkeletonDirective } from '@sanring/ui';"
         />
       </app-component-page-section>
-
 
       <app-component-page-section [section]="section('example')">
         <div class="grid gap-2">
@@ -85,7 +86,9 @@ import { skeletonPage, skeletonPageExamples } from './skeleton.docs';
           <app-component-page-section [section]="section('example-card')">
             <app-component-page-code-previewer [code]="examples.card" language="angular-html">
               <div previewer class="flex w-full justify-center">
-                <div class="w-[min(360px,100%)] rounded-[var(--sanring-radius)] border border-[var(--docs-border)] p-5">
+                <div
+                  class="w-[min(360px,100%)] rounded-[var(--sanring-radius)] border border-[var(--docs-border)] p-5"
+                >
                   <div sanringSkeleton class="h-40 w-full"></div>
                   <div class="mt-4 grid gap-2">
                     <div sanringSkeleton class="h-4 w-3/4"></div>

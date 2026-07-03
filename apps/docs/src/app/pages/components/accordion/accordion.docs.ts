@@ -1,4 +1,7 @@
-import { ComponentPageApiRow, ComponentPageDefinition } from '../../../docs-schema/component-page.types';
+import {
+  ComponentPageApiRow,
+  ComponentPageDefinition,
+} from '../../../docs-schema/component-page.types';
 
 export const accordionPage = {
   componentId: 'accordion',
@@ -32,7 +35,6 @@ export const accordionPage = {
     {
       id: 'example',
       titleKey: 'toc.examples',
-      descriptionKey: 'accordion.examples.description',
       level: 2,
       children: [
         {
@@ -70,19 +72,54 @@ export const accordionPage = {
     },
   ],
   apiRows: [
-    { property: 'multi', type: 'boolean', defaultValue: 'false', descriptionKey: 'accordion.api.multi.description' },
-    { property: 'expanded', type: 'boolean', defaultValue: 'false', descriptionKey: 'accordion.api.expanded.description' },
-    { property: 'disabled', type: 'boolean', defaultValue: 'false', descriptionKey: 'accordion.api.disabled.description' },
+    {
+      property: 'multi',
+      type: 'boolean',
+      defaultValue: 'false',
+      descriptionKey: 'accordion.api.multi.description',
+    },
+    {
+      property: 'expanded',
+      type: 'boolean',
+      defaultValue: 'false',
+      descriptionKey: 'accordion.api.expanded.description',
+    },
+    {
+      property: 'disabled',
+      type: 'boolean',
+      defaultValue: 'false',
+      descriptionKey: 'accordion.api.disabled.description',
+    },
     {
       property: 'variant',
       type: "'default' | 'underline'",
       defaultValue: "'default'",
       descriptionKey: 'accordion.api.variant.description',
     },
-    { property: 'openAll()', type: 'method', defaultValue: '-', descriptionKey: 'accordion.api.openAll.description' },
-    { property: 'closeAll()', type: 'method', defaultValue: '-', descriptionKey: 'accordion.api.closeAll.description' },
-    { property: 'opened', type: 'OutputEmitterRef<void>', defaultValue: '-', descriptionKey: 'accordion.api.opened.description' },
-    { property: 'closed', type: 'OutputEmitterRef<void>', defaultValue: '-', descriptionKey: 'accordion.api.closed.description' },
+    {
+      property: 'openAll()',
+      type: 'method',
+      defaultValue: '-',
+      descriptionKey: 'accordion.api.openAll.description',
+    },
+    {
+      property: 'closeAll()',
+      type: 'method',
+      defaultValue: '-',
+      descriptionKey: 'accordion.api.closeAll.description',
+    },
+    {
+      property: 'opened',
+      type: 'OutputEmitterRef<void>',
+      defaultValue: '-',
+      descriptionKey: 'accordion.api.opened.description',
+    },
+    {
+      property: 'closed',
+      type: 'OutputEmitterRef<void>',
+      defaultValue: '-',
+      descriptionKey: 'accordion.api.closed.description',
+    },
     {
       property: 'expandedChange',
       type: 'OutputEmitterRef<boolean>',
@@ -103,7 +140,13 @@ export const accordionPageExamples = {
     </sanring-accordion-content>
   </sanring-accordion-item>
 </sanring-accordion>`,
-  usageImport: `import { SANRING_ACCORDION_IMPORTS } from '@sanring/ui';`,
+  usageImport: `import { Component } from '@angular/core';
+import { SANRING_ACCORDION_IMPORTS } from '@sanring/ui';
+
+@Component({
+  imports: [SANRING_ACCORDION_IMPORTS],
+})
+export class ExampleComponent {}`,
   usageMain: `<sanring-accordion>
   <sanring-accordion-item>
     <sanring-accordion-trigger>
@@ -114,6 +157,23 @@ export const accordionPageExamples = {
     </sanring-accordion-content>
   </sanring-accordion-item>
 </sanring-accordion>`,
+  usageIndividualImports: `import { Component } from '@angular/core';
+import {
+  AccordionComponent,
+  AccordionContentComponent,
+  AccordionItemComponent,
+  AccordionTriggerComponent,
+} from '@sanring/ui';
+
+@Component({
+  imports: [
+    AccordionComponent,
+    AccordionItemComponent,
+    AccordionTriggerComponent,
+    AccordionContentComponent,
+  ],
+})
+export class ExampleComponent {}`,
   single: `<sanring-accordion>
   <sanring-accordion-item>
     <sanring-accordion-trigger>Shipping options</sanring-accordion-trigger>

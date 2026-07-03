@@ -1,4 +1,7 @@
-import { ComponentPageApiRow, ComponentPageDefinition } from '../../../docs-schema/component-page.types';
+import {
+  ComponentPageApiRow,
+  ComponentPageDefinition,
+} from '../../../docs-schema/component-page.types';
 
 export const radioPage = {
   componentId: 'radio',
@@ -25,7 +28,6 @@ export const radioPage = {
     {
       id: 'example',
       titleKey: 'toc.examples',
-      descriptionKey: 'radio.examples.description',
       level: 2,
       children: [
         {
@@ -61,26 +63,106 @@ export const radioPage = {
 } as const satisfies ComponentPageDefinition;
 
 export const radioGroupApiRows = [
-  { property: 'class', type: 'string', defaultValue: "''", descriptionKey: 'radio.api.group.class' },
-  { property: 'name', type: 'string', defaultValue: 'undefined', descriptionKey: 'radio.api.group.name' },
-  { property: 'disabled', type: 'boolean', defaultValue: 'false', descriptionKey: 'radio.api.group.disabled' },
-  { property: 'required', type: 'boolean', defaultValue: 'false', descriptionKey: 'radio.api.group.required' },
-  { property: 'orientation', type: 'RadioOrientation', defaultValue: 'RadioOrientation.Vertical', descriptionKey: 'radio.api.group.orientation' },
-  { property: 'value', type: 'RadioValue | null', defaultValue: 'null', descriptionKey: 'radio.api.group.value' },
-  { property: 'valueChange', type: 'EventEmitter<RadioValue | null>', defaultValue: '—', descriptionKey: 'radio.api.group.valueChange' },
-  { property: 'ariaLabel', type: 'string', defaultValue: 'undefined', descriptionKey: 'radio.api.group.ariaLabel' },
-  { property: 'ariaLabelledBy', type: 'string', defaultValue: 'undefined', descriptionKey: 'radio.api.group.ariaLabelledBy' },
-  { property: 'ariaDescribedBy', type: 'string', defaultValue: 'undefined', descriptionKey: 'radio.api.group.ariaDescribedBy' },
+  {
+    property: 'class',
+    type: 'string',
+    defaultValue: "''",
+    descriptionKey: 'radio.api.group.class',
+  },
+  {
+    property: 'name',
+    type: 'string',
+    defaultValue: 'undefined',
+    descriptionKey: 'radio.api.group.name',
+  },
+  {
+    property: 'disabled',
+    type: 'boolean',
+    defaultValue: 'false',
+    descriptionKey: 'radio.api.group.disabled',
+  },
+  {
+    property: 'required',
+    type: 'boolean',
+    defaultValue: 'false',
+    descriptionKey: 'radio.api.group.required',
+  },
+  {
+    property: 'orientation',
+    type: 'RadioOrientation',
+    defaultValue: 'RadioOrientation.Vertical',
+    descriptionKey: 'radio.api.group.orientation',
+  },
+  {
+    property: 'value',
+    type: 'RadioValue | null',
+    defaultValue: 'null',
+    descriptionKey: 'radio.api.group.value',
+  },
+  {
+    property: 'valueChange',
+    type: 'EventEmitter<RadioValue | null>',
+    defaultValue: '—',
+    descriptionKey: 'radio.api.group.valueChange',
+  },
+  {
+    property: 'ariaLabel',
+    type: 'string',
+    defaultValue: 'undefined',
+    descriptionKey: 'radio.api.group.ariaLabel',
+  },
+  {
+    property: 'ariaLabelledBy',
+    type: 'string',
+    defaultValue: 'undefined',
+    descriptionKey: 'radio.api.group.ariaLabelledBy',
+  },
+  {
+    property: 'ariaDescribedBy',
+    type: 'string',
+    defaultValue: 'undefined',
+    descriptionKey: 'radio.api.group.ariaDescribedBy',
+  },
 ] as const satisfies readonly ComponentPageApiRow[];
 
 export const radioItemApiRows = [
   { property: 'class', type: 'string', defaultValue: "''", descriptionKey: 'radio.api.item.class' },
-  { property: 'id', type: 'string', defaultValue: 'generated', descriptionKey: 'radio.api.item.id' },
-  { property: 'value', type: 'RadioValue', defaultValue: '—', descriptionKey: 'radio.api.item.value' },
-  { property: 'disabled', type: 'boolean', defaultValue: 'false', descriptionKey: 'radio.api.item.disabled' },
-  { property: 'ariaLabel', type: 'string', defaultValue: 'undefined', descriptionKey: 'radio.api.item.ariaLabel' },
-  { property: 'ariaLabelledBy', type: 'string', defaultValue: 'undefined', descriptionKey: 'radio.api.item.ariaLabelledBy' },
-  { property: 'ariaDescribedBy', type: 'string', defaultValue: 'undefined', descriptionKey: 'radio.api.item.ariaDescribedBy' },
+  {
+    property: 'id',
+    type: 'string',
+    defaultValue: 'generated',
+    descriptionKey: 'radio.api.item.id',
+  },
+  {
+    property: 'value',
+    type: 'RadioValue',
+    defaultValue: '—',
+    descriptionKey: 'radio.api.item.value',
+  },
+  {
+    property: 'disabled',
+    type: 'boolean',
+    defaultValue: 'false',
+    descriptionKey: 'radio.api.item.disabled',
+  },
+  {
+    property: 'ariaLabel',
+    type: 'string',
+    defaultValue: 'undefined',
+    descriptionKey: 'radio.api.item.ariaLabel',
+  },
+  {
+    property: 'ariaLabelledBy',
+    type: 'string',
+    defaultValue: 'undefined',
+    descriptionKey: 'radio.api.item.ariaLabelledBy',
+  },
+  {
+    property: 'ariaDescribedBy',
+    type: 'string',
+    defaultValue: 'undefined',
+    descriptionKey: 'radio.api.item.ariaDescribedBy',
+  },
 ] as const satisfies readonly ComponentPageApiRow[];
 
 export const radioPageExamples = {
@@ -90,11 +172,26 @@ export const radioPageExamples = {
   <sanring-radio-item value="option3" />
 </sanring-radio-group>`,
 
-  usageImport: `import { SANRING_RADIO_IMPORTS } from '@sanring/ui';`,
+  usageImport: `import { Component } from '@angular/core';
+import { FormsModule } from '@angular/forms';
+import { SANRING_RADIO_IMPORTS } from '@sanring/ui';
+
+@Component({
+  imports: [FormsModule, SANRING_RADIO_IMPORTS],
+})
+export class ExampleComponent {}`,
   usageMain: `<sanring-radio-group [(ngModel)]="value">
   <sanring-radio-item value="a" />
   <sanring-radio-item value="b" />
 </sanring-radio-group>`,
+  usageIndividualImports: `import { Component } from '@angular/core';
+import { FormsModule } from '@angular/forms';
+import { RadioGroupComponent, RadioItemComponent } from '@sanring/ui';
+
+@Component({
+  imports: [FormsModule, RadioGroupComponent, RadioItemComponent],
+})
+export class ExampleComponent {}`,
 
   withLabel: `<sanring-radio-group [(ngModel)]="value">
   <div class="flex items-center gap-2">

@@ -10,6 +10,7 @@ import {
   ComponentPageComponent,
   ComponentPageHeaderComponent,
   ComponentPageInstallationComponent,
+  ComponentPageUsageImportsComponent,
   ComponentPageSectionComponent,
 } from '../../../layouts/component-page';
 import { buttonPage, buttonPageExamples } from './button.docs';
@@ -24,6 +25,7 @@ import { buttonPage, buttonPageExamples } from './button.docs';
     ComponentPageCodePreviewer,
     ComponentPageHeaderComponent,
     ComponentPageInstallationComponent,
+    ComponentPageUsageImportsComponent,
     ComponentPageSectionComponent,
     LucideArrowRight,
     LucideDownload,
@@ -60,10 +62,10 @@ import { buttonPage, buttonPageExamples } from './button.docs';
 
       <app-component-page-section [section]="section('usage')">
         <div class="grid gap-6">
-          <div class="overflow-hidden rounded-[var(--sanring-radius)] border border-[var(--docs-border)]">
-            <app-component-page-code-block [code]="examples.usageImport" language="typescript" />
-          </div>
-          <div class="overflow-hidden rounded-[var(--sanring-radius)] border border-[var(--docs-border)]">
+          <app-component-page-usage-imports [code]="examples.usageImport" />
+          <div
+            class="overflow-hidden rounded-[var(--sanring-radius)] border border-[var(--docs-border)]"
+          >
             <app-component-page-code-block [code]="examples.usageMain" language="angular-html" />
           </div>
         </div>
@@ -75,7 +77,6 @@ import { buttonPage, buttonPageExamples } from './button.docs';
           manualSnippet="import { ButtonDirective } from '@sanring/ui';"
         />
       </app-component-page-section>
-
 
       <app-component-page-section [section]="section('example')">
         <div class="grid gap-2">

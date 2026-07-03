@@ -9,6 +9,7 @@ import {
   ComponentPageComponent,
   ComponentPageHeaderComponent,
   ComponentPageInstallationComponent,
+  ComponentPageUsageImportsComponent,
   ComponentPageSectionComponent,
 } from '../../../layouts/component-page';
 import { dialogPage, dialogPageExamples } from './dialog.docs';
@@ -24,6 +25,7 @@ import { dialogPage, dialogPageExamples } from './dialog.docs';
     ComponentPageComponent,
     ComponentPageHeaderComponent,
     ComponentPageInstallationComponent,
+    ComponentPageUsageImportsComponent,
     ComponentPageSectionComponent,
   ],
   template: `
@@ -46,10 +48,13 @@ import { dialogPage, dialogPageExamples } from './dialog.docs';
 
       <app-component-page-section [section]="section('usage')">
         <div class="grid gap-6">
-          <div class="overflow-hidden rounded-[var(--sanring-radius)] border border-[var(--docs-border)]">
-            <app-component-page-code-block [code]="examples.usageImport" language="typescript" />
-          </div>
-          <div class="overflow-hidden rounded-[var(--sanring-radius)] border border-[var(--docs-border)]">
+          <app-component-page-usage-imports
+            [code]="examples.usageImport"
+            [individualCode]="examples.usageIndividualImports"
+          />
+          <div
+            class="overflow-hidden rounded-[var(--sanring-radius)] border border-[var(--docs-border)]"
+          >
             <app-component-page-code-block [code]="examples.usageMain" language="angular-html" />
           </div>
         </div>
@@ -63,7 +68,9 @@ import { dialogPage, dialogPageExamples } from './dialog.docs';
       </app-component-page-section>
 
       <app-component-page-section [section]="section('composition')">
-        <div class="overflow-hidden rounded-[var(--sanring-radius)] border border-[var(--docs-border)]">
+        <div
+          class="overflow-hidden rounded-[var(--sanring-radius)] border border-[var(--docs-border)]"
+        >
           <app-component-page-code-block [code]="examples.composition" language="bash" />
         </div>
       </app-component-page-section>
@@ -71,7 +78,10 @@ import { dialogPage, dialogPageExamples } from './dialog.docs';
       <app-component-page-section [section]="section('example')">
         <div>
           <app-component-page-section [section]="section('example-custom-close')">
-            <app-component-page-code-previewer [code]="examples.customClose" language="angular-html">
+            <app-component-page-code-previewer
+              [code]="examples.customClose"
+              language="angular-html"
+            >
               <div previewer class="flex justify-center">
                 <button sanringBtn [sanringDialogTrigger]="customCloseDialog" type="button">
                   {{ i18n.t('dialog.demo.customClose') }}
@@ -91,7 +101,10 @@ import { dialogPage, dialogPageExamples } from './dialog.docs';
           </app-component-page-section>
 
           <app-component-page-section [section]="section('example-sticky-footer')">
-            <app-component-page-code-previewer [code]="examples.stickyFooter" language="angular-html">
+            <app-component-page-code-previewer
+              [code]="examples.stickyFooter"
+              language="angular-html"
+            >
               <div previewer class="flex justify-center">
                 <button sanringBtn [sanringDialogTrigger]="stickyFooterDialog" type="button">
                   {{ i18n.t('dialog.demo.stickyFooter') }}

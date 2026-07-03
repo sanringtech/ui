@@ -11,6 +11,7 @@ import {
   ComponentPageComponent,
   ComponentPageHeaderComponent,
   ComponentPageInstallationComponent,
+  ComponentPageUsageImportsComponent,
   ComponentPageSectionComponent,
 } from '../../../layouts/component-page';
 import { selectPage, selectPageExamples } from './select.docs';
@@ -27,6 +28,7 @@ import { selectPage, selectPageExamples } from './select.docs';
     ComponentPageComponent,
     ComponentPageHeaderComponent,
     ComponentPageInstallationComponent,
+    ComponentPageUsageImportsComponent,
     ComponentPageSectionComponent,
   ],
   template: `
@@ -58,11 +60,10 @@ import { selectPage, selectPageExamples } from './select.docs';
 
       <app-component-page-section [section]="section('usage')">
         <div class="grid gap-6">
-          <div
-            class="overflow-hidden rounded-[var(--sanring-radius)] border border-[var(--docs-border)]"
-          >
-            <app-component-page-code-block [code]="examples.usageImport" language="typescript" />
-          </div>
+          <app-component-page-usage-imports
+            [code]="examples.usageImport"
+            [individualCode]="examples.usageIndividualImports"
+          />
           <div
             class="overflow-hidden rounded-[var(--sanring-radius)] border border-[var(--docs-border)]"
           >
@@ -151,7 +152,10 @@ import { selectPage, selectPageExamples } from './select.docs';
               [code]="examples.itemAligned"
               language="angular-html"
             >
-              <div previewer class="flex min-h-[220px] flex-wrap items-start justify-center gap-10 pt-8">
+              <div
+                previewer
+                class="flex min-h-[220px] flex-wrap items-start justify-center gap-10 pt-8"
+              >
                 <div class="flex flex-col items-center gap-2">
                   <span class="text-xs text-[var(--docs-muted)]">position="item-aligned"</span>
                   <sanring-select [(ngModel)]="theme">

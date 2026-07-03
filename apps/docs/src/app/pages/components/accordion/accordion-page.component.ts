@@ -1,8 +1,5 @@
 import { Component, inject } from '@angular/core';
-import {
-  SANRING_ACCORDION_IMPORTS,
-  ButtonDirective,
-} from '@sanring/ui';
+import { SANRING_ACCORDION_IMPORTS, ButtonDirective } from '@sanring/ui';
 import { getComponentPageSection } from '../../../docs-schema/component-page.utils';
 import {
   ComponentPageApiTableComponent,
@@ -11,6 +8,7 @@ import {
   ComponentPageComponent,
   ComponentPageHeaderComponent,
   ComponentPageInstallationComponent,
+  ComponentPageUsageImportsComponent,
   ComponentPageSectionComponent,
 } from '../../../layouts/component-page';
 import { I18nService } from '../../../i18n/i18n.service';
@@ -27,6 +25,7 @@ import { accordionPage, accordionPageExamples } from './accordion.docs';
     ComponentPageCodePreviewer,
     ComponentPageHeaderComponent,
     ComponentPageInstallationComponent,
+    ComponentPageUsageImportsComponent,
     ComponentPageSectionComponent,
   ],
   template: `
@@ -58,10 +57,13 @@ import { accordionPage, accordionPageExamples } from './accordion.docs';
 
       <app-component-page-section [section]="section('usage')">
         <div class="grid gap-6">
-          <div class="overflow-hidden rounded-[var(--sanring-radius)] border border-[var(--docs-border)]">
-            <app-component-page-code-block [code]="examples.usageImport" language="typescript" />
-          </div>
-          <div class="overflow-hidden rounded-[var(--sanring-radius)] border border-[var(--docs-border)]">
+          <app-component-page-usage-imports
+            [code]="examples.usageImport"
+            [individualCode]="examples.usageIndividualImports"
+          />
+          <div
+            class="overflow-hidden rounded-[var(--sanring-radius)] border border-[var(--docs-border)]"
+          >
             <app-component-page-code-block [code]="examples.usageMain" language="angular-html" />
           </div>
         </div>
@@ -75,7 +77,9 @@ import { accordionPage, accordionPageExamples } from './accordion.docs';
       </app-component-page-section>
 
       <app-component-page-section [section]="section('composition')">
-        <div class="overflow-hidden rounded-[var(--sanring-radius)] border border-[var(--docs-border)]">
+        <div
+          class="overflow-hidden rounded-[var(--sanring-radius)] border border-[var(--docs-border)]"
+        >
           <app-component-page-code-block [code]="examples.composition" language="bash" />
         </div>
       </app-component-page-section>
@@ -121,7 +125,10 @@ import { accordionPage, accordionPageExamples } from './accordion.docs';
           </app-component-page-section>
 
           <app-component-page-section [section]="section('example-default-open')">
-            <app-component-page-code-previewer [code]="examples.defaultOpen" language="angular-html">
+            <app-component-page-code-previewer
+              [code]="examples.defaultOpen"
+              language="angular-html"
+            >
               <div previewer class="w-[min(520px,100%)]">
                 <sanring-accordion class="block w-full">
                   @for (item of demoItems; track item.id) {
@@ -145,7 +152,9 @@ import { accordionPage, accordionPageExamples } from './accordion.docs';
                 <sanring-accordion class="block w-full">
                   @for (item of demoItems; track item.id) {
                     <sanring-accordion-item>
-                      <sanring-accordion-trigger variant="underline">{{ item.question }}</sanring-accordion-trigger>
+                      <sanring-accordion-trigger variant="underline">{{
+                        item.question
+                      }}</sanring-accordion-trigger>
                       <sanring-accordion-content>
                         <p class="mb-0 mt-0 pb-4 text-sm leading-relaxed text-[var(--docs-muted)]">
                           {{ item.answer }}
@@ -162,10 +171,22 @@ import { accordionPage, accordionPageExamples } from './accordion.docs';
             <app-component-page-code-previewer [code]="examples.controlled" language="angular-html">
               <div previewer class="grid w-[min(560px,100%)] gap-4">
                 <div class="flex flex-wrap justify-end gap-2">
-                  <button sanringBtn type="button" variant="outline" size="sm" (click)="controlled.openAll()">
+                  <button
+                    sanringBtn
+                    type="button"
+                    variant="outline"
+                    size="sm"
+                    (click)="controlled.openAll()"
+                  >
                     {{ i18n.t('accordion.demo.openAll') }}
                   </button>
-                  <button sanringBtn type="button" variant="outline" size="sm" (click)="controlled.closeAll()">
+                  <button
+                    sanringBtn
+                    type="button"
+                    variant="outline"
+                    size="sm"
+                    (click)="controlled.closeAll()"
+                  >
                     {{ i18n.t('accordion.demo.closeAll') }}
                   </button>
                 </div>

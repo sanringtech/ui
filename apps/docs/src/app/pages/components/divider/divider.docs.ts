@@ -1,4 +1,7 @@
-import { ComponentPageApiRow, ComponentPageDefinition } from '../../../docs-schema/component-page.types';
+import {
+  ComponentPageApiRow,
+  ComponentPageDefinition,
+} from '../../../docs-schema/component-page.types';
 
 export const dividerPage = {
   componentId: 'divider',
@@ -26,7 +29,6 @@ export const dividerPage = {
     {
       id: 'example',
       titleKey: 'toc.examples',
-      descriptionKey: 'divider.examples.description',
       level: 2,
       children: [
         {
@@ -54,8 +56,18 @@ export const dividerPage = {
     },
   ],
   apiRows: [
-    { property: 'vertical', type: 'boolean', defaultValue: 'false', descriptionKey: 'divider.api.vertical.description' },
-    { property: 'inset', type: 'DividerInset', defaultValue: "'none'", descriptionKey: 'divider.api.inset.description' },
+    {
+      property: 'vertical',
+      type: 'boolean',
+      defaultValue: 'false',
+      descriptionKey: 'divider.api.vertical.description',
+    },
+    {
+      property: 'inset',
+      type: 'DividerInset',
+      defaultValue: "'none'",
+      descriptionKey: 'divider.api.inset.description',
+    },
   ] satisfies readonly ComponentPageApiRow[],
 } as const satisfies ComponentPageDefinition;
 

@@ -29,7 +29,6 @@ export const selectPage = {
     {
       id: 'example',
       titleKey: 'toc.examples',
-      descriptionKey: 'select.examples.description',
       level: 2,
       children: [
         {
@@ -136,8 +135,14 @@ export const selectPageExamples = {
     <sanring-select-item value="support">Customer support operations</sanring-select-item>
   </sanring-select-content>
 </sanring-select>`,
-  usageImport: `import { FormsModule } from '@angular/forms';
-import { SANRING_SELECT_IMPORTS } from '@sanring/ui';`,
+  usageImport: `import { Component } from '@angular/core';
+import { FormsModule } from '@angular/forms';
+import { SANRING_SELECT_IMPORTS } from '@sanring/ui';
+
+@Component({
+  imports: [FormsModule, SANRING_SELECT_IMPORTS],
+})
+export class ExampleComponent {}`,
   usageMain: `<sanring-select [(ngModel)]="value">
   <button sanringSelectTrigger>
     <sanring-select-value placeholder="Choose a workspace" />
@@ -147,6 +152,33 @@ import { SANRING_SELECT_IMPORTS } from '@sanring/ui';`,
     <sanring-select-item value="engineering">Engineering</sanring-select-item>
   </sanring-select-content>
 </sanring-select>`,
+  usageIndividualImports: `import { Component } from '@angular/core';
+import { FormsModule } from '@angular/forms';
+import {
+  SelectComponent,
+  SelectContentComponent,
+  SelectGroupComponent,
+  SelectItemComponent,
+  SelectLabelComponent,
+  SelectSeparatorComponent,
+  SelectTriggerDirective,
+  SelectValueComponent,
+} from '@sanring/ui';
+
+@Component({
+  imports: [
+    FormsModule,
+    SelectComponent,
+    SelectTriggerDirective,
+    SelectValueComponent,
+    SelectContentComponent,
+    SelectGroupComponent,
+    SelectLabelComponent,
+    SelectItemComponent,
+    SelectSeparatorComponent,
+  ],
+})
+export class ExampleComponent {}`,
   groups: `<sanring-select [(ngModel)]="region">
   <button sanringSelectTrigger class="w-[240px]">
     <sanring-select-value placeholder="Choose a region" />

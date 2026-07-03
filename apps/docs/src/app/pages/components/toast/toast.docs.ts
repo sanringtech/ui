@@ -1,4 +1,7 @@
-import { ComponentPageApiRow, ComponentPageDefinition } from '../../../docs-schema/component-page.types';
+import {
+  ComponentPageApiRow,
+  ComponentPageDefinition,
+} from '../../../docs-schema/component-page.types';
 
 export const toastPage = {
   componentId: 'toast',
@@ -26,7 +29,6 @@ export const toastPage = {
     {
       id: 'example',
       titleKey: 'toc.examples',
-      descriptionKey: 'toast.examples.description',
       level: 2,
       children: [
         { id: 'example-variant', titleKey: 'toast.demo.variant', level: 3 },
@@ -42,20 +44,90 @@ export const toastPage = {
     },
   ],
   apiRows: [
-    { property: 'ToastService.show(options)', type: 'method', defaultValue: '-', descriptionKey: 'toast.api.show.description' },
-    { property: 'success(title, options)', type: 'method', defaultValue: '-', descriptionKey: 'toast.api.success.description' },
-    { property: 'error(title, options)', type: 'method', defaultValue: '-', descriptionKey: 'toast.api.error.description' },
-    { property: 'warning(title, options)', type: 'method', defaultValue: '-', descriptionKey: 'toast.api.warning.description' },
-    { property: 'info(title, options)', type: 'method', defaultValue: '-', descriptionKey: 'toast.api.info.description' },
-    { property: 'dismiss(id)', type: 'method', defaultValue: '-', descriptionKey: 'toast.api.dismiss.description' },
-    { property: 'dismissAll()', type: 'method', defaultValue: '-', descriptionKey: 'toast.api.dismissAll.description' },
-    { property: 'position', type: 'ToastPosition', defaultValue: "'bottom-right'", descriptionKey: 'toast.api.position.description' },
-    { property: 'maxToasts', type: 'number', defaultValue: '3', descriptionKey: 'toast.api.maxToasts.description' },
-    { property: 'stacked', type: 'boolean', defaultValue: 'true', descriptionKey: 'toast.api.stacked.description' },
-    { property: 'toastHeight', type: 'number', defaultValue: '72', descriptionKey: 'toast.api.toastHeight.description' },
-    { property: 'duration', type: 'number', defaultValue: '5000', descriptionKey: 'toast.api.duration.description' },
-    { property: 'closable', type: 'boolean', defaultValue: 'true', descriptionKey: 'toast.api.closable.description' },
-    { property: 'action', type: 'ToastAction', defaultValue: '-', descriptionKey: 'toast.api.action.description' },
+    {
+      property: 'ToastService.show(options)',
+      type: 'method',
+      defaultValue: '-',
+      descriptionKey: 'toast.api.show.description',
+    },
+    {
+      property: 'success(title, options)',
+      type: 'method',
+      defaultValue: '-',
+      descriptionKey: 'toast.api.success.description',
+    },
+    {
+      property: 'error(title, options)',
+      type: 'method',
+      defaultValue: '-',
+      descriptionKey: 'toast.api.error.description',
+    },
+    {
+      property: 'warning(title, options)',
+      type: 'method',
+      defaultValue: '-',
+      descriptionKey: 'toast.api.warning.description',
+    },
+    {
+      property: 'info(title, options)',
+      type: 'method',
+      defaultValue: '-',
+      descriptionKey: 'toast.api.info.description',
+    },
+    {
+      property: 'dismiss(id)',
+      type: 'method',
+      defaultValue: '-',
+      descriptionKey: 'toast.api.dismiss.description',
+    },
+    {
+      property: 'dismissAll()',
+      type: 'method',
+      defaultValue: '-',
+      descriptionKey: 'toast.api.dismissAll.description',
+    },
+    {
+      property: 'position',
+      type: 'ToastPosition',
+      defaultValue: "'bottom-right'",
+      descriptionKey: 'toast.api.position.description',
+    },
+    {
+      property: 'maxToasts',
+      type: 'number',
+      defaultValue: '3',
+      descriptionKey: 'toast.api.maxToasts.description',
+    },
+    {
+      property: 'stacked',
+      type: 'boolean',
+      defaultValue: 'true',
+      descriptionKey: 'toast.api.stacked.description',
+    },
+    {
+      property: 'toastHeight',
+      type: 'number',
+      defaultValue: '72',
+      descriptionKey: 'toast.api.toastHeight.description',
+    },
+    {
+      property: 'duration',
+      type: 'number',
+      defaultValue: '5000',
+      descriptionKey: 'toast.api.duration.description',
+    },
+    {
+      property: 'closable',
+      type: 'boolean',
+      defaultValue: 'true',
+      descriptionKey: 'toast.api.closable.description',
+    },
+    {
+      property: 'action',
+      type: 'ToastAction',
+      defaultValue: '-',
+      descriptionKey: 'toast.api.action.description',
+    },
   ] satisfies readonly ComponentPageApiRow[],
 } as const satisfies ComponentPageDefinition;
 
@@ -65,13 +137,30 @@ export const toastPageExamples = {
 <button sanringBtn type="button" (click)="toast.success('Saved')">
   Show toast
 </button>`,
-  usageImport: `import { SANRING_TOAST_IMPORTS, ToastService } from '@sanring/ui';`,
+  usageImport: `import { Component, inject } from '@angular/core';
+import { ButtonDirective, SANRING_TOAST_IMPORTS, ToastService } from '@sanring/ui';
+
+@Component({
+  imports: [ButtonDirective, SANRING_TOAST_IMPORTS],
+})
+export class ExampleComponent {
+  private readonly toast = inject(ToastService);
+}`,
   usageMain: `private readonly toast = inject(ToastService);
 
 save() {
   this.toast.success('Project saved', {
     description: 'Your changes are now available to the team.',
   });
+}`,
+  usageIndividualImports: `import { Component, inject } from '@angular/core';
+import { ButtonDirective, ToastService, ToasterComponent } from '@sanring/ui';
+
+@Component({
+  imports: [ButtonDirective, ToasterComponent],
+})
+export class ExampleComponent {
+  private readonly toast = inject(ToastService);
 }`,
   variant: `<button type="button" (click)="toast.success('Saved')">Success</button>
 <button type="button" (click)="toast.error('Upload failed')">Error</button>

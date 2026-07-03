@@ -29,7 +29,6 @@ export const dropdownMenuPage = {
     {
       id: 'example',
       titleKey: 'toc.examples',
-      descriptionKey: 'dropdownMenu.examples.description',
       level: 2,
       children: [
         {
@@ -117,7 +116,13 @@ export const dropdownMenuPageExamples = {
     </button>
   </sanring-dropdown-menu-content>
 </sanring-dropdown-menu>`,
-  usageImport: `import { ButtonDirective, SANRING_DROPDOWN_MENU_IMPORTS } from '@sanring/ui';`,
+  usageImport: `import { Component } from '@angular/core';
+import { ButtonDirective, SANRING_DROPDOWN_MENU_IMPORTS } from '@sanring/ui';
+
+@Component({
+  imports: [ButtonDirective, SANRING_DROPDOWN_MENU_IMPORTS],
+})
+export class ExampleComponent {}`,
   usageMain: `<sanring-dropdown-menu>
   <button sanringBtn sanringDropdownMenuTrigger [menu]="menu.menu">Open menu</button>
 
@@ -126,6 +131,25 @@ export const dropdownMenuPageExamples = {
     <button sanringDropdownMenuItem type="button" value="settings">Settings</button>
   </sanring-dropdown-menu-content>
 </sanring-dropdown-menu>`,
+  usageIndividualImports: `import { Component } from '@angular/core';
+import {
+  ButtonDirective,
+  DropdownMenuComponent,
+  DropdownMenuContentComponent,
+  DropdownMenuItemDirective,
+  DropdownMenuTriggerDirective,
+} from '@sanring/ui';
+
+@Component({
+  imports: [
+    ButtonDirective,
+    DropdownMenuComponent,
+    DropdownMenuTriggerDirective,
+    DropdownMenuContentComponent,
+    DropdownMenuItemDirective,
+  ],
+})
+export class ExampleComponent {}`,
   checkbox: `<sanring-dropdown-menu>
   <button sanringBtn variant="outline" sanringDropdownMenuTrigger [menu]="viewMenu.menu">
     View

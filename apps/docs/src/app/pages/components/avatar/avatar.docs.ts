@@ -35,7 +35,6 @@ export const avatarPage = {
     {
       id: 'example',
       titleKey: 'toc.examples',
-      descriptionKey: 'avatar.examples.description',
       level: 2,
       children: [
         {
@@ -133,11 +132,38 @@ export const avatarPageExamples = {
   />
   <sanring-avatar-fallback>AL</sanring-avatar-fallback>
 </sanring-avatar>`,
-  usageImport: `import { SANRING_AVATAR_IMPORTS } from '@sanring/ui';`,
+  usageImport: `import { Component } from '@angular/core';
+import { SANRING_AVATAR_IMPORTS } from '@sanring/ui';
+
+@Component({
+  imports: [SANRING_AVATAR_IMPORTS],
+})
+export class ExampleComponent {}`,
   usageMain: `<sanring-avatar ariaLabel="Ada Lovelace">
   <img sanringAvatarImage src="https://i.pravatar.cc/96?img=5" alt="Ada Lovelace" />
   <sanring-avatar-fallback>AL</sanring-avatar-fallback>
 </sanring-avatar>`,
+  usageIndividualImports: `import { Component } from '@angular/core';
+import {
+  AvatarBadgeDirective,
+  AvatarComponent,
+  AvatarFallbackComponent,
+  AvatarGroupComponent,
+  AvatarGroupCountComponent,
+  AvatarImageDirective,
+} from '@sanring/ui';
+
+@Component({
+  imports: [
+    AvatarComponent,
+    AvatarImageDirective,
+    AvatarFallbackComponent,
+    AvatarBadgeDirective,
+    AvatarGroupComponent,
+    AvatarGroupCountComponent,
+  ],
+})
+export class ExampleComponent {}`,
   composition: `sanring-avatar-group
 ├── sanring-avatar
 │   ├── img[sanringAvatarImage]

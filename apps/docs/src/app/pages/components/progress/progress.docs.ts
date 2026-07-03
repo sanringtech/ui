@@ -1,4 +1,7 @@
-import { ComponentPageApiRow, ComponentPageDefinition } from '../../../docs-schema/component-page.types';
+import {
+  ComponentPageApiRow,
+  ComponentPageDefinition,
+} from '../../../docs-schema/component-page.types';
 
 export const progressPage = {
   componentId: 'progress',
@@ -26,12 +29,11 @@ export const progressPage = {
     {
       id: 'example',
       titleKey: 'toc.examples',
-      descriptionKey: 'progress.examples.description',
       level: 2,
       children: [
         { id: 'example-shimmer', titleKey: 'progress.demo.shimmer', level: 3 },
-        { id: 'example-shape',   titleKey: 'progress.demo.shape',   level: 3 },
-        { id: 'example-color',   titleKey: 'progress.demo.color',   level: 3 },
+        { id: 'example-shape', titleKey: 'progress.demo.shape', level: 3 },
+        { id: 'example-color', titleKey: 'progress.demo.color', level: 3 },
       ],
     },
     {
@@ -42,13 +44,48 @@ export const progressPage = {
     },
   ],
   apiRows: [
-    { property: 'value',      type: 'number',                               defaultValue: '0',          descriptionKey: 'progress.api.value.description'      },
-    { property: 'max',        type: 'number',                               defaultValue: '100',        descriptionKey: 'progress.api.max.description'        },
-    { property: 'shape',      type: "'rounded' | 'square' | 'trapezoid'",  defaultValue: "'rounded'",  descriptionKey: 'progress.api.shape.description'      },
-    { property: 'shimmer',    type: 'boolean',                              defaultValue: 'false',      descriptionKey: 'progress.api.shimmer.description'    },
-    { property: 'ariaLabel',  type: 'string',                               defaultValue: '—',          descriptionKey: 'progress.api.ariaLabel.description'  },
-    { property: 'barClass',   type: 'string',                               defaultValue: "''",         descriptionKey: 'progress.api.barClass.description'   },
-    { property: 'class',      type: 'string',                               defaultValue: "''",         descriptionKey: 'progress.api.class.description'      },
+    {
+      property: 'value',
+      type: 'number',
+      defaultValue: '0',
+      descriptionKey: 'progress.api.value.description',
+    },
+    {
+      property: 'max',
+      type: 'number',
+      defaultValue: '100',
+      descriptionKey: 'progress.api.max.description',
+    },
+    {
+      property: 'shape',
+      type: "'rounded' | 'square' | 'trapezoid'",
+      defaultValue: "'rounded'",
+      descriptionKey: 'progress.api.shape.description',
+    },
+    {
+      property: 'shimmer',
+      type: 'boolean',
+      defaultValue: 'false',
+      descriptionKey: 'progress.api.shimmer.description',
+    },
+    {
+      property: 'ariaLabel',
+      type: 'string',
+      defaultValue: '—',
+      descriptionKey: 'progress.api.ariaLabel.description',
+    },
+    {
+      property: 'barClass',
+      type: 'string',
+      defaultValue: "''",
+      descriptionKey: 'progress.api.barClass.description',
+    },
+    {
+      property: 'class',
+      type: 'string',
+      defaultValue: "''",
+      descriptionKey: 'progress.api.class.description',
+    },
   ] satisfies readonly ComponentPageApiRow[],
 } as const satisfies ComponentPageDefinition;
 

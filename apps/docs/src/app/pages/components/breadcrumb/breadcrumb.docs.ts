@@ -1,31 +1,73 @@
-import { ComponentPageApiRow, ComponentPageDefinition } from '../../../docs-schema/component-page.types';
+import {
+  ComponentPageApiRow,
+  ComponentPageDefinition,
+} from '../../../docs-schema/component-page.types';
 
 export const breadcrumbPage = {
   componentId: 'breadcrumb',
   titleKey: 'component.breadcrumb',
   descriptionKey: 'breadcrumb.description',
   sections: [
-    { id: 'basic',        titleKey: 'toc.basic',            descriptionKey: 'breadcrumb.examples.basic.description', level: 2 },
-    { id: 'usage',        titleKey: 'toc.usage',            descriptionKey: 'breadcrumb.usage.description',          level: 2 },
-    { id: 'installation', titleKey: 'sidebar.installation',  descriptionKey: 'breadcrumb.installation.description',   level: 2 },
-    { id: 'composition',  titleKey: 'toc.composition',      descriptionKey: 'breadcrumb.composition.description',    level: 2 },
+    {
+      id: 'basic',
+      titleKey: 'toc.basic',
+      descriptionKey: 'breadcrumb.examples.basic.description',
+      level: 2,
+    },
+    {
+      id: 'usage',
+      titleKey: 'toc.usage',
+      descriptionKey: 'breadcrumb.usage.description',
+      level: 2,
+    },
+    {
+      id: 'installation',
+      titleKey: 'sidebar.installation',
+      descriptionKey: 'breadcrumb.installation.description',
+      level: 2,
+    },
+    {
+      id: 'composition',
+      titleKey: 'toc.composition',
+      descriptionKey: 'breadcrumb.composition.description',
+      level: 2,
+    },
     {
       id: 'example',
       titleKey: 'toc.examples',
-      descriptionKey: 'breadcrumb.examples.description',
       level: 2,
       children: [
-        { id: 'example-divider',   titleKey: 'breadcrumb.demo.divider',       level: 3 },
-        { id: 'example-ellipsis',  titleKey: 'breadcrumb.demo.withEllipsis',  level: 3 },
-        { id: 'example-custom',    titleKey: 'breadcrumb.demo.customDivider', level: 3 },
+        { id: 'example-divider', titleKey: 'breadcrumb.demo.divider', level: 3 },
+        { id: 'example-ellipsis', titleKey: 'breadcrumb.demo.withEllipsis', level: 3 },
+        { id: 'example-custom', titleKey: 'breadcrumb.demo.customDivider', level: 3 },
       ],
     },
-    { id: 'api', titleKey: 'toc.apiReference', descriptionKey: 'breadcrumb.api.description', level: 2 },
+    {
+      id: 'api',
+      titleKey: 'toc.apiReference',
+      descriptionKey: 'breadcrumb.api.description',
+      level: 2,
+    },
   ],
   apiRows: [
-    { property: 'type (BreadcrumbDividerComponent)', type: "'chevron' | 'dot'", defaultValue: "'chevron'", descriptionKey: 'breadcrumb.api.type.description' },
-    { property: 'routerLink (BreadcrumbLinkComponent)', type: 'string | unknown[] | null',  defaultValue: 'undefined', descriptionKey: 'breadcrumb.api.routerLink.description' },
-    { property: 'class',  type: 'string', defaultValue: "''", descriptionKey: 'breadcrumb.api.class.description' },
+    {
+      property: 'type (BreadcrumbDividerComponent)',
+      type: "'chevron' | 'dot'",
+      defaultValue: "'chevron'",
+      descriptionKey: 'breadcrumb.api.type.description',
+    },
+    {
+      property: 'routerLink (BreadcrumbLinkComponent)',
+      type: 'string | unknown[] | null',
+      defaultValue: 'undefined',
+      descriptionKey: 'breadcrumb.api.routerLink.description',
+    },
+    {
+      property: 'class',
+      type: 'string',
+      defaultValue: "''",
+      descriptionKey: 'breadcrumb.api.class.description',
+    },
   ] satisfies readonly ComponentPageApiRow[],
 } as const satisfies ComponentPageDefinition;
 
@@ -50,8 +92,13 @@ export const breadcrumbPageExamples = {
   </sanring-breadcrumb-list>
 </sanring-breadcrumb>`,
 
-  usageImport: `import { SANRING_BREADCRUMB_IMPORTS } from '@sanring/ui';`,
+  usageImport: `import { Component } from '@angular/core';
+import { SANRING_BREADCRUMB_IMPORTS } from '@sanring/ui';
 
+@Component({
+  imports: [SANRING_BREADCRUMB_IMPORTS],
+})
+export class ExampleComponent {}`,
   usageMain: `<sanring-breadcrumb>
   <sanring-breadcrumb-list>
     <sanring-breadcrumb-item>
@@ -63,6 +110,29 @@ export const breadcrumbPageExamples = {
     </sanring-breadcrumb-item>
   </sanring-breadcrumb-list>
 </sanring-breadcrumb>`,
+  usageIndividualImports: `import { Component } from '@angular/core';
+import {
+  BreadcrumbComponent,
+  BreadcrumbDividerComponent,
+  BreadcrumbEllipsisComponent,
+  BreadcrumbItemComponent,
+  BreadcrumbLinkComponent,
+  BreadcrumbListComponent,
+  BreadcrumbPageComponent,
+} from '@sanring/ui';
+
+@Component({
+  imports: [
+    BreadcrumbComponent,
+    BreadcrumbListComponent,
+    BreadcrumbItemComponent,
+    BreadcrumbLinkComponent,
+    BreadcrumbPageComponent,
+    BreadcrumbDividerComponent,
+    BreadcrumbEllipsisComponent,
+  ],
+})
+export class ExampleComponent {}`,
 
   composition: `sanring-breadcrumb                  <!-- nav wrapper -->
 └── sanring-breadcrumb-list           <!-- ol list -->
