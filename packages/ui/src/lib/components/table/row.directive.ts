@@ -1,4 +1,4 @@
-import { computed, Directive, input } from '@angular/core';
+import { booleanAttribute, computed, Directive, input } from '@angular/core';
 import { CdkHeaderRowDef, CdkRowDef, CdkFooterRowDef } from '@angular/cdk/table';
 import { cn } from '../../utils';
 
@@ -61,10 +61,14 @@ export class TableHeaderRowDirective {
 @Directive({
   selector: 'tr[cdk-row][sanringRow]',
   standalone: true,
-  host: { '[class]': 'rowClass()' },
+  host: {
+    '[class]': 'rowClass()',
+    '[attr.data-state]': 'selected() ? "selected" : null',
+  },
 })
 export class TableRowDirective {
   readonly class = input<string | undefined>();
+  readonly selected = input(false, { transform: booleanAttribute });
 
   protected readonly rowClass = computed(() =>
     cn(
