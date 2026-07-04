@@ -64,6 +64,7 @@ export class TableHeaderRowDirective {
   host: {
     '[class]': 'rowClass()',
     '[attr.data-state]': 'selected() ? "selected" : null',
+    '[attr.aria-selected]': 'selected() ? "true" : null',
   },
 })
 export class TableRowDirective {

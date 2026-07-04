@@ -932,6 +932,7 @@ export const en = {
     'Install @sanring/ui and import the table primitives with Angular CDK table.',
   'table.demo.sortable': 'Sortable headers',
   'table.demo.empty': 'Empty state',
+  'table.demo.selection': 'Row selection',
   'table.demo.actions': 'Actions menu',
   'table.api.description': 'Directives and components provided by the table primitive set.',
   'table.api.sanringTable.description':

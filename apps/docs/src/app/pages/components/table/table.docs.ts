@@ -33,6 +33,7 @@ export const tablePage = {
       children: [
         { id: 'example-sortable', titleKey: 'table.demo.sortable', level: 3 },
         { id: 'example-empty', titleKey: 'table.demo.empty', level: 3 },
+        { id: 'example-selection', titleKey: 'table.demo.selection', level: 3 },
         { id: 'example-actions', titleKey: 'table.demo.actions', level: 3 },
       ],
     },
@@ -170,6 +171,35 @@ import {
   <tr *sanringNoDataRow>
     <td [attr.colspan]="displayedColumns.length">No invoices found.</td>
   </tr>
+</table>`,
+
+  selection: `<table cdk-table sanringTable [dataSource]="invoices">
+  <ng-container sanringColumnDef="select">
+    <th sanringHeaderCell *sanringHeaderCellDef class="w-12">
+      <sanring-checkbox
+        ariaLabel="Select all invoices"
+        [checked]="selectionState()"
+        (checkedChange)="toggleAll($event)"
+      />
+    </th>
+    <td sanringCell *sanringCellDef="let invoice" class="w-12">
+      <sanring-checkbox
+        [ariaLabel]="'Select invoice ' + invoice.id"
+        [checked]="isSelected(invoice.id)"
+        (checkedChange)="toggleRow(invoice.id, $event)"
+      />
+    </td>
+  </ng-container>
+
+  <!-- invoice/customer/status columns... -->
+
+  <tr cdk-header-row sanringRow *sanringHeaderRowDef="selectionColumns"></tr>
+  <tr
+    cdk-row
+    sanringRow
+    *sanringRowDef="let row; columns: selectionColumns"
+    [selected]="isSelected(row.id)"
+  ></tr>
 </table>`,
 
   actions: `<ng-container sanringColumnDef="actions">

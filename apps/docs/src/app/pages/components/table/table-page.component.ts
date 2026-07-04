@@ -3,6 +3,8 @@ import { Component, computed, inject, signal } from '@angular/core';
 import { LucideEllipsis, LucideFile, LucideSettings, LucideTrash2 } from '@lucide/angular';
 import {
   ButtonDirective,
+  CheckboxComponent,
+  CheckedState,
   SANRING_DROPDOWN_MENU_IMPORTS,
   SortDirective,
   SortHeaderComponent,
@@ -46,6 +48,7 @@ interface InvoiceRow {
   imports: [
     CdkTableModule,
     ButtonDirective,
+    CheckboxComponent,
     SANRING_DROPDOWN_MENU_IMPORTS,
     LucideEllipsis,
     LucideFile,
@@ -225,6 +228,58 @@ interface InvoiceRow {
             </app-component-page-code-previewer>
           </app-component-page-section>
 
+          <app-component-page-section [section]="section('example-selection')">
+            <app-component-page-code-previewer [code]="examples.selection" language="angular-html">
+              <div previewer class="w-full">
+                <sanring-table-container class="rounded-[var(--sanring-radius)] border border-[var(--docs-border)]">
+                  <table cdk-table sanringTable [dataSource]="invoices">
+                    <ng-container sanringColumnDef="select">
+                      <th sanringHeaderCell *sanringHeaderCellDef class="w-12">
+                        <sanring-checkbox
+                          ariaLabel="Select all invoices"
+                          [checked]="selectionState()"
+                          (checkedChange)="toggleAll($event)"
+                        />
+                      </th>
+                      <td sanringCell *sanringCellDef="let invoice" class="w-12">
+                        <sanring-checkbox
+                          [ariaLabel]="'Select invoice ' + invoice.id"
+                          [checked]="isSelected(invoice.id)"
+                          (checkedChange)="toggleRow(invoice.id, $event)"
+                        />
+                      </td>
+                    </ng-container>
+
+                    <ng-container sanringColumnDef="invoice">
+                      <th sanringHeaderCell *sanringHeaderCellDef>Invoice</th>
+                      <td sanringCell *sanringCellDef="let invoice">{{ invoice.id }}</td>
+                    </ng-container>
+
+                    <ng-container sanringColumnDef="customer">
+                      <th sanringHeaderCell *sanringHeaderCellDef>Customer</th>
+                      <td sanringCell *sanringCellDef="let invoice">{{ invoice.customer }}</td>
+                    </ng-container>
+
+                    <ng-container sanringColumnDef="status">
+                      <th sanringHeaderCell *sanringHeaderCellDef>Status</th>
+                      <td sanringCell *sanringCellDef="let invoice">
+                        <span [class]="statusClass(invoice.status)">{{ invoice.status }}</span>
+                      </td>
+                    </ng-container>
+
+                    <tr cdk-header-row sanringRow *sanringHeaderRowDef="selectionColumns"></tr>
+                    <tr
+                      cdk-row
+                      sanringRow
+                      *sanringRowDef="let row; columns: selectionColumns"
+                      [selected]="isSelected(row.id)"
+                    ></tr>
+                  </table>
+                </sanring-table-container>
+              </div>
+            </app-component-page-code-previewer>
+          </app-component-page-section>
+
           <app-component-page-section [section]="section('example-actions')">
             <app-component-page-code-previewer
               [code]="examples.actions"
@@ -313,9 +368,11 @@ export class TablePageComponent {
   protected readonly examples = tablePageExamples;
   protected readonly i18n = inject(I18nService);
   protected readonly displayedColumns = ['invoice', 'customer', 'status', 'amount'];
+  protected readonly selectionColumns = ['select', 'invoice', 'customer', 'status'];
   protected readonly actionColumns = ['invoice', 'customer', 'amount', 'actions'];
   protected readonly emptyRows: InvoiceRow[] = [];
   protected readonly sortState = signal<SortState | null>(null);
+  protected readonly selectedInvoiceIds = signal<ReadonlySet<string>>(new Set(['INV-1001']));
 
   protected readonly invoices: InvoiceRow[] = [
     { id: 'INV-1001', customer: 'Acme Co.', status: 'Paid', amount: 2400 },
@@ -368,6 +425,37 @@ export class TablePageComponent {
     }
 
     return `${base} bg-amber-50 text-amber-700 dark:bg-amber-500/15 dark:text-amber-300`;
+  }
+
+  protected isSelected(id: string): boolean {
+    return this.selectedInvoiceIds().has(id);
+  }
+
+  protected selectionState(): CheckedState {
+    const selectedCount = this.selectedInvoiceIds().size;
+    if (selectedCount === 0) return false;
+    if (selectedCount === this.invoices.length) return true;
+    return 'indeterminate';
+  }
+
+  protected toggleAll(state: CheckedState): void {
+    this.selectedInvoiceIds.set(
+      state === true ? new Set(this.invoices.map((invoice) => invoice.id)) : new Set(),
+    );
+  }
+
+  protected toggleRow(id: string, state: CheckedState): void {
+    this.selectedInvoiceIds.update((current) => {
+      const next = new Set(current);
+
+      if (state === true) {
+        next.add(id);
+      } else {
+        next.delete(id);
+      }
+
+      return next;
+    });
   }
 
   private sortValue(row: InvoiceRow, active: string): string | number {
