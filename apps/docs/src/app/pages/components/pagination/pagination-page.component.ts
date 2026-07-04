@@ -59,7 +59,7 @@ interface OrderRow {
 
             <sanring-paginator
               [pageIndex]="pageIndex()"
-              [pageSize]="pageSize"
+              [pageSize]="pageSize()"
               [length]="orders.length"
               [boundaryCount]="3"
               [siblingCount]="0"
@@ -97,11 +97,55 @@ interface OrderRow {
 
                 <sanring-paginator
                   [pageIndex]="pageIndex()"
-                  [pageSize]="pageSize"
+                  [pageSize]="pageSize()"
                   [length]="orders.length"
                   [boundaryCount]="3"
                   [siblingCount]="0"
                   (pageChange)="onPageChange($event)"
+                />
+              </div>
+            </app-component-page-code-previewer>
+          </app-component-page-section>
+
+          <app-component-page-section [section]="section('example-page-size')">
+            <app-component-page-code-previewer [code]="examples.pageSize" language="angular-html">
+              <div previewer class="grid w-full gap-4">
+                <div class="flex items-center justify-between gap-3 text-sm">
+                  <label for="docs-pagination-page-size" class="text-[var(--docs-muted)]">
+                    {{ i18n.t('pagination.demo.rowsPerPage') }}
+                  </label>
+                  <select
+                    id="docs-pagination-page-size"
+                    class="h-9 rounded-[var(--sanring-radius)] border border-[var(--sanring-border)] bg-[var(--sanring-background)] px-3 text-sm text-[var(--sanring-foreground)] outline-none transition-colors focus-visible:ring-2 focus-visible:ring-[var(--sanring-border-strong)]"
+                    [value]="pageSize()"
+                    (change)="setPageSize(pageSizeSelect.value)"
+                    #pageSizeSelect
+                  >
+                    <option value="4">4</option>
+                    <option value="8">8</option>
+                    <option value="12">12</option>
+                  </select>
+                </div>
+
+                <div class="grid gap-2 rounded-[var(--sanring-radius)] border border-[var(--docs-border)] p-4">
+                  @for (order of pageSizeOrders(); track order.id) {
+                    <div class="flex items-center justify-between gap-4 text-sm">
+                      <div class="min-w-0">
+                        <div class="font-medium text-[var(--sanring-foreground)]">{{ order.id }}</div>
+                        <div class="truncate text-[var(--docs-muted)]">{{ order.customer }}</div>
+                      </div>
+                      <span class="shrink-0 text-xs text-[var(--docs-muted)]">{{ order.status }}</span>
+                    </div>
+                  }
+                </div>
+
+                <sanring-paginator
+                  [pageIndex]="pageSizePageIndex()"
+                  [pageSize]="pageSize()"
+                  [length]="orders.length"
+                  [boundaryCount]="3"
+                  [siblingCount]="0"
+                  (pageChange)="pageSizePageIndex.set($event.pageIndex)"
                 />
               </div>
             </app-component-page-code-previewer>
@@ -144,8 +188,9 @@ export class PaginationPageComponent {
   protected readonly examples = paginationPageExamples;
   protected readonly i18n = inject(I18nService);
 
-  protected readonly pageSize = 4;
+  protected readonly pageSize = signal(4);
   protected readonly pageIndex = signal(0);
+  protected readonly pageSizePageIndex = signal(0);
   protected readonly orders: OrderRow[] = Array.from({ length: 40 }, (_, index) => {
     const customers = [
       'Acme Co.',
@@ -167,12 +212,24 @@ export class PaginationPageComponent {
   });
 
   protected readonly pagedOrders = computed(() => {
-    const start = this.pageIndex() * this.pageSize;
-    return this.orders.slice(start, start + this.pageSize);
+    const pageSize = this.pageSize();
+    const start = this.pageIndex() * pageSize;
+    return this.orders.slice(start, start + pageSize);
+  });
+
+  protected readonly pageSizeOrders = computed(() => {
+    const pageSize = this.pageSize();
+    const start = this.pageSizePageIndex() * pageSize;
+    return this.orders.slice(start, start + pageSize);
   });
 
   protected onPageChange(event: PageEvent): void {
     this.pageIndex.set(event.pageIndex);
+  }
+
+  protected setPageSize(value: string): void {
+    this.pageSize.set(Number(value));
+    this.pageSizePageIndex.set(0);
   }
 
   protected section(id: string) {

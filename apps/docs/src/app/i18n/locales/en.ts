@@ -755,9 +755,11 @@ export const en = {
   'pagination.installation.description':
     'Install @sanring/ui and import PaginatorComponent or the pagination primitive set.',
   'pagination.demo.controlled': 'Controlled paginator',
+  'pagination.demo.pageSize': 'Page size',
   'pagination.demo.primitives': 'Primitive composition',
   'pagination.demo.currentPage': 'Current page',
   'pagination.demo.items': 'items',
+  'pagination.demo.rowsPerPage': 'Rows per page',
   'pagination.api.description':
     'Components, directives, and inputs provided by the pagination primitive set.',
   'pagination.api.paginator.description':

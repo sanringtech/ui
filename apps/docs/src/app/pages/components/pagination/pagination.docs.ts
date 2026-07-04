@@ -32,6 +32,7 @@ export const paginationPage = {
       level: 2,
       children: [
         { id: 'example-controlled', titleKey: 'pagination.demo.controlled', level: 3 },
+        { id: 'example-page-size', titleKey: 'pagination.demo.pageSize', level: 3 },
         { id: 'example-primitives', titleKey: 'pagination.demo.primitives', level: 3 },
       ],
     },
@@ -121,7 +122,7 @@ export const paginationPage = {
 export const paginationPageExamples = {
   basic: `<sanring-paginator
   [pageIndex]="pageIndex()"
-  [pageSize]="pageSize"
+  [pageSize]="pageSize()"
   [length]="orders.length"
   [boundaryCount]="3"
   [siblingCount]="0"
@@ -139,11 +140,34 @@ export const paginationPageExamples = {
 
   controlled: `<sanring-paginator
   [pageIndex]="pageIndex()"
-  [pageSize]="pageSize"
+  [pageSize]="pageSize()"
   [length]="orders.length"
   [boundaryCount]="3"
   [siblingCount]="0"
   (pageChange)="pageIndex.set($event.pageIndex)"
+/>`,
+
+  pageSize: `<div class="flex items-center justify-between gap-3">
+  <label for="page-size">Rows per page</label>
+  <select
+    id="page-size"
+    [value]="pageSize()"
+    (change)="setPageSize(pageSizeSelect.value)"
+    #pageSizeSelect
+  >
+    <option value="4">4</option>
+    <option value="8">8</option>
+    <option value="12">12</option>
+  </select>
+</div>
+
+<sanring-paginator
+  [pageIndex]="pageSizePageIndex()"
+  [pageSize]="pageSize()"
+  [length]="orders.length"
+  [boundaryCount]="3"
+  [siblingCount]="0"
+  (pageChange)="pageSizePageIndex.set($event.pageIndex)"
 />`,
 
   primitives: `<sanring-pagination ariaLabel="Invoice pages">

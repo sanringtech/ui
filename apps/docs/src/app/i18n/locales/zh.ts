@@ -683,9 +683,11 @@ export const zh: Record<TranslationKey, string> = {
   'pagination.installation.description':
     '安裝 @sanring/ui，並匯入 PaginatorComponent 或 pagination primitive set。',
   'pagination.demo.controlled': '受控分頁器',
+  'pagination.demo.pageSize': '每頁筆數',
   'pagination.demo.primitives': 'Primitive 組合',
   'pagination.demo.currentPage': '目前頁數',
   'pagination.demo.items': '筆資料',
+  'pagination.demo.rowsPerPage': '每頁筆數',
   'pagination.api.description':
     'pagination primitive set 提供的 components、directives 與 inputs。',
   'pagination.api.paginator.description':
