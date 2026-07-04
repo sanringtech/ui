@@ -46,6 +46,7 @@ export const en = {
   'component.input': 'Input',
   'component.label': 'Label',
   'component.link': 'Link',
+  'component.pagination': 'Pagination',
   'component.select': 'Select',
   'component.scrollArea': 'Scroll Area',
   'component.skeleton': 'Skeleton',
@@ -744,6 +745,40 @@ export const en = {
   'progress.api.shape.description': "Track shape: 'rounded' (pill, default), 'square' (flat), or 'trapezoid' (angled).",
   'progress.api.shimmer.description': 'Enables a sweeping shimmer animation on the fill bar to signal active progress.',
   'progress.api.ariaLabel.description': 'Accessible label for the progressbar role. Recommended when no visible label is present.',
+
+  'pagination.description':
+    'Pagination primitives and a composed paginator for navigating large result sets.',
+  'pagination.examples.basic.description':
+    'A controlled paginator attached to a small list preview.',
+  'pagination.usage.description':
+    'Use PaginatorComponent for the common case, or compose the low-level pagination primitives when you need custom layout.',
+  'pagination.installation.description':
+    'Install @sanring/ui and import PaginatorComponent or the pagination primitive set.',
+  'pagination.demo.controlled': 'Controlled paginator',
+  'pagination.demo.primitives': 'Primitive composition',
+  'pagination.demo.currentPage': 'Current page',
+  'pagination.demo.items': 'items',
+  'pagination.api.description':
+    'Components, directives, and inputs provided by the pagination primitive set.',
+  'pagination.api.paginator.description':
+    'Composed paginator with range label, page numbers, ellipsis, and navigation controls.',
+  'pagination.api.pageIndex.description': 'Zero-based active page index.',
+  'pagination.api.pageSize.description': 'Number of items represented by each page.',
+  'pagination.api.length.description': 'Total number of items across all pages.',
+  'pagination.api.siblingCount.description':
+    'Number of neighboring pages rendered around the active page before ellipsis is inserted.',
+  'pagination.api.boundaryCount.description':
+    'Number of pages always rendered at the beginning and end of the page range.',
+  'pagination.api.showFirstLast.description':
+    'Shows or hides first-page and last-page navigation controls.',
+  'pagination.api.pageChange.description': 'Emits when navigation requests a different page.',
+  'pagination.api.pagination.description':
+    'Root navigation component that provides layout and aria-label wiring.',
+  'pagination.api.list.description': 'Flex list wrapper for pagination items and nav controls.',
+  'pagination.api.item.description':
+    'Styles page number buttons or links, including active and disabled states.',
+  'pagination.api.nav.description':
+    'Styles previous, next, first, or last controls while preserving button/link semantics.',
 
   'component.spinner': 'Spinner',
   'spinner.description': 'A lightweight animated loading indicator with three icon variants, four sizes, and full colour control via text utilities.',

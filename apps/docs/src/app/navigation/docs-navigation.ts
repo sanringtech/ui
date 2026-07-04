@@ -26,6 +26,7 @@ export type DocsComponentId =
   | 'input'
   | 'label'
   | 'link'
+  | 'pagination'
   | 'popover'
   | 'progress'
   | 'radio'
@@ -158,6 +159,12 @@ export const docsComponentItems: DocsComponentNavItem[] = [
     id: 'link',
     labelKey: 'component.link',
     path: '/components/link',
+    active: true,
+  },
+  {
+    id: 'pagination',
+    labelKey: 'component.pagination',
+    path: '/components/pagination',
     active: true,
   },
   {

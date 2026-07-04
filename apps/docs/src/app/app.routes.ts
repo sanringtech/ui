@@ -160,6 +160,13 @@ export const routes: Routes = [
                   ),
               },
               {
+                path: 'pagination',
+                loadComponent: () =>
+                  import('./pages/components/pagination/pagination-page.component').then(
+                    (m) => m.PaginationPageComponent,
+                  ),
+              },
+              {
                 path: 'popover',
                 loadComponent: () =>
                   import('./pages/components/popover/popover-page.component').then(

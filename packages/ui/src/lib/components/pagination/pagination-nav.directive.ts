@@ -1,31 +1,17 @@
-import {
-  Directive,
-  ElementRef,
-  HostListener,
-  booleanAttribute,
-  computed,
-  inject,
-  input,
-} from '@angular/core';
+import { Directive, computed, input } from '@angular/core';
 import { cn } from '../../utils';
+import { DisableableNavDirective } from './disableable-nav.directive';
 
 @Directive({
   selector: 'button[sanringPaginationNav], a[sanringPaginationNav]',
   standalone: true,
+  hostDirectives: [{ directive: DisableableNavDirective, inputs: ['disabled'] }],
   host: {
     '[class]': 'navClass()',
-    '[attr.aria-disabled]': "disabled() ? 'true' : null",
-    '[attr.disabled]': 'disabled() && !isAnchor ? true : null',
-    '[attr.tabindex]': 'disabled() && isAnchor ? -1 : null',
   },
 })
 export class PaginationNavDirective {
-  private readonly elementRef = inject<ElementRef<HTMLElement>>(ElementRef);
-
   readonly class = input<string | undefined>();
-  readonly disabled = input(false, { transform: booleanAttribute });
-
-  protected readonly isAnchor = this.elementRef.nativeElement.tagName.toLowerCase() === 'a';
 
   protected readonly navClass = computed(() =>
     cn(
@@ -35,12 +21,4 @@ export class PaginationNavDirective {
       this.class(),
     ),
   );
-
-  @HostListener('click', ['$event'])
-  protected handleClick(event: Event): void {
-    if (!this.disabled()) return;
-
-    event.preventDefault();
-    event.stopImmediatePropagation();
-  }
 }

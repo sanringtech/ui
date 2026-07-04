@@ -1,3 +1,4 @@
+export * from './disableable-nav.directive';
 export * from './page-size-select.component';
 export * from './paginator.component';
 export * from './pagination.component';

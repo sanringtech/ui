@@ -111,6 +111,7 @@ export class PaginatorComponent {
   readonly pageIndex = input(0);
   readonly pageSize = input(10);
   readonly length = input(0);
+  readonly boundaryCount = input(1);
   readonly siblingCount = input(1);
   readonly showFirstLast = input(true);
   readonly ariaLabel = input('Pagination');
@@ -148,27 +149,40 @@ export class PaginatorComponent {
   protected readonly pageTokens = computed<PageToken[]>(() => {
     const pageCount = this.pageCount();
     const current = this.clampPageIndex(this.pageIndex());
+    const boundaryCount = Math.max(1, this.boundaryCount());
     const siblingCount = Math.max(0, this.siblingCount());
-    const maxVisibleWithoutEllipsis = siblingCount * 2 + 5;
+    const visiblePages = new Set<number>();
 
-    if (pageCount <= maxVisibleWithoutEllipsis) {
+    if (pageCount <= boundaryCount * 2 + siblingCount * 2 + 1) {
       return Array.from({ length: pageCount }, (_, index) => index);
     }
 
-    const left = Math.max(current - siblingCount, 1);
-    const right = Math.min(current + siblingCount, pageCount - 2);
-    const pages: PageToken[] = [0];
-
-    if (left > 1) pages.push('ellipsis-start');
-
-    for (let page = left; page <= right; page++) {
-      pages.push(page);
+    for (let page = 0; page < Math.min(boundaryCount, pageCount); page++) {
+      visiblePages.add(page);
     }
 
-    if (right < pageCount - 2) pages.push('ellipsis-end');
+    for (let page = Math.max(pageCount - boundaryCount, 0); page < pageCount; page++) {
+      visiblePages.add(page);
+    }
 
-    pages.push(pageCount - 1);
-    return pages;
+    for (
+      let page = Math.max(current - siblingCount, 0);
+      page <= Math.min(current + siblingCount, pageCount - 1);
+      page++
+    ) {
+      visiblePages.add(page);
+    }
+
+    return Array.from(visiblePages)
+      .sort((a, b) => a - b)
+      .reduce<PageToken[]>((tokens, page, index, pages) => {
+        if (index > 0 && page - pages[index - 1] > 1) {
+          tokens.push(tokens.includes('ellipsis-start') ? 'ellipsis-end' : 'ellipsis-start');
+        }
+
+        tokens.push(page);
+        return tokens;
+      }, []);
   });
 
   protected isPageNumber(token: PageToken): token is number {
