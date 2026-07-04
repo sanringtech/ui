@@ -1,4 +1,4 @@
-import { Directive } from '@angular/core';
+import { Directive, computed, inject } from '@angular/core';
 import {
   CdkHeaderCellDef,
   CdkCellDef,
@@ -7,6 +7,8 @@ import {
   CdkCell,
   CdkFooterCell, // 實體三護法（負責 cdk 內部格子插槽的連動）
 } from '@angular/cdk/table';
+import { TableColumnDefDirective } from './column-def.directive';
+import { TableDirective } from './table.directive';
 
 // ==========================================
 // 📦 模具陣營（專門貼在 ng-template 模具上）
@@ -44,9 +46,22 @@ export class TableFooterCellDefDirective {}
   host: {
     class:
       'h-12 px-4 text-left align-middle font-medium text-[var(--sanring-muted)] [&:has([role=checkbox])]:pr-0',
+    '[style.width]': 'widthStyle()',
   },
 })
-export class TableHeaderCellDirective {}
+export class TableHeaderCellDirective {
+  // table-layout: fixed 只需要抓「第一列」cell 的寬度，所以只有 header cell 需要設 width。
+  private readonly table = inject(TableDirective, { optional: true });
+  private readonly column = inject(TableColumnDefDirective, { optional: true });
+
+  protected readonly widthStyle = computed<string | null>(() => {
+    const fixedWidth = this.column?.width();
+    if (fixedWidth) return fixedWidth;
+
+    const percent = this.column ? (this.table?.widthPercentFor(this.column.name) ?? null) : null;
+    return percent != null ? `${percent}%` : null;
+  });
+}
 
 @Directive({
   selector: 'td[sanringCell]',

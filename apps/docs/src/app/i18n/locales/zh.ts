@@ -858,6 +858,8 @@ export const zh: Record<TranslationKey, string> = {
   'table.installation.description':
     '安裝 @sanring/ui，並與 Angular CDK table 一起匯入 table primitives。',
   'table.demo.sortable': '可排序表頭',
+  'table.demo.columnSizing': '欄位比例',
+  'table.demo.sticky': 'Sticky 欄位',
   'table.demo.empty': '空資料狀態',
   'table.demo.selection': '列選取',
   'table.demo.actions': '操作選單',

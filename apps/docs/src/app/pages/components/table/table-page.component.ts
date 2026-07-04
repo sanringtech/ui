@@ -185,6 +185,163 @@ interface InvoiceRow {
             </app-component-page-code-previewer>
           </app-component-page-section>
 
+          <app-component-page-section [section]="section('example-column-sizing')">
+            <app-component-page-code-previewer
+              [code]="examples.columnSizing"
+              language="angular-html"
+            >
+              <div previewer class="w-full">
+                <sanring-table-container class="rounded-[var(--sanring-radius)] border border-[var(--docs-border)]">
+                  <table
+                    cdk-table
+                    sanringTable
+                    [dataSource]="invoices"
+                    class="table-fixed [&_.cdk-column-select]:w-12 [&_.cdk-column-invoice]:w-28 [&_.cdk-column-customer]:w-[45%] [&_.cdk-column-amount]:w-32 [&_.cdk-column-actions]:w-14"
+                  >
+                    <ng-container sanringColumnDef="select">
+                      <th sanringHeaderCell *sanringHeaderCellDef></th>
+                      <td sanringCell *sanringCellDef="let invoice">
+                        <sanring-checkbox [ariaLabel]="'Select invoice ' + invoice.id" />
+                      </td>
+                    </ng-container>
+
+                    <ng-container sanringColumnDef="invoice">
+                      <th sanringHeaderCell *sanringHeaderCellDef>Invoice</th>
+                      <td sanringCell *sanringCellDef="let invoice" class="truncate">
+                        {{ invoice.id }}
+                      </td>
+                    </ng-container>
+
+                    <ng-container sanringColumnDef="customer">
+                      <th sanringHeaderCell *sanringHeaderCellDef>Customer</th>
+                      <td sanringCell *sanringCellDef="let invoice" class="truncate">
+                        {{ invoice.customer }}
+                      </td>
+                    </ng-container>
+
+                    <ng-container sanringColumnDef="amount">
+                      <th sanringHeaderCell *sanringHeaderCellDef class="text-right">Amount</th>
+                      <td sanringCell *sanringCellDef="let invoice" class="text-right tabular-nums">
+                        {{ formatAmount(invoice.amount) }}
+                      </td>
+                    </ng-container>
+
+                    <ng-container sanringColumnDef="actions">
+                      <th sanringHeaderCell *sanringHeaderCellDef class="text-right">Actions</th>
+                      <td sanringCell *sanringCellDef="let invoice" class="text-right">
+                        <button sanringBtn variant="ghost" size="icon" aria-label="Open actions">
+                          <svg lucideEllipsis class="size-4"></svg>
+                        </button>
+                      </td>
+                    </ng-container>
+
+                    <tr cdk-header-row sanringRow *sanringHeaderRowDef="sizingColumns"></tr>
+                    <tr cdk-row sanringRow *sanringRowDef="let row; columns: sizingColumns"></tr>
+                  </table>
+                </sanring-table-container>
+              </div>
+            </app-component-page-code-previewer>
+          </app-component-page-section>
+
+          <app-component-page-section [section]="section('example-sticky')">
+            <app-component-page-code-previewer [code]="examples.sticky" language="angular-html">
+              <div previewer class="grid w-full gap-4">
+                <sanring-table-container class="max-w-full rounded-[var(--sanring-radius)] border border-[var(--docs-border)]">
+                  <table cdk-table sanringTable [dataSource]="invoices" class="min-w-[760px]">
+                    <ng-container sanringColumnDef="invoice" sticky>
+                      <th
+                        sanringHeaderCell
+                        *sanringHeaderCellDef
+                        class="bg-[var(--sanring-background)] shadow-[1px_0_0_var(--sanring-border)]"
+                      >
+                        Invoice
+                      </th>
+                      <td
+                        sanringCell
+                        *sanringCellDef="let invoice"
+                        class="bg-[var(--sanring-background)] shadow-[1px_0_0_var(--sanring-border)]"
+                      >
+                        {{ invoice.id }}
+                      </td>
+                    </ng-container>
+
+                    <ng-container sanringColumnDef="customer">
+                      <th sanringHeaderCell *sanringHeaderCellDef>Customer</th>
+                      <td sanringCell *sanringCellDef="let invoice">{{ invoice.customer }}</td>
+                    </ng-container>
+
+                    <ng-container sanringColumnDef="status">
+                      <th sanringHeaderCell *sanringHeaderCellDef>Status</th>
+                      <td sanringCell *sanringCellDef="let invoice">
+                        <span [class]="statusClass(invoice.status)">{{ invoice.status }}</span>
+                      </td>
+                    </ng-container>
+
+                    <ng-container sanringColumnDef="amount">
+                      <th sanringHeaderCell *sanringHeaderCellDef class="text-right">Amount</th>
+                      <td sanringCell *sanringCellDef="let invoice" class="text-right tabular-nums">
+                        {{ formatAmount(invoice.amount) }}
+                      </td>
+                    </ng-container>
+
+                    <tr cdk-header-row sanringRow *sanringHeaderRowDef="stickyStartColumns"></tr>
+                    <tr cdk-row sanringRow *sanringRowDef="let row; columns: stickyStartColumns"></tr>
+                  </table>
+                </sanring-table-container>
+
+                <sanring-table-container class="max-w-full rounded-[var(--sanring-radius)] border border-[var(--docs-border)]">
+                  <table cdk-table sanringTable [dataSource]="invoices" class="min-w-[820px]">
+                    <ng-container sanringColumnDef="invoice">
+                      <th sanringHeaderCell *sanringHeaderCellDef>Invoice</th>
+                      <td sanringCell *sanringCellDef="let invoice">{{ invoice.id }}</td>
+                    </ng-container>
+
+                    <ng-container sanringColumnDef="customer">
+                      <th sanringHeaderCell *sanringHeaderCellDef>Customer</th>
+                      <td sanringCell *sanringCellDef="let invoice">{{ invoice.customer }}</td>
+                    </ng-container>
+
+                    <ng-container sanringColumnDef="status">
+                      <th sanringHeaderCell *sanringHeaderCellDef>Status</th>
+                      <td sanringCell *sanringCellDef="let invoice">
+                        <span [class]="statusClass(invoice.status)">{{ invoice.status }}</span>
+                      </td>
+                    </ng-container>
+
+                    <ng-container sanringColumnDef="amount">
+                      <th sanringHeaderCell *sanringHeaderCellDef class="text-right">Amount</th>
+                      <td sanringCell *sanringCellDef="let invoice" class="text-right tabular-nums">
+                        {{ formatAmount(invoice.amount) }}
+                      </td>
+                    </ng-container>
+
+                    <ng-container sanringColumnDef="actions" stickyEnd>
+                      <th
+                        sanringHeaderCell
+                        *sanringHeaderCellDef
+                        class="bg-[var(--sanring-background)] text-right shadow-[-1px_0_0_var(--sanring-border)]"
+                      >
+                        Actions
+                      </th>
+                      <td
+                        sanringCell
+                        *sanringCellDef="let invoice"
+                        class="bg-[var(--sanring-background)] text-right shadow-[-1px_0_0_var(--sanring-border)]"
+                      >
+                        <button sanringBtn variant="ghost" size="icon" aria-label="Open actions">
+                          <svg lucideEllipsis class="size-4"></svg>
+                        </button>
+                      </td>
+                    </ng-container>
+
+                    <tr cdk-header-row sanringRow *sanringHeaderRowDef="stickyEndColumns"></tr>
+                    <tr cdk-row sanringRow *sanringRowDef="let row; columns: stickyEndColumns"></tr>
+                  </table>
+                </sanring-table-container>
+              </div>
+            </app-component-page-code-previewer>
+          </app-component-page-section>
+
           <app-component-page-section [section]="section('example-empty')">
             <app-component-page-code-previewer [code]="examples.empty" language="angular-html">
               <div previewer class="w-full">
@@ -368,6 +525,9 @@ export class TablePageComponent {
   protected readonly examples = tablePageExamples;
   protected readonly i18n = inject(I18nService);
   protected readonly displayedColumns = ['invoice', 'customer', 'status', 'amount'];
+  protected readonly sizingColumns = ['select', 'invoice', 'customer', 'amount', 'actions'];
+  protected readonly stickyStartColumns = ['invoice', 'customer', 'status', 'amount'];
+  protected readonly stickyEndColumns = ['invoice', 'customer', 'status', 'amount', 'actions'];
   protected readonly selectionColumns = ['select', 'invoice', 'customer', 'status'];
   protected readonly actionColumns = ['invoice', 'customer', 'amount', 'actions'];
   protected readonly emptyRows: InvoiceRow[] = [];
