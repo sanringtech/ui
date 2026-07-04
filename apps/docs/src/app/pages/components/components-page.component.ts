@@ -11,7 +11,9 @@ import { docsComponentItems, DocsComponentNavItem } from '../../navigation/docs-
   template: `
     <app-component-page [sections]="sections">
       <header class="border-b border-[var(--docs-border)] pb-10">
-        <h1 class="m-0 text-[34px] font-semibold leading-tight tracking-normal text-[var(--docs-fg)]">
+        <h1
+          class="m-0 text-[34px] font-semibold leading-tight tracking-normal text-[var(--docs-fg)]"
+        >
           {{ i18n.t('nav.components') }}
         </h1>
         <p class="mb-0 mt-4 max-w-[620px] text-base leading-[1.7] text-[var(--docs-muted)]">
@@ -24,7 +26,7 @@ import { docsComponentItems, DocsComponentNavItem } from '../../navigation/docs-
           <div class="mb-5">
             <h2
               id="updated-components-title"
-              class="m-0 text-xl font-semibold leading-tight text-[var(--docs-fg)]"
+              class="m-0 text-[28px] font-semibold leading-tight tracking-normal text-[var(--docs-fg)]"
             >
               {{ i18n.t('components.updatedTitle') }}
             </h2>
@@ -58,7 +60,7 @@ import { docsComponentItems, DocsComponentNavItem } from '../../navigation/docs-
         <section id="all-components" aria-labelledby="all-components-title">
           <h2
             id="all-components-title"
-            class="m-0 mb-5 text-xl font-semibold leading-tight text-[var(--docs-fg)]"
+            class="m-0 mb-5 text-[28px] font-semibold leading-tight tracking-normal text-[var(--docs-fg)]"
           >
             {{ i18n.t('components.allTitle') }}
           </h2>
