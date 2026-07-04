@@ -169,37 +169,32 @@ import {
 </table>`,
 
   columnSizing: `<sanring-table-container>
-  <table
-    cdk-table
-    sanringTable
-    [dataSource]="invoices"
-    class="table-fixed [&_.cdk-column-select]:w-12 [&_.cdk-column-invoice]:w-28 [&_.cdk-column-customer]:w-[45%] [&_.cdk-column-amount]:w-32 [&_.cdk-column-actions]:w-14"
-  >
-    <ng-container sanringColumnDef="select">
+  <table cdk-table sanringTable [dataSource]="invoices">
+    <ng-container sanringColumnDef="select" width="48px">
       <th sanringHeaderCell *sanringHeaderCellDef></th>
       <td sanringCell *sanringCellDef="let invoice">
         <sanring-checkbox [ariaLabel]="'Select invoice ' + invoice.id" />
       </td>
     </ng-container>
 
-    <ng-container sanringColumnDef="invoice">
+    <ng-container sanringColumnDef="invoice" [ratio]="1">
       <th sanringHeaderCell *sanringHeaderCellDef>Invoice</th>
       <td sanringCell *sanringCellDef="let invoice" class="truncate">{{ invoice.id }}</td>
     </ng-container>
 
-    <ng-container sanringColumnDef="customer">
+    <ng-container sanringColumnDef="customer" [ratio]="2">
       <th sanringHeaderCell *sanringHeaderCellDef>Customer</th>
       <td sanringCell *sanringCellDef="let invoice" class="truncate">{{ invoice.customer }}</td>
     </ng-container>
 
-    <ng-container sanringColumnDef="amount">
+    <ng-container sanringColumnDef="amount" [ratio]="1">
       <th sanringHeaderCell *sanringHeaderCellDef class="text-right">Amount</th>
       <td sanringCell *sanringCellDef="let invoice" class="text-right tabular-nums">
         {{ invoice.amount }}
       </td>
     </ng-container>
 
-    <ng-container sanringColumnDef="actions">
+    <ng-container sanringColumnDef="actions" width="56px">
       <th sanringHeaderCell *sanringHeaderCellDef class="text-right">Actions</th>
       <td sanringCell *sanringCellDef="let invoice" class="text-right">
         <button sanringBtn variant="ghost" size="icon" aria-label="Open actions">
