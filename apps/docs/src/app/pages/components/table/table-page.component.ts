@@ -5,6 +5,7 @@ import {
   ButtonDirective,
   CheckboxComponent,
   CheckedState,
+  PaginatorComponent,
   SANRING_DROPDOWN_MENU_IMPORTS,
   SortDirective,
   SortHeaderComponent,
@@ -62,6 +63,7 @@ interface InvoiceRow {
     ComponentPageInstallationComponent,
     ComponentPageSectionComponent,
     ComponentPageUsageImportsComponent,
+    PaginatorComponent,
     SortDirective,
     SortHeaderComponent,
     TableCellDefDirective,
@@ -506,6 +508,65 @@ interface InvoiceRow {
               </div>
             </app-component-page-code-previewer>
           </app-component-page-section>
+
+          <app-component-page-section [section]="section('example-pagination')">
+            <app-component-page-code-previewer [code]="examples.pagination" language="angular-html">
+              <div previewer class="grid w-full gap-4">
+                <sanring-table-container class="rounded-[var(--sanring-radius)] border border-[var(--docs-border)]">
+                  <table cdk-table sanringTable [dataSource]="pagedInvoices()">
+                    <ng-container sanringColumnDef="select">
+                      <th sanringHeaderCell *sanringHeaderCellDef class="w-12">
+                        <sanring-checkbox
+                          ariaLabel="Select all invoices"
+                          [checked]="paginationSelectionState()"
+                          (checkedChange)="togglePaginationAll($event)"
+                        />
+                      </th>
+                      <td sanringCell *sanringCellDef="let invoice" class="w-12">
+                        <sanring-checkbox
+                          [ariaLabel]="'Select invoice ' + invoice.id"
+                          [checked]="isPaginationSelected(invoice.id)"
+                          (checkedChange)="togglePaginationRow(invoice.id, $event)"
+                        />
+                      </td>
+                    </ng-container>
+
+                    <ng-container sanringColumnDef="invoice">
+                      <th sanringHeaderCell *sanringHeaderCellDef>Invoice</th>
+                      <td sanringCell *sanringCellDef="let invoice">{{ invoice.id }}</td>
+                    </ng-container>
+
+                    <ng-container sanringColumnDef="customer">
+                      <th sanringHeaderCell *sanringHeaderCellDef>Customer</th>
+                      <td sanringCell *sanringCellDef="let invoice">{{ invoice.customer }}</td>
+                    </ng-container>
+
+                    <ng-container sanringColumnDef="amount">
+                      <th sanringHeaderCell *sanringHeaderCellDef class="text-right">Amount</th>
+                      <td sanringCell *sanringCellDef="let invoice" class="text-right tabular-nums">
+                        {{ formatAmount(invoice.amount) }}
+                      </td>
+                    </ng-container>
+
+                    <tr cdk-header-row sanringRow *sanringHeaderRowDef="paginationColumns"></tr>
+                    <tr
+                      cdk-row
+                      sanringRow
+                      *sanringRowDef="let row; columns: paginationColumns"
+                      [selected]="isPaginationSelected(row.id)"
+                    ></tr>
+                  </table>
+                </sanring-table-container>
+
+                <sanring-paginator
+                  [pageIndex]="pageIndex()"
+                  [pageSize]="pageSize"
+                  [length]="paginationInvoices.length"
+                  (pageChange)="pageIndex.set($event.pageIndex)"
+                />
+              </div>
+            </app-component-page-code-previewer>
+          </app-component-page-section>
         </div>
       </app-component-page-section>
 
@@ -525,9 +586,13 @@ export class TablePageComponent {
   protected readonly stickyEndColumns = ['invoice', 'customer', 'status', 'amount', 'actions'];
   protected readonly selectionColumns = ['select', 'invoice', 'customer', 'status'];
   protected readonly actionColumns = ['invoice', 'customer', 'amount', 'actions'];
+  protected readonly paginationColumns = ['select', 'invoice', 'customer', 'amount'];
   protected readonly emptyRows: InvoiceRow[] = [];
   protected readonly sortState = signal<SortState | null>(null);
   protected readonly selectedInvoiceIds = signal<ReadonlySet<string>>(new Set(['INV-1001']));
+  protected readonly selectedPaginationInvoiceIds = signal<ReadonlySet<string>>(new Set());
+  protected readonly pageIndex = signal(0);
+  protected readonly pageSize = 5;
 
   protected readonly invoices: InvoiceRow[] = [
     { id: 'INV-1001', customer: 'Acme Co.', status: 'Paid', amount: 2400 },
@@ -535,6 +600,27 @@ export class TablePageComponent {
     { id: 'INV-1003', customer: 'Orbit Studio', status: 'Overdue', amount: 860 },
     { id: 'INV-1004', customer: 'Blue Pine', status: 'Paid', amount: 3420 },
   ];
+
+  protected readonly paginationInvoices: InvoiceRow[] = Array.from({ length: 32 }, (_, index) => {
+    const customers = [
+      'Acme Co.',
+      'Northstar Labs',
+      'Orbit Studio',
+      'Blue Pine',
+      'Umbrella Supply',
+      'Stark Industries',
+      'Wayne Foundation',
+      'Wonka Factory',
+    ];
+    const statuses: InvoiceRow['status'][] = ['Paid', 'Pending', 'Overdue'];
+
+    return {
+      id: `INV-${2001 + index}`,
+      customer: customers[index % customers.length],
+      status: statuses[index % statuses.length],
+      amount: 400 + ((index * 137) % 3600),
+    };
+  });
 
   protected readonly sortedInvoices = computed(() => {
     const sort = this.sortState();
@@ -553,6 +639,11 @@ export class TablePageComponent {
 
       return String(left).localeCompare(String(right)) * direction;
     });
+  });
+
+  protected readonly pagedInvoices = computed(() => {
+    const start = this.pageIndex() * this.pageSize;
+    return this.paginationInvoices.slice(start, start + this.pageSize);
   });
 
   protected section(id: string) {
@@ -601,6 +692,37 @@ export class TablePageComponent {
 
   protected toggleRow(id: string, state: CheckedState): void {
     this.selectedInvoiceIds.update((current) => {
+      const next = new Set(current);
+
+      if (state === true) {
+        next.add(id);
+      } else {
+        next.delete(id);
+      }
+
+      return next;
+    });
+  }
+
+  protected isPaginationSelected(id: string): boolean {
+    return this.selectedPaginationInvoiceIds().has(id);
+  }
+
+  protected paginationSelectionState(): CheckedState {
+    const selectedCount = this.selectedPaginationInvoiceIds().size;
+    if (selectedCount === 0) return false;
+    if (selectedCount === this.paginationInvoices.length) return true;
+    return 'indeterminate';
+  }
+
+  protected togglePaginationAll(state: CheckedState): void {
+    this.selectedPaginationInvoiceIds.set(
+      state === true ? new Set(this.paginationInvoices.map((invoice) => invoice.id)) : new Set(),
+    );
+  }
+
+  protected togglePaginationRow(id: string, state: CheckedState): void {
+    this.selectedPaginationInvoiceIds.update((current) => {
       const next = new Set(current);
 
       if (state === true) {

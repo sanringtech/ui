@@ -973,6 +973,7 @@ export const en = {
   'table.demo.empty': 'Empty state',
   'table.demo.selection': 'Row selection',
   'table.demo.actions': 'Actions menu',
+  'table.demo.pagination': 'With pagination',
   'table.api.description': 'Directives and components provided by the table primitive set.',
   'table.api.sanringTable.description':
     'Applies Sanring table sizing, typography, and reset classes to an Angular CDK table.',

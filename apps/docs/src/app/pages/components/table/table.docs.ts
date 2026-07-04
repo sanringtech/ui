@@ -37,6 +37,7 @@ export const tablePage = {
         { id: 'example-empty', titleKey: 'table.demo.empty', level: 3 },
         { id: 'example-selection', titleKey: 'table.demo.selection', level: 3 },
         { id: 'example-actions', titleKey: 'table.demo.actions', level: 3 },
+        { id: 'example-pagination', titleKey: 'table.demo.pagination', level: 3 },
       ],
     },
     {
@@ -327,4 +328,58 @@ import {
     </sanring-dropdown-menu>
   </td>
 </ng-container>`,
+
+  pagination: `<sanring-table-container>
+  <table cdk-table sanringTable [dataSource]="pagedInvoices()">
+    <ng-container sanringColumnDef="select">
+      <th sanringHeaderCell *sanringHeaderCellDef class="w-12">
+        <sanring-checkbox
+          ariaLabel="Select all invoices"
+          [checked]="paginationSelectionState()"
+          (checkedChange)="togglePaginationAll($event)"
+        />
+      </th>
+      <td sanringCell *sanringCellDef="let invoice" class="w-12">
+        <sanring-checkbox
+          [ariaLabel]="'Select invoice ' + invoice.id"
+          [checked]="isPaginationSelected(invoice.id)"
+          (checkedChange)="togglePaginationRow(invoice.id, $event)"
+        />
+      </td>
+    </ng-container>
+
+    <ng-container sanringColumnDef="invoice">
+      <th sanringHeaderCell *sanringHeaderCellDef>Invoice</th>
+      <td sanringCell *sanringCellDef="let invoice">{{ invoice.id }}</td>
+    </ng-container>
+
+    <ng-container sanringColumnDef="customer">
+      <th sanringHeaderCell *sanringHeaderCellDef>Customer</th>
+      <td sanringCell *sanringCellDef="let invoice">{{ invoice.customer }}</td>
+    </ng-container>
+
+    <ng-container sanringColumnDef="amount">
+      <th sanringHeaderCell *sanringHeaderCellDef class="text-right">Amount</th>
+      <td sanringCell *sanringCellDef="let invoice" class="text-right tabular-nums">
+        {{ invoice.amount }}
+      </td>
+    </ng-container>
+
+    <tr cdk-header-row sanringRow *sanringHeaderRowDef="paginationColumns"></tr>
+    <tr
+      cdk-row
+      sanringRow
+      *sanringRowDef="let row; columns: paginationColumns"
+      [selected]="isPaginationSelected(row.id)"
+    ></tr>
+  </table>
+</sanring-table-container>
+
+<!-- table 跟 paginator 是各自獨立的元件，靠使用端自己切資料串起來 -->
+<sanring-paginator
+  [pageIndex]="pageIndex()"
+  [pageSize]="pageSize"
+  [length]="paginationInvoices.length"
+  (pageChange)="pageIndex.set($event.pageIndex)"
+/>`,
 } as const;

@@ -900,6 +900,7 @@ export const zh: Record<TranslationKey, string> = {
   'table.demo.empty': '空資料狀態',
   'table.demo.selection': '列選取',
   'table.demo.actions': '操作選單',
+  'table.demo.pagination': '搭配分頁器',
   'table.api.description': 'table primitive set 提供的 directives 與 components。',
   'table.api.sanringTable.description':
     '將 Sanring 的尺寸、字體與 reset 樣式套用到 Angular CDK table。',
