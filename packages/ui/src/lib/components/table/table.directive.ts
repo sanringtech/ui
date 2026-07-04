@@ -2,8 +2,9 @@ import { Directive, computed, input } from '@angular/core';
 import { cn } from '../../utils';
 
 @Directive({
-  // 💡 優化 1：放寬 Selector，讓不習慣寫原生 <table> 標籤的人也能用
-  selector: 'table[cdk-table][sanringTable], [cdk-table][sanringTable]',
+  // 只支援原生 <table cdk-table> 模式：cell/row directive 目前都只匹配 th/td/tr，
+  // 沒有對應 CDK flex-layout（<cdk-table> 自訂標籤）的平行版本，selector 加寬也不會生效。
+  selector: 'table[cdk-table][sanringTable]',
   standalone: true,
   host: {
     '[class]': 'tableClass()',

@@ -1,4 +1,11 @@
-import { ChangeDetectionStrategy, Component, computed, inject, input } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  booleanAttribute,
+  computed,
+  inject,
+  input,
+} from '@angular/core';
 import { LucideChevronDown, LucideChevronUp, LucideChevronsUpDown } from '@lucide/angular';
 import { cn } from '../../utils';
 import { TableHeaderCellDirective } from './cell.directive';
@@ -13,12 +20,11 @@ import { SortDirection } from './table.type';
   // 複用 TableHeaderCellDirective：基礎 header cell 樣式 + CdkHeaderCell 都會一併帶進來
   hostDirectives: [TableHeaderCellDirective],
   host: {
-    '[class]': 'headerClass()',
+    // aria-sort 一定要在 th 本身，這裡就是 <th>，可以直接綁
     '[attr.aria-sort]': 'ariaSort()',
-    '(click)': 'toggle()',
   },
   template: `
-    <span class="inline-flex items-center gap-1.5">
+    <button type="button" [class]="buttonClass()" [disabled]="disabled()" (click)="toggle()">
       <ng-content></ng-content>
 
       @if (direction() === 'asc') {
@@ -28,7 +34,7 @@ import { SortDirection } from './table.type';
       } @else {
         <svg lucideChevronsUpDown class="size-4 opacity-50"></svg>
       }
-    </span>
+    </button>
   `,
 })
 export class SortHeaderComponent {
@@ -38,8 +44,9 @@ export class SortHeaderComponent {
 
   readonly sortId = input.required<string>({ alias: 'sanringSortHeader' });
   readonly class = input<string | undefined>();
+  readonly disabled = input(false, { transform: booleanAttribute });
 
-  protected readonly direction = computed<SortDirection>(
+  protected readonly direction = computed<SortDirection | null>(
     () => this.sort?.directionFor(this.sortId()) ?? null,
   );
 
@@ -50,8 +57,12 @@ export class SortHeaderComponent {
     return 'none';
   });
 
-  protected readonly headerClass = computed(() =>
-    cn('cursor-pointer select-none hover:bg-[var(--sanring-elevated)]', this.class()),
+  // 真正的 <button>：原生 tabIndex + Enter/Space 觸發 click，鍵盤可及性不用手刻。
+  protected readonly buttonClass = computed(() =>
+    cn(
+      '-ml-2 inline-flex h-8 items-center gap-1.5 rounded-[var(--sanring-radius-sm)] px-2 text-sm font-medium text-[var(--sanring-foreground)] transition-colors hover:bg-[var(--sanring-elevated)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--sanring-border-strong)] disabled:pointer-events-none disabled:opacity-50',
+      this.class(),
+    ),
   );
 
   constructor() {
@@ -63,6 +74,7 @@ export class SortHeaderComponent {
   }
 
   toggle(): void {
+    if (this.disabled()) return;
     this.sort?.sort(this.sortId());
   }
 }
