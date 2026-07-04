@@ -31,6 +31,7 @@ export const zh: Record<TranslationKey, string> = {
   'sidebar.registry': 'Registry',
   'sidebar.forms': '表單',
   'sidebar.changelog': '更新紀錄',
+  'sidebar.roadmap': '路線圖',
   'component.accordion': '手風琴',
   'component.alert': '提示',
   'component.alertDialog': '提示對話框',
@@ -552,6 +553,18 @@ export const zh: Record<TranslationKey, string> = {
   'intro.firstComponent.title': '加入第一個元件',
   'intro.firstComponent.body':
     '從 @sanring/ui 匯入需要的 directive 或 component，加入 Angular 元件的 imports 陣列即可使用。',
+
+  'roadmap.page.description':
+    '接下來的規劃，依「複用多少既有程式碼」跟「實際被需要的頻率」排序，而不是單純看起來炫不炫。',
+  'roadmap.tier1.title': 'Tier 1 — 接下來就做（成本低、槓桿高）',
+  'roadmap.tier1.description': '成本低、價值高，而且大多是組合既有的東西。',
+  'roadmap.tier2.title': 'Tier 2 — 中等成本，複用既有 overlay 基礎建設',
+  'roadmap.tier2.description': '建立在 Dropdown Menu、Popover、Progress、Button 之上，不是從零開始。',
+  'roadmap.tier3.title': 'Tier 3 — 獨立的新基礎建設',
+  'roadmap.tier3.description': '真正的新工程，不只是把既有 primitive 兜起來。',
+  'roadmap.tier4.title': 'Tier 4 — 先緩 / 重新評估需求',
+  'roadmap.tier4.description':
+    '比較偏向行銷/媒體網站，而不是這個庫目前主要服務的 app UI（dashboard、表單、資料表格）。如果目標受眾改變，可以再重新評估。',
 
   'theming.page.description': 'Sanring UI 如何處理顏色、字型與間距，以及如何為你的品牌進行客製化覆寫。',
   'theming.tokens.title': '設計 Token',

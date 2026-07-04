@@ -54,6 +54,7 @@ export const docsSectionItems: DocsSidebarItem[] = [
   { labelKey: 'sidebar.cli', path: '/cli', active: true },
   { labelKey: 'nav.components', path: '/components', active: true },
   { labelKey: 'sidebar.changelog', path: '/changelog', active: true },
+  { labelKey: 'sidebar.roadmap', path: '/roadmap', active: true },
 ];
 
 export const docsComponentItems: DocsComponentNavItem[] = [

@@ -41,6 +41,13 @@ export const routes: Routes = [
               ),
           },
           {
+            path: 'roadmap',
+            loadComponent: () =>
+              import('./pages/roadmap/roadmap-page.component').then(
+                (m) => m.RoadmapPageComponent,
+              ),
+          },
+          {
             path: 'components',
             loadComponent: () =>
               import('./layouts/component-docs-layout.component').then(

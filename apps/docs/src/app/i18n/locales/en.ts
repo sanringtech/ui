@@ -29,6 +29,7 @@ export const en = {
   'sidebar.registry': 'Registry',
   'sidebar.forms': 'Forms',
   'sidebar.changelog': 'Changelog',
+  'sidebar.roadmap': 'Roadmap',
   'component.accordion': 'Accordion',
   'component.alert': 'Alert',
   'component.alertDialog': 'Alert Dialog',
@@ -623,6 +624,21 @@ export const en = {
   'intro.firstComponent.title': 'Add your first component',
   'intro.firstComponent.body':
     'Import the directive or component you need from @sanring/ui and add it to your Angular component\'s imports array.',
+
+  'roadmap.page.description':
+    'What\'s planned next, prioritized by how much existing code it reuses and how often it\'s actually needed — not just by how visually impressive it is.',
+  'roadmap.tier1.title': 'Tier 1 — Do next (cheap, high leverage)',
+  'roadmap.tier1.description':
+    'Low cost, high value, and mostly composition of things that already exist.',
+  'roadmap.tier2.title': 'Tier 2 — Moderate cost, reuses existing overlay infra',
+  'roadmap.tier2.description':
+    'Builds on Dropdown Menu, Popover, Progress, and Button rather than starting from scratch.',
+  'roadmap.tier3.title': 'Tier 3 — Standalone new infrastructure',
+  'roadmap.tier3.description':
+    'Genuinely new engineering, not just gluing existing primitives together.',
+  'roadmap.tier4.title': 'Tier 4 — Defer / reconsider need',
+  'roadmap.tier4.description':
+    'Lean toward marketing/media sites rather than the app UI (dashboards, forms, data tables) this library has targeted so far. Revisit if that changes.',
 
   'theming.page.description':
     'How Sanring UI handles color, typography, and spacing — and how to override them for your brand.',
