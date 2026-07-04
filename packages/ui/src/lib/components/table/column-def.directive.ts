@@ -7,7 +7,7 @@ import { CdkColumnDef } from '@angular/cdk/table';
   hostDirectives: [
     {
       directive: CdkColumnDef,
-      inputs: ['cdkColumnDef: sanringColumnDef'],
+      inputs: ['cdkColumnDef: sanringColumnDef', 'sticky', 'stickyEnd'],
     },
   ],
 })
