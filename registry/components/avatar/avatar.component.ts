@@ -34,7 +34,7 @@ export class AvatarComponent {
   protected readonly avatarClass = computed(() =>
     cn(
       'relative flex shrink-0 items-center justify-center overflow-visible rounded-full',
-      'bg-[var(--sanring-surface-strong)] text-[var(--sanring-muted-foreground)]',
+      'bg-[var(--sanring-surface-strong)] text-[var(--sanring-muted)]',
       'ring-2 ring-[var(--sanring-background)]',
       SIZE_CLASSES[this.size()] ?? SIZE_CLASSES.md,
       this.class(),

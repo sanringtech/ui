@@ -39,7 +39,7 @@ export class AvatarFallbackComponent implements OnDestroy {
   protected readonly fallbackClass = computed(() =>
     cn(
       'flex size-full items-center justify-center rounded-full text-sm font-medium uppercase',
-      'bg-[var(--sanring-surface-strong)] text-[var(--sanring-muted-foreground)]',
+      'bg-[var(--sanring-surface-strong)] text-[var(--sanring-muted)]',
       this.isVisible() ? null : 'hidden',
       this.class(),
     ),
