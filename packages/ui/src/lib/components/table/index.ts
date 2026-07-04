@@ -5,3 +5,6 @@ export * from './row.directive';
 export * from './table.directive';
 export * from './table-container.component';
 export * from './no-data-row.directive';
+export * from './sort-header.component';
+export * from './sort.directive';
+export * from './table.type';
