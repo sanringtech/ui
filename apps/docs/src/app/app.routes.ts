@@ -223,6 +223,13 @@ export const routes: Routes = [
                   ),
               },
               {
+                path: 'table',
+                loadComponent: () =>
+                  import('./pages/components/table/table-page.component').then(
+                    (m) => m.TablePageComponent,
+                  ),
+              },
+              {
                 path: 'tag',
                 loadComponent: () =>
                   import('./pages/components/tag/tag-page.component').then(

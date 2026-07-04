@@ -35,6 +35,7 @@ export type DocsComponentId =
   | 'skeleton'
   | 'spinner'
   | 'switch'
+  | 'table'
   | 'tag'
   | 'tabs'
   | 'toggle'
@@ -211,6 +212,12 @@ export const docsComponentItems: DocsComponentNavItem[] = [
     id: 'switch',
     labelKey: 'component.switch',
     path: '/components/switch',
+    active: true,
+  },
+  {
+    id: 'table',
+    labelKey: 'component.table',
+    path: '/components/table',
     active: true,
   },
   {
