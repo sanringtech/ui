@@ -1,5 +1,10 @@
 import { Component, computed, inject, signal } from '@angular/core';
-import { PageEvent, PaginatorComponent, SANRING_PAGINATION_IMPORTS } from '@sanring/ui';
+import {
+  PageEvent,
+  PageSizeSelectComponent,
+  PaginatorComponent,
+  SANRING_PAGINATION_IMPORTS,
+} from '@sanring/ui';
 import { getComponentPageSection } from '../../../docs-schema/component-page.utils';
 import { I18nService } from '../../../i18n/i18n.service';
 import {
@@ -25,6 +30,7 @@ interface OrderRow {
   imports: [
     SANRING_PAGINATION_IMPORTS,
     PaginatorComponent,
+    PageSizeSelectComponent,
     ComponentPageApiTableComponent,
     ComponentPageCodeBlock,
     ComponentPageCodePreviewer,
@@ -111,20 +117,13 @@ interface OrderRow {
             <app-component-page-code-previewer [code]="examples.pageSize" language="angular-html">
               <div previewer class="grid w-full gap-4">
                 <div class="flex items-center justify-between gap-3 text-sm">
-                  <label for="docs-pagination-page-size" class="text-[var(--docs-muted)]">
-                    {{ i18n.t('pagination.demo.rowsPerPage') }}
-                  </label>
-                  <select
-                    id="docs-pagination-page-size"
-                    class="h-9 rounded-[var(--sanring-radius)] border border-[var(--sanring-border)] bg-[var(--sanring-background)] px-3 text-sm text-[var(--sanring-foreground)] outline-none transition-colors focus-visible:ring-2 focus-visible:ring-[var(--sanring-border-strong)]"
-                    [value]="pageSize()"
-                    (change)="setPageSize(pageSizeSelect.value)"
-                    #pageSizeSelect
-                  >
-                    <option value="4">4</option>
-                    <option value="8">8</option>
-                    <option value="12">12</option>
-                  </select>
+                  <span class="text-[var(--docs-muted)]">{{ i18n.t('pagination.demo.rowsPerPage') }}</span>
+                  <sanring-page-size-select
+                    [pageSize]="pageSize()"
+                    (pageSizeChange)="setPageSize($event)"
+                    [pageSizeOptions]="[4, 8, 12]"
+                    [ariaLabel]="i18n.t('pagination.demo.rowsPerPage')"
+                  />
                 </div>
 
                 <div class="grid gap-2 rounded-[var(--sanring-radius)] border border-[var(--docs-border)] p-4">
@@ -227,8 +226,8 @@ export class PaginationPageComponent {
     this.pageIndex.set(event.pageIndex);
   }
 
-  protected setPageSize(value: string): void {
-    this.pageSize.set(Number(value));
+  protected setPageSize(value: number): void {
+    this.pageSize.set(value);
     this.pageSizePageIndex.set(0);
   }
 

@@ -148,17 +148,13 @@ export const paginationPageExamples = {
 />`,
 
   pageSize: `<div class="flex items-center justify-between gap-3">
-  <label for="page-size">Rows per page</label>
-  <select
-    id="page-size"
-    [value]="pageSize()"
-    (change)="setPageSize(pageSizeSelect.value)"
-    #pageSizeSelect
-  >
-    <option value="4">4</option>
-    <option value="8">8</option>
-    <option value="12">12</option>
-  </select>
+  <span>Rows per page</span>
+  <sanring-page-size-select
+    [pageSize]="pageSize()"
+    (pageSizeChange)="setPageSize($event)"
+    [pageSizeOptions]="[4, 8, 12]"
+    ariaLabel="Rows per page"
+  />
 </div>
 
 <sanring-paginator
