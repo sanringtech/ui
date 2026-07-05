@@ -1,5 +1,11 @@
 # @sanring/cli
 
+## 0.4.0
+
+### Minor Changes
+
+- 20c768d: Registry now includes `aspect-ratio` and `textarea` components (`sanring add aspect-ratio`, `sanring add textarea`). `@sanring/ui`'s `input` directive no longer targets `<textarea>` — use the new `sanringTextarea` directive instead when re-copying the `input` component.
+
 ## 0.3.0
 
 ### Minor Changes
