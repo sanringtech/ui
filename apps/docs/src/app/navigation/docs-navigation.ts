@@ -42,6 +42,7 @@ export type DocsComponentId =
   | 'tag'
   | 'tabs'
   | 'textarea'
+  | 'timeline'
   | 'toggle'
   | 'toast'
   | 'tooltip';
@@ -246,6 +247,12 @@ export const docsComponentItems: DocsComponentNavItem[] = [
     id: 'textarea',
     labelKey: 'component.textarea',
     path: '/components/textarea',
+    active: true,
+  },
+  {
+    id: 'timeline',
+    labelKey: 'component.timeline',
+    path: '/components/timeline',
     active: true,
   },
   {

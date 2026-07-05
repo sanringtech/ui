@@ -279,6 +279,13 @@ export const routes: Routes = [
                   ),
               },
               {
+                path: 'timeline',
+                loadComponent: () =>
+                  import('./pages/components/timeline/timeline-page.component').then(
+                    (m) => m.TimelinePageComponent,
+                  ),
+              },
+              {
                 path: 'tabs',
                 loadComponent: () =>
                   import('./pages/components/tabs/tabs-page.component').then(

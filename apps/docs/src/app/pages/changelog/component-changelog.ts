@@ -39,6 +39,12 @@ export const componentChangelog: readonly ComponentChangelogEntry[] = [
       {
         type: 'added',
         notable: true,
+        componentIds: ['timeline'],
+        text: 'New Timeline primitives for chronological event lists with vertical and horizontal orientation support.',
+      },
+      {
+        type: 'added',
+        notable: true,
         componentIds: ['stepper'],
         text: 'New Stepper primitives backed by Angular CDK Stepper, with template labels, custom icons, and solid or dashed connectors.',
       },

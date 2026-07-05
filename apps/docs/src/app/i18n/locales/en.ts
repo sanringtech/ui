@@ -58,6 +58,7 @@ export const en = {
   'component.tag': 'Tag',
   'component.tabs': 'Tabs',
   'component.textarea': 'Textarea',
+  'component.timeline': 'Timeline',
   'component.tooltip': 'Tooltip',
   'components.description':
     'Here you can find all components currently available in the library. More components will be added as the system grows.',
@@ -368,6 +369,33 @@ export const en = {
   'textarea.demo.resize': 'Resizable',
   'textarea.api.description': 'Inputs supported by the sanringTextarea directive.',
   'textarea.api.class.description': 'Additional classes merged with the base textarea styles.',
+  'timeline.description':
+    'Composable timeline primitives for chronological events, activity feeds, and process milestones.',
+  'timeline.examples.basic.description':
+    'Use sanringTimeline with native list markup, then compose separators, markers, connectors, and content.',
+  'timeline.usage.description':
+    'Import the timeline directives from @sanring/ui and apply them to list or div-based activity markup.',
+  'timeline.installation.description':
+    'Install the timeline primitives and compose item, separator, and content directives where each event renders.',
+  'timeline.demo.horizontal': 'Horizontal',
+  'timeline.demo.divBased': 'Div-based timeline',
+  'timeline.demo.created': 'Created project',
+  'timeline.demo.createdDescription': 'Workspace and registry files are ready.',
+  'timeline.demo.reviewed': 'Reviewed content',
+  'timeline.demo.reviewedDescription': 'Documentation examples were checked against the primitive API.',
+  'timeline.demo.shipped': 'Published update',
+  'timeline.demo.shippedDescription': 'The component can now be installed through the registry workflow.',
+  'timeline.demo.plan': 'Plan',
+  'timeline.demo.build': 'Build',
+  'timeline.demo.release': 'Release',
+  'timeline.demo.divTitle': 'Imported activity feed',
+  'timeline.demo.divDescription': 'Use div-based markup when the source data is not naturally a native list.',
+  'timeline.api.description': 'Inputs supported by the Timeline directives.',
+  'timeline.api.orientation.description': 'Controls whether items stack vertically or horizontally.',
+  'timeline.api.class.description': 'Additional classes merged with the timeline root.',
+  'timeline.api.itemClass.description': 'Additional classes merged with each timeline item.',
+  'timeline.api.separatorClass.description': 'Additional classes merged with each separator wrapper.',
+  'timeline.api.contentClass.description': 'Additional classes merged with each content container.',
   'slider.description':
     'A range control for selecting a numeric value with pointer, touch, keyboard, and Angular forms support.',
   'slider.examples.basic.description':
@@ -732,7 +760,10 @@ export const en = {
     'Import the directive or component you need from @sanring/ui and add it to your Angular component\'s imports array.',
 
   'roadmap.page.description':
-    'What\'s planned next, prioritized by how much existing code it reuses and how often it\'s actually needed — not just by how visually impressive it is.',
+    'Recently shipped primitives and what is planned next, prioritized by how much existing code they reuse and how often they are actually needed.',
+  'roadmap.shipped.title': 'Recently shipped',
+  'roadmap.shipped.description':
+    'Primitives that have moved from roadmap into the component docs and registry workflow.',
   'roadmap.tier1.title': 'Tier 1 — Do next (cheap, high leverage)',
   'roadmap.tier1.description':
     'Low cost, high value, and mostly composition of things that already exist.',

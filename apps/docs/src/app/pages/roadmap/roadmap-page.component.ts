@@ -23,7 +23,23 @@ interface RoadmapItem {
       </header>
 
       <app-component-page-section [section]="sections[0]">
-        <p class="mt-0 text-sm text-[var(--docs-muted)]">{{ i18n.t('roadmap.tier1.description') }}</p>
+        <p class="mt-0 text-sm text-[var(--docs-muted)]">
+          {{ i18n.t('roadmap.shipped.description') }}
+        </p>
+        <ul class="mt-4 space-y-4 list-none p-0">
+          @for (item of shipped; track item.name) {
+            <li>
+              <div class="font-medium text-[var(--docs-fg)]">{{ item.name }}</div>
+              <div class="text-sm text-[var(--docs-muted)]">{{ item.description }}</div>
+            </li>
+          }
+        </ul>
+      </app-component-page-section>
+
+      <app-component-page-section [section]="sections[1]">
+        <p class="mt-0 text-sm text-[var(--docs-muted)]">
+          {{ i18n.t('roadmap.tier1.description') }}
+        </p>
         <ul class="mt-4 space-y-4 list-none p-0">
           @for (item of tier1; track item.name) {
             <li>
@@ -34,8 +50,10 @@ interface RoadmapItem {
         </ul>
       </app-component-page-section>
 
-      <app-component-page-section [section]="sections[1]">
-        <p class="mt-0 text-sm text-[var(--docs-muted)]">{{ i18n.t('roadmap.tier2.description') }}</p>
+      <app-component-page-section [section]="sections[2]">
+        <p class="mt-0 text-sm text-[var(--docs-muted)]">
+          {{ i18n.t('roadmap.tier2.description') }}
+        </p>
         <ul class="mt-4 space-y-4 list-none p-0">
           @for (item of tier2; track item.name) {
             <li>
@@ -46,8 +64,10 @@ interface RoadmapItem {
         </ul>
       </app-component-page-section>
 
-      <app-component-page-section [section]="sections[2]">
-        <p class="mt-0 text-sm text-[var(--docs-muted)]">{{ i18n.t('roadmap.tier3.description') }}</p>
+      <app-component-page-section [section]="sections[3]">
+        <p class="mt-0 text-sm text-[var(--docs-muted)]">
+          {{ i18n.t('roadmap.tier3.description') }}
+        </p>
         <ul class="mt-4 space-y-4 list-none p-0">
           @for (item of tier3; track item.name) {
             <li>
@@ -58,8 +78,10 @@ interface RoadmapItem {
         </ul>
       </app-component-page-section>
 
-      <app-component-page-section [section]="sections[3]">
-        <p class="mt-0 text-sm text-[var(--docs-muted)]">{{ i18n.t('roadmap.tier4.description') }}</p>
+      <app-component-page-section [section]="sections[4]">
+        <p class="mt-0 text-sm text-[var(--docs-muted)]">
+          {{ i18n.t('roadmap.tier4.description') }}
+        </p>
         <ul class="mt-4 space-y-4 list-none p-0">
           @for (item of tier4; track item.name) {
             <li>
@@ -76,10 +98,36 @@ export class RoadmapPageComponent {
   protected readonly i18n = inject(I18nService);
 
   protected readonly sections: readonly ComponentPageSectionDefinition[] = [
+    { id: 'shipped', titleKey: 'roadmap.shipped.title' },
     { id: 'tier-1', titleKey: 'roadmap.tier1.title' },
     { id: 'tier-2', titleKey: 'roadmap.tier2.title' },
     { id: 'tier-3', titleKey: 'roadmap.tier3.title' },
     { id: 'tier-4', titleKey: 'roadmap.tier4.title' },
+  ];
+
+  protected readonly shipped: RoadmapItem[] = [
+    {
+      name: 'Aspect Ratio',
+      description: 'Responsive media and embed frame primitive with CSS aspect-ratio support.',
+    },
+    {
+      name: 'Textarea',
+      description: 'Native textarea styling directive split from Input for multiline form fields.',
+    },
+    {
+      name: 'Slider',
+      description: 'Range control with pointer, keyboard, ARIA slider semantics, and forms support.',
+    },
+    {
+      name: 'Stepper',
+      description:
+        'CDK-backed workflow primitive with template labels, custom icons, and connector styles.',
+    },
+    {
+      name: 'Timeline',
+      description:
+        'Composable chronological event primitives with vertical and horizontal orientations.',
+    },
   ];
 
   protected readonly tier1: RoadmapItem[] = [
@@ -87,14 +135,6 @@ export class RoadmapPageComponent {
       name: 'Field',
       description:
         'Label + control + description + error message layout, plus ReactiveFormsModule state (ng-invalid/ng-touched) and aria-describedby wiring. Everything else in forms depends on this.',
-    },
-    {
-      name: 'Textarea',
-      description: 'Multi-line Input with optional auto-resize. Trivial cost, very high usage.',
-    },
-    {
-      name: 'Aspect Ratio',
-      description: 'Wrapper div + CSS aspect-ratio. Near-zero cost.',
     },
     {
       name: 'Alert Dialog',

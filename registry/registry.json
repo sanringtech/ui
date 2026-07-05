@@ -380,6 +380,19 @@
       ]
     },
     {
+      "name": "timeline",
+      "description": "Displays chronological events or process milestones.",
+      "sharedDeps": ["utils"],
+      "files": [
+        "timeline/timeline.directive.ts",
+        "timeline/timeline-item.directive.ts",
+        "timeline/timeline-separator.directive.ts",
+        "timeline/timeline-content.directive.ts",
+        "timeline/timeline-type.ts",
+        "timeline/index.ts"
+      ]
+    },
+    {
       "name": "switch",
       "description": "A control that allows the user to toggle between checked and not checked.",
       "sharedDeps": ["utils", "component-styles"],

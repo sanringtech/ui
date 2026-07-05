@@ -60,6 +60,7 @@ export const zh: Record<TranslationKey, string> = {
   'component.tag': '標籤',
   'component.tabs': '頁籤',
   'component.textarea': '多行文字',
+  'component.timeline': '時間軸',
   'component.tooltip': '提示浮層',
   'components.description': '這裡列出目前元件庫可用的所有元件，後續會隨系統成長持續補上更多元件。',
   'components.updatedTitle': '已更新元件',
@@ -332,6 +333,32 @@ export const zh: Record<TranslationKey, string> = {
   'textarea.demo.resize': '可調整大小',
   'textarea.api.description': 'sanringTextarea directive 支援的 Inputs。',
   'textarea.api.class.description': '與基礎多行文字樣式合併的額外 class。',
+  'timeline.description': '可組合的時間軸 primitives，適合時間事件、活動紀錄與流程里程碑。',
+  'timeline.examples.basic.description':
+    '使用 sanringTimeline 搭配原生清單標記，再自行組合分隔、節點、連接線與內容。',
+  'timeline.usage.description':
+    '從 @sanring/ui 匯入 Timeline directives，並套用到清單或 div 型活動資料標記。',
+  'timeline.installation.description':
+    '安裝 Timeline primitives，並在每個事件中組合 item、separator 與 content directives。',
+  'timeline.demo.horizontal': '水平',
+  'timeline.demo.divBased': 'Div 型時間軸',
+  'timeline.demo.created': '建立專案',
+  'timeline.demo.createdDescription': '工作區與 registry 檔案已準備完成。',
+  'timeline.demo.reviewed': '檢查內容',
+  'timeline.demo.reviewedDescription': '文件範例已依照 primitive API 檢查。',
+  'timeline.demo.shipped': '發布更新',
+  'timeline.demo.shippedDescription': '元件現在可透過 registry 工作流程安裝。',
+  'timeline.demo.plan': '規劃',
+  'timeline.demo.build': '建置',
+  'timeline.demo.release': '發布',
+  'timeline.demo.divTitle': '匯入的活動紀錄',
+  'timeline.demo.divDescription': '當來源資料不適合原生清單時，可以使用 div 型標記。',
+  'timeline.api.description': 'Timeline directives 支援的 Inputs。',
+  'timeline.api.orientation.description': '控制項目垂直堆疊或水平排列。',
+  'timeline.api.class.description': '與 timeline 根元素合併的額外 class。',
+  'timeline.api.itemClass.description': '與每個 timeline item 合併的額外 class。',
+  'timeline.api.separatorClass.description': '與每個 separator wrapper 合併的額外 class。',
+  'timeline.api.contentClass.description': '與每個 content container 合併的額外 class。',
   'slider.description':
     '用於選取數值範圍的控制項，支援 pointer、touch、鍵盤與 Angular 表單。',
   'slider.examples.basic.description':
@@ -659,7 +686,9 @@ export const zh: Record<TranslationKey, string> = {
     '從 @sanring/ui 匯入需要的 directive 或 component，加入 Angular 元件的 imports 陣列即可使用。',
 
   'roadmap.page.description':
-    '接下來的規劃，依「複用多少既有程式碼」跟「實際被需要的頻率」排序，而不是單純看起來炫不炫。',
+    '近期已完成的 primitives 與接下來的規劃，依「複用多少既有程式碼」跟「實際被需要的頻率」排序。',
+  'roadmap.shipped.title': '近期已完成',
+  'roadmap.shipped.description': '已從 roadmap 移到 component docs 與 registry 工作流程的 primitives。',
   'roadmap.tier1.title': 'Tier 1 — 接下來就做（成本低、槓桿高）',
   'roadmap.tier1.description': '成本低、價值高，而且大多是組合既有的東西。',
   'roadmap.tier2.title': 'Tier 2 — 中等成本，複用既有 overlay 基礎建設',

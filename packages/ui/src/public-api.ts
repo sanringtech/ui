@@ -37,5 +37,6 @@ export * from './lib/components/toggle';
 export * from './lib/components/tabs';
 export * from './lib/components/table';
 export * from './lib/components/textarea';
+export * from './lib/components/timeline';
 export * from './lib/components/toast';
 export * from './lib/components/tooltip';
