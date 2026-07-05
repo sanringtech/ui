@@ -34,6 +34,17 @@ export interface ComponentChangelogEntry {
  */
 export const componentChangelog: readonly ComponentChangelogEntry[] = [
   {
+    date: '2026-07-06',
+    changes: [
+      {
+        type: 'added',
+        notable: true,
+        componentIds: ['alert-dialog'],
+        text: 'New Alert Dialog primitives — a Dialog variant that cannot be dismissed by backdrop click or Escape, with `sanringAlertDialogAction`/`sanringAlertDialogCancel` directives for confirm/cancel flows.',
+      },
+    ],
+  },
+  {
     date: '2026-07-05',
     changes: [
       {
@@ -144,6 +155,10 @@ export function getRecentlyUpdatedComponentIds(): DocsComponentId[] {
     for (const id of change.componentIds ?? []) ids.add(id);
   }
   return [...ids];
+}
+
+export function isRecentlyUpdatedComponentId(id: DocsComponentId): boolean {
+  return getRecentlyUpdatedComponentIds().includes(id);
 }
 
 export function getRecentlyAddedComponentIds(): DocsComponentId[] {

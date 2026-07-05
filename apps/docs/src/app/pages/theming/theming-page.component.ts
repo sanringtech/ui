@@ -112,7 +112,7 @@ export class ThemingPageComponent {
   protected readonly tailwindSource = `@import 'tailwindcss';
 
 /* tell Tailwind to scan component source for utility classes */
-@source "../node_modules/@sanring/ui";
+@source "../node_modules/@sanring/ui/src";
 @source "./app/components/ui";
 
 /* wire --sanring-* tokens to Tailwind utilities

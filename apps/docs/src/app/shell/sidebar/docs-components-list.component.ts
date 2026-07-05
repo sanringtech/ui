@@ -1,6 +1,7 @@
 import { Component, inject } from '@angular/core';
 import { I18nService } from '../../i18n/i18n.service';
 import { docsComponentItems } from '../../navigation/docs-navigation';
+import { isRecentlyUpdatedComponentId } from '../../pages/changelog/component-changelog';
 import { DocsSectionComponent } from './docs-section.component';
 
 @Component({
@@ -15,6 +16,9 @@ import { DocsSectionComponent } from './docs-section.component';
   `,
 })
 export class DocsComponentsListComponent {
-  protected readonly items = docsComponentItems;
+  protected readonly items = docsComponentItems.map((item) => ({
+    ...item,
+    badge: isRecentlyUpdatedComponentId(item.id),
+  }));
   protected readonly i18n = inject(I18nService);
 }

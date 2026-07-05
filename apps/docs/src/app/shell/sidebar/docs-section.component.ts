@@ -25,7 +25,11 @@ import { I18nService } from '../../i18n/i18n.service';
           >
             {{ i18n.t(item.labelKey) }}
             @if (item.badge) {
-              <span class="ml-2 h-2 w-2 rounded-full bg-blue-500"></span>
+              <span class="sr-only">{{ i18n.t('home.components.newBadge') }}</span>
+              <span
+                class="ml-2 size-2 shrink-0 rounded-full bg-[var(--docs-accent-strong)] shadow-[0_0_0_3px_color-mix(in_srgb,var(--docs-accent)_18%,transparent)]"
+                aria-hidden="true"
+              ></span>
             }
           </a>
         }

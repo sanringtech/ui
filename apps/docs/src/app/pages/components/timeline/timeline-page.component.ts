@@ -43,24 +43,49 @@ import { timelinePage, timelinePageExamples } from './timeline.docs';
         [description]="i18n.t(page.descriptionKey)"
       />
 
+      <!-- Basic Vertical Timeline -->
       <app-component-page-section [section]="section('basic')">
         <app-component-page-code-previewer [code]="examples.basic" language="angular-html">
-          <ul previewer sanringTimeline class="max-w-xl">
+          <ul previewer sanringTimeline class="w-full max-w-3xl px-4 py-6">
             @for (event of events; track event.titleKey; let last = $last) {
-              <li sanringTimelineItem>
-                <span sanringTimelineSeparator class="pt-1">
-                  <span class="size-3 rounded-full bg-[var(--sanring-foreground)]"></span>
+              <li sanringTimelineItem class="relative flex gap-6">
+                <span sanringTimelineSeparator class="relative flex flex-col items-center">
+                  <span
+                    class="relative z-10 grid size-10 place-items-center rounded-full border border-[var(--docs-border-strong)] bg-[var(--docs-surface)] shadow-sm"
+                  >
+                    <span [class]="event.dotClass"></span>
+                  </span>
                   @if (!last) {
-                    <span class="mt-2 h-full min-h-12 w-px bg-[var(--sanring-border-strong)]"></span>
+                    <!-- 自動延伸的連接線 -->
+                    <span
+                      class="absolute bottom-[-1.5rem] left-1/2 top-10 w-px -translate-x-1/2 bg-[var(--docs-border-strong)] opacity-60"
+                    ></span>
                   }
                 </span>
-                <div sanringTimelineContent class="pb-1">
-                  <p class="font-medium text-[var(--docs-foreground)]">
-                    {{ i18n.t(event.titleKey) }}
-                  </p>
-                  <p class="mt-1 text-sm text-[var(--docs-foreground-muted)]">
-                    {{ i18n.t(event.descriptionKey) }}
-                  </p>
+                <div sanringTimelineContent class="flex-1 pb-10">
+                  <article
+                    class="group min-h-[5rem] rounded-xl border border-[var(--docs-border)] bg-[var(--docs-panel)] p-5 shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md"
+                  >
+                    <div
+                      class="flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-center"
+                    >
+                      <div class="min-w-0 flex-1">
+                        <p
+                          class="m-0 text-base font-semibold text-[var(--docs-fg)] group-hover:text-[var(--docs-accent-strong)] transition-colors"
+                        >
+                          {{ i18n.t(event.titleKey) }}
+                        </p>
+                        <p class="m-0 mt-1.5 text-sm leading-relaxed text-[var(--docs-muted)]">
+                          {{ i18n.t(event.descriptionKey) }}
+                        </p>
+                      </div>
+                      <span
+                        class="shrink-0 rounded-full border border-[var(--docs-border)] bg-[var(--docs-surface)] px-3 py-1.5 text-xs font-medium tracking-wide text-[var(--docs-muted)] shadow-sm"
+                      >
+                        {{ i18n.t(event.metaKey) }}
+                      </span>
+                    </div>
+                  </article>
                 </div>
               </li>
             }
@@ -72,7 +97,7 @@ import { timelinePage, timelinePageExamples } from './timeline.docs';
         <div class="grid gap-6">
           <app-component-page-usage-imports [code]="examples.usageImport" />
           <div
-            class="overflow-hidden rounded-[var(--sanring-radius)] border border-[var(--docs-border)]"
+            class="overflow-hidden rounded-[var(--sanring-radius)] border border-[var(--docs-border)] shadow-sm"
           >
             <app-component-page-code-block [code]="examples.usageMain" language="angular-html" />
           </div>
@@ -87,46 +112,86 @@ import { timelinePage, timelinePageExamples } from './timeline.docs';
       </app-component-page-section>
 
       <app-component-page-section [section]="section('example')">
-        <div class="grid gap-2">
+        <div class="grid gap-8">
+          <!-- Horizontal Timeline -->
           <app-component-page-section [section]="section('example-horizontal')">
             <app-component-page-code-previewer [code]="examples.horizontal" language="angular-html">
-              <ul
-                previewer
-                sanringTimeline
-                orientation="horizontal"
-                class="w-full max-w-2xl overflow-x-auto pb-2"
-              >
-                @for (event of compactEvents; track event.titleKey; let last = $last) {
-                  <li sanringTimelineItem class="min-w-36">
-                    <span sanringTimelineSeparator class="w-full">
-                      <span class="size-3 rounded-full bg-[var(--sanring-foreground)]"></span>
-                      @if (!last) {
-                        <span class="ml-2 h-px min-w-16 flex-1 bg-[var(--sanring-border-strong)]"></span>
-                      }
-                    </span>
-                    <div sanringTimelineContent>
-                      <p class="text-sm font-medium text-[var(--docs-foreground)]">
-                        {{ i18n.t(event.titleKey) }}
-                      </p>
-                    </div>
-                  </li>
-                }
-              </ul>
+              <div previewer class="w-full max-w-4xl overflow-x-auto px-4 py-8">
+                <ul sanringTimeline orientation="horizontal" class="flex min-w-[720px] gap-4">
+                  @for (event of compactEvents; track event.titleKey; let last = $last) {
+                    <li sanringTimelineItem class="relative flex min-w-0 flex-1 flex-col gap-5">
+                      <span sanringTimelineSeparator class="relative flex w-full justify-center">
+                        @if (!$first) {
+                          <span
+                            class="absolute left-0 right-1/2 top-1/2 h-px -translate-y-1/2 bg-[var(--docs-border-strong)] opacity-60"
+                          ></span>
+                        }
+                        @if (!last) {
+                          <span
+                            class="absolute left-1/2 right-0 top-1/2 h-px -translate-y-1/2 bg-[var(--docs-border-strong)] opacity-60"
+                          ></span>
+                        }
+                        <span
+                          class="relative z-10 grid size-10 place-items-center rounded-full border-2 border-[var(--docs-border-strong)] bg-[var(--docs-panel)] text-sm font-bold text-[var(--docs-fg)] shadow-sm"
+                        >
+                          {{ $index + 1 }}
+                        </span>
+                      </span>
+                      <div sanringTimelineContent>
+                        <article
+                          class="flex min-h-[7rem] flex-col justify-center rounded-xl border border-[var(--docs-border)] bg-[var(--docs-panel)] p-5 text-center shadow-sm transition-all hover:-translate-y-1 hover:shadow-md"
+                        >
+                          <p class="m-0 text-sm font-bold text-[var(--docs-fg)]">
+                            {{ i18n.t(event.titleKey) }}
+                          </p>
+                          <p class="m-0 mt-2 text-xs leading-relaxed text-[var(--docs-muted)]">
+                            {{ i18n.t(event.descriptionKey) }}
+                          </p>
+                        </article>
+                      </div>
+                    </li>
+                  }
+                </ul>
+              </div>
             </app-component-page-code-previewer>
           </app-component-page-section>
 
+          <!-- Div-based Feed -->
           <app-component-page-section [section]="section('example-div')">
             <app-component-page-code-previewer [code]="examples.divBased" language="angular-html">
-              <div previewer sanringTimeline class="max-w-xl">
-                <div sanringTimelineItem>
-                  <div sanringTimelineContent class="rounded-md border border-[var(--docs-border)] p-4">
-                    <p class="font-medium text-[var(--docs-foreground)]">
-                      {{ i18n.t('timeline.demo.divTitle') }}
-                    </p>
-                    <p class="mt-1 text-sm text-[var(--docs-foreground-muted)]">
-                      {{ i18n.t('timeline.demo.divDescription') }}
-                    </p>
-                  </div>
+              <div previewer class="w-full max-w-2xl py-4">
+                <div
+                  sanringTimeline
+                  class="flex flex-col overflow-hidden rounded-xl border border-[var(--docs-border)] bg-[var(--docs-panel)] shadow-sm"
+                >
+                  @for (item of feedItems; track item.titleKey; let last = $last) {
+                    <div
+                      sanringTimelineItem
+                      class="group relative flex items-start gap-5 p-5 transition-colors hover:bg-black/[0.02] dark:hover:bg-white/[0.02]"
+                      [class.border-b]="!last"
+                      [class.border-[var(--docs-border)]]="!last"
+                    >
+                      <span
+                        sanringTimelineSeparator
+                        class="grid size-11 shrink-0 place-items-center rounded-full border border-[var(--docs-border)] bg-[var(--docs-surface)] text-sm font-bold text-[var(--docs-fg)] shadow-sm"
+                      >
+                        {{ item.initials }}
+                      </span>
+                      <div sanringTimelineContent class="flex-1 pt-0.5">
+                        <div class="flex flex-wrap items-baseline gap-x-3 gap-y-1">
+                          <p class="m-0 text-sm font-semibold text-[var(--docs-fg)]">
+                            {{ i18n.t(item.titleKey) }}
+                          </p>
+                          <span class="text-xs font-medium text-[var(--docs-muted)]">
+                            {{ i18n.t(item.metaKey) }}
+                          </span>
+                        </div>
+                        <p class="m-0 mt-1.5 text-sm leading-relaxed text-[var(--docs-muted)]">
+                          {{ i18n.t(item.descriptionKey) }}
+                        </p>
+                      </div>
+                    </div>
+                  }
                 </div>
               </div>
             </app-component-page-code-previewer>
@@ -149,21 +214,51 @@ export class TimelinePageComponent {
     {
       titleKey: 'timeline.demo.created',
       descriptionKey: 'timeline.demo.createdDescription',
+      metaKey: 'timeline.demo.createdMeta',
+      dotClass: 'size-3.5 rounded-full bg-[var(--docs-accent-strong)] shadow-sm', // 稍微調大一點點並加陰影
     },
     {
       titleKey: 'timeline.demo.reviewed',
       descriptionKey: 'timeline.demo.reviewedDescription',
+      metaKey: 'timeline.demo.reviewedMeta',
+      dotClass: 'size-3.5 rounded-full bg-emerald-400 shadow-sm',
     },
     {
       titleKey: 'timeline.demo.shipped',
       descriptionKey: 'timeline.demo.shippedDescription',
+      metaKey: 'timeline.demo.shippedMeta',
+      dotClass: 'size-3.5 rounded-full bg-amber-400 shadow-sm',
     },
   ] as const;
 
   protected readonly compactEvents = [
-    { titleKey: 'timeline.demo.plan' },
-    { titleKey: 'timeline.demo.build' },
-    { titleKey: 'timeline.demo.release' },
+    {
+      titleKey: 'timeline.demo.plan',
+      descriptionKey: 'timeline.demo.planDescription',
+    },
+    {
+      titleKey: 'timeline.demo.build',
+      descriptionKey: 'timeline.demo.buildDescription',
+    },
+    {
+      titleKey: 'timeline.demo.release',
+      descriptionKey: 'timeline.demo.releaseDescription',
+    },
+  ] as const;
+
+  protected readonly feedItems = [
+    {
+      initials: 'UI',
+      titleKey: 'timeline.demo.divTitle',
+      metaKey: 'timeline.demo.divMeta',
+      descriptionKey: 'timeline.demo.divDescription',
+    },
+    {
+      initials: 'QA',
+      titleKey: 'timeline.demo.qaTitle',
+      metaKey: 'timeline.demo.qaMeta',
+      descriptionKey: 'timeline.demo.qaDescription',
+    },
   ] as const;
 
   protected section(id: string) {

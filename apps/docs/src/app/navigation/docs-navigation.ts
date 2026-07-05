@@ -74,13 +74,12 @@ export const docsComponentItems: DocsComponentNavItem[] = [
     path: '/components/alert',
     active: true,
   },
-  // {
-  //   id: 'alert-dialog',
-  //   labelKey: 'component.alertDialog',
-  //   path: '/components/alert-dialog',
-  //   active: true,
-  //   disabled: true,
-  // },
+  {
+    id: 'alert-dialog',
+    labelKey: 'component.alertDialog',
+    path: '/components/alert-dialog',
+    active: true,
+  },
   {
     id: 'aspect-ratio',
     labelKey: 'component.aspectRatio',

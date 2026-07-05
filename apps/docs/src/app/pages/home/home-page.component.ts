@@ -14,7 +14,7 @@ import { ButtonDirective, ScrollAreaDirective } from '@sanring/ui';
 import { I18nService } from '../../i18n/i18n.service';
 import { TranslationKey } from '../../i18n/translations';
 import { docsComponentItems } from '../../navigation/docs-navigation';
-import { getRecentlyAddedComponentIds } from '../changelog/component-changelog';
+import { isRecentlyUpdatedComponentId } from '../changelog/component-changelog';
 
 interface HomeFeature {
   titleKey: TranslationKey;
@@ -240,12 +240,11 @@ interface HomeHighlight {
 export class HomePageComponent {
   protected readonly i18n = inject(I18nService);
   protected readonly componentCount = docsComponentItems.length;
-  private readonly newComponentIds = new Set(getRecentlyAddedComponentIds());
   protected readonly componentItems = docsComponentItems.map((item) => ({
     id: item.id,
     path: item.path,
     labelKey: item.labelKey,
-    isNew: this.newComponentIds.has(item.id),
+    isNew: isRecentlyUpdatedComponentId(item.id),
   }));
 
   protected readonly highlights: HomeHighlight[] = [

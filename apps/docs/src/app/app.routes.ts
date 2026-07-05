@@ -83,6 +83,13 @@ export const routes: Routes = [
                   ),
               },
               {
+                path: 'alert-dialog',
+                loadComponent: () =>
+                  import('./pages/components/alert-dialog/alert-dialog-page.component').then(
+                    (m) => m.AlertDialogPageComponent,
+                  ),
+              },
+              {
                 path: 'aspect-ratio',
                 loadComponent: () =>
                   import('./pages/components/aspect-ratio/aspect-ratio-page.component').then(

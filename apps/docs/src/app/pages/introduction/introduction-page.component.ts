@@ -29,7 +29,7 @@ import {
 
       <app-component-page-section [section]="sections[1]">
         <ul class="mt-0 space-y-2 text-sm text-[var(--docs-muted)] list-none p-0">
-          <li><span class="font-medium text-[var(--docs-fg)]">Angular</span> &mdash; 17+</li>
+          <li><span class="font-medium text-[var(--docs-fg)]">Angular</span> &mdash; 22+</li>
           <li><span class="font-medium text-[var(--docs-fg)]">Tailwind CSS</span> &mdash; v4</li>
           <li><span class="font-medium text-[var(--docs-fg)]">Node.js</span> &mdash; 18+</li>
         </ul>
@@ -47,6 +47,13 @@ import {
       </app-component-page-section>
 
       <app-component-page-section [section]="sections[3]">
+        <p class="mt-0 text-sm text-[var(--docs-muted)]">{{ i18n.t('intro.workflow.body') }}</p>
+        <div class="mt-4 overflow-hidden rounded-[var(--sanring-radius)] border border-[var(--docs-border)]">
+          <app-component-page-code-block [code]="cliWorkflow" language="bash" />
+        </div>
+      </app-component-page-section>
+
+      <app-component-page-section [section]="sections[4]">
         <p class="mt-0 text-sm text-[var(--docs-muted)]">{{ i18n.t('intro.firstComponent.body') }}</p>
         <div class="mt-4 overflow-hidden rounded-[var(--sanring-radius)] border border-[var(--docs-border)]">
           <app-component-page-code-block [code]="firstComponent" language="angular-ts" />
@@ -62,14 +69,19 @@ export class IntroductionPageComponent {
     { id: 'what-is', titleKey: 'intro.whatIs.title' },
     { id: 'requirements', titleKey: 'intro.requirements.title' },
     { id: 'installation', titleKey: 'intro.installation.title' },
+    { id: 'workflow', titleKey: 'intro.workflow.title' },
     { id: 'first-component', titleKey: 'intro.firstComponent.title' },
   ];
 
   protected readonly installCommand = `npm install @sanring/ui`;
 
-  protected readonly tailwindSource = `@source "../../node_modules/@sanring/ui/src";`;
+  protected readonly tailwindSource = `@source "../node_modules/@sanring/ui/src";
+@source "./app/components/ui";`;
 
-  protected readonly firstComponent = `import { ButtonDirective } from '@sanring/ui';
+  protected readonly cliWorkflow = `npx @sanring/cli@latest init
+npx @sanring/cli@latest add button`;
+
+  protected readonly firstComponent = `import { ButtonDirective } from './components/ui/button';
 
 @Component({
   imports: [ButtonDirective],

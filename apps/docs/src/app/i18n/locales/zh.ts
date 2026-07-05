@@ -191,6 +191,30 @@ export const zh: Record<TranslationKey, string> = {
   'alert.api.description': 'sanring-alert component 支援的 Inputs。',
   'alert.api.class.description': '與基礎提示樣式合併的額外 class。',
   'alert.api.variant.description': '控制視覺語氣，目前支援 default 與 destructive。',
+  'alertDialog.description':
+    '用於破壞性或重要操作的強制確認對話框。與 Dialog 不同，無法透過點擊背景或按 Escape 關閉。',
+  'alertDialog.demo.open': '刪除帳號',
+  'alertDialog.demo.cancel': '取消',
+  'alertDialog.demo.action': '刪除',
+  'alertDialog.demo.customResultTitle': '移除項目',
+  'alertDialog.demo.customResult': '自訂結果值',
+  'alertDialog.examples.description': '需要使用者做出明確選擇才會關閉的確認流程。',
+  'alertDialog.examples.basic.description':
+    '呼叫 `AlertDialogService.open()`，並用 `AlertDialogContent`、title、description 與 action/cancel directive 組合對話框內容。',
+  'alertDialog.usage.description':
+    '匯入 `AlertDialogService`，呼叫 `open()` 並傳入 `ng-template`，在裡面搭配 `sanringAlertDialogCancel` 與 `sanringAlertDialogAction`。',
+  'alertDialog.installation.description':
+    'Alert Dialog 建立在 Dialog 之上——安裝時也會一併安裝它依賴的 Dialog primitives。',
+  'alertDialog.composition.description':
+    '`AlertDialogContent` 繼承自 `DialogContent`，預設隱藏關閉按鈕。搭配 `sanringDialogTitle`、`sanringDialogDescription`、`sanringAlertDialogCancel` 與 `sanringAlertDialogAction` 使用。',
+  'alertDialog.api.description': 'Alert Dialog primitives 支援的 Inputs。',
+  'alertDialog.api.class.description': '與 `AlertDialogContent` 版面樣式合併的額外 class。',
+  'alertDialog.api.showClose.description':
+    '控制是否顯示內建關閉按鈕。預設為 `false`，與 Dialog 不同。',
+  'alertDialog.api.action.description':
+    '點擊時傳給 `DialogRef.close()` 的選用結果值，預設為 `true`。',
+  'alertDialog.api.cancel.description':
+    '點擊時傳給 `DialogRef.close()` 的選用結果值，預設為 `false`。',
   'button.description': '彈性的操作 primitive，可用於命令、導覽觸發與精簡圖示控制。',
   'button.demo.default': '預設',
   'button.demo.secondary': '次要',
@@ -342,17 +366,30 @@ export const zh: Record<TranslationKey, string> = {
     '安裝 Timeline primitives，並在每個事件中組合 item、separator 與 content directives。',
   'timeline.demo.horizontal': '水平',
   'timeline.demo.divBased': 'Div 型時間軸',
+  'timeline.demo.releaseActivity': '發布活動',
+  'timeline.demo.releaseActivityDescription': '適合發布紀錄與 registry 更新的精簡活動軌跡。',
+  'timeline.demo.today': '今天',
   'timeline.demo.created': '建立專案',
   'timeline.demo.createdDescription': '工作區與 registry 檔案已準備完成。',
+  'timeline.demo.createdMeta': '09:12',
   'timeline.demo.reviewed': '檢查內容',
   'timeline.demo.reviewedDescription': '文件範例已依照 primitive API 檢查。',
+  'timeline.demo.reviewedMeta': '10:48',
   'timeline.demo.shipped': '發布更新',
   'timeline.demo.shippedDescription': '元件現在可透過 registry 工作流程安裝。',
+  'timeline.demo.shippedMeta': '13:30',
   'timeline.demo.plan': '規劃',
+  'timeline.demo.planDescription': '定義範圍、負責人與發布說明。',
   'timeline.demo.build': '建置',
+  'timeline.demo.buildDescription': '執行檢查並打包 registry 檔案。',
   'timeline.demo.release': '發布',
+  'timeline.demo.releaseDescription': '發布文件並同步 CLI registry。',
   'timeline.demo.divTitle': '匯入的活動紀錄',
+  'timeline.demo.divMeta': 'UI 團隊',
   'timeline.demo.divDescription': '當來源資料不適合原生清單時，可以使用 div 型標記。',
+  'timeline.demo.qaTitle': '品質檢查',
+  'timeline.demo.qaMeta': 'QA 通過',
+  'timeline.demo.qaDescription': '發布前已檢查視覺間距與空狀態。',
   'timeline.api.description': 'Timeline directives 支援的 Inputs。',
   'timeline.api.orientation.description': '控制項目垂直堆疊或水平排列。',
   'timeline.api.class.description': '與 timeline 根元素合併的額外 class。',
@@ -681,9 +718,11 @@ export const zh: Record<TranslationKey, string> = {
   'intro.installation.body': '從 npm 安裝基礎套件，取得元件 primitives 的使用權。',
   'intro.installation.tailwind':
     '接著讓 Tailwind 掃描套件原始碼，確保元件用到的 utility class 都被納入 build。在你的 CSS 入口檔加入以下設定：',
+  'intro.workflow.title': '建議工作流',
+  'intro.workflow.body': '使用 CLI 初始化本機 registry 設定，接著只加入你需要的元件原始碼。',
   'intro.firstComponent.title': '加入第一個元件',
   'intro.firstComponent.body':
-    '從 @sanring/ui 匯入需要的 directive 或 component，加入 Angular 元件的 imports 陣列即可使用。',
+    '加入元件後，從本機 UI 資料夾匯入需要的 directive 或 component，加入 Angular 元件的 imports 陣列即可使用。',
 
   'roadmap.page.description':
     '近期已完成的 primitives 與接下來的規劃，依「複用多少既有程式碼」跟「實際被需要的頻率」排序。',
@@ -707,7 +746,7 @@ export const zh: Record<TranslationKey, string> = {
   'theming.tailwind.body':
     'Tailwind v4 從 CSS 中的 @theme 區塊讀取 token 值。使用 @theme inline 可讓 var() 參考在執行期保持活躍，亮暗主題切換無需重新 build。',
   'theming.tailwind.note':
-    'inline 關鍵字是關鍵差異——缺少它，Tailwind 會在 build 時一次性解析變數值，亮暗切換就會失效。若使用 CLI 複製元件，請把你設定的 component path 也加入 @source。',
+    'inline 關鍵字是關鍵差異——缺少它，Tailwind 會在 build 時一次性解析變數值，亮暗切換就會失效。@source 路徑應同時包含 package source 與 CLI 複製出的本機 component path。',
   'theming.brand.title': '自訂品牌',
   'theming.brand.body':
     '在 :root 中覆寫任何 --sanring-* 或 --docs-accent token，元件立即反映新值，不需更改任何設定檔。',

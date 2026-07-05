@@ -4,7 +4,7 @@ import { ComponentPageSectionDefinition } from '../../docs-schema/component-page
 import { I18nService } from '../../i18n/i18n.service';
 import { ComponentPageComponent } from '../../layouts/component-page';
 import { docsComponentItems, DocsComponentNavItem } from '../../navigation/docs-navigation';
-import { getRecentlyUpdatedComponentIds } from '../changelog/component-changelog';
+import { isRecentlyUpdatedComponentId } from '../changelog/component-changelog';
 
 @Component({
   selector: 'app-components-page',
@@ -73,16 +73,23 @@ import { getRecentlyUpdatedComponentIds } from '../changelog/component-changelog
               @for (item of items; track item.id) {
                 @if (item.disabled) {
                   <span
-                    class="text-lg font-semibold text-[color-mix(in_srgb,var(--docs-muted)_45%,transparent)]"
+                    class="inline-flex min-w-0 items-center gap-2 text-lg font-semibold text-[color-mix(in_srgb,var(--docs-muted)_45%,transparent)]"
                   >
-                    {{ i18n.t(item.labelKey) }}
+                    <span class="min-w-0 truncate">{{ i18n.t(item.labelKey) }}</span>
                   </span>
                 } @else {
                   <a
-                    class="text-lg font-semibold text-[var(--docs-fg)] no-underline transition-colors hover:text-[var(--docs-muted)]"
+                    class="inline-flex min-w-0 items-center gap-2 text-lg font-semibold text-[var(--docs-fg)] no-underline transition-colors hover:text-[var(--docs-muted)]"
                     [routerLink]="item.path"
                   >
-                    {{ i18n.t(item.labelKey) }}
+                    <span class="min-w-0 truncate">{{ i18n.t(item.labelKey) }}</span>
+                    @if (item.badge) {
+                      <span class="sr-only">{{ i18n.t('home.components.newBadge') }}</span>
+                      <span
+                        class="size-2 shrink-0 rounded-full bg-[var(--docs-accent-strong)] shadow-[0_0_0_3px_color-mix(in_srgb,var(--docs-accent)_18%,transparent)]"
+                        aria-hidden="true"
+                      ></span>
+                    }
                   </a>
                 }
               }
@@ -107,10 +114,10 @@ export class ComponentsPageComponent {
       level: 2,
     },
   ];
-  protected readonly items = docsComponentItems;
-  protected readonly updatedItems: DocsComponentNavItem[] = (() => {
-    const updatedIds = new Set(getRecentlyUpdatedComponentIds());
-    return docsComponentItems.filter((item) => updatedIds.has(item.id));
-  })();
+  protected readonly items: DocsComponentNavItem[] = docsComponentItems.map((item) => ({
+    ...item,
+    badge: isRecentlyUpdatedComponentId(item.id),
+  }));
+  protected readonly updatedItems: DocsComponentNavItem[] = this.items.filter((item) => item.badge);
   protected readonly i18n = inject(I18nService);
 }

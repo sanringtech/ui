@@ -205,6 +205,32 @@ export const en = {
   'alert.api.class.description': 'Additional classes merged with the base alert styles.',
   'alert.api.variant.description':
     'Controls the visual tone. Available variants are default and destructive.',
+  'alertDialog.description':
+    'A modal confirmation dialog for destructive or important actions. Unlike Dialog, it cannot be dismissed by clicking the backdrop or pressing Escape.',
+  'alertDialog.demo.open': 'Delete account',
+  'alertDialog.demo.cancel': 'Cancel',
+  'alertDialog.demo.action': 'Delete',
+  'alertDialog.demo.customResultTitle': 'Remove item',
+  'alertDialog.demo.customResult': 'Custom result value',
+  'alertDialog.examples.description':
+    'Confirmation flows that require an explicit choice before the dialog closes.',
+  'alertDialog.examples.basic.description':
+    'Call `AlertDialogService.open()` and compose the body from `AlertDialogContent`, title, description, and the action/cancel directives.',
+  'alertDialog.usage.description':
+    'Import `AlertDialogService`, call `open()` with an `ng-template`, and pair `sanringAlertDialogCancel` with `sanringAlertDialogAction` inside it.',
+  'alertDialog.installation.description':
+    'Alert Dialog builds on Dialog — installing it also installs the Dialog primitives it depends on.',
+  'alertDialog.composition.description':
+    '`AlertDialogContent` extends `DialogContent` with the close button hidden by default. Pair it with `sanringDialogTitle`, `sanringDialogDescription`, `sanringAlertDialogCancel`, and `sanringAlertDialogAction`.',
+  'alertDialog.api.description': 'Inputs supported by the alert dialog primitives.',
+  'alertDialog.api.class.description':
+    'Additional classes merged with `AlertDialogContent` layout styles.',
+  'alertDialog.api.showClose.description':
+    'Controls whether the built-in close button is rendered. Defaults to `false`, unlike Dialog.',
+  'alertDialog.api.action.description':
+    'Optional result value passed to `DialogRef.close()` when clicked. Defaults to `true`.',
+  'alertDialog.api.cancel.description':
+    'Optional result value passed to `DialogRef.close()` when clicked. Defaults to `false`.',
   'button.description':
     'A flexible action primitive for commands, navigation triggers, and compact icon controls.',
   'button.demo.default': 'Default',
@@ -379,17 +405,30 @@ export const en = {
     'Install the timeline primitives and compose item, separator, and content directives where each event renders.',
   'timeline.demo.horizontal': 'Horizontal',
   'timeline.demo.divBased': 'Div-based timeline',
+  'timeline.demo.releaseActivity': 'Release activity',
+  'timeline.demo.releaseActivityDescription': 'A compact activity trail for release notes and registry updates.',
+  'timeline.demo.today': 'Today',
   'timeline.demo.created': 'Created project',
   'timeline.demo.createdDescription': 'Workspace and registry files are ready.',
+  'timeline.demo.createdMeta': '09:12',
   'timeline.demo.reviewed': 'Reviewed content',
   'timeline.demo.reviewedDescription': 'Documentation examples were checked against the primitive API.',
+  'timeline.demo.reviewedMeta': '10:48',
   'timeline.demo.shipped': 'Published update',
   'timeline.demo.shippedDescription': 'The component can now be installed through the registry workflow.',
+  'timeline.demo.shippedMeta': '13:30',
   'timeline.demo.plan': 'Plan',
+  'timeline.demo.planDescription': 'Define scope, owners, and release notes.',
   'timeline.demo.build': 'Build',
+  'timeline.demo.buildDescription': 'Run checks and package registry files.',
   'timeline.demo.release': 'Release',
+  'timeline.demo.releaseDescription': 'Publish docs and sync the CLI registry.',
   'timeline.demo.divTitle': 'Imported activity feed',
+  'timeline.demo.divMeta': 'UI team',
   'timeline.demo.divDescription': 'Use div-based markup when the source data is not naturally a native list.',
+  'timeline.demo.qaTitle': 'Quality review',
+  'timeline.demo.qaMeta': 'QA pass',
+  'timeline.demo.qaDescription': 'Visual spacing and empty states were reviewed before publishing.',
   'timeline.api.description': 'Inputs supported by the Timeline directives.',
   'timeline.api.orientation.description': 'Controls whether items stack vertically or horizontally.',
   'timeline.api.class.description': 'Additional classes merged with the timeline root.',
@@ -755,9 +794,12 @@ export const en = {
   'intro.installation.body': 'Install the base package from npm to get access to the component primitives.',
   'intro.installation.tailwind':
     'Then tell Tailwind to scan the package source so utility classes from the components are included in your build. Add this to your CSS entry file:',
+  'intro.workflow.title': 'Recommended workflow',
+  'intro.workflow.body':
+    'Use the CLI to initialize local registry settings, then add only the component source you need.',
   'intro.firstComponent.title': 'Add your first component',
   'intro.firstComponent.body':
-    'Import the directive or component you need from @sanring/ui and add it to your Angular component\'s imports array.',
+    'After adding a component, import the directive or component from your local UI folder and add it to your Angular component\'s imports array.',
 
   'roadmap.page.description':
     'Recently shipped primitives and what is planned next, prioritized by how much existing code they reuse and how often they are actually needed.',
@@ -786,7 +828,7 @@ export const en = {
   'theming.tailwind.body':
     'Tailwind v4 reads token values from @theme blocks in your CSS. Using @theme inline keeps the var() reference alive at runtime so theme switching works without a rebuild.',
   'theming.tailwind.note':
-    'The inline keyword is the key difference — without it Tailwind resolves the value once at build time and dark/light switching stops working. If you copy components with the CLI, add your configured component path to @source too.',
+    'The inline keyword is the key difference — without it Tailwind resolves the value once at build time and dark/light switching stops working. The @source paths should include both the package source and your local CLI component path.',
   'theming.brand.title': 'Customising your brand',
   'theming.brand.body':
     'Override any --sanring-* or --docs-accent token in :root. Components immediately pick up the new values — no configuration files to change.',
