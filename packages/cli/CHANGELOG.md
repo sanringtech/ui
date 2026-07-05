@@ -4,6 +4,13 @@
 
 ### Minor Changes
 
+- Registry now includes `alert-dialog` (`sanring add alert-dialog`) — a Dialog variant that cannot be dismissed by backdrop click or Escape, for confirmations that require an explicit choice. Installing it also installs `dialog`, which it depends on. `sanringAlertDialogAction`/`sanringAlertDialogCancel` close with a result value (`true`/`false` by default, or a custom value), and `sanringAlertDialogTrigger` opens it declaratively, mirroring `sanringDialogTrigger`.
+
+  Also updates the `dialog` component it depends on: adds `DialogMedia` for an icon badge above the title, `sanringDialogTrigger` now accepts an optional `sanringDialogConfig` (CDK `DialogConfig`) to override defaults per-trigger, and `sanringDialogClose` accepts an optional result value (`[sanringDialogClose]="result"`).
+
+- Registry now includes `slider` (`sanring add slider`) — a range control for selecting a numeric value, with pointer, keyboard, ARIA slider semantics, and Angular forms support.
+- Registry now includes `stepper` (`sanring add stepper`) — a multi-step workflow built on Angular CDK Stepper, with template labels, custom icons, and solid or dashed connectors.
+- Registry now includes `timeline` (`sanring add timeline`) — chronological event/process primitives with vertical and horizontal orientation support.
 - 20c768d: Registry now includes `aspect-ratio` and `textarea` components (`sanring add aspect-ratio`, `sanring add textarea`). `@sanring/ui`'s `input` directive no longer targets `<textarea>` — use the new `sanringTextarea` directive instead when re-copying the `input` component.
 
 ## 0.3.0
