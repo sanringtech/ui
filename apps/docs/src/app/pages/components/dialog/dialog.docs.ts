@@ -43,6 +43,16 @@ export const dialogPage = {
           level: 3,
         },
         {
+          id: 'example-media',
+          titleKey: 'dialog.demo.media',
+          level: 3,
+        },
+        {
+          id: 'example-config-result',
+          titleKey: 'dialog.demo.configResult',
+          level: 3,
+        },
+        {
           id: 'example-no-close',
           titleKey: 'dialog.demo.noClose',
           level: 3,
@@ -79,6 +89,24 @@ export const dialogPage = {
       defaultValue: 'true',
       descriptionKey: 'dialog.api.showClose.description',
     },
+    {
+      property: 'sanringDialogConfig',
+      type: 'DialogConfig',
+      defaultValue: 'undefined',
+      descriptionKey: 'dialog.api.triggerConfig.description',
+    },
+    {
+      property: 'sanringDialogClose',
+      type: 'unknown',
+      defaultValue: 'undefined',
+      descriptionKey: 'dialog.api.closeResult.description',
+    },
+    {
+      property: 'sanring-dialog-media.class',
+      type: 'string',
+      defaultValue: 'undefined',
+      descriptionKey: 'dialog.api.mediaClass.description',
+    },
   ] satisfies readonly ComponentPageApiRow[],
 } as const satisfies ComponentPageDefinition;
 
@@ -86,6 +114,7 @@ export const dialogPageExamples = {
   composition: `[sanringDialogTrigger]
 sanring-dialog-content
 ├── sanring-dialog-header
+│   ├── sanring-dialog-media
 │   ├── [sanringDialogTitle]
 │   └── [sanringDialogDescription]
 └── sanring-dialog-footer`,
@@ -124,6 +153,7 @@ import {
   DialogDescriptionDirective,
   DialogFooterComponent,
   DialogHeaderComponent,
+  DialogMediaComponent,
   DialogTitleDirective,
   DialogTriggerDirective,
 } from '@sanring/ui';
@@ -134,6 +164,7 @@ import {
     DialogTriggerDirective,
     DialogContentComponent,
     DialogHeaderComponent,
+    DialogMediaComponent,
     DialogTitleDirective,
     DialogDescriptionDirective,
     DialogFooterComponent,
@@ -151,7 +182,49 @@ export class ExampleComponent {}`,
     </sanring-dialog-header>
 
     <sanring-dialog-footer>
-      <button sanringBtn sanringDialogClose type="button">Done</button>
+      <button sanringBtn [sanringDialogClose]="'done'" type="button">Done</button>
+    </sanring-dialog-footer>
+  </sanring-dialog-content>
+</ng-template>`,
+  media: `<button sanringBtn [sanringDialogTrigger]="dialog">Open dialog</button>
+
+<ng-template #dialog>
+  <sanring-dialog-content>
+    <sanring-dialog-header>
+      <sanring-dialog-media>
+        <svg><!-- icon --></svg>
+      </sanring-dialog-media>
+      <h2 sanringDialogTitle>Share project?</h2>
+      <p sanringDialogDescription>
+        Anyone with the link will be able to view this project.
+      </p>
+    </sanring-dialog-header>
+  </sanring-dialog-content>
+</ng-template>`,
+  configResult: `<button
+  sanringBtn
+  [sanringDialogTrigger]="dialog"
+  [sanringDialogConfig]="{ disableClose: true }"
+>
+  Review changes
+</button>
+
+<ng-template #dialog>
+  <sanring-dialog-content [showClose]="false">
+    <sanring-dialog-header>
+      <h2 sanringDialogTitle>Review changes</h2>
+      <p sanringDialogDescription>
+        This dialog cannot be dismissed by Escape or backdrop.
+      </p>
+    </sanring-dialog-header>
+
+    <sanring-dialog-footer>
+      <button sanringBtn variant="outline" [sanringDialogClose]="'cancel'" type="button">
+        Cancel
+      </button>
+      <button sanringBtn [sanringDialogClose]="'confirm'" type="button">
+        Confirm
+      </button>
     </sanring-dialog-footer>
   </sanring-dialog-content>
 </ng-template>`,

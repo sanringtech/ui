@@ -85,26 +85,25 @@ export const timelinePage = {
 } as const satisfies ComponentPageDefinition;
 
 export const timelinePageExamples = {
-  basic: `<ul sanringTimeline class="gap-0">
-  <li sanringTimelineItem class="gap-5">
+  basic: `<ul sanringTimeline>
+  <li sanringTimelineItem>
     <span sanringTimelineSeparator>
-      <span class="grid size-8 place-items-center rounded-full border bg-background">
-        <span class="size-3 rounded-full bg-primary"></span>
+      <span class="grid size-6 place-items-center rounded-full border-2 bg-background">
+        <span class="size-2 rounded-full bg-primary"></span>
       </span>
-      <span class="h-20 w-px bg-border"></span>
+      <!-- omit on the last item -->
+      <span class="w-px flex-1 bg-border"></span>
     </span>
-    <div sanringTimelineContent class="pb-7">
-      <article class="min-h-20 rounded-md border bg-background px-4 py-3">
-        <div class="flex items-start justify-between gap-4">
+    <div sanringTimelineContent class="pb-6">
+      <div class="rounded-lg border bg-background p-4">
+        <div class="flex items-center justify-between gap-4">
           <div>
             <p class="font-medium">Created project</p>
             <p class="text-sm text-muted-foreground">Workspace and registry files are ready.</p>
           </div>
-          <span class="rounded-full border px-2.5 py-1 text-xs">
-            09:12
-          </span>
+          <span sanringBadge variant="outline">09:12</span>
         </div>
-      </article>
+      </div>
     </div>
   </li>
 </ul>`,
@@ -120,42 +119,44 @@ export const timelinePageExamples = {
     <div sanringTimelineContent>Created project</div>
   </li>
 </ul>`,
-  horizontal: `<ul sanringTimeline orientation="horizontal" class="gap-0">
-  <li sanringTimelineItem class="flex-1 gap-3">
-    <span sanringTimelineSeparator class="relative w-full justify-center">
-      <span class="absolute left-1/2 right-0 top-1/2 h-px -translate-y-1/2 bg-border"></span>
-      <span class="relative z-10 grid size-9 place-items-center rounded-full border bg-background">
+  horizontal: `<!-- TimelineItem stacks vertically and TimelineSeparator runs
+     horizontally once orientation="horizontal" -->
+<ul sanringTimeline orientation="horizontal" class="gap-0">
+  <li sanringTimelineItem class="flex-1">
+    <span sanringTimelineSeparator class="w-full">
+      <!-- first item: hide the leading line segment -->
+      <span class="h-px flex-1 bg-border invisible"></span>
+      <span class="grid size-7 place-items-center rounded-full border-2 bg-background text-xs">
         1
       </span>
+      <span class="h-px flex-1 bg-border"></span>
     </span>
-    <div sanringTimelineContent>
-      <article class="min-h-28 rounded-md border p-4">
-        Plan
-      </article>
-    </div>
+    <div sanringTimelineContent class="pt-3 text-center">Plan</div>
   </li>
-  <li sanringTimelineItem class="flex-1 gap-3">
-    <span sanringTimelineSeparator class="relative w-full justify-center">
-      <span class="absolute left-0 right-1/2 top-1/2 h-px -translate-y-1/2 bg-border"></span>
-      <span class="relative z-10 grid size-9 place-items-center rounded-full border bg-background">
+  <li sanringTimelineItem class="flex-1">
+    <span sanringTimelineSeparator class="w-full">
+      <span class="h-px flex-1 bg-border"></span>
+      <span class="grid size-7 place-items-center rounded-full border-2 bg-background text-xs">
         2
       </span>
+      <!-- last item: hide the trailing line segment -->
+      <span class="h-px flex-1 bg-border invisible"></span>
     </span>
-    <div sanringTimelineContent>
-      <article class="min-h-28 rounded-md border p-4">
-        Build
-      </article>
-    </div>
+    <div sanringTimelineContent class="pt-3 text-center">Build</div>
   </li>
 </ul>`,
-  divBased: `<div sanringTimeline class="gap-0 rounded-md border">
-  <div sanringTimelineItem class="items-start gap-4 border-b p-4">
-    <span sanringTimelineSeparator class="grid size-9 place-items-center rounded-md bg-muted">
-      UI
-    </span>
-    <div sanringTimelineContent>
-      Imported from an activity feed.
+  divBased: `<!-- sanringTimeline/-Item/-Content also accept plain divs, so the
+     primitives compose with a Card instead of a semantic list -->
+<sanring-card>
+  <div sanringTimeline class="divide-y">
+    <div sanringTimelineItem class="items-center p-4">
+      <span sanringTimelineSeparator>
+        <sanring-avatar size="sm">
+          <sanring-avatar-fallback>UI</sanring-avatar-fallback>
+        </sanring-avatar>
+      </span>
+      <div sanringTimelineContent>Imported from an activity feed.</div>
     </div>
   </div>
-</div>`,
+</sanring-card>`,
 } as const;

@@ -333,6 +333,8 @@ export const en = {
     'An overlay primitive built on Angular CDK Dialog for modal tasks and focused decisions.',
   'dialog.demo.open': 'Open dialog',
   'dialog.demo.customClose': 'Custom Close Button',
+  'dialog.demo.media': 'With Media',
+  'dialog.demo.configResult': 'Config and Result',
   'dialog.demo.noClose': 'No Close Button',
   'dialog.demo.stickyFooter': 'Sticky Footer',
   'dialog.demo.scrollable': 'Scrollable Content',
@@ -345,10 +347,13 @@ export const en = {
   'dialog.installation.description':
     'Dialog is powered by Angular CDK Dialog. Compose the exported primitives from @sanring/ui.',
   'dialog.composition.description':
-    'Use DialogContent for the panel, DialogHeader and DialogFooter for layout, and sanringDialogClose for custom close actions.',
+    'Use DialogContent for the panel, DialogHeader/DialogFooter for layout, optional DialogMedia for emphasis, and sanringDialogTrigger/sanringDialogClose for config and close results.',
   'dialog.api.description': 'Inputs supported by the dialog primitives.',
   'dialog.api.class.description': 'Additional classes merged with DialogContent layout styles.',
   'dialog.api.showClose.description': 'Controls whether the built-in close button is rendered.',
+  'dialog.api.triggerConfig.description': 'CDK DialogConfig passed when sanringDialogTrigger opens the template.',
+  'dialog.api.closeResult.description': 'Optional result value emitted when sanringDialogClose closes the dialog.',
+  'dialog.api.mediaClass.description': 'Additional classes merged with the dialog media container.',
   'divider.description': 'A simple separator for grouping content and actions in a layout.',
   'divider.demo.account': 'Account',
   'divider.demo.profile': 'Profile',

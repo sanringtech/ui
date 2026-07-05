@@ -1,4 +1,5 @@
 import { Component, inject } from '@angular/core';
+import { LucideShare2 } from '@lucide/angular';
 import { ButtonDirective, SANRING_DIALOG_IMPORTS } from '@sanring/ui';
 import { getComponentPageSection } from '../../../docs-schema/component-page.utils';
 import { I18nService } from '../../../i18n/i18n.service';
@@ -27,6 +28,7 @@ import { dialogPage, dialogPageExamples } from './dialog.docs';
     ComponentPageInstallationComponent,
     ComponentPageUsageImportsComponent,
     ComponentPageSectionComponent,
+    LucideShare2,
   ],
   template: `
     <app-component-page [sections]="page.sections">
@@ -90,6 +92,34 @@ import { dialogPage, dialogPageExamples } from './dialog.docs';
             </app-component-page-code-previewer>
           </app-component-page-section>
 
+          <app-component-page-section [section]="section('example-media')">
+            <app-component-page-code-previewer [code]="examples.media" language="angular-html">
+              <div previewer class="flex justify-center">
+                <button sanringBtn [sanringDialogTrigger]="mediaDialog" type="button">
+                  {{ i18n.t('dialog.demo.media') }}
+                </button>
+              </div>
+            </app-component-page-code-previewer>
+          </app-component-page-section>
+
+          <app-component-page-section [section]="section('example-config-result')">
+            <app-component-page-code-previewer
+              [code]="examples.configResult"
+              language="angular-html"
+            >
+              <div previewer class="flex justify-center">
+                <button
+                  sanringBtn
+                  [sanringDialogTrigger]="configResultDialog"
+                  [sanringDialogConfig]="{ disableClose: true }"
+                  type="button"
+                >
+                  {{ i18n.t('dialog.demo.configResult') }}
+                </button>
+              </div>
+            </app-component-page-code-previewer>
+          </app-component-page-section>
+
           <app-component-page-section [section]="section('example-no-close')">
             <app-component-page-code-previewer [code]="examples.noClose" language="angular-html">
               <div previewer class="flex justify-center">
@@ -145,7 +175,38 @@ import { dialogPage, dialogPageExamples } from './dialog.docs';
             <p sanringDialogDescription>Close this dialog from an action button.</p>
           </sanring-dialog-header>
           <sanring-dialog-footer>
-            <button sanringBtn sanringDialogClose type="button">Done</button>
+            <button sanringBtn [sanringDialogClose]="'done'" type="button">Done</button>
+          </sanring-dialog-footer>
+        </sanring-dialog-content>
+      </ng-template>
+
+      <ng-template #mediaDialog>
+        <sanring-dialog-content>
+          <sanring-dialog-header>
+            <sanring-dialog-media>
+              <svg lucideShare2></svg>
+            </sanring-dialog-media>
+            <h2 sanringDialogTitle>Share project?</h2>
+            <p sanringDialogDescription>
+              Anyone with the link will be able to view this project.
+            </p>
+          </sanring-dialog-header>
+        </sanring-dialog-content>
+      </ng-template>
+
+      <ng-template #configResultDialog>
+        <sanring-dialog-content [showClose]="false">
+          <sanring-dialog-header>
+            <h2 sanringDialogTitle>Review changes</h2>
+            <p sanringDialogDescription>
+              This dialog cannot be dismissed by Escape or backdrop.
+            </p>
+          </sanring-dialog-header>
+          <sanring-dialog-footer>
+            <button sanringBtn variant="outline" [sanringDialogClose]="'cancel'" type="button">
+              Cancel
+            </button>
+            <button sanringBtn [sanringDialogClose]="'confirm'" type="button">Confirm</button>
           </sanring-dialog-footer>
         </sanring-dialog-content>
       </ng-template>

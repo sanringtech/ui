@@ -301,6 +301,8 @@ export const zh: Record<TranslationKey, string> = {
   'dialog.description': '建立在 Angular CDK Dialog 上的 overlay primitive，適合 modal 任務與聚焦決策。',
   'dialog.demo.open': '開啟對話框',
   'dialog.demo.customClose': '自訂關閉按鈕',
+  'dialog.demo.media': '包含媒體',
+  'dialog.demo.configResult': '設定與結果',
   'dialog.demo.noClose': '沒有關閉按鈕',
   'dialog.demo.stickyFooter': '固定頁尾',
   'dialog.demo.scrollable': '可捲動內容',
@@ -312,10 +314,13 @@ export const zh: Record<TranslationKey, string> = {
   'dialog.installation.description':
     'Dialog 基於 Angular CDK Dialog，從 @sanring/ui 匯入並組合對應 primitives。',
   'dialog.composition.description':
-    '使用 DialogContent 建立 panel，DialogHeader 與 DialogFooter 管理版面，sanringDialogClose 處理自訂關閉操作。',
+    '使用 DialogContent 建立 panel，DialogHeader/DialogFooter 管理版面，選用 DialogMedia 強化重點，並透過 sanringDialogTrigger/sanringDialogClose 處理設定與關閉結果。',
   'dialog.api.description': 'Dialog primitives 支援的 Inputs。',
   'dialog.api.class.description': '與 DialogContent 版面樣式合併的額外 class。',
   'dialog.api.showClose.description': '控制是否渲染內建關閉按鈕。',
+  'dialog.api.triggerConfig.description': 'sanringDialogTrigger 開啟 template 時傳入的 CDK DialogConfig。',
+  'dialog.api.closeResult.description': 'sanringDialogClose 關閉 dialog 時送出的選填結果值。',
+  'dialog.api.mediaClass.description': '與 dialog media 容器合併的額外 class。',
   'divider.description': '用於在版面中分組內容與操作的簡單分隔元素。',
   'divider.demo.account': '帳戶',
   'divider.demo.profile': '個人資料',

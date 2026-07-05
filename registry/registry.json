@@ -184,6 +184,7 @@
         "dialog/dialog.service.ts",
         "dialog/dialog-content.component.ts",
         "dialog/dialog-header.component.ts",
+        "dialog/dialog-media.component.ts",
         "dialog/dialog-footer.component.ts",
         "dialog/dialog-title.directive.ts",
         "dialog/dialog-description.directive.ts",
