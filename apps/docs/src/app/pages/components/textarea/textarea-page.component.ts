@@ -1,5 +1,5 @@
 import { Component, inject } from '@angular/core';
-import { InputDirective } from '@sanring/ui';
+import { TextareaDirective } from '@sanring/ui';
 import { getComponentPageSection } from '../../../docs-schema/component-page.utils';
 import { I18nService } from '../../../i18n/i18n.service';
 import {
@@ -12,13 +12,12 @@ import {
   ComponentPageUsageImportsComponent,
   ComponentPageSectionComponent,
 } from '../../../layouts/component-page';
-import { inputPage, inputPageExamples } from './input.docs';
+import { textareaPage, textareaPageExamples } from './textarea.docs';
 
 @Component({
-  selector: 'app-input-page',
+  selector: 'app-textarea-page',
   imports: [
     ComponentPageApiTableComponent,
-    InputDirective,
     ComponentPageCodeBlock,
     ComponentPageCodePreviewer,
     ComponentPageComponent,
@@ -26,6 +25,7 @@ import { inputPage, inputPageExamples } from './input.docs';
     ComponentPageInstallationComponent,
     ComponentPageUsageImportsComponent,
     ComponentPageSectionComponent,
+    TextareaDirective,
   ],
   template: `
     <app-component-page [sections]="page.sections">
@@ -37,8 +37,8 @@ import { inputPage, inputPageExamples } from './input.docs';
 
       <app-component-page-section [section]="section('basic')">
         <app-component-page-code-previewer [code]="examples.basic" language="angular-html">
-          <div previewer class="w-[min(360px,100%)]">
-            <input sanringInput placeholder="Email" type="email" />
+          <div previewer class="w-[min(420px,100%)]">
+            <textarea sanringTextarea placeholder="Write a note"></textarea>
           </div>
         </app-component-page-code-previewer>
       </app-component-page-section>
@@ -56,8 +56,8 @@ import { inputPage, inputPageExamples } from './input.docs';
 
       <app-component-page-section [section]="section('installation')">
         <app-component-page-installation
-          componentName="input"
-          manualSnippet="import { InputDirective } from '@sanring/ui';"
+          componentName="textarea"
+          manualSnippet="import { TextareaDirective } from '@sanring/ui';"
         />
       </app-component-page-section>
 
@@ -65,16 +65,20 @@ import { inputPage, inputPageExamples } from './input.docs';
         <div class="grid gap-2">
           <app-component-page-section [section]="section('example-disabled')">
             <app-component-page-code-previewer [code]="examples.disabled" language="angular-html">
-              <div previewer class="w-[min(360px,100%)]">
-                <input sanringInput disabled value="readonly@sanring.dev" />
+              <div previewer class="w-[min(420px,100%)]">
+                <textarea sanringTextarea disabled>Readonly message</textarea>
               </div>
             </app-component-page-code-previewer>
           </app-component-page-section>
 
-          <app-component-page-section [section]="section('example-file')">
-            <app-component-page-code-previewer [code]="examples.file" language="angular-html">
-              <div previewer class="w-[min(360px,100%)]">
-                <input sanringInput type="file" />
+          <app-component-page-section [section]="section('example-resize')">
+            <app-component-page-code-previewer [code]="examples.resize" language="angular-html">
+              <div previewer class="w-[min(420px,100%)]">
+                <textarea
+                  sanringTextarea
+                  class="min-h-[140px] resize-y"
+                  placeholder="Longer message"
+                ></textarea>
               </div>
             </app-component-page-code-previewer>
           </app-component-page-section>
@@ -87,9 +91,9 @@ import { inputPage, inputPageExamples } from './input.docs';
     </app-component-page>
   `,
 })
-export class InputPageComponent {
-  protected readonly page = inputPage;
-  protected readonly examples = inputPageExamples;
+export class TextareaPageComponent {
+  protected readonly page = textareaPage;
+  protected readonly examples = textareaPageExamples;
   protected readonly i18n = inject(I18nService);
 
   protected section(id: string) {

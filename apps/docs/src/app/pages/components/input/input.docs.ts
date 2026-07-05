@@ -37,11 +37,6 @@ export const inputPage = {
           level: 3,
         },
         {
-          id: 'example-textarea',
-          titleKey: 'input.demo.textarea',
-          level: 3,
-        },
-        {
           id: 'example-file',
           titleKey: 'input.demo.file',
           level: 3,
@@ -70,6 +65,5 @@ export const inputPageExamples = {
   usageImport: `import { InputDirective } from '@sanring/ui';`,
   usageMain: `<input sanringInput placeholder="Email" type="email" />`,
   disabled: `<input sanringInput disabled value="readonly@sanring.dev" />`,
-  textarea: `<textarea sanringInput placeholder="Write a note"></textarea>`,
   file: `<input sanringInput type="file" />`,
 } as const;

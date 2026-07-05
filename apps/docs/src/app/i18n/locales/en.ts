@@ -55,6 +55,7 @@ export const en = {
   'component.table': 'Table',
   'component.tag': 'Tag',
   'component.tabs': 'Tabs',
+  'component.textarea': 'Textarea',
   'component.tooltip': 'Tooltip',
   'components.description':
     'Here you can find all components currently available in the library. More components will be added as the system grows.',
@@ -97,6 +98,7 @@ export const en = {
   'home.components.eyebrow': 'Components',
   'home.components.title': 'Curated component entry points',
   'home.components.panelTitle': 'All components',
+  'home.components.newBadge': 'New',
   'home.components.descriptionPrefix': 'The docs currently include',
   'home.components.descriptionSuffix':
     'available components covering core actions, feedback, overlays, navigation, and data display.',
@@ -119,6 +121,24 @@ export const en = {
   'toc.card.description':
     'Use the docs app to preview components, examples, and API decisions before publishing.',
   'toc.card.action': 'Open Registry',
+  'aspectRatio.description':
+    'A layout directive that keeps media, embeds, and preview frames locked to a consistent aspect ratio.',
+  'aspectRatio.examples.basic.description':
+    'Use sanringAspectRatio on any container and pass the desired CSS aspect-ratio value.',
+  'aspectRatio.usage.description':
+    'Import AspectRatioDirective, then apply sanringAspectRatio to the element that should own the frame.',
+  'aspectRatio.installation.description':
+    'Install @sanring/ui and import AspectRatioDirective into the standalone component that renders the media frame.',
+  'aspectRatio.demo.media': 'Media frame',
+  'aspectRatio.demo.square': 'Square thumbnail',
+  'aspectRatio.demo.card': 'Card media',
+  'aspectRatio.demo.cardTitle': 'Stable media frame',
+  'aspectRatio.demo.cardBody': 'Content below stays put while media loads.',
+  'aspectRatio.api.description': 'sanringAspectRatio directive inputs.',
+  'aspectRatio.api.ratio.description':
+    'Aspect ratio value applied to the host element. Accepts CSS ratio strings such as 16 / 9 or numbers such as 1.777.',
+  'aspectRatio.api.class.description':
+    'Additional classes merged with the base relative w-full container styles.',
   'accordion.description':
     'A vertically stacked set of interactive headings that each reveal a section of content.',
   'accordion.tabs.radix': 'Radix UI',
@@ -320,21 +340,32 @@ export const en = {
   'divider.api.vertical.description': 'Switches the separator from horizontal to vertical.',
   'divider.api.inset.description': 'Offsets the horizontal divider: none, start, end, or both.',
   'input.description':
-    'A form control styling directive for native inputs, textareas, and file fields.',
+    'A form control styling directive for native input and file fields.',
   'input.demo.disabled': 'Disabled',
-  'input.demo.textarea': 'Textarea',
   'input.demo.file': 'File',
   'input.examples.description':
-    'Common input patterns for editable text, disabled fields, textareas, and file uploads.',
+    'Common input patterns for editable text, disabled fields, and file uploads.',
   'input.examples.basic.description':
     'Apply sanringInput to a native input to keep browser behavior while receiving system styling.',
   'input.usage.description': 'Import InputDirective from @sanring/ui and apply sanringInput to an input.',
   'input.installation.description':
-    'Use sanringInput on native input or textarea elements and keep type, value, disabled, and form bindings native.',
+    'Use sanringInput on native input elements and keep type, value, disabled, and form bindings native.',
   'input.composition.description':
     'Pair Input with Label for accessible forms, or combine it with Card and Alert in larger workflows.',
   'input.api.description': 'Inputs supported by the sanringInput directive.',
   'input.api.class.description': 'Additional classes merged with the base input styles.',
+  'textarea.description':
+    'A multiline form control styling directive for native textarea elements.',
+  'textarea.examples.basic.description':
+    'Apply sanringTextarea to a native textarea to keep browser editing behavior with Sanring UI field styling.',
+  'textarea.usage.description':
+    'Import TextareaDirective from @sanring/ui and apply sanringTextarea to a textarea.',
+  'textarea.installation.description':
+    'Use sanringTextarea on native textarea elements and keep value, disabled, rows, and form bindings native.',
+  'textarea.demo.disabled': 'Disabled',
+  'textarea.demo.resize': 'Resizable',
+  'textarea.api.description': 'Inputs supported by the sanringTextarea directive.',
+  'textarea.api.class.description': 'Additional classes merged with the base textarea styles.',
   'label.description':
     'A native label styling directive for accessible form labels and field captions.',
   'label.demo.withInput': 'With input',
@@ -649,7 +680,7 @@ export const en = {
   'theming.tailwind.body':
     'Tailwind v4 reads token values from @theme blocks in your CSS. Using @theme inline keeps the var() reference alive at runtime so theme switching works without a rebuild.',
   'theming.tailwind.note':
-    'The inline keyword is the key difference — without it Tailwind resolves the value once at build time and dark/light switching stops working.',
+    'The inline keyword is the key difference — without it Tailwind resolves the value once at build time and dark/light switching stops working. If you copy components with the CLI, add your configured component path to @source too.',
   'theming.brand.title': 'Customising your brand',
   'theming.brand.body':
     'Override any --sanring-* or --docs-accent token in :root. Components immediately pick up the new values — no configuration files to change.',
@@ -673,6 +704,9 @@ export const en = {
   'cli.list.title': 'list',
   'cli.list.body':
     'Prints every component available in the registry, along with its peer dependencies. Aliased as ls.',
+  'cli.requirements.title': 'Requirements',
+  'cli.requirements.body':
+    'Run the CLI from the root of an Angular project. Before starting, make sure your project matches these versions and stylesheet requirements.',
 
   'changelog.page.description':
     'What changed, and where the record comes from — CLI releases are generated straight from Changesets, component updates are curated by hand.',
@@ -684,6 +718,7 @@ export const en = {
   'changelog.component.title': 'Components',
   'changelog.component.body':
     '@sanring/ui is intentionally excluded from Changesets — components are copied into your project as source, not published as a versioned package. This list is maintained by hand instead.',
+  'changelog.component.otherFixes': 'Other fixes',
 
   'component.radio': 'Radio Group',
   'radio.description': 'A set of radio buttons backed by ControlValueAccessor, with full keyboard navigation (roving tabindex) and WAI-ARIA compliance.',

@@ -4,6 +4,7 @@ import { ComponentPageSectionDefinition } from '../../docs-schema/component-page
 import { I18nService } from '../../i18n/i18n.service';
 import { ComponentPageComponent } from '../../layouts/component-page';
 import { docsComponentItems, DocsComponentNavItem } from '../../navigation/docs-navigation';
+import { getRecentlyUpdatedComponentIds } from '../changelog/component-changelog';
 
 @Component({
   selector: 'app-components-page',
@@ -107,6 +108,9 @@ export class ComponentsPageComponent {
     },
   ];
   protected readonly items = docsComponentItems;
-  protected readonly updatedItems: DocsComponentNavItem[] = [];
+  protected readonly updatedItems: DocsComponentNavItem[] = (() => {
+    const updatedIds = new Set(getRecentlyUpdatedComponentIds());
+    return docsComponentItems.filter((item) => updatedIds.has(item.id));
+  })();
   protected readonly i18n = inject(I18nService);
 }

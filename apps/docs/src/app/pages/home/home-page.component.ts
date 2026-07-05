@@ -14,6 +14,7 @@ import { ButtonDirective, ScrollAreaDirective } from '@sanring/ui';
 import { I18nService } from '../../i18n/i18n.service';
 import { TranslationKey } from '../../i18n/translations';
 import { docsComponentItems } from '../../navigation/docs-navigation';
+import { getRecentlyAddedComponentIds } from '../changelog/component-changelog';
 
 interface HomeFeature {
   titleKey: TranslationKey;
@@ -217,10 +218,17 @@ interface HomeHighlight {
           >
             @for (item of componentItems; track item.id) {
               <a
-                class="rounded-[var(--sanring-radius)] border border-[var(--docs-border)] bg-[var(--docs-surface)] px-4 py-3 text-sm font-semibold text-[var(--docs-fg)] no-underline transition-colors hover:border-[var(--docs-border-strong)] hover:bg-[var(--docs-elevated)]"
+                class="flex min-w-0 items-center justify-between gap-3 rounded-[var(--sanring-radius)] border border-[var(--docs-border)] bg-[var(--docs-surface)] px-4 py-3 text-sm font-semibold text-[var(--docs-fg)] no-underline transition-colors hover:border-[var(--docs-border-strong)] hover:bg-[var(--docs-elevated)]"
                 [routerLink]="item.path"
               >
-                {{ i18n.t(item.labelKey) }}
+                <span class="min-w-0 truncate">{{ i18n.t(item.labelKey) }}</span>
+                @if (item.isNew) {
+                  <span class="sr-only">{{ i18n.t('home.components.newBadge') }}</span>
+                  <span
+                    class="size-2 shrink-0 rounded-full bg-[var(--docs-accent-strong)] shadow-[0_0_0_3px_color-mix(in_srgb,var(--docs-accent)_18%,transparent)]"
+                    aria-hidden="true"
+                  ></span>
+                }
               </a>
             }
           </nav>
@@ -232,10 +240,12 @@ interface HomeHighlight {
 export class HomePageComponent {
   protected readonly i18n = inject(I18nService);
   protected readonly componentCount = docsComponentItems.length;
+  private readonly newComponentIds = new Set(getRecentlyAddedComponentIds());
   protected readonly componentItems = docsComponentItems.map((item) => ({
     id: item.id,
     path: item.path,
     labelKey: item.labelKey,
+    isNew: this.newComponentIds.has(item.id),
   }));
 
   protected readonly highlights: HomeHighlight[] = [

@@ -3,7 +3,7 @@ import { cn } from '../shared/utils';
 import { FIELD_SIZE_CLASS } from '../shared/component-styles';
 
 @Directive({
-  selector: 'input[sanringInput], textarea[sanringInput]',
+  selector: 'input[sanringInput]',
   standalone: true,
   host: {
     '[class]': 'inputClass()',
@@ -21,7 +21,6 @@ export class InputDirective {
       'placeholder:text-[var(--sanring-muted)]',
       'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--sanring-border-strong)]',
       'disabled:cursor-not-allowed disabled:opacity-50',
-      '[&:is(textarea)]:h-auto [&:is(textarea)]:min-h-[80px]',
       this.class(),
     ),
   );

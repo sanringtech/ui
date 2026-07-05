@@ -49,6 +49,15 @@
       ]
     },
     {
+      "name": "aspect-ratio",
+      "description": "Keeps media, embeds, and preview frames locked to a consistent aspect ratio.",
+      "sharedDeps": ["utils"],
+      "files": [
+        "aspect-ratio/aspect-ratio.directive.ts",
+        "aspect-ratio/index.ts"
+      ]
+    },
+    {
       "name": "avatar",
       "description": "An image element with a fallback for representing the user.",
       "sharedDeps": ["utils"],
@@ -189,6 +198,15 @@
       "files": [
         "input/input.directive.ts",
         "input/index.ts"
+      ]
+    },
+    {
+      "name": "textarea",
+      "description": "Displays a multiline form textarea field.",
+      "sharedDeps": ["utils"],
+      "files": [
+        "textarea/textarea.directive.ts",
+        "textarea/index.ts"
       ]
     },
     {

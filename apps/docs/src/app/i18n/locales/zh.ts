@@ -57,6 +57,7 @@ export const zh: Record<TranslationKey, string> = {
   'component.table': '表格',
   'component.tag': '標籤',
   'component.tabs': '頁籤',
+  'component.textarea': '多行文字',
   'component.tooltip': '提示浮層',
   'components.description': '這裡列出目前元件庫可用的所有元件，後續會隨系統成長持續補上更多元件。',
   'components.updatedTitle': '已更新元件',
@@ -97,6 +98,7 @@ export const zh: Record<TranslationKey, string> = {
   'home.components.eyebrow': 'Components',
   'home.components.title': '已整理的元件入口',
   'home.components.panelTitle': '所有元件',
+  'home.components.newBadge': '新元件',
   'home.components.descriptionPrefix': '文件站目前收錄',
   'home.components.descriptionSuffix': '個可用元件，涵蓋基礎操作、回饋訊息、overlay、導覽與資料呈現。',
   'toc.label': '本頁內容',
@@ -117,6 +119,24 @@ export const zh: Record<TranslationKey, string> = {
   'toc.card.title': '打造你的 Sanring UI 應用',
   'toc.card.description': '使用文件應用預覽元件、範例與 API 決策，再進行發布。',
   'toc.card.action': '開啟 Registry',
+  'aspectRatio.description':
+    '用於固定媒體、嵌入內容與預覽框比例的版面 directive。',
+  'aspectRatio.examples.basic.description':
+    '把 sanringAspectRatio 套用到任意容器，並傳入想要的 CSS aspect-ratio 值。',
+  'aspectRatio.usage.description':
+    '匯入 AspectRatioDirective，然後將 sanringAspectRatio 套用到要承載比例框的元素。',
+  'aspectRatio.installation.description':
+    '安裝 @sanring/ui，並在渲染媒體框的 standalone component 中匯入 AspectRatioDirective。',
+  'aspectRatio.demo.media': '媒體框',
+  'aspectRatio.demo.square': '正方形縮圖',
+  'aspectRatio.demo.card': '卡片媒體',
+  'aspectRatio.demo.cardTitle': '穩定的媒體框',
+  'aspectRatio.demo.cardBody': '媒體載入時，下方內容仍保持位置穩定。',
+  'aspectRatio.api.description': 'sanringAspectRatio directive 支援的 Inputs。',
+  'aspectRatio.api.ratio.description':
+    '套用到宿主元素的寬高比。可使用 16 / 9 這類 CSS ratio 字串，或 1.777 這類數字。',
+  'aspectRatio.api.class.description':
+    '額外合併到基礎 relative w-full 容器樣式上的 class。',
   'accordion.description': '垂直堆疊的互動標題集合，每個標題都能展開對應內容。',
   'accordion.tabs.radix': 'Radix UI',
   'accordion.tabs.base': 'Base UI',
@@ -286,20 +306,30 @@ export const zh: Record<TranslationKey, string> = {
   'divider.api.description': 'sanring-divider component 支援的 Inputs。',
   'divider.api.vertical.description': '將分隔線從水平切換為垂直。',
   'divider.api.inset.description': '調整水平分隔線縮排，可使用 none、start、end 或 both。',
-  'input.description': '用於原生 input、textarea 與 file 欄位的表單控制項樣式 directive。',
+  'input.description': '用於原生 input 與 file 欄位的表單控制項樣式 directive。',
   'input.demo.disabled': '停用',
-  'input.demo.textarea': '多行文字',
   'input.demo.file': '檔案上傳',
-  'input.examples.description': '常見輸入模式，適合文字欄位、停用狀態、多行文字與檔案上傳。',
+  'input.examples.description': '常見輸入模式，適合文字欄位、停用狀態與檔案上傳。',
   'input.examples.basic.description':
     '將 sanringInput 套用到原生 input，保留瀏覽器行為並取得系統樣式。',
   'input.usage.description': '從 @sanring/ui 匯入 InputDirective，並將 sanringInput 套用到 input。',
   'input.installation.description':
-    '在原生 input 或 textarea 上使用 sanringInput，並保留 type、value、disabled 與表單綁定。',
+    '在原生 input 上使用 sanringInput，並保留 type、value、disabled 與表單綁定。',
   'input.composition.description':
     'Input 可搭配 Label 建立可存取表單，也能與 Card、Alert 組成更完整的工作流程。',
   'input.api.description': 'sanringInput directive 支援的 Inputs。',
   'input.api.class.description': '與基礎輸入框樣式合併的額外 class。',
+  'textarea.description': '用於原生 textarea 的多行文字表單控制項樣式 directive。',
+  'textarea.examples.basic.description':
+    '將 sanringTextarea 套用到原生 textarea，保留瀏覽器編輯行為並取得 Sanring UI 欄位樣式。',
+  'textarea.usage.description':
+    '從 @sanring/ui 匯入 TextareaDirective，並將 sanringTextarea 套用到 textarea。',
+  'textarea.installation.description':
+    '在原生 textarea 上使用 sanringTextarea，並保留 value、disabled、rows 與表單綁定。',
+  'textarea.demo.disabled': '停用',
+  'textarea.demo.resize': '可調整大小',
+  'textarea.api.description': 'sanringTextarea directive 支援的 Inputs。',
+  'textarea.api.class.description': '與基礎多行文字樣式合併的額外 class。',
   'label.description': '用於原生 label 的樣式 directive，適合可存取表單標籤與欄位說明。',
   'label.demo.withInput': '搭配輸入框',
   'label.demo.disabled': '停用狀態',
@@ -574,7 +604,7 @@ export const zh: Record<TranslationKey, string> = {
   'theming.tailwind.body':
     'Tailwind v4 從 CSS 中的 @theme 區塊讀取 token 值。使用 @theme inline 可讓 var() 參考在執行期保持活躍，亮暗主題切換無需重新 build。',
   'theming.tailwind.note':
-    'inline 關鍵字是關鍵差異——缺少它，Tailwind 會在 build 時一次性解析變數值，亮暗切換就會失效。',
+    'inline 關鍵字是關鍵差異——缺少它，Tailwind 會在 build 時一次性解析變數值，亮暗切換就會失效。若使用 CLI 複製元件，請把你設定的 component path 也加入 @source。',
   'theming.brand.title': '自訂品牌',
   'theming.brand.body':
     '在 :root 中覆寫任何 --sanring-* 或 --docs-accent token，元件立即反映新值，不需更改任何設定檔。',
@@ -598,6 +628,9 @@ export const zh: Record<TranslationKey, string> = {
   'cli.list.title': 'list',
   'cli.list.body':
     '列出 registry 裡所有可用的元件與其 peer dependencies。指令別名為 ls。',
+  'cli.requirements.title': '需求',
+  'cli.requirements.body':
+    'CLI 需要在 Angular 專案根目錄執行。使用前請確認專案已符合以下版本與樣式設定。',
 
   'changelog.page.description':
     '記錄有什麼變動、資料來自哪裡——CLI 的版本紀錄直接由 Changesets 產生，元件的變更則是手動維護。',
@@ -609,6 +642,7 @@ export const zh: Record<TranslationKey, string> = {
   'changelog.component.title': '元件',
   'changelog.component.body':
     '@sanring/ui 刻意排除在 Changesets 之外——元件是以原始碼形式複製進你的專案，不是發布成有版本號的套件，這份清單改為手動維護。',
+  'changelog.component.otherFixes': '其他修正',
 
   'component.radio': 'Radio 群組',
   'radio.description': '一組單選按鈕，透過 ControlValueAccessor 相容 Angular 表單，內建 Roving Tabindex 鍵盤導航與完整 WAI-ARIA 規範。',

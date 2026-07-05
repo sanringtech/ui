@@ -17,7 +17,36 @@ const COMPONENT_TYPE_CLASS: Record<ComponentChangeType, string> = {
   fixed: 'bg-[var(--docs-warn-bg)] text-[var(--docs-warn-fg)]',
 };
 
-const CHIP_CLASS = 'shrink-0 rounded-[var(--sanring-radius-xs)] px-1.5 py-0.5 text-[11px] font-medium uppercase tracking-wide';
+const CHIP_CLASS = 'shrink-0 rounded-[var(--sanring-radius-xs)] px-1.5 py-0.5 text-[11px] font-medium leading-none uppercase tracking-wide';
+
+/**
+ * Shared type scale for this page. Every text block below picks one of these
+ * instead of leaving weight/line-height to the browser default, so CLI and
+ * component entries render on the same rhythm. Every row — notable or not —
+ * shares the same size, weight, line-height, and left edge; "notable" is
+ * marked by text color alone, so there's no extra border/padding to misalign.
+ */
+const ENTRY_HEADING_CLASS = 'm-0 text-base font-semibold leading-snug text-[var(--docs-fg)]';
+const ROW_CLASS = 'flex items-start gap-2.5 text-sm font-normal leading-relaxed text-[var(--docs-muted)]';
+const NOTABLE_ROW_CLASS = 'flex items-start gap-2.5 text-sm font-normal leading-relaxed text-[var(--docs-fg)]';
+const INLINE_CODE_CLASS =
+  'rounded-[var(--sanring-radius-xs)] bg-[var(--docs-surface-strong)] px-1 py-0.5 font-mono text-[0.9em] text-[var(--docs-fg)]';
+
+function escapeHtml(value: string): string {
+  return value.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+}
+
+/** Renders `` `code` `` spans as inline <code>, escaping everything else. */
+function renderInlineCode(text: string): string {
+  return text
+    .split(/(`[^`]+`)/g)
+    .map((segment) =>
+      segment.startsWith('`') && segment.endsWith('`')
+        ? `<code class="${INLINE_CODE_CLASS}">${escapeHtml(segment.slice(1, -1))}</code>`
+        : escapeHtml(segment),
+    )
+    .join('');
+}
 
 @Component({
   selector: 'app-changelog-page',
@@ -47,13 +76,13 @@ const CHIP_CLASS = 'shrink-0 rounded-[var(--sanring-radius-xs)] px-1.5 py-0.5 te
           <div class="mt-6 space-y-8">
             @for (version of cliChangelog.value(); track version.version) {
               <div>
-                <h3 class="m-0 text-base font-semibold text-[var(--docs-fg)]">v{{ version.version }}</h3>
+                <h3 [class]="entryHeadingClass">v{{ version.version }}</h3>
                 <ul class="mt-3 list-none space-y-2 p-0">
                   @for (change of version.changes; track $index) {
-                    <li class="flex items-start gap-2.5 text-sm text-[var(--docs-muted)]">
+                    <li [class]="rowClass">
                       <span [class]="chipClass + ' ' + cliTypeClass[change.type]">{{ change.type }}</span>
                       <span class="min-w-0 flex-1">
-                        {{ change.text }}
+                        <span [innerHTML]="renderText(change.text)"></span>
                         @if (change.hash) {
                           <span class="text-[var(--docs-muted)]">({{ change.hash }})</span>
                         }
@@ -74,17 +103,36 @@ const CHIP_CLASS = 'shrink-0 rounded-[var(--sanring-radius-xs)] px-1.5 py-0.5 te
         </p>
 
         <div class="mt-6 space-y-8">
-          @for (entry of componentChangelog; track entry.date) {
+          @for (entry of groupedComponentChangelog; track entry.date) {
             <div>
-              <h3 class="m-0 text-base font-semibold text-[var(--docs-fg)]">{{ entry.date }}</h3>
-              <ul class="mt-3 list-none space-y-2 p-0">
-                @for (change of entry.changes; track $index) {
-                  <li class="flex items-start gap-2.5 text-sm text-[var(--docs-muted)]">
-                    <span [class]="chipClass + ' ' + componentTypeClass[change.type]">{{ change.type }}</span>
-                    <span class="min-w-0 flex-1">{{ change.text }}</span>
-                  </li>
-                }
-              </ul>
+              <h3 [class]="entryHeadingClass">{{ entry.date }}</h3>
+
+              @if (entry.visible.length > 0) {
+                <ul class="mt-3 list-none space-y-2.5 p-0">
+                  @for (change of entry.visible; track $index) {
+                    <li [class]="change.notable ? notableRowClass : rowClass">
+                      <span [class]="chipClass + ' ' + componentTypeClass[change.type]">{{ change.type }}</span>
+                      <span class="min-w-0 flex-1" [innerHTML]="renderText(change.text)"></span>
+                    </li>
+                  }
+                </ul>
+              }
+
+              @if (entry.fixed.length > 0) {
+                <details class="mt-3 [&_summary::-webkit-details-marker]:hidden">
+                  <summary class="cursor-pointer text-xs font-medium leading-snug text-[var(--docs-muted)] hover:text-[var(--docs-fg)]">
+                    {{ i18n.t('changelog.component.otherFixes') }} ({{ entry.fixed.length }})
+                  </summary>
+                  <ul class="mt-2 list-none space-y-2 p-0">
+                    @for (change of entry.fixed; track $index) {
+                      <li [class]="rowClass">
+                        <span [class]="chipClass + ' ' + componentTypeClass[change.type]">{{ change.type }}</span>
+                        <span class="min-w-0 flex-1" [innerHTML]="renderText(change.text)"></span>
+                      </li>
+                    }
+                  </ul>
+                </details>
+              }
             </div>
           }
         </div>
@@ -100,8 +148,15 @@ export class ChangelogPageComponent {
     { id: 'components', titleKey: 'changelog.component.title' },
   ];
 
-  protected readonly componentChangelog = componentChangelog;
+  protected readonly groupedComponentChangelog = componentChangelog.map((entry) => ({
+    date: entry.date,
+    visible: entry.changes.filter((change) => change.notable || change.type !== 'fixed'),
+    fixed: entry.changes.filter((change) => change.type === 'fixed' && !change.notable),
+  }));
   protected readonly chipClass = CHIP_CLASS;
+  protected readonly entryHeadingClass = ENTRY_HEADING_CLASS;
+  protected readonly rowClass = ROW_CLASS;
+  protected readonly notableRowClass = NOTABLE_ROW_CLASS;
   protected readonly cliTypeClass = CLI_TYPE_CLASS;
   protected readonly componentTypeClass = COMPONENT_TYPE_CLASS;
 
@@ -113,4 +168,8 @@ export class ChangelogPageComponent {
       return parseCliChangelog(markdown);
     },
   });
+
+  protected renderText(text: string): string {
+    return renderInlineCode(text);
+  }
 }

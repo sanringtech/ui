@@ -83,6 +83,13 @@ export const routes: Routes = [
                   ),
               },
               {
+                path: 'aspect-ratio',
+                loadComponent: () =>
+                  import('./pages/components/aspect-ratio/aspect-ratio-page.component').then(
+                    (m) => m.AspectRatioPageComponent,
+                  ),
+              },
+              {
                 path: 'avatar',
                 loadComponent: () =>
                   import('./pages/components/avatar/avatar-page.component').then(
@@ -248,6 +255,13 @@ export const routes: Routes = [
                 loadComponent: () =>
                   import('./pages/components/tag/tag-page.component').then(
                     (m) => m.TagPageComponent,
+                  ),
+              },
+              {
+                path: 'textarea',
+                loadComponent: () =>
+                  import('./pages/components/textarea/textarea-page.component').then(
+                    (m) => m.TextareaPageComponent,
                   ),
               },
               {

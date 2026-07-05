@@ -39,6 +39,7 @@ export type DocsComponentId =
   | 'table'
   | 'tag'
   | 'tabs'
+  | 'textarea'
   | 'toggle'
   | 'toast'
   | 'tooltip';
@@ -77,13 +78,12 @@ export const docsComponentItems: DocsComponentNavItem[] = [
   //   active: true,
   //   disabled: true,
   // },
-  // {
-  //   id: 'aspect-ratio',
-  //   labelKey: 'component.aspectRatio',
-  //   path: '/components/aspect-ratio',
-  //   active: true,
-  //   disabled: true,
-  // },
+  {
+    id: 'aspect-ratio',
+    labelKey: 'component.aspectRatio',
+    path: '/components/aspect-ratio',
+    active: true,
+  },
   {
     id: 'avatar',
     labelKey: 'component.avatar',
@@ -226,6 +226,12 @@ export const docsComponentItems: DocsComponentNavItem[] = [
     id: 'table',
     labelKey: 'component.table',
     path: '/components/table',
+    active: true,
+  },
+  {
+    id: 'textarea',
+    labelKey: 'component.textarea',
+    path: '/components/textarea',
     active: true,
   },
   {

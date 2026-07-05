@@ -96,8 +96,27 @@ const INLINE_CODE_CLASS =
         </div>
         <ul class="mt-4 list-none space-y-2 p-0 text-sm text-[var(--docs-muted)]">
           <li>
-            <code [class]="inlineCodeClass">--registry &lt;url&gt;</code>
-            &mdash; custom registry URL
+            <code [class]="inlineCodeClass">--registry &lt;source&gt;</code>
+            &mdash; custom registry (URL or local path)
+          </li>
+        </ul>
+      </app-component-page-section>
+
+      <!-- 5. Requirements -->
+      <app-component-page-section [section]="sections[4]">
+        <p class="mt-0 text-base leading-[1.7] text-[var(--docs-muted)]">
+          {{ i18n.t('cli.requirements.body') }}
+        </p>
+        <ul class="mt-4 list-none space-y-2 p-0 text-sm text-[var(--docs-muted)]">
+          <li>
+            <code [class]="inlineCodeClass">Node.js &gt;= 18</code>
+          </li>
+          <li>
+            <code [class]="inlineCodeClass">Angular &gt;= 22</code>
+          </li>
+          <li>
+            <code [class]="inlineCodeClass">Tailwind CSS v4</code>
+            &mdash; configured in your application stylesheet
           </li>
         </ul>
       </app-component-page-section>
@@ -113,19 +132,24 @@ export class CliPageComponent {
     { id: 'init', titleKey: 'cli.init.title' },
     { id: 'add', titleKey: 'cli.add.title' },
     { id: 'list', titleKey: 'cli.list.title' },
+    { id: 'requirements', titleKey: 'cli.requirements.title' },
   ];
 
   protected readonly commands = {
-    overview: `npx @sanring/cli init
-npx @sanring/cli add button`,
-    init: `npx @sanring/cli init`,
-    add: `npx @sanring/cli add button
+    overview: `npx @sanring/cli@latest init
+npx @sanring/cli@latest add button`,
+    init: `npx @sanring/cli@latest init`,
+    add: `npx @sanring/cli@latest add button
 
 # add multiple components at once
-npx @sanring/cli add button dialog
+npx @sanring/cli@latest add button dialog
+
+# component dependencies are added automatically
+npx @sanring/cli@latest add tag
 
 # preview what would change, without writing any files
-npx @sanring/cli add button --dry-run`,
-    list: `npx @sanring/cli list`,
+npx @sanring/cli@latest add button --dry-run`,
+    list: `npx @sanring/cli@latest list
+npx @sanring/cli@latest ls`,
   };
 }
