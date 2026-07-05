@@ -38,6 +38,11 @@ export const alertDialogPage = {
       level: 2,
       children: [
         {
+          id: 'example-media',
+          titleKey: 'alertDialog.demo.mediaTitle',
+          level: 3,
+        },
+        {
           id: 'example-custom-result',
           titleKey: 'alertDialog.demo.customResult',
           level: 3,
@@ -52,6 +57,18 @@ export const alertDialogPage = {
     },
   ],
   apiRows: [
+    {
+      property: 'sanringAlertDialogTrigger',
+      type: 'TemplateRef<unknown>',
+      defaultValue: 'required',
+      descriptionKey: 'alertDialog.api.trigger.description',
+    },
+    {
+      property: 'sanringAlertDialogConfig',
+      type: 'DialogConfig',
+      defaultValue: 'undefined',
+      descriptionKey: 'alertDialog.api.triggerConfig.description',
+    },
     {
       property: 'class',
       type: 'string',
@@ -80,84 +97,114 @@ export const alertDialogPage = {
 } as const satisfies ComponentPageDefinition;
 
 export const alertDialogPageExamples = {
-  composition: `AlertDialogService.open()
+  composition: `[sanringAlertDialogTrigger]
 sanring-alert-dialog-content
-├── [sanringDialogTitle]
-├── [sanringDialogDescription]
-├── [sanringAlertDialogCancel]
-└── [sanringAlertDialogAction]`,
-  basic: `<button sanringBtn (click)="openBasicAlert()" type="button">Delete account</button>
+├── sanring-dialog-header
+│   ├── sanring-dialog-media (optional)
+│   ├── [sanringDialogTitle]
+│   └── [sanringDialogDescription]
+└── sanring-dialog-footer
+    ├── [sanringAlertDialogCancel]
+    └── [sanringAlertDialogAction]`,
+  basic: `<button sanringBtn [sanringAlertDialogTrigger]="alertDialog" type="button">
+  Delete account
+</button>
 
 <ng-template #alertDialog>
   <sanring-alert-dialog-content>
-    <h2 sanringDialogTitle>Delete account?</h2>
-    <p sanringDialogDescription>This action cannot be undone.</p>
-    <div class="flex justify-end gap-2">
+    <sanring-dialog-header>
+      <h2 sanringDialogTitle>Delete account?</h2>
+      <p sanringDialogDescription>This action cannot be undone.</p>
+    </sanring-dialog-header>
+    <sanring-dialog-footer>
       <button sanringBtn variant="outline" sanringAlertDialogCancel type="button">Cancel</button>
       <button sanringBtn variant="destructive" sanringAlertDialogAction type="button">Delete</button>
-    </div>
+    </sanring-dialog-footer>
   </sanring-alert-dialog-content>
 </ng-template>`,
-  usageImport: `import { Component, ViewChild, TemplateRef, inject } from '@angular/core';
-import { ButtonDirective, SANRING_ALERT_DIALOG_IMPORTS, AlertDialogService } from '@sanring/ui';
+  usageImport: `import { Component } from '@angular/core';
+import { ButtonDirective, SANRING_ALERT_DIALOG_IMPORTS } from '@sanring/ui';
 
 @Component({
   imports: [ButtonDirective, SANRING_ALERT_DIALOG_IMPORTS],
 })
-export class ExampleComponent {
-  private readonly alertDialogService = inject(AlertDialogService);
-
-  @ViewChild('alertDialog') alertDialog!: TemplateRef<unknown>;
-
-  openBasicAlert() {
-    const ref = this.alertDialogService.open<boolean>(this.alertDialog);
-    ref.closed.subscribe((confirmed) => {
-      if (confirmed) {
-        // perform the destructive action
-      }
-    });
-  }
-}`,
-  usageMain: `<button sanringBtn (click)="openBasicAlert()" type="button">Delete account</button>
+export class ExampleComponent {}`,
+  usageMain: `<button sanringBtn [sanringAlertDialogTrigger]="alertDialog" type="button">
+  Delete account
+</button>
 
 <ng-template #alertDialog>
   <sanring-alert-dialog-content>
-    <h2 sanringDialogTitle>Delete account?</h2>
-    <p sanringDialogDescription>This action cannot be undone.</p>
-    <button sanringBtn sanringAlertDialogCancel type="button">Cancel</button>
-    <button sanringBtn sanringAlertDialogAction type="button">Delete</button>
+    <sanring-dialog-header>
+      <h2 sanringDialogTitle>Delete account?</h2>
+      <p sanringDialogDescription>This action cannot be undone.</p>
+    </sanring-dialog-header>
+    <sanring-dialog-footer>
+      <button sanringBtn sanringAlertDialogCancel type="button">Cancel</button>
+      <button sanringBtn sanringAlertDialogAction type="button">Delete</button>
+    </sanring-dialog-footer>
   </sanring-alert-dialog-content>
 </ng-template>`,
   usageIndividualImports: `import { Component } from '@angular/core';
 import {
   ButtonDirective,
-  AlertDialogService,
+  AlertDialogTriggerDirective,
   AlertDialogContentComponent,
-  AlertDialogActionDirective,
-  AlertDialogCancelDirective,
+  DialogHeaderComponent,
   DialogTitleDirective,
   DialogDescriptionDirective,
+  DialogFooterComponent,
+  AlertDialogActionDirective,
+  AlertDialogCancelDirective,
 } from '@sanring/ui';
 
 @Component({
   imports: [
     ButtonDirective,
+    AlertDialogTriggerDirective,
     AlertDialogContentComponent,
+    DialogHeaderComponent,
     DialogTitleDirective,
     DialogDescriptionDirective,
+    DialogFooterComponent,
     AlertDialogActionDirective,
     AlertDialogCancelDirective,
   ],
 })
 export class ExampleComponent {}`,
+  media: `<button sanringBtn variant="outline" [sanringAlertDialogTrigger]="mediaDialog" type="button">
+  Share project
+</button>
+
+<ng-template #mediaDialog>
+  <sanring-alert-dialog-content>
+    <sanring-dialog-header>
+      <sanring-dialog-media>
+        <svg lucideShare2></svg>
+      </sanring-dialog-media>
+      <h2 sanringDialogTitle>Share this project?</h2>
+      <p sanringDialogDescription>
+        Anyone with the link will be able to view and edit this project.
+      </p>
+    </sanring-dialog-header>
+    <sanring-dialog-footer>
+      <button sanringBtn variant="outline" sanringAlertDialogCancel type="button">Cancel</button>
+      <button sanringBtn sanringAlertDialogAction type="button">Share</button>
+    </sanring-dialog-footer>
+  </sanring-alert-dialog-content>
+</ng-template>`,
   customResult: `<button sanringBtn (click)="openCustomResultAlert()" type="button">Remove item</button>
 
 <ng-template #customResultAlertDialog>
   <sanring-alert-dialog-content>
-    <h2 sanringDialogTitle>Remove item?</h2>
-    <p sanringDialogDescription>This item will be removed from your list.</p>
-    <button sanringBtn [sanringAlertDialogCancel]="'dismissed'" type="button">Cancel</button>
-    <button sanringBtn [sanringAlertDialogAction]="'item-42'" type="button">Remove</button>
+    <sanring-dialog-header>
+      <h2 sanringDialogTitle>Remove item?</h2>
+      <p sanringDialogDescription>This item will be removed from your list.</p>
+    </sanring-dialog-header>
+    <sanring-dialog-footer>
+      <button sanringBtn [sanringAlertDialogCancel]="'dismissed'" type="button">Cancel</button>
+      <button sanringBtn [sanringAlertDialogAction]="'item-42'" type="button">Remove</button>
+    </sanring-dialog-footer>
   </sanring-alert-dialog-content>
 </ng-template>`,
 } as const;

@@ -62,6 +62,7 @@
         "alert-dialog/alert-dialog-content.component.ts",
         "alert-dialog/alert-dialog-action.directive.ts",
         "alert-dialog/alert-dialog-cancel.directive.ts",
+        "alert-dialog/alert-dialog-trigger.directive.ts",
         "alert-dialog/index.ts"
       ]
     },

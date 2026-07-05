@@ -1,4 +1,5 @@
 import { Component, TemplateRef, ViewChild, inject } from '@angular/core';
+import { LucideShare2 } from '@lucide/angular';
 import { AlertDialogService, ButtonDirective, SANRING_ALERT_DIALOG_IMPORTS } from '@sanring/ui';
 import { getComponentPageSection } from '../../../docs-schema/component-page.utils';
 import { I18nService } from '../../../i18n/i18n.service';
@@ -20,6 +21,7 @@ import { alertDialogPage, alertDialogPageExamples } from './alert-dialog.docs';
     ComponentPageApiTableComponent,
     ButtonDirective,
     SANRING_ALERT_DIALOG_IMPORTS,
+    LucideShare2,
     ComponentPageCodeBlock,
     ComponentPageCodePreviewer,
     ComponentPageComponent,
@@ -39,7 +41,7 @@ import { alertDialogPage, alertDialogPageExamples } from './alert-dialog.docs';
       <app-component-page-section [section]="section('basic')">
         <app-component-page-code-previewer [code]="examples.basic" language="angular-html">
           <div previewer class="flex justify-center">
-            <button sanringBtn (click)="openBasicAlert()" type="button">
+            <button sanringBtn [sanringAlertDialogTrigger]="alertDialog" type="button">
               {{ i18n.t('alertDialog.demo.open') }}
             </button>
           </div>
@@ -76,7 +78,22 @@ import { alertDialogPage, alertDialogPageExamples } from './alert-dialog.docs';
       </app-component-page-section>
 
       <app-component-page-section [section]="section('example')">
-        <div>
+        <div class="grid gap-8">
+          <app-component-page-section [section]="section('example-media')">
+            <app-component-page-code-previewer [code]="examples.media" language="angular-html">
+              <div previewer class="flex justify-center">
+                <button
+                  sanringBtn
+                  variant="outline"
+                  [sanringAlertDialogTrigger]="mediaDialog"
+                  type="button"
+                >
+                  {{ i18n.t('alertDialog.demo.mediaTitle') }}
+                </button>
+              </div>
+            </app-component-page-code-previewer>
+          </app-component-page-section>
+
           <app-component-page-section [section]="section('example-custom-result')">
             <app-component-page-code-previewer
               [code]="examples.customResult"
@@ -98,24 +115,48 @@ import { alertDialogPage, alertDialogPageExamples } from './alert-dialog.docs';
 
       <ng-template #alertDialog>
         <sanring-alert-dialog-content>
-          <h2 sanringDialogTitle>{{ i18n.t('alertDialog.demo.open') }}?</h2>
-          <p sanringDialogDescription>This action cannot be undone.</p>
-          <div class="mt-4 flex justify-end gap-2">
+          <sanring-dialog-header>
+            <h2 sanringDialogTitle>{{ i18n.t('alertDialog.demo.open') }}?</h2>
+            <p sanringDialogDescription>This action cannot be undone.</p>
+          </sanring-dialog-header>
+          <sanring-dialog-footer>
             <button sanringBtn variant="outline" sanringAlertDialogCancel type="button">
               {{ i18n.t('alertDialog.demo.cancel') }}
             </button>
             <button sanringBtn variant="destructive" sanringAlertDialogAction type="button">
               {{ i18n.t('alertDialog.demo.action') }}
             </button>
-          </div>
+          </sanring-dialog-footer>
+        </sanring-alert-dialog-content>
+      </ng-template>
+
+      <ng-template #mediaDialog>
+        <sanring-alert-dialog-content>
+          <sanring-dialog-header>
+            <sanring-dialog-media>
+              <svg lucideShare2></svg>
+            </sanring-dialog-media>
+            <h2 sanringDialogTitle>{{ i18n.t('alertDialog.demo.mediaTitle') }}?</h2>
+            <p sanringDialogDescription>{{ i18n.t('alertDialog.demo.mediaDescription') }}</p>
+          </sanring-dialog-header>
+          <sanring-dialog-footer>
+            <button sanringBtn variant="outline" sanringAlertDialogCancel type="button">
+              {{ i18n.t('alertDialog.demo.cancel') }}
+            </button>
+            <button sanringBtn sanringAlertDialogAction type="button">
+              {{ i18n.t('alertDialog.demo.share') }}
+            </button>
+          </sanring-dialog-footer>
         </sanring-alert-dialog-content>
       </ng-template>
 
       <ng-template #customResultAlertDialog>
         <sanring-alert-dialog-content>
-          <h2 sanringDialogTitle>{{ i18n.t('alertDialog.demo.customResultTitle') }}?</h2>
-          <p sanringDialogDescription>This item will be removed from your list.</p>
-          <div class="mt-4 flex justify-end gap-2">
+          <sanring-dialog-header>
+            <h2 sanringDialogTitle>{{ i18n.t('alertDialog.demo.customResultTitle') }}?</h2>
+            <p sanringDialogDescription>This item will be removed from your list.</p>
+          </sanring-dialog-header>
+          <sanring-dialog-footer>
             <button
               sanringBtn
               variant="outline"
@@ -132,7 +173,7 @@ import { alertDialogPage, alertDialogPageExamples } from './alert-dialog.docs';
             >
               {{ i18n.t('alertDialog.demo.action') }}
             </button>
-          </div>
+          </sanring-dialog-footer>
         </sanring-alert-dialog-content>
       </ng-template>
     </app-component-page>
@@ -145,16 +186,11 @@ export class AlertDialogPageComponent {
 
   private readonly alertDialogService = inject(AlertDialogService);
 
-  @ViewChild('alertDialog') private readonly alertDialog!: TemplateRef<unknown>;
   @ViewChild('customResultAlertDialog')
   private readonly customResultAlertDialog!: TemplateRef<unknown>;
 
   protected section(id: string) {
     return getComponentPageSection(this.page, id);
-  }
-
-  protected openBasicAlert() {
-    this.alertDialogService.open<boolean>(this.alertDialog);
   }
 
   protected openCustomResultAlert() {

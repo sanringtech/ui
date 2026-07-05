@@ -212,17 +212,25 @@ export const en = {
   'alertDialog.demo.action': 'Delete',
   'alertDialog.demo.customResultTitle': 'Remove item',
   'alertDialog.demo.customResult': 'Custom result value',
+  'alertDialog.demo.mediaTitle': 'Share project',
+  'alertDialog.demo.mediaDescription':
+    'Anyone with the link will be able to view and edit this project.',
+  'alertDialog.demo.share': 'Share',
   'alertDialog.examples.description':
     'Confirmation flows that require an explicit choice before the dialog closes.',
   'alertDialog.examples.basic.description':
-    'Call `AlertDialogService.open()` and compose the body from `AlertDialogContent`, title, description, and the action/cancel directives.',
+    'Use `sanringAlertDialogTrigger` and compose the body from `AlertDialogContent`, `DialogHeader`/`DialogFooter`, title, description, and the action/cancel directives.',
   'alertDialog.usage.description':
-    'Import `AlertDialogService`, call `open()` with an `ng-template`, and pair `sanringAlertDialogCancel` with `sanringAlertDialogAction` inside it.',
+    'Import the alert dialog primitives and bind `sanringAlertDialogTrigger` to an `ng-template`, pairing `sanringAlertDialogCancel` with `sanringAlertDialogAction` inside it.',
   'alertDialog.installation.description':
     'Alert Dialog builds on Dialog — installing it also installs the Dialog primitives it depends on.',
   'alertDialog.composition.description':
-    '`AlertDialogContent` extends `DialogContent` with the close button hidden by default. Pair it with `sanringDialogTitle`, `sanringDialogDescription`, `sanringAlertDialogCancel`, and `sanringAlertDialogAction`.',
+    '`AlertDialogContent` extends `DialogContent` with the close button hidden by default. Pair it with `DialogHeader`, an optional `DialogMedia` icon, `sanringDialogTitle`, `sanringDialogDescription`, `DialogFooter`, `sanringAlertDialogCancel`, and `sanringAlertDialogAction`.',
   'alertDialog.api.description': 'Inputs supported by the alert dialog primitives.',
+  'alertDialog.api.trigger.description':
+    'Template rendered inside the alert dialog when the trigger is activated.',
+  'alertDialog.api.triggerConfig.description':
+    'Optional CDK `DialogConfig` merged into the opened dialog. `role` and `disableClose` are always locked regardless of what is passed here.',
   'alertDialog.api.class.description':
     'Additional classes merged with `AlertDialogContent` layout styles.',
   'alertDialog.api.showClose.description':

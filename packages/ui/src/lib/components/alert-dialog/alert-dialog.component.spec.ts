@@ -5,6 +5,7 @@ import { TestBed } from '@angular/core/testing';
 import { AlertDialogActionDirective } from './alert-dialog-action.directive';
 import { AlertDialogCancelDirective } from './alert-dialog-cancel.directive';
 import { AlertDialogContentComponent } from './alert-dialog-content.component';
+import { AlertDialogTriggerDirective } from './alert-dialog-trigger.directive';
 import { AlertDialogService } from './alert-dialog.service';
 import { DialogDescriptionDirective } from '../dialog/dialog-description.directive';
 import { DialogTitleDirective } from '../dialog/dialog-title.directive';
@@ -14,10 +15,20 @@ import { DialogTitleDirective } from '../dialog/dialog-title.directive';
     AlertDialogActionDirective,
     AlertDialogCancelDirective,
     AlertDialogContentComponent,
+    AlertDialogTriggerDirective,
     DialogDescriptionDirective,
     DialogTitleDirective,
   ],
   template: `
+    <button type="button" [sanringAlertDialogTrigger]="alertDialog">Open</button>
+    <button
+      type="button"
+      [sanringAlertDialogTrigger]="alertDialog"
+      [sanringAlertDialogConfig]="{ disableClose: false }"
+    >
+      Open (attempts to unlock disableClose)
+    </button>
+
     <ng-template #alertDialog>
       <sanring-alert-dialog-content>
         <h2 sanringDialogTitle>Delete item?</h2>
@@ -74,6 +85,26 @@ describe('AlertDialog', () => {
     expect(dialogContainer?.getAttribute('aria-labelledby')).toBe(title?.id);
     expect(dialogContainer?.getAttribute('aria-describedby')).toBe(description?.id);
     expect(overlayElement.querySelector('button[aria-label="關閉對話框"]')).toBeNull();
+  });
+
+  it('opens via sanringAlertDialogTrigger and locks disableClose even if the trigger config tries to unset it', () => {
+    const fixture = TestBed.createComponent(AlertDialogTestHost);
+    fixture.detectChanges();
+
+    const buttons = fixture.nativeElement.querySelectorAll('button');
+    (buttons[1] as HTMLButtonElement).click();
+    fixture.detectChanges();
+
+    const overlayElement = overlayContainer.getContainerElement();
+    const dialogContainer = overlayElement.querySelector('cdk-dialog-container');
+
+    expect(dialogContainer?.getAttribute('role')).toBe('alertdialog');
+
+    const backdrop = overlayElement.querySelector('.cdk-overlay-backdrop') as HTMLElement;
+    backdrop.click();
+    fixture.detectChanges();
+
+    expect(overlayContainer.getContainerElement().querySelector('cdk-dialog-container')).not.toBeNull();
   });
 
   it('does not close on backdrop click or Escape', () => {
