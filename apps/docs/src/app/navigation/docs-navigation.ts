@@ -34,6 +34,7 @@ export type DocsComponentId =
   | 'select'
   | 'sheet'
   | 'skeleton'
+  | 'slider'
   | 'spinner'
   | 'switch'
   | 'table'
@@ -208,6 +209,12 @@ export const docsComponentItems: DocsComponentNavItem[] = [
     id: 'skeleton',
     labelKey: 'component.skeleton',
     path: '/components/skeleton',
+    active: true,
+  },
+  {
+    id: 'slider',
+    labelKey: 'component.slider',
+    path: '/components/slider',
     active: true,
   },
   {

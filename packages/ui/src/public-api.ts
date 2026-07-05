@@ -28,6 +28,7 @@ export * from './lib/components/scrollArea';
 export * from './lib/components/select';
 export * from './lib/components/sheet';
 export * from './lib/components/skeleton';
+export * from './lib/components/slider';
 export * from './lib/components/spinner';
 export * from './lib/components/switch';
 export * from './lib/components/tag';

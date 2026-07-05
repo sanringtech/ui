@@ -230,6 +230,13 @@ export const routes: Routes = [
                   ),
               },
               {
+                path: 'slider',
+                loadComponent: () =>
+                  import('./pages/components/slider/slider-page.component').then(
+                    (m) => m.SliderPageComponent,
+                  ),
+              },
+              {
                 path: 'spinner',
                 loadComponent: () =>
                   import('./pages/components/spinner/spinner-page.component').then(

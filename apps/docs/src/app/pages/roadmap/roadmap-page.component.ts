@@ -118,10 +118,6 @@ export class RoadmapPageComponent {
       description:
         'Drag-and-drop zone and file list, reusing Progress (upload progress) and Button (remove/retry). Pairs with Field.',
     },
-    {
-      name: 'Slider',
-      description: 'Self-contained, no dependency on other components.',
-    },
   ];
 
   protected readonly tier3: RoadmapItem[] = [

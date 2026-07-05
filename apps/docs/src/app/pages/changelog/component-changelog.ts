@@ -39,6 +39,12 @@ export const componentChangelog: readonly ComponentChangelogEntry[] = [
       {
         type: 'added',
         notable: true,
+        componentIds: ['slider'],
+        text: 'New Slider component with pointer, keyboard, ARIA slider semantics, and Angular forms support.',
+      },
+      {
+        type: 'added',
+        notable: true,
         componentIds: ['aspect-ratio'],
         text: 'New Aspect Ratio directive for responsive media boxes with CSS `aspect-ratio` support.',
       },

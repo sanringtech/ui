@@ -336,6 +336,18 @@
       ]
     },
     {
+      "name": "slider",
+      "description": "A range control for selecting a numeric value.",
+      "sharedDeps": ["utils", "component-styles"],
+      "peerDependencies": {
+        "@angular/forms": "^22.0.0"
+      },
+      "files": [
+        "slider/slider.component.ts",
+        "slider/index.ts"
+      ]
+    },
+    {
       "name": "spinner",
       "description": "Displays an animated loading indicator.",
       "sharedDeps": ["utils"],
