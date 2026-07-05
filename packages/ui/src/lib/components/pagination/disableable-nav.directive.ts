@@ -1,4 +1,11 @@
-import { Directive, ElementRef, HostListener, booleanAttribute, inject, input } from '@angular/core';
+import {
+  Directive,
+  ElementRef,
+  HostListener,
+  booleanAttribute,
+  inject,
+  input,
+} from '@angular/core';
 
 /**
  * @docs-private 共用邏輯：處理「按鈕或連結」在 disabled 狀態下的 aria/attr/click 攔截。
