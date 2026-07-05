@@ -39,6 +39,12 @@ export const componentChangelog: readonly ComponentChangelogEntry[] = [
       {
         type: 'added',
         notable: true,
+        componentIds: ['stepper'],
+        text: 'New Stepper primitives backed by Angular CDK Stepper, with template labels, custom icons, and solid or dashed connectors.',
+      },
+      {
+        type: 'added',
+        notable: true,
         componentIds: ['slider'],
         text: 'New Slider component with pointer, keyboard, ARIA slider semantics, and Angular forms support.',
       },

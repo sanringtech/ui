@@ -244,6 +244,13 @@ export const routes: Routes = [
                   ),
               },
               {
+                path: 'stepper',
+                loadComponent: () =>
+                  import('./pages/components/stepper/stepper-page.component').then(
+                    (m) => m.StepperPageComponent,
+                  ),
+              },
+              {
                 path: 'switch',
                 loadComponent: () =>
                   import('./pages/components/switch/switch-page.component').then(

@@ -36,6 +36,7 @@ export type DocsComponentId =
   | 'skeleton'
   | 'slider'
   | 'spinner'
+  | 'stepper'
   | 'switch'
   | 'table'
   | 'tag'
@@ -221,6 +222,12 @@ export const docsComponentItems: DocsComponentNavItem[] = [
     id: 'spinner',
     labelKey: 'component.spinner',
     path: '/components/spinner',
+    active: true,
+  },
+  {
+    id: 'stepper',
+    labelKey: 'component.stepper',
+    path: '/components/stepper',
     active: true,
   },
   {

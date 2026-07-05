@@ -52,6 +52,35 @@ describe('SliderComponent', () => {
     expect(fixture.componentInstance.latestValue).toBe(6);
   });
 
+  it('drops the left transition while dragging so the thumb tracks the pointer instantly', () => {
+    const fixture = TestBed.createComponent(SliderTestHost);
+    fixture.detectChanges();
+
+    const slider = fixture.nativeElement.querySelector('sanring-slider[role="slider"]') as HTMLElement;
+    const thumb = slider.querySelector('span') as HTMLElement & {
+      setPointerCapture: (id: number) => void;
+      hasPointerCapture: (id: number) => boolean;
+      releasePointerCapture: (id: number) => void;
+    };
+
+    // jsdom doesn't implement the Pointer Capture API; stub it so drag handling can run.
+    slider.setPointerCapture = () => {};
+    slider.hasPointerCapture = () => false;
+    slider.releasePointerCapture = () => {};
+
+    expect(thumb.classList.contains('transition-[left]')).toBe(true);
+
+    slider.dispatchEvent(new PointerEvent('pointerdown', { bubbles: true, button: 0, pointerId: 1 }));
+    fixture.detectChanges();
+
+    expect(thumb.classList.contains('transition-[left]')).toBe(false);
+
+    slider.dispatchEvent(new PointerEvent('pointerup', { bubbles: true, pointerId: 1 }));
+    fixture.detectChanges();
+
+    expect(thumb.classList.contains('transition-[left]')).toBe(true);
+  });
+
   it('does not update when disabled', () => {
     const fixture = TestBed.createComponent(SliderTestHost);
     fixture.detectChanges();

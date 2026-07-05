@@ -60,7 +60,7 @@ let nextUniqueId = 0;
     </div>
 
     <span
-      class="pointer-events-none absolute block size-5 -translate-x-1/2 rounded-full border-2 border-[var(--sanring-foreground)] bg-[var(--sanring-background)] shadow-sm transition-[left]"
+      [class]="thumbClass()"
       [style.left.%]="percentage()"
     ></span>
   `,
@@ -101,9 +101,19 @@ export class SliderComponent implements ControlValueAccessor {
     ),
   );
 
+  // Dragging updates `left` on every pointermove — a CSS transition there fights the
+  // pointer position and makes the thumb visibly lag behind the cursor (and the fill,
+  // which has no transition). Only animate `left` for discrete changes (keyboard, click).
+  protected readonly thumbClass = computed(() =>
+    cn(
+      'pointer-events-none absolute block size-5 -translate-x-1/2 rounded-full border-2 border-[var(--sanring-foreground)] bg-[var(--sanring-background)] shadow-sm',
+      this.dragging() ? '' : 'transition-[left]',
+    ),
+  );
+
   private readonly host = inject<ElementRef<HTMLElement>>(ElementRef);
   private readonly disabledState = signal(false);
-  private isDragging = false;
+  private readonly dragging = signal(false);
   private onChange: (value: number) => void = () => {};
   private onTouched: () => void = () => {};
 
@@ -158,18 +168,18 @@ export class SliderComponent implements ControlValueAccessor {
     event.preventDefault();
     this.host.nativeElement.focus();
     this.host.nativeElement.setPointerCapture(event.pointerId);
-    this.isDragging = true;
+    this.dragging.set(true);
     this.setValueFromPointer(event);
   }
 
   onPointerMove(event: PointerEvent): void {
-    if (!this.isDragging || this.isDisabled()) return;
+    if (!this.dragging() || this.isDisabled()) return;
     this.setValueFromPointer(event);
   }
 
   onPointerEnd(event: PointerEvent): void {
-    if (!this.isDragging) return;
-    this.isDragging = false;
+    if (!this.dragging()) return;
+    this.dragging.set(false);
     if (this.host.nativeElement.hasPointerCapture(event.pointerId)) {
       this.host.nativeElement.releasePointerCapture(event.pointerId);
     }
