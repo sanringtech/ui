@@ -1,6 +1,32 @@
-import { booleanAttribute, Component, computed, contentChild, effect, input, signal } from '@angular/core';
+import {
+  afterNextRender,
+  booleanAttribute,
+  Component,
+  computed,
+  contentChild,
+  effect,
+  ElementRef,
+  inject,
+  input,
+  signal,
+} from '@angular/core';
 import { cn, uniqueId } from '../../utils';
 import { SANRING_FIELD_CONTROL } from './field.type';
+
+const LABEL_BACKGROUND_VAR = '--sanring-field-label-background';
+
+// 找出離 host 最近、有實際不透明 background-color 的祖先，當作 floating label 缺口色塊的底色
+function findAmbientBackground(el: HTMLElement): string | null {
+  let current = el.parentElement;
+  while (current) {
+    const { backgroundColor } = getComputedStyle(current);
+    if (backgroundColor && backgroundColor !== 'transparent' && !/^rgba\(0, 0, 0, 0\)$/.test(backgroundColor)) {
+      return backgroundColor;
+    }
+    current = current.parentElement;
+  }
+  return null;
+}
 
 @Component({
   selector: 'sanring-field',
@@ -39,6 +65,8 @@ export class SanringFieldComponent {
 
   // 抓取投影進來的 Input / Select / Switch
   readonly control = contentChild(SANRING_FIELD_CONTROL);
+
+  private readonly elementRef = inject(ElementRef<HTMLElement>);
 
   // Description / ErrorMessage 會透過 registerDescribedBy 把自己的 id 掛進來
   private readonly describedByIds = signal<readonly string[]>([]);
@@ -101,6 +129,25 @@ export class SanringFieldComponent {
     // 把收集到的 describedByIds 同步給 control，讓 input 產生正確的 aria-describedby
     effect(() => {
       this.control()?.setDescribedByIds?.([...this.describedByIds()]);
+    });
+
+    // floating label 的缺口色塊需要知道「外部背景」是什麼色，這裡自動偵測，只在渲染完成後跑一次：
+    // 1. 如果開發者已經手動覆寫過 --sanring-field-label-background（不管是在這個元素或祖先層級），
+    //    getComputedStyle 讀到的值就不會是空字串，這時完全不動它，手動指定的優先權永遠比自動偵測高。
+    // 2. 沒有手動覆寫時，才往上找第一個有實際 (非透明) background-color 的祖先當作偵測結果。
+    // 限制：只認得出單色 background-color，抓不到漸層/圖片背景；且只在初次渲染後跑一次，
+    // 之後如果外部背景動態改變 (例如切換 dark/light 主題) 不會自動重新偵測。
+    afterNextRender(() => {
+      if (!this.floating()) return;
+
+      const hostEl = this.elementRef.nativeElement;
+      const alreadyOverridden = getComputedStyle(hostEl).getPropertyValue(LABEL_BACKGROUND_VAR).trim();
+      if (alreadyOverridden) return;
+
+      const detected = findAmbientBackground(hostEl);
+      if (detected) {
+        hostEl.style.setProperty(LABEL_BACKGROUND_VAR, detected);
+      }
     });
   }
 

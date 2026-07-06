@@ -37,3 +37,38 @@ describe('SanringFieldComponent projection', () => {
     expect(html).toContain('sanringinput');
   });
 });
+
+describe('SanringFieldComponent ambient background auto-detection', () => {
+  it('picks up the nearest ancestor background-color when nothing is overridden', async () => {
+    const fixture = TestBed.createComponent(HostComponent);
+    fixture.componentInstance.floating = true;
+    // 模擬外層容器 (例如 code-previewer 面板) 有自己的實際背景色
+    fixture.nativeElement.style.backgroundColor = 'rgb(24, 32, 33)';
+    document.body.appendChild(fixture.nativeElement);
+    fixture.detectChanges();
+    await fixture.whenStable();
+
+    const fieldEl = fixture.nativeElement.querySelector('sanring-field') as HTMLElement;
+    expect(fieldEl.style.getPropertyValue('--sanring-field-label-background')).toBe('rgb(24, 32, 33)');
+
+    fixture.nativeElement.remove();
+  });
+
+  it('does not override an explicitly set --sanring-field-label-background', async () => {
+    const fixture = TestBed.createComponent(HostComponent);
+    fixture.componentInstance.floating = true;
+    fixture.nativeElement.style.backgroundColor = 'rgb(24, 32, 33)';
+    document.body.appendChild(fixture.nativeElement);
+    fixture.detectChanges();
+
+    // 搶在 afterNextRender 的偵測邏輯跑之前，同步設定一個「開發者手動指定」的值
+    const fieldEl = fixture.nativeElement.querySelector('sanring-field') as HTMLElement;
+    fieldEl.style.setProperty('--sanring-field-label-background', 'rgb(1, 2, 3)');
+
+    await fixture.whenStable();
+
+    expect(fieldEl.style.getPropertyValue('--sanring-field-label-background')).toBe('rgb(1, 2, 3)');
+
+    fixture.nativeElement.remove();
+  });
+});
