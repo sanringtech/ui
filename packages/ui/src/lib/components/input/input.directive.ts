@@ -1,11 +1,9 @@
 import { Directive, ElementRef, computed, inject, input, DoCheck, OnDestroy } from '@angular/core';
-import { cn } from '../../utils';
+import { cn, uniqueId } from '../../utils';
 import { FIELD_SIZE_CLASS } from '../component-styles';
 import { Subject } from 'rxjs';
-import { NgControl } from '@angular/forms';
+import { NgControl, Validators } from '@angular/forms';
 import { FieldType, SanringFieldControl, SANRING_FIELD_CONTROL } from '../field/field.type';
-
-let nextUniqueId = 0;
 
 @Directive({
   selector: 'input[sanringInput]',
@@ -14,8 +12,11 @@ let nextUniqueId = 0;
   host: {
     '[class]': 'inputClass()',
     '[id]': 'id',
+    '[attr.aria-invalid]': 'errorState || null',
+    '[attr.aria-required]': 'required || null',
     '(focus)': 'onFocus()',
     '(blur)': 'onBlur()',
+    '(input)': 'onInput()',
   },
 })
 export class InputDirective implements SanringFieldControl<string>, DoCheck, OnDestroy {
@@ -24,7 +25,7 @@ export class InputDirective implements SanringFieldControl<string>, DoCheck, OnD
   readonly stateChanges = new Subject<void>();
   readonly controlType = FieldType.input;
   focused = false;
-  id = `sanring-input-${nextUniqueId++}`;
+  id = uniqueId('sanring-input');
 
   readonly ngControl = inject(NgControl, { optional: true, self: true });
   private readonly el = inject(ElementRef<HTMLInputElement>);
@@ -48,7 +49,7 @@ export class InputDirective implements SanringFieldControl<string>, DoCheck, OnD
     return !this.el.nativeElement.value;
   }
 
-  get value(): string | null {
+  get value(): string {
     return this.el.nativeElement.value;
   }
 
@@ -63,7 +64,9 @@ export class InputDirective implements SanringFieldControl<string>, DoCheck, OnD
   }
 
   get required(): boolean {
-    return this.el.nativeElement.required;
+    return (
+      this.el.nativeElement.required || !!this.ngControl?.control?.hasValidator(Validators.required)
+    );
   }
 
   onFocus() {
@@ -73,6 +76,11 @@ export class InputDirective implements SanringFieldControl<string>, DoCheck, OnD
 
   onBlur() {
     this.focused = false;
+    this.stateChanges.next();
+  }
+
+  // 確保即使沒有 ngControl，使用者的每次按鍵都能通知外層 (例如更新 empty 狀態)
+  onInput() {
     this.stateChanges.next();
   }
 
@@ -90,5 +98,13 @@ export class InputDirective implements SanringFieldControl<string>, DoCheck, OnD
 
   focus(options?: FocusOptions): void {
     this.el.nativeElement.focus(options);
+  }
+
+  setDescribedByIds(ids: string[]): void {
+    if (ids.length) {
+      this.el.nativeElement.setAttribute('aria-describedby', ids.join(' '));
+    } else {
+      this.el.nativeElement.removeAttribute('aria-describedby');
+    }
   }
 }

@@ -1,20 +1,10 @@
-import {
-  Component,
-  computed,
-  contentChild,
-  effect,
-  signal,
-  ViewEncapsulation,
-} from '@angular/core';
-import { cn } from '../../utils';
+import { Component, computed, contentChild, effect, signal } from '@angular/core';
+import { cn, uniqueId } from '../../utils';
 import { SANRING_FIELD_CONTROL } from './field.type';
-
-let nextUniqueId = 0;
 
 @Component({
   selector: 'sanring-field',
   standalone: true,
-  encapsulation: ViewEncapsulation.None,
   host: {
     '[class]': 'fieldClass()',
   },
@@ -25,13 +15,42 @@ let nextUniqueId = 0;
 })
 export class SanringFieldComponent {
   // 產生這組 Field 專屬的 ID 前綴
-  readonly id = `sanring-field-${nextUniqueId++}`;
+  readonly id = uniqueId('sanring-field');
 
   // 抓取投影進來的 Input / Select / Switch
   readonly control = contentChild(SANRING_FIELD_CONTROL);
 
-  // 用 Signal 來管理內部的狀態
-  readonly hasError = signal(false);
+  // Description / ErrorMessage 會透過 registerDescribedBy 把自己的 id 掛進來
+  private readonly describedByIds = signal<readonly string[]>([]);
+
+  // control 上的 disabled/required/focused/empty/errorState 都是 plain getter，不是 signal，
+  // 靠這個計數器把 stateChanges (Observable) 橋接進 signal graph，下面的 computed 才會正確重算
+  private readonly stateVersion = signal(0);
+
+  readonly hasError = computed(() => {
+    this.stateVersion();
+    return this.control()?.errorState ?? false;
+  });
+
+  readonly isDisabled = computed(() => {
+    this.stateVersion();
+    return this.control()?.disabled ?? false;
+  });
+
+  readonly isRequired = computed(() => {
+    this.stateVersion();
+    return this.control()?.required ?? false;
+  });
+
+  readonly isFocused = computed(() => {
+    this.stateVersion();
+    return this.control()?.focused ?? false;
+  });
+
+  readonly isEmpty = computed(() => {
+    this.stateVersion();
+    return this.control()?.empty ?? false;
+  });
 
   // 根據錯誤狀態動態調整外層 class（可依需求擴充）
   protected readonly fieldClass = computed(() =>
@@ -47,18 +66,25 @@ export class SanringFieldComponent {
       const ctrl = this.control();
       if (!ctrl) return;
 
-      this.updateErrorState();
+      this.stateVersion.update((v) => v + 1);
 
-      const subscription = ctrl.stateChanges.subscribe(() => this.updateErrorState());
+      const subscription = ctrl.stateChanges.subscribe(() => this.stateVersion.update((v) => v + 1));
       onCleanup(() => subscription.unsubscribe());
+    });
+
+    // 把收集到的 describedByIds 同步給 control，讓 input 產生正確的 aria-describedby
+    effect(() => {
+      this.control()?.setDescribedByIds?.([...this.describedByIds()]);
     });
   }
 
-  private updateErrorState() {
-    const ctrl = this.control();
-    if (ctrl) {
-      this.hasError.set(ctrl.errorState);
-    }
+  // 提供給 Description / ErrorMessage 註冊/取消自己的 id
+  registerDescribedBy(id: string) {
+    this.describedByIds.update((ids) => (ids.includes(id) ? ids : [...ids, id]));
+  }
+
+  unregisterDescribedBy(id: string) {
+    this.describedByIds.update((ids) => ids.filter((existing) => existing !== id));
   }
 
   // 提供給內部 Label 取得對應的 Input ID
