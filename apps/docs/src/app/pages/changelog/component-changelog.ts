@@ -34,6 +34,28 @@ export interface ComponentChangelogEntry {
  */
 export const componentChangelog: readonly ComponentChangelogEntry[] = [
   {
+    date: '2026-07-07',
+    changes: [
+      {
+        type: 'added',
+        notable: true,
+        componentIds: ['input'],
+        text: 'New Field composition — `SanringFieldComponent`, `FieldLabelDirective`, `ErrorMessageComponent`, and `DescriptionDirective` auto-wire `for`, `id`, and `aria-describedby` to any control implementing `SanringFieldControl`.',
+      },
+      {
+        type: 'added',
+        notable: true,
+        componentIds: ['input'],
+        text: '`<sanring-field floating>` — floating label layout with an automatic background-matched border notch; no CDK or width measurement required.',
+      },
+      {
+        type: 'added',
+        componentIds: ['input'],
+        text: '`InputDirective` now implements the full `SanringFieldControl` contract: `disabled`, `required` (native attribute or `Validators.required`), `aria-invalid`, `aria-required`, and `aria-describedby`.',
+      },
+    ],
+  },
+  {
     date: '2026-07-06',
     changes: [
       {
