@@ -87,10 +87,7 @@ export const inputPageExamples = {
   <input sanringInput placeholder="name@sanring.dev" type="email" />
   <p sanringDescription>We'll only use this for account notifications.</p>
 </sanring-field>`,
-  floating: `<sanring-field
-  floating
-  class="[--sanring-field-label-background:var(--docs-bg)] [--sanring-field-control-background:var(--sanring-surface)]"
->
+  floating: `<sanring-field floating class="[--sanring-field-label-background:var(--docs-panel)]">
   <label sanringLabel>Email</label>
   <input sanringInput placeholder="" type="email" />
 </sanring-field>`,

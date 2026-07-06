@@ -84,7 +84,7 @@ import { inputPage, inputPageExamples } from './input.docs';
               <div previewer class="w-[min(360px,100%)]">
                 <sanring-field
                   floating
-                  class="[--sanring-field-label-background:var(--docs-bg)] [--sanring-field-control-background:var(--sanring-surface)]"
+                  class="[--sanring-field-label-background:var(--docs-panel)]"
                 >
                   <label sanringLabel>Email</label>
                   <input sanringInput placeholder="" type="email" />
@@ -109,11 +109,7 @@ import { inputPage, inputPageExamples } from './input.docs';
               <div previewer class="w-[min(360px,100%)]">
                 <sanring-field>
                   <label sanringLabel>Email</label>
-                  <input
-                    sanringInput
-                    [formControl]="emailControl"
-                    placeholder="name@sanring.dev"
-                  />
+                  <input sanringInput [formControl]="emailControl" placeholder="name@sanring.dev" />
                   <sanring-error-message>Email is required.</sanring-error-message>
                 </sanring-field>
               </div>
