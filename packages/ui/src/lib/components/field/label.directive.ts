@@ -44,11 +44,10 @@ export class LabelDirective {
         'pointer-events-none absolute left-3 origin-left transition-all duration-150',
         this.isFloated()
           ? // top-0 -translate-y-1/2：不管字級多大，label 自己的垂直中心永遠精準卡在 border 線上，
-            // 不需要量測高度。label 背景與水平 padding 都走 CSS 變數，讓 Field 放在 card/panel/dialog
-            // 這類不同 surface 時可以由外層覆寫，不需要 Angular 量測或讀取實際背景色。
-            // 背景色應該跟「input 外部」一致，而不是跟 input 內部 bg-[--sanring-surface] 一致。
-            // padding box 會自動依文字寬度加寬，剛好蓋掉 label 下方那段 border 缺口。
-            'top-0 -translate-y-1/2 bg-[var(--sanring-field-label-background,var(--sanring-background))] px-[var(--sanring-field-label-padding-x,0.25rem)] text-xs'
+            // 不需要量測高度。label 背景用上下雙色漸層：上半吃 input 外部背景，下半吃 input 內部背景。
+            // 這能處理 Field 放在 card/panel/dialog 時，外部 surface 與 input surface 不同色的情況。
+            // 若 input 被自訂成不同背景，可覆寫 --sanring-field-control-background；仍不需要 Angular 量測。
+            'top-0 -translate-y-1/2 bg-[linear-gradient(to_bottom,var(--sanring-field-label-background,var(--sanring-background))_50%,var(--sanring-field-control-background,var(--sanring-surface))_50%)] px-[var(--sanring-field-label-padding-x,0.375rem)] text-xs'
           : 'top-1/2 -translate-y-1/2 text-sm text-[var(--sanring-muted)]',
       ],
       // 有 Field 包裝時，精確依賴 control 狀態，不受 DOM 順序影響
