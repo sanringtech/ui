@@ -26,8 +26,10 @@ export class LabelDirective {
     cn(
       // shadcn 預設的 label 樣式
       'text-sm font-medium leading-none',
-      // 配合 input 的 peer class，當 input disabled 時，label 也要跟著變淡且不可點擊
+      // 沒有 Field 包裝時的 CSS-only fallback：僅在 input 排在 label 之前才會生效 (peer 是後面的兄弟選擇器)
       'peer-disabled:cursor-not-allowed peer-disabled:opacity-70',
+      // 有 Field 包裝時，精確依賴 control 狀態，不受 DOM 順序影響
+      this.field?.isDisabled() && 'cursor-not-allowed opacity-70',
       // 如果你希望輸入錯誤時 Label 也變紅，可以加上這行
       this.field?.hasError() && 'text-red-500',
       this.class(),

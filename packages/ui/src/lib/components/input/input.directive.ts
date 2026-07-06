@@ -12,8 +12,8 @@ import { FieldType, SanringFieldControl, SANRING_FIELD_CONTROL } from '../field/
   host: {
     '[class]': 'inputClass()',
     '[id]': 'id',
-    '[attr.aria-invalid]': 'errorState || null',
-    '[attr.aria-required]': 'required || null',
+    '[attr.aria-invalid]': 'errorState ? "true" : null',
+    '[attr.aria-required]': 'required ? "true" : null',
     '(focus)': 'onFocus()',
     '(blur)': 'onBlur()',
     '(input)': 'onInput()',
@@ -22,13 +22,15 @@ import { FieldType, SanringFieldControl, SANRING_FIELD_CONTROL } from '../field/
 export class InputDirective implements SanringFieldControl<string>, DoCheck, OnDestroy {
   readonly class = input<string>('');
 
-  readonly stateChanges = new Subject<void>();
+  private readonly stateChangesSubject = new Subject<void>();
+  readonly stateChanges = this.stateChangesSubject.asObservable();
   readonly controlType = FieldType.input;
   focused = false;
   id = uniqueId('sanring-input');
 
   readonly ngControl = inject(NgControl, { optional: true, self: true });
   private readonly el = inject(ElementRef<HTMLInputElement>);
+  private previousState: InputStateSnapshot | null = null;
 
   protected readonly inputClass = computed(() =>
     cn(
@@ -65,35 +67,37 @@ export class InputDirective implements SanringFieldControl<string>, DoCheck, OnD
 
   get required(): boolean {
     return (
-      this.el.nativeElement.required || !!this.ngControl?.control?.hasValidator(Validators.required)
+      this.el.nativeElement.required ||
+      !!this.ngControl?.control?.hasValidator(Validators.required) ||
+      !!this.ngControl?.control?.hasValidator(Validators.requiredTrue)
     );
   }
 
   onFocus() {
     this.focused = true;
-    this.stateChanges.next();
+    this.emitStateChanges();
   }
 
   onBlur() {
     this.focused = false;
-    this.stateChanges.next();
+    this.emitStateChanges();
   }
 
   // 確保即使沒有 ngControl，使用者的每次按鍵都能通知外層 (例如更新 empty 狀態)
   onInput() {
-    this.stateChanges.next();
+    this.emitStateChanges();
   }
 
   // Angular 在某些狀態改變時（例如透過程式碼手動 markAsTouched）不會觸發 DOM 事件，
   // 透過 ngDoCheck 可以在每個變更偵測週期同步狀態給外層 Field。
   ngDoCheck() {
-    if (this.ngControl) {
-      this.stateChanges.next();
+    if (this.ngControl && this.hasStateChanged()) {
+      this.emitStateChanges();
     }
   }
 
   ngOnDestroy() {
-    this.stateChanges.complete();
+    this.stateChangesSubject.complete();
   }
 
   focus(options?: FocusOptions): void {
@@ -107,4 +111,44 @@ export class InputDirective implements SanringFieldControl<string>, DoCheck, OnD
       this.el.nativeElement.removeAttribute('aria-describedby');
     }
   }
+
+  private emitStateChanges(): void {
+    this.previousState = this.getStateSnapshot();
+    this.stateChangesSubject.next();
+  }
+
+  private hasStateChanged(): boolean {
+    const currentState = this.getStateSnapshot();
+    const previousState = this.previousState;
+
+    return (
+      !previousState ||
+      currentState.value !== previousState.value ||
+      currentState.focused !== previousState.focused ||
+      currentState.empty !== previousState.empty ||
+      currentState.errorState !== previousState.errorState ||
+      currentState.disabled !== previousState.disabled ||
+      currentState.required !== previousState.required
+    );
+  }
+
+  private getStateSnapshot(): InputStateSnapshot {
+    return {
+      value: this.value,
+      focused: this.focused,
+      empty: this.empty,
+      errorState: this.errorState,
+      disabled: this.disabled,
+      required: this.required,
+    };
+  }
+}
+
+interface InputStateSnapshot {
+  value: string;
+  focused: boolean;
+  empty: boolean;
+  errorState: boolean;
+  disabled: boolean;
+  required: boolean;
 }

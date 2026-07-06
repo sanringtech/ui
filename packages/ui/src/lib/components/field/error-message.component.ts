@@ -1,4 +1,4 @@
-import { Component, DestroyRef, computed, inject, input } from '@angular/core';
+import { Component, computed, effect, inject, input } from '@angular/core';
 import { cn, uniqueId } from '../../utils';
 import { SanringFieldComponent } from './field.component';
 
@@ -12,6 +12,7 @@ import { SanringFieldComponent } from './field.component';
     'aria-live': 'polite',
     // 根據 Field 狀態自動隱藏
     '[class.hidden]': '!shouldShow()',
+    '[attr.aria-hidden]': 'shouldShow() ? null : "true"',
   },
   template: `<ng-content></ng-content>`,
 })
@@ -33,10 +34,13 @@ export class ErrorMessageComponent {
   });
 
   constructor() {
-    // 顯示中的錯誤訊息才需要出現在 aria-describedby，隱藏時（display:none）就算掛著也不會被朗讀，
-    // 但仍主動 unregister 讓 Field 的 describedByIds 保持乾淨
-    this.field?.registerDescribedBy(this.id);
-    inject(DestroyRef).onDestroy(() => this.field?.unregisterDescribedBy(this.id));
+    // 只有顯示中的錯誤訊息才該出現在 aria-describedby：隱藏元素被 aria-describedby 引用時，
+    // 不同瀏覽器/AT 組合的朗讀行為並不一致，不能依賴 display:none 保證不會被讀到
+    effect((onCleanup) => {
+      if (!this.shouldShow()) return;
+      this.field?.registerDescribedBy(this.id);
+      onCleanup(() => this.field?.unregisterDescribedBy(this.id));
+    });
   }
 
   protected readonly errorClass = computed(() =>

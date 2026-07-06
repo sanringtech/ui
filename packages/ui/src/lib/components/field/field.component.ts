@@ -57,6 +57,10 @@ export class SanringFieldComponent {
     cn(
       'group relative flex flex-col gap-2',
       this.hasError() && 'is-error', // 加上 is-error 標記，方便子元件寫 CSS
+      this.isDisabled() && 'is-disabled',
+      this.isRequired() && 'is-required',
+      this.isFocused() && 'is-focused',
+      this.isEmpty() && 'is-empty',
     ),
   );
 
