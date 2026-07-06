@@ -39,7 +39,7 @@ export class InputDirective implements SanringFieldControl<string>, DoCheck, OnD
       FIELD_SIZE_CLASS,
       'file:border-0 file:bg-transparent file:text-sm file:font-medium',
       'placeholder:text-[var(--sanring-muted)]',
-      'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--sanring-border-strong)]',
+      'focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-[var(--sanring-border-strong)]',
       'disabled:cursor-not-allowed disabled:opacity-50',
       // 當驗證失敗時，覆蓋原有的 border 與 ring 顏色
       this.errorState && 'border-red-500 focus-visible:ring-red-500',

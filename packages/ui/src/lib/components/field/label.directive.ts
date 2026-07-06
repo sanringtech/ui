@@ -25,7 +25,9 @@ export class LabelDirective {
   protected readonly labelClass = computed(() =>
     cn(
       // shadcn 預設的 label 樣式
-      'text-sm font-medium leading-none',
+      // self-start：field 是 flex flex-col，預設 align-items:stretch 會把 label 撐滿整列寬度，
+      // 撐開的空白區域仍算在 <label for> 的點擊範圍內，導致點擊視覺空白處也會 focus 到 input
+      'text-sm font-medium leading-none self-start',
       // 沒有 Field 包裝時的 CSS-only fallback：僅在 input 排在 label 之前才會生效 (peer 是後面的兄弟選擇器)
       'peer-disabled:cursor-not-allowed peer-disabled:opacity-70',
       // 有 Field 包裝時，精確依賴 control 狀態，不受 DOM 順序影響
