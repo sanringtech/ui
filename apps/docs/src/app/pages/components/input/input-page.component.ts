@@ -82,7 +82,7 @@ import { inputPage, inputPageExamples } from './input.docs';
           <app-component-page-section [section]="section('example-floating')">
             <app-component-page-code-previewer [code]="examples.floating" language="angular-html">
               <div previewer class="w-[min(360px,100%)]">
-                <sanring-field floating>
+                <sanring-field floating class="[--sanring-field-label-background:var(--docs-bg)]">
                   <label sanringLabel>Email</label>
                   <input sanringInput placeholder="" type="email" />
                 </sanring-field>
