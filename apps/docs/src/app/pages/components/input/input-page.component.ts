@@ -79,6 +79,17 @@ import { inputPage, inputPageExamples } from './input.docs';
 
       <app-component-page-section [section]="section('example')">
         <div class="grid gap-2">
+          <app-component-page-section [section]="section('example-floating')">
+            <app-component-page-code-previewer [code]="examples.floating" language="angular-html">
+              <div previewer class="w-[min(360px,100%)]">
+                <sanring-field floating>
+                  <label sanringLabel>Email</label>
+                  <input sanringInput placeholder="" type="email" />
+                </sanring-field>
+              </div>
+            </app-component-page-code-previewer>
+          </app-component-page-section>
+
           <app-component-page-section [section]="section('example-disabled')">
             <app-component-page-code-previewer [code]="examples.disabled" language="angular-html">
               <div previewer class="w-[min(360px,100%)]">

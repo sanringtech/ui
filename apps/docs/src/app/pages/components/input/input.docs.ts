@@ -32,6 +32,11 @@ export const inputPage = {
       level: 2,
       children: [
         {
+          id: 'example-floating',
+          titleKey: 'input.demo.floating',
+          level: 3,
+        },
+        {
           id: 'example-disabled',
           titleKey: 'input.demo.disabled',
           level: 3,
@@ -81,6 +86,10 @@ export const inputPageExamples = {
   <label sanringLabel>Email</label>
   <input sanringInput placeholder="name@sanring.dev" type="email" />
   <p sanringDescription>We'll only use this for account notifications.</p>
+</sanring-field>`,
+  floating: `<sanring-field floating>
+  <label sanringLabel>Email</label>
+  <input sanringInput placeholder="" type="email" />
 </sanring-field>`,
   disabled: `<sanring-field>
   <label sanringLabel>Disabled email</label>

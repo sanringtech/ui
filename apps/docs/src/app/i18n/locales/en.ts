@@ -383,6 +383,7 @@ export const en = {
   'divider.api.inset.description': 'Offsets the horizontal divider: none, start, end, or both.',
   'input.description':
     'A form control styling directive for native input and file fields.',
+  'input.demo.floating': 'Floating label',
   'input.demo.disabled': 'Disabled',
   'input.demo.file': 'File',
   'input.demo.validation': 'Validation state',

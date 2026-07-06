@@ -345,6 +345,7 @@ export const zh: Record<TranslationKey, string> = {
   'divider.api.vertical.description': '將分隔線從水平切換為垂直。',
   'divider.api.inset.description': '調整水平分隔線縮排，可使用 none、start、end 或 both。',
   'input.description': '用於原生 input 與 file 欄位的表單控制項樣式 directive。',
+  'input.demo.floating': '浮動標籤',
   'input.demo.disabled': '停用',
   'input.demo.file': '檔案上傳',
   'input.demo.validation': '驗證狀態',

@@ -22,19 +22,41 @@ export class LabelDirective {
     return this.field?.inputId ?? null; // 如果沒有被 Field 包住，就不綁定
   });
 
-  protected readonly labelClass = computed(() =>
-    cn(
+  // floating 模式下，是否應該浮到上方：有 focus 或 input 有值就要浮起來
+  protected readonly isFloated = computed(() => {
+    if (!this.field) return false;
+    return this.field.isFocused() || !this.field.isEmpty();
+  });
+
+  protected readonly labelClass = computed(() => {
+    const floating = this.field?.floating() ?? false;
+
+    return cn(
       // shadcn 預設的 label 樣式
       // self-start：field 是 flex flex-col，預設 align-items:stretch 會把 label 撐滿整列寬度，
       // 撐開的空白區域仍算在 <label for> 的點擊範圍內，導致點擊視覺空白處也會 focus 到 input
       'text-sm font-medium leading-none self-start',
       // 沒有 Field 包裝時的 CSS-only fallback：僅在 input 排在 label 之前才會生效 (peer 是後面的兄弟選擇器)
       'peer-disabled:cursor-not-allowed peer-disabled:opacity-70',
+      // floating 模式：label 疊在 input 上方 (relative wrapper 由 field.component.ts 提供)，
+      // 用 pointer-events-none 確保點擊一律落在 input 上，而不是被 label 攔截
+      floating && [
+        'pointer-events-none absolute left-3 origin-left transition-all duration-150',
+        this.isFloated()
+          ? // top-0 -translate-y-1/2：不管字級多大，label 自己的垂直中心永遠精準卡在 border 線上，
+            // 不需要量測高度。bg-[--sanring-background] + px-1 是拿「頁面背景色」把壓在下面的 border
+            // 蓋掉一小段，做出 Material 那種缺口效果——寬度就是 label 自己的 padding box，
+            // 瀏覽器自動依文字內容算，不需要另外量測 label 寬度、也不需要 ResizeObserver/CDK。
+            // 但這個背景色必須跟「元件外部」的背景一致，如果外部背景不是 --sanring-background
+            // (例如卡在有色的卡片/面板上)，需要覆寫這個 CSS 變數，否則缺口色塊會跟環境對不上
+            'top-0 -translate-y-1/2 bg-[var(--sanring-background)] px-1 text-xs'
+          : 'top-1/2 -translate-y-1/2 text-sm text-[var(--sanring-muted)]',
+      ],
       // 有 Field 包裝時，精確依賴 control 狀態，不受 DOM 順序影響
       this.field?.isDisabled() && 'cursor-not-allowed opacity-70',
       // 如果你希望輸入錯誤時 Label 也變紅，可以加上這行
       this.field?.hasError() && 'text-red-500',
       this.class(),
-    ),
-  );
+    );
+  });
 }

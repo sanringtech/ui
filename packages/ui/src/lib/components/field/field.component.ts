@@ -1,4 +1,4 @@
-import { Component, computed, contentChild, effect, signal } from '@angular/core';
+import { booleanAttribute, Component, computed, contentChild, effect, input, signal } from '@angular/core';
 import { cn, uniqueId } from '../../utils';
 import { SANRING_FIELD_CONTROL } from './field.type';
 
@@ -9,13 +9,33 @@ import { SANRING_FIELD_CONTROL } from './field.type';
     '[class]': 'fieldClass()',
   },
   template: `
-    <!-- 這裡使用最單純的投影，保留最大的排版彈性 -->
+    <!-- 注意：同一個 select 字串不能同時出現在 @if 跟 @else 兩個分支裡——沒有渲染的那個分支會把內容
+         「卡」走，導致實際渲染的分支反而是空的 (Angular content projection 的 bucket 是整份 template
+         靜態決定，不分 branch)。所以這裡兩個 <ng-content> 各自只出現一次，用 CSS 的 display:contents
+         切換排版：floating 時當一般 relative 容器；非 floating 時讓這層 wrapper 從版面上「消失」，
+         label/input 直接變成 Field 自己 flex-col 的 item，等同原本沒有 wrapper 的行為。
+         label 用 absolute 定位不受 DOM 順序影響 (positioned 元素的疊層永遠蓋在 static 元素之上)，
+         所以 label 寫在前面即可同時滿足「非 floating 時 label 要先出現」跟「floating 時疊在 input 上」 -->
+    <div [class]="controlWrapperClass()">
+      <ng-content select="[sanringLabel]"></ng-content>
+      <ng-content select="[sanringInput]"></ng-content>
+    </div>
+    <ng-content select="[sanringDescription], sanring-error-message"></ng-content>
+    <!-- 其餘沒有對到上面 selector 的內容，維持原本最單純的投影 -->
     <ng-content></ng-content>
   `,
 })
 export class SanringFieldComponent {
   // 產生這組 Field 專屬的 ID 前綴
   readonly id = uniqueId('sanring-field');
+
+  // 是否使用 floating label 排版（label 從 input 內部浮到上方）
+  readonly floating = input(false, { transform: booleanAttribute });
+
+  // 非 floating 時用 display:contents 讓這層 wrapper 從版面消失，行為等同沒有 wrapper
+  protected readonly controlWrapperClass = computed(() =>
+    this.floating() ? 'relative flex items-center' : 'contents',
+  );
 
   // 抓取投影進來的 Input / Select / Switch
   readonly control = contentChild(SANRING_FIELD_CONTROL);
@@ -56,6 +76,8 @@ export class SanringFieldComponent {
   protected readonly fieldClass = computed(() =>
     cn(
       'group relative flex flex-col gap-2',
+      // 留出空間給 floating label 往上飄出時不會被上面裁切
+      this.floating() && 'pt-3 is-floating',
       this.hasError() && 'is-error', // 加上 is-error 標記，方便子元件寫 CSS
       this.isDisabled() && 'is-disabled',
       this.isRequired() && 'is-required',
