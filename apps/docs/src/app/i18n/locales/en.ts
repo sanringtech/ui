@@ -385,6 +385,7 @@ export const en = {
     'A form control styling directive for native input and file fields.',
   'input.demo.disabled': 'Disabled',
   'input.demo.file': 'File',
+  'input.demo.validation': 'Validation state',
   'input.examples.description':
     'Common input patterns for editable text, disabled fields, and file uploads.',
   'input.examples.basic.description':

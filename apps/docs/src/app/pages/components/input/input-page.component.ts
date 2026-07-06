@@ -1,5 +1,12 @@
 import { Component, inject } from '@angular/core';
-import { InputDirective } from '@sanring/ui';
+import { FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
+import {
+  DescriptionDirective,
+  ErrorMessageComponent,
+  FieldLabelDirective,
+  InputDirective,
+  SanringFieldComponent,
+} from '@sanring/ui';
 import { getComponentPageSection } from '../../../docs-schema/component-page.utils';
 import { I18nService } from '../../../i18n/i18n.service';
 import {
@@ -18,7 +25,12 @@ import { inputPage, inputPageExamples } from './input.docs';
   selector: 'app-input-page',
   imports: [
     ComponentPageApiTableComponent,
+    DescriptionDirective,
+    ErrorMessageComponent,
+    FieldLabelDirective,
     InputDirective,
+    ReactiveFormsModule,
+    SanringFieldComponent,
     ComponentPageCodeBlock,
     ComponentPageCodePreviewer,
     ComponentPageComponent,
@@ -38,7 +50,11 @@ import { inputPage, inputPageExamples } from './input.docs';
       <app-component-page-section [section]="section('basic')">
         <app-component-page-code-previewer [code]="examples.basic" language="angular-html">
           <div previewer class="w-[min(360px,100%)]">
-            <input sanringInput placeholder="Email" type="email" />
+            <sanring-field>
+              <label sanringLabel>Email</label>
+              <input sanringInput placeholder="name@sanring.dev" type="email" />
+              <p sanringDescription>We'll only use this for account notifications.</p>
+            </sanring-field>
           </div>
         </app-component-page-code-previewer>
       </app-component-page-section>
@@ -57,7 +73,7 @@ import { inputPage, inputPageExamples } from './input.docs';
       <app-component-page-section [section]="section('installation')">
         <app-component-page-installation
           componentName="input"
-          manualSnippet="import { InputDirective } from '@sanring/ui';"
+          manualSnippet="import { DescriptionDirective, FieldLabelDirective, InputDirective, SanringFieldComponent } from '@sanring/ui';"
         />
       </app-component-page-section>
 
@@ -66,7 +82,26 @@ import { inputPage, inputPageExamples } from './input.docs';
           <app-component-page-section [section]="section('example-disabled')">
             <app-component-page-code-previewer [code]="examples.disabled" language="angular-html">
               <div previewer class="w-[min(360px,100%)]">
-                <input sanringInput disabled value="readonly@sanring.dev" />
+                <sanring-field>
+                  <label sanringLabel>Disabled email</label>
+                  <input sanringInput disabled value="readonly@sanring.dev" />
+                </sanring-field>
+              </div>
+            </app-component-page-code-previewer>
+          </app-component-page-section>
+
+          <app-component-page-section [section]="section('example-validation')">
+            <app-component-page-code-previewer [code]="examples.validation" language="angular-html">
+              <div previewer class="w-[min(360px,100%)]">
+                <sanring-field>
+                  <label sanringLabel>Email</label>
+                  <input
+                    sanringInput
+                    [formControl]="emailControl"
+                    placeholder="name@sanring.dev"
+                  />
+                  <sanring-error-message>Email is required.</sanring-error-message>
+                </sanring-field>
               </div>
             </app-component-page-code-previewer>
           </app-component-page-section>
@@ -91,6 +126,14 @@ export class InputPageComponent {
   protected readonly page = inputPage;
   protected readonly examples = inputPageExamples;
   protected readonly i18n = inject(I18nService);
+  protected readonly emailControl = new FormControl('', {
+    nonNullable: true,
+    validators: [Validators.required],
+  });
+
+  constructor() {
+    this.emailControl.markAsTouched();
+  }
 
   protected section(id: string) {
     return getComponentPageSection(this.page, id);

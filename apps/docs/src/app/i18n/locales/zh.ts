@@ -347,6 +347,7 @@ export const zh: Record<TranslationKey, string> = {
   'input.description': '用於原生 input 與 file 欄位的表單控制項樣式 directive。',
   'input.demo.disabled': '停用',
   'input.demo.file': '檔案上傳',
+  'input.demo.validation': '驗證狀態',
   'input.examples.description': '常見輸入模式，適合文字欄位、停用狀態與檔案上傳。',
   'input.examples.basic.description':
     '將 sanringInput 套用到原生 input，保留瀏覽器行為並取得系統樣式。',

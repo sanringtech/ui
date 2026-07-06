@@ -67,9 +67,7 @@ export class InputDirective implements SanringFieldControl<string>, DoCheck, OnD
 
   get required(): boolean {
     return (
-      this.el.nativeElement.required ||
-      !!this.ngControl?.control?.hasValidator(Validators.required) ||
-      !!this.ngControl?.control?.hasValidator(Validators.requiredTrue)
+      this.el.nativeElement.required || !!this.ngControl?.control?.hasValidator(Validators.required)
     );
   }
 
