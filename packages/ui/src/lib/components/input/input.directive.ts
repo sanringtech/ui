@@ -1,4 +1,4 @@
-import { Directive, ElementRef, computed, inject, input, DoCheck, OnDestroy } from '@angular/core';
+import { Directive, ElementRef, inject, input, DoCheck, OnDestroy } from '@angular/core';
 import { cn, uniqueId } from '../../utils';
 import { FIELD_SIZE_CLASS } from '../component-styles';
 import { Subject } from 'rxjs';
@@ -10,7 +10,7 @@ import { FieldType, SanringFieldControl, SANRING_FIELD_CONTROL } from '../field/
   standalone: true,
   providers: [{ provide: SANRING_FIELD_CONTROL, useExisting: InputDirective }],
   host: {
-    '[class]': 'inputClass()',
+    '[class]': 'hostClass',
     '[id]': 'id',
     '[attr.aria-invalid]': 'errorState ? "true" : null',
     '[attr.aria-required]': 'required ? "true" : null',
@@ -32,8 +32,8 @@ export class InputDirective implements SanringFieldControl<string>, DoCheck, OnD
   private readonly el = inject(ElementRef<HTMLInputElement>);
   private previousState: InputStateSnapshot | null = null;
 
-  protected readonly inputClass = computed(() =>
-    cn(
+  protected get hostClass(): string {
+    return cn(
       'peer flex h-10 w-full rounded-[var(--sanring-radius)] border border-[var(--sanring-border-strong)]',
       'bg-[var(--sanring-surface)] text-[var(--sanring-foreground)]',
       FIELD_SIZE_CLASS,
@@ -44,8 +44,8 @@ export class InputDirective implements SanringFieldControl<string>, DoCheck, OnD
       // 當驗證失敗時，覆蓋原有的 border 與 ring 顏色
       this.errorState && 'border-red-500 focus-visible:ring-red-500',
       this.class(),
-    ),
-  );
+    );
+  }
 
   get empty(): boolean {
     return !this.el.nativeElement.value;
