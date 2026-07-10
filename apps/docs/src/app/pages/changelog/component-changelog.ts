@@ -55,6 +55,12 @@ export const componentChangelog: readonly ComponentChangelogEntry[] = [
         text: 'New Command component page — searchable command list with groups, shortcuts, and an optional ⌘K / Ctrl K dialog wrapper.',
       },
       {
+        type: 'added',
+        notable: true,
+        componentIds: ['tree'],
+        text: 'New Tree component page — expandable hierarchy examples with controlled expanded and selected state.',
+      },
+      {
         type: 'fixed',
         componentIds: ['sheet'],
         text: '`sanring-sheet-content` now portals through `Overlay`/`TemplatePortal` instead of an in-place `position: fixed` panel, restores focus to the trigger on close, and hides background content from assistive tech while open.',

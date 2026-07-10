@@ -65,6 +65,7 @@ export const en = {
   'component.textarea': 'Textarea',
   'component.timeline': 'Timeline',
   'component.tooltip': 'Tooltip',
+  'component.tree': 'Tree',
   'components.description':
     'Here you can find all components currently available in the library. More components will be added as the system grows.',
   'components.updatedTitle': 'Updated components',
@@ -1306,4 +1307,24 @@ export const en = {
     'Directive for a button that scrolls to the previous slide and disables itself at the start.',
   'carousel.api.next.description':
     'Directive for a button that scrolls to the next slide and disables itself at the end.',
+
+  'tree.description':
+    'Composable tree primitives for file explorers, nested navigation, and hierarchical data.',
+  'tree.examples.basic.description':
+    'Compose tree, node, trigger, and group primitives to build an expandable hierarchy.',
+  'tree.usage.description':
+    'Import the tree primitives from @sanring/ui and control expanded and selected values with signals.',
+  'tree.installation.description':
+    'Install @sanring/ui, then import the tree primitives into the standalone component that renders the hierarchy.',
+  'tree.composition.description':
+    'Tree separates the root state container, node semantics, expandable group, and trigger interaction.',
+  'tree.api.description': 'Inputs, models, and directives supported by the tree primitives.',
+  'tree.api.expandedValue.description': 'Expanded node values controlled by the tree root.',
+  'tree.api.selectedValue.description': 'Currently selected node value controlled by the tree root.',
+  'tree.api.value.description': 'Unique value for a tree node.',
+  'tree.api.exportAs.description':
+    'Exposes the node instance in a template reference variable — read `isExpanded()`/`isSelected()` directly instead of comparing value strings in the component class.',
+  'tree.api.trigger.description':
+    'Directive applied to the interactive element that toggles a node group.',
+  'tree.api.class.description': 'Additional classes merged with the corresponding tree primitive.',
 } as const;

@@ -2,35 +2,24 @@ import { Directive, inject } from '@angular/core';
 import { TreeComponent } from './tree.component';
 import { TreeNodeComponent } from './tree-node.component';
 
+// 純粹的點擊展開/收合開關（例如資料夾圖示）。鍵盤互動（方向鍵、Enter）已經集中
+// 交給 TreeComponent 上的 CDK TreeKeyManager 處理，所以這裡不再需要自己的
+// tabindex/role="button"/keydown 綁定——保留的話會讓同一列出現兩個 tab stop，
+// 破壞 roving tabindex（一次只有一個節點是 tab stop）的規則。
 @Directive({
   selector: '[sanringTreeTrigger]',
   standalone: true,
   host: {
     '(click)': 'toggle()',
-    '(keydown.enter)': 'toggle()',
-    '(keydown.space)': 'toggle()',
-
-    role: 'button',
-    tabindex: '0',
-    '[attr.aria-expanded]': 'isExpanded()',
   },
 })
 export class TreeTriggerDirective {
   private node = inject(TreeNodeComponent);
   private tree = inject(TreeComponent);
 
-  // 告訴 HTML 目前是否處於展開狀態
-  protected isExpanded(): boolean {
-    return this.tree.isExpanded(this.node.value());
-  }
-
-  // 核心動作：通知大腦切換狀態！
   protected toggle(event?: Event) {
-    // 避免事件冒泡，干擾到外層的其他點擊邏輯
     event?.stopPropagation();
     event?.preventDefault();
-
-    // 呼叫我們剛剛在大腦寫好的方法
     this.tree.toggleExpand(this.node.value());
   }
 }

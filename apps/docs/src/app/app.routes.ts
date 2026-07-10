@@ -341,6 +341,13 @@ export const routes: Routes = [
                     (m) => m.TooltipPageComponent,
                   ),
               },
+              {
+                path: 'tree',
+                loadComponent: () =>
+                  import('./pages/components/tree/tree-page.component').then(
+                    (m) => m.TreePageComponent,
+                  ),
+              },
             ],
           },
         ],

@@ -48,7 +48,8 @@ export type DocsComponentId =
   | 'timeline'
   | 'toggle'
   | 'toast'
-  | 'tooltip';
+  | 'tooltip'
+  | 'tree';
 
 export interface DocsComponentNavItem extends DocsSidebarItem {
   id: DocsComponentId;
@@ -303,6 +304,12 @@ export const docsComponentItems: DocsComponentNavItem[] = [
     id: 'tooltip',
     labelKey: 'component.tooltip',
     path: '/components/tooltip',
+    active: true,
+  },
+  {
+    id: 'tree',
+    labelKey: 'component.tree',
+    path: '/components/tree',
     active: true,
   },
 ];
