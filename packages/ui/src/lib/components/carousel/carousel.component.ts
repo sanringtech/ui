@@ -5,12 +5,16 @@ import { CarouselOrientation } from './carousel.type';
 
 // 兩個子元件（content 的負向 margin、item 的正向 padding）必須用同一組間距，
 // 否則第一張/最後一張幻燈片會沒對齊邊緣。集中定義避免兩邊各寫一份、日後改一邊忘了改另一邊。
+//
+// vertical 額外加了 h-full：block 元素的寬度預設會撐滿父層，但高度不會，
+// flex container 在主軸（這裡是垂直）沒有明確高度時，子項目的 basis-full 依 CSS
+// 規範會退化成 auto（依內容撐開），導致每張幻燈片高度不一致、Embla 量到錯的尺寸。
 export const CAROUSEL_ITEM_SPACING_CLASS: Record<
   CarouselOrientation,
   { item: string; content: string }
 > = {
   horizontal: { item: 'pl-4', content: '-ml-4' },
-  vertical: { item: 'pt-4', content: '-mt-4 flex-col' },
+  vertical: { item: 'pt-4', content: '-mt-4 flex-col h-full' },
 };
 
 @Component({
@@ -40,7 +44,7 @@ export class CarouselComponent implements OnDestroy {
   readonly ariaLabel = input<string | undefined>();
   readonly class = input<string | undefined>();
 
-  protected readonly carouselClass = computed(() => cn('relative w-full', this.class()));
+  protected readonly carouselClass = computed(() => cn('relative block w-full', this.class()));
 
   private emblaApi?: EmblaCarouselType;
   readonly canScrollPrev = signal(false);

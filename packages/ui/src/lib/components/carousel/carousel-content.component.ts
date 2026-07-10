@@ -39,8 +39,9 @@ export class CarouselContentComponent implements AfterViewInit, OnDestroy {
   // 保存引擎實體以便清理
   private emblaApi?: ReturnType<typeof EmblaCarousel>;
 
-  // 🌟 Viewport 樣式：就只是單純的隱藏溢出
-  protected readonly hostClass = computed(() => cn('overflow-hidden', this.class()));
+  // 🌟 Viewport 樣式：自訂元素預設是 inline，沒有明確 block 會整個縮成內容大小，
+  // 導致 overflow-hidden 裁切錯位、旁邊 absolute 定位的按鈕跟著跑位
+  protected readonly hostClass = computed(() => cn('block w-full overflow-hidden', this.class()));
 
   // 🌟 Container 樣式 (這段是 shadcn 最精彩的設計之一)
   protected readonly containerClass = computed(() =>

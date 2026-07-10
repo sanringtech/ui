@@ -1223,6 +1223,10 @@ export const en = {
   'carousel.demo.next': 'Next slide',
   'carousel.demo.multiple': 'Multiple visible slides',
   'carousel.demo.vertical': 'Vertical',
+  'carousel.demo.sizes': 'Sizes',
+  'carousel.demo.sizesLabel': 'Sized slides',
+  'carousel.examples.sizes.description':
+    'Use the basis utility class on sanring-carousel-item to control how many slides are visible at once.',
   'carousel.api.description': 'Inputs and directives supported by the carousel primitives.',
   'carousel.api.orientation.description':
     'Sets the carousel axis. Horizontal maps to Embla x-axis, vertical maps to y-axis.',

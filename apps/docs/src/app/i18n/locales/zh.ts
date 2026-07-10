@@ -1136,6 +1136,10 @@ export const zh: Record<TranslationKey, string> = {
   'carousel.demo.next': '下一張',
   'carousel.demo.multiple': '多張可見',
   'carousel.demo.vertical': '垂直輪播',
+  'carousel.demo.sizes': '尺寸',
+  'carousel.demo.sizesLabel': '尺寸範例',
+  'carousel.examples.sizes.description':
+    '在 sanring-carousel-item 上使用 basis utility class，控制同時可見的幻燈片數量。',
   'carousel.api.description': 'carousel primitives 支援的 inputs 與 directives。',
   'carousel.api.orientation.description':
     '設定輪播軸向。horizontal 對應 Embla x 軸，vertical 對應 y 軸。',

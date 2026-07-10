@@ -48,49 +48,52 @@ import { carouselPage, carouselPageExamples } from './carousel.docs';
 
       <app-component-page-section [section]="section('basic')">
         <app-component-page-code-previewer [code]="examples.basic" language="angular-html">
-          <div previewer class="w-[min(520px,100%)] px-10">
+          <div previewer class="w-[min(520px,100%)]">
             <sanring-carousel [ariaLabel]="i18n.t('carousel.demo.featured')">
-              <sanring-carousel-content>
-                @for (slide of slides; track slide.title) {
-                  <sanring-carousel-item>
-                    <div
-                      class="grid aspect-[16/9] place-items-center rounded-[var(--sanring-radius)] border border-[var(--docs-border)] bg-[var(--docs-surface)] p-6 text-center"
-                    >
-                      <div>
-                        <p class="m-0 text-sm font-semibold text-[var(--docs-fg)]">
-                          {{ slide.title }}
-                        </p>
-                        <p class="mb-0 mt-2 text-sm leading-6 text-[var(--docs-muted)]">
-                          {{ slide.description }}
-                        </p>
-                      </div>
-                    </div>
-                  </sanring-carousel-item>
-                }
-              </sanring-carousel-content>
+              <div class="flex items-center gap-3">
+                <button
+                  sanringBtn
+                  sanringCarouselPrevious
+                  type="button"
+                  variant="outline"
+                  size="icon"
+                  class="shrink-0 rounded-full"
+                  [attr.aria-label]="i18n.t('carousel.demo.previous')"
+                >
+                  <svg lucideChevronLeft class="size-4"></svg>
+                </button>
 
-              <button
-                sanringBtn
-                sanringCarouselPrevious
-                type="button"
-                variant="outline"
-                size="icon"
-                class="absolute left-0 top-1/2 -translate-y-1/2 rounded-full"
-                [attr.aria-label]="i18n.t('carousel.demo.previous')"
-              >
-                <svg lucideChevronLeft class="size-4"></svg>
-              </button>
-              <button
-                sanringBtn
-                sanringCarouselNext
-                type="button"
-                variant="outline"
-                size="icon"
-                class="absolute right-0 top-1/2 -translate-y-1/2 rounded-full"
-                [attr.aria-label]="i18n.t('carousel.demo.next')"
-              >
-                <svg lucideChevronRight class="size-4"></svg>
-              </button>
+                <sanring-carousel-content class="min-w-0 flex-1">
+                  @for (slide of slides; track slide.title) {
+                    <sanring-carousel-item>
+                      <div
+                        class="grid aspect-[16/9] place-items-center rounded-[var(--sanring-radius)] border border-[var(--docs-border)] bg-[var(--docs-surface)] p-6 text-center"
+                      >
+                        <div>
+                          <p class="m-0 text-sm font-semibold text-[var(--docs-fg)]">
+                            {{ slide.title }}
+                          </p>
+                          <p class="mb-0 mt-2 text-sm leading-6 text-[var(--docs-muted)]">
+                            {{ slide.description }}
+                          </p>
+                        </div>
+                      </div>
+                    </sanring-carousel-item>
+                  }
+                </sanring-carousel-content>
+
+                <button
+                  sanringBtn
+                  sanringCarouselNext
+                  type="button"
+                  variant="outline"
+                  size="icon"
+                  class="shrink-0 rounded-full"
+                  [attr.aria-label]="i18n.t('carousel.demo.next')"
+                >
+                  <svg lucideChevronRight class="size-4"></svg>
+                </button>
+              </div>
             </sanring-carousel>
           </div>
         </app-component-page-code-previewer>
@@ -127,52 +130,106 @@ import { carouselPage, carouselPageExamples } from './carousel.docs';
 
       <app-component-page-section [section]="section('example')">
         <div class="grid gap-2">
+          <app-component-page-section [section]="section('example-sizes')">
+            <app-component-page-code-previewer [code]="examples.sizes" language="angular-html">
+              <div previewer class="w-[min(680px,100%)]">
+                <sanring-carousel [ariaLabel]="i18n.t('carousel.demo.sizesLabel')">
+                  <div class="flex items-center gap-3">
+                    <button
+                      sanringBtn
+                      sanringCarouselPrevious
+                      type="button"
+                      variant="outline"
+                      size="icon"
+                      class="shrink-0 rounded-full"
+                      [attr.aria-label]="i18n.t('carousel.demo.previous')"
+                    >
+                      <svg lucideChevronLeft class="size-4"></svg>
+                    </button>
+
+                    <sanring-carousel-content class="min-w-0 flex-1">
+                      @for (slide of cards; track slide.title) {
+                        <sanring-carousel-item class="basis-1/3">
+                          <div
+                            class="min-h-36 rounded-[var(--sanring-radius)] border border-[var(--docs-border)] bg-[var(--docs-surface)] p-4"
+                          >
+                            <p class="m-0 text-sm font-semibold text-[var(--docs-fg)]">
+                              {{ slide.title }}
+                            </p>
+                            <p class="mb-0 mt-2 text-sm leading-6 text-[var(--docs-muted)]">
+                              {{ slide.description }}
+                            </p>
+                          </div>
+                        </sanring-carousel-item>
+                      }
+                    </sanring-carousel-content>
+
+                    <button
+                      sanringBtn
+                      sanringCarouselNext
+                      type="button"
+                      variant="outline"
+                      size="icon"
+                      class="shrink-0 rounded-full"
+                      [attr.aria-label]="i18n.t('carousel.demo.next')"
+                    >
+                      <svg lucideChevronRight class="size-4"></svg>
+                    </button>
+                  </div>
+                </sanring-carousel>
+              </div>
+            </app-component-page-code-previewer>
+          </app-component-page-section>
+
           <app-component-page-section [section]="section('example-multiple')">
             <app-component-page-code-previewer [code]="examples.multiple" language="angular-html">
-              <div previewer class="w-[min(680px,100%)] px-10">
+              <div previewer class="w-[min(680px,100%)]">
                 <sanring-carousel
                   [ariaLabel]="i18n.t('carousel.demo.teamHighlights')"
                   [opts]="{ align: 'start' }"
                 >
-                  <sanring-carousel-content>
-                    @for (slide of cards; track slide.title) {
-                      <sanring-carousel-item class="basis-full sm:basis-1/2 lg:basis-1/3">
-                        <div
-                          class="min-h-36 rounded-[var(--sanring-radius)] border border-[var(--docs-border)] bg-[var(--docs-surface)] p-4"
-                        >
-                          <p class="m-0 text-sm font-semibold text-[var(--docs-fg)]">
-                            {{ slide.title }}
-                          </p>
-                          <p class="mb-0 mt-2 text-sm leading-6 text-[var(--docs-muted)]">
-                            {{ slide.description }}
-                          </p>
-                        </div>
-                      </sanring-carousel-item>
-                    }
-                  </sanring-carousel-content>
+                  <div class="flex items-center gap-3">
+                    <button
+                      sanringBtn
+                      sanringCarouselPrevious
+                      type="button"
+                      variant="outline"
+                      size="icon"
+                      class="shrink-0 rounded-full"
+                      [attr.aria-label]="i18n.t('carousel.demo.previous')"
+                    >
+                      <svg lucideChevronLeft class="size-4"></svg>
+                    </button>
 
-                  <button
-                    sanringBtn
-                    sanringCarouselPrevious
-                    type="button"
-                    variant="outline"
-                    size="icon"
-                    class="absolute left-0 top-1/2 -translate-y-1/2 rounded-full"
-                    [attr.aria-label]="i18n.t('carousel.demo.previous')"
-                  >
-                    <svg lucideChevronLeft class="size-4"></svg>
-                  </button>
-                  <button
-                    sanringBtn
-                    sanringCarouselNext
-                    type="button"
-                    variant="outline"
-                    size="icon"
-                    class="absolute right-0 top-1/2 -translate-y-1/2 rounded-full"
-                    [attr.aria-label]="i18n.t('carousel.demo.next')"
-                  >
-                    <svg lucideChevronRight class="size-4"></svg>
-                  </button>
+                    <sanring-carousel-content class="min-w-0 flex-1">
+                      @for (slide of cards; track slide.title) {
+                        <sanring-carousel-item class="basis-full sm:basis-1/2 lg:basis-1/3">
+                          <div
+                            class="min-h-36 rounded-[var(--sanring-radius)] border border-[var(--docs-border)] bg-[var(--docs-surface)] p-4"
+                          >
+                            <p class="m-0 text-sm font-semibold text-[var(--docs-fg)]">
+                              {{ slide.title }}
+                            </p>
+                            <p class="mb-0 mt-2 text-sm leading-6 text-[var(--docs-muted)]">
+                              {{ slide.description }}
+                            </p>
+                          </div>
+                        </sanring-carousel-item>
+                      }
+                    </sanring-carousel-content>
+
+                    <button
+                      sanringBtn
+                      sanringCarouselNext
+                      type="button"
+                      variant="outline"
+                      size="icon"
+                      class="shrink-0 rounded-full"
+                      [attr.aria-label]="i18n.t('carousel.demo.next')"
+                    >
+                      <svg lucideChevronRight class="size-4"></svg>
+                    </button>
+                  </div>
                 </sanring-carousel>
               </div>
             </app-component-page-code-previewer>
@@ -180,53 +237,56 @@ import { carouselPage, carouselPageExamples } from './carousel.docs';
 
           <app-component-page-section [section]="section('example-vertical')">
             <app-component-page-code-previewer [code]="examples.vertical" language="angular-html">
-              <div previewer class="w-[min(420px,100%)] py-10">
+              <div previewer class="w-[min(420px,100%)]">
                 <sanring-carousel
                   orientation="vertical"
                   [ariaLabel]="i18n.t('carousel.demo.releaseNotes')"
                   class="mx-auto max-w-sm"
                 >
-                  <sanring-carousel-content class="h-64">
-                    @for (note of notes; track note.title) {
-                      <sanring-carousel-item>
-                        <div
-                          class="grid h-64 place-items-center rounded-[var(--sanring-radius)] border border-[var(--docs-border)] bg-[var(--docs-surface)] p-6 text-center"
-                        >
-                          <div>
-                            <p class="m-0 text-sm font-semibold text-[var(--docs-fg)]">
-                              {{ note.title }}
-                            </p>
-                            <p class="mb-0 mt-2 text-sm leading-6 text-[var(--docs-muted)]">
-                              {{ note.description }}
-                            </p>
-                          </div>
-                        </div>
-                      </sanring-carousel-item>
-                    }
-                  </sanring-carousel-content>
+                  <div class="flex flex-col items-center gap-3">
+                    <button
+                      sanringBtn
+                      sanringCarouselPrevious
+                      type="button"
+                      variant="outline"
+                      size="icon"
+                      class="shrink-0 rounded-full"
+                      [attr.aria-label]="i18n.t('carousel.demo.previous')"
+                    >
+                      <svg lucideChevronUp class="size-4"></svg>
+                    </button>
 
-                  <button
-                    sanringBtn
-                    sanringCarouselPrevious
-                    type="button"
-                    variant="outline"
-                    size="icon"
-                    class="absolute left-1/2 top-0 -translate-x-1/2 -translate-y-1/2 rounded-full"
-                    [attr.aria-label]="i18n.t('carousel.demo.previous')"
-                  >
-                    <svg lucideChevronUp class="size-4"></svg>
-                  </button>
-                  <button
-                    sanringBtn
-                    sanringCarouselNext
-                    type="button"
-                    variant="outline"
-                    size="icon"
-                    class="absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-1/2 rounded-full"
-                    [attr.aria-label]="i18n.t('carousel.demo.next')"
-                  >
-                    <svg lucideChevronDown class="size-4"></svg>
-                  </button>
+                    <sanring-carousel-content class="h-64 w-full">
+                      @for (note of notes; track note.title) {
+                        <sanring-carousel-item>
+                          <div
+                            class="grid h-64 place-items-center rounded-[var(--sanring-radius)] border border-[var(--docs-border)] bg-[var(--docs-surface)] p-6 text-center"
+                          >
+                            <div>
+                              <p class="m-0 text-sm font-semibold text-[var(--docs-fg)]">
+                                {{ note.title }}
+                              </p>
+                              <p class="mb-0 mt-2 text-sm leading-6 text-[var(--docs-muted)]">
+                                {{ note.description }}
+                              </p>
+                            </div>
+                          </div>
+                        </sanring-carousel-item>
+                      }
+                    </sanring-carousel-content>
+
+                    <button
+                      sanringBtn
+                      sanringCarouselNext
+                      type="button"
+                      variant="outline"
+                      size="icon"
+                      class="shrink-0 rounded-full"
+                      [attr.aria-label]="i18n.t('carousel.demo.next')"
+                    >
+                      <svg lucideChevronDown class="size-4"></svg>
+                    </button>
+                  </div>
                 </sanring-carousel>
               </div>
             </app-component-page-code-previewer>
