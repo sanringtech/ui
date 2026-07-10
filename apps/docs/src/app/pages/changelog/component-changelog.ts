@@ -34,6 +34,23 @@ export interface ComponentChangelogEntry {
  */
 export const componentChangelog: readonly ComponentChangelogEntry[] = [
   {
+    date: '2026-07-10',
+    changes: [
+      {
+        type: 'added',
+        notable: true,
+        componentIds: ['carousel'],
+        text: 'New Carousel component page — Embla-backed horizontal and vertical slide examples with API guidance.',
+      },
+      {
+        type: 'added',
+        notable: true,
+        componentIds: ['hover-card'],
+        text: 'New Hover Card component page — hover and focus overlay examples with delay, placement, and API guidance.',
+      },
+    ],
+  },
+  {
     date: '2026-07-07',
     changes: [
       {
