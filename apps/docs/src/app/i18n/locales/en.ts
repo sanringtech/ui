@@ -40,6 +40,7 @@ export const en = {
   'component.breadcrumb': 'Breadcrumb',
   'component.button': 'Button',
   'component.card': 'Card',
+  'component.carousel': 'Carousel',
   'component.checkbox': 'Checkbox',
   'component.collapsible': 'Collapsible',
   'component.dialog': 'Dialog',
@@ -1208,4 +1209,33 @@ export const en = {
     'Interactive header cell that toggles asc, desc, and none states for a column.',
   'table.api.noDataRow.description':
     'Template rendered by CDK table when the data source is empty.',
+
+  'carousel.description':
+    'A composable carousel built on Embla for horizontal or vertical slide navigation.',
+  'carousel.examples.basic.description':
+    'Compose the root, content, item, and navigation button directives to build a carousel.',
+  'carousel.usage.description':
+    'Import the carousel primitives from @sanring/ui and pass Embla options through the opts input.',
+  'carousel.installation.description':
+    'Install @sanring/ui, then import the carousel primitives into the standalone component that renders slides.',
+  'carousel.composition.description':
+    'Carousel separates the Embla viewport, slide items, and navigation controls so each piece can be styled independently.',
+  'carousel.demo.featured': 'Featured projects',
+  'carousel.demo.teamHighlights': 'Team highlights',
+  'carousel.demo.releaseNotes': 'Release notes',
+  'carousel.demo.previous': 'Previous slide',
+  'carousel.demo.next': 'Next slide',
+  'carousel.demo.multiple': 'Multiple visible slides',
+  'carousel.demo.vertical': 'Vertical',
+  'carousel.api.description': 'Inputs and directives supported by the carousel primitives.',
+  'carousel.api.orientation.description':
+    'Sets the carousel axis. Horizontal maps to Embla x-axis, vertical maps to y-axis.',
+  'carousel.api.opts.description':
+    'Embla options passed to the underlying carousel instance, such as loop or align.',
+  'carousel.api.ariaLabel.description': 'Accessible label applied to the carousel region.',
+  'carousel.api.class.description': 'Additional classes merged onto the carousel root.',
+  'carousel.api.previous.description':
+    'Directive for a button that scrolls to the previous slide and disables itself at the start.',
+  'carousel.api.next.description':
+    'Directive for a button that scrolls to the next slide and disables itself at the end.',
 } as const;

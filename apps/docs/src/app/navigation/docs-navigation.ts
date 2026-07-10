@@ -18,6 +18,7 @@ export type DocsComponentId =
   | 'breadcrumb'
   | 'button'
   | 'card'
+  | 'carousel'
   | 'checkbox'
   | 'collapsible'
   | 'dialog'
@@ -114,6 +115,12 @@ export const docsComponentItems: DocsComponentNavItem[] = [
     id: 'card',
     labelKey: 'component.card',
     path: '/components/card',
+    active: true,
+  },
+  {
+    id: 'carousel',
+    labelKey: 'component.carousel',
+    path: '/components/carousel',
     active: true,
   },
   {

@@ -15,6 +15,7 @@ export * from './lib/components/checkbox';
 export * from './lib/components/collapsible';
 export * from './lib/components/badge';
 export * from './lib/components/card';
+export * from './lib/components/carousel';
 export * from './lib/components/dialog';
 export * from './lib/components/divider';
 export * from './lib/components/field';

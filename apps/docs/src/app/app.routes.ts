@@ -125,6 +125,13 @@ export const routes: Routes = [
                   ),
               },
               {
+                path: 'carousel',
+                loadComponent: () =>
+                  import('./pages/components/carousel/carousel-page.component').then(
+                    (m) => m.CarouselPageComponent,
+                  ),
+              },
+              {
                 path: 'checkbox',
                 loadComponent: () =>
                   import('./pages/components/checkbox/checkbox-page.component').then(
