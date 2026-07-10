@@ -874,16 +874,12 @@ export const en = {
     'Run the CLI from the root of an Angular project. Before starting, make sure your project matches these versions and stylesheet requirements.',
 
   'changelog.page.description':
-    'What changed, and where the record comes from — CLI releases are generated straight from Changesets, component updates are curated by hand.',
-  'changelog.cli.title': 'CLI',
-  'changelog.cli.body':
-    '@sanring/cli is versioned with Changesets. This list is parsed directly from the package\'s CHANGELOG.md at load time, so it always matches the published record.',
-  'changelog.cli.loading': 'Loading CLI changelog…',
-  'changelog.cli.error': 'Could not load the CLI changelog right now.',
+    'A curated record of component changes, additions, and fixes across Sanring UI.',
   'changelog.component.title': 'Components',
   'changelog.component.body':
-    '@sanring/ui is intentionally excluded from Changesets — components are copied into your project as source, not published as a versioned package. This list is maintained by hand instead.',
-  'changelog.component.otherFixes': 'Other fixes',
+    '@sanring/ui components are copied into your project as source, so this record focuses on user-facing component updates.',
+  'changelog.component.otherFixes': 'Other changes',
+  'changelog.component.changeCount': 'changes',
 
   'component.radio': 'Radio Group',
   'radio.description': 'A set of radio buttons backed by ControlValueAccessor, with full keyboard navigation (roving tabindex) and WAI-ARIA compliance.',

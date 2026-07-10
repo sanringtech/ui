@@ -1,15 +1,14 @@
-import { Component, inject, resource } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
+import {
+  TimelineContentDirective,
+  TimelineDirective,
+  TimelineItemDirective,
+  TimelineSeparatorDirective,
+} from '@sanring/ui';
 import { ComponentPageSectionDefinition } from '../../docs-schema/component-page.types';
 import { I18nService } from '../../i18n/i18n.service';
 import { ComponentPageComponent, ComponentPageSectionComponent } from '../../layouts/component-page';
-import { CliChangeType, parseCliChangelog } from './cli-changelog';
 import { ComponentChangeType, componentChangelog } from './component-changelog';
-
-const CLI_TYPE_CLASS: Record<CliChangeType, string> = {
-  major: 'bg-[var(--docs-error-bg)] text-[var(--docs-error-fg)]',
-  minor: 'bg-[var(--docs-info-bg)] text-[var(--docs-info-fg)]',
-  patch: 'bg-[var(--docs-surface-strong)] text-[var(--docs-muted)]',
-};
 
 const COMPONENT_TYPE_CLASS: Record<ComponentChangeType, string> = {
   added: 'bg-[var(--docs-success-bg)] text-[var(--docs-success-fg)]',
@@ -21,12 +20,11 @@ const CHIP_CLASS = 'shrink-0 rounded-[var(--sanring-radius-xs)] px-1.5 py-0.5 te
 
 /**
  * Shared type scale for this page. Every text block below picks one of these
- * instead of leaving weight/line-height to the browser default, so CLI and
- * component entries render on the same rhythm. Every row — notable or not —
- * shares the same size, weight, line-height, and left edge; "notable" is
- * marked by text color alone, so there's no extra border/padding to misalign.
+ * instead of leaving weight/line-height to the browser default. Every row,
+ * notable or not, shares the same size, weight, line-height, and left edge;
+ * notable entries are marked by text color alone, so there is no extra
+ * border or padding to misalign.
  */
-const ENTRY_HEADING_CLASS = 'm-0 text-base font-semibold leading-snug text-[var(--docs-fg)]';
 const ROW_CLASS = 'flex items-start gap-2.5 text-sm font-normal leading-relaxed text-[var(--docs-muted)]';
 const NOTABLE_ROW_CLASS = 'flex items-start gap-2.5 text-sm font-normal leading-relaxed text-[var(--docs-fg)]';
 const INLINE_CODE_CLASS =
@@ -50,7 +48,14 @@ function renderInlineCode(text: string): string {
 
 @Component({
   selector: 'app-changelog-page',
-  imports: [ComponentPageComponent, ComponentPageSectionComponent],
+  imports: [
+    ComponentPageComponent,
+    ComponentPageSectionComponent,
+    TimelineContentDirective,
+    TimelineDirective,
+    TimelineItemDirective,
+    TimelineSeparatorDirective,
+  ],
   template: `
     <app-component-page [sections]="sections">
       <header class="border-b border-[var(--docs-border)] pb-10">
@@ -62,112 +67,158 @@ function renderInlineCode(text: string): string {
         </p>
       </header>
 
-      <!-- 1. CLI -->
+      <!-- Components -->
       <app-component-page-section [section]="sections[0]">
-        <p class="mt-0 text-base leading-[1.7] text-[var(--docs-muted)]">
-          {{ i18n.t('changelog.cli.body') }}
-        </p>
-
-        @if (cliChangelog.isLoading()) {
-          <p class="mt-6 text-sm text-[var(--docs-muted)]">{{ i18n.t('changelog.cli.loading') }}</p>
-        } @else if (cliChangelog.error()) {
-          <p class="mt-6 text-sm text-[var(--docs-error)]">{{ i18n.t('changelog.cli.error') }}</p>
-        } @else {
-          <div class="mt-6 space-y-8">
-            @for (version of cliChangelog.value(); track version.version) {
-              <div>
-                <h3 [class]="entryHeadingClass">v{{ version.version }}</h3>
-                <ul class="mt-3 list-none space-y-2 p-0">
-                  @for (change of version.changes; track $index) {
-                    <li [class]="rowClass">
-                      <span [class]="chipClass + ' ' + cliTypeClass[change.type]">{{ change.type }}</span>
-                      <span class="min-w-0 flex-1">
-                        <span [innerHTML]="renderText(change.text)"></span>
-                        @if (change.hash) {
-                          <span class="text-[var(--docs-muted)]">({{ change.hash }})</span>
-                        }
-                      </span>
-                    </li>
-                  }
-                </ul>
-              </div>
-            }
-          </div>
-        }
-      </app-component-page-section>
-
-      <!-- 2. Components -->
-      <app-component-page-section [section]="sections[1]">
         <p class="mt-0 text-base leading-[1.7] text-[var(--docs-muted)]">
           {{ i18n.t('changelog.component.body') }}
         </p>
 
-        <div class="mt-6 space-y-8">
-          @for (entry of groupedComponentChangelog; track entry.date) {
-            <div>
-              <h3 [class]="entryHeadingClass">{{ entry.date }}</h3>
+        <ul sanringTimeline class="mt-8 gap-0">
+          @for (entry of groupedComponentChangelog; track entry.date; let last = $last) {
+            <li sanringTimelineItem class="gap-5">
+              <span sanringTimelineSeparator>
+                <span
+                  class="grid min-h-9 min-w-9 shrink-0 place-items-center rounded-full border border-[var(--docs-border-strong)] bg-[var(--docs-panel)] shadow-sm"
+                >
+                  <span class="size-2.5 rounded-full bg-[var(--docs-accent-strong)]"></span>
+                </span>
+                @if (!last) {
+                  <span class="w-px flex-1 bg-[var(--docs-border)]"></span>
+                }
+              </span>
 
-              @if (entry.visible.length > 0) {
-                <ul class="mt-3 list-none space-y-2.5 p-0">
-                  @for (change of entry.visible; track $index) {
-                    <li [class]="change.notable ? notableRowClass : rowClass">
-                      <span [class]="chipClass + ' ' + componentTypeClass[change.type]">{{ change.type }}</span>
-                      <span class="min-w-0 flex-1" [innerHTML]="renderText(change.text)"></span>
-                    </li>
+              <section sanringTimelineContent class="pb-10">
+                <article
+                  class="rounded-[var(--sanring-radius)] border border-[var(--docs-border)] bg-[var(--docs-panel)] p-5 shadow-sm transition-[border-color,box-shadow] hover:border-[var(--docs-border-strong)] hover:shadow-md"
+                >
+                  <header
+                    class="flex flex-wrap items-center justify-between gap-x-4 gap-y-2 border-b border-[var(--docs-border)] pb-4"
+                  >
+                    <time
+                      class="block text-sm font-semibold leading-none text-[var(--docs-fg)]"
+                      [attr.datetime]="entry.date"
+                    >
+                      {{ entry.date }}
+                    </time>
+                    <span class="text-xs font-medium leading-none text-[var(--docs-muted)]">
+                      {{ entry.changes.length }}
+                      {{ i18n.t('changelog.component.changeCount') }}
+                    </span>
+                  </header>
+
+                  @if (entry.visible.length > 0) {
+                    <ul class="mt-4 list-none space-y-2.5 p-0">
+                      @for (change of entry.visible; track $index) {
+                        <li [class]="change.notable ? notableRowClass : rowClass">
+                          <span [class]="chipClass + ' ' + componentTypeClass[change.type]">{{ change.type }}</span>
+                          <span class="min-w-0 flex-1" [innerHTML]="renderText(change.text)"></span>
+                        </li>
+                      }
+                    </ul>
                   }
-                </ul>
-              }
 
-              @if (entry.fixed.length > 0) {
-                <details class="mt-3 [&_summary::-webkit-details-marker]:hidden">
-                  <summary class="cursor-pointer text-xs font-medium leading-snug text-[var(--docs-muted)] hover:text-[var(--docs-fg)]">
-                    {{ i18n.t('changelog.component.otherFixes') }} ({{ entry.fixed.length }})
-                  </summary>
-                  <ul class="mt-2 list-none space-y-2 p-0">
-                    @for (change of entry.fixed; track $index) {
-                      <li [class]="rowClass">
-                        <span [class]="chipClass + ' ' + componentTypeClass[change.type]">{{ change.type }}</span>
-                        <span class="min-w-0 flex-1" [innerHTML]="renderText(change.text)"></span>
-                      </li>
-                    }
-                  </ul>
-                </details>
-              }
-            </div>
+                  @if (entry.collapsed.length > 0) {
+                    <div class="mt-4 border-t border-[var(--docs-border)] pt-3">
+                      <button
+                        type="button"
+                        class="inline-flex cursor-pointer items-center gap-2 rounded-[var(--sanring-radius-xs)] text-xs font-medium leading-snug text-[var(--docs-muted)] transition-colors hover:text-[var(--docs-fg)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--docs-border-strong)]"
+                        [attr.aria-expanded]="isExpanded(entry.date)"
+                        [attr.aria-controls]="'changelog-extra-' + entry.date"
+                        (click)="toggleExpanded(entry.date)"
+                      >
+                        <span>
+                          {{ i18n.t('changelog.component.otherFixes') }} ({{ entry.collapsed.length }})
+                        </span>
+                        <span
+                          [class]="collapseChevronClass(entry.date)"
+                          aria-hidden="true"
+                        >
+                          v
+                        </span>
+                      </button>
+
+                      <div
+                        [class]="collapsePanelClass(entry.date)"
+                        [id]="'changelog-extra-' + entry.date"
+                      >
+                        <div class="min-h-0">
+                          <ul class="mt-3 list-none space-y-2 p-0">
+                            @for (change of entry.collapsed; track $index) {
+                              <li [class]="rowClass">
+                                <span [class]="chipClass + ' ' + componentTypeClass[change.type]">{{ change.type }}</span>
+                                <span class="min-w-0 flex-1" [innerHTML]="renderText(change.text)"></span>
+                              </li>
+                            }
+                          </ul>
+                        </div>
+                      </div>
+                    </div>
+                  }
+                </article>
+              </section>
+            </li>
           }
-        </div>
+        </ul>
       </app-component-page-section>
     </app-component-page>
   `,
 })
 export class ChangelogPageComponent {
   protected readonly i18n = inject(I18nService);
+  private readonly expandedEntries = signal<ReadonlySet<string>>(new Set());
 
   protected readonly sections: readonly ComponentPageSectionDefinition[] = [
-    { id: 'cli', titleKey: 'changelog.cli.title' },
     { id: 'components', titleKey: 'changelog.component.title' },
   ];
 
-  protected readonly groupedComponentChangelog = componentChangelog.map((entry) => ({
-    date: entry.date,
-    visible: entry.changes.filter((change) => change.notable || change.type !== 'fixed'),
-    fixed: entry.changes.filter((change) => change.type === 'fixed' && !change.notable),
-  }));
+  protected readonly groupedComponentChangelog = componentChangelog.map((entry) => {
+    const visible = entry.changes.slice(0, 5);
+
+    return {
+      date: entry.date,
+      changes: entry.changes,
+      visible,
+      collapsed: entry.changes.slice(visible.length),
+    };
+  });
   protected readonly chipClass = CHIP_CLASS;
-  protected readonly entryHeadingClass = ENTRY_HEADING_CLASS;
   protected readonly rowClass = ROW_CLASS;
   protected readonly notableRowClass = NOTABLE_ROW_CLASS;
-  protected readonly cliTypeClass = CLI_TYPE_CLASS;
   protected readonly componentTypeClass = COMPONENT_TYPE_CLASS;
 
-  protected readonly cliChangelog = resource({
-    loader: async () => {
-      const response = await fetch('/data/cli-changelog/CHANGELOG.md');
-      if (!response.ok) throw new Error(`Failed to load CLI changelog: ${response.status}`);
-      const markdown = await response.text();
-      return parseCliChangelog(markdown);
-    },
-  });
+  protected isExpanded(date: string): boolean {
+    return this.expandedEntries().has(date);
+  }
+
+  protected toggleExpanded(date: string) {
+    this.expandedEntries.update((current) => {
+      const next = new Set(current);
+      if (next.has(date)) {
+        next.delete(date);
+      } else {
+        next.add(date);
+      }
+      return next;
+    });
+  }
+
+  protected collapseChevronClass(date: string): string {
+    return [
+      'text-[10px] transition-transform duration-300 ease-out',
+      this.isExpanded(date) ? 'rotate-180' : '',
+    ]
+      .filter(Boolean)
+      .join(' ');
+  }
+
+  protected collapsePanelClass(date: string): string {
+    return [
+      'grid overflow-hidden transition-[grid-template-rows,opacity,transform] duration-300 ease-out',
+      this.isExpanded(date)
+        ? 'grid-rows-[1fr] translate-y-0 opacity-100'
+        : 'grid-rows-[0fr] -translate-y-1 opacity-0',
+    ].join(' ');
+  }
 
   protected renderText(text: string): string {
     return renderInlineCode(text);

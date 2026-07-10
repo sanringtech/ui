@@ -790,16 +790,12 @@ export const zh: Record<TranslationKey, string> = {
     'CLI 需要在 Angular 專案根目錄執行。使用前請確認專案已符合以下版本與樣式設定。',
 
   'changelog.page.description':
-    '記錄有什麼變動、資料來自哪裡——CLI 的版本紀錄直接由 Changesets 產生，元件的變更則是手動維護。',
-  'changelog.cli.title': 'CLI',
-  'changelog.cli.body':
-    '@sanring/cli 用 Changesets 管理版本。這份清單是載入時直接解析套件的 CHANGELOG.md，永遠跟實際發布的紀錄一致。',
-  'changelog.cli.loading': '正在載入 CLI 變更紀錄…',
-  'changelog.cli.error': '目前無法載入 CLI 變更紀錄。',
+    '集中記錄 Sanring UI 元件的新增、調整與修正。',
   'changelog.component.title': '元件',
   'changelog.component.body':
-    '@sanring/ui 刻意排除在 Changesets 之外——元件是以原始碼形式複製進你的專案，不是發布成有版本號的套件，這份清單改為手動維護。',
-  'changelog.component.otherFixes': '其他修正',
+    '@sanring/ui 元件會以原始碼形式複製進你的專案，因此這份紀錄聚焦在使用者會感知到的元件更新。',
+  'changelog.component.otherFixes': '其他變更',
+  'changelog.component.changeCount': '筆變更',
 
   'component.radio': 'Radio 群組',
   'radio.description': '一組單選按鈕，透過 ControlValueAccessor 相容 Angular 表單，內建 Roving Tabindex 鍵盤導航與完整 WAI-ARIA 規範。',
