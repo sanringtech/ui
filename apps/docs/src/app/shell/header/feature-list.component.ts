@@ -30,19 +30,30 @@ const MAX_SEARCH_RESULTS = 8;
     <div class="flex min-w-0 items-center gap-6 max-[860px]:w-full max-[860px]:gap-3">
       <div class="max-[860px]:min-w-0 max-[860px]:flex-1">
         <sanring-popover [(isOpen)]="isSearchOpen" align="start">
-          <label class="block" sanringPopoverTrigger>
-            <span class="sr-only">{{ i18n.t('search.label') }}</span>
-            <input
-              sanringInput
-              class="w-[330px] max-[980px]:w-[min(46vw,300px)] max-[860px]:w-full"
-              type="search"
-              autocomplete="off"
-              [placeholder]="i18n.t('search.placeholder')"
-              [value]="query()"
-              (input)="onQueryInput($event)"
-              (keydown)="onSearchKeydown($event)"
-            />
-          </label>
+          <div class="relative block">
+            <!--
+              Positioning anchor only — never a click target. Popover open/close
+              here is driven entirely by typing, focus, Escape, and selection, not
+              by sanringPopoverTrigger's click-to-toggle (which would flash an
+              empty panel on a plain focus click and briefly play the popover's
+              leave animation).
+            -->
+            <span class="pointer-events-none absolute inset-0" sanringPopoverTrigger aria-hidden="true"></span>
+            <label class="relative block">
+              <span class="sr-only">{{ i18n.t('search.label') }}</span>
+              <input
+                sanringInput
+                class="w-[330px] max-[980px]:w-[min(46vw,300px)] max-[860px]:w-full"
+                type="search"
+                autocomplete="off"
+                [placeholder]="i18n.t('search.placeholder')"
+                [value]="query()"
+                (input)="onQueryInput($event)"
+                (focus)="onSearchFocus()"
+                (keydown)="onSearchKeydown($event)"
+              />
+            </label>
+          </div>
           <sanring-popover-content class="w-[330px] p-1">
             @if (results().length) {
               @for (result of results(); track result.path; let i = $index) {
@@ -142,6 +153,10 @@ export class FeatureListComponent {
     this.query.set(value);
     this.activeIndex.set(0);
     this.isSearchOpen.set(value.trim().length > 0);
+  }
+
+  protected onSearchFocus() {
+    if (this.query().trim()) this.isSearchOpen.set(true);
   }
 
   protected onSearchKeydown(event: KeyboardEvent) {
