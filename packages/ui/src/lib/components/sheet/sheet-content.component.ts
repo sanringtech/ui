@@ -1,10 +1,14 @@
 import { CdkTrapFocus } from '@angular/cdk/a11y';
+import { Overlay, OverlayContainer, OverlayRef } from '@angular/cdk/overlay';
+import { TemplatePortal } from '@angular/cdk/portal';
 import {
   ChangeDetectionStrategy,
   Component,
   DestroyRef,
   ElementRef,
+  TemplateRef,
   ViewChild,
+  ViewContainerRef,
   computed,
   effect,
   inject,
@@ -53,7 +57,7 @@ const SIDE_LEAVE: Record<SheetSide, string> = {
     '(document:keydown.escape)': 'onEscape()',
   },
   template: `
-    @if (shouldDisplay()) {
+    <ng-template #contentTemplate>
       <div
         [class]="backdropClass()"
         aria-hidden="true"
@@ -74,13 +78,17 @@ const SIDE_LEAVE: Record<SheetSide, string> = {
       >
         <ng-content></ng-content>
       </div>
-    }
+    </ng-template>
   `,
 })
 export class SheetContentComponent {
   protected readonly sheet = inject(SheetComponent);
   private readonly destroyRef = inject(DestroyRef);
+  private readonly overlay = inject(Overlay);
+  private readonly overlayContainer = inject(OverlayContainer);
+  private readonly viewContainerRef = inject(ViewContainerRef);
 
+  @ViewChild('contentTemplate') private contentTemplateRef!: TemplateRef<unknown>;
   @ViewChild('panelDiv') private panelDiv?: ElementRef<HTMLElement>;
 
   readonly side  = input<SheetSide>('right');
@@ -88,6 +96,17 @@ export class SheetContentComponent {
 
   private readonly _leaving = signal(false);
   private _leaveTimer: ReturnType<typeof setTimeout> | undefined;
+
+  // Portal 到 cdk-overlay-container（<body> 底下），避免祖先元素的 transform/filter/contain
+  // 劫走 position:fixed 的 containing block，並讓 z-index 跟其他 CDK overlay 共用同一套堆疊管理。
+  private overlayRef?: OverlayRef;
+  private portal?: TemplatePortal;
+
+  // 關閉後把焦點還給開啟它的元素，符合 WAI-ARIA dialog pattern 的要求
+  private previouslyFocusedElement: HTMLElement | null = null;
+
+  // 開啟期間把背景內容標成 aria-hidden，避免螢幕閱讀器使用者還能導覽到面板背後的內容
+  private hiddenSiblings: Element[] = [];
 
   /** Keep DOM visible during leave animation */
   protected readonly shouldDisplay = computed(
@@ -104,6 +123,15 @@ export class SheetContentComponent {
       } else {
         document.body.style.overflow = '';
         document.body.style.paddingRight = '';
+      }
+    });
+
+    // Attach/detach the overlay portal alongside visibility
+    effect(() => {
+      if (this.shouldDisplay()) {
+        this.attachOverlay();
+      } else {
+        this.detachOverlay();
       }
     });
 
@@ -130,6 +158,8 @@ export class SheetContentComponent {
       clearTimeout(this._leaveTimer);
       document.body.style.overflow = '';
       document.body.style.paddingRight = '';
+      this.detachOverlay();
+      this.overlayRef?.dispose();
     });
   }
 
@@ -161,6 +191,47 @@ export class SheetContentComponent {
       this.class(),
     );
   });
+
+  private attachOverlay(): void {
+    this.overlayRef ??= this.overlay.create({
+      scrollStrategy: this.overlay.scrollStrategies.noop(),
+      positionStrategy: this.overlay.position().global(),
+    });
+
+    if (this.overlayRef.hasAttached()) return;
+
+    this.previouslyFocusedElement = document.activeElement as HTMLElement | null;
+    this.hideBackgroundFromAssistiveTech();
+
+    this.portal ??= new TemplatePortal(this.contentTemplateRef, this.viewContainerRef);
+    this.overlayRef.attach(this.portal);
+  }
+
+  private detachOverlay(): void {
+    if (!this.overlayRef?.hasAttached()) return;
+
+    this.overlayRef.detach();
+    this.restoreBackgroundFromAssistiveTech();
+    this.previouslyFocusedElement?.focus();
+    this.previouslyFocusedElement = null;
+  }
+
+  private hideBackgroundFromAssistiveTech(): void {
+    const overlayContainerElement = this.overlayContainer.getContainerElement();
+    this.hiddenSiblings = Array.from(document.body.children).filter(
+      (el) => el !== overlayContainerElement && !el.hasAttribute('aria-hidden'),
+    );
+    for (const el of this.hiddenSiblings) {
+      el.setAttribute('aria-hidden', 'true');
+    }
+  }
+
+  private restoreBackgroundFromAssistiveTech(): void {
+    for (const el of this.hiddenSiblings) {
+      el.removeAttribute('aria-hidden');
+    }
+    this.hiddenSiblings = [];
+  }
 
   private _startLeave(): void {
     this._leaving.set(true);
