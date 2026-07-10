@@ -129,6 +129,7 @@ export class ThemingPageComponent {
 }`;
 
   protected readonly tailwindSource = `@import 'tailwindcss';
+@import './sanring-theme.css';
 
 /* tell Tailwind to scan component source for utility classes */
 @source "../node_modules/@sanring/ui/src";

@@ -854,7 +854,7 @@ export const en = {
   'intro.installation.title': 'Installation',
   'intro.installation.body': 'Install the base package when you want to consume primitives directly from @sanring/ui.',
   'intro.installation.tailwind':
-    'Then tell Tailwind to scan the package source so utility classes from the components are included in your build. Add this to your CSS entry file:',
+    'Then import the generated theme file and tell Tailwind to scan package and local component source. Add this to your CSS entry file:',
   'intro.workflow.title': 'Recommended workflow',
   'intro.workflow.body':
     'Use the CLI when you want selected component source copied into your own project instead of depending only on package exports.',

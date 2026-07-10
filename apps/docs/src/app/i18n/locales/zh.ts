@@ -773,7 +773,7 @@ export const zh: Record<TranslationKey, string> = {
   'intro.installation.title': '安裝',
   'intro.installation.body': '當你想直接從 @sanring/ui 使用 primitives 時，安裝基礎套件即可。',
   'intro.installation.tailwind':
-    '接著讓 Tailwind 掃描套件原始碼，確保元件用到的 utility class 都被納入 build。在你的 CSS 入口檔加入以下設定：',
+    '接著匯入產生的 theme 檔，並讓 Tailwind 掃描套件與本地元件原始碼。在你的 CSS 入口檔加入以下設定：',
   'intro.workflow.title': '建議工作流',
   'intro.workflow.body': '當你希望把指定元件原始碼複製進自己的專案，而不只依賴 package exports 時，使用 CLI 工作流。',
   'intro.firstComponent.title': '加入第一個元件',

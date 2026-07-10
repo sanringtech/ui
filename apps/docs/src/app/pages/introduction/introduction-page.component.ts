@@ -6,6 +6,7 @@ import {
   ComponentPageComponent,
   ComponentPageSectionComponent,
 } from '../../layouts/component-page';
+import { docsComponentItems } from '../../navigation/docs-navigation';
 import { TranslationKey } from '../../i18n/translations';
 
 interface IntroStatusCard {
@@ -111,6 +112,7 @@ interface IntroStatusCard {
 })
 export class IntroductionPageComponent {
   protected readonly i18n = inject(I18nService);
+  private readonly componentCount = docsComponentItems.length;
 
   protected readonly sections: readonly ComponentPageSectionDefinition[] = [
     { id: 'what-is', titleKey: 'intro.whatIs.title' },
@@ -123,7 +125,7 @@ export class IntroductionPageComponent {
 
   protected readonly statusCards: IntroStatusCard[] = [
     {
-      value: '39',
+      value: String(this.componentCount),
       titleKey: 'intro.coverage.components.title',
       descriptionKey: 'intro.coverage.components.description',
     },
@@ -141,7 +143,9 @@ export class IntroductionPageComponent {
 
   protected readonly installCommand = `npm install @sanring/ui`;
 
-  protected readonly tailwindSource = `@source "../node_modules/@sanring/ui/src";
+  protected readonly tailwindSource = `@import './sanring-theme.css';
+
+@source "../node_modules/@sanring/ui/src";
 @source "./app/components/ui";`;
 
   protected readonly cliWorkflow = `npx @sanring/cli@latest init
