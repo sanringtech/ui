@@ -77,8 +77,17 @@ export const en = {
   'home.title': 'Sanring UI',
   'home.description':
     'A set of Angular component primitives, documentation, and registry workflow. Compose low-coupling components, override styles, and bring only the source you need into your product through the CLI.',
+  'home.release.label': 'Version notes',
   'home.actions.browseComponents': 'Browse components',
   'home.actions.viewExample': 'View example',
+  'home.visual.eyebrow': 'Registry pipeline',
+  'home.visual.title': 'Install source primitives on demand',
+  'home.visual.status': 'Ready',
+  'home.visual.registry': 'Registry',
+  'home.visual.command': 'CLI run',
+  'home.visual.output.one': 'resolved 3 components',
+  'home.visual.output.two': 'synced shared utilities',
+  'home.visual.output.three': 'ready to compose',
   'home.snapshot.eyebrow': 'Registry snapshot',
   'home.snapshot.title': 'Components and tools',
   'home.snapshot.components.label': 'Components',
@@ -91,7 +100,7 @@ export const en = {
   'home.highlights.eyebrow': 'Highlights',
   'home.highlights.title': 'Key features',
   'home.highlights.description':
-    'From interaction states and style extension to publishing workflow, Sanring UI breaks product interfaces into predictable, maintainable composition units.',
+    'Composable Angular primitives with token styling, source installs, and predictable interaction states.',
   'home.feature.composable.title': 'Composable primitives',
   'home.feature.composable.description':
     'Each component keeps clear root, trigger, content, or directive boundaries so product teams can compose freely.',

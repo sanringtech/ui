@@ -7,6 +7,7 @@ import {
   LucideCode2,
   LucideLayers3,
   LucidePalette,
+  LucideRocket,
   LucideSparkles,
   LucideTerminalSquare,
 } from '@lucide/angular';
@@ -29,6 +30,11 @@ interface HomeHighlight {
   kind?: 'package';
 }
 
+interface HomeVisualMetric {
+  labelKey: TranslationKey;
+  value: string;
+}
+
 @Component({
   selector: 'app-home-page',
   imports: [
@@ -41,13 +47,30 @@ interface HomeHighlight {
     LucideCode2,
     LucideLayers3,
     LucidePalette,
+    LucideRocket,
     LucideSparkles,
     LucideTerminalSquare,
   ],
   template: `
-    <section class="mx-auto flex w-full max-w-[1180px] flex-col gap-16 px-8 pb-24 pt-14 max-[860px]:gap-12 max-[860px]:px-5 max-[860px]:pt-9">
-      <div class="grid items-center gap-12 lg:grid-cols-[minmax(0,1.05fr)_minmax(360px,0.95fr)]">
+    <section class="mx-auto flex w-full max-w-[1280px] flex-col gap-16 px-8 pb-24 pt-14 max-[860px]:gap-12 max-[860px]:px-5 max-[860px]:pt-9">
+      <div class="grid items-center gap-12 lg:grid-cols-[minmax(0,0.95fr)_minmax(520px,1.05fr)] max-[1080px]:grid-cols-1">
         <div class="min-w-0">
+          <div class="mb-6 flex flex-wrap items-center gap-3">
+            <span
+              class="inline-flex h-9 items-center rounded-[var(--sanring-radius)] border border-[var(--docs-border)] bg-[var(--docs-elevated)] px-3 font-mono text-sm font-semibold text-[var(--docs-fg)] shadow-[0_10px_30px_color-mix(in_srgb,var(--docs-bg)_52%,transparent)]"
+            >
+              {{ releaseVersion }}
+            </span>
+            <a
+              class="inline-flex h-9 items-center gap-2 rounded-[var(--sanring-radius)] border border-[color-mix(in_srgb,var(--docs-accent)_30%,var(--docs-border))] bg-[color-mix(in_srgb,var(--docs-accent)_10%,var(--docs-elevated))] px-3 text-sm font-semibold text-[var(--docs-accent-strong)] no-underline transition-colors hover:border-[color-mix(in_srgb,var(--docs-accent)_55%,var(--docs-border))] hover:bg-[color-mix(in_srgb,var(--docs-accent)_16%,var(--docs-elevated))]"
+              routerLink="/changelog"
+            >
+              <svg class="size-4" lucideRocket></svg>
+              <span>{{ i18n.t('home.release.label') }}</span>
+              <svg class="size-4" lucideChevronRight></svg>
+            </a>
+          </div>
+
           <div
             class="mb-6 inline-flex items-center gap-2 rounded-full border border-[color-mix(in_srgb,var(--docs-accent)_42%,var(--docs-border))] bg-[color-mix(in_srgb,var(--docs-accent)_9%,var(--docs-surface))] px-3 py-1 text-sm font-medium text-[var(--docs-muted)]"
           >
@@ -87,71 +110,142 @@ interface HomeHighlight {
         </div>
 
         <div
-          class="min-w-0 rounded-[var(--sanring-radius)] border border-[var(--docs-border)] bg-[var(--docs-panel)] p-5 shadow-[0_24px_80px_color-mix(in_srgb,var(--docs-bg)_72%,transparent)]"
+          class="relative min-h-[430px] min-w-0 overflow-hidden rounded-[var(--sanring-radius)] border border-[var(--docs-border)] bg-[var(--docs-panel)] p-5 shadow-[0_24px_80px_color-mix(in_srgb,var(--docs-bg)_72%,transparent)]"
         >
-          <div class="flex items-center justify-between border-b border-[var(--docs-border)] pb-4">
+          <div
+            class="pointer-events-none absolute inset-0 opacity-60 [background-image:linear-gradient(color-mix(in_srgb,var(--docs-border)_44%,transparent)_1px,transparent_1px),linear-gradient(90deg,color-mix(in_srgb,var(--docs-border)_44%,transparent)_1px,transparent_1px)] [background-size:28px_28px]"
+            aria-hidden="true"
+          ></div>
+
+          <div class="relative z-10 flex items-center justify-between gap-4">
             <div>
               <p class="m-0 text-sm font-medium text-[var(--docs-muted)]">
-                {{ i18n.t('home.snapshot.eyebrow') }}
+                {{ i18n.t('home.visual.eyebrow') }}
               </p>
               <h2 class="m-0 mt-1 text-xl font-semibold text-[var(--docs-fg)]">
-                {{ i18n.t('home.snapshot.title') }}
+                {{ i18n.t('home.visual.title') }}
               </h2>
             </div>
-            <div class="rounded-[var(--sanring-radius-sm)] border border-[color-mix(in_srgb,var(--docs-accent)_35%,var(--docs-border))] bg-[color-mix(in_srgb,var(--docs-accent)_10%,var(--docs-surface))] p-2 text-[var(--docs-accent-strong)]">
-              <svg class="size-5" lucideBlocks></svg>
+            <div class="inline-flex items-center gap-2 rounded-[var(--sanring-radius)] border border-[color-mix(in_srgb,var(--docs-success-fg)_30%,var(--docs-border))] bg-[color-mix(in_srgb,var(--docs-success-bg)_70%,var(--docs-surface))] px-3 py-1.5 text-xs font-semibold text-[var(--docs-success-fg)]">
+              <span
+                class="size-2 rounded-full bg-[var(--docs-success-fg)] shadow-[0_0_0_4px_color-mix(in_srgb,var(--docs-success-fg)_16%,transparent)]"
+                aria-hidden="true"
+              ></span>
+              {{ i18n.t('home.visual.status') }}
             </div>
           </div>
 
-          <div class="grid grid-cols-3 gap-3 py-5 max-[1180px]:grid-cols-1">
-            @for (highlight of highlights; track highlight.labelKey) {
-              <div class="min-w-0 rounded-[var(--sanring-radius)] border border-[var(--docs-border)] bg-[var(--docs-surface)] p-4">
-                @if (highlight.kind === 'package') {
-                  <p class="m-0 text-sm font-medium text-[var(--docs-fg)]">
-                    {{ i18n.t(highlight.labelKey) }}
-                  </p>
-                  <p
-                    class="m-0 mt-2 min-w-0 overflow-hidden text-ellipsis whitespace-nowrap font-mono text-sm font-semibold leading-tight text-[var(--docs-accent-strong)]"
-                    [title]="highlight.value"
-                  >
-                    {{ highlight.value }}
-                  </p>
-                } @else {
-                  <p class="m-0 min-w-0 whitespace-nowrap text-[22px] font-semibold leading-tight text-[var(--docs-accent-strong)]">
-                    {{ highlight.value }}
-                  </p>
-                  <p class="m-0 mt-1 text-sm font-medium text-[var(--docs-fg)]">
-                    {{ i18n.t(highlight.labelKey) }}
-                  </p>
-                }
-                <p class="m-0 mt-3 text-sm leading-6 text-[var(--docs-muted)]">
-                  {{ i18n.t(highlight.descriptionKey) }}
-                </p>
+          <div class="relative z-10 mt-8 grid gap-4">
+            <div class="grid grid-cols-[minmax(0,0.85fr)_minmax(0,1.15fr)] items-stretch gap-4 max-[1180px]:grid-cols-1">
+              <div class="rounded-[var(--sanring-radius)] border border-[var(--docs-border)] bg-[color-mix(in_srgb,var(--docs-surface)_82%,transparent)] p-4 backdrop-blur">
+                <div class="flex items-center gap-2 text-sm font-semibold text-[var(--docs-fg)]">
+                  <svg class="size-4 text-[var(--docs-accent-strong)]" lucideBlocks></svg>
+                  {{ i18n.t('home.visual.registry') }}
+                </div>
+                <div class="mt-4 grid gap-2">
+                  @for (node of registryNodes; track node) {
+                    <div
+                      class="flex items-center justify-between gap-3 rounded-[var(--sanring-radius-sm)] border border-[var(--docs-border)] bg-[var(--docs-bg)] px-3 py-2"
+                    >
+                      <span class="min-w-0 truncate font-mono text-xs text-[var(--docs-muted)]">
+                        {{ node }}
+                      </span>
+                      <span class="size-1.5 rounded-full bg-[var(--docs-accent-strong)]"></span>
+                    </div>
+                  }
+                </div>
               </div>
-            }
-          </div>
 
-          <div class="rounded-[var(--sanring-radius)] border border-[var(--docs-border)] bg-[var(--docs-code)] p-4 font-mono text-sm leading-7 text-[var(--docs-fg)]">
-            <div class="flex items-center gap-2 text-[var(--docs-muted)]">
-              <svg class="size-4" lucideTerminalSquare></svg>
-              {{ i18n.t('home.install.label') }}
+              <div class="rounded-[var(--sanring-radius)] border border-[var(--docs-border)] bg-[color-mix(in_srgb,var(--docs-code)_86%,transparent)] p-4 font-mono text-sm leading-7 text-[var(--docs-fg)] backdrop-blur">
+                <div class="flex items-center gap-2 text-[var(--docs-muted)]">
+                  <svg class="size-4" lucideTerminalSquare></svg>
+                  {{ i18n.t('home.visual.command') }}
+                </div>
+                <div
+                  class="mt-3 rounded-[var(--sanring-radius-sm)] border border-[var(--docs-border)] bg-[var(--docs-bg)] px-3 py-2 text-sm leading-6"
+                >
+                  <code class="break-words [overflow-wrap:anywhere]">
+                    pnpm dlx &#64;sanring/cli add button dialog toast
+                  </code>
+                </div>
+                <div class="mt-3 grid gap-1 border-t border-[var(--docs-border)] pt-3 text-xs text-[var(--docs-muted)]">
+                  <span>{{ i18n.t('home.visual.output.one') }}</span>
+                  <span>{{ i18n.t('home.visual.output.two') }}</span>
+                  <span class="text-[var(--docs-success-fg)]">{{ i18n.t('home.visual.output.three') }}</span>
+                </div>
+              </div>
             </div>
-            <pre class="m-0 mt-3 overflow-x-auto"><code>pnpm dlx &#64;sanring/cli add button dialog toast</code></pre>
+
+            <div class="grid grid-cols-3 gap-3 max-[520px]:grid-cols-1">
+              @for (metric of visualMetrics; track metric.labelKey) {
+                <div class="rounded-[var(--sanring-radius)] border border-[var(--docs-border)] bg-[color-mix(in_srgb,var(--docs-surface)_82%,transparent)] p-3 backdrop-blur">
+                  <p class="m-0 text-[20px] font-semibold leading-none text-[var(--docs-accent-strong)]">
+                    {{ metric.value }}
+                  </p>
+                  <p class="m-0 mt-2 text-xs font-medium text-[var(--docs-muted)]">
+                    {{ i18n.t(metric.labelKey) }}
+                  </p>
+                </div>
+              }
+            </div>
           </div>
         </div>
       </div>
 
-      <section>
-        <div class="mb-6 flex items-end justify-between gap-6 max-[720px]:block">
+      <section
+        class="grid gap-4 rounded-[var(--sanring-radius)] border border-[var(--docs-border)] bg-[var(--docs-panel)] p-4 lg:grid-cols-[minmax(240px,0.9fr)_repeat(3,minmax(0,1fr))] max-[900px]:grid-cols-1"
+        aria-labelledby="home-snapshot-title"
+      >
+        <div class="flex min-w-0 items-center gap-3 border-r border-[var(--docs-border)] pr-4 max-[900px]:border-r-0 max-[900px]:border-b max-[900px]:pb-4 max-[900px]:pr-0">
+          <div class="rounded-[var(--sanring-radius-sm)] border border-[color-mix(in_srgb,var(--docs-accent)_35%,var(--docs-border))] bg-[color-mix(in_srgb,var(--docs-accent)_10%,var(--docs-surface))] p-2 text-[var(--docs-accent-strong)]">
+            <svg class="size-5" lucideBlocks></svg>
+          </div>
           <div>
-            <p class="m-0 text-sm font-semibold uppercase text-[var(--docs-muted)]">
-              {{ i18n.t('home.highlights.eyebrow') }}
+            <p id="home-snapshot-title" class="m-0 text-sm font-medium text-[var(--docs-muted)]">
+              {{ i18n.t('home.snapshot.eyebrow') }}
             </p>
-            <h2 class="m-0 mt-2 text-[30px] font-semibold leading-tight text-[var(--docs-fg)]">
-              {{ i18n.t('home.highlights.title') }}
+            <h2 class="m-0 mt-1 text-xl font-semibold text-[var(--docs-fg)]">
+              {{ i18n.t('home.snapshot.title') }}
             </h2>
           </div>
-          <p class="m-0 max-w-[520px] text-base leading-7 text-[var(--docs-muted)] max-[720px]:mt-3">
+        </div>
+
+        @for (highlight of highlights; track highlight.labelKey) {
+          <div class="min-w-0 rounded-[var(--sanring-radius)] border border-[var(--docs-border)] bg-[var(--docs-surface)] p-4">
+            @if (highlight.kind === 'package') {
+              <p class="m-0 text-sm font-medium text-[var(--docs-fg)]">
+                {{ i18n.t(highlight.labelKey) }}
+              </p>
+              <p
+                class="m-0 mt-2 min-w-0 overflow-hidden text-ellipsis whitespace-nowrap font-mono text-sm font-semibold leading-tight text-[var(--docs-accent-strong)]"
+                [title]="highlight.value"
+              >
+                {{ highlight.value }}
+              </p>
+            } @else {
+              <p class="m-0 min-w-0 whitespace-nowrap text-[22px] font-semibold leading-tight text-[var(--docs-accent-strong)]">
+                {{ highlight.value }}
+              </p>
+              <p class="m-0 mt-1 text-sm font-medium text-[var(--docs-fg)]">
+                {{ i18n.t(highlight.labelKey) }}
+              </p>
+            }
+            <p class="m-0 mt-3 text-sm leading-6 text-[var(--docs-muted)]">
+              {{ i18n.t(highlight.descriptionKey) }}
+            </p>
+          </div>
+        }
+      </section>
+
+      <section>
+        <div class="mb-7 max-w-[660px]">
+          <p class="m-0 text-sm font-semibold uppercase text-[var(--docs-muted)]">
+            {{ i18n.t('home.highlights.eyebrow') }}
+          </p>
+          <h2 class="m-0 mt-2 text-[30px] font-semibold leading-tight text-[var(--docs-fg)]">
+            {{ i18n.t('home.highlights.title') }}
+          </h2>
+          <p class="m-0 mt-3 text-base leading-7 text-[var(--docs-muted)]">
             {{ i18n.t('home.highlights.description') }}
           </p>
         </div>
@@ -239,6 +333,7 @@ interface HomeHighlight {
 })
 export class HomePageComponent {
   protected readonly i18n = inject(I18nService);
+  protected readonly releaseVersion = 'v0.5.1';
   protected readonly componentCount = docsComponentItems.length;
   protected readonly componentItems = docsComponentItems.map((item) => ({
     id: item.id,
@@ -246,6 +341,22 @@ export class HomePageComponent {
     labelKey: item.labelKey,
     isNew: isRecentlyUpdatedComponentId(item.id),
   }));
+
+  protected readonly registryNodes = ['button', 'dialog', 'toast'];
+  protected readonly visualMetrics: HomeVisualMetric[] = [
+    {
+      labelKey: 'home.snapshot.components.label',
+      value: String(this.componentCount),
+    },
+    {
+      labelKey: 'home.snapshot.registry.label',
+      value: 'registry',
+    },
+    {
+      labelKey: 'home.snapshot.cli.label',
+      value: 'CLI',
+    },
+  ];
 
   protected readonly highlights: HomeHighlight[] = [
     {

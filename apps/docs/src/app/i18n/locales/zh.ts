@@ -77,8 +77,17 @@ export const zh: Record<TranslationKey, string> = {
   'home.title': 'Sanring UI',
   'home.description':
     '一套為 Angular 應用打造的元件 primitives、文件站與 registry 工作流。你可以直接組合低耦合元件、覆寫樣式，並透過 CLI 把需要的片段帶進產品。',
+  'home.release.label': '版本紀錄',
   'home.actions.browseComponents': '瀏覽元件',
   'home.actions.viewExample': '查看範例',
+  'home.visual.eyebrow': 'Registry pipeline',
+  'home.visual.title': '按需安裝 source primitives',
+  'home.visual.status': 'Ready',
+  'home.visual.registry': 'Registry',
+  'home.visual.command': 'CLI run',
+  'home.visual.output.one': 'resolved 3 components',
+  'home.visual.output.two': 'synced shared utilities',
+  'home.visual.output.three': 'ready to compose',
   'home.snapshot.eyebrow': 'Registry snapshot',
   'home.snapshot.title': '可用元件與工具',
   'home.snapshot.components.label': 'Components',
@@ -91,7 +100,7 @@ export const zh: Record<TranslationKey, string> = {
   'home.highlights.eyebrow': 'Highlights',
   'home.highlights.title': '重點特色',
   'home.highlights.description':
-    '從互動狀態、樣式擴充到發佈流程，Sanring UI 將常見產品介面拆成可預期、可維護的組合單元。',
+    '可組合的 Angular primitives，具備 token 樣式、source 安裝與可預期的互動狀態。',
   'home.feature.composable.title': 'Composable primitives',
   'home.feature.composable.description':
     '每個元件保留清楚的 root、trigger、content 或 directive 邊界，適合依產品需求自由組合。',
