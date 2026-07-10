@@ -14,6 +14,7 @@ export const en = {
   'actions.copied': 'Copied!',
   'actions.copyFailed': 'Copy failed',
   'actions.copyPage': 'Copy Page',
+  'actions.clearSearch': 'Clear search',
   'actions.previousPage': 'Previous page',
   'actions.nextPage': 'Next page',
   'actions.toggleTheme': 'Toggle theme',

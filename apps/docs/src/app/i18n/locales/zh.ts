@@ -16,6 +16,7 @@ export const zh: Record<TranslationKey, string> = {
   'actions.copied': '已複製！',
   'actions.copyFailed': '複製失敗',
   'actions.copyPage': '複製頁面',
+  'actions.clearSearch': '清除搜尋',
   'actions.previousPage': '上一頁',
   'actions.nextPage': '下一頁',
   'actions.toggleTheme': '切換主題',

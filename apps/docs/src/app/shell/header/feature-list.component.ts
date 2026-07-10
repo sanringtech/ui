@@ -1,6 +1,6 @@
 import { Component, computed, inject, signal } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
-import { LucideMoon, LucideSun } from '@lucide/angular';
+import { LucideMoon, LucideSun, LucideX } from '@lucide/angular';
 import { ButtonDirective, InputDirective, SANRING_POPOVER_IMPORTS } from '@sanring/ui';
 import { I18nService } from '../../i18n/i18n.service';
 import { docsComponentItems, docsSectionItems } from '../../navigation/docs-navigation';
@@ -21,6 +21,7 @@ const MAX_SEARCH_RESULTS = 8;
     ButtonDirective,
     HeaderActionButtonComponent,
     InputDirective,
+    LucideX,
     LucideSun,
     LucideMoon,
     RouterLink,
@@ -43,7 +44,7 @@ const MAX_SEARCH_RESULTS = 8;
               <span class="sr-only">{{ i18n.t('search.label') }}</span>
               <input
                 sanringInput
-                class="w-[330px] max-[980px]:w-[min(46vw,300px)] max-[860px]:w-full"
+                class="w-[330px] pr-10 [&::-webkit-search-cancel-button]:appearance-none [&::-webkit-search-decoration]:appearance-none max-[980px]:w-[min(46vw,300px)] max-[860px]:w-full"
                 type="search"
                 autocomplete="off"
                 [placeholder]="i18n.t('search.placeholder')"
@@ -52,6 +53,16 @@ const MAX_SEARCH_RESULTS = 8;
                 (focus)="onSearchFocus()"
                 (keydown)="onSearchKeydown($event)"
               />
+              @if (query()) {
+                <button
+                  type="button"
+                  class="absolute right-2 top-1/2 inline-grid size-7 -translate-y-1/2 place-items-center rounded-[var(--sanring-radius-xs)] text-[var(--docs-muted)] transition-[background-color,color] hover:bg-[var(--docs-active)] hover:text-[var(--docs-fg)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--docs-border-strong)]"
+                  [attr.aria-label]="i18n.t('actions.clearSearch')"
+                  (click)="clearSearch()"
+                >
+                  <svg lucideX class="size-4"></svg>
+                </button>
+              }
             </label>
           </div>
           <sanring-popover-content class="w-[330px] p-1">
@@ -188,6 +199,12 @@ export class FeatureListComponent {
   }
 
   protected closeSearch() {
+    this.isSearchOpen.set(false);
+  }
+
+  protected clearSearch() {
+    this.query.set('');
+    this.activeIndex.set(0);
     this.isSearchOpen.set(false);
   }
 
