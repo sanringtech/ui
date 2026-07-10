@@ -18,6 +18,6 @@ export class CommandListComponent {
   protected readonly command = inject(CommandComponent);
 
   protected readonly listClass = computed(() =>
-    cn('block max-h-[300px] overflow-y-auto overflow-x-hidden', this.class()),
+    cn('block max-h-[420px] overflow-y-auto overflow-x-hidden', this.class()),
   );
 }

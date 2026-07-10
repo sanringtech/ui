@@ -1,5 +1,5 @@
 import { LucideSearch } from '@lucide/angular';
-import { Component, computed, inject, input } from '@angular/core';
+import { Component, computed, inject, input, output } from '@angular/core';
 import { cn } from '../../utils';
 import { CommandComponent } from './command.component';
 
@@ -9,8 +9,8 @@ import { CommandComponent } from './command.component';
   imports: [LucideSearch],
   host: { class: 'block' },
   template: `
-    <div class="flex items-center gap-2 border-b border-[var(--sanring-border)] px-3">
-      <svg lucideSearch class="size-4 shrink-0 opacity-50"></svg>
+    <div class="flex items-center gap-3 border-b border-[var(--sanring-border)] px-4">
+      <svg lucideSearch class="size-5 shrink-0 opacity-50"></svg>
       <input
         [class]="inputClass()"
         [placeholder]="placeholder()"
@@ -32,11 +32,14 @@ export class CommandInputComponent {
   readonly class = input<string | undefined>();
   readonly placeholder = input('Search...');
 
+  /** 每次輸入變動都會送出目前文字，給想自己接管篩選邏輯（例如 fuzzy match）的消費者用 */
+  readonly queryChange = output<string>();
+
   protected readonly command = inject(CommandComponent);
 
   protected readonly inputClass = computed(() =>
     cn(
-      'flex h-11 w-full rounded-[var(--sanring-radius)] bg-transparent py-3 text-sm outline-none',
+      'flex h-14 w-full rounded-[var(--sanring-radius)] bg-transparent py-3 text-base outline-none',
       'placeholder:text-[var(--sanring-muted)] disabled:cursor-not-allowed disabled:opacity-50',
       this.class(),
     ),
@@ -45,5 +48,6 @@ export class CommandInputComponent {
   onInput(event: Event) {
     const inputElement = event.target as HTMLInputElement;
     this.command.setSearchQuery(inputElement.value);
+    this.queryChange.emit(inputElement.value);
   }
 }

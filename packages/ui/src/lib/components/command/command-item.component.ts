@@ -59,7 +59,9 @@ export class CommandItemComponent implements Highlightable {
 
   // 拿可見文字內容（而不是 value）去比對搜尋字串，這樣使用者打的字才會跟畫面上
   // 看到的內容對得起來，不會因為 value 是內部 id（如 "profile"）就搜不到。
+  // shouldFilter 關掉時完全不比對，交給消費者外部決定要渲染哪些 item。
   readonly isVisible = computed(() => {
+    if (!this.command.shouldFilter()) return true;
     const query = this.command.searchQuery().trim().toLowerCase();
     if (!query) return true;
     return this.getLabel().toLowerCase().includes(query);
@@ -67,7 +69,7 @@ export class CommandItemComponent implements Highlightable {
 
   protected readonly itemClass = computed(() =>
     cn(
-      'relative flex cursor-default select-none items-center gap-2 rounded-[var(--sanring-radius-xs)] px-2 py-1.5 text-sm outline-none',
+      'relative flex cursor-default select-none items-center gap-3 rounded-[var(--sanring-radius-sm)] px-3 py-2.5 text-sm outline-none',
       this.active() && 'bg-[var(--sanring-surface)] text-[var(--sanring-foreground)]',
       this.disabled && 'pointer-events-none opacity-50',
       this.class(),

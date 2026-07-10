@@ -41,6 +41,9 @@ function detectIsMac(platform: Platform): boolean {
 })
 export class CommandDialogComponent {
   readonly class = input<string | undefined>();
+  // 面板通常沒有可見標題（就一個搜尋框），交給 CDK dialog container 的 aria-label
+  // 給螢幕閱讀器使用者一個可辨識的名稱，而不是只靠 input 的 placeholder。
+  readonly ariaLabel = input<string | undefined>();
 
   @ViewChild('dialogTemplate') private readonly templateRef!: TemplateRef<unknown>;
 
@@ -59,7 +62,7 @@ export class CommandDialogComponent {
   protected readonly panelClass = computed(() =>
     cn(
       OVERLAY_SURFACE_CLASS,
-      'w-full max-w-xl overflow-hidden rounded-[var(--sanring-radius-lg)] shadow-2xl',
+      'w-full max-w-2xl overflow-hidden rounded-[var(--sanring-radius-lg)] shadow-2xl',
       this.class(),
     ),
   );
@@ -81,7 +84,8 @@ export class CommandDialogComponent {
 
     this.isOpen.set(true);
     this.dialogRef = this.dialogService.open(this.templateRef, {
-      panelClass: ['fixed', 'inset-0', 'z-[51]', 'flex', 'items-start', 'justify-center', 'p-4', 'pt-[15vh]'],
+      ariaLabel: this.ariaLabel(),
+      panelClass: ['fixed', 'inset-0', 'z-[51]', 'flex', 'items-start', 'justify-center', 'p-4', 'pt-[12vh]'],
     });
     this.dialogRef.closed.subscribe(() => {
       this.dialogRef = null;

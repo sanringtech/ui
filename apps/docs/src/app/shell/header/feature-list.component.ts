@@ -1,15 +1,18 @@
 import { Component, computed, inject, signal } from '@angular/core';
-import { Router, RouterLink } from '@angular/router';
-import { LucideMoon, LucideSun, LucideX } from '@lucide/angular';
-import { ButtonDirective, InputDirective, SANRING_POPOVER_IMPORTS } from '@sanring/ui';
+import { Router } from '@angular/router';
+import { LucideMoon, LucideSearch, LucideSun } from '@lucide/angular';
+import { ButtonDirective, CommandDialogComponent, SANRING_COMMAND_IMPORTS } from '@sanring/ui';
 import { I18nService } from '../../i18n/i18n.service';
 import { docsComponentItems, docsSectionItems } from '../../navigation/docs-navigation';
 import { fuzzyMatch } from './fuzzy-match';
 import { HeaderActionButtonComponent } from './header-action-button.component';
 
-interface SearchResult {
+interface SearchItem {
   label: string;
   path: string;
+}
+
+interface SearchResult extends SearchItem {
   score: number;
 }
 
@@ -20,74 +23,55 @@ const MAX_SEARCH_RESULTS = 8;
   imports: [
     ButtonDirective,
     HeaderActionButtonComponent,
-    InputDirective,
-    LucideX,
+    LucideSearch,
     LucideSun,
     LucideMoon,
-    RouterLink,
-    SANRING_POPOVER_IMPORTS,
+    SANRING_COMMAND_IMPORTS,
   ],
   template: `
     <div class="flex min-w-0 items-center gap-6 max-[860px]:w-full max-[860px]:gap-3">
       <div class="max-[860px]:min-w-0 max-[860px]:flex-1">
-        <sanring-popover [(isOpen)]="isSearchOpen" align="start">
-          <div class="relative block">
-            <!--
-              Positioning anchor only — never a click target. Popover open/close
-              here is driven entirely by typing, focus, Escape, and selection, not
-              by sanringPopoverTrigger's click-to-toggle (which would flash an
-              empty panel on a plain focus click and briefly play the popover's
-              leave animation).
-            -->
-            <span class="pointer-events-none absolute inset-0" sanringPopoverTrigger aria-hidden="true"></span>
-            <label class="relative block">
-              <span class="sr-only">{{ i18n.t('search.label') }}</span>
-              <input
-                sanringInput
-                class="w-[330px] pr-10 [&::-webkit-search-cancel-button]:appearance-none [&::-webkit-search-decoration]:appearance-none max-[980px]:w-[min(46vw,300px)] max-[860px]:w-full"
-                type="search"
-                autocomplete="off"
-                [placeholder]="i18n.t('search.placeholder')"
-                [value]="query()"
-                (input)="onQueryInput($event)"
-                (focus)="onSearchFocus()"
-                (keydown)="onSearchKeydown($event)"
-              />
-              @if (query()) {
-                <button
-                  type="button"
-                  class="absolute right-2 top-1/2 inline-grid size-7 -translate-y-1/2 place-items-center rounded-[var(--sanring-radius-xs)] text-[var(--docs-muted)] transition-[background-color,color] hover:bg-[var(--docs-active)] hover:text-[var(--docs-fg)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--docs-border-strong)]"
-                  [attr.aria-label]="i18n.t('actions.clearSearch')"
-                  (click)="clearSearch()"
-                >
-                  <svg lucideX class="size-4"></svg>
-                </button>
-              }
-            </label>
-          </div>
-          <sanring-popover-content class="w-[330px] p-1">
-            @if (results().length) {
-              @for (result of results(); track result.path; let i = $index) {
-                <a
-                  [routerLink]="result.path"
-                  (click)="closeSearch()"
-                  (mouseenter)="activeIndex.set(i)"
-                  class="flex min-h-8 items-center gap-3 rounded-[var(--sanring-radius-sm)] px-3 text-sm text-[var(--docs-fg)] no-underline transition-colors"
-                  [class]="i === activeIndex() ? 'bg-[var(--docs-active)]' : ''"
-                >
-                  <span class="truncate">{{ result.label }}</span>
-                  <span class="ml-auto shrink-0 truncate text-xs text-[var(--docs-muted)]">{{
-                    result.path
-                  }}</span>
-                </a>
-              }
-            } @else if (query().trim()) {
-              <p class="px-3 py-2 text-sm text-[var(--docs-muted)]">
+        <button
+          type="button"
+          class="flex h-10 w-[330px] items-center gap-2 rounded-[var(--sanring-radius)] border border-[var(--docs-border)] bg-[var(--docs-elevated)] px-3 text-sm text-[var(--docs-muted)] transition-colors hover:border-[var(--docs-border-strong)] max-[980px]:w-[min(46vw,300px)] max-[860px]:w-full"
+          (click)="commandDialog.open()"
+        >
+          <svg class="size-4 shrink-0" lucideSearch></svg>
+          <span class="min-w-0 flex-1 truncate text-left">{{ i18n.t('search.placeholder') }}</span>
+          <span
+            class="hidden shrink-0 rounded-[var(--sanring-radius-xs)] border border-[var(--docs-border)] px-1.5 py-0.5 font-mono text-xs text-[var(--docs-muted)] sm:inline-block"
+          >
+            {{ commandDialog.shortcutHint() }}
+          </span>
+        </button>
+
+        <sanring-command-dialog
+          #commandDialog
+          [ariaLabel]="i18n.t('search.label')"
+          class="max-w-3xl"
+        >
+          <sanring-command [shouldFilter]="false" (valueChange)="onSelect($event, commandDialog)">
+            <sanring-command-input
+              [placeholder]="i18n.t('search.placeholder')"
+              (queryChange)="onQueryChange($event)"
+            />
+            <sanring-command-list
+              class="min-h-[360px] max-h-[min(560px,calc(100vh-14rem))] p-2"
+            >
+              <sanring-command-empty class="py-20">
                 {{ i18n.t('search.noResults') }}
-              </p>
-            }
-          </sanring-popover-content>
-        </sanring-popover>
+              </sanring-command-empty>
+              @for (item of filteredItems(); track item.path) {
+                <sanring-command-item [value]="item.path" class="px-4 py-3">
+                  <span class="min-w-0 flex-1 truncate">{{ item.label }}</span>
+                  <span class="ml-auto shrink-0 truncate text-xs text-[var(--sanring-muted)]">{{
+                    item.path
+                  }}</span>
+                </sanring-command-item>
+              }
+            </sanring-command-list>
+          </sanring-command>
+        </sanring-command-dialog>
       </div>
 
       <div class="flex flex-none items-center gap-4 max-[860px]:gap-3">
@@ -131,10 +115,8 @@ export class FeatureListComponent {
   private readonly router = inject(Router);
 
   protected readonly query = signal('');
-  protected readonly isSearchOpen = signal(false);
-  protected readonly activeIndex = signal(0);
 
-  private readonly searchItems = computed(() => {
+  private readonly searchIndex = computed<SearchItem[]>(() => {
     const sectionItems = docsSectionItems
       .filter((item): item is typeof item & { path: string } => !!item.path && !item.disabled)
       .map((item) => ({ label: this.i18n.t(item.labelKey), path: item.path }));
@@ -146,12 +128,16 @@ export class FeatureListComponent {
     return [...sectionItems, ...componentItems];
   });
 
-  protected readonly results = computed<SearchResult[]>(() => {
+  // 空字串時直接瀏覽全部項目（Command Dialog 是完整 modal，讓使用者不用打字也能瀏覽比較合理）；
+  // 有輸入才走 fuzzy match + 排序 + 截斷，避免結果洗版。
+  protected readonly filteredItems = computed<SearchItem[]>(() => {
     const query = this.query();
-    if (!query.trim()) return [];
+    const index = this.searchIndex();
+
+    if (!query.trim()) return index;
 
     const matches: SearchResult[] = [];
-    for (const item of this.searchItems()) {
+    for (const item of index) {
       const score = fuzzyMatch(query, item.label);
       if (score !== null) matches.push({ ...item, score });
     }
@@ -159,53 +145,14 @@ export class FeatureListComponent {
     return matches.sort((a, b) => b.score - a.score).slice(0, MAX_SEARCH_RESULTS);
   });
 
-  protected onQueryInput(event: Event) {
-    const value = (event.target as HTMLInputElement).value;
+  protected onQueryChange(value: string) {
     this.query.set(value);
-    this.activeIndex.set(0);
-    this.isSearchOpen.set(value.trim().length > 0);
   }
 
-  protected onSearchFocus() {
-    if (this.query().trim()) this.isSearchOpen.set(true);
-  }
-
-  protected onSearchKeydown(event: KeyboardEvent) {
-    const results = this.results();
-
-    switch (event.key) {
-      case 'ArrowDown':
-        if (!results.length) return;
-        event.preventDefault();
-        this.activeIndex.update((index) => (index + 1) % results.length);
-        return;
-      case 'ArrowUp':
-        if (!results.length) return;
-        event.preventDefault();
-        this.activeIndex.update((index) => (index - 1 + results.length) % results.length);
-        return;
-      case 'Enter': {
-        const result = results[this.activeIndex()];
-        if (!result) return;
-        event.preventDefault();
-        this.router.navigateByUrl(result.path);
-        this.closeSearch();
-        return;
-      }
-      case 'Escape':
-        this.isSearchOpen.set(false);
-        return;
-    }
-  }
-
-  protected closeSearch() {
-    this.isSearchOpen.set(false);
-  }
-
-  protected clearSearch() {
+  protected onSelect(path: string, dialog: CommandDialogComponent) {
+    this.router.navigateByUrl(path);
+    dialog.close();
     this.query.set('');
-    this.activeIndex.set(0);
-    this.isSearchOpen.set(false);
   }
 
   protected toggleTheme() {

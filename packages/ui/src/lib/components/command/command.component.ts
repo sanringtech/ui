@@ -2,6 +2,7 @@ import { ActiveDescendantKeyManager } from '@angular/cdk/a11y';
 import {
   Component,
   Injector,
+  booleanAttribute,
   computed,
   contentChildren,
   effect,
@@ -27,6 +28,10 @@ let nextCommandId = 0;
 })
 export class CommandComponent {
   readonly class = input<string | undefined>();
+  // 對齊 cmdk 的 shouldFilter：關掉時，item 自己的內建 substring 比對整組停用，
+  // 交給消費者外部先篩選/排序好要渲染哪些 item（例如接自己的 fuzzy match），
+  // Command 本身不再二次過濾、也不會把外部已經判定「符合」的項目又擋掉。
+  readonly shouldFilter = input(true, { transform: booleanAttribute });
   readonly valueChange = output<string>();
 
   readonly listId = `sanring-command-list-${nextCommandId++}`;

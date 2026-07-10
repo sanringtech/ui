@@ -7,7 +7,7 @@ import { cn } from '../../utils';
   template: `
     <!-- 標題區塊 -->
     @if (heading()) {
-      <div class="px-2 py-1.5 text-xs font-medium text-[var(--sanring-muted)]">
+      <div class="px-3 py-2 text-xs font-medium text-[var(--sanring-muted)]">
         {{ heading() }}
       </div>
     }
@@ -27,6 +27,6 @@ export class CommandGroupComponent {
   readonly class = input<string | undefined>();
 
   protected readonly groupClass = computed(() =>
-    cn('block overflow-hidden p-1 text-[var(--sanring-foreground)]', this.class()),
+    cn('block overflow-hidden p-2 text-[var(--sanring-foreground)]', this.class()),
   );
 }
