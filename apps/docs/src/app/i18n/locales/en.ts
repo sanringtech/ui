@@ -804,21 +804,31 @@ export const en = {
   'collapsible.api.openChange.description': 'Emits whenever the open state changes through the model binding.',
 
   'intro.page.description':
-    'Angular component primitives, a documentation site, and a registry workflow — built for teams that need composable building blocks without framework lock-in.',
+    'Angular component primitives, documentation, and a registry workflow for teams that want composable building blocks they can own.',
   'intro.whatIs.title': 'What is Sanring UI?',
   'intro.whatIs.body':
-    'Sanring UI is a collection of Angular component primitives. Unlike traditional npm-only packages, each component\'s source lives in a registry — you copy exactly the pieces you need into your project, own the code, and override styles freely with Tailwind.',
+    'Sanring UI is a source-first Angular component system. Use the docs to inspect behavior and APIs, install the package for shared primitives, or copy selected component source through the registry workflow when a product needs full local ownership.',
+  'intro.coverage.title': 'Current coverage',
+  'intro.coverage.components.title': 'Documented components',
+  'intro.coverage.components.description':
+    'The docs now cover core controls, forms, overlays, navigation, feedback, and data display primitives.',
+  'intro.coverage.groups.title': 'Primary groups',
+  'intro.coverage.groups.description':
+    'Controls, overlays, data display, and layout/navigation are the current focus areas.',
+  'intro.coverage.next.title': 'Package-ready gaps',
+  'intro.coverage.next.description':
+    'Field and future form-oriented pages are tracked on the roadmap as the next docs gap to close.',
   'intro.requirements.title': 'Requirements',
   'intro.installation.title': 'Installation',
-  'intro.installation.body': 'Install the base package from npm to get access to the component primitives.',
+  'intro.installation.body': 'Install the base package when you want to consume primitives directly from @sanring/ui.',
   'intro.installation.tailwind':
     'Then tell Tailwind to scan the package source so utility classes from the components are included in your build. Add this to your CSS entry file:',
   'intro.workflow.title': 'Recommended workflow',
   'intro.workflow.body':
-    'Use the CLI to initialize local registry settings, then add only the component source you need.',
+    'Use the CLI when you want selected component source copied into your own project instead of depending only on package exports.',
   'intro.firstComponent.title': 'Add your first component',
   'intro.firstComponent.body':
-    'After adding a component, import the directive or component from your local UI folder and add it to your Angular component\'s imports array.',
+    'After adding or importing a component, place the directive or component in the standalone imports array where it is used.',
 
   'roadmap.page.description':
     'Current component coverage and what is planned next, based on the actual package source and docs surface.',

@@ -6,6 +6,13 @@ import {
   ComponentPageComponent,
   ComponentPageSectionComponent,
 } from '../../layouts/component-page';
+import { TranslationKey } from '../../i18n/translations';
+
+interface IntroStatusCard {
+  value: string;
+  titleKey: TranslationKey;
+  descriptionKey: TranslationKey;
+}
 
 @Component({
   selector: 'app-introduction-page',
@@ -28,6 +35,46 @@ import {
       </app-component-page-section>
 
       <app-component-page-section [section]="sections[1]">
+        <div class="grid gap-3 sm:grid-cols-3">
+          @for (item of statusCards; track item.titleKey) {
+            <div
+              class="rounded-[var(--sanring-radius)] border border-[var(--docs-border)] bg-[var(--docs-panel)] p-4 shadow-sm"
+            >
+              <div class="text-2xl font-semibold leading-none text-[var(--docs-fg)]">
+                {{ item.value }}
+              </div>
+              <h3 class="mb-0 mt-3 text-sm font-semibold text-[var(--docs-fg)]">
+                {{ i18n.t(item.titleKey) }}
+              </h3>
+              <p class="mb-0 mt-2 text-sm leading-6 text-[var(--docs-muted)]">
+                {{ i18n.t(item.descriptionKey) }}
+              </p>
+            </div>
+          }
+        </div>
+        <div class="mt-5 flex flex-wrap gap-2">
+          <a
+            class="rounded-[var(--sanring-radius)] border border-[var(--docs-border)] px-3 py-1.5 text-sm font-medium text-[var(--docs-fg)] no-underline transition-colors hover:bg-[var(--docs-active)]"
+            href="/components"
+          >
+            {{ i18n.t('nav.components') }}
+          </a>
+          <a
+            class="rounded-[var(--sanring-radius)] border border-[var(--docs-border)] px-3 py-1.5 text-sm font-medium text-[var(--docs-fg)] no-underline transition-colors hover:bg-[var(--docs-active)]"
+            href="/roadmap"
+          >
+            {{ i18n.t('sidebar.roadmap') }}
+          </a>
+          <a
+            class="rounded-[var(--sanring-radius)] border border-[var(--docs-border)] px-3 py-1.5 text-sm font-medium text-[var(--docs-fg)] no-underline transition-colors hover:bg-[var(--docs-active)]"
+            href="/changelog"
+          >
+            {{ i18n.t('sidebar.changelog') }}
+          </a>
+        </div>
+      </app-component-page-section>
+
+      <app-component-page-section [section]="sections[2]">
         <ul class="mt-0 space-y-2 text-sm text-[var(--docs-muted)] list-none p-0">
           <li><span class="font-medium text-[var(--docs-fg)]">Angular</span> &mdash; 22+</li>
           <li><span class="font-medium text-[var(--docs-fg)]">Tailwind CSS</span> &mdash; v4</li>
@@ -35,7 +82,7 @@ import {
         </ul>
       </app-component-page-section>
 
-      <app-component-page-section [section]="sections[2]">
+      <app-component-page-section [section]="sections[3]">
         <p class="mt-0 text-sm text-[var(--docs-muted)]">{{ i18n.t('intro.installation.body') }}</p>
         <div class="mt-4 overflow-hidden rounded-[var(--sanring-radius)] border border-[var(--docs-border)]">
           <app-component-page-code-block [code]="installCommand" language="bash" />
@@ -46,14 +93,14 @@ import {
         </div>
       </app-component-page-section>
 
-      <app-component-page-section [section]="sections[3]">
+      <app-component-page-section [section]="sections[4]">
         <p class="mt-0 text-sm text-[var(--docs-muted)]">{{ i18n.t('intro.workflow.body') }}</p>
         <div class="mt-4 overflow-hidden rounded-[var(--sanring-radius)] border border-[var(--docs-border)]">
           <app-component-page-code-block [code]="cliWorkflow" language="bash" />
         </div>
       </app-component-page-section>
 
-      <app-component-page-section [section]="sections[4]">
+      <app-component-page-section [section]="sections[5]">
         <p class="mt-0 text-sm text-[var(--docs-muted)]">{{ i18n.t('intro.firstComponent.body') }}</p>
         <div class="mt-4 overflow-hidden rounded-[var(--sanring-radius)] border border-[var(--docs-border)]">
           <app-component-page-code-block [code]="firstComponent" language="angular-ts" />
@@ -67,10 +114,29 @@ export class IntroductionPageComponent {
 
   protected readonly sections: readonly ComponentPageSectionDefinition[] = [
     { id: 'what-is', titleKey: 'intro.whatIs.title' },
+    { id: 'current-coverage', titleKey: 'intro.coverage.title' },
     { id: 'requirements', titleKey: 'intro.requirements.title' },
     { id: 'installation', titleKey: 'intro.installation.title' },
     { id: 'workflow', titleKey: 'intro.workflow.title' },
     { id: 'first-component', titleKey: 'intro.firstComponent.title' },
+  ];
+
+  protected readonly statusCards: IntroStatusCard[] = [
+    {
+      value: '39',
+      titleKey: 'intro.coverage.components.title',
+      descriptionKey: 'intro.coverage.components.description',
+    },
+    {
+      value: '4',
+      titleKey: 'intro.coverage.groups.title',
+      descriptionKey: 'intro.coverage.groups.description',
+    },
+    {
+      value: '2',
+      titleKey: 'intro.coverage.next.title',
+      descriptionKey: 'intro.coverage.next.description',
+    },
   ];
 
   protected readonly installCommand = `npm install @sanring/ui`;

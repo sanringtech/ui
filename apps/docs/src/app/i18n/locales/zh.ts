@@ -726,20 +726,29 @@ export const zh: Record<TranslationKey, string> = {
   'collapsible.api.openChange.description': '透過 model binding 變更 open 狀態時觸發。',
 
   'intro.page.description':
-    'Angular 元件 primitives、文件站與 registry 工作流——為需要可組合建構模組的團隊打造，不綁定特定框架版本。',
+    'Angular 元件 primitives、文件與 registry 工作流，提供可組合且能被產品團隊掌握的建構模組。',
   'intro.whatIs.title': 'Sanring UI 是什麼？',
   'intro.whatIs.body':
-    'Sanring UI 是一套 Angular 元件 primitives。與傳統只靠 npm 的套件不同，每個元件的原始碼存放在 registry 裡——你把需要的部分複製進自己的專案、擁有程式碼，並可以用 Tailwind 自由覆寫樣式。',
+    'Sanring UI 是 source-first 的 Angular 元件系統。你可以用文件檢查行為與 API、透過套件共用 primitives，也可以在產品需要完整本地掌控時，透過 registry workflow 複製指定元件原始碼。',
+  'intro.coverage.title': '目前覆蓋範圍',
+  'intro.coverage.components.title': '已文件化元件',
+  'intro.coverage.components.description':
+    '文件站已涵蓋基礎控制、表單、overlay、導覽、回饋訊息與資料呈現 primitives。',
+  'intro.coverage.groups.title': '主要分類',
+  'intro.coverage.groups.description': '目前聚焦在 controls、overlays、data display，以及 layout/navigation。',
+  'intro.coverage.next.title': '待補文件缺口',
+  'intro.coverage.next.description':
+    'Field 與後續表單相關頁面已在 roadmap 追蹤，是下一批要補齊的 docs gap。',
   'intro.requirements.title': '需求',
   'intro.installation.title': '安裝',
-  'intro.installation.body': '從 npm 安裝基礎套件，取得元件 primitives 的使用權。',
+  'intro.installation.body': '當你想直接從 @sanring/ui 使用 primitives 時，安裝基礎套件即可。',
   'intro.installation.tailwind':
     '接著讓 Tailwind 掃描套件原始碼，確保元件用到的 utility class 都被納入 build。在你的 CSS 入口檔加入以下設定：',
   'intro.workflow.title': '建議工作流',
-  'intro.workflow.body': '使用 CLI 初始化本機 registry 設定，接著只加入你需要的元件原始碼。',
+  'intro.workflow.body': '當你希望把指定元件原始碼複製進自己的專案，而不只依賴 package exports 時，使用 CLI 工作流。',
   'intro.firstComponent.title': '加入第一個元件',
   'intro.firstComponent.body':
-    '加入元件後，從本機 UI 資料夾匯入需要的 directive 或 component，加入 Angular 元件的 imports 陣列即可使用。',
+    '加入或匯入元件後，將需要的 directive 或 component 放進實際使用處的 standalone imports 陣列。',
 
   'roadmap.page.description':
     '依目前 package 原始碼與文件站收錄狀態，整理現有元件覆蓋率與下一步規劃。',
