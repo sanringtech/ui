@@ -25,6 +25,7 @@ export type DocsComponentId =
   | 'dialog'
   | 'divider'
   | 'dropdown-menu'
+  | 'field'
   | 'hover-card'
   | 'input'
   | 'label'
@@ -160,6 +161,12 @@ export const docsComponentItems: DocsComponentNavItem[] = [
     id: 'dropdown-menu',
     labelKey: 'component.dropdownMenu',
     path: '/components/dropdown-menu',
+    active: true,
+  },
+  {
+    id: 'field',
+    labelKey: 'component.field',
+    path: '/components/field',
     active: true,
   },
   {

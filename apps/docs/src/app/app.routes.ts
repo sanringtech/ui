@@ -174,6 +174,13 @@ export const routes: Routes = [
                   ),
               },
               {
+                path: 'field',
+                loadComponent: () =>
+                  import('./pages/components/field/field-page.component').then(
+                    (m) => m.FieldPageComponent,
+                  ),
+              },
+              {
                 path: 'hover-card',
                 loadComponent: () =>
                   import('./pages/components/hover-card/hover-card-page.component').then(

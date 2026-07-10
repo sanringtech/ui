@@ -210,8 +210,17 @@
     },
     {
       "name": "field",
-      "description": "A form field wrapper that manages label, input, and helper text layout.",
+      "description": "Form composition primitives — Field, Label, Description, and ErrorMessage wire up layout, ARIA, and Angular Forms validation state for a control.",
+      "sharedDeps": ["utils"],
+      "peerDependencies": {
+        "@angular/forms": "^22.0.0"
+      },
       "files": [
+        "field/field.component.ts",
+        "field/field.type.ts",
+        "field/label.directive.ts",
+        "field/description.directive.ts",
+        "field/error-message.component.ts",
         "field/index.ts"
       ]
     },
@@ -219,6 +228,10 @@
       "name": "input",
       "description": "Displays a form input field.",
       "sharedDeps": ["utils", "component-styles"],
+      "componentDeps": ["field"],
+      "peerDependencies": {
+        "@angular/forms": "^22.0.0"
+      },
       "files": [
         "input/input.directive.ts",
         "input/index.ts"
