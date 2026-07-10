@@ -46,6 +46,7 @@ export const zh: Record<TranslationKey, string> = {
   'component.carousel': '輪播',
   'component.checkbox': '核取方塊',
   'component.collapsible': 'Collapsible',
+  'component.command': 'Command',
   'component.dialog': '對話框',
   'component.divider': '分隔線',
   'component.dropdownMenu': '下拉選單',
@@ -1061,6 +1062,35 @@ export const zh: Record<TranslationKey, string> = {
   'hoverCard.api.side.description': '浮動面板偏好的顯示方向；CDK overlay 可能為了保持可見而翻轉位置。',
   'hoverCard.api.sideOffset.description': 'trigger 與浮動面板之間的距離，單位為 px。',
   'hoverCard.api.class.description': '合併到浮動 content panel 的額外 class。',
+
+  'command.description': '可搜尋的指令清單，用於快速導覽與操作，可選搭配 ⌘K / Ctrl K 快捷鍵的 dialog 包裝。',
+  'command.examples.basic.description':
+    '組合 input、list、group 與 item。輸入文字會依項目可見文字內容進行篩選。',
+  'command.usage.description':
+    '從 @sanring/ui 匯入 command primitives，監聽 valueChange 回應選取事件。',
+  'command.installation.description':
+    '安裝 @sanring/ui 後，將 command primitives 匯入負責渲染清單的 standalone component。',
+  'command.composition.description':
+    'Command 將搜尋輸入框、可捲動清單、群組、項目與選用的 dialog 包裝分開，方便各自獨立使用。',
+  'command.demo.dialog': 'Command dialog',
+  'command.demo.shortcuts': '快捷鍵與停用項目',
+  'command.demo.placeholder': '搜尋指令...',
+  'command.demo.empty': '找不到符合的結果。',
+  'command.demo.suggestions': '建議',
+  'command.demo.settingsGroup': '設定',
+  'command.demo.openDialog': '搜尋...',
+  'command.demo.disabledItem': '封存',
+  'command.api.description': 'command primitives 支援的 Inputs 與 Outputs。',
+  'command.api.value.description': '識別 `sanring-command-item` 的唯一值，選取時會一併送出。',
+  'command.api.disabled.description': '將該項目排除在篩選、鍵盤導覽與選取之外。',
+  'command.api.heading.description': '顯示在 `sanring-command-group` 上方的選用標題。',
+  'command.api.placeholder.description': '搜尋輸入框的 placeholder 文字。',
+  'command.api.class.description': '合併到對應 primitive 的額外 class。',
+  'command.api.selected.description':
+    '`sanring-command-item` 被點擊或用 Enter 啟用時，送出該項目的 value。',
+  'command.api.valueChange.description': '任何項目被選取時，從根元件 `sanring-command` 送出。',
+  'command.api.shortcutHint.description':
+    '`sanring-command-dialog` 上的唯讀 signal，依平台顯示對應的快捷鍵文字（Mac 上是 ⌘K，其他平台是 Ctrl K）。',
 
   'breadcrumb.description': '顯示使用者在層級中目前位置的導航輔助元件——由可組合的 primitives 建構，完整支援無障礙規範。',
   'breadcrumb.examples.basic.description': '使用預設 chevron 分隔符的三層麵包屑。',

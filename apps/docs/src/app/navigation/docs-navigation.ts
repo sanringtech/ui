@@ -21,6 +21,7 @@ export type DocsComponentId =
   | 'carousel'
   | 'checkbox'
   | 'collapsible'
+  | 'command'
   | 'dialog'
   | 'divider'
   | 'dropdown-menu'
@@ -134,6 +135,12 @@ export const docsComponentItems: DocsComponentNavItem[] = [
     id: 'collapsible',
     labelKey: 'component.collapsible',
     path: '/components/collapsible',
+    active: true,
+  },
+  {
+    id: 'command',
+    labelKey: 'component.command',
+    path: '/components/command',
     active: true,
   },
   {

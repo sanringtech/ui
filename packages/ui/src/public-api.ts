@@ -13,6 +13,7 @@ export * from './lib/components/avatar';
 export * from './lib/components/button';
 export * from './lib/components/checkbox';
 export * from './lib/components/collapsible';
+export * from './lib/components/command';
 export * from './lib/components/badge';
 export * from './lib/components/card';
 export * from './lib/components/carousel';

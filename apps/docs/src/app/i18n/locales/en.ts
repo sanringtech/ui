@@ -44,6 +44,7 @@ export const en = {
   'component.carousel': 'Carousel',
   'component.checkbox': 'Checkbox',
   'component.collapsible': 'Collapsible',
+  'component.command': 'Command',
   'component.dialog': 'Dialog',
   'component.divider': 'Divider',
   'component.dropdownMenu': 'Dropdown Menu',
@@ -1148,6 +1149,35 @@ export const en = {
   'hoverCard.api.side.description': 'Preferred side for the floating panel. CDK overlay may flip it to stay visible.',
   'hoverCard.api.sideOffset.description': 'Distance in pixels between the trigger and floating panel.',
   'hoverCard.api.class.description': 'Additional classes merged onto the floating content panel.',
+
+  'command.description':
+    'A searchable command list for quick navigation and actions, with an optional ⌘K / Ctrl K dialog wrapper.',
+  'command.examples.basic.description':
+    'Compose input, list, groups, and items. Typing filters items against their visible text.',
+  'command.usage.description':
+    'Import the command primitives from @sanring/ui and listen for valueChange to react to a selection.',
+  'command.installation.description':
+    'Install @sanring/ui, then import the command primitives into the standalone component that renders the list.',
+  'command.composition.description':
+    'Command separates the search input, scrollable list, groups, items, and an optional dialog wrapper so each piece can be used independently.',
+  'command.demo.dialog': 'Command dialog',
+  'command.demo.shortcuts': 'Shortcuts and disabled items',
+  'command.demo.placeholder': 'Search commands...',
+  'command.demo.empty': 'No results found.',
+  'command.demo.suggestions': 'Suggestions',
+  'command.demo.settingsGroup': 'Settings',
+  'command.demo.openDialog': 'Search...',
+  'command.demo.disabledItem': 'Archive',
+  'command.api.description': 'Inputs and outputs supported by the command primitives.',
+  'command.api.value.description': 'Unique value identifying a `sanring-command-item`, emitted on selection.',
+  'command.api.disabled.description': 'Excludes the item from filtering, keyboard navigation, and selection.',
+  'command.api.heading.description': 'Optional label rendered above a `sanring-command-group`.',
+  'command.api.placeholder.description': 'Placeholder text for the search input.',
+  'command.api.class.description': 'Additional classes merged onto the corresponding primitive.',
+  'command.api.selected.description': 'Emits a `sanring-command-item`\'s value when it is clicked or activated with Enter.',
+  'command.api.valueChange.description': 'Emits from the root `sanring-command` whenever any item is selected.',
+  'command.api.shortcutHint.description':
+    'Read-only signal on `sanring-command-dialog` with the platform-appropriate shortcut label (⌘K on Mac, Ctrl K elsewhere).',
 
   'breadcrumb.description': 'A navigation aid showing the user\'s current location within a hierarchy — built from composable primitives with full accessibility support.',
   'breadcrumb.examples.basic.description': 'Three-level breadcrumb using the default chevron divider.',

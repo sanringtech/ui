@@ -146,6 +146,13 @@ export const routes: Routes = [
                   ),
               },
               {
+                path: 'command',
+                loadComponent: () =>
+                  import('./pages/components/command/command-page.component').then(
+                    (m) => m.CommandPageComponent,
+                  ),
+              },
+              {
                 path: 'dialog',
                 loadComponent: () =>
                   import('./pages/components/dialog/dialog-page.component').then(
