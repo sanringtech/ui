@@ -129,6 +129,7 @@ export class RoadmapPageComponent {
     { name: 'Carousel', description: '' },
     { name: 'Checkbox', description: '' },
     { name: 'Collapsible', description: '' },
+    { name: 'Command', description: '' },
     { name: 'Dialog', description: '' },
     { name: 'Divider', description: '' },
     { name: 'Dropdown Menu', description: '' },
@@ -156,6 +157,7 @@ export class RoadmapPageComponent {
     { name: 'Toggle', description: '' },
     { name: 'Toast', description: '' },
     { name: 'Tooltip', description: '' },
+    { name: 'Tree', description: '' },
   ];
 
   protected readonly tier1: RoadmapItem[] = [
@@ -178,13 +180,7 @@ export class RoadmapPageComponent {
       name: 'Combobox',
       meta: 'next',
       description:
-        'Keyboard focus management, filtering, and selection model. This should come before Command because Command can reuse the same interaction pattern.',
-    },
-    {
-      name: 'Command (Cmd+K)',
-      meta: 'next',
-      description:
-        'Builds on Dialog plus Combobox-style filtering and keyboard navigation.',
+        'Keyboard focus management, filtering, and selection model. It can reuse the interaction patterns proven by Command.',
     },
   ];
 
