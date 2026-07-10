@@ -10,6 +10,12 @@ import {
   signal,
 } from '@angular/core';
 import { cn } from '../../utils';
+import {
+  COLLECTION_ITEM_ACTIVE_CLASS,
+  COLLECTION_ITEM_CLASS,
+  COLLECTION_ITEM_DISABLED_CLASS,
+} from '../component-styles';
+import { isCollectionItemVisible } from '../shared/collection-state';
 import { CommandComponent } from './command.component';
 
 let nextItemId = 0;
@@ -62,16 +68,15 @@ export class CommandItemComponent implements Highlightable {
   // shouldFilter 關掉時完全不比對，交給消費者外部決定要渲染哪些 item。
   readonly isVisible = computed(() => {
     if (!this.command.shouldFilter()) return true;
-    const query = this.command.searchQuery().trim().toLowerCase();
-    if (!query) return true;
-    return this.getLabel().toLowerCase().includes(query);
+    return isCollectionItemVisible(this.getLabel(), this.command.searchQuery());
   });
 
   protected readonly itemClass = computed(() =>
     cn(
-      'relative flex cursor-default select-none items-center gap-3 rounded-[var(--sanring-radius-sm)] px-3 py-2.5 text-sm outline-none',
-      this.active() && 'bg-[var(--sanring-surface)] text-[var(--sanring-foreground)]',
-      this.disabled && 'pointer-events-none opacity-50',
+      COLLECTION_ITEM_CLASS,
+      'gap-3 px-3 py-2.5',
+      this.active() && COLLECTION_ITEM_ACTIVE_CLASS,
+      this.disabled && COLLECTION_ITEM_DISABLED_CLASS,
       this.class(),
     ),
   );

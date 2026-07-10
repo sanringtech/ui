@@ -1,5 +1,6 @@
 import { Component, computed, inject, input } from '@angular/core';
 import { cn } from '../../utils';
+import { COLLECTION_LIST_CLASS } from '../component-styles';
 import { CommandComponent } from './command.component';
 
 @Component({
@@ -18,6 +19,6 @@ export class CommandListComponent {
   protected readonly command = inject(CommandComponent);
 
   protected readonly listClass = computed(() =>
-    cn('block max-h-[420px] overflow-y-auto overflow-x-hidden', this.class()),
+    cn(COLLECTION_LIST_CLASS, 'max-h-[420px]', this.class()),
   );
 }

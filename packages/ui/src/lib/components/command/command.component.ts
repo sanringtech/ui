@@ -1,4 +1,3 @@
-import { ActiveDescendantKeyManager } from '@angular/cdk/a11y';
 import {
   Component,
   Injector,
@@ -13,6 +12,7 @@ import {
   untracked,
 } from '@angular/core';
 import { cn } from '../../utils';
+import { CollectionController } from '../shared/collection-controller';
 import { CommandItemComponent } from './command-item.component';
 
 let nextCommandId = 0;
@@ -43,14 +43,11 @@ export class CommandComponent {
   // 那種寫法的順序取決於 item 的 effect 執行先後，不保證跟畫面順序一致。
   private readonly items = contentChildren(CommandItemComponent, { descendants: true });
 
-  private readonly keyManager = new ActiveDescendantKeyManager(this.items, this.injector)
-    .withWrap()
-    .withVerticalOrientation()
-    .skipPredicate((item) => !item.isVisible() || item.disabled);
+  private readonly collection = new CollectionController(this.items, this.injector);
 
   /** 目前 active 項目的 id，給 CommandInputComponent 綁 aria-activedescendant 用 */
-  readonly activeItemId = computed(() => this.keyManager.activeItem?.id ?? null);
-  readonly visibleCount = computed(() => this.items().filter((item) => item.isVisible()).length);
+  readonly activeItemId = this.collection.activeItemId;
+  readonly visibleCount = this.collection.visibleCount;
 
   protected readonly hostClass = computed(() =>
     cn(
@@ -63,11 +60,9 @@ export class CommandComponent {
     // 搜尋字串（或可見項目集合）變動時，把 active 項目重新對到第一個可見結果
     effect(() => {
       this.searchQuery();
-      const visible = this.items().filter((item) => item.isVisible() && !item.disabled);
+      const visible = this.collection.focusableItems();
       untracked(() => {
-        if (visible.length > 0 && !visible.includes(this.keyManager.activeItem as CommandItemComponent)) {
-          this.keyManager.setActiveItem(visible[0]);
-        }
+        if (visible.length > 0) this.collection.ensureActiveItem();
       });
     });
   }
@@ -77,17 +72,15 @@ export class CommandComponent {
   }
 
   setActiveItem(item: CommandItemComponent) {
-    this.keyManager.setActiveItem(item);
+    this.collection.setActiveItem(item);
   }
 
   protected onKeydown(event: KeyboardEvent) {
     if (event.key === 'Enter') {
-      event.preventDefault();
-      const active = this.keyManager.activeItem;
-      if (active && !active.disabled) active.select();
+      this.collection.onKeydown(event);
       return;
     }
 
-    this.keyManager.onKeydown(event);
+    this.collection.onKeydown(event);
   }
 }

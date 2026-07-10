@@ -1,18 +1,17 @@
 import { Component, computed, input } from '@angular/core';
 import { cn } from '../../utils';
+import { COLLECTION_GROUP_CLASS, COLLECTION_GROUP_HEADING_CLASS } from '../component-styles';
 
 @Component({
   selector: 'sanring-command-group',
   standalone: true,
   template: `
-    <!-- 標題區塊 -->
     @if (heading()) {
-      <div class="px-3 py-2 text-xs font-medium text-[var(--sanring-muted)]">
+      <div [class]="headingClass">
         {{ heading() }}
       </div>
     }
 
-    <!-- 內容區塊 (放 Item 的地方) -->
     <div role="group">
       <ng-content></ng-content>
     </div>
@@ -22,11 +21,12 @@ import { cn } from '../../utils';
   },
 })
 export class CommandGroupComponent {
-  // 接收外部傳入的群組標題 (例如 "設定"、"推薦")
   readonly heading = input<string>();
   readonly class = input<string | undefined>();
 
+  protected readonly headingClass = COLLECTION_GROUP_HEADING_CLASS;
+
   protected readonly groupClass = computed(() =>
-    cn('block overflow-hidden p-2 text-[var(--sanring-foreground)]', this.class()),
+    cn(COLLECTION_GROUP_CLASS, 'p-2', this.class()),
   );
 }

@@ -1,5 +1,7 @@
 import { Component, computed, inject, input } from '@angular/core';
 import { cn } from '../../utils';
+import { COLLECTION_EMPTY_CLASS } from '../component-styles';
+import { isCollectionEmpty } from '../shared/collection-state';
 import { CommandComponent } from './command.component';
 
 @Component({
@@ -17,8 +19,8 @@ export class CommandEmptyComponent {
 
   protected readonly command = inject(CommandComponent);
 
-  protected readonly isVisible = computed(() => this.command.visibleCount() === 0);
+  protected readonly isVisible = computed(() => isCollectionEmpty(this.command.visibleCount()));
   protected readonly emptyClass = computed(() =>
-    cn('block py-6 text-center text-sm', this.class()),
+    cn(COLLECTION_EMPTY_CLASS, this.class()),
   );
 }
