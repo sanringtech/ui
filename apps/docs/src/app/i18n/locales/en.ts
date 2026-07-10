@@ -8,6 +8,7 @@ export const en = {
   'nav.create': 'Create',
   'search.label': 'Search documentation',
   'search.placeholder': 'Search documentation...',
+  'search.noResults': 'No results found.',
   'actions.new': '+ New',
   'actions.copyCode': 'Copy code',
   'actions.copied': 'Copied!',

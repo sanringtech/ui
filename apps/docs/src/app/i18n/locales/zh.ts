@@ -10,6 +10,7 @@ export const zh: Record<TranslationKey, string> = {
   'nav.create': '建立',
   'search.label': '搜尋文件',
   'search.placeholder': '搜尋文件...',
+  'search.noResults': '找不到符合的結果。',
   'actions.new': '+ 新增',
   'actions.copyCode': '複製程式碼',
   'actions.copied': '已複製！',
