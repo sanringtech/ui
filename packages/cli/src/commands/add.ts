@@ -2,6 +2,7 @@ import { Command } from 'commander';
 import { spawnSync } from 'node:child_process';
 import { existsSync, mkdirSync, writeFileSync } from 'node:fs';
 import { dirname, join, resolve } from 'node:path';
+import { createInterface } from 'node:readline/promises';
 import ora from 'ora';
 import pc from 'picocolors';
 import {
@@ -15,12 +16,17 @@ import {
 } from '../registry.js';
 import { getInstalledPackages, isAngularProject, readConfig } from '../utils.js';
 
-function writeFile(dest: string, content: string, force: boolean): 'written' | 'skipped' {
+export function writeFile(dest: string, content: string, force: boolean): 'written' | 'skipped' {
   if (existsSync(dest) && !force) return 'skipped';
   const dir = dirname(dest);
   if (!existsSync(dir)) mkdirSync(dir, { recursive: true });
   writeFileSync(dest, content, 'utf-8');
   return 'written';
+}
+
+export interface OverwriteCandidate {
+  label: string;
+  dest: string;
 }
 
 export function collectPeerDeps(
@@ -36,6 +42,66 @@ export function collectPeerDeps(
     }
   }
   return deps;
+}
+
+export function collectOverwriteCandidates(
+  components: RegistryComponent[],
+  sharedItems: RegistryShared[],
+  componentBasePath: string,
+  sharedDestDir: string,
+): OverwriteCandidate[] {
+  const candidates: OverwriteCandidate[] = [];
+  const sharedNamesNeeded = new Set<string>();
+
+  for (const component of components) {
+    for (const depName of component.sharedDeps ?? []) sharedNamesNeeded.add(depName);
+  }
+
+  for (const depName of sharedNamesNeeded) {
+    const shared = sharedItems.find((item) => item.name === depName);
+    if (!shared) continue;
+
+    const fileName = shared.file.split('/').pop()!;
+    const dest = join(sharedDestDir, fileName);
+    if (existsSync(dest)) candidates.push({ label: `shared/${fileName}`, dest });
+  }
+
+  for (const component of components) {
+    const destDir = join(componentBasePath, component.name);
+    for (const file of component.files) {
+      const fileName = file.split('/').pop()!;
+      const dest = join(destDir, fileName);
+      if (existsSync(dest)) candidates.push({ label: `${component.name}/${fileName}`, dest });
+    }
+  }
+
+  return candidates;
+}
+
+async function confirmOverwrite(candidates: OverwriteCandidate[], yes: boolean): Promise<boolean> {
+  if (candidates.length === 0) return true;
+
+  console.log(pc.yellow(`  ⚠ ${candidates.length} existing file${candidates.length > 1 ? 's' : ''} would be overwritten:`));
+  for (const candidate of candidates) {
+    console.log(pc.dim(`  – ${candidate.label}`));
+  }
+
+  if (yes) {
+    console.log(pc.dim('\n  Proceeding because --yes was provided.\n'));
+    return true;
+  }
+
+  if (!process.stdin.isTTY) {
+    console.error(pc.red('\n✖ Refusing to overwrite files without confirmation.'));
+    console.error(pc.dim(`  Re-run with ${pc.white('--dry-run')} to preview, or ${pc.white('--force --yes')} to confirm in non-interactive environments.\n`));
+    return false;
+  }
+
+  const rl = createInterface({ input: process.stdin, output: process.stdout });
+  const answer = await rl.question(pc.dim('\n  Continue and overwrite these files?') + ' [y/N]: ');
+  rl.close();
+
+  return answer.trim().toLowerCase() === 'y' || answer.trim().toLowerCase() === 'yes';
 }
 
 // Resolves the requested component names plus their transitive `componentDeps`
@@ -82,12 +148,20 @@ export const addCommand = new Command('add')
   .option('-p, --path <path>', 'destination path relative to cwd')
   .option('-s, --shared-path <path>', 'destination for shared utilities (default: <path>/shared)')
   .option('-f, --force', 'overwrite existing files', false)
+  .option('-y, --yes', 'skip overwrite confirmation when using --force', false)
   .option('--registry <source>', 'custom registry (URL or local path)')
   .option('--dry-run', 'preview changes without writing files', false)
   .action(
     async (
       componentNames: string[],
-      options: { path?: string; sharedPath?: string; force: boolean; registry?: string; dryRun: boolean },
+      options: {
+        path?: string;
+        sharedPath?: string;
+        force: boolean;
+        yes: boolean;
+        registry?: string;
+        dryRun: boolean;
+      },
     ) => {
       const cwd = process.cwd();
       const registrySource = options.registry;
@@ -133,6 +207,21 @@ export const addCommand = new Command('add')
       const sharedDestDir = options.sharedPath
         ? resolve(cwd, options.sharedPath)
         : join(componentBasePath, 'shared');
+
+      if (options.force && !options.dryRun) {
+        const overwriteCandidates = collectOverwriteCandidates(
+          toInstall,
+          registry.shared,
+          componentBasePath,
+          sharedDestDir,
+        );
+        const confirmed = await confirmOverwrite(overwriteCandidates, options.yes);
+        if (!confirmed) {
+          console.log(pc.dim('\n  No files were written.\n'));
+          process.exit(1);
+          return;
+        }
+      }
 
       let written = 0, skipped = 0, failed = 0;
 

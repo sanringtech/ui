@@ -1,6 +1,9 @@
 import { describe, expect, it } from 'vitest';
+import { mkdirSync, mkdtempSync, rmSync, writeFileSync } from 'node:fs';
+import { join } from 'node:path';
+import { tmpdir } from 'node:os';
 import type { Registry, RegistryComponent, RegistryShared } from '../registry.js';
-import { collectPeerDeps, resolveInstallSet } from './add.js';
+import { collectOverwriteCandidates, collectPeerDeps, resolveInstallSet } from './add.js';
 
 function component(overrides: Partial<RegistryComponent> & { name: string }): RegistryComponent {
   return { description: '', files: [`${overrides.name}/index.ts`], ...overrides };
@@ -77,5 +80,59 @@ describe('collectPeerDeps', () => {
 
   it('returns an empty object when nothing has peer dependencies', () => {
     expect(collectPeerDeps([component({ name: 'a' })], [])).toEqual({});
+  });
+});
+
+describe('collectOverwriteCandidates', () => {
+  const shared: RegistryShared[] = [
+    { name: 'utils', description: '', file: 'shared/utils.ts' },
+    { name: 'styles', description: '', file: 'shared/component-styles.ts' },
+  ];
+
+  it('returns existing shared and component files that force would overwrite', () => {
+    const dir = mkdtempSync(join(tmpdir(), 'sanring-cli-add-'));
+    const componentBasePath = join(dir, 'components');
+    const sharedDestDir = join(componentBasePath, 'shared');
+
+    try {
+      mkdirSync(sharedDestDir, { recursive: true });
+      mkdirSync(join(componentBasePath, 'button'), { recursive: true });
+      writeFileSync(join(sharedDestDir, 'utils.ts'), 'local utils', { flag: 'w' });
+      writeFileSync(join(componentBasePath, 'button', 'index.ts'), 'local button', { flag: 'w' });
+
+      const candidates = collectOverwriteCandidates(
+        [
+          component({ name: 'button', sharedDeps: ['utils', 'styles'] }),
+          component({ name: 'badge' }),
+        ],
+        shared,
+        componentBasePath,
+        sharedDestDir,
+      );
+
+      expect(candidates.map((candidate) => candidate.label)).toEqual([
+        'shared/utils.ts',
+        'button/index.ts',
+      ]);
+    } finally {
+      rmSync(dir, { recursive: true, force: true });
+    }
+  });
+
+  it('returns an empty list when target files do not exist', () => {
+    const dir = mkdtempSync(join(tmpdir(), 'sanring-cli-add-'));
+
+    try {
+      expect(
+        collectOverwriteCandidates(
+          [component({ name: 'button', sharedDeps: ['utils'] })],
+          shared,
+          join(dir, 'components'),
+          join(dir, 'components', 'shared'),
+        ),
+      ).toEqual([]);
+    } finally {
+      rmSync(dir, { recursive: true, force: true });
+    }
   });
 });

@@ -1,8 +1,9 @@
 import { Command } from 'commander';
 import { spawnSync } from 'node:child_process';
+import { join } from 'node:path';
 import { createInterface } from 'node:readline/promises';
 import pc from 'picocolors';
-import { detectPackageManager, installCommand } from '../registry.js';
+import { detectPackageManager, fetchFile, installCommand } from '../registry.js';
 import {
   CONFIG_FILE,
   getInstalledPackages,
@@ -10,8 +11,10 @@ import {
   readConfig,
   writeConfig,
 } from '../utils.js';
+import { writeFile } from './add.js';
 
 const DEFAULT_COMPONENT_PATH = 'src/app/components/ui';
+export const THEME_FILE_PATH = 'src/sanring-theme.css';
 const BASE_DEPS: Record<string, string> = {
   clsx: '^2.0.0',
   'tailwind-merge': '^3.0.0',
@@ -21,7 +24,9 @@ export const initCommand = new Command('init')
   .description('Initialize Sanring UI in your Angular project')
   .option('-p, --path <path>', 'component destination path', DEFAULT_COMPONENT_PATH)
   .option('-y, --yes', 'accept all defaults without prompting', false)
-  .action(async (options: { path: string; yes: boolean }) => {
+  .option('-f, --force', 'overwrite an existing theme file', false)
+  .option('--registry <source>', 'custom registry (URL or local path)')
+  .action(async (options: { path: string; yes: boolean; force: boolean; registry?: string }) => {
     const cwd = process.cwd();
 
     console.log(pc.cyan(`\nSanring UI — init\n`));
@@ -56,7 +61,24 @@ export const initCommand = new Command('init')
     writeConfig(cwd, { componentPath });
     console.log(pc.green('\n✔') + ` ${CONFIG_FILE} written` + pc.dim(` (componentPath: ${componentPath})`));
 
-    // 5. Install base deps if missing
+    // 5. Write the design-token stylesheet every component reads (--sanring-*).
+    // Skipped if it already exists (protects any brand-color edits) unless --force.
+    const themeDest = join(cwd, THEME_FILE_PATH);
+    try {
+      const themeContent = await fetchFile('shared/theme.css', options.registry);
+      const themeResult = writeFile(themeDest, themeContent, options.force);
+      if (themeResult === 'written') {
+        console.log(pc.green('✔') + ` ${THEME_FILE_PATH} written`);
+      } else {
+        console.log(
+          pc.dim(`–  ${THEME_FILE_PATH} already exists, use --force to reset it to defaults`),
+        );
+      }
+    } catch (e) {
+      console.warn(pc.yellow(`⚠ Could not fetch shared/theme.css: ${e instanceof Error ? e.message : e}`));
+    }
+
+    // 6. Install base deps if missing
     const installed = getInstalledPackages(cwd);
     const missing = Object.entries(BASE_DEPS).filter(([pkg]) => !installed.has(pkg));
 
@@ -76,5 +98,10 @@ export const initCommand = new Command('init')
       }
     }
 
-    console.log(pc.cyan(`\nDone! Run ${pc.bold('sanring add <component>')} to add components.\n`));
+    console.log(
+      pc.cyan(`\nAdd this to your global stylesheet (e.g. src/styles.css):\n`) +
+        pc.white(`  @import './sanring-theme.css';\n`),
+    );
+    console.log(pc.dim(`  Customizing colors? See https://ui.sanring.dev/theming\n`));
+    console.log(pc.cyan(`Done! Run ${pc.bold('sanring add <component>')} to add components.\n`));
   });

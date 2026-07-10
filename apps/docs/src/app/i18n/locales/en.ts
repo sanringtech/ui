@@ -854,7 +854,7 @@ export const en = {
     'How Sanring UI handles color, typography, and spacing — and how to override them for your brand.',
   'theming.tokens.title': 'Design tokens',
   'theming.tokens.body':
-    'Sanring UI exposes a set of CSS custom properties (--sanring-*) that components use internally. You set these once in :root and everything updates.',
+    'Sanring UI exposes a set of CSS custom properties (--sanring-*) that components use internally. Running sanring init generates src/sanring-theme.css with the full default set for you — just @import it into your global stylesheet. Override any variable in :root afterwards and everything updates.',
   'theming.tailwind.title': 'Tailwind v4 integration',
   'theming.tailwind.body':
     'Tailwind v4 reads token values from @theme blocks in your CSS. Using @theme inline keeps the var() reference alive at runtime so theme switching works without a rebuild.',
@@ -862,7 +862,7 @@ export const en = {
     'The inline keyword is the key difference — without it Tailwind resolves the value once at build time and dark/light switching stops working. The @source paths should include both the package source and your local CLI component path.',
   'theming.brand.title': 'Customising your brand',
   'theming.brand.body':
-    'Override any --sanring-* or --docs-accent token in :root. Components immediately pick up the new values — no configuration files to change.',
+    'Override any --sanring-* token in :root. Components immediately pick up the new values — no configuration files to change.',
   'theming.darkMode.title': 'Dark / light mode',
   'theming.darkMode.body':
     'Dark is the default — the base :root block defines all dark values. Light mode is a shallow override on :root[data-theme=\'light\']. Toggle it by setting the attribute on <html>.',
@@ -873,13 +873,16 @@ export const en = {
     'A command-line tool for scaffolding Sanring UI components directly into your project — copy the source, wire up dependencies, and stay in control of the code.',
   'cli.overview.title': 'Overview',
   'cli.overview.body':
-    'The @sanring/cli package exposes three commands — init, add, and list — that read from the same component registry used by this documentation site. Run it with npx so you always get the latest version.',
+    'The @sanring/cli package exposes four commands — init, add, diff, and list — that read from the same component registry used by this documentation site. Run it with npx so you always get the latest version.',
   'cli.init.title': 'init',
   'cli.init.body':
-    'Run once per project. Verifies you\'re in an Angular project, writes a sanring.config.json with your chosen component path, and installs the base peer dependencies (clsx, tailwind-merge).',
+    'Run once per project. Verifies you\'re in an Angular project, writes a sanring.config.json with your chosen component path, generates src/sanring-theme.css (the --sanring-* design tokens every component reads — skipped by default if it already exists, to protect your customizations), and installs the base peer dependencies (clsx, tailwind-merge).',
   'cli.add.title': 'add',
   'cli.add.body':
     'Copies one or more components\' source files into your project and installs any missing peer dependencies. If a component depends on another (e.g. tag depends on badge), the dependency is added automatically. Pass --dry-run to preview exactly which files would be created or overwritten without touching your filesystem.',
+  'cli.diff.title': 'diff',
+  'cli.diff.body':
+    'Sanring UI has no version concept — components are copied source, not npm packages — so there\'s no automatic way to know if your local files have drifted from the registry. diff compares your installed components and sanring-theme.css against the current registry line by line, showing what you\'ve customized locally and what\'s changed upstream, so you can check before running add --force. Omit the component names to check everything currently installed.',
   'cli.list.title': 'list',
   'cli.list.body':
     'Prints every component available in the registry, along with its peer dependencies. Aliased as ls.',

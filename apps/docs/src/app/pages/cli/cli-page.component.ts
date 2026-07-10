@@ -51,6 +51,14 @@ const INLINE_CODE_CLASS =
             <code [class]="inlineCodeClass">-y, --yes</code>
             &mdash; accept all defaults without prompting
           </li>
+          <li>
+            <code [class]="inlineCodeClass">-f, --force</code>
+            &mdash; overwrite an existing theme file with the defaults
+          </li>
+          <li>
+            <code [class]="inlineCodeClass">--registry &lt;source&gt;</code>
+            &mdash; custom registry (URL or local path)
+          </li>
         </ul>
       </app-component-page-section>
 
@@ -73,7 +81,11 @@ const INLINE_CODE_CLASS =
           </li>
           <li>
             <code [class]="inlineCodeClass">-f, --force</code>
-            &mdash; overwrite existing files
+            &mdash; overwrite existing files after confirmation
+          </li>
+          <li>
+            <code [class]="inlineCodeClass">-y, --yes</code>
+            &mdash; skip overwrite confirmation when using <code [class]="inlineCodeClass">--force</code>
           </li>
           <li>
             <code [class]="inlineCodeClass">--registry &lt;source&gt;</code>
@@ -86,8 +98,28 @@ const INLINE_CODE_CLASS =
         </ul>
       </app-component-page-section>
 
-      <!-- 4. list -->
+      <!-- 4. diff -->
       <app-component-page-section [section]="sections[3]">
+        <p class="mt-0 text-base leading-[1.7] text-[var(--docs-muted)]">
+          {{ i18n.t('cli.diff.body') }}
+        </p>
+        <div class="mt-6 overflow-hidden rounded-[var(--sanring-radius)] border border-[var(--docs-border)]">
+          <app-component-page-code-block [code]="commands.diff" language="bash" />
+        </div>
+        <ul class="mt-4 list-none space-y-2 p-0 text-sm text-[var(--docs-muted)]">
+          <li>
+            <code [class]="inlineCodeClass">-p, --path &lt;path&gt;</code>
+            &mdash; destination path relative to cwd
+          </li>
+          <li>
+            <code [class]="inlineCodeClass">--registry &lt;source&gt;</code>
+            &mdash; custom registry (URL or local path)
+          </li>
+        </ul>
+      </app-component-page-section>
+
+      <!-- 5. list -->
+      <app-component-page-section [section]="sections[4]">
         <p class="mt-0 text-base leading-[1.7] text-[var(--docs-muted)]">
           {{ i18n.t('cli.list.body') }}
         </p>
@@ -102,8 +134,8 @@ const INLINE_CODE_CLASS =
         </ul>
       </app-component-page-section>
 
-      <!-- 5. Requirements -->
-      <app-component-page-section [section]="sections[4]">
+      <!-- 6. Requirements -->
+      <app-component-page-section [section]="sections[5]">
         <p class="mt-0 text-base leading-[1.7] text-[var(--docs-muted)]">
           {{ i18n.t('cli.requirements.body') }}
         </p>
@@ -131,6 +163,7 @@ export class CliPageComponent {
     { id: 'overview', titleKey: 'cli.overview.title' },
     { id: 'init', titleKey: 'cli.init.title' },
     { id: 'add', titleKey: 'cli.add.title' },
+    { id: 'diff', titleKey: 'cli.diff.title' },
     { id: 'list', titleKey: 'cli.list.title' },
     { id: 'requirements', titleKey: 'cli.requirements.title' },
   ];
@@ -149,6 +182,11 @@ npx @sanring/cli@latest add tag
 
 # preview what would change, without writing any files
 npx @sanring/cli@latest add button --dry-run`,
+    diff: `# check everything installed
+npx @sanring/cli@latest diff
+
+# check just one component
+npx @sanring/cli@latest diff button`,
     list: `npx @sanring/cli@latest list
 npx @sanring/cli@latest ls`,
   };

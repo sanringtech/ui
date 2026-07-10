@@ -26,10 +26,16 @@ npx @sanring/cli@latest add accordion
 
 ### `init`
 
-Initialize Sanring UI in your Angular project. Sets up `sanring.config.json` and installs base dependencies.
+Initialize Sanring UI in your Angular project. Sets up `sanring.config.json`, writes `src/sanring-theme.css` (the `--sanring-*` design tokens every component reads — see [Theming](https://ui.sanring.dev/theming)), and installs base dependencies.
 
 ```bash
 npx @sanring/cli@latest init
+```
+
+Add the generated stylesheet to your global CSS once:
+
+```css
+@import './sanring-theme.css';
 ```
 
 Options:
@@ -38,6 +44,8 @@ Options:
 |---|---|---|
 | `-p, --path <path>` | Component destination path | `src/app/components/ui` |
 | `-y, --yes` | Accept all defaults | `false` |
+| `-f, --force` | Overwrite an existing theme file with the defaults | `false` |
+| `--registry <source>` | Custom registry (URL or local path) | — |
 
 ---
 
@@ -56,7 +64,27 @@ Options:
 | Flag | Description |
 |---|---|
 | `-p, --path <path>` | Override destination path |
-| `-f, --force` | Overwrite existing files |
+| `-f, --force` | Overwrite existing files after confirmation |
+| `-y, --yes` | Skip overwrite confirmation when using `--force` |
+| `--registry <source>` | Custom registry (URL or local path) |
+| `--dry-run` | Preview changes without writing files |
+
+---
+
+### `diff [components...]`
+
+Sanring UI has no version concept — components are copied source, not npm packages — so there's no automatic way to know if your local copy has drifted from the registry. `diff` compares your installed files (and `sanring-theme.css`) against the current registry and prints what changed, so you can see whether a file was customized locally, updated upstream, or both before running `add --force`.
+
+```bash
+npx @sanring/cli@latest diff            # check everything installed
+npx @sanring/cli@latest diff accordion  # check just one component
+```
+
+Options:
+
+| Flag | Description |
+|---|---|
+| `-p, --path <path>` | Override destination path |
 | `--registry <source>` | Custom registry (URL or local path) |
 
 ---

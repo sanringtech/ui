@@ -69,7 +69,7 @@ export class StepHeaderComponent {
   protected readonly hostClass = computed(() =>
     cn(
       'group flex min-w-0 cursor-pointer items-center gap-3 rounded-[var(--sanring-radius-sm)] outline-none transition-opacity',
-      'focus-visible:ring-2 focus-visible:ring-[var(--sanring-ring)] focus-visible:ring-offset-2',
+      'focus-visible:ring-2 focus-visible:ring-[var(--sanring-border-strong)] focus-visible:ring-offset-2',
       this.disabled() && 'pointer-events-none cursor-not-allowed opacity-50',
       this.class(),
     ),

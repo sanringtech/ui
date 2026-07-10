@@ -28,7 +28,7 @@ import {
         </p>
         <div class="mt-6 overflow-hidden rounded-[var(--sanring-radius)] border border-[var(--docs-border)]">
           <div class="flex items-center gap-2 border-b border-[var(--docs-border)] bg-[var(--docs-surface)] px-4 py-2.5">
-            <span class="text-xs font-medium text-[var(--docs-muted)]">styles.css</span>
+            <span class="text-xs font-medium text-[var(--docs-muted)]">sanring-theme.css (generated, abridged)</span>
           </div>
           <app-component-page-code-block [code]="tokensSource" language="css" />
         </div>
@@ -94,19 +94,38 @@ export class ThemingPageComponent {
   ];
 
   protected readonly tokensSource = `:root {
-  /* surface & typography */
-  --sanring-background:    #070a0b;
-  --sanring-foreground:    #f1f5f5;
-  --sanring-muted:         #94a3a6;
-  --sanring-border:        #1f2729;
-  --sanring-border-strong: #38454a;
-  --sanring-surface:       #0d1213;
-  --sanring-elevated:      #121718;
-  --sanring-control:       #f4faf9;
+  /* radius scale */
+  --sanring-radius-xs: 3px;
+  --sanring-radius-sm: 6px;
+  --sanring-radius:    8px;
+  --sanring-radius-lg: 12px;
 
-  /* primary color — drives bg-primary, text-primary, border-primary */
-  --sanring-primary:    #8bd3dd;
-  --sanring-primary-fg: #062f35;
+  /* brand color scale — 9 steps, 10 lightest to 90 darkest */
+  --sanring-primary-10: #e8f6f8;
+  --sanring-primary-50: #8bd3dd;
+  --sanring-primary-90: #1c2a2c;
+  /* ...plus coral / sun / neutral / info / success / warn / error scales */
+
+  /* single-value alias — drives bg-primary, text-primary, border-primary */
+  --sanring-primary:    var(--sanring-primary-50);
+  --sanring-primary-fg: var(--sanring-neutral-90);
+
+  /* semantic layer — components read these, not the raw scales above */
+  --sanring-background:    var(--sanring-neutral-90);
+  --sanring-foreground:    var(--sanring-neutral-10);
+  --sanring-muted:         var(--sanring-neutral-40);
+  --sanring-border:        #354042;
+  --sanring-border-strong: var(--sanring-neutral-60);
+  --sanring-surface:       #232a2b;
+  --sanring-control:       var(--sanring-neutral-10);
+
+  /* ...plus progress and avatar-badge tokens */
+}
+
+:root[data-theme='light'] {
+  /* shallow overrides — see the generated file for the full list */
+  --sanring-background: var(--sanring-neutral-10);
+  --sanring-foreground: var(--sanring-neutral-90);
 }`;
 
   protected readonly tailwindSource = `@import 'tailwindcss';

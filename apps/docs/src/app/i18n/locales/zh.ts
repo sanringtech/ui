@@ -769,7 +769,7 @@ export const zh: Record<TranslationKey, string> = {
   'theming.page.description': 'Sanring UI 如何處理顏色、字型與間距，以及如何為你的品牌進行客製化覆寫。',
   'theming.tokens.title': '設計 Token',
   'theming.tokens.body':
-    'Sanring UI 透過 CSS 自訂屬性（--sanring-*）暴露內部設計值，元件直接引用這些變數。只需在 :root 設定一次，所有元件同步更新。',
+    'Sanring UI 透過 CSS 自訂屬性（--sanring-*）暴露內部設計值，元件直接引用這些變數。執行 sanring init 會自動產生 src/sanring-theme.css 並寫入完整預設值，你只需 @import 進全域樣式；之後在 :root 覆寫任一變數，所有元件同步更新。',
   'theming.tailwind.title': 'Tailwind v4 整合',
   'theming.tailwind.body':
     'Tailwind v4 從 CSS 中的 @theme 區塊讀取 token 值。使用 @theme inline 可讓 var() 參考在執行期保持活躍，亮暗主題切換無需重新 build。',
@@ -777,7 +777,7 @@ export const zh: Record<TranslationKey, string> = {
     'inline 關鍵字是關鍵差異——缺少它，Tailwind 會在 build 時一次性解析變數值，亮暗切換就會失效。@source 路徑應同時包含 package source 與 CLI 複製出的本機 component path。',
   'theming.brand.title': '自訂品牌',
   'theming.brand.body':
-    '在 :root 中覆寫任何 --sanring-* 或 --docs-accent token，元件立即反映新值，不需更改任何設定檔。',
+    '在 :root 中覆寫任何 --sanring-* token，元件立即反映新值，不需更改任何設定檔。',
   'theming.darkMode.title': '暗色 / 亮色模式',
   'theming.darkMode.body':
     '預設為暗色——基礎 :root 區塊定義所有暗色值。亮色模式是 :root[data-theme=\'light\'] 上的淺層覆寫，只需在 <html> 上設定屬性即可切換。',
@@ -788,13 +788,16 @@ export const zh: Record<TranslationKey, string> = {
     '一個命令列工具，能直接把 Sanring UI 元件的原始碼複製進你的專案——順便處理依賴安裝，程式碼完全歸你掌控。',
   'cli.overview.title': '概覽',
   'cli.overview.body':
-    '@sanring/cli 套件提供三個指令——init、add、list，讀取跟這個文件站相同的元件 registry。建議用 npx 執行，隨時拿到最新版本。',
+    '@sanring/cli 套件提供四個指令——init、add、diff、list，讀取跟這個文件站相同的元件 registry。建議用 npx 執行，隨時拿到最新版本。',
   'cli.init.title': 'init',
   'cli.init.body':
-    '每個專案只需執行一次。會確認目前是否在 Angular 專案中，寫入 sanring.config.json 記錄你選擇的元件路徑，並安裝基礎的 peer dependencies（clsx、tailwind-merge）。',
+    '每個專案只需執行一次。會確認目前是否在 Angular 專案中，寫入 sanring.config.json 記錄你選擇的元件路徑，產生 src/sanring-theme.css（所有元件都會讀取的 --sanring-* 設計 token，已存在則預設跳過以保護你的客製化），並安裝基礎的 peer dependencies（clsx、tailwind-merge）。',
   'cli.add.title': 'add',
   'cli.add.body':
     '把一個或多個元件的原始碼複製進你的專案，並安裝缺少的 peer dependencies。如果某個元件依賴其他元件（例如 tag 依賴 badge），依賴會自動一併安裝。加上 --dry-run 可以在不動任何檔案的情況下，預覽哪些檔案會被新增或覆寫。',
+  'cli.diff.title': 'diff',
+  'cli.diff.body':
+    'Sanring UI 沒有版本概念——元件是複製原始碼，不是 npm 套件——所以沒有自動方式知道本地檔案跟 registry 是否有落差。diff 會把你已安裝的元件與 sanring-theme.css 拿去跟目前的 registry 逐行比對，列出哪些檔案被你客製化過、哪些 registry 端有更新，方便在執行 add --force 之前先確認不會無聲蓋掉你的修改。不帶元件名稱會檢查目前已安裝的全部項目。',
   'cli.list.title': 'list',
   'cli.list.body':
     '列出 registry 裡所有可用的元件與其 peer dependencies。指令別名為 ls。',

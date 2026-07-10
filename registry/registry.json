@@ -16,6 +16,11 @@
       "name": "component-styles",
       "description": "Design-token constants used across components",
       "file": "shared/component-styles.ts"
+    },
+    {
+      "name": "theme",
+      "description": "CSS custom properties every component reads for color/radius — import this once in your global stylesheet",
+      "file": "shared/theme.css"
     }
   ],
   "components": [
