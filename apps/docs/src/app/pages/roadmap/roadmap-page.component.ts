@@ -130,6 +130,7 @@ export class RoadmapPageComponent {
     { name: 'Checkbox', description: '' },
     { name: 'Collapsible', description: '' },
     { name: 'Command', description: '' },
+    { name: 'Combobox', description: '' },
     { name: 'Dialog', description: '' },
     { name: 'Divider', description: '' },
     { name: 'Dropdown Menu', description: '' },
@@ -175,12 +176,6 @@ export class RoadmapPageComponent {
       meta: 'scaffolded',
       description:
         'Directory exists, but the current index is empty. Finish calendar/date math, selection model, forms integration, and docs before exposing.',
-    },
-    {
-      name: 'Combobox',
-      meta: 'next',
-      description:
-        'Keyboard focus management, filtering, and selection model. It can reuse the interaction patterns proven by Command.',
     },
   ];
 

@@ -18,6 +18,7 @@ import { ComboboxItemComponent } from './combobox-item.component';
 @Component({
   selector: 'sanring-combobox',
   standalone: true,
+  exportAs: 'sanringCombobox',
   template: `<ng-content></ng-content>`,
   host: {
     '[attr.data-state]': 'isOpen() ? "open" : "closed"',
@@ -50,10 +51,19 @@ export class ComboboxComponent {
 
   readonly activeItemId = this.collection.activeItemId;
   readonly visibleCount = this.collection.visibleCount;
+  readonly inputValue = computed(() => {
+    const query = this.searchQuery();
+    if (this.isOpen() || query || this.multiple()) return query;
+
+    const current = this.value();
+    if (!current || Array.isArray(current)) return '';
+
+    return this.items().find((item) => item.value() === current)?.getLabel() ?? current;
+  });
 
   protected readonly hostClass = computed(() =>
     cn(
-      'relative inline-block w-full',
+      'relative block w-full',
       this.disabled() && 'opacity-50 cursor-not-allowed',
       this.class(),
     ),
@@ -130,5 +140,16 @@ export class ComboboxComponent {
       return Array.isArray(current) && current.includes(val);
     }
     return current === val;
+  }
+
+  hasValue(): boolean {
+    const current = this.value();
+    if (Array.isArray(current)) return current.length > 0;
+    return current !== null && current !== '';
+  }
+
+  clear(): void {
+    this.value.set(this.multiple() ? [] : null);
+    this.searchQuery.set('');
   }
 }

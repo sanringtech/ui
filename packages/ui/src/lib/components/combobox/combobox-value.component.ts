@@ -6,7 +6,7 @@ import { ComboboxComponent } from './combobox.component';
   standalone: true,
   template: `
     @if (isEmpty()) {
-      <span class="text-muted-foreground">{{ placeholder() }}</span>
+      <span class="text-[var(--sanring-muted)]">{{ placeholder() }}</span>
     } @else {
       <ng-content></ng-content>
     }
@@ -14,7 +14,7 @@ import { ComboboxComponent } from './combobox.component';
   host: { style: 'display: contents;' },
 })
 export class ComboboxValueComponent {
-  readonly placeholder = input<string>('請選擇...');
+  readonly placeholder = input<string>('');
 
   // 必須連線到大腦！這就是它跟 Badge 最大的不同
   protected combobox = inject(ComboboxComponent);

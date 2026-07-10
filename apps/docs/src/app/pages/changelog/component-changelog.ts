@@ -39,6 +39,12 @@ export const componentChangelog: readonly ComponentChangelogEntry[] = [
       {
         type: 'added',
         notable: true,
+        componentIds: ['combobox'],
+        text: 'New Combobox component page — autocomplete input examples with single select, multiple chips, groups, keyboard navigation, and API guidance.',
+      },
+      {
+        type: 'added',
+        notable: true,
         componentIds: ['carousel'],
         text: 'New Carousel component page — Embla-backed horizontal and vertical slide examples with API guidance.',
       },

@@ -8,6 +8,7 @@ import {
 } from '@angular/core';
 import { ComboboxComponent } from './combobox.component';
 import { cn } from '../../utils';
+import { OVERLAY_SURFACE_CLASS } from '../component-styles';
 
 @Component({
   selector: 'sanring-combobox-content',
@@ -38,8 +39,8 @@ export class ComboboxContentComponent {
 
   protected readonly contentClass = computed(() =>
     cn(
-      'absolute left-0 top-full z-50 mt-2 w-full min-w-32 overflow-hidden rounded-md border bg-popover text-popover-foreground shadow-md outline-none',
-      'data-[state=open]:animate-in data-[state=open]:fade-in-0 data-[state=open]:zoom-in-95 data-[state=open]:slide-in-from-top-2',
+      'absolute left-0 top-full z-50 mt-2 w-full min-w-32 overflow-hidden rounded-[var(--sanring-radius)] outline-none',
+      OVERLAY_SURFACE_CLASS,
       this.class(),
     ),
   );

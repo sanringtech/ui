@@ -153,6 +153,13 @@ export const routes: Routes = [
                   ),
               },
               {
+                path: 'combobox',
+                loadComponent: () =>
+                  import('./pages/components/combobox/combobox-page.component').then(
+                    (m) => m.ComboboxPageComponent,
+                  ),
+              },
+              {
                 path: 'dialog',
                 loadComponent: () =>
                   import('./pages/components/dialog/dialog-page.component').then(

@@ -9,7 +9,7 @@ import {
   signal,
 } from '@angular/core';
 import { LucideCheck } from '@lucide/angular';
-import { cn } from '../../utils';
+import { cn, uniqueId } from '../../utils';
 import {
   COLLECTION_ITEM_ACTIVE_CLASS,
   COLLECTION_ITEM_CLASS,
@@ -18,20 +18,20 @@ import {
 import { isCollectionItemVisible } from '../shared/collection-state';
 import { ComboboxComponent } from './combobox.component';
 
-let nextItemId = 0;
-
 @Component({
   selector: 'sanring-combobox-item',
   standalone: true,
   imports: [LucideCheck],
   template: `
-    <span class="absolute left-2 flex h-3.5 w-3.5 items-center justify-center">
+    <span class="flex size-4 shrink-0 items-center justify-center text-[var(--sanring-primary-50)]">
       @if (isSelected()) {
-        <svg lucideCheck class="h-4 w-4"></svg>
+        <svg lucideCheck class="size-4"></svg>
       }
     </span>
 
-    <ng-content></ng-content>
+    <span class="min-w-0 flex-1 truncate">
+      <ng-content></ng-content>
+    </span>
   `,
   host: {
     role: 'option',
@@ -52,7 +52,7 @@ export class ComboboxItemComponent implements Highlightable {
   readonly disabledInput = input(false, { alias: 'disabled', transform: booleanAttribute });
   readonly class = input<string | undefined>();
 
-  readonly id = `sanring-combobox-item-${nextItemId++}`;
+  readonly id = uniqueId('sanring-combobox-item');
 
   protected combobox = inject(ComboboxComponent);
   private readonly el = inject(ElementRef<HTMLElement>);
@@ -71,7 +71,7 @@ export class ComboboxItemComponent implements Highlightable {
   protected readonly itemClass = computed(() =>
     cn(
       COLLECTION_ITEM_CLASS,
-      'w-full py-1.5 pl-8 pr-2',
+      'w-full py-1.5 px-2',
       this.active() && COLLECTION_ITEM_ACTIVE_CLASS,
       !this.disabled && 'hover:bg-[var(--sanring-surface)] hover:text-[var(--sanring-foreground)]',
       this.disabled && COLLECTION_ITEM_DISABLED_CLASS,
@@ -89,6 +89,10 @@ export class ComboboxItemComponent implements Highlightable {
 
   getLabel(): string {
     return this.label() ?? this.el.nativeElement.textContent?.trim() ?? this.value();
+  }
+
+  isVisible(): boolean {
+    return this.isMatch();
   }
 
   select(): void {

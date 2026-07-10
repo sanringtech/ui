@@ -29,11 +29,11 @@ export const MENU_ITEM_SIZE_CLASS = 'min-h-8 px-2 py-1.5 text-sm';
 export const SELECT_ITEM_SIZE_CLASS = 'min-h-8 px-2 py-1.5 text-sm';
 export const COLLECTION_LIST_CLASS = 'block overflow-y-auto overflow-x-hidden';
 export const COLLECTION_ITEM_CLASS =
-  'relative flex cursor-default select-none items-center rounded-[var(--sanring-radius-sm)] text-sm outline-none transition-colors';
+  'relative flex cursor-default select-none items-center gap-2 rounded-[var(--sanring-radius-sm)] text-sm outline-none transition-colors';
 export const COLLECTION_ITEM_ACTIVE_CLASS = 'bg-[var(--sanring-surface)] text-[var(--sanring-foreground)]';
 export const COLLECTION_ITEM_DISABLED_CLASS = 'pointer-events-none opacity-50';
 export const COLLECTION_GROUP_CLASS = 'block overflow-hidden text-[var(--sanring-foreground)]';
-export const COLLECTION_GROUP_HEADING_CLASS = 'px-3 py-2 text-xs font-medium text-[var(--sanring-muted)]';
+export const COLLECTION_GROUP_HEADING_CLASS = 'px-2 py-1.5 text-xs font-medium text-[var(--sanring-muted)]';
 export const COLLECTION_EMPTY_CLASS = 'block py-6 text-center text-sm text-[var(--sanring-muted)]';
 export const BREADCRUMB_TEXT_CLASS = 'text-sm';
 export const BREADCRUMB_CURRENT_PAGE_CLASS = 'font-normal text-[var(--sanring-foreground)]';

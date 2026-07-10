@@ -16,7 +16,7 @@ import { cn } from '../../utils';
     <!-- 刪除按鈕 -->
     <button
       type="button"
-      class="ml-1 flex h-4 w-4 items-center justify-center rounded-full opacity-70 transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
+      class="ml-1 flex h-4 w-4 items-center justify-center rounded-full opacity-70 transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-[var(--sanring-border-strong)]"
       (click)="onRemove($event)"
       [disabled]="isDisabled()"
     >
@@ -45,11 +45,11 @@ export class ComboboxChipComponent {
   // 🎨 視覺排版：經典的 Badge/Chip 樣式
   protected readonly chipClass = computed(() =>
     cn(
-      'inline-flex items-center justify-between rounded-sm px-1.5 py-0.5 text-xs font-semibold transition-colors',
+      'inline-flex items-center justify-between rounded-[var(--sanring-radius-xs)] px-1.5 py-0.5 text-xs font-semibold transition-colors',
       // 預設樣式：次要背景色
-      'bg-secondary text-secondary-foreground',
+      'border border-[var(--sanring-border)] bg-[var(--sanring-surface-strong)] text-[var(--sanring-foreground)]',
       // 禁用狀態的透明度
-      this.isDisabled() ? 'opacity-50 pointer-events-none' : 'hover:bg-secondary/80',
+      this.isDisabled() ? 'opacity-50 pointer-events-none' : 'hover:bg-[var(--sanring-active)]',
       this.class(),
     ),
   );
