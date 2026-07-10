@@ -132,6 +132,7 @@ export class RoadmapPageComponent {
     { name: 'Dialog', description: '' },
     { name: 'Divider', description: '' },
     { name: 'Dropdown Menu', description: '' },
+    { name: 'Hover Card', description: '' },
     { name: 'Input', description: '' },
     { name: 'Label', description: '' },
     { name: 'Link', description: '' },
@@ -163,12 +164,6 @@ export class RoadmapPageComponent {
       meta: 'package-ready',
       description:
         'Implemented and exported as form composition primitives. Needs a dedicated docs page because Input already depends on this pattern.',
-    },
-    {
-      name: 'Hover Card',
-      meta: 'package-ready',
-      description:
-        'Implemented and exported with hover/focus trigger delays over CDK overlay. Next step is docs, examples, and API table.',
     },
   ];
 

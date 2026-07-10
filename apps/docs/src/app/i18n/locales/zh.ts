@@ -49,6 +49,7 @@ export const zh: Record<TranslationKey, string> = {
   'component.dialog': '對話框',
   'component.divider': '分隔線',
   'component.dropdownMenu': '下拉選單',
+  'component.hoverCard': 'Hover Card',
   'component.input': '輸入框',
   'component.label': '標籤文字',
   'component.link': '連結',
@@ -1027,6 +1028,30 @@ export const zh: Record<TranslationKey, string> = {
   'popover.api.isOpen.description': '控制 popover 是否可見，支援 [(isOpen)] 雙向綁定。',
   'popover.api.align.description': "相對於 trigger 的對齊方式：'start'、'center'（預設）或 'end'。",
   'popover.api.class.description': '合併到浮動面板的額外 class。',
+
+  'hoverCard.description': '由 hover 或鍵盤 focus 開啟的浮動預覽面板，適合使用者摘要與輕量上下文。',
+  'hoverCard.examples.basic.description':
+    '將 trigger 與 content 包在一起；卡片會在 hover 或 focus 後開啟，並依設定延遲關閉。',
+  'hoverCard.usage.description':
+    '匯入 hover-card primitives，並將 sanringHoverCardTrigger 套用到要作為浮動面板定位錨點的元素。',
+  'hoverCard.installation.description':
+    '安裝 @sanring/ui，並匯入 SANRING_HOVER_CARD_IMPORTS 取得 root、trigger 與 content primitives。',
+  'hoverCard.composition.description':
+    'Hover Card 將延遲控制器、trigger anchor 與浮動 content panel 拆開。',
+  'hoverCard.demo.trigger': '@sanring/ui',
+  'hoverCard.demo.description': '為 dashboard、表單、overlay 與密集資料介面打造的 Angular primitives。',
+  'hoverCard.demo.side': '方向',
+  'hoverCard.demo.sideDescription': '面板靠近 viewport 邊緣時會自動重新定位。',
+  'hoverCard.demo.delay': '延遲',
+  'hoverCard.demo.fastOpen': '快速開啟',
+  'hoverCard.demo.delayDescription':
+    '密集 app UI 可使用較短 openDelay，並保留較寬容的 closeDelay 讓游標移動更順。',
+  'hoverCard.api.description': 'hover-card root 與 content primitives 支援的 inputs。',
+  'hoverCard.api.openDelay.description': 'hover 或 focus 後，開啟前等待的毫秒數。',
+  'hoverCard.api.closeDelay.description': '游標或 focus 離開後，關閉前等待的毫秒數。',
+  'hoverCard.api.side.description': '浮動面板偏好的顯示方向；CDK overlay 可能為了保持可見而翻轉位置。',
+  'hoverCard.api.sideOffset.description': 'trigger 與浮動面板之間的距離，單位為 px。',
+  'hoverCard.api.class.description': '合併到浮動 content panel 的額外 class。',
 
   'breadcrumb.description': '顯示使用者在層級中目前位置的導航輔助元件——由可組合的 primitives 建構，完整支援無障礙規範。',
   'breadcrumb.examples.basic.description': '使用預設 chevron 分隔符的三層麵包屑。',

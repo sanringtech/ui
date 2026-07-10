@@ -167,6 +167,13 @@ export const routes: Routes = [
                   ),
               },
               {
+                path: 'hover-card',
+                loadComponent: () =>
+                  import('./pages/components/hover-card/hover-card-page.component').then(
+                    (m) => m.HoverCardPageComponent,
+                  ),
+              },
+              {
                 path: 'input',
                 loadComponent: () =>
                   import('./pages/components/input/input-page.component').then(
