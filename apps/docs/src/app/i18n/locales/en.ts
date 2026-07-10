@@ -819,22 +819,22 @@ export const en = {
     'After adding a component, import the directive or component from your local UI folder and add it to your Angular component\'s imports array.',
 
   'roadmap.page.description':
-    'Recently shipped primitives and what is planned next, prioritized by how much existing code they reuse and how often they are actually needed.',
-  'roadmap.shipped.title': 'Recently shipped',
+    'Current component coverage and what is planned next, based on the actual package source and docs surface.',
+  'roadmap.shipped.title': 'Documented components',
   'roadmap.shipped.description':
-    'Primitives that have moved from roadmap into the component docs and registry workflow.',
-  'roadmap.tier1.title': 'Tier 1 — Do next (cheap, high leverage)',
+    'Components that already have a docs page and appear in the component navigation.',
+  'roadmap.tier1.title': 'Implemented, docs next',
   'roadmap.tier1.description':
-    'Low cost, high value, and mostly composition of things that already exist.',
-  'roadmap.tier2.title': 'Tier 2 — Moderate cost, reuses existing overlay infra',
+    'Primitives that exist in the package source and should move into the docs navigation next.',
+  'roadmap.tier2.title': 'In progress / next build',
   'roadmap.tier2.description':
-    'Builds on Dropdown Menu, Popover, Progress, and Button rather than starting from scratch.',
-  'roadmap.tier3.title': 'Tier 3 — Standalone new infrastructure',
+    'Work that is scaffolded or naturally follows from the current component set.',
+  'roadmap.tier3.title': 'Later candidates',
   'roadmap.tier3.description':
-    'Genuinely new engineering, not just gluing existing primitives together.',
-  'roadmap.tier4.title': 'Tier 4 — Defer / reconsider need',
+    'Useful primitives, but less urgent than closing the package/docs gap.',
+  'roadmap.tier4.title': 'Defer / reconsider scope',
   'roadmap.tier4.description':
-    'Lean toward marketing/media sites rather than the app UI (dashboards, forms, data tables) this library has targeted so far. Revisit if that changes.',
+    'Items that may belong in recipes, examples, or separate packages rather than core primitives.',
 
   'theming.page.description':
     'How Sanring UI handles color, typography, and spacing — and how to override them for your brand.',

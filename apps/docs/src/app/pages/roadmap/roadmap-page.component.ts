@@ -1,4 +1,5 @@
 import { Component, inject } from '@angular/core';
+import { NgTemplateOutlet } from '@angular/common';
 import { ComponentPageSectionDefinition } from '../../docs-schema/component-page.types';
 import { I18nService } from '../../i18n/i18n.service';
 import { ComponentPageComponent, ComponentPageSectionComponent } from '../../layouts/component-page';
@@ -6,11 +7,12 @@ import { ComponentPageComponent, ComponentPageSectionComponent } from '../../lay
 interface RoadmapItem {
   name: string;
   description: string;
+  meta?: string;
 }
 
 @Component({
   selector: 'app-roadmap-page',
-  imports: [ComponentPageComponent, ComponentPageSectionComponent],
+  imports: [ComponentPageComponent, ComponentPageSectionComponent, NgTemplateOutlet],
   template: `
     <app-component-page [sections]="sections">
       <header class="border-b border-[var(--docs-border)] pb-10">
@@ -26,71 +28,80 @@ interface RoadmapItem {
         <p class="mt-0 text-sm text-[var(--docs-muted)]">
           {{ i18n.t('roadmap.shipped.description') }}
         </p>
-        <ul class="mt-4 space-y-4 list-none p-0">
+        <div class="mt-5 flex flex-wrap gap-2">
           @for (item of shipped; track item.name) {
-            <li>
-              <div class="font-medium text-[var(--docs-fg)]">{{ item.name }}</div>
-              <div class="text-sm text-[var(--docs-muted)]">{{ item.description }}</div>
-            </li>
+            <span
+              class="rounded-[var(--sanring-radius)] border border-[var(--docs-border)] bg-[var(--docs-panel)] px-3 py-1.5 text-sm font-medium text-[var(--docs-fg)]"
+            >
+              {{ item.name }}
+            </span>
           }
-        </ul>
+        </div>
       </app-component-page-section>
 
       <app-component-page-section [section]="sections[1]">
         <p class="mt-0 text-sm text-[var(--docs-muted)]">
           {{ i18n.t('roadmap.tier1.description') }}
         </p>
-        <ul class="mt-4 space-y-4 list-none p-0">
-          @for (item of tier1; track item.name) {
-            <li>
-              <div class="font-medium text-[var(--docs-fg)]">{{ item.name }}</div>
-              <div class="text-sm text-[var(--docs-muted)]">{{ item.description }}</div>
-            </li>
-          }
-        </ul>
+        <ng-container
+          [ngTemplateOutlet]="roadmapCards"
+          [ngTemplateOutletContext]="{ items: tier1 }"
+        />
       </app-component-page-section>
 
       <app-component-page-section [section]="sections[2]">
         <p class="mt-0 text-sm text-[var(--docs-muted)]">
           {{ i18n.t('roadmap.tier2.description') }}
         </p>
-        <ul class="mt-4 space-y-4 list-none p-0">
-          @for (item of tier2; track item.name) {
-            <li>
-              <div class="font-medium text-[var(--docs-fg)]">{{ item.name }}</div>
-              <div class="text-sm text-[var(--docs-muted)]">{{ item.description }}</div>
-            </li>
-          }
-        </ul>
+        <ng-container
+          [ngTemplateOutlet]="roadmapCards"
+          [ngTemplateOutletContext]="{ items: tier2 }"
+        />
       </app-component-page-section>
 
       <app-component-page-section [section]="sections[3]">
         <p class="mt-0 text-sm text-[var(--docs-muted)]">
           {{ i18n.t('roadmap.tier3.description') }}
         </p>
-        <ul class="mt-4 space-y-4 list-none p-0">
-          @for (item of tier3; track item.name) {
-            <li>
-              <div class="font-medium text-[var(--docs-fg)]">{{ item.name }}</div>
-              <div class="text-sm text-[var(--docs-muted)]">{{ item.description }}</div>
-            </li>
-          }
-        </ul>
+        <ng-container
+          [ngTemplateOutlet]="roadmapCards"
+          [ngTemplateOutletContext]="{ items: tier3 }"
+        />
       </app-component-page-section>
 
       <app-component-page-section [section]="sections[4]">
         <p class="mt-0 text-sm text-[var(--docs-muted)]">
           {{ i18n.t('roadmap.tier4.description') }}
         </p>
-        <ul class="mt-4 space-y-4 list-none p-0">
-          @for (item of tier4; track item.name) {
-            <li>
-              <div class="font-medium text-[var(--docs-fg)]">{{ item.name }}</div>
-              <div class="text-sm text-[var(--docs-muted)]">{{ item.description }}</div>
+        <ng-container
+          [ngTemplateOutlet]="roadmapCards"
+          [ngTemplateOutletContext]="{ items: tier4 }"
+        />
+      </app-component-page-section>
+
+      <ng-template #roadmapCards let-items="items">
+        <ul class="mt-5 grid list-none gap-3 p-0">
+          @for (item of items; track item.name) {
+            <li
+              class="rounded-[var(--sanring-radius)] border border-[var(--docs-border)] bg-[var(--docs-panel)] p-4 shadow-sm"
+            >
+              <div class="flex flex-wrap items-center justify-between gap-2">
+                <div class="font-medium text-[var(--docs-fg)]">{{ item.name }}</div>
+                @if (item.meta) {
+                  <span
+                    class="rounded-[var(--sanring-radius-xs)] bg-[var(--docs-surface-strong)] px-2 py-1 text-xs font-medium text-[var(--docs-muted)]"
+                  >
+                    {{ item.meta }}
+                  </span>
+                }
+              </div>
+              <div class="mt-2 text-sm leading-6 text-[var(--docs-muted)]">
+                {{ item.description }}
+              </div>
             </li>
           }
         </ul>
-      </app-component-page-section>
+      </ng-template>
     </app-component-page>
   `,
 })
@@ -106,88 +117,108 @@ export class RoadmapPageComponent {
   ];
 
   protected readonly shipped: RoadmapItem[] = [
-    {
-      name: 'Aspect Ratio',
-      description: 'Responsive media and embed frame primitive with CSS aspect-ratio support.',
-    },
-    {
-      name: 'Textarea',
-      description: 'Native textarea styling directive split from Input for multiline form fields.',
-    },
-    {
-      name: 'Slider',
-      description: 'Range control with pointer, keyboard, ARIA slider semantics, and forms support.',
-    },
-    {
-      name: 'Stepper',
-      description:
-        'CDK-backed workflow primitive with template labels, custom icons, and connector styles.',
-    },
-    {
-      name: 'Timeline',
-      description:
-        'Composable chronological event primitives with vertical and horizontal orientations.',
-    },
+    { name: 'Accordion', description: '' },
+    { name: 'Alert', description: '' },
+    { name: 'Alert Dialog', description: '' },
+    { name: 'Aspect Ratio', description: '' },
+    { name: 'Avatar', description: '' },
+    { name: 'Badge', description: '' },
+    { name: 'Breadcrumb', description: '' },
+    { name: 'Button', description: '' },
+    { name: 'Card', description: '' },
+    { name: 'Carousel', description: '' },
+    { name: 'Checkbox', description: '' },
+    { name: 'Collapsible', description: '' },
+    { name: 'Dialog', description: '' },
+    { name: 'Divider', description: '' },
+    { name: 'Dropdown Menu', description: '' },
+    { name: 'Input', description: '' },
+    { name: 'Label', description: '' },
+    { name: 'Link', description: '' },
+    { name: 'Pagination', description: '' },
+    { name: 'Popover', description: '' },
+    { name: 'Progress', description: '' },
+    { name: 'Radio Group', description: '' },
+    { name: 'Scroll Area', description: '' },
+    { name: 'Select', description: '' },
+    { name: 'Sheet', description: '' },
+    { name: 'Skeleton', description: '' },
+    { name: 'Slider', description: '' },
+    { name: 'Spinner', description: '' },
+    { name: 'Stepper', description: '' },
+    { name: 'Switch', description: '' },
+    { name: 'Table', description: '' },
+    { name: 'Tag', description: '' },
+    { name: 'Tabs', description: '' },
+    { name: 'Textarea', description: '' },
+    { name: 'Timeline', description: '' },
+    { name: 'Toggle', description: '' },
+    { name: 'Toast', description: '' },
+    { name: 'Tooltip', description: '' },
   ];
 
   protected readonly tier1: RoadmapItem[] = [
     {
       name: 'Field',
+      meta: 'package-ready',
       description:
-        'Label + control + description + error message layout, plus ReactiveFormsModule state (ng-invalid/ng-touched) and aria-describedby wiring. Everything else in forms depends on this.',
+        'Implemented and exported as form composition primitives. Needs a dedicated docs page because Input already depends on this pattern.',
     },
     {
-      name: 'Alert Dialog',
+      name: 'Hover Card',
+      meta: 'package-ready',
       description:
-        'A specialized Dialog with default confirm/cancel actions for destructive-action confirmations.',
+        'Implemented and exported with hover/focus trigger delays over CDK overlay. Next step is docs, examples, and API table.',
     },
   ];
 
   protected readonly tier2: RoadmapItem[] = [
+    {
+      name: 'Date Picker / Calendar',
+      meta: 'scaffolded',
+      description:
+        'Directory exists, but the current index is empty. Finish calendar/date math, selection model, forms integration, and docs before exposing.',
+    },
+    {
+      name: 'Combobox',
+      meta: 'next',
+      description:
+        'Keyboard focus management, filtering, and selection model. This should come before Command because Command can reuse the same interaction pattern.',
+    },
+    {
+      name: 'Command (Cmd+K)',
+      meta: 'next',
+      description:
+        'Builds on Dialog plus Combobox-style filtering and keyboard navigation.',
+    },
+  ];
+
+  protected readonly tier3: RoadmapItem[] = [
     {
       name: 'Context Menu',
       description:
         'Same shape as Dropdown Menu, triggered by right-click at cursor coordinates instead of a button anchor.',
     },
     {
-      name: 'Hover Card',
-      description: 'Popover with a hover+delay trigger instead of click.',
-    },
-    {
       name: 'File Upload',
       description:
-        'Drag-and-drop zone and file list, reusing Progress (upload progress) and Button (remove/retry). Pairs with Field.',
-    },
-  ];
-
-  protected readonly tier3: RoadmapItem[] = [
-    {
-      name: 'Combobox',
-      description:
-        'Keyboard focus management and filtering logic. Build before Command since Command reuses the same pattern.',
+        'Drag-and-drop zone and file list, reusing Progress, Button, and Field for upload states.',
     },
     {
-      name: 'Date Picker / Calendar',
-      description: 'Date math plus a calendar grid component — new infrastructure, not just composition.',
-    },
-    {
-      name: 'Command (Cmd+K)',
-      description: 'Builds on Combobox’s filtering/keyboard-nav logic, layered on the existing Dialog.',
+      name: 'Resizable',
+      description: 'Drag-to-resize split panes for IDE-like layouts.',
     },
   ];
 
   protected readonly tier4: RoadmapItem[] = [
     {
-      name: 'Resizable',
-      description: 'Drag-to-resize split panes. Useful for IDE-like layouts, narrower audience.',
-    },
-    {
       name: 'Navigation Menu',
       description: 'Mega menu for marketing-site top navigation. High effort, low reuse of existing pieces.',
     },
     {
-      name: 'Carousel',
-      description: 'Media/marketing use case. High effort (touch/drag, autoplay, indicators).',
+      name: 'Charts',
+      description:
+        'Potential future category, but it likely belongs in a separate package or recipe layer rather than core primitives.',
     },
   ];
 }
