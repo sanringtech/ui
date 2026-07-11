@@ -207,7 +207,7 @@ import { fileUploadPage, fileUploadPageExamples } from './file-upload.docs';
             <app-component-page-code-previewer [code]="examples.field" language="angular-html">
               <div previewer class="w-[min(420px,100%)]">
                 <sanring-field>
-                  <label sanringLabel>{{ i18n.t('fileUpload.demo.fieldLabel') }}</label>
+                  <label sanringLabel for="resume-upload">{{ i18n.t('fileUpload.demo.fieldLabel') }}</label>
                   <sanring-file-upload
                     accept=".pdf"
                     [maxSize]="2 * 1024 * 1024"

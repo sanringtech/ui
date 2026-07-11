@@ -42,6 +42,12 @@ export const comboboxPage = {
         { id: 'example-popup', titleKey: 'combobox.demo.popup', level: 3 },
         { id: 'example-clear', titleKey: 'combobox.demo.clearButtonTitle', level: 3 },
         { id: 'example-disabled', titleKey: 'toc.disabled', level: 3 },
+        {
+          id: 'example-field',
+          titleKey: 'combobox.demo.field',
+          descriptionKey: 'combobox.examples.field.description',
+          level: 3,
+        },
       ],
     },
     {
@@ -278,4 +284,21 @@ popup mode — swap the trigger for the input once open
   disabled: `<sanring-combobox [disabled]="true">
   <sanring-combobox-input placeholder="Disabled combobox" />
 </sanring-combobox>`,
+
+  field: `<sanring-field>
+  <sanring-combobox [formControl]="frameworkControl">
+    <sanring-combobox-input placeholder="Select a framework" />
+    <sanring-combobox-content>
+      <sanring-combobox-empty>No frameworks found.</sanring-combobox-empty>
+      <sanring-combobox-list>
+        @for (item of frameworks; track item.value) {
+          <sanring-combobox-item [value]="item.value" [label]="item.label">
+            {{ item.label }}
+          </sanring-combobox-item>
+        }
+      </sanring-combobox-list>
+    </sanring-combobox-content>
+  </sanring-combobox>
+  <sanring-error-message>Please choose a framework.</sanring-error-message>
+</sanring-field>`,
 } as const;

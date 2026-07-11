@@ -51,6 +51,12 @@ export const selectPage = {
           titleKey: 'select.demo.disabledItem',
           level: 3,
         },
+        {
+          id: 'example-field',
+          titleKey: 'select.demo.field',
+          descriptionKey: 'select.examples.field.description',
+          level: 3,
+        },
       ],
     },
     {
@@ -249,4 +255,16 @@ export class ExampleComponent {}`,
     <sanring-select-item value="enterprise" disabled>Enterprise</sanring-select-item>
   </sanring-select-content>
 </sanring-select>`,
+  field: `<sanring-field>
+  <sanring-select [formControl]="workspaceControl">
+    <button sanringSelectTrigger class="w-[240px]">
+      <sanring-select-value placeholder="Choose a workspace" />
+    </button>
+    <sanring-select-content matchTriggerWidth>
+      <sanring-select-item value="design">Design</sanring-select-item>
+      <sanring-select-item value="engineering">Engineering</sanring-select-item>
+    </sanring-select-content>
+  </sanring-select>
+  <sanring-error-message>Please choose a workspace.</sanring-error-message>
+</sanring-field>`,
 } as const;

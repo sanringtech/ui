@@ -155,7 +155,9 @@ export class SwitchComponent implements ControlValueAccessor, OnInit {
     // 跟 checkbox 一樣的原因：constructor 階段 self-inject NgControl 會跟 NgModel 搭配時
     // 觸發 NG0200 循環依賴（本元件同時透過 NG_VALUE_ACCESSOR 註冊自己），延後到 ngOnInit 才拿。
     this.ngControl = this.injector.get(NgControl, null, { optional: true, self: true });
-    this.ngControl?.statusChanges
+    // 不能只聽 statusChanges——markAsTouched() 不會觸發它，改聽 control.events（Angular
+    // v18+ 公開 API）才能在 markAllAsTouched() 這類外部呼叫時正確更新 errorState。
+    this.ngControl?.control?.events
       ?.pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe(() => this.emitStateChanges());
   }

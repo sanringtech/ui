@@ -112,9 +112,7 @@ export class FileUploadComponent implements ControlValueAccessor, OnInit {
 
   ngOnInit(): void {
     this.ngControl = this.injector.get(NgControl, null, { optional: true, self: true });
-    // 不能只聽 statusChanges——markAsTouched() 不會觸發它，改聽 control.events（Angular
-    // v18+ 公開 API）才能在 markAllAsTouched() 這類外部呼叫時正確更新 errorState。
-    this.ngControl?.control?.events
+    this.ngControl?.statusChanges
       ?.pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe(() => this.emitStateChanges());
   }

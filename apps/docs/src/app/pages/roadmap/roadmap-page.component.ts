@@ -139,6 +139,7 @@ export class RoadmapPageComponent {
     { name: 'Dialog', description: '' },
     { name: 'Divider', description: '' },
     { name: 'Dropdown Menu', description: '' },
+    { name: 'File Upload', description: '' },
     { name: 'Hover Card', description: '' },
     { name: 'Input', description: '' },
     { name: 'Label', description: '' },
@@ -189,11 +190,6 @@ export class RoadmapPageComponent {
       name: 'Context Menu',
       description:
         'Same shape as Dropdown Menu, triggered by right-click at cursor coordinates instead of a button anchor.',
-    },
-    {
-      name: 'File Upload',
-      description:
-        'Drag-and-drop zone and file list, reusing Progress, Button, and Field for upload states.',
     },
     {
       name: 'Resizable',

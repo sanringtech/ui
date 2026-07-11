@@ -55,6 +55,12 @@ export const switchPage = {
           titleKey: 'switch.demo.size',
           level: 3,
         },
+        {
+          id: 'example-field',
+          titleKey: 'switch.demo.field',
+          descriptionKey: 'switch.examples.field.description',
+          level: 3,
+        },
       ],
     },
     {
@@ -138,4 +144,11 @@ export const switchPageExamples = {
   <sanring-switch checked />
   <sanring-switch size="lg" checked />
 </div>`,
+  field: `<sanring-field>
+  <div class="flex items-center justify-between gap-4">
+    <label for="terms-switch">Accept terms</label>
+    <sanring-switch id="terms-switch" [formControl]="termsControl" />
+  </div>
+  <sanring-error-message>You must enable this setting to continue.</sanring-error-message>
+</sanring-field>`,
 } as const;

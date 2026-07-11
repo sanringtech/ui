@@ -34,6 +34,17 @@ export interface ComponentChangelogEntry {
  */
 export const componentChangelog: readonly ComponentChangelogEntry[] = [
   {
+    date: '2026-07-11',
+    changes: [
+      {
+        type: 'added',
+        notable: true,
+        componentIds: ['file-upload'],
+        text: 'New File Upload component page — drag-and-drop selection, trigger-only usage, validation, progress display, and Field integration examples.',
+      },
+    ],
+  },
+  {
     date: '2026-07-10',
     changes: [
       {

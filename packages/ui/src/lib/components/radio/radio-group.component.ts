@@ -150,7 +150,11 @@ export class RadioGroupComponent implements ControlValueAccessor, OnInit {
     // 跟 checkbox 一樣的原因：constructor 階段 self-inject NgControl 會跟 NgModel 搭配時
     // 觸發 NG0200 循環依賴，延後到 ngOnInit 才拿。
     this.ngControl = this.injector.get(NgControl, null, { optional: true, self: true });
-    this.ngControl?.statusChanges
+    // 不能只聽 statusChanges——那個 Observable 只在 valid/invalid/pending/disabled 這幾種
+    // status 真的變動時才會 emit，markAsTouched() 純粹改 touched flag，不會觸發它，導致
+    // 外部呼叫 markAllAsTouched() 時錯誤訊息不會跳出來。改聽 control.events（Angular v18+
+    // 公開 API），touched/pristine/status/value 任何一種變化都會經過這裡。
+    this.ngControl?.control?.events
       ?.pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe(() => this.emitStateChanges());
   }

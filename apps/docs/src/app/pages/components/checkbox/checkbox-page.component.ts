@@ -1,6 +1,13 @@
 import { Component, inject } from '@angular/core';
-import { FormsModule } from '@angular/forms';
-import { CheckboxComponent, CheckboxSize, CheckedState, LabelDirective } from '@sanring/ui';
+import { FormControl, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import {
+  CheckboxComponent,
+  CheckboxSize,
+  CheckedState,
+  ErrorMessageComponent,
+  LabelDirective,
+  SanringFieldComponent,
+} from '@sanring/ui';
 import { getComponentPageSection } from '../../../docs-schema/component-page.utils';
 import { I18nService } from '../../../i18n/i18n.service';
 import {
@@ -19,9 +26,12 @@ import { checkboxPage, checkboxPageExamples } from './checkbox.docs';
   selector: 'app-checkbox-page',
   imports: [
     FormsModule,
+    ReactiveFormsModule,
     ComponentPageApiTableComponent,
     CheckboxComponent,
+    ErrorMessageComponent,
     LabelDirective,
+    SanringFieldComponent,
     ComponentPageCodeBlock,
     ComponentPageCodePreviewer,
     ComponentPageComponent,
@@ -187,6 +197,22 @@ import { checkboxPage, checkboxPageExamples } from './checkbox.docs';
         </app-component-page-code-previewer>
       </app-component-page-section>
 
+      <app-component-page-section [section]="section('example-field')">
+        <app-component-page-code-previewer [code]="examples.field" language="angular-html">
+          <div previewer class="w-[min(360px,100%)]">
+            <sanring-field>
+              <div class="flex items-center gap-2">
+                <sanring-checkbox id="terms-field" [formControl]="termsControl" />
+                <label for="terms-field" class="text-sm font-medium leading-none">
+                  {{ i18n.t('checkbox.demo.acceptTerms') }}
+                </label>
+              </div>
+              <sanring-error-message>{{ i18n.t('checkbox.demo.fieldError') }}</sanring-error-message>
+            </sanring-field>
+          </div>
+        </app-component-page-code-previewer>
+      </app-component-page-section>
+
       <app-component-page-section [section]="section('api')">
         <app-component-page-api-table [rows]="page.apiRows!" />
       </app-component-page-section>
@@ -206,6 +232,14 @@ export class CheckboxPageComponent {
   sizeChecked: CheckedState = false;
   eventChecked: CheckedState = false;
   changeCount = 0;
+
+  protected readonly termsControl = new FormControl<CheckedState>(false, {
+    validators: [Validators.requiredTrue],
+  });
+
+  constructor() {
+    this.termsControl.markAsTouched();
+  }
 
   onCheckedChange() {
     this.changeCount++;

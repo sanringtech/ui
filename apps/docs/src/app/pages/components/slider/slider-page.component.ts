@@ -1,5 +1,6 @@
 import { Component, inject, signal } from '@angular/core';
-import { LabelDirective, SliderComponent } from '@sanring/ui';
+import { FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
+import { ErrorMessageComponent, LabelDirective, SanringFieldComponent, SliderComponent } from '@sanring/ui';
 import { getComponentPageSection } from '../../../docs-schema/component-page.utils';
 import { I18nService } from '../../../i18n/i18n.service';
 import {
@@ -17,6 +18,7 @@ import { sliderPage, sliderPageExamples } from './slider.docs';
 @Component({
   selector: 'app-slider-page',
   imports: [
+    ReactiveFormsModule,
     ComponentPageApiTableComponent,
     ComponentPageCodeBlock,
     ComponentPageCodePreviewer,
@@ -25,7 +27,9 @@ import { sliderPage, sliderPageExamples } from './slider.docs';
     ComponentPageInstallationComponent,
     ComponentPageUsageImportsComponent,
     ComponentPageSectionComponent,
+    ErrorMessageComponent,
     LabelDirective,
+    SanringFieldComponent,
     SliderComponent,
   ],
   template: `
@@ -129,6 +133,20 @@ import { sliderPage, sliderPageExamples } from './slider.docs';
               </div>
             </app-component-page-code-previewer>
           </app-component-page-section>
+
+          <app-component-page-section [section]="section('example-field')">
+            <app-component-page-code-previewer [code]="examples.field" language="angular-html">
+              <div previewer class="grid w-full max-w-sm gap-3 px-4">
+                <sanring-field>
+                  <sanring-slider
+                    [formControl]="volumeControl"
+                    [ariaLabel]="i18n.t('slider.demo.minVolume')"
+                  />
+                  <sanring-error-message>{{ i18n.t('slider.demo.fieldError') }}</sanring-error-message>
+                </sanring-field>
+              </div>
+            </app-component-page-code-previewer>
+          </app-component-page-section>
         </div>
       </app-component-page-section>
 
@@ -145,6 +163,15 @@ export class SliderPageComponent {
   protected readonly basicValue = signal(50);
   protected readonly stepValue = signal(4);
   protected readonly formValue = signal(65);
+
+  protected readonly volumeControl = new FormControl<number>(50, {
+    nonNullable: true,
+    validators: [Validators.min(80)],
+  });
+
+  constructor() {
+    this.volumeControl.markAsTouched();
+  }
 
   protected section(id: string) {
     return getComponentPageSection(this.page, id);

@@ -45,6 +45,12 @@ export const radioPage = {
           titleKey: 'radio.demo.disabled',
           level: 3,
         },
+        {
+          id: 'example-field',
+          titleKey: 'radio.demo.field',
+          descriptionKey: 'radio.examples.field.description',
+          level: 3,
+        },
       ],
     },
     {
@@ -246,4 +252,18 @@ export class ExampleComponent {}`,
     <label sanringLabel for="s2">Option 2 (disabled)</label>
   </div>
 </sanring-radio-group>`,
+
+  field: `<sanring-field>
+  <sanring-radio-group [formControl]="planControl">
+    <div class="flex items-center gap-2">
+      <sanring-radio-item id="plan-free" value="free" />
+      <label for="plan-free">Free</label>
+    </div>
+    <div class="flex items-center gap-2">
+      <sanring-radio-item id="plan-pro" value="pro" />
+      <label for="plan-pro">Pro</label>
+    </div>
+  </sanring-radio-group>
+  <sanring-error-message>Please choose a plan.</sanring-error-message>
+</sanring-field>`,
 } as const;

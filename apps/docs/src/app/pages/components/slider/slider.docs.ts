@@ -34,6 +34,12 @@ export const sliderPage = {
         { id: 'example-step', titleKey: 'slider.demo.step', level: 3 },
         { id: 'example-form', titleKey: 'slider.demo.form', level: 3 },
         { id: 'example-disabled', titleKey: 'slider.demo.disabled', level: 3 },
+        {
+          id: 'example-field',
+          titleKey: 'slider.demo.field',
+          descriptionKey: 'slider.examples.field.description',
+          level: 3,
+        },
       ],
     },
     {
@@ -139,4 +145,8 @@ export const sliderPageExamples = {
   (valueChange)="brightness = $event"
 />`,
   disabled: `<sanring-slider [value]="35" disabled ariaLabel="Locked value" />`,
+  field: `<sanring-field>
+  <sanring-slider [formControl]="volumeControl" ariaLabel="Minimum volume" />
+  <sanring-error-message>Volume must be at least 80.</sanring-error-message>
+</sanring-field>`,
 } as const;

@@ -460,6 +460,11 @@ export const zh: Record<TranslationKey, string> = {
   'slider.demo.rating': '評分',
   'slider.demo.brightness': '亮度',
   'slider.demo.locked': '鎖定值',
+  'slider.demo.field': '搭配 Field',
+  'slider.demo.minVolume': '最小音量',
+  'slider.demo.fieldError': '音量至少要 80。',
+  'slider.examples.field.description':
+    '把 sanring-slider 包在 sanring-field 裡並綁定 reactive form control——控制項變成 invalid 且 touched 之後，錯誤訊息會自動顯示。',
   'slider.api.description': 'sanring-slider 支援的 Inputs 與 Outputs。',
   'slider.api.class.description': '與 slider 根元素樣式合併的額外 class。',
   'slider.api.id.description': 'Slider id，預設會自動產生。',
@@ -601,6 +606,11 @@ export const zh: Record<TranslationKey, string> = {
   'switch.demo.notificationsDescription': '接收帳戶活動提醒。',
   'switch.demo.consentTitle': '必要同意項目',
   'switch.demo.consentError': '你必須啟用此設定才能繼續。',
+  'switch.demo.field': '搭配 Field',
+  'switch.demo.acceptTerms': '接受條款',
+  'switch.demo.fieldError': '必須啟用此設定才能繼續。',
+  'switch.examples.field.description':
+    '把 sanring-switch 包在 sanring-field 裡並綁定 reactive form control——控制項變成 invalid 且 touched 之後，錯誤訊息會自動顯示。',
   'switch.examples.description': '常見的 Switch 模式，包含說明文字、選項卡片、停用、驗證與尺寸。',
   'switch.examples.basic.description': 'Switch 適合用於可立即套用變更的布林設定。',
   'switch.usage.description': '從 @sanring/ui 匯入 SwitchComponent，並搭配可存取的 label 使用。',
@@ -724,6 +734,10 @@ export const zh: Record<TranslationKey, string> = {
   'checkbox.demo.size.md': '中',
   'checkbox.demo.size.lg': '大',
   'checkbox.demo.eventBinding': '事件綁定',
+  'checkbox.demo.field': '搭配 Field',
+  'checkbox.demo.fieldError': '必須接受條款才能繼續。',
+  'checkbox.examples.field.description':
+    '把 sanring-checkbox 包在 sanring-field 裡並綁定 reactive form control——控制項變成 invalid 且 touched 之後，錯誤訊息會自動顯示。',
 
   'collapsible.description': '用來從 trigger 展開或收合單一內容區域的狀態 primitive。',
   'collapsible.controlledState': '受控狀態',
@@ -851,6 +865,12 @@ export const zh: Record<TranslationKey, string> = {
   'radio.demo.withLabel': '搭配標籤',
   'radio.demo.horizontal': '水平排列',
   'radio.demo.disabled': '停用',
+  'radio.demo.field': '搭配 Field',
+  'radio.demo.planFree': '免費方案',
+  'radio.demo.planPro': '專業方案',
+  'radio.demo.fieldError': '請選擇一個方案。',
+  'radio.examples.field.description':
+    '把 sanring-radio-group 包在 sanring-field 裡並綁定 reactive form control——控制項變成 invalid 且 touched 之後，錯誤訊息會自動顯示。',
   'radio.api.group.title': 'RadioGroupComponent',
   'radio.api.group.description': '群組容器的 Inputs 與 Outputs。',
   'radio.api.item.title': 'RadioItemComponent',
@@ -1173,6 +1193,11 @@ export const zh: Record<TranslationKey, string> = {
   'select.demo.itemAligned': '項目對齊 Trigger',
   'select.demo.disabledItem': '停用項目',
   'select.demo.customIcon': '自訂 CircleCheck 圖示',
+  'select.demo.field': '搭配 Field',
+  'select.demo.chooseWorkspace': '選擇一個工作區',
+  'select.demo.fieldError': '請選擇一個工作區。',
+  'select.examples.field.description':
+    '把 sanring-select 包在 sanring-field 裡並綁定 reactive form control——控制項變成 invalid 且 touched 之後，錯誤訊息會自動顯示。',
   'select.api.description': 'select primitives 支援的 inputs、models 與 class。',
   'select.api.value.description': '目前選取的值，透過 ControlValueAccessor 支援 Angular 表單。',
   'select.api.isOpen.description': '控制浮動 listbox 是否開啟。',
@@ -1246,6 +1271,10 @@ export const zh: Record<TranslationKey, string> = {
   'combobox.demo.search': 'Search',
   'combobox.demo.clearButtonTitle': 'Clear Button',
   'combobox.demo.clearButtonDescription': '傳入 showClear 會渲染一個能重設 value 與搜尋文字的按鈕。',
+  'combobox.demo.field': '搭配 Field',
+  'combobox.demo.fieldError': '請選擇一個框架。',
+  'combobox.examples.field.description':
+    '把 sanring-combobox 包在 sanring-field 裡並綁定 reactive form control——控制項變成 invalid 且 touched 之後，錯誤訊息會自動顯示。',
   'combobox.api.description': 'combobox primitives 支援的 inputs 與 models。',
   'combobox.api.value.description':
     '由 root 控制的選取值。單選使用 string，多選使用 string array。',

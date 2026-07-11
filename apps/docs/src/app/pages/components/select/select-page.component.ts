@@ -1,7 +1,7 @@
 import { Component, inject } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import { FormControl, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { LucideCircleCheck } from '@lucide/angular';
-import { SANRING_SELECT_IMPORTS, SelectValue } from '@sanring/ui';
+import { ErrorMessageComponent, SANRING_SELECT_IMPORTS, SanringFieldComponent, SelectValue } from '@sanring/ui';
 import { getComponentPageSection } from '../../../docs-schema/component-page.utils';
 import { I18nService } from '../../../i18n/i18n.service';
 import {
@@ -20,8 +20,11 @@ import { selectPage, selectPageExamples } from './select.docs';
   selector: 'app-select-page',
   imports: [
     FormsModule,
+    ReactiveFormsModule,
     LucideCircleCheck,
     SANRING_SELECT_IMPORTS,
+    ErrorMessageComponent,
+    SanringFieldComponent,
     ComponentPageApiTableComponent,
     ComponentPageCodeBlock,
     ComponentPageCodePreviewer,
@@ -208,6 +211,25 @@ import { selectPage, selectPageExamples } from './select.docs';
               </div>
             </app-component-page-code-previewer>
           </app-component-page-section>
+
+          <app-component-page-section [section]="section('example-field')">
+            <app-component-page-code-previewer [code]="examples.field" language="angular-html">
+              <div previewer class="flex min-h-[180px] items-start justify-center pt-8">
+                <sanring-field>
+                  <sanring-select [formControl]="workspaceControl">
+                    <button sanringSelectTrigger class="w-[240px]">
+                      <sanring-select-value [placeholder]="i18n.t('select.demo.chooseWorkspace')" />
+                    </button>
+                    <sanring-select-content matchTriggerWidth>
+                      <sanring-select-item value="design">Design</sanring-select-item>
+                      <sanring-select-item value="engineering">Engineering</sanring-select-item>
+                    </sanring-select-content>
+                  </sanring-select>
+                  <sanring-error-message>{{ i18n.t('select.demo.fieldError') }}</sanring-error-message>
+                </sanring-field>
+              </div>
+            </app-component-page-code-previewer>
+          </app-component-page-section>
         </div>
       </app-component-page-section>
 
@@ -228,6 +250,14 @@ export class SelectPageComponent {
   themePopper: SelectValue = 'dark';
   plan: SelectValue = 'pro';
   reviewState: SelectValue = 'approved';
+
+  protected readonly workspaceControl = new FormControl<SelectValue | null>(null, {
+    validators: [Validators.required],
+  });
+
+  constructor() {
+    this.workspaceControl.markAsTouched();
+  }
 
   protected section(id: string) {
     return getComponentPageSection(this.page, id);

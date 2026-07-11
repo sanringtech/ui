@@ -60,6 +60,12 @@ export const checkboxPage = {
           titleKey: 'checkbox.demo.eventBinding',
           level: 3,
         },
+        {
+          id: 'example-field',
+          titleKey: 'checkbox.demo.field',
+          descriptionKey: 'checkbox.examples.field.description',
+          level: 3,
+        },
       ],
     },
     {
@@ -212,4 +218,11 @@ export const checkboxPageExamples = {
 
 <!-- or listen to the output directly -->
 <sanring-checkbox (checkedChange)="onCheckedChange($event)" />`,
+  field: `<sanring-field>
+  <div class="flex items-center gap-2">
+    <sanring-checkbox id="terms-field" [formControl]="termsControl" />
+    <label sanringLabel for="terms-field">Accept terms and conditions</label>
+  </div>
+  <sanring-error-message>You must accept the terms to continue.</sanring-error-message>
+</sanring-field>`,
 } as const;

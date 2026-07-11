@@ -194,8 +194,12 @@ export class CheckboxComponent implements ControlValueAccessor, OnInit {
     this.ngControl = this.injector.get(NgControl, null, { optional: true, self: true });
 
     // OnPush 元件被跳過 CD 時 ngDoCheck 不會執行，所以不能像 input/textarea 靠輪詢偵測
-    // ngControl 狀態變化，改成直接訂閱 statusChanges 在狀態真的變動時才廣播
-    this.ngControl?.statusChanges
+    // ngControl 狀態變化。不能只聽 statusChanges——那個 Observable 只在 valid/invalid/
+    // pending/disabled 這幾種 status 真的變動時才會 emit，markAsTouched() 純粹改 touched
+    // flag，不會觸發它，導致外部呼叫 markAllAsTouched() 時錯誤訊息不會跳出來。改聽
+    // control.events（Angular v18+ 公開 API），touched/pristine/status/value 任何一種
+    // 變化都會經過這裡。
+    this.ngControl?.control?.events
       ?.pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe(() => this.emitStateChanges());
   }

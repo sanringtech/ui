@@ -186,7 +186,7 @@ export const fileUploadPageExamples = {
   </sanring-file-dropzone>
 </sanring-file-upload>`,
   field: `<sanring-field>
-  <label sanringLabel>Resume</label>
+  <label sanringLabel for="resume-upload">Resume</label>
   <sanring-file-upload accept=".pdf" [maxSize]="2 * 1024 * 1024" [formControl]="resumeControl">
     <sanring-file-dropzone>
       <button sanringFileTrigger type="button">Browse files</button>

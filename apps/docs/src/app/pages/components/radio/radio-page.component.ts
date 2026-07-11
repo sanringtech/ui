@@ -1,6 +1,13 @@
 import { Component, inject } from '@angular/core';
-import { FormsModule } from '@angular/forms';
-import { LabelDirective, SANRING_RADIO_IMPORTS, RadioOrientation, RadioValue } from '@sanring/ui';
+import { FormControl, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import {
+  ErrorMessageComponent,
+  LabelDirective,
+  SANRING_RADIO_IMPORTS,
+  RadioOrientation,
+  RadioValue,
+  SanringFieldComponent,
+} from '@sanring/ui';
 import { getComponentPageSection } from '../../../docs-schema/component-page.utils';
 import { I18nService } from '../../../i18n/i18n.service';
 import {
@@ -19,6 +26,7 @@ import { radioGroupApiRows, radioItemApiRows, radioPage, radioPageExamples } fro
   selector: 'app-radio-page',
   imports: [
     FormsModule,
+    ReactiveFormsModule,
     ComponentPageApiTableComponent,
     ComponentPageCodeBlock,
     ComponentPageCodePreviewer,
@@ -27,7 +35,9 @@ import { radioGroupApiRows, radioItemApiRows, radioPage, radioPageExamples } fro
     ComponentPageInstallationComponent,
     ComponentPageUsageImportsComponent,
     ComponentPageSectionComponent,
+    ErrorMessageComponent,
     SANRING_RADIO_IMPORTS,
+    SanringFieldComponent,
     LabelDirective,
   ],
   template: `
@@ -145,6 +155,26 @@ import { radioGroupApiRows, radioItemApiRows, radioPage, radioPageExamples } fro
               </div>
             </app-component-page-code-previewer>
           </app-component-page-section>
+
+          <app-component-page-section [section]="section('example-field')">
+            <app-component-page-code-previewer [code]="examples.field" language="angular-html">
+              <div previewer class="flex items-center justify-center">
+                <sanring-field>
+                  <sanring-radio-group [formControl]="planControl">
+                    <div class="flex items-center gap-2">
+                      <sanring-radio-item id="plan-free" value="free" />
+                      <label for="plan-free">{{ i18n.t('radio.demo.planFree') }}</label>
+                    </div>
+                    <div class="flex items-center gap-2">
+                      <sanring-radio-item id="plan-pro" value="pro" />
+                      <label for="plan-pro">{{ i18n.t('radio.demo.planPro') }}</label>
+                    </div>
+                  </sanring-radio-group>
+                  <sanring-error-message>{{ i18n.t('radio.demo.fieldError') }}</sanring-error-message>
+                </sanring-field>
+              </div>
+            </app-component-page-code-previewer>
+          </app-component-page-section>
         </div>
       </app-component-page-section>
 
@@ -171,6 +201,14 @@ export class RadioPageComponent {
   horizontalValue: RadioValue = 'center';
   disabledGroupValue: RadioValue = 'option1';
   disabledItemValue: RadioValue = 'option1';
+
+  protected readonly planControl = new FormControl<RadioValue | null>(null, {
+    validators: [Validators.required],
+  });
+
+  constructor() {
+    this.planControl.markAsTouched();
+  }
 
   protected section(id: string) {
     return getComponentPageSection(this.page, id);

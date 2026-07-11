@@ -157,6 +157,7 @@
       "name": "checkbox",
       "description": "A control that allows the user to toggle between checked and not checked.",
       "sharedDeps": ["utils", "component-styles"],
+      "componentDeps": ["field"],
       "peerDependencies": {
         "@angular/forms": "^22.0.0",
         "@lucide/angular": "^1.0.0"
@@ -225,6 +226,23 @@
       ]
     },
     {
+      "name": "file-upload",
+      "description": "Headless file selection primitives with drag-and-drop, trigger composition, validation, and file item rendering.",
+      "sharedDeps": ["utils"],
+      "componentDeps": ["field", "progress"],
+      "peerDependencies": {
+        "@angular/forms": "^22.0.0",
+        "@lucide/angular": "^1.0.0"
+      },
+      "files": [
+        "file-upload/file-upload.component.ts",
+        "file-upload/file-dropzone.component.ts",
+        "file-upload/file-trigger.directive.ts",
+        "file-upload/file-item.component.ts",
+        "file-upload/index.ts"
+      ]
+    },
+    {
       "name": "input",
       "description": "Displays a form input field.",
       "sharedDeps": ["utils", "component-styles"],
@@ -241,6 +259,10 @@
       "name": "textarea",
       "description": "Displays a multiline form textarea field.",
       "sharedDeps": ["utils"],
+      "componentDeps": ["field"],
+      "peerDependencies": {
+        "@angular/forms": "^22.0.0"
+      },
       "files": [
         "textarea/textarea.directive.ts",
         "textarea/index.ts"
@@ -317,6 +339,7 @@
       "name": "radio",
       "description": "A set of checkable buttons where no more than one can be checked at a time.",
       "sharedDeps": ["utils", "component-styles"],
+      "componentDeps": ["field"],
       "peerDependencies": {
         "@angular/forms": "^22.0.0",
         "@lucide/angular": "^1.0.0"
@@ -376,6 +399,7 @@
       "name": "slider",
       "description": "A range control for selecting a numeric value.",
       "sharedDeps": ["utils", "component-styles"],
+      "componentDeps": ["field"],
       "peerDependencies": {
         "@angular/forms": "^22.0.0"
       },
@@ -433,6 +457,7 @@
       "name": "switch",
       "description": "A control that allows the user to toggle between checked and not checked.",
       "sharedDeps": ["utils", "component-styles"],
+      "componentDeps": ["field"],
       "peerDependencies": {
         "@angular/forms": "^22.0.0"
       },

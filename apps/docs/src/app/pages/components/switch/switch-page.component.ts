@@ -1,5 +1,6 @@
 import { Component, inject } from '@angular/core';
-import { LabelDirective, SwitchComponent } from '@sanring/ui';
+import { FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
+import { ErrorMessageComponent, LabelDirective, SanringFieldComponent, SwitchComponent } from '@sanring/ui';
 import { getComponentPageSection } from '../../../docs-schema/component-page.utils';
 import { I18nService } from '../../../i18n/i18n.service';
 import {
@@ -17,7 +18,10 @@ import { switchPage, switchPageExamples } from './switch.docs';
 @Component({
   selector: 'app-switch-page',
   imports: [
+    ReactiveFormsModule,
     ComponentPageApiTableComponent,
+    ErrorMessageComponent,
+    SanringFieldComponent,
     SwitchComponent,
     LabelDirective,
     ComponentPageCodeBlock,
@@ -141,6 +145,22 @@ import { switchPage, switchPageExamples } from './switch.docs';
               </div>
             </app-component-page-code-previewer>
           </app-component-page-section>
+
+          <app-component-page-section [section]="section('example-field')">
+            <app-component-page-code-previewer [code]="examples.field" language="angular-html">
+              <div previewer class="w-[min(360px,100%)]">
+                <sanring-field>
+                  <div class="flex items-center justify-between gap-4">
+                    <label for="terms-switch" class="text-sm font-medium leading-none">
+                      {{ i18n.t('switch.demo.acceptTerms') }}
+                    </label>
+                    <sanring-switch id="terms-switch" [formControl]="termsControl" />
+                  </div>
+                  <sanring-error-message>{{ i18n.t('switch.demo.fieldError') }}</sanring-error-message>
+                </sanring-field>
+              </div>
+            </app-component-page-code-previewer>
+          </app-component-page-section>
         </div>
       </app-component-page-section>
 
@@ -154,6 +174,14 @@ export class SwitchPageComponent {
   protected readonly page = switchPage;
   protected readonly examples = switchPageExamples;
   protected readonly i18n = inject(I18nService);
+
+  protected readonly termsControl = new FormControl<boolean>(false, {
+    validators: [Validators.requiredTrue],
+  });
+
+  constructor() {
+    this.termsControl.markAsTouched();
+  }
 
   protected section(id: string) {
     return getComponentPageSection(this.page, id);

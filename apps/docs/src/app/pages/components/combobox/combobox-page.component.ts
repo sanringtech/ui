@@ -1,6 +1,12 @@
 import { Component, inject } from '@angular/core';
+import { FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
 import { LucideChevronDown } from '@lucide/angular';
-import { ButtonDirective, SANRING_COMBOBOX_IMPORTS } from '@sanring/ui';
+import {
+  ButtonDirective,
+  ErrorMessageComponent,
+  SANRING_COMBOBOX_IMPORTS,
+  SanringFieldComponent,
+} from '@sanring/ui';
 import { getComponentPageSection } from '../../../docs-schema/component-page.utils';
 import { I18nService } from '../../../i18n/i18n.service';
 import {
@@ -19,9 +25,12 @@ import { comboboxPage, comboboxPageExamples } from './combobox.docs';
 @Component({
   selector: 'app-combobox-page',
   imports: [
+    ReactiveFormsModule,
     SANRING_COMBOBOX_IMPORTS,
     ButtonDirective,
+    ErrorMessageComponent,
     LucideChevronDown,
+    SanringFieldComponent,
     ComponentPageApiTableComponent,
     ComponentPageCodeBlock,
     ComponentPageCodePreviewer,
@@ -250,6 +259,31 @@ import { comboboxPage, comboboxPageExamples } from './combobox.docs';
               </div>
             </app-component-page-code-previewer>
           </app-component-page-section>
+
+          <app-component-page-section [section]="section('example-field')">
+            <app-component-page-code-previewer [code]="examples.field" language="angular-html">
+              <div previewer class="flex w-full min-h-[220px] items-start justify-center pt-8">
+                <sanring-field class="w-[min(360px,100%)]">
+                  <sanring-combobox [formControl]="frameworkControl">
+                    <sanring-combobox-input [placeholder]="i18n.t('combobox.demo.placeholder')" />
+                    <sanring-combobox-content>
+                      <sanring-combobox-empty>{{
+                        i18n.t('combobox.demo.empty')
+                      }}</sanring-combobox-empty>
+                      <sanring-combobox-list>
+                        @for (item of frameworks; track item.value) {
+                          <sanring-combobox-item [value]="item.value" [label]="item.label">
+                            {{ item.label }}
+                          </sanring-combobox-item>
+                        }
+                      </sanring-combobox-list>
+                    </sanring-combobox-content>
+                  </sanring-combobox>
+                  <sanring-error-message>{{ i18n.t('combobox.demo.fieldError') }}</sanring-error-message>
+                </sanring-field>
+              </div>
+            </app-component-page-code-previewer>
+          </app-component-page-section>
         </div>
       </app-component-page-section>
 
@@ -269,6 +303,14 @@ export class ComboboxPageComponent {
   protected library: string | string[] | null = 'angular';
   protected country: string | string[] | null = null;
   protected clearDemoValue: string | string[] | null = 'react';
+
+  protected readonly frameworkControl = new FormControl<string | null>(null, {
+    validators: [Validators.required],
+  });
+
+  constructor() {
+    this.frameworkControl.markAsTouched();
+  }
 
   protected readonly frameworks = [
     { value: 'angular', label: 'Angular' },
