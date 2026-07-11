@@ -156,6 +156,11 @@ export class FileUploadComponent implements ControlValueAccessor, OnInit {
     this.syncValue();
   }
 
+  /** 關閉單一被拒絕的檔案通知，不影響已接受的檔案 */
+  dismissRejection(fileToDismiss: File) {
+    this.rejectedFiles.update((current) => current.filter((r) => r.file !== fileToDismiss));
+  }
+
   clearFiles() {
     this.files.set([]);
     this.rejectedFiles.set([]);

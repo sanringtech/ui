@@ -3,8 +3,8 @@ import {
   ElementRef,
   HostListener,
   OnDestroy,
-  OnInit,
   Renderer2,
+  afterNextRender,
   effect,
   inject,
   signal,
@@ -16,7 +16,7 @@ import { FileUploadComponent } from './file-upload.component';
   selector: '[sanringFileTrigger]',
   standalone: true,
 })
-export class FileTriggerDirective implements OnInit, OnDestroy {
+export class FileTriggerDirective implements OnDestroy {
   // 🌟 1. 注入大腦與 DOM 操作工具
   private upload = inject(FileUploadComponent);
   private el = inject(ElementRef);
@@ -32,9 +32,15 @@ export class FileTriggerDirective implements OnInit, OnDestroy {
       if (!this.hiddenInputReady()) return;
       this.syncHiddenInputAttributes();
     });
+
+    // 用 afterNextRender 而不是 ngOnInit：這顆按鈕現在可能被投影在 @if 區塊裡
+    // (見 FileDropzoneComponent)，ngOnInit 觸發時投影節點不一定已經真的接到 DOM
+    // 上，這時 el.nativeElement.parentNode 會是 null，導致 appendChild 直接炸掉。
+    // afterNextRender 保證這次渲染真的跑完、DOM 已經定位好才執行。
+    afterNextRender(() => this.createHiddenInput());
   }
 
-  ngOnInit() {
+  private createHiddenInput(): void {
     // 🌟 2. 建立隱藏的原生 input
     this.hiddenInput = this.renderer.createElement('input');
     this.renderer.setAttribute(this.hiddenInput, 'type', 'file');
@@ -62,16 +68,18 @@ export class FileTriggerDirective implements OnInit, OnDestroy {
     event.preventDefault();
     if (this.upload.isDisabled) return;
 
-    // 代為點擊那個隱藏的原生 input
-    this.hiddenInput.click();
+    // 代為點擊那個隱藏的原生 input（afterNextRender 還沒跑完之前點擊視為無效）
+    this.hiddenInput?.click();
   }
 
   ngOnDestroy() {
     this.removeChangeListener?.();
+    if (!this.hiddenInput) return;
+
     this.upload.unregisterTriggerInput(this.hiddenInput);
 
     // 🧹 清理機制：元件銷毀時，記得把動態生成的 input 拔掉，避免 Memory Leak
-    if (this.hiddenInput && this.hiddenInput.parentNode) {
+    if (this.hiddenInput.parentNode) {
       this.renderer.removeChild(this.hiddenInput.parentNode, this.hiddenInput);
     }
   }

@@ -1,10 +1,12 @@
 import { Component, inject } from '@angular/core';
 import { FormControl, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import { LucideUpload } from '@lucide/angular';
 import {
   DescriptionDirective,
   ErrorMessageComponent,
   FieldLabelDirective,
   FileDropzoneComponent,
+  FileItemComponent,
   FileTriggerDirective,
   FileUploadComponent,
   SanringFieldComponent,
@@ -30,9 +32,11 @@ import { fileUploadPage, fileUploadPageExamples } from './file-upload.docs';
     ErrorMessageComponent,
     FieldLabelDirective,
     FileDropzoneComponent,
+    FileItemComponent,
     FileTriggerDirective,
     FileUploadComponent,
     FormsModule,
+    LucideUpload,
     ReactiveFormsModule,
     SanringFieldComponent,
     ComponentPageApiTableComponent,
@@ -60,31 +64,13 @@ import { fileUploadPage, fileUploadPageExamples } from './file-upload.docs';
                 <button
                   sanringFileTrigger
                   type="button"
-                  class="font-medium underline underline-offset-2"
+                  class="inline-flex items-center gap-1.5 font-medium underline underline-offset-2"
                 >
+                  <svg lucideUpload class="size-4"></svg>
                   {{ i18n.t('fileUpload.demo.browse') }}
                 </button>
                 <p class="text-sm text-muted-foreground">{{ i18n.t('fileUpload.demo.dropHint') }}</p>
               </sanring-file-dropzone>
-
-              @if (basicFiles.length) {
-                <div class="mt-3 grid gap-1">
-                  @for (file of basicFiles; track file) {
-                    <div class="flex items-center justify-between gap-2 text-sm">
-                      <span class="truncate">{{ file.name }}</span>
-                      <button
-                        type="button"
-                        class="text-xs text-muted-foreground hover:text-foreground"
-                        (click)="basicFiles = removeFile(basicFiles, file)"
-                      >
-                        {{ i18n.t('fileUpload.demo.remove') }}
-                      </button>
-                    </div>
-                  }
-                </div>
-              } @else {
-                <p class="mt-3 text-sm text-muted-foreground">{{ i18n.t('fileUpload.demo.noFiles') }}</p>
-              }
             </sanring-file-upload>
           </div>
         </app-component-page-code-previewer>
@@ -122,7 +108,7 @@ import { fileUploadPage, fileUploadPageExamples } from './file-upload.docs';
                     {{ i18n.t('fileUpload.demo.chooseFile') }}
                   </button>
                   @if (triggerFiles.length) {
-                    <p class="text-sm text-muted-foreground">{{ triggerFiles[0].name }}</p>
+                    <sanring-file-item [file]="triggerFiles[0]" class="w-full" />
                   }
                 </sanring-file-upload>
               </div>
@@ -142,19 +128,6 @@ import { fileUploadPage, fileUploadPageExamples } from './file-upload.docs';
                       {{ i18n.t('fileUpload.demo.browse') }}
                     </button>
                   </sanring-file-dropzone>
-
-                  @for (file of multipleFiles; track file) {
-                    <div class="mt-2 flex items-center justify-between gap-2 text-sm">
-                      <span class="truncate">{{ file.name }}</span>
-                      <button
-                        type="button"
-                        class="text-xs text-muted-foreground hover:text-foreground"
-                        (click)="multipleFiles = removeFile(multipleFiles, file)"
-                      >
-                        {{ i18n.t('fileUpload.demo.remove') }}
-                      </button>
-                    </div>
-                  }
                 </sanring-file-upload>
               </div>
             </app-component-page-code-previewer>
@@ -164,7 +137,6 @@ import { fileUploadPage, fileUploadPageExamples } from './file-upload.docs';
             <app-component-page-code-previewer [code]="examples.validation" language="angular-html">
               <div previewer class="w-[min(420px,100%)]">
                 <sanring-file-upload
-                  #upload="sanringFileUpload"
                   multiple
                   accept="image/*"
                   [maxSize]="1024 * 1024"
@@ -179,12 +151,6 @@ import { fileUploadPage, fileUploadPageExamples } from './file-upload.docs';
                       {{ i18n.t('fileUpload.demo.browse') }}
                     </button>
                   </sanring-file-dropzone>
-
-                  @for (rejection of upload.rejectedFiles(); track rejection.file) {
-                    <p class="mt-2 text-sm text-red-500">
-                      {{ rejection.file.name }}: {{ rejection.errors.join(', ') }}
-                    </p>
-                  }
                 </sanring-file-upload>
               </div>
             </app-component-page-code-previewer>
@@ -256,10 +222,6 @@ export class FileUploadPageComponent {
 
   constructor() {
     this.resumeControl.markAsTouched();
-  }
-
-  protected removeFile(files: File[], fileToRemove: File): File[] {
-    return files.filter((file) => file !== fileToRemove);
   }
 
   protected section(id: string) {

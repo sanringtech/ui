@@ -114,57 +114,48 @@ export const fileUploadPageExamples = {
   usageImport: `import { FileDropzoneComponent, FileTriggerDirective, FileUploadComponent } from '@sanring/ui';`,
   usageMain: `<sanring-file-upload [(ngModel)]="files">
   <sanring-file-dropzone>
-    <button sanringFileTrigger type="button">Browse files</button>
+    <button sanringFileTrigger type="button">
+      <svg lucideUpload></svg>
+      Browse files
+    </button>
     <p>or drag and drop here</p>
   </sanring-file-dropzone>
 </sanring-file-upload>`,
-  basic: `<sanring-file-upload [(ngModel)]="files">
+  basic: `<!-- The dropzone has no built-in icon or copy — precise layout (like an icon
+     sitting right next to "Browse files") only works if you compose it yourself.
+     Once a file is accepted, the prompt automatically swaps for a sanring-file-item
+     box (name, size, and a remove button). -->
+<sanring-file-upload [(ngModel)]="files">
   <sanring-file-dropzone class="cursor-pointer text-center">
-    <button sanringFileTrigger type="button" class="font-medium underline underline-offset-2">
+    <button
+      sanringFileTrigger
+      type="button"
+      class="inline-flex items-center gap-1.5 font-medium underline underline-offset-2"
+    >
+      <svg lucideUpload class="size-4"></svg>
       Browse files
     </button>
     <p class="text-sm text-muted-foreground">or drag and drop here</p>
   </sanring-file-dropzone>
-
-  @for (file of files; track file) {
-    <div class="flex items-center justify-between gap-2 text-sm">
-      <span class="truncate">{{ file.name }}</span>
-      <button type="button" (click)="removeFile(file)">Remove</button>
-    </div>
-  }
 </sanring-file-upload>`,
-  trigger: `<sanring-file-upload [(ngModel)]="files">
+  trigger: `<!-- sanring-file-item also works standalone, outside of a dropzone -->
+<sanring-file-upload [(ngModel)]="files">
   <button sanringFileTrigger type="button">Choose file</button>
   @if (files.length) {
-    <p>{{ files[0].name }}</p>
+    <sanring-file-item [file]="files[0]" />
   }
 </sanring-file-upload>`,
   multiple: `<sanring-file-upload multiple [(ngModel)]="files">
   <sanring-file-dropzone>
     <button sanringFileTrigger type="button">Browse files</button>
   </sanring-file-dropzone>
-
-  @for (file of files; track file) {
-    <div class="flex items-center justify-between gap-2 text-sm">
-      <span class="truncate">{{ file.name }}</span>
-      <button type="button" (click)="removeFile(file)">Remove</button>
-    </div>
-  }
 </sanring-file-upload>`,
-  validation: `<sanring-file-upload
-  #upload="sanringFileUpload"
-  multiple
-  accept="image/*"
-  [maxSize]="1024 * 1024"
-  [(ngModel)]="files"
->
+  validation: `<!-- Rejected files render as red sanring-file-item boxes with the rejection
+     reason shown in place of the file size -->
+<sanring-file-upload multiple accept="image/*" [maxSize]="1024 * 1024" [(ngModel)]="files">
   <sanring-file-dropzone>
     <button sanringFileTrigger type="button">Browse images (max 1MB)</button>
   </sanring-file-dropzone>
-
-  @for (rejection of upload.rejectedFiles(); track rejection.file) {
-    <p class="text-sm text-red-500">{{ rejection.file.name }}: {{ rejection.errors.join(', ') }}</p>
-  }
 </sanring-file-upload>`,
   disabled: `<sanring-file-upload disabled>
   <sanring-file-dropzone>
