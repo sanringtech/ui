@@ -36,6 +36,7 @@ export type DocsComponentId =
   | 'popover'
   | 'progress'
   | 'radio'
+  | 'resizable'
   | 'scroll-area'
   | 'select'
   | 'sheet'
@@ -229,6 +230,12 @@ export const docsComponentItems: DocsComponentNavItem[] = [
     id: 'radio',
     labelKey: 'component.radio',
     path: '/components/radio',
+    active: true,
+  },
+  {
+    id: 'resizable',
+    labelKey: 'component.resizable',
+    path: '/components/resizable',
     active: true,
   },
   {

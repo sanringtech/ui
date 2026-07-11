@@ -1,97 +1,96 @@
-import { Component, computed, inject, input } from '@angular/core';
-import { ResizableGroupComponent } from './resizable-group.component';
+import { Component, ElementRef, computed, inject, input } from '@angular/core';
+import { LucideGripHorizontal, LucideGripVertical } from '@lucide/angular';
 import { cn } from '../../utils';
+import { ResizableGroupComponent } from './resizable-group.component';
 
 @Component({
   selector: 'sanring-resizable-handle',
   standalone: true,
+  imports: [LucideGripHorizontal, LucideGripVertical],
   template: `
-    <!-- 🌟 可選的視覺小把手 (Grip Icon)，很多編輯器中間都有這個小藥丸 -->
     @if (withHandle()) {
-      <div class="z-10 flex h-4 w-3 items-center justify-center rounded-sm border bg-border">
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          width="24"
-          height="24"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="2"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          class="h-2.5 w-2.5"
-        >
-          <circle cx="9" cy="12" r="1" />
-          <circle cx="9" cy="5" r="1" />
-          <circle cx="9" cy="19" r="1" />
-          <circle cx="15" cy="12" r="1" />
-          <circle cx="15" cy="5" r="1" />
-          <circle cx="15" cy="19" r="1" />
-        </svg>
+      <div [class]="gripClass()">
+        @if (group.direction() === 'horizontal') {
+          <svg lucideGripVertical class="size-2.5" aria-hidden="true"></svg>
+        } @else {
+          <svg lucideGripHorizontal class="size-2.5" aria-hidden="true"></svg>
+        }
       </div>
     }
   `,
   host: {
-    // 🌟 告訴 CSS 現在是水平還是垂直
+    role: 'separator',
     '[attr.data-orientation]': 'group.direction()',
+    '[attr.aria-orientation]': 'group.direction()',
+    '[attr.aria-disabled]': 'isDisabled() ? "true" : null',
+    '[attr.tabindex]': 'isDisabled() ? -1 : 0',
     '[class]': 'handleClass()',
-
-    // 🌟 攔截拖曳起點，並通報給大腦
     '(mousedown)': 'onDragStart($event)',
     '(touchstart)': 'onDragStart($event)',
+    '(keydown)': 'onKeyDown($event)',
   },
 })
 export class ResizableHandleComponent {
-  // ==========================================
-  // 1. 外部設定 (Inputs)
-  // ==========================================
   readonly withHandle = input<boolean>(false);
   readonly disabled = input<boolean>(false);
+  readonly keyboardStep = input<number>(5);
   readonly class = input<string | undefined>();
 
-  // 🪄 依賴注入：連線大腦
-  protected group = inject(ResizableGroupComponent);
+  protected readonly group = inject(ResizableGroupComponent);
+  private readonly elementRef = inject(ElementRef<HTMLElement>);
 
-  // ==========================================
-  // 2. 視覺排版運算 (包含隱形感應區的黑魔法)
-  // ==========================================
+  protected readonly isDisabled = computed(() => this.disabled() || this.group.disabled());
+
   protected readonly handleClass = computed(() =>
     cn(
-      // 基礎樣式：一條 1px 的線，並設定 relative 讓內部的 grip 絕對定位
-      'relative flex w-px items-center justify-center bg-border transition-colors',
-
-      // 隱形感應區：利用 after 偽元素把點擊範圍往外擴張，才不會太難點到
+      'relative flex w-px items-center justify-center bg-[var(--sanring-border-strong)] transition-colors',
       'after:absolute after:inset-y-0 after:left-1/2 after:w-2 after:-translate-x-1/2',
-
-      // 焦點樣式支援
-      'focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring focus-visible:ring-offset-1',
-
-      // 根據方向動態切換：
-      // 水平分割時 (左右拖) -> 鼠標變左右，高度撐滿
+      'focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-[var(--sanring-border-strong)] focus-visible:ring-offset-1',
       'data-[orientation=horizontal]:cursor-col-resize',
-
-      // 垂直分割時 (上下拖) -> 寬高反轉，鼠標變上下，且內部的 grip 小圖示要旋轉 90 度
       'data-[orientation=vertical]:h-px data-[orientation=vertical]:w-full',
       'data-[orientation=vertical]:after:left-0 data-[orientation=vertical]:after:h-2 data-[orientation=vertical]:after:w-full data-[orientation=vertical]:after:-translate-y-1/2 data-[orientation=vertical]:after:translate-x-0',
-      'data-[orientation=vertical]:cursor-row-resize [&[data-orientation=vertical]>div]:rotate-90',
-
-      // 停用狀態
-      this.disabled() && 'pointer-events-none opacity-50',
-
+      'data-[orientation=vertical]:cursor-row-resize',
+      this.isDisabled() && 'pointer-events-none opacity-50',
       this.class(),
     ),
   );
 
-  // ==========================================
-  // 3. 互動邏輯 (通報大腦)
-  // ==========================================
-  onDragStart(event: MouseEvent | TouchEvent) {
-    if (this.disabled()) return;
+  protected readonly gripClass = computed(() =>
+    cn(
+      'z-10 flex items-center justify-center rounded-sm border border-[var(--sanring-border-strong)] bg-[var(--sanring-surface)] text-[var(--sanring-muted)]',
+      this.group.direction() === 'horizontal' ? 'h-4 w-3' : 'h-3 w-4',
+    ),
+  );
 
-    // 🛑 阻止預設行為 (例如反白選取文字)，讓拖曳過程更順暢
+  onDragStart(event: MouseEvent | TouchEvent): void {
+    if (this.isDisabled()) return;
+
     event.preventDefault();
+    this.group.startDrag(this.elementRef.nativeElement, event);
+  }
 
-    // 🌟 把「我被按下了」這件事，連同事件本身丟給大腦去處理
-    // this.group.startDrag(this, event);
+  onKeyDown(event: KeyboardEvent): void {
+    if (this.isDisabled()) return;
+
+    const step = this.keyboardStep();
+    const direction = this.group.direction();
+    const isRtl = getComputedStyle(this.elementRef.nativeElement).direction === 'rtl';
+    let delta = 0;
+
+    if (direction === 'horizontal') {
+      if (event.key === 'ArrowLeft') delta = isRtl ? step : -step;
+      if (event.key === 'ArrowRight') delta = isRtl ? -step : step;
+    } else {
+      if (event.key === 'ArrowUp') delta = -step;
+      if (event.key === 'ArrowDown') delta = step;
+    }
+
+    if (event.key === 'Home') delta = -100;
+    if (event.key === 'End') delta = 100;
+
+    if (delta === 0) return;
+
+    event.preventDefault();
+    this.group.resizeBy(this.elementRef.nativeElement, delta);
   }
 }

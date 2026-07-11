@@ -56,6 +56,7 @@ export const en = {
   'component.label': 'Label',
   'component.link': 'Link',
   'component.pagination': 'Pagination',
+  'component.resizable': 'Resizable',
   'component.select': 'Select',
   'component.scrollArea': 'Scroll Area',
   'component.skeleton': 'Skeleton',
@@ -805,7 +806,7 @@ export const en = {
   'checkbox.api.ariaLabel.description': 'Accessible label for standalone checkboxes not associated with a visible <label> element.',
   'checkbox.api.ariaLabelledBy.description': 'ID of an external element that labels this checkbox.',
   'checkbox.api.ariaDescribedBy.description': 'ID of an element that provides an extended description for this checkbox.',
-  'checkbox.api.size.description': 'Visual size of the checkbox. Accepts CheckboxSize enum values: Sm, Md (default), Lg.',
+  'checkbox.api.size.description': "Visual size of the checkbox. Accepts 'sm', 'md' (default), or 'lg'.",
   'checkbox.demo.size': 'Size Variants',
   'checkbox.demo.size.sm': 'Small',
   'checkbox.demo.size.md': 'Medium',
@@ -1473,4 +1474,42 @@ export const en = {
   'fileUpload.demo.fieldError': 'A file is required.',
   'fileUpload.examples.progress.description':
     'sanring-file-item takes an optional [progress] input — pass it a 0-100 number from your own upload logic and it replaces the file size with a progress bar. Set it back to null when the upload finishes.',
+
+  'resizable.description':
+    'Drag-to-resize split panes for editor, dashboard, and inspection layouts.',
+  'resizable.examples.basic.description':
+    'Compose a group, panels, and a handle. Panels use percentage sizes and respect min/max constraints while dragging.',
+  'resizable.usage.description':
+    'Import the resizable primitives and place handles between adjacent panels.',
+  'resizable.installation.description':
+    'Import ResizableGroupComponent, ResizablePanelComponent, and ResizableHandleComponent from @sanring/ui.',
+  'resizable.examples.controlled.description':
+    'Bind [(sizes)] to persist or restore a split layout. The values are percentages for each panel.',
+  'resizable.demo.vertical': 'Vertical',
+  'resizable.demo.controlled': 'Controlled sizes',
+  'resizable.demo.disabled': 'Disabled',
+  'resizable.demo.navigation': 'Navigation',
+  'resizable.demo.editor': 'Editor',
+  'resizable.demo.dragHint': 'Drag the handle',
+  'resizable.demo.preview': 'Preview',
+  'resizable.demo.previewHint': 'Resize vertically to reveal more console space.',
+  'resizable.demo.consoleReady': '> preview ready',
+  'resizable.demo.consoleResize': '> drag handle to resize panes',
+  'resizable.demo.files': 'Files',
+  'resizable.demo.canvas': 'Canvas',
+  'resizable.demo.inspector': 'Inspector',
+  'resizable.demo.resetLayout': 'Reset layout',
+  'resizable.demo.lockedPanel': 'Locked panel',
+  'resizable.demo.lockedContent': 'Disabled groups keep the layout visible but block drag and keyboard resizing.',
+  'resizable.api.description': 'Inputs and models supported by the resizable primitive set.',
+  'resizable.api.direction.description': 'Sets the split axis for the group.',
+  'resizable.api.sizes.description':
+    'Two-way bindable panel sizes, expressed as percentages. Useful for saving and restoring layouts.',
+  'resizable.api.disabled.description': 'Disables pointer and keyboard resizing for the group.',
+  'resizable.api.defaultSize.description': 'Initial panel size in percent before a controlled size exists.',
+  'resizable.api.minSize.description': 'Minimum panel size in percent.',
+  'resizable.api.maxSize.description': 'Maximum panel size in percent.',
+  'resizable.api.withHandle.description': 'Renders the visible grip inside the handle.',
+  'resizable.api.keyboardStep.description':
+    'Percentage step used when resizing with arrow keys. Home and End jump to the panel boundary.',
 } as const;

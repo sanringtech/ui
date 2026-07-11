@@ -1,4 +1,4 @@
-import { Component, computed, effect, input, signal, untracked } from '@angular/core';
+import { Component, computed, input, signal } from '@angular/core';
 import { cn } from '../../utils';
 
 @Component({
@@ -26,20 +26,6 @@ export class ResizablePanelComponent {
   // ==========================================
   // 儲存當下被大腦計算出來的實際尺寸，未來拖曳時大腦會頻繁更新這個值
   readonly currentSize = signal<number | undefined>(undefined);
-
-  constructor() {
-    // 初始化的時候，把 defaultSize 抄進 currentSize 裡面
-    // 使用 allowSignalWrites 是因為我們在 effect 中更新狀態
-    effect(
-      () => {
-        const defaultVal = this.defaultSize();
-        if (defaultVal !== undefined && untracked(this.currentSize) === undefined) {
-          this.currentSize.set(defaultVal);
-        }
-      },
-      { allowSignalWrites: true },
-    );
-  }
 
   // ==========================================
   // 3. 視覺排版運算

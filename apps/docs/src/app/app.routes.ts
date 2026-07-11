@@ -251,6 +251,13 @@ export const routes: Routes = [
                   ),
               },
               {
+                path: 'resizable',
+                loadComponent: () =>
+                  import('./pages/components/resizable/resizable-page.component').then(
+                    (m) => m.ResizablePageComponent,
+                  ),
+              },
+              {
                 path: 'scroll-area',
                 loadComponent: () =>
                   import('./pages/components/scroll-area/scroll-area-page.component').then(

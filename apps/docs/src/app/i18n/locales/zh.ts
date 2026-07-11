@@ -58,6 +58,7 @@ export const zh: Record<TranslationKey, string> = {
   'component.label': '標籤文字',
   'component.link': '連結',
   'component.pagination': '分頁器',
+  'component.resizable': '可調整分割區',
   'component.select': '選取選單',
   'component.scrollArea': '滾動區域',
   'component.skeleton': '骨架屏',
@@ -728,7 +729,7 @@ export const zh: Record<TranslationKey, string> = {
   'checkbox.api.ariaLabel.description': '獨立使用（無可見 label 元素關聯）時的無障礙標籤。',
   'checkbox.api.ariaLabelledBy.description': '標示此 checkbox 的外部元素 ID。',
   'checkbox.api.ariaDescribedBy.description': '提供此 checkbox 延伸說明的元素 ID。',
-  'checkbox.api.size.description': 'Checkbox 的視覺尺寸，接受 CheckboxSize enum：Sm、Md（預設）、Lg。',
+  'checkbox.api.size.description': "Checkbox 的視覺尺寸，接受 'sm'、'md'（預設）、'lg'。",
   'checkbox.demo.size': '尺寸變體',
   'checkbox.demo.size.sm': '小',
   'checkbox.demo.size.md': '中',
@@ -1374,4 +1375,40 @@ export const zh: Record<TranslationKey, string> = {
   'fileUpload.demo.fieldError': '此欄位為必填。',
   'fileUpload.examples.progress.description':
     'sanring-file-item 有個可選的 [progress] input——從你自己的上傳邏輯傳一個 0-100 的數字進去，就會用進度條取代檔案大小顯示；上傳完成後把它設回 null 即可。',
+
+  'resizable.description': '可拖曳調整尺寸的分割面板，適合編輯器、儀表板與檢視器版面。',
+  'resizable.examples.basic.description':
+    '組合 group、panel 與 handle。拖曳時會以百分比調整 panel 尺寸，並遵守 min/max 限制。',
+  'resizable.usage.description': '匯入 resizable primitives，並把 handle 放在相鄰 panel 之間。',
+  'resizable.installation.description':
+    '從 @sanring/ui 匯入 ResizableGroupComponent、ResizablePanelComponent 與 ResizableHandleComponent。',
+  'resizable.examples.controlled.description':
+    '用 [(sizes)] 保存或還原分割版面；每個數值都是對應 panel 的百分比。',
+  'resizable.demo.vertical': '垂直分割',
+  'resizable.demo.controlled': '受控尺寸',
+  'resizable.demo.disabled': '停用',
+  'resizable.demo.navigation': '導覽',
+  'resizable.demo.editor': '編輯器',
+  'resizable.demo.dragHint': '拖曳分隔線',
+  'resizable.demo.preview': '預覽',
+  'resizable.demo.previewHint': '垂直拖曳以顯示更多 console 空間。',
+  'resizable.demo.consoleReady': '> preview ready',
+  'resizable.demo.consoleResize': '> drag handle to resize panes',
+  'resizable.demo.files': '檔案',
+  'resizable.demo.canvas': '畫布',
+  'resizable.demo.inspector': '檢查器',
+  'resizable.demo.resetLayout': '重設版面',
+  'resizable.demo.lockedPanel': '鎖定面板',
+  'resizable.demo.lockedContent': '停用後仍保留目前版面，但會阻止拖曳與鍵盤調整。',
+  'resizable.api.description': 'resizable primitive set 支援的 inputs 與 models。',
+  'resizable.api.direction.description': '設定 group 的分割方向。',
+  'resizable.api.sizes.description':
+    '可雙向綁定的 panel 尺寸，以百分比表示；適合保存與還原 layout。',
+  'resizable.api.disabled.description': '停用整個 group 的 pointer 與鍵盤調整。',
+  'resizable.api.defaultSize.description': '尚未有受控尺寸時使用的初始 panel 百分比。',
+  'resizable.api.minSize.description': 'panel 允許的最小百分比。',
+  'resizable.api.maxSize.description': 'panel 允許的最大百分比。',
+  'resizable.api.withHandle.description': '在 handle 中顯示可見的拖曳握把。',
+  'resizable.api.keyboardStep.description':
+    '使用方向鍵調整時的百分比步進；Home 與 End 會跳到 panel 邊界。',
 };
