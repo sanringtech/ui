@@ -1,7 +1,10 @@
 import {
   ChangeDetectionStrategy,
   Component,
+  DestroyRef,
   ElementRef,
+  Injector,
+  OnInit,
   booleanAttribute,
   computed,
   effect,
@@ -13,9 +16,12 @@ import {
   signal,
   untracked,
 } from '@angular/core';
-import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { ControlValueAccessor, NG_VALUE_ACCESSOR, NgControl, Validators } from '@angular/forms';
+import { Observable, Subject } from 'rxjs';
 import { cn } from '../shared/utils';
 import { SELECTION_CONTROL_FOCUS_CLASS } from '../shared/component-styles';
+import { FieldType, SanringFieldControl, SANRING_FIELD_CONTROL } from '../field/field.type';
 
 let nextUniqueId = 0;
 
@@ -29,6 +35,12 @@ let nextUniqueId = 0;
       useExisting: forwardRef(() => SliderComponent),
       multi: true,
     },
+    // 跟 checkbox 一樣：id/disabled/value 已經被同名 @Input 佔用，改用 useFactory 轉接。
+    {
+      provide: SANRING_FIELD_CONTROL,
+      useFactory: (host: SliderComponent) => new SliderFieldControlAdapter(host),
+      deps: [forwardRef(() => SliderComponent)],
+    },
   ],
   host: {
     '[class]': 'hostClass()',
@@ -40,11 +52,14 @@ let nextUniqueId = 0;
     '[attr.aria-valuetext]': 'ariaValueText()',
     '[attr.aria-label]': 'ariaLabel()',
     '[attr.aria-labelledby]': 'ariaLabelledBy()',
-    '[attr.aria-describedby]': 'ariaDescribedBy()',
+    '[attr.aria-describedby]': 'computedAriaDescribedBy()',
+    '[attr.aria-invalid]': 'errorState ? "true" : null',
+    '[attr.aria-required]': 'fieldRequired ? "true" : null',
     '[attr.aria-disabled]': 'isDisabled() || null',
     '[attr.aria-orientation]': '"horizontal"',
     '[attr.tabindex]': 'isDisabled() ? -1 : tabIndex()',
     '[attr.data-disabled]': 'isDisabled() || null',
+    '(focus)': 'onFocus()',
     '(blur)': 'markTouched()',
     '(keydown)': 'onKeydown($event)',
     '(pointerdown)': 'onPointerDown($event)',
@@ -60,12 +75,12 @@ let nextUniqueId = 0;
     </div>
 
     <span
-      class="pointer-events-none absolute block size-5 -translate-x-1/2 rounded-full border-2 border-[var(--sanring-foreground)] bg-[var(--sanring-background)] shadow-sm transition-[left]"
+      [class]="thumbClass()"
       [style.left.%]="percentage()"
     ></span>
   `,
 })
-export class SliderComponent implements ControlValueAccessor {
+export class SliderComponent implements ControlValueAccessor, OnInit {
   readonly class = input<string | undefined>();
   readonly id = input(`sanring-slider-${nextUniqueId++}`);
   readonly min = input(0, { transform: numberAttribute });
@@ -101,11 +116,59 @@ export class SliderComponent implements ControlValueAccessor {
     ),
   );
 
+  // Dragging updates `left` on every pointermove — a CSS transition there fights the
+  // pointer position and makes the thumb visibly lag behind the cursor (and the fill,
+  // which has no transition). Only animate `left` for discrete changes (keyboard, click).
+  protected readonly thumbClass = computed(() =>
+    cn(
+      'pointer-events-none absolute block size-5 -translate-x-1/2 rounded-full border-2 border-[var(--sanring-foreground)] bg-[var(--sanring-background)] shadow-sm',
+      this.dragging() ? '' : 'transition-[left]',
+    ),
+  );
+
   private readonly host = inject<ElementRef<HTMLElement>>(ElementRef);
   private readonly disabledState = signal(false);
-  private isDragging = false;
+  private readonly dragging = signal(false);
   private onChange: (value: number) => void = () => {};
   private onTouched: () => void = () => {};
+
+  // ==========================================
+  // Field 整合：id/disabled/value 已經被同名 @Input 佔用，走下面的 fieldXxx getter，
+  // 由 SliderFieldControlAdapter 轉接成 SanringFieldControl 介面。
+  // ==========================================
+  readonly controlType = FieldType.slider;
+  focused = false;
+  ngControl: NgControl | null = null;
+
+  private readonly injector = inject(Injector);
+  private readonly destroyRef = inject(DestroyRef);
+  private readonly stateChangesSubject = new Subject<void>();
+  readonly stateChanges: Observable<void> = this.stateChangesSubject.asObservable();
+  private readonly stateVersion = signal(0);
+  private readonly fieldDescribedByIds = signal<string[]>([]);
+
+  protected readonly computedAriaDescribedBy = computed(() => {
+    const ids = [this.ariaDescribedBy(), ...this.fieldDescribedByIds()].filter((v): v is string => !!v);
+    return ids.length ? ids.join(' ') : undefined;
+  });
+
+  get errorState(): boolean {
+    this.stateVersion();
+    return !!(this.ngControl?.invalid && this.ngControl?.touched);
+  }
+
+  get fieldValue(): number {
+    return this.valueSignal();
+  }
+
+  get fieldDisabled(): boolean {
+    return this.isDisabled();
+  }
+
+  get fieldRequired(): boolean {
+    this.stateVersion();
+    return !!this.ngControl?.control?.hasValidator(Validators.required);
+  }
 
   constructor() {
     effect(() => {
@@ -115,6 +178,32 @@ export class SliderComponent implements ControlValueAccessor {
       this.step();
       untracked(() => this.setValue(value, false));
     });
+
+    this.destroyRef.onDestroy(() => this.stateChangesSubject.complete());
+  }
+
+  ngOnInit(): void {
+    // 跟 checkbox 一樣的原因：constructor 階段 self-inject NgControl 會跟 NgModel 搭配時
+    // 觸發 NG0200 循環依賴（本元件同時透過 NG_VALUE_ACCESSOR 註冊自己），延後到 ngOnInit 才拿。
+    this.ngControl = this.injector.get(NgControl, null, { optional: true, self: true });
+    // 不能只聽 statusChanges——markAsTouched() 不會觸發它，改聽 control.events（Angular
+    // v18+ 公開 API）才能在 markAllAsTouched() 這類外部呼叫時正確更新 errorState。
+    this.ngControl?.control?.events
+      ?.pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe(() => this.emitStateChanges());
+  }
+
+  onFocus(): void {
+    this.focused = true;
+    this.emitStateChanges();
+  }
+
+  focus(options?: FocusOptions): void {
+    this.host.nativeElement.focus(options);
+  }
+
+  setDescribedByIds(ids: string[]): void {
+    this.fieldDescribedByIds.set(ids);
   }
 
   onKeydown(event: KeyboardEvent): void {
@@ -158,18 +247,18 @@ export class SliderComponent implements ControlValueAccessor {
     event.preventDefault();
     this.host.nativeElement.focus();
     this.host.nativeElement.setPointerCapture(event.pointerId);
-    this.isDragging = true;
+    this.dragging.set(true);
     this.setValueFromPointer(event);
   }
 
   onPointerMove(event: PointerEvent): void {
-    if (!this.isDragging || this.isDisabled()) return;
+    if (!this.dragging() || this.isDisabled()) return;
     this.setValueFromPointer(event);
   }
 
   onPointerEnd(event: PointerEvent): void {
-    if (!this.isDragging) return;
-    this.isDragging = false;
+    if (!this.dragging()) return;
+    this.dragging.set(false);
     if (this.host.nativeElement.hasPointerCapture(event.pointerId)) {
       this.host.nativeElement.releasePointerCapture(event.pointerId);
     }
@@ -178,6 +267,8 @@ export class SliderComponent implements ControlValueAccessor {
 
   markTouched(): void {
     this.onTouched();
+    this.focused = false;
+    this.emitStateChanges();
   }
 
   writeValue(value: number | null | undefined): void {
@@ -194,6 +285,7 @@ export class SliderComponent implements ControlValueAccessor {
 
   setDisabledState(isDisabled: boolean): void {
     this.disabledState.set(isDisabled);
+    this.emitStateChanges();
   }
 
   private setValueFromPointer(event: PointerEvent): void {
@@ -210,6 +302,7 @@ export class SliderComponent implements ControlValueAccessor {
     if (this.valueSignal() === nextValue) return;
 
     this.valueSignal.set(nextValue);
+    this.emitStateChanges();
     if (!emit) return;
     this.onChange(nextValue);
     this.valueChange.emit(nextValue);
@@ -227,5 +320,61 @@ export class SliderComponent implements ControlValueAccessor {
   private normalizedStep(): number {
     const step = this.step();
     return Number.isFinite(step) && step > 0 ? step : 1;
+  }
+
+  private emitStateChanges(): void {
+    this.stateVersion.update((v) => v + 1);
+    this.stateChangesSubject.next();
+  }
+}
+
+class SliderFieldControlAdapter implements SanringFieldControl<number> {
+  readonly controlType = FieldType.slider;
+
+  constructor(private readonly host: SliderComponent) {}
+
+  get id(): string {
+    return this.host.id();
+  }
+
+  get value(): number {
+    return this.host.fieldValue;
+  }
+
+  // 滑桿一定有一個數值，不存在「空值」的狀態
+  get empty(): boolean {
+    return false;
+  }
+
+  get focused(): boolean {
+    return this.host.focused;
+  }
+
+  get errorState(): boolean {
+    return this.host.errorState;
+  }
+
+  get disabled(): boolean {
+    return this.host.fieldDisabled;
+  }
+
+  get required(): boolean {
+    return this.host.fieldRequired;
+  }
+
+  get ngControl(): NgControl | null {
+    return this.host.ngControl;
+  }
+
+  get stateChanges(): Observable<void> {
+    return this.host.stateChanges;
+  }
+
+  focus(options?: FocusOptions): void {
+    this.host.focus(options);
+  }
+
+  setDescribedByIds(ids: string[]): void {
+    this.host.setDescribedByIds(ids);
   }
 }
