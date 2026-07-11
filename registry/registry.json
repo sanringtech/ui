@@ -77,6 +77,7 @@
       "sharedDeps": ["utils"],
       "files": [
         "aspect-ratio/aspect-ratio.directive.ts",
+        "aspect-ratio/aspect-ratio.type.ts",
         "aspect-ratio/index.ts"
       ]
     },
@@ -417,6 +418,7 @@
       },
       "files": [
         "spinner/spinner.component.ts",
+        "spinner/spinner.type.ts",
         "spinner/index.ts"
       ]
     },
