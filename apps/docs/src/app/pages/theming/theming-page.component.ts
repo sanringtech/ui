@@ -119,7 +119,7 @@ export class ThemingPageComponent {
   --sanring-surface:       #232a2b;
   --sanring-control:       var(--sanring-neutral-10);
 
-  /* ...plus progress and avatar-badge tokens */
+  /* ...plus progress, file-upload, and avatar-badge tokens */
 }
 
 :root[data-theme='light'] {

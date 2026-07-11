@@ -139,6 +139,7 @@ export class RoadmapPageComponent {
     { name: 'Dialog', description: '' },
     { name: 'Divider', description: '' },
     { name: 'Dropdown Menu', description: '' },
+    { name: 'Field', description: '' },
     { name: 'File Upload', description: '' },
     { name: 'Hover Card', description: '' },
     { name: 'Input', description: '' },
@@ -148,6 +149,7 @@ export class RoadmapPageComponent {
     { name: 'Popover', description: '' },
     { name: 'Progress', description: '' },
     { name: 'Radio Group', description: '' },
+    { name: 'Resizable', description: '' },
     { name: 'Scroll Area', description: '' },
     { name: 'Select', description: '' },
     { name: 'Sheet', description: '' },
@@ -169,10 +171,10 @@ export class RoadmapPageComponent {
 
   protected readonly tier1: RoadmapItem[] = [
     {
-      name: 'Field',
+      name: 'Context Menu',
       meta: 'package-ready',
       description:
-        'Implemented and exported as form composition primitives. Needs a dedicated docs page because Input already depends on this pattern.',
+        'Implemented in package source as menu primitives for right-click workflows. Needs docs examples, navigation entry, and registry wiring.',
     },
   ];
 
@@ -187,22 +189,13 @@ export class RoadmapPageComponent {
 
   protected readonly tier3: RoadmapItem[] = [
     {
-      name: 'Context Menu',
-      description:
-        'Same shape as Dropdown Menu, triggered by right-click at cursor coordinates instead of a button anchor.',
-    },
-    {
-      name: 'Resizable',
-      description: 'Drag-to-resize split panes for IDE-like layouts.',
-    },
-  ];
-
-  protected readonly tier4: RoadmapItem[] = [
-    {
       name: 'Navigation Menu',
       description:
         'Mega menu for marketing-site top navigation. High effort, low reuse of existing pieces.',
     },
+  ];
+
+  protected readonly tier4: RoadmapItem[] = [
     {
       name: 'Charts',
       description:

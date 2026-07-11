@@ -785,7 +785,7 @@ export const zh: Record<TranslationKey, string> = {
   'intro.coverage.groups.description': '目前聚焦在 controls、overlays、data display，以及 layout/navigation。',
   'intro.coverage.next.title': '待補文件缺口',
   'intro.coverage.next.description':
-    'Field 與後續表單相關頁面已在 roadmap 追蹤，是下一批要補齊的 docs gap。',
+    'Context Menu 已具備 package source，並在 roadmap 追蹤為下一個要補齊的 docs gap。',
   'intro.requirements.title': '需求',
   'intro.installation.title': '安裝',
   'intro.installation.body': '當你想直接從 @sanring/ui 使用 primitives 時，安裝基礎套件即可。',
@@ -839,7 +839,7 @@ export const zh: Record<TranslationKey, string> = {
     '每個專案只需執行一次。會確認目前是否在 Angular 專案中，寫入 sanring.config.json 記錄你選擇的元件路徑，產生 src/sanring-theme.css（所有元件都會讀取的 --sanring-* 設計 token，已存在則預設跳過以保護你的客製化），並安裝基礎的 peer dependencies（clsx、tailwind-merge）。',
   'cli.add.title': 'add',
   'cli.add.body':
-    '把一個或多個元件的原始碼複製進你的專案，並安裝缺少的 peer dependencies。如果某個元件依賴其他元件（例如 tag 依賴 badge），依賴會自動一併安裝。加上 --dry-run 可以在不動任何檔案的情況下，預覽哪些檔案會被新增或覆寫。',
+    '把一個或多個元件的原始碼複製進你的專案，並安裝缺少的 peer dependencies。如果某個元件依賴其他元件（例如 file-upload 依賴 field 與 progress），依賴會自動一併安裝。加上 --dry-run 可以在不動任何檔案的情況下，預覽哪些檔案會被新增或覆寫。',
   'cli.diff.title': 'diff',
   'cli.diff.body':
     'Sanring UI 沒有版本概念——元件是複製原始碼，不是 npm 套件——所以沒有自動方式知道本地檔案跟 registry 是否有落差。diff 會把你已安裝的元件與 sanring-theme.css 拿去跟目前的 registry 逐行比對，列出哪些檔案被你客製化過、哪些 registry 端有更新，方便在執行 add --force 之前先確認不會無聲蓋掉你的修改。不帶元件名稱會檢查目前已安裝的全部項目。',

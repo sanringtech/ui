@@ -149,13 +149,23 @@ export class IntroductionPageComponent {
 @source "./app/components/ui";`;
 
   protected readonly cliWorkflow = `npx @sanring/cli@latest init
-npx @sanring/cli@latest add button`;
+npx @sanring/cli@latest add file-upload`;
 
-  protected readonly firstComponent = `import { ButtonDirective } from './components/ui/button';
+  protected readonly firstComponent = `import {
+  FileDropzoneComponent,
+  FileTriggerDirective,
+  FileUploadComponent,
+} from './components/ui/file-upload';
 
 @Component({
-  imports: [ButtonDirective],
-  template: '<button sanringBtn>Click me</button>',
+  imports: [FileDropzoneComponent, FileTriggerDirective, FileUploadComponent],
+  template: \`
+    <sanring-file-upload>
+      <sanring-file-dropzone>
+        <button sanringFileTrigger type="button">Browse files</button>
+      </sanring-file-dropzone>
+    </sanring-file-upload>
+  \`,
 })
 export class AppComponent {}`;
 }

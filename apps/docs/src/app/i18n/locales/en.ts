@@ -866,7 +866,7 @@ export const en = {
     'Controls, overlays, data display, and layout/navigation are the current focus areas.',
   'intro.coverage.next.title': 'Package-ready gaps',
   'intro.coverage.next.description':
-    'Field and future form-oriented pages are tracked on the roadmap as the next docs gap to close.',
+    'Context Menu is package-ready and tracked on the roadmap as the next docs gap to close.',
   'intro.requirements.title': 'Requirements',
   'intro.installation.title': 'Installation',
   'intro.installation.body': 'Install the base package when you want to consume primitives directly from @sanring/ui.',
@@ -926,7 +926,7 @@ export const en = {
     'Run once per project. Verifies you\'re in an Angular project, writes a sanring.config.json with your chosen component path, generates src/sanring-theme.css (the --sanring-* design tokens every component reads — skipped by default if it already exists, to protect your customizations), and installs the base peer dependencies (clsx, tailwind-merge).',
   'cli.add.title': 'add',
   'cli.add.body':
-    'Copies one or more components\' source files into your project and installs any missing peer dependencies. If a component depends on another (e.g. tag depends on badge), the dependency is added automatically. Pass --dry-run to preview exactly which files would be created or overwritten without touching your filesystem.',
+    'Copies one or more components\' source files into your project and installs any missing peer dependencies. If a component depends on another (e.g. file-upload depends on field and progress), the dependency is added automatically. Pass --dry-run to preview exactly which files would be created or overwritten without touching your filesystem.',
   'cli.diff.title': 'diff',
   'cli.diff.body':
     'Sanring UI has no version concept — components are copied source, not npm packages — so there\'s no automatic way to know if your local files have drifted from the registry. diff compares your installed components and sanring-theme.css against the current registry line by line, showing what you\'ve customized locally and what\'s changed upstream, so you can check before running add --force. Omit the component names to check everything currently installed.',
