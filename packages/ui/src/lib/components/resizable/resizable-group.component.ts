@@ -3,6 +3,7 @@ import {
   DestroyRef,
   ElementRef,
   afterNextRender,
+  booleanAttribute,
   computed,
   contentChildren,
   effect,
@@ -43,7 +44,7 @@ export class ResizableGroupComponent {
   // 外部設定 (Inputs)
   // ==========================================
   readonly direction = input<ResizableDirection>('horizontal');
-  readonly disabled = input<boolean>(false);
+  readonly disabled = input(false, { transform: booleanAttribute });
   readonly class = input<string | undefined>();
 
   /** 以百分比表示每個 panel 的尺寸。可雙向綁定保存 layout。 */
@@ -224,10 +225,19 @@ export class ResizableGroupComponent {
     return this.panels().map((panel) => ({
       minSize: panel.minSize(),
       maxSize: panel.maxSize(),
+      collapsible: panel.collapsible(),
+      collapsedSize: panel.collapsedSize(),
     }));
   }
 
   private getPanelConstraintsAt(index: number): ResizablePanelConstraints {
-    return this.getAllPanelConstraints()[index] ?? { minSize: 0, maxSize: 100 };
+    return (
+      this.getAllPanelConstraints()[index] ?? {
+        minSize: 0,
+        maxSize: 100,
+        collapsible: false,
+        collapsedSize: 0,
+      }
+    );
   }
 }

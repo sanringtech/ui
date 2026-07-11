@@ -1490,6 +1490,9 @@ export const en = {
   'resizable.demo.disabled': 'Disabled',
   'resizable.demo.navigation': 'Navigation',
   'resizable.demo.editor': 'Editor',
+  'resizable.demo.one': 'One',
+  'resizable.demo.two': 'Two',
+  'resizable.demo.three': 'Three',
   'resizable.demo.dragHint': 'Drag the handle',
   'resizable.demo.preview': 'Preview',
   'resizable.demo.previewHint': 'Resize vertically to reveal more console space.',
@@ -1509,6 +1512,10 @@ export const en = {
   'resizable.api.defaultSize.description': 'Initial panel size in percent before a controlled size exists.',
   'resizable.api.minSize.description': 'Minimum panel size in percent.',
   'resizable.api.maxSize.description': 'Maximum panel size in percent.',
+  'resizable.api.collapsible.description':
+    'Allows the panel to snap below minSize and collapse to collapsedSize.',
+  'resizable.api.collapsedSize.description':
+    'Panel size used when a collapsible panel snaps closed, expressed as a percentage.',
   'resizable.api.withHandle.description': 'Renders the visible grip inside the handle.',
   'resizable.api.keyboardStep.description':
     'Percentage step used when resizing with arrow keys. Home and End jump to the panel boundary.',

@@ -1,4 +1,4 @@
-import { Component, ElementRef, computed, inject, input } from '@angular/core';
+import { Component, ElementRef, booleanAttribute, computed, inject, input } from '@angular/core';
 import { LucideGripHorizontal, LucideGripVertical } from '@lucide/angular';
 import { cn } from '../../utils';
 import { ResizableGroupComponent } from './resizable-group.component';
@@ -31,8 +31,8 @@ import { ResizableGroupComponent } from './resizable-group.component';
   },
 })
 export class ResizableHandleComponent {
-  readonly withHandle = input<boolean>(false);
-  readonly disabled = input<boolean>(false);
+  readonly withHandle = input(false, { transform: booleanAttribute });
+  readonly disabled = input(false, { transform: booleanAttribute });
   readonly keyboardStep = input<number>(5);
   readonly class = input<string | undefined>();
 

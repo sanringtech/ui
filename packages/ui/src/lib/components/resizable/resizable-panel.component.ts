@@ -1,4 +1,4 @@
-import { Component, computed, input, signal } from '@angular/core';
+import { Component, booleanAttribute, computed, input, signal } from '@angular/core';
 import { cn } from '../../utils';
 
 @Component({
@@ -18,6 +18,8 @@ export class ResizablePanelComponent {
   readonly defaultSize = input<number>();
   readonly minSize = input<number>(0);
   readonly maxSize = input<number>(100);
+  readonly collapsible = input(false, { transform: booleanAttribute });
+  readonly collapsedSize = input<number>(0);
 
   readonly class = input<string | undefined>();
 

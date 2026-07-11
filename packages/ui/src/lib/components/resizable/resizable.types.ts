@@ -14,6 +14,8 @@ export interface ResizableDragState {
 export interface ResizablePanelConstraints {
   minSize: number;
   maxSize: number;
+  collapsible: boolean;
+  collapsedSize: number;
 }
 
 export interface ResizablePairSize {

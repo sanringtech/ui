@@ -17,13 +17,7 @@ export function normalizeSizes(
   sizes: readonly number[],
   constraints: readonly ResizablePanelConstraints[],
 ): number[] {
-  const clamped = sizes.map((size, index) =>
-    clamp(
-      Number.isFinite(size) ? size : 0,
-      constraints[index]?.minSize ?? 0,
-      constraints[index]?.maxSize ?? 100,
-    ),
-  );
+  const clamped = sizes.map((size, index) => normalizePanelSize(size, constraints[index]));
   const total = clamped.reduce((sum, size) => sum + size, 0);
 
   if (total <= 0) return constraints.map(() => 100 / constraints.length);
@@ -38,12 +32,37 @@ export function resizePanelPair(
   afterConstraints: ResizablePanelConstraints,
 ): ResizablePairSize {
   const pairTotal = base.beforeSize + base.afterSize;
-  const minBefore = beforeConstraints.minSize;
-  const maxBefore = Math.min(beforeConstraints.maxSize, pairTotal - afterConstraints.minSize);
-  const minAfter = afterConstraints.minSize;
-  const maxAfter = Math.min(afterConstraints.maxSize, pairTotal - beforeConstraints.minSize);
+  const targetBeforeSize = base.beforeSize + delta;
+  const targetAfterSize = pairTotal - targetBeforeSize;
 
-  const beforeSize = clamp(base.beforeSize + delta, minBefore, maxBefore);
+  if (beforeConstraints.collapsible && targetBeforeSize <= beforeConstraints.minSize) {
+    return resolvePairSize(pairTotal, beforeConstraints.collapsedSize, beforeConstraints, afterConstraints);
+  }
+
+  if (afterConstraints.collapsible && targetAfterSize <= afterConstraints.minSize) {
+    return resolvePairSize(
+      pairTotal,
+      pairTotal - afterConstraints.collapsedSize,
+      beforeConstraints,
+      afterConstraints,
+    );
+  }
+
+  return resolvePairSize(pairTotal, targetBeforeSize, beforeConstraints, afterConstraints);
+}
+
+function resolvePairSize(
+  pairTotal: number,
+  targetBeforeSize: number,
+  beforeConstraints: ResizablePanelConstraints,
+  afterConstraints: ResizablePanelConstraints,
+): ResizablePairSize {
+  const minBefore = getMinimumOpenSize(beforeConstraints);
+  const minAfter = getMinimumOpenSize(afterConstraints);
+  const maxBefore = Math.min(beforeConstraints.maxSize, pairTotal - minAfter);
+  const maxAfter = Math.min(afterConstraints.maxSize, pairTotal - minBefore);
+
+  const beforeSize = clamp(targetBeforeSize, minBefore, maxBefore);
   const afterSize = clamp(pairTotal - beforeSize, minAfter, maxAfter);
 
   return { beforeSize, afterSize };
@@ -74,6 +93,24 @@ export function listen<K extends keyof DocumentEventMap>(
 function clamp(value: number, min: number, max: number): number {
   if (max < min) return min;
   return Math.min(Math.max(value, min), max);
+}
+
+function normalizePanelSize(
+  size: number,
+  constraints: ResizablePanelConstraints | undefined,
+): number {
+  const finiteSize = Number.isFinite(size) ? size : 0;
+  if (!constraints) return clamp(finiteSize, 0, 100);
+
+  if (constraints.collapsible && finiteSize <= constraints.minSize) {
+    return constraints.collapsedSize;
+  }
+
+  return clamp(finiteSize, constraints.minSize, constraints.maxSize);
+}
+
+function getMinimumOpenSize(constraints: ResizablePanelConstraints): number {
+  return constraints.collapsible ? constraints.collapsedSize : constraints.minSize;
 }
 
 function isTouchEvent(event: ResizablePointerEvent): event is TouchEvent {

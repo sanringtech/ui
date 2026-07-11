@@ -43,43 +43,45 @@ import { resizablePage, resizablePageExamples } from './resizable.docs';
 
       <app-component-page-section [section]="section('basic')">
         <app-component-page-code-previewer [code]="examples.basic" language="angular-html">
-          <div previewer class="h-64 w-full max-w-3xl px-4">
+          <div previewer class="h-60 w-full max-w-2xl px-4">
             <sanring-resizable-group
               class="rounded-[var(--sanring-radius)] border border-[var(--docs-border)] bg-[var(--sanring-surface)]"
             >
               <sanring-resizable-panel
-                [defaultSize]="28"
-                [minSize]="18"
-                class="bg-[var(--sanring-surface-muted)]"
+                [defaultSize]="24"
+                [minSize]="15"
+                collapsible
+                class="bg-[var(--sanring-surface)]"
               >
-                <div class="grid h-full content-start gap-2 p-4">
-                  <span class="text-sm font-medium text-[var(--docs-fg)]">
-                    {{ i18n.t('resizable.demo.navigation') }}
+                <div class="grid h-full place-items-center p-4">
+                  <span class="text-base font-semibold text-[var(--docs-fg)]">
+                    {{ i18n.t('resizable.demo.one') }}
                   </span>
-                  <div class="h-2 rounded bg-[var(--sanring-border)]"></div>
-                  <div class="h-2 w-2/3 rounded bg-[var(--sanring-border)]"></div>
-                  <div class="h-2 w-4/5 rounded bg-[var(--sanring-border)]"></div>
                 </div>
               </sanring-resizable-panel>
-              <sanring-resizable-handle [withHandle]="true" />
-              <sanring-resizable-panel [defaultSize]="72" [minSize]="35">
-                <div class="grid h-full grid-rows-[auto_1fr] gap-3 p-4">
-                  <div class="flex items-center justify-between gap-3">
-                    <span class="text-sm font-medium text-[var(--docs-fg)]">
-                      {{ i18n.t('resizable.demo.editor') }}
-                    </span>
-                    <span class="text-xs text-[var(--docs-muted)]">
-                      {{ i18n.t('resizable.demo.dragHint') }}
-                    </span>
-                  </div>
-                  <div
-                    class="rounded-[var(--sanring-radius)] border border-[var(--docs-border)] bg-[var(--docs-surface)] p-4 font-mono text-xs leading-6 text-[var(--docs-muted)]"
+              <sanring-resizable-handle withHandle />
+              <sanring-resizable-panel [defaultSize]="76" [minSize]="35">
+                <sanring-resizable-group direction="vertical">
+                  <sanring-resizable-panel
+                    [defaultSize]="35"
+                    [minSize]="20"
+                    collapsible
                   >
-                    <div>const layout = createResizableGroup();</div>
-                    <div>layout.persist(sizes);</div>
-                    <div>layout.restore();</div>
-                  </div>
-                </div>
+                    <div class="grid h-full place-items-center p-4">
+                      <span class="text-base font-semibold text-[var(--docs-fg)]">
+                        {{ i18n.t('resizable.demo.two') }}
+                      </span>
+                    </div>
+                  </sanring-resizable-panel>
+                  <sanring-resizable-handle withHandle />
+                  <sanring-resizable-panel [defaultSize]="65" [minSize]="25">
+                    <div class="grid h-full place-items-center p-4">
+                      <span class="text-base font-semibold text-[var(--docs-fg)]">
+                        {{ i18n.t('resizable.demo.three') }}
+                      </span>
+                    </div>
+                  </sanring-resizable-panel>
+                </sanring-resizable-group>
               </sanring-resizable-panel>
             </sanring-resizable-group>
           </div>
@@ -125,7 +127,7 @@ import { resizablePage, resizablePageExamples } from './resizable.docs';
                       </div>
                     </div>
                   </sanring-resizable-panel>
-                  <sanring-resizable-handle [withHandle]="true" />
+                  <sanring-resizable-handle withHandle />
                   <sanring-resizable-panel
                     [defaultSize]="38"
                     [minSize]="20"
@@ -154,13 +156,13 @@ import { resizablePage, resizablePageExamples } from './resizable.docs';
                         {{ i18n.t('resizable.demo.files') }}
                       </div>
                     </sanring-resizable-panel>
-                    <sanring-resizable-handle [withHandle]="true" />
+                    <sanring-resizable-handle withHandle />
                     <sanring-resizable-panel [minSize]="30">
                       <div class="grid h-full place-items-center p-4 text-sm text-[var(--docs-fg)]">
                         {{ i18n.t('resizable.demo.canvas') }}
                       </div>
                     </sanring-resizable-panel>
-                    <sanring-resizable-handle [withHandle]="true" />
+                    <sanring-resizable-handle withHandle />
                     <sanring-resizable-panel [minSize]="20" class="bg-[var(--docs-surface)]">
                       <div class="h-full p-4 text-sm font-medium text-[var(--docs-fg)]">
                         {{ i18n.t('resizable.demo.inspector') }}
@@ -189,7 +191,7 @@ import { resizablePage, resizablePageExamples } from './resizable.docs';
             <app-component-page-code-previewer [code]="examples.disabled" language="angular-html">
               <div previewer class="h-48 w-full max-w-2xl px-4">
                 <sanring-resizable-group
-                  [disabled]="true"
+                  disabled
                   class="rounded-[var(--sanring-radius)] border border-[var(--docs-border)] bg-[var(--sanring-surface)]"
                   [sizes]="[35, 65]"
                 >
@@ -198,7 +200,7 @@ import { resizablePage, resizablePageExamples } from './resizable.docs';
                       {{ i18n.t('resizable.demo.lockedPanel') }}
                     </div>
                   </sanring-resizable-panel>
-                  <sanring-resizable-handle [withHandle]="true" />
+                  <sanring-resizable-handle withHandle />
                   <sanring-resizable-panel>
                     <div class="h-full p-4 text-sm text-[var(--docs-muted)]">
                       {{ i18n.t('resizable.demo.lockedContent') }}

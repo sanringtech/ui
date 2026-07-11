@@ -1389,6 +1389,9 @@ export const zh: Record<TranslationKey, string> = {
   'resizable.demo.disabled': '停用',
   'resizable.demo.navigation': '導覽',
   'resizable.demo.editor': '編輯器',
+  'resizable.demo.one': 'One',
+  'resizable.demo.two': 'Two',
+  'resizable.demo.three': 'Three',
   'resizable.demo.dragHint': '拖曳分隔線',
   'resizable.demo.preview': '預覽',
   'resizable.demo.previewHint': '垂直拖曳以顯示更多 console 空間。',
@@ -1408,6 +1411,10 @@ export const zh: Record<TranslationKey, string> = {
   'resizable.api.defaultSize.description': '尚未有受控尺寸時使用的初始 panel 百分比。',
   'resizable.api.minSize.description': 'panel 允許的最小百分比。',
   'resizable.api.maxSize.description': 'panel 允許的最大百分比。',
+  'resizable.api.collapsible.description':
+    '允許 panel 低於 minSize 後吸附收合到 collapsedSize。',
+  'resizable.api.collapsedSize.description':
+    'collapsible panel 吸附收合後的尺寸，以百分比表示。',
   'resizable.api.withHandle.description': '在 handle 中顯示可見的拖曳握把。',
   'resizable.api.keyboardStep.description':
     '使用方向鍵調整時的百分比步進；Home 與 End 會跳到 panel 邊界。',
