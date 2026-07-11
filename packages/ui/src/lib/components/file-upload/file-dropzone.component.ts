@@ -28,7 +28,7 @@ export class FileDropzoneComponent {
       'hover:bg-accent/50',
       // 當有檔案拖曳進來時的視覺回饋
       this.isDragging() && 'border-primary bg-accent opacity-80',
-      this.upload.disabled() && 'pointer-events-none opacity-50 cursor-not-allowed',
+      this.upload.isDisabled && 'pointer-events-none opacity-50 cursor-not-allowed',
       this.class(),
     ),
   );
@@ -41,7 +41,7 @@ export class FileDropzoneComponent {
   onDragOver(event: DragEvent) {
     event.preventDefault(); // 🛑 必須阻止預設行為，否則無法觸發 drop
     event.stopPropagation();
-    if (!this.upload.disabled()) {
+    if (!this.upload.isDisabled) {
       this.isDragging.set(true);
     }
   }
@@ -59,7 +59,7 @@ export class FileDropzoneComponent {
     event.stopPropagation();
     this.isDragging.set(false);
 
-    if (this.upload.disabled()) return;
+    if (this.upload.isDisabled) return;
 
     // 🌟 將攔截到的檔案交給大腦處理！
     const files = event.dataTransfer?.files;

@@ -21,6 +21,7 @@ export * from './lib/components/carousel';
 export * from './lib/components/dialog';
 export * from './lib/components/divider';
 export * from './lib/components/field';
+export * from './lib/components/file-upload';
 export * from './lib/components/hover-card';
 export * from './lib/components/input';
 export * from './lib/components/label';

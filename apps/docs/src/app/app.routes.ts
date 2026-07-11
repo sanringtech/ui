@@ -188,6 +188,13 @@ export const routes: Routes = [
                   ),
               },
               {
+                path: 'file-upload',
+                loadComponent: () =>
+                  import('./pages/components/file-upload/file-upload-page.component').then(
+                    (m) => m.FileUploadPageComponent,
+                  ),
+              },
+              {
                 path: 'hover-card',
                 loadComponent: () =>
                   import('./pages/components/hover-card/hover-card-page.component').then(

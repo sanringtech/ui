@@ -52,8 +52,10 @@ interface HomeVisualMetric {
     LucideTerminalSquare,
   ],
   template: `
-    <section class="mx-auto flex w-full max-w-[1280px] flex-col gap-16 px-8 pb-24 pt-14 max-[860px]:gap-12 max-[860px]:px-5 max-[860px]:pt-9">
-      <div class="grid items-center gap-12 lg:grid-cols-[minmax(0,0.95fr)_minmax(520px,1.05fr)] max-[1080px]:grid-cols-1">
+    <section class="relative isolate mx-auto flex w-full max-w-[1280px] flex-col gap-16 overflow-hidden px-8 pb-24 pt-14 max-[860px]:gap-12 max-[860px]:px-5 max-[860px]:pt-9">
+      <div class="home-particles" aria-hidden="true"></div>
+
+      <div class="relative z-10 grid items-center gap-12 lg:grid-cols-[minmax(0,0.95fr)_minmax(520px,1.05fr)] max-[1080px]:grid-cols-1">
         <div class="min-w-0">
           <div class="mb-6 flex flex-wrap items-center gap-3">
             <span
@@ -193,7 +195,7 @@ interface HomeVisualMetric {
       </div>
 
       <section
-        class="grid gap-4 rounded-[var(--sanring-radius)] border border-[var(--docs-border)] bg-[var(--docs-panel)] p-4 lg:grid-cols-[minmax(240px,0.9fr)_repeat(3,minmax(0,1fr))] max-[900px]:grid-cols-1"
+        class="relative z-10 grid gap-4 rounded-[var(--sanring-radius)] border border-[var(--docs-border)] bg-[var(--docs-panel)] p-4 lg:grid-cols-[minmax(240px,0.9fr)_repeat(3,minmax(0,1fr))] max-[900px]:grid-cols-1"
         aria-labelledby="home-snapshot-title"
       >
         <div class="flex min-w-0 items-center gap-3 border-r border-[var(--docs-border)] pr-4 max-[900px]:border-r-0 max-[900px]:border-b max-[900px]:pb-4 max-[900px]:pr-0">
@@ -237,7 +239,7 @@ interface HomeVisualMetric {
         }
       </section>
 
-      <section>
+      <section class="relative z-10">
         <div class="mb-7 max-w-[660px]">
           <p class="m-0 text-sm font-semibold uppercase text-[var(--docs-muted)]">
             {{ i18n.t('home.highlights.eyebrow') }}
@@ -280,7 +282,7 @@ interface HomeVisualMetric {
         </div>
       </section>
 
-      <section class="grid gap-8 lg:grid-cols-[minmax(0,0.85fr)_minmax(0,1.15fr)]">
+      <section class="relative z-10 grid gap-8 lg:grid-cols-[minmax(0,0.85fr)_minmax(0,1.15fr)]">
         <div>
           <p class="m-0 text-sm font-semibold uppercase text-[var(--docs-muted)]">
             {{ i18n.t('home.components.eyebrow') }}
@@ -330,6 +332,85 @@ interface HomeVisualMetric {
       </section>
     </section>
   `,
+  styles: [
+    `
+      :host {
+        display: block;
+      }
+
+      .home-particles {
+        pointer-events: none;
+        position: absolute;
+        inset: 0;
+        z-index: 0;
+        overflow: hidden;
+        opacity: 0.64;
+        mask-image: linear-gradient(to bottom, black 0%, black 58%, transparent 100%);
+      }
+
+      .home-particles::before,
+      .home-particles::after {
+        content: '';
+        position: absolute;
+        inset: -18% -10% 34%;
+        background-image:
+          radial-gradient(circle, color-mix(in srgb, var(--docs-accent) 48%, transparent) 0 1px, transparent 1.5px),
+          radial-gradient(circle, color-mix(in srgb, var(--docs-fg) 22%, transparent) 0 1px, transparent 1.5px);
+        background-position:
+          0 0,
+          24px 38px;
+        background-size:
+          88px 88px,
+          132px 132px;
+        transform: translate3d(0, 0, 0);
+        animation: home-particles-drift 34s linear infinite;
+      }
+
+      .home-particles::after {
+        inset: -12% -16% 28%;
+        opacity: 0.52;
+        background-size:
+          118px 118px,
+          172px 172px;
+        background-position:
+          42px 18px,
+          10px 64px;
+        animation-duration: 48s;
+        animation-direction: reverse;
+      }
+
+      @keyframes home-particles-drift {
+        from {
+          transform: translate3d(0, 0, 0);
+        }
+
+        to {
+          transform: translate3d(42px, 56px, 0);
+        }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        .home-particles::before,
+        .home-particles::after {
+          animation: none;
+        }
+      }
+
+      @media (max-width: 640px) {
+        .home-particles {
+          opacity: 0.42;
+        }
+
+        .home-particles::before,
+        .home-particles::after {
+          bottom: 48%;
+          background-size:
+            118px 118px,
+            164px 164px;
+        }
+      }
+    `,
+  ],
 })
 export class HomePageComponent {
   protected readonly i18n = inject(I18nService);

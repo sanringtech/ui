@@ -5,7 +5,9 @@ import {
   OnDestroy,
   OnInit,
   Renderer2,
+  effect,
   inject,
+  signal,
 } from '@angular/core';
 import { FileUploadComponent } from './file-upload.component';
 
@@ -22,23 +24,25 @@ export class FileTriggerDirective implements OnInit, OnDestroy {
 
   // 存放動態生成的隱藏 input
   private hiddenInput!: HTMLInputElement;
+  private readonly hiddenInputReady = signal(false);
+  private removeChangeListener: (() => void) | null = null;
+
+  constructor() {
+    effect(() => {
+      if (!this.hiddenInputReady()) return;
+      this.syncHiddenInputAttributes();
+    });
+  }
 
   ngOnInit() {
     // 🌟 2. 建立隱藏的原生 input
     this.hiddenInput = this.renderer.createElement('input');
     this.renderer.setAttribute(this.hiddenInput, 'type', 'file');
     this.renderer.setStyle(this.hiddenInput, 'display', 'none');
-
-    // 🌟 3. 同步大腦的設定 (支援多選與格式限制)
-    if (this.upload.multiple()) {
-      this.renderer.setAttribute(this.hiddenInput, 'multiple', 'true');
-    }
-    if (this.upload.accept()) {
-      this.renderer.setAttribute(this.hiddenInput, 'accept', this.upload.accept()!);
-    }
+    this.syncHiddenInputAttributes();
 
     // 🌟 4. 監聽原生 input 的 change 事件 (當使用者選好檔案時)
-    this.renderer.listen(this.hiddenInput, 'change', (event: Event) => {
+    this.removeChangeListener = this.renderer.listen(this.hiddenInput, 'change', (event: Event) => {
       const files = (event.target as HTMLInputElement).files;
       this.upload.handleFiles(files);
 
@@ -48,22 +52,48 @@ export class FileTriggerDirective implements OnInit, OnDestroy {
 
     // 將這個隱藏的 input 附加到畫面上 (插在當前按鈕的旁邊)
     this.renderer.appendChild(this.el.nativeElement.parentNode, this.hiddenInput);
+    this.upload.registerTriggerInput(this.hiddenInput);
+    this.hiddenInputReady.set(true);
   }
 
   // 🌟 5. 攔截宿主元素的點擊事件
   @HostListener('click', ['$event'])
   onClick(event: MouseEvent) {
     event.preventDefault();
-    if (this.upload.disabled()) return;
+    if (this.upload.isDisabled) return;
 
     // 代為點擊那個隱藏的原生 input
     this.hiddenInput.click();
   }
 
   ngOnDestroy() {
+    this.removeChangeListener?.();
+    this.upload.unregisterTriggerInput(this.hiddenInput);
+
     // 🧹 清理機制：元件銷毀時，記得把動態生成的 input 拔掉，避免 Memory Leak
     if (this.hiddenInput && this.hiddenInput.parentNode) {
       this.renderer.removeChild(this.hiddenInput.parentNode, this.hiddenInput);
+    }
+  }
+
+  private syncHiddenInputAttributes(): void {
+    if (this.upload.multiple()) {
+      this.renderer.setAttribute(this.hiddenInput, 'multiple', '');
+    } else {
+      this.renderer.removeAttribute(this.hiddenInput, 'multiple');
+    }
+
+    const accept = this.upload.accept();
+    if (accept && accept !== '*') {
+      this.renderer.setAttribute(this.hiddenInput, 'accept', accept);
+    } else {
+      this.renderer.removeAttribute(this.hiddenInput, 'accept');
+    }
+
+    if (this.upload.isDisabled) {
+      this.renderer.setAttribute(this.hiddenInput, 'disabled', '');
+    } else {
+      this.renderer.removeAttribute(this.hiddenInput, 'disabled');
     }
   }
 }

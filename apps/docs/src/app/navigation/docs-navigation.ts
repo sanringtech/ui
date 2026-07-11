@@ -27,6 +27,7 @@ export type DocsComponentId =
   | 'divider'
   | 'dropdown-menu'
   | 'field'
+  | 'file-upload'
   | 'hover-card'
   | 'input'
   | 'label'
@@ -174,6 +175,12 @@ export const docsComponentItems: DocsComponentNavItem[] = [
     id: 'field',
     labelKey: 'component.field',
     path: '/components/field',
+    active: true,
+  },
+  {
+    id: 'file-upload',
+    labelKey: 'component.fileUpload',
+    path: '/components/file-upload',
     active: true,
   },
   {
