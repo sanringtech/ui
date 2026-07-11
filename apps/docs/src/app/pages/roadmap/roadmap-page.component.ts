@@ -2,7 +2,10 @@ import { Component, inject } from '@angular/core';
 import { NgTemplateOutlet } from '@angular/common';
 import { ComponentPageSectionDefinition } from '../../docs-schema/component-page.types';
 import { I18nService } from '../../i18n/i18n.service';
-import { ComponentPageComponent, ComponentPageSectionComponent } from '../../layouts/component-page';
+import {
+  ComponentPageComponent,
+  ComponentPageSectionComponent,
+} from '../../layouts/component-page';
 
 interface RoadmapItem {
   name: string;
@@ -16,7 +19,9 @@ interface RoadmapItem {
   template: `
     <app-component-page [sections]="sections">
       <header class="border-b border-[var(--docs-border)] pb-10">
-        <h1 class="m-0 text-[34px] font-semibold leading-tight tracking-normal text-[var(--docs-fg)]">
+        <h1
+          class="m-0 text-[34px] font-semibold leading-tight tracking-normal text-[var(--docs-fg)]"
+        >
           {{ i18n.t('sidebar.roadmap') }}
         </h1>
         <p class="mb-0 mt-4 max-w-[620px] text-base leading-[1.7] text-[var(--docs-muted)]">
@@ -199,7 +204,8 @@ export class RoadmapPageComponent {
   protected readonly tier4: RoadmapItem[] = [
     {
       name: 'Navigation Menu',
-      description: 'Mega menu for marketing-site top navigation. High effort, low reuse of existing pieces.',
+      description:
+        'Mega menu for marketing-site top navigation. High effort, low reuse of existing pieces.',
     },
     {
       name: 'Charts',

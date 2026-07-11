@@ -40,7 +40,7 @@ export class ComboboxChipComponent {
   protected combobox = inject(ComboboxComponent);
 
   // 🔍 禁用狀態判斷：如果大腦被禁用了，或者這顆 Chip 自己被禁用了，就鎖死按鈕
-  protected readonly isDisabled = computed(() => this.disabled() || this.combobox.disabled());
+  protected readonly isDisabled = computed(() => this.disabled() || this.combobox.isDisabled());
 
   // 🎨 視覺排版：經典的 Badge/Chip 樣式
   protected readonly chipClass = computed(() =>

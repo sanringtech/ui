@@ -1,5 +1,5 @@
 import { CdkOverlayOrigin } from '@angular/cdk/overlay';
-import { Directive, computed, inject, input } from '@angular/core';
+import { Directive, ElementRef, computed, inject, input } from '@angular/core';
 import { cn } from '../../utils';
 import { SelectComponent } from './select.component';
 
@@ -11,13 +11,19 @@ import { SelectComponent } from './select.component';
     type: 'button',
     role: 'combobox',
     'aria-haspopup': 'listbox',
+    '[id]': 'select.id',
     '[attr.aria-expanded]': 'select.isOpen() ? "true" : "false"',
     '[attr.aria-controls]': 'select.isOpen() ? select.contentId : null',
     '[attr.data-state]': 'select.isOpen() ? "open" : "closed"',
-    '[disabled]': 'select.disabled()',
-    '[attr.aria-disabled]': 'select.disabled() ? "true" : "false"',
+    '[disabled]': 'select.disabledState()',
+    '[attr.aria-disabled]': 'select.disabledState() ? "true" : "false"',
+    '[attr.aria-invalid]': 'select.errorState ? "true" : null',
+    '[attr.aria-required]': 'select.required ? "true" : null',
+    '[attr.aria-describedby]': 'select.describedByAttr',
     '[class]': 'triggerClass()',
     '(click)': 'onClick()',
+    '(focus)': 'select.onTriggerFocus()',
+    '(blur)': 'select.onTriggerBlur()',
     '(keydown.enter)': 'onOpenKeydown($event)',
     '(keydown.space)': 'onOpenKeydown($event)',
     '(keydown.arrowdown)': 'onOpenKeydown($event)',
@@ -31,6 +37,7 @@ export class SelectTriggerDirective {
 
   constructor() {
     this.select.triggerOrigin = this.origin;
+    this.select.registerTrigger(inject(ElementRef));
   }
 
   protected readonly triggerClass = computed(() =>
@@ -45,12 +52,12 @@ export class SelectTriggerDirective {
   );
 
   protected onClick(): void {
-    if (this.select.disabled()) return;
+    if (this.select.disabledState()) return;
     this.select.setOpen(!this.select.isOpen());
   }
 
   protected onOpenKeydown(event: Event): void {
-    if (this.select.disabled()) return;
+    if (this.select.disabledState()) return;
     if (!(event instanceof KeyboardEvent)) return;
 
     event.preventDefault();

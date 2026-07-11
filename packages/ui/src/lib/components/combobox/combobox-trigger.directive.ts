@@ -9,10 +9,16 @@ import { ComboboxComponent } from './combobox.component';
   host: {
     type: 'button',
     role: 'combobox',
+    '[id]': 'combobox.inputId',
     '[attr.aria-expanded]': 'combobox.isOpen()',
     '[attr.aria-controls]': 'combobox.listId',
-    '[attr.disabled]': 'combobox.disabled() ? true : null',
+    '[attr.disabled]': 'combobox.isDisabled() ? true : null',
+    '[attr.aria-invalid]': 'combobox.errorState ? "true" : null',
+    '[attr.aria-required]': 'combobox.fieldRequired ? "true" : null',
+    '[attr.aria-describedby]': 'combobox.computedAriaDescribedBy()',
     '(click)': 'onClick()',
+    '(focus)': 'combobox.onFocus()',
+    '(blur)': 'combobox.onBlur()',
   },
 })
 export class ComboboxTriggerDirective {

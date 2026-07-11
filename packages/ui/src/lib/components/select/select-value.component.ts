@@ -13,10 +13,10 @@ import { cn } from '../../utils';
   },
   template: `
     <ng-content>
-      @if (select.value() === null || select.value() === undefined) {
+      @if (select.selectedValue() === null || select.selectedValue() === undefined) {
         <span class="text-[var(--sanring-muted)]">{{ placeholder() }}</span>
       } @else {
-        <span>{{ select.selectedLabel() ?? select.value() }}</span>
+        <span>{{ select.selectedLabel() ?? select.selectedValue() }}</span>
       }
     </ng-content>
   `,

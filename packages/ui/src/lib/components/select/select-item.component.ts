@@ -59,8 +59,8 @@ export class SelectItemComponent implements AfterViewInit {
   readonly indicatorPosition = input<SelectIndicatorPosition>('start');
   readonly class = input<string | undefined>();
 
-  protected readonly isSelected = computed(() => this.select.value() === this.value());
-  protected readonly isDisabled = computed(() => this.disabled() || this.select.disabled());
+  protected readonly isSelected = computed(() => this.select.selectedValue() === this.value());
+  protected readonly isDisabled = computed(() => this.disabled() || this.select.disabledState());
 
   protected readonly itemClass = computed(() =>
     cn(

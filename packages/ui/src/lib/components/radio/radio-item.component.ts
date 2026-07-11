@@ -97,6 +97,10 @@ export class RadioItemComponent {
     this.select();
   }
 
+  focusOnly(options?: FocusOptions): void {
+    this.btnRef?.nativeElement.focus(options);
+  }
+
   onFocus(): void {
     this.group?.setFocusedItem(this);
   }

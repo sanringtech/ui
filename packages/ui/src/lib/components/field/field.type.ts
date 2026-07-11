@@ -7,6 +7,9 @@ export const FieldType = {
   textarea: 'textarea',
   switch: 'switch',
   select: 'select',
+  checkbox: 'checkbox',
+  radioGroup: 'radio-group',
+  slider: 'slider',
 } as const;
 
 export type FieldType = (typeof FieldType)[keyof typeof FieldType];
