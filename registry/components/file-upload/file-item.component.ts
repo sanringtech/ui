@@ -2,7 +2,8 @@ import { Component, computed, effect, inject, input, signal } from '@angular/cor
 import { LucideFileText, LucideX } from '@lucide/angular';
 import { cn } from '../shared/utils';
 import { ProgressComponent } from '../progress/progress.component';
-import { FileUploadComponent, FileUploadErrorCode } from './file-upload.component';
+import { FileUploadComponent } from './file-upload.component';
+import { FileUploadErrorCode } from './file-upload.type';
 
 const ERROR_HINTS: Record<FileUploadErrorCode, string> = {
   [FileUploadErrorCode.Accept]: 'Unsupported file type',

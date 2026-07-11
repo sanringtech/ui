@@ -237,6 +237,7 @@
       },
       "files": [
         "file-upload/file-upload.component.ts",
+        "file-upload/file-upload.type.ts",
         "file-upload/file-dropzone.component.ts",
         "file-upload/file-trigger.directive.ts",
         "file-upload/file-item.component.ts",

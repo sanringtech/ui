@@ -16,6 +16,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR, NgControl, Validators } from '@angular/forms';
 import { Observable, Subject } from 'rxjs';
 import { FieldType, SANRING_FIELD_CONTROL, SanringFieldControl } from '../field/field.type';
+import { FileRejection, FileUploadErrorCode } from './file-upload.type';
 
 @Component({
   selector: 'sanring-file-upload',
@@ -112,7 +113,9 @@ export class FileUploadComponent implements ControlValueAccessor, OnInit {
 
   ngOnInit(): void {
     this.ngControl = this.injector.get(NgControl, null, { optional: true, self: true });
-    this.ngControl?.statusChanges
+    // Listen to control.events rather than statusChanges only: markAsTouched() does not
+    // emit statusChanges, but it still needs to refresh Field error state.
+    this.ngControl?.control?.events
       ?.pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe(() => this.emitStateChanges());
   }
@@ -257,19 +260,6 @@ export class FileUploadComponent implements ControlValueAccessor, OnInit {
     this.stateVersion.update((v) => v + 1);
     this.stateChangesSubject.next();
   }
-}
-
-export const FileUploadErrorCode = {
-  Accept: 'accept',
-  MaxFiles: 'max-files',
-  MaxSize: 'max-size',
-} as const;
-
-export type FileUploadErrorCode = (typeof FileUploadErrorCode)[keyof typeof FileUploadErrorCode];
-
-export interface FileRejection {
-  file: File;
-  errors: FileUploadErrorCode[];
 }
 
 class FileUploadFieldControlAdapter implements SanringFieldControl<File[]> {
