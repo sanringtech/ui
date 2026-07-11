@@ -2,7 +2,6 @@ import { Component, inject } from '@angular/core';
 import { FormControl, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import {
   CheckboxComponent,
-  CheckboxSize,
   CheckedState,
   ErrorMessageComponent,
   LabelDirective,
@@ -166,19 +165,19 @@ import { checkboxPage, checkboxPageExamples } from './checkbox.docs';
           <div previewer class="flex items-center justify-center">
             <div class="flex items-center gap-6">
               <div class="flex flex-col items-center gap-2">
-                <sanring-checkbox [size]="CheckboxSize.Sm" [(ngModel)]="sizeChecked" />
+                <sanring-checkbox size="sm" [(ngModel)]="sizeChecked" />
                 <span class="text-xs text-muted-foreground">{{
                   i18n.t('checkbox.demo.size.sm')
                 }}</span>
               </div>
               <div class="flex flex-col items-center gap-2">
-                <sanring-checkbox [size]="CheckboxSize.Md" [(ngModel)]="sizeChecked" />
+                <sanring-checkbox size="md" [(ngModel)]="sizeChecked" />
                 <span class="text-xs text-muted-foreground">{{
                   i18n.t('checkbox.demo.size.md')
                 }}</span>
               </div>
               <div class="flex flex-col items-center gap-2">
-                <sanring-checkbox [size]="CheckboxSize.Lg" [(ngModel)]="sizeChecked" />
+                <sanring-checkbox size="lg" [(ngModel)]="sizeChecked" />
                 <span class="text-xs text-muted-foreground">{{
                   i18n.t('checkbox.demo.size.lg')
                 }}</span>
@@ -223,7 +222,6 @@ export class CheckboxPageComponent {
   protected readonly page = checkboxPage;
   protected readonly examples = checkboxPageExamples;
   protected readonly i18n = inject(I18nService);
-  protected readonly CheckboxSize = CheckboxSize;
 
   basicChecked: CheckedState = false;
   indeterminate: CheckedState = 'indeterminate';

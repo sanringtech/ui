@@ -100,7 +100,7 @@ export class CheckboxComponent implements ControlValueAccessor, OnInit {
   readonly ariaLabel = input<string | undefined>();
   readonly ariaLabelledBy = input<string | undefined>();
   readonly ariaDescribedBy = input<string | undefined>();
-  readonly size = input<CheckboxSize>(CheckboxSize.Md);
+  readonly size = input<CheckboxSize>('md');
   readonly checked = input<CheckedState>(false);
 
   readonly checkedChange = output<CheckedState>();
@@ -108,14 +108,14 @@ export class CheckboxComponent implements ControlValueAccessor, OnInit {
   protected checkedSignal = signal<CheckedState>(false);
   protected readonly isDisabled = computed(() => this.disabled() || this.disabledState());
   protected readonly iconSizeClass = computed(
-    () => CHECKBOX_ICON_SIZE_CLASSES[this.size()] ?? CHECKBOX_ICON_SIZE_CLASSES[CheckboxSize.Md],
+    () => CHECKBOX_ICON_SIZE_CLASSES[this.size()] ?? CHECKBOX_ICON_SIZE_CLASSES['md'],
   );
   protected readonly checkboxClass = computed(() =>
     cn(
       SELECTION_CONTROL_BASE_CLASS,
       SELECTION_CONTROL_FOCUS_CLASS,
       'rounded-[var(--sanring-radius-xs)] border border-primary',
-      CHECKBOX_SIZE_CLASSES[this.size()] ?? CHECKBOX_SIZE_CLASSES[CheckboxSize.Md],
+      CHECKBOX_SIZE_CLASSES[this.size()] ?? CHECKBOX_SIZE_CLASSES['md'],
       CHECKBOX_STATE_CLASS,
       // 讀 this.errorState（getter）而不是直接寫條件，是為了讓下面 stateVersion 的橋接生效，
       // 否則 ngControl.invalid/touched 不是 signal，這個 computed 不會在驗證狀態改變時重算

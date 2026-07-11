@@ -150,8 +150,8 @@ export const checkboxPage = {
     },
     {
       property: 'size',
-      type: 'CheckboxSize',
-      defaultValue: 'CheckboxSize.Md',
+      type: "'sm' | 'md' | 'lg'",
+      defaultValue: "'md'",
       descriptionKey: 'checkbox.api.size.description',
     },
   ] satisfies readonly ComponentPageApiRow[],
@@ -200,15 +200,15 @@ export const checkboxPageExamples = {
 </div>`,
   size: `<div class="flex items-center gap-6">
   <div class="flex flex-col items-center gap-2">
-    <sanring-checkbox [size]="CheckboxSize.Sm" [(ngModel)]="checked" />
+    <sanring-checkbox size="sm" [(ngModel)]="checked" />
     <span class="text-xs text-muted-foreground">Sm</span>
   </div>
   <div class="flex flex-col items-center gap-2">
-    <sanring-checkbox [size]="CheckboxSize.Md" [(ngModel)]="checked" />
+    <sanring-checkbox size="md" [(ngModel)]="checked" />
     <span class="text-xs text-muted-foreground">Md</span>
   </div>
   <div class="flex flex-col items-center gap-2">
-    <sanring-checkbox [size]="CheckboxSize.Lg" [(ngModel)]="checked" />
+    <sanring-checkbox size="lg" [(ngModel)]="checked" />
     <span class="text-xs text-muted-foreground">Lg</span>
   </div>
 </div>`,

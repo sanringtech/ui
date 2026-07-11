@@ -80,7 +80,7 @@ export class CheckboxComponent implements ControlValueAccessor {
   readonly ariaLabel = input<string | undefined>();
   readonly ariaLabelledBy = input<string | undefined>();
   readonly ariaDescribedBy = input<string | undefined>();
-  readonly size = input<CheckboxSize>(CheckboxSize.Md);
+  readonly size = input<CheckboxSize>('md');
   readonly checked = input<CheckedState>(false);
 
   readonly checkedChange = output<CheckedState>();
@@ -88,14 +88,14 @@ export class CheckboxComponent implements ControlValueAccessor {
   protected checkedSignal = signal<CheckedState>(false);
   protected readonly isDisabled = computed(() => this.disabled() || this.disabledState());
   protected readonly iconSizeClass = computed(
-    () => CHECKBOX_ICON_SIZE_CLASSES[this.size()] ?? CHECKBOX_ICON_SIZE_CLASSES[CheckboxSize.Md],
+    () => CHECKBOX_ICON_SIZE_CLASSES[this.size()] ?? CHECKBOX_ICON_SIZE_CLASSES['md'],
   );
   protected readonly checkboxClass = computed(() =>
     cn(
       SELECTION_CONTROL_BASE_CLASS,
       SELECTION_CONTROL_FOCUS_CLASS,
       'rounded-sm border border-primary',
-      CHECKBOX_SIZE_CLASSES[this.size()] ?? CHECKBOX_SIZE_CLASSES[CheckboxSize.Md],
+      CHECKBOX_SIZE_CLASSES[this.size()] ?? CHECKBOX_SIZE_CLASSES['md'],
       CHECKBOX_STATE_CLASS,
       this.class(),
     ),

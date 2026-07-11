@@ -3,8 +3,7 @@ import { CdkStepHeader } from '@angular/cdk/stepper';
 import { Component, TemplateRef, computed, input } from '@angular/core';
 import { LucideCheck, LucideCircleAlert } from '@lucide/angular';
 import { cn } from '../shared/utils';
-import { StepIconContext } from './step-icon.directive';
-import { StepState } from './stepper.type';
+import { StepIconContext, StepState } from './stepper.type';
 
 @Component({
   selector: 'sanring-step-header',

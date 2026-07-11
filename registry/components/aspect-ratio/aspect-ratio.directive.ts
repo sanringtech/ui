@@ -1,7 +1,6 @@
 import { Directive, computed, input } from '@angular/core';
 import { cn } from '../shared/utils';
-
-export type AspectRatioValue = string | number;
+import { AspectRatioValue } from './aspect-ratio.type';
 
 function coerceAspectRatio(value: AspectRatioValue | '' | null | undefined): AspectRatioValue {
   return value === '' || value == null ? '1 / 1' : value;

@@ -1,10 +1,7 @@
 import { ChangeDetectionStrategy, Component, computed, input } from '@angular/core';
 import { LucideLoader, LucideLoaderCircle, LucideLoaderPinwheel } from '@lucide/angular';
 import { cn } from '../../utils';
-
-export type SpinnerVariant = 'loader' | 'loader-circle' | 'pinwheel';
-export type SpinnerSize = 'sm' | 'md' | 'lg' | 'xl';
-export type SpinnerSpeed = 'slow' | 'normal' | 'fast';
+import { SpinnerSize, SpinnerSpeed, SpinnerVariant } from './spinner.type';
 
 const SIZES: Record<SpinnerSize, string> = {
   sm: 'size-4',

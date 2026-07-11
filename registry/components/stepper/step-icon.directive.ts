@@ -1,10 +1,5 @@
 import { Directive, TemplateRef, inject } from '@angular/core';
-
-export interface StepIconContext {
-  $implicit: number;
-  index: number;
-  state: string;
-}
+import { StepIconContext } from './stepper.type';
 
 @Directive({
   selector: 'ng-template[sanringStepIcon]',
