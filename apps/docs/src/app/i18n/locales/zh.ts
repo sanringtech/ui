@@ -1327,8 +1327,11 @@ export const zh: Record<TranslationKey, string> = {
   'fileUpload.api.maxFiles.description': '啟用 multiple 時允許的最大檔案數，超出的檔案會被拒絕。',
   'fileUpload.api.files.description':
     '已選取的檔案。可用 [(files)] 雙向綁定，或透過 ngModel/formControl 綁定。',
+  'fileUpload.api.progress.description':
+    'sanring-file-item 有一個獨立的 [progress] input（0-100）。FileUploadComponent 本身不處理實際上傳，所以這個值永遠來自你自己的上傳邏輯——傳 null 就會退回顯示檔案大小。',
   'fileUpload.demo.dropzone': 'Dropzone',
   'fileUpload.demo.trigger': '只有 Trigger',
+  'fileUpload.demo.progress': '上傳進度',
   'fileUpload.demo.multiple': '多檔案',
   'fileUpload.demo.validation': '驗證',
   'fileUpload.demo.disabled': '停用',
@@ -1336,7 +1339,10 @@ export const zh: Record<TranslationKey, string> = {
   'fileUpload.demo.browse': '瀏覽檔案',
   'fileUpload.demo.dropHint': '或拖放到這裡',
   'fileUpload.demo.chooseFile': '選擇檔案',
+  'fileUpload.demo.startUpload': '模擬上傳',
   'fileUpload.demo.fieldLabel': '履歷',
   'fileUpload.demo.fieldHint': '僅限 PDF，最大 2MB。',
   'fileUpload.demo.fieldError': '此欄位為必填。',
+  'fileUpload.examples.progress.description':
+    'sanring-file-item 有個可選的 [progress] input——從你自己的上傳邏輯傳一個 0-100 的數字進去，就會用進度條取代檔案大小顯示；上傳完成後把它設回 null 即可。',
 };

@@ -50,13 +50,20 @@ export class FileDropzoneComponent {
   // 一樣要有視覺回饋，所以 isDragging 的樣式獨立在最外層、跟 hasContent 是否顯示清單無關。
   protected readonly dropzoneClass = computed(() =>
     cn(
-      'relative rounded-lg border-2 transition-colors',
-      this.hasContent() ? 'border-transparent p-0' : 'border-dashed border-[var(--sanring-border-strong)] p-6',
+      'relative rounded-lg border-2',
+      // p-0 讓外層 border 直接貼在 sanring-file-item 自己的 border 上——平常外層是透明的
+      // 看不出來，但拖曳時外層變色，兩條 border 會緊貼著同時出現，看起來像重複的線。
+      // 留一點 padding 讓兩層 border 之間有間距，拖曳變色時才不會黏在一起。
+      this.hasContent() ? 'border-transparent p-2' : 'border-dashed border-[var(--sanring-border-strong)] p-6',
       !this.hasContent() && 'flex flex-col items-center justify-center hover:bg-[var(--sanring-surface-strong)]',
-      // 拖曳中的視覺回饋：不管有沒有已存在的檔案都要變色。用 --sanring-active（跟 select-item
-      // 選中狀態同一個 token）而不是 --sanring-primary，因為後者在 docs app 沒有實際定義成
-      // CSS 變數（只有橋接給 Tailwind 的 --color-primary），直接當 var() 用會是空值
-      this.isDragging() && 'border-[var(--sanring-active)] bg-[var(--sanring-active)]/30',
+      // transition-colors 只在拖曳中才加，不要放在最外層當基礎 class：空狀態的邊框是
+      // border-dashed，一旦選到檔案（不管是拖放還是點按鈕），hasContent 從 false → true
+      // 會同時把 border-style 從 dashed 切成 solid、border-color 從 border-strong 切成
+      // transparent——瀏覽器沒辦法把 dashed 平滑轉成 solid，兩者疊在一起造成圓角處噴出
+      // 破碎殘影（看起來像兩側凸起的小三角形）。拿掉基礎 transition-colors 後，這個切換
+      // 會直接跳過去，不再嘗試動畫化一個做不到的轉場；只有 isDragging 這個「同一個狀態內」
+      // 的顏色變化才需要、也才能被平滑轉場。
+      this.isDragging() && 'transition-colors border-[var(--sanring-active)] bg-[var(--sanring-active)]/30',
       this.upload.isDisabled && 'pointer-events-none opacity-50 cursor-not-allowed',
       this.class(),
     ),

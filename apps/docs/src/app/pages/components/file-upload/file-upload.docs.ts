@@ -36,6 +36,12 @@ export const fileUploadPage = {
           level: 3,
         },
         {
+          id: 'example-progress',
+          titleKey: 'fileUpload.demo.progress',
+          descriptionKey: 'fileUpload.examples.progress.description',
+          level: 3,
+        },
+        {
           id: 'example-multiple',
           titleKey: 'fileUpload.demo.multiple',
           level: 3,
@@ -107,6 +113,12 @@ export const fileUploadPage = {
       defaultValue: '[]',
       descriptionKey: 'fileUpload.api.files.description',
     },
+    {
+      property: 'sanring-file-item [progress]',
+      type: 'number | null',
+      defaultValue: 'null',
+      descriptionKey: 'fileUpload.api.progress.description',
+    },
   ] satisfies readonly ComponentPageApiRow[],
 } as const satisfies ComponentPageDefinition;
 
@@ -143,6 +155,17 @@ export const fileUploadPageExamples = {
   <button sanringFileTrigger type="button">Choose file</button>
   @if (files.length) {
     <sanring-file-item [file]="files[0]" />
+  }
+</sanring-file-upload>`,
+  progress: `<!-- sanring-file-item injects FileUploadComponent, so it must stay nested
+     inside <sanring-file-upload> — as a sibling it can't find a provider (NG0201).
+     FileUploadComponent never performs the upload itself, so the progress number
+     always comes from your own upload call (HttpClient reportProgress,
+     XMLHttpRequest.upload.onprogress, etc). Pass it straight into [progress]. -->
+<sanring-file-upload [(ngModel)]="files">
+  <button sanringFileTrigger type="button">Choose file</button>
+  @if (files[0]; as file) {
+    <sanring-file-item [file]="file" [progress]="uploadProgress()" />
   }
 </sanring-file-upload>`,
   multiple: `<sanring-file-upload multiple [(ngModel)]="files">

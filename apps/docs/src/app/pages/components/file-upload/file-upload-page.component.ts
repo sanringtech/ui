@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { FormControl, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { LucideUpload } from '@lucide/angular';
 import {
@@ -115,6 +115,39 @@ import { fileUploadPage, fileUploadPageExamples } from './file-upload.docs';
             </app-component-page-code-previewer>
           </app-component-page-section>
 
+          <app-component-page-section [section]="section('example-progress')">
+            <app-component-page-code-previewer [code]="examples.progress" language="angular-html">
+              <div previewer class="flex w-[min(420px,100%)] flex-col items-center gap-3">
+                <sanring-file-upload [(ngModel)]="progressFiles">
+                  <button
+                    sanringFileTrigger
+                    type="button"
+                    class="rounded-[var(--sanring-radius)] border border-[var(--sanring-border-strong)] px-3 py-2 text-sm"
+                  >
+                    {{ i18n.t('fileUpload.demo.chooseFile') }}
+                  </button>
+
+                  <!-- sanring-file-item injects FileUploadComponent, so it has to stay
+                       nested inside <sanring-file-upload> — as a sibling it can't find a
+                       provider (NG0201) -->
+                  @if (progressFiles[0]; as file) {
+                    <sanring-file-item [file]="file" [progress]="progressValue()" class="w-full" />
+                  }
+                </sanring-file-upload>
+
+                @if (progressFiles[0]) {
+                  <button
+                    type="button"
+                    class="text-sm underline underline-offset-2"
+                    (click)="startSimulatedUpload()"
+                  >
+                    {{ i18n.t('fileUpload.demo.startUpload') }}
+                  </button>
+                }
+              </div>
+            </app-component-page-code-previewer>
+          </app-component-page-section>
+
           <app-component-page-section [section]="section('example-multiple')">
             <app-component-page-code-previewer [code]="examples.multiple" language="angular-html">
               <div previewer class="w-[min(420px,100%)]">
@@ -212,6 +245,7 @@ export class FileUploadPageComponent {
 
   basicFiles: File[] = [];
   triggerFiles: File[] = [];
+  progressFiles: File[] = [];
   multipleFiles: File[] = [];
   validatedFiles: File[] = [];
 
@@ -219,6 +253,29 @@ export class FileUploadPageComponent {
     nonNullable: true,
     validators: [Validators.required],
   });
+
+  // 這裡的進度是純模擬——FileUploadComponent 本身不打任何 API，實際專案裡這個數字
+  // 要從你自己的上傳呼叫（HttpClient reportProgress、XHR upload.onprogress...）回報進來
+  protected readonly progressValue = signal<number | null>(null);
+  private progressTimer?: ReturnType<typeof setInterval>;
+
+  protected startSimulatedUpload(): void {
+    clearInterval(this.progressTimer);
+    this.progressValue.set(0);
+
+    this.progressTimer = setInterval(() => {
+      const next = (this.progressValue() ?? 0) + 10;
+
+      if (next >= 100) {
+        clearInterval(this.progressTimer);
+        this.progressValue.set(100);
+        setTimeout(() => this.progressValue.set(null), 600);
+        return;
+      }
+
+      this.progressValue.set(next);
+    }, 200);
+  }
 
   constructor() {
     this.resumeControl.markAsTouched();

@@ -1,6 +1,7 @@
 import { Component, computed, effect, inject, input, signal } from '@angular/core';
 import { LucideFileText, LucideX } from '@lucide/angular';
 import { cn } from '../../utils';
+import { ProgressComponent } from '../progress/progress.component';
 import { FileUploadComponent, FileUploadErrorCode } from './file-upload.component';
 
 const ERROR_HINTS: Record<FileUploadErrorCode, string> = {
@@ -12,7 +13,7 @@ const ERROR_HINTS: Record<FileUploadErrorCode, string> = {
 @Component({
   selector: 'sanring-file-item',
   standalone: true,
-  imports: [LucideFileText, LucideX],
+  imports: [LucideFileText, LucideX, ProgressComponent],
   template: `
     <div [class]="itemClass()">
       <div
@@ -29,9 +30,13 @@ const ERROR_HINTS: Record<FileUploadErrorCode, string> = {
         <p class="truncate text-sm font-medium text-[var(--sanring-foreground)]">
           {{ file().name }}
         </p>
-        <!-- hint 只在這個檔案被拒絕時才顯示，取代原本的檔案大小 -->
+        <!-- hint 只在這個檔案被拒絕時才顯示，取代原本的檔案大小；上傳進度則取代大小顯示，
+             progress 是不是還在跑、什麼時候清掉都由外部決定，這裡只負責畫 -->
         @if (hint(); as hintText) {
           <p class="truncate text-xs text-red-500">{{ hintText }}</p>
+        } @else if (progress() !== null) {
+          <p class="text-xs text-[var(--sanring-muted)]">{{ progress() }}%</p>
+          <sanring-progress [value]="progress()!" class="mt-1" />
         } @else {
           <p class="text-xs text-[var(--sanring-muted)]">{{ formattedSize() }}</p>
         }
@@ -53,6 +58,9 @@ export class FileItemComponent {
   readonly file = input.required<File>();
   // 只有「被拒絕」的檔案才會帶 errors 進來（見 FileDropzoneComponent），一般已接受的檔案是空陣列
   readonly errors = input<readonly FileUploadErrorCode[]>([]);
+  // 上傳進度 (0-100)：這個庫不處理實際上傳，進度值完全由外部（打 API 的那一端）回報，
+  // 維持 null 就不顯示 progress bar，什麼時候該歸零/清掉也由外部決定
+  readonly progress = input<number | null>(null);
 
   private readonly upload = inject(FileUploadComponent);
 
