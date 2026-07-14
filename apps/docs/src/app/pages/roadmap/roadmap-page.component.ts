@@ -130,6 +130,7 @@ export class RoadmapPageComponent {
     { name: 'Badge', description: '' },
     { name: 'Breadcrumb', description: '' },
     { name: 'Button', description: '' },
+    { name: 'Calendar', description: '' },
     { name: 'Card', description: '' },
     { name: 'Carousel', description: '' },
     { name: 'Checkbox', description: '' },
@@ -180,10 +181,10 @@ export class RoadmapPageComponent {
 
   protected readonly tier2: RoadmapItem[] = [
     {
-      name: 'Date Picker / Calendar',
-      meta: 'scaffolded',
+      name: 'Date Picker',
+      meta: 'next build',
       description:
-        'Directory exists, but the current index is empty. Finish calendar/date math, selection model, forms integration, and docs before exposing.',
+        'Compose Calendar with popover, trigger, input formatting, and forms integration for the full date-picker workflow.',
     },
   ];
 

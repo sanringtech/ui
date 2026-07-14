@@ -967,7 +967,7 @@ export const en = {
   'intro.coverage.title': 'Current coverage',
   'intro.coverage.components.title': 'Documented components',
   'intro.coverage.components.description':
-    'The docs now cover core controls, forms, overlays, navigation, feedback, and data display primitives.',
+    'The docs now cover core controls, forms, overlays, navigation, feedback, date selection, and data display primitives.',
   'intro.coverage.groups.title': 'Primary groups',
   'intro.coverage.groups.description':
     'Controls, overlays, data display, and layout/navigation are the current focus areas.',
@@ -977,7 +977,7 @@ export const en = {
   'intro.requirements.title': 'Requirements',
   'intro.installation.title': 'Installation',
   'intro.installation.body':
-    'Install the base package when you want to consume primitives directly from @sanring/ui.',
+    'Install the base package when you want to consume primitives directly from @sanring/ui. Calendar also uses @sanring/date-picker as a peer dependency.',
   'intro.installation.tailwind':
     'Then import the generated theme file and tell Tailwind to scan package and local component source. Add this to your CSS entry file:',
   'intro.workflow.title': 'Recommended workflow',
@@ -1034,7 +1034,7 @@ export const en = {
     "Run once per project. Verifies you're in an Angular project, writes a sanring.config.json with your chosen component path, generates src/sanring-theme.css (the --sanring-* design tokens every component reads — skipped by default if it already exists, to protect your customizations), and installs the base peer dependencies (clsx, tailwind-merge).",
   'cli.add.title': 'add',
   'cli.add.body':
-    "Copies one or more components' source files into your project and installs any missing peer dependencies. If a component depends on another (e.g. file-upload depends on field and progress), the dependency is added automatically. Pass --dry-run to preview exactly which files would be created or overwritten without touching your filesystem.",
+    "Copies one or more components' source files into your project and installs any missing peer dependencies. If a component depends on another package or primitive (e.g. calendar depends on @sanring/date-picker), the dependency is added automatically. Pass --dry-run to preview exactly which files would be created or overwritten without touching your filesystem.",
   'cli.diff.title': 'diff',
   'cli.diff.body':
     "Sanring UI has no version concept — components are copied source, not npm packages — so there's no automatic way to know if your local files have drifted from the registry. diff compares your installed components and sanring-theme.css against the current registry line by line, showing what you've customized locally and what's changed upstream, so you can check before running add --force. Omit the component names to check everything currently installed.",

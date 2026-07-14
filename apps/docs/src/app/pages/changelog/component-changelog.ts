@@ -34,6 +34,17 @@ export interface ComponentChangelogEntry {
  */
 export const componentChangelog: readonly ComponentChangelogEntry[] = [
   {
+    date: '2026-07-14',
+    changes: [
+      {
+        type: 'added',
+        notable: true,
+        componentIds: ['calendar'],
+        text: 'New Calendar component page — single-date selection, disabled rules, range draft handling, multi-month display, sizing, locale configuration, and API guidance.',
+      },
+    ],
+  },
+  {
     date: '2026-07-11',
     changes: [
       {

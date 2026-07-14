@@ -170,18 +170,18 @@ export class CliPageComponent {
 
   protected readonly commands = {
     overview: `npx @sanring/cli@latest init
-npx @sanring/cli@latest add file-upload`,
+npx @sanring/cli@latest add calendar`,
     init: `npx @sanring/cli@latest init`,
-    add: `npx @sanring/cli@latest add file-upload
+    add: `npx @sanring/cli@latest add calendar
 
 # add multiple components at once
-npx @sanring/cli@latest add file-upload dialog
+npx @sanring/cli@latest add calendar dialog
 
 # component dependencies are added automatically
-npx @sanring/cli@latest add file-upload
+npx @sanring/cli@latest add calendar
 
 # preview what would change, without writing any files
-npx @sanring/cli@latest add file-upload --dry-run`,
+npx @sanring/cli@latest add calendar --dry-run`,
     diff: `# check everything installed
 npx @sanring/cli@latest diff
 

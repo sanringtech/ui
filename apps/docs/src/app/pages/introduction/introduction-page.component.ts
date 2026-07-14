@@ -135,7 +135,7 @@ export class IntroductionPageComponent {
       descriptionKey: 'intro.coverage.groups.description',
     },
     {
-      value: '2',
+      value: '1',
       titleKey: 'intro.coverage.next.title',
       descriptionKey: 'intro.coverage.next.description',
     },
@@ -149,23 +149,41 @@ export class IntroductionPageComponent {
 @source "./app/components/ui";`;
 
   protected readonly cliWorkflow = `npx @sanring/cli@latest init
-npx @sanring/cli@latest add file-upload`;
+npx @sanring/cli@latest add calendar`;
 
-  protected readonly firstComponent = `import {
-  FileDropzoneComponent,
-  FileTriggerDirective,
-  FileUploadComponent,
-} from './components/ui/file-upload';
+  protected readonly firstComponent = `import { CALENDAR_LOCALE } from '@sanring/date-picker';
+import { CalendarComponent } from './components/ui/calendar';
 
 @Component({
-  imports: [FileDropzoneComponent, FileTriggerDirective, FileUploadComponent],
+  imports: [CalendarComponent],
+  providers: [
+    {
+      provide: CALENDAR_LOCALE,
+      useValue: {
+        weekStartsOn: 0,
+        weekdayLabels: ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'],
+        monthLabels: [
+          'January',
+          'February',
+          'March',
+          'April',
+          'May',
+          'June',
+          'July',
+          'August',
+          'September',
+          'October',
+          'November',
+          'December',
+        ],
+      },
+    },
+  ],
   template: \`
-    <sanring-file-upload>
-      <sanring-file-dropzone>
-        <button sanringFileTrigger type="button">Browse files</button>
-      </sanring-file-dropzone>
-    </sanring-file-upload>
+    <sanring-calendar (selectedDateChange)="selectedDate = $event" />
   \`,
 })
-export class AppComponent {}`;
+export class AppComponent {
+  selectedDate: Date | null = null;
+}`;
 }
