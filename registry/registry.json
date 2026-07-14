@@ -140,6 +140,23 @@
       ]
     },
     {
+      "name": "calendar",
+      "description": "A date field grid that allows users to select a single date or range.",
+      "sharedDeps": ["utils", "component-styles"],
+      "componentDeps": ["button"],
+      "peerDependencies": {
+        "@lucide/angular": "^1.0.0",
+        "@sanring/date-picker": "^0.1.0"
+      },
+      "files": [
+        "calendar/calendar.component.ts",
+        "calendar/calendar-day.directive.ts",
+        "calendar/calendar-header.component.ts",
+        "calendar/calendar.type.ts",
+        "calendar/index.ts"
+      ]
+    },
+    {
       "name": "card",
       "description": "Displays a card with header, content, and footer.",
       "sharedDeps": ["utils", "component-styles"],

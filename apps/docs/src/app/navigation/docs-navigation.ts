@@ -17,6 +17,7 @@ export type DocsComponentId =
   | 'badge'
   | 'breadcrumb'
   | 'button'
+  | 'calendar'
   | 'card'
   | 'carousel'
   | 'checkbox'
@@ -116,6 +117,12 @@ export const docsComponentItems: DocsComponentNavItem[] = [
     id: 'button',
     labelKey: 'component.button',
     path: '/components/button',
+    active: true,
+  },
+  {
+    id: 'calendar',
+    labelKey: 'component.calendar',
+    path: '/components/calendar',
     active: true,
   },
   {

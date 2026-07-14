@@ -16,6 +16,7 @@ export * from './lib/components/collapsible';
 export * from './lib/components/command';
 export * from './lib/components/combobox';
 export * from './lib/components/badge';
+export * from './lib/components/calendar';
 export * from './lib/components/card';
 export * from './lib/components/carousel';
 export * from './lib/components/dialog';

@@ -40,6 +40,7 @@ export const en = {
   'component.badge': 'Badge',
   'component.breadcrumb': 'Breadcrumb',
   'component.button': 'Button',
+  'component.calendar': 'Calendar',
   'component.card': 'Card',
   'component.carousel': 'Carousel',
   'component.checkbox': 'Checkbox',
@@ -193,7 +194,8 @@ export const en = {
   'accordion.composition.description':
     'The component is split into root, item, trigger, and content primitives so each part remains reusable.',
   'accordion.api.description': 'Inputs and outputs supported by the accordion primitives.',
-  'accordion.api.multi.description': 'Allows multiple accordion items to stay open at the same time.',
+  'accordion.api.multi.description':
+    'Allows multiple accordion items to stay open at the same time.',
   'accordion.api.expanded.description': 'Controls whether an accordion item is open.',
   'accordion.api.disabled.description': 'Disables interaction for an accordion item.',
   'accordion.api.variant.description':
@@ -214,8 +216,7 @@ export const en = {
     'Use Alert for persistent information that should remain visible until the underlying state changes.',
   'alert.examples.basic.description':
     'Alert reserves space in the layout and combines an icon, title, and description.',
-  'alert.usage.description':
-    'Import Alert primitives and compose them with native text and icons.',
+  'alert.usage.description': 'Import Alert primitives and compose them with native text and icons.',
   'alert.installation.description':
     'Import AlertComponent, AlertTitleDirective, and AlertDescriptionDirective from @sanring/ui.',
   'alert.composition.description':
@@ -284,8 +285,7 @@ export const en = {
   'button.api.class.description': 'Additional classes merged with the base button styles.',
   'button.api.variant.description':
     'Controls visual emphasis: default, secondary, outline, ghost, destructive, or link.',
-  'button.api.size.description':
-    'Controls button density: sm, md, icon, toolbar, or toolbarIcon.',
+  'button.api.size.description': 'Controls button density: sm, md, icon, toolbar, or toolbarIcon.',
   'badge.description': 'A compact label for status, counts, metadata, and inline categories.',
   'badge.demo.default': 'Default',
   'badge.demo.secondary': 'Secondary',
@@ -301,7 +301,8 @@ export const en = {
   'badge.examples.description': 'Common badge variants for metadata and status labels.',
   'badge.examples.basic.description':
     'Use badges as compact inline labels on text, cards, lists, or links.',
-  'badge.usage.description': 'Import BadgeDirective from @sanring/ui and apply sanringBadge to an element.',
+  'badge.usage.description':
+    'Import BadgeDirective from @sanring/ui and apply sanringBadge to an element.',
   'badge.installation.description':
     'Import Badge and choose a variant that matches the metadata priority.',
   'badge.composition.description':
@@ -338,6 +339,70 @@ export const en = {
     'Places the badge at the visual start or end edge, respecting RTL direction.',
   'avatar.api.overlap.description': 'Stack overlap amount in rem for avatar groups.',
   'avatar.api.count.description': 'Number displayed by the avatar group count item.',
+  'calendar.description':
+    'A date grid built on the headless @sanring/date-picker engine, supporting single, range, and multi-month selection.',
+  'calendar.examples.description':
+    'The 5 states below map directly onto @sanring/date-picker’s own progressive demo scenarios.',
+  'calendar.demo.basic': 'Basic single-select',
+  'calendar.demo.basic.description':
+    'Default state: pick any day, click it again to deselect. No disabled rules.',
+  'calendar.demo.noDeselect': 'No deselect',
+  'calendar.demo.noDeselect.description':
+    'allowDeselect = false — clicking the already-selected date again does not clear it.',
+  'calendar.demo.disabled': 'With disabled rules',
+  'calendar.demo.disabled.description':
+    'Weekends (predicate function) plus a 7/20–7/24 break (interval), combined; deselect is also off.',
+  'calendar.demo.range': 'Range selection',
+  'calendar.demo.range.description':
+    'First click sets the start (enters Draft), second click commits the range; "Abort draft" rolls it back.',
+  'calendar.demo.multiMonth': 'Multi-month',
+  'calendar.demo.multiMonth.description':
+    'Two months rendered side by side; arrow keys move seamlessly between them and only page at the outer edge.',
+  'calendar.demo.sizes': 'Sizes',
+  'calendar.demo.size.sm': 'Sm',
+  'calendar.demo.size.md': 'Md',
+  'calendar.demo.size.lg': 'Lg',
+  'calendar.demo.infoBlockSeparate': 'Info block: separate',
+  'calendar.demo.infoBlockInline': 'Info block: inline',
+  'calendar.demo.clear': 'Clear',
+  'calendar.demo.abortDraft': 'Abort draft',
+  'calendar.demo.noSelection': 'Not selected',
+  'calendar.demo.selected': 'Selected: ',
+  'calendar.demo.rangeStart': 'Start: ',
+  'calendar.demo.rangeAwaitingEnd': ' (pick an end date)',
+  'calendar.demo.rangeSeparator': ' – ',
+  'calendar.examples.basic.description':
+    'Throws without a locale — CALENDAR_LOCALE has no default, forcing an explicit choice of week start and month/weekday labels.',
+  'calendar.usage.description':
+    'Import CalendarComponent and provide CALENDAR_LOCALE at the app or component level.',
+  'calendar.installation.description':
+    'Import CalendarComponent from @sanring/ui, and additionally install @sanring/date-picker as a peer dependency.',
+  'calendar.api.description': 'Inputs, outputs, and public methods supported by CalendarComponent.',
+  'calendar.api.class.description': 'Additional classes merged with the component base styles.',
+  'calendar.api.size.description': 'Size of each day cell.',
+  'calendar.api.locale.description':
+    'Overrides the injected CALENDAR_LOCALE; falls back to the injected token when omitted.',
+  'calendar.api.mode.description':
+    'Single or range selection mode; switching resets the current selection.',
+  'calendar.api.monthsToDisplay.description': 'Number of months rendered side by side.',
+  'calendar.api.disabled.description':
+    'Disabled-date matcher: a single date, an array, an interval, or a predicate function.',
+  'calendar.api.allowDeselect.description':
+    'Whether re-clicking the selected date clears the selection.',
+  'calendar.api.prevMonthLabel.description':
+    'aria-label for the previous-month button, overridable for i18n.',
+  'calendar.api.nextMonthLabel.description':
+    'aria-label for the next-month button, overridable for i18n.',
+  'calendar.api.selectedDateChange.description':
+    'Emits when the selected date changes in single mode.',
+  'calendar.api.isDraftActive.description':
+    'In range mode, whether the first endpoint is picked and a second one is pending.',
+  'calendar.api.clear.description':
+    'Clears the current selection (also discards an in-progress range draft).',
+  'calendar.api.abortRangeDraft.description':
+    'Aborts an in-progress range draft without touching the committed range.',
+  'calendar.api.selectedRangeChange.description':
+    'Emits when the selected range changes in range mode.',
   'card.description':
     'A composable surface primitive for forms, metrics, media, lists, and any structured content.',
   'card.demo.form': 'Standard form',
@@ -378,8 +443,10 @@ export const en = {
   'dialog.api.description': 'Inputs supported by the dialog primitives.',
   'dialog.api.class.description': 'Additional classes merged with DialogContent layout styles.',
   'dialog.api.showClose.description': 'Controls whether the built-in close button is rendered.',
-  'dialog.api.triggerConfig.description': 'CDK DialogConfig passed when sanringDialogTrigger opens the template.',
-  'dialog.api.closeResult.description': 'Optional result value emitted when sanringDialogClose closes the dialog.',
+  'dialog.api.triggerConfig.description':
+    'CDK DialogConfig passed when sanringDialogTrigger opens the template.',
+  'dialog.api.closeResult.description':
+    'Optional result value emitted when sanringDialogClose closes the dialog.',
   'dialog.api.mediaClass.description': 'Additional classes merged with the dialog media container.',
   'divider.description': 'A simple separator for grouping content and actions in a layout.',
   'divider.demo.account': 'Account',
@@ -408,7 +475,7 @@ export const en = {
   'field.examples.description':
     'Common Field patterns for floating labels, validation state, and disabled controls.',
   'field.examples.basic.description':
-    'Wrap a label, control, and description in sanring-field — the label\'s for attribute and the control\'s aria-describedby are wired up automatically.',
+    "Wrap a label, control, and description in sanring-field — the label's for attribute and the control's aria-describedby are wired up automatically.",
   'field.usage.description':
     'Import SanringFieldComponent and the pieces you need, then compose them inside <sanring-field>.',
   'field.installation.description':
@@ -416,12 +483,14 @@ export const en = {
   'field.composition.description':
     'Field only lays out and wires up its children — it never renders a control itself. Project a label, one control that implements SanringFieldControl (InputDirective today), an optional description, and an optional error message.',
   'field.api.description': 'Inputs supported by sanring-field and the directives it composes with.',
-  'field.api.floating.description': 'Floats the label above the control instead of stacking it on top.',
+  'field.api.floating.description':
+    'Floats the label above the control instead of stacking it on top.',
   'field.api.labelClass.description': "Additional classes merged with the label's base styles.",
-  'field.api.descriptionClass.description': "Additional classes merged with the description's base styles.",
-  'field.api.errorMessageClass.description': "Additional classes merged with the error message's base styles.",
-  'input.description':
-    'A form control styling directive for native input and file fields.',
+  'field.api.descriptionClass.description':
+    "Additional classes merged with the description's base styles.",
+  'field.api.errorMessageClass.description':
+    "Additional classes merged with the error message's base styles.",
+  'input.description': 'A form control styling directive for native input and file fields.',
   'input.demo.floating': 'Floating label',
   'input.demo.disabled': 'Disabled',
   'input.demo.file': 'File',
@@ -430,7 +499,8 @@ export const en = {
     'Common input patterns for editable text, disabled fields, and file uploads.',
   'input.examples.basic.description':
     'Apply sanringInput to a native input to keep browser behavior while receiving system styling.',
-  'input.usage.description': 'Import InputDirective from @sanring/ui and apply sanringInput to an input.',
+  'input.usage.description':
+    'Import InputDirective from @sanring/ui and apply sanringInput to an input.',
   'input.installation.description':
     'Use sanringInput on native input elements and keep type, value, disabled, and form bindings native.',
   'input.composition.description':
@@ -460,16 +530,19 @@ export const en = {
   'timeline.demo.horizontal': 'Horizontal',
   'timeline.demo.divBased': 'Div-based timeline',
   'timeline.demo.releaseActivity': 'Release activity',
-  'timeline.demo.releaseActivityDescription': 'A compact activity trail for release notes and registry updates.',
+  'timeline.demo.releaseActivityDescription':
+    'A compact activity trail for release notes and registry updates.',
   'timeline.demo.today': 'Today',
   'timeline.demo.created': 'Created project',
   'timeline.demo.createdDescription': 'Workspace and registry files are ready.',
   'timeline.demo.createdMeta': '09:12',
   'timeline.demo.reviewed': 'Reviewed content',
-  'timeline.demo.reviewedDescription': 'Documentation examples were checked against the primitive API.',
+  'timeline.demo.reviewedDescription':
+    'Documentation examples were checked against the primitive API.',
   'timeline.demo.reviewedMeta': '10:48',
   'timeline.demo.shipped': 'Published update',
-  'timeline.demo.shippedDescription': 'The component can now be installed through the registry workflow.',
+  'timeline.demo.shippedDescription':
+    'The component can now be installed through the registry workflow.',
   'timeline.demo.shippedMeta': '13:30',
   'timeline.demo.plan': 'Plan',
   'timeline.demo.planDescription': 'Define scope, owners, and release notes.',
@@ -479,15 +552,18 @@ export const en = {
   'timeline.demo.releaseDescription': 'Publish docs and sync the CLI registry.',
   'timeline.demo.divTitle': 'Imported activity feed',
   'timeline.demo.divMeta': 'UI team',
-  'timeline.demo.divDescription': 'Use div-based markup when the source data is not naturally a native list.',
+  'timeline.demo.divDescription':
+    'Use div-based markup when the source data is not naturally a native list.',
   'timeline.demo.qaTitle': 'Quality review',
   'timeline.demo.qaMeta': 'QA pass',
   'timeline.demo.qaDescription': 'Visual spacing and empty states were reviewed before publishing.',
   'timeline.api.description': 'Inputs supported by the Timeline directives.',
-  'timeline.api.orientation.description': 'Controls whether items stack vertically or horizontally.',
+  'timeline.api.orientation.description':
+    'Controls whether items stack vertically or horizontally.',
   'timeline.api.class.description': 'Additional classes merged with the timeline root.',
   'timeline.api.itemClass.description': 'Additional classes merged with each timeline item.',
-  'timeline.api.separatorClass.description': 'Additional classes merged with each separator wrapper.',
+  'timeline.api.separatorClass.description':
+    'Additional classes merged with each separator wrapper.',
   'timeline.api.contentClass.description': 'Additional classes merged with each content container.',
   'slider.description':
     'A range control for selecting a numeric value with pointer, touch, keyboard, and Angular forms support.',
@@ -515,15 +591,16 @@ export const en = {
   'slider.api.min.description': 'Minimum allowed value.',
   'slider.api.max.description': 'Maximum allowed value.',
   'slider.api.step.description': 'Increment used by pointer rounding and keyboard changes.',
-  'slider.api.value.description': 'Current numeric value. Values are clamped to min/max and snapped to step.',
+  'slider.api.value.description':
+    'Current numeric value. Values are clamped to min/max and snapped to step.',
   'slider.api.disabled.description': 'Disables pointer and keyboard interaction.',
   'slider.api.valueChange.description': 'Emits the next numeric value after user interaction.',
   'slider.api.ariaLabel.description': 'Accessible label when no visible label is associated.',
   'slider.api.ariaLabelledBy.description': 'Id of the visible label element that names the slider.',
   'slider.api.ariaDescribedBy.description': 'Id of helper text that describes the slider.',
-  'slider.api.ariaValueText.description': 'Human-readable value text when the number alone is not enough.',
-  'stepper.description':
-    'A CDK-backed workflow primitive for guiding users through ordered steps.',
+  'slider.api.ariaValueText.description':
+    'Human-readable value text when the number alone is not enough.',
+  'stepper.description': 'A CDK-backed workflow primitive for guiding users through ordered steps.',
   'stepper.examples.basic.description':
     'Compose sanring-stepper with sanring-step panels and next/previous buttons for multi-step flows.',
   'stepper.usage.description':
@@ -539,7 +616,8 @@ export const en = {
   'stepper.demo.accountTitle': 'Create the account',
   'stepper.demo.accountDescription': 'Collect the required account details before profile setup.',
   'stepper.demo.profileTitle': 'Add profile details',
-  'stepper.demo.profileDescription': 'Optional information can be skipped without blocking the flow.',
+  'stepper.demo.profileDescription':
+    'Optional information can be skipped without blocking the flow.',
   'stepper.demo.reviewTitle': 'Review and confirm',
   'stepper.demo.reviewDescription': 'Check the collected information before continuing.',
   'stepper.demo.next': 'Next',
@@ -560,13 +638,20 @@ export const en = {
   'stepper.api.class.description': 'Additional classes merged with the stepper root.',
   'stepper.api.lineStyle.description': 'Connector style rendered between step headers.',
   'stepper.api.optionalLabel.description': 'Text shown below optional step labels.',
-  'stepper.api.linear.description': 'Uses CDK Stepper linear mode to block navigation until previous steps are complete.',
-  'stepper.api.orientation.description': 'CDK Stepper orientation used for header layout and keyboard behavior.',
-  'stepper.api.selectedIndex.description': 'Currently selected step index. Supports two-way binding through selectedIndexChange.',
-  'stepper.api.stepLabel.description': 'Plain text label for a step. Use sanringStepLabel for a template label.',
-  'stepper.api.stepOptional.description': 'Marks a step as optional and renders the optional helper label.',
-  'stepper.api.stepCompleted.description': 'Marks a step as completed and uses the completed indicator.',
-  'stepper.api.stepCustomState.description': 'Overrides the visual state rendered by the Sanring step header.',
+  'stepper.api.linear.description':
+    'Uses CDK Stepper linear mode to block navigation until previous steps are complete.',
+  'stepper.api.orientation.description':
+    'CDK Stepper orientation used for header layout and keyboard behavior.',
+  'stepper.api.selectedIndex.description':
+    'Currently selected step index. Supports two-way binding through selectedIndexChange.',
+  'stepper.api.stepLabel.description':
+    'Plain text label for a step. Use sanringStepLabel for a template label.',
+  'stepper.api.stepOptional.description':
+    'Marks a step as optional and renders the optional helper label.',
+  'stepper.api.stepCompleted.description':
+    'Marks a step as completed and uses the completed indicator.',
+  'stepper.api.stepCustomState.description':
+    'Overrides the visual state rendered by the Sanring step header.',
   'label.description':
     'A native label styling directive for accessible form labels and field captions.',
   'label.demo.withInput': 'With input',
@@ -574,7 +659,8 @@ export const en = {
   'label.examples.description': 'Common label patterns for standalone labels and form controls.',
   'label.examples.basic.description':
     'Apply sanringLabel to a native label so for/id association stays intact.',
-  'label.usage.description': 'Import LabelDirective from @sanring/ui and apply sanringLabel to a label.',
+  'label.usage.description':
+    'Import LabelDirective from @sanring/ui and apply sanringLabel to a label.',
   'label.installation.description':
     'Use sanringLabel on native label elements and connect them to controls with for and id.',
   'label.composition.description':
@@ -591,7 +677,8 @@ export const en = {
     'Common link patterns for external navigation and Angular router state.',
   'link.examples.basic.description':
     'Use the directive on a native anchor so href, target, routerLink, and routerLinkActive keep their native behavior.',
-  'link.usage.description': 'Import LinkDirective from @sanring/ui and apply sanringLink to an anchor.',
+  'link.usage.description':
+    'Import LinkDirective from @sanring/ui and apply sanringLink to an anchor.',
   'link.installation.description':
     'Import LinkDirective from @sanring/ui and keep navigation attributes on the native anchor element.',
   'link.composition.description':
@@ -627,8 +714,7 @@ export const en = {
     'Use sanringScrollArea on the scroll container; add sanringInfiniteScroll when the bottom of the list should request more content.',
   'scrollArea.api.description':
     'Inputs and outputs supported by sanringScrollArea and sanringInfiniteScroll.',
-  'scrollArea.api.class.description':
-    'Additional classes merged with the base scroll area layout.',
+  'scrollArea.api.class.description': 'Additional classes merged with the base scroll area layout.',
   'scrollArea.api.orientation.description':
     'Controls the allowed scroll direction on sanring-scroll-area.',
   'scrollArea.api.loadMore.description':
@@ -702,7 +788,8 @@ export const en = {
   'tag.demo.frontend': 'Frontend',
   'tag.examples.description': 'Common tag patterns for filters, chips, and categorized content.',
   'tag.examples.basic.description': 'Use tags for selected values or compact content categories.',
-  'tag.usage.description': 'Import TagComponent from @sanring/ui and project label content inside it.',
+  'tag.usage.description':
+    'Import TagComponent from @sanring/ui and project label content inside it.',
   'tag.installation.description':
     'Import Tag and optionally enable closable when the tag should emit a remove event.',
   'tag.composition.description':
@@ -740,10 +827,12 @@ export const en = {
     'Tabs are split into root, list, trigger, and content primitives so layout and panels remain flexible.',
   'tabs.api.description': 'Inputs and outputs supported by the tabs primitives.',
   'tabs.api.defaultValue.description': 'Initial tab value selected when the component is created.',
-  'tabs.api.orientation.description': 'Controls horizontal or vertical tabs layout and keyboard navigation.',
+  'tabs.api.orientation.description':
+    'Controls horizontal or vertical tabs layout and keyboard navigation.',
   'tabs.api.variant.description': 'Controls the visual treatment of the trigger list.',
   'tabs.api.value.description': 'Required value used to pair a trigger with its content panel.',
-  'tabs.api.disabled.description': 'Prevents a trigger from being selected or focused by keyboard navigation.',
+  'tabs.api.disabled.description':
+    'Prevents a trigger from being selected or focused by keyboard navigation.',
   'tabs.api.valueChange.description': 'Emits when the selected tab value changes.',
   'tooltip.description':
     'A small floating panel that reveals contextual information when a trigger is hovered or focused.',
@@ -776,10 +865,12 @@ export const en = {
     'Tooltip is composed from a state root, a trigger directive, and floating content.',
   'tooltip.api.description': 'Inputs supported by the tooltip primitives.',
   'tooltip.api.delayDuration.description': 'Delay in milliseconds before the tooltip opens.',
-  'tooltip.api.side.description': 'Preferred side for the tooltip before fallback positions are used.',
+  'tooltip.api.side.description':
+    'Preferred side for the tooltip before fallback positions are used.',
   'tooltip.api.sideOffset.description': 'Distance between the trigger and floating content.',
   'tooltip.api.class.description': 'Additional classes merged with root or content styles.',
-  'checkbox.description': 'A control for toggling a boolean or indeterminate state, compatible with Angular forms via ControlValueAccessor.',
+  'checkbox.description':
+    'A control for toggling a boolean or indeterminate state, compatible with Angular forms via ControlValueAccessor.',
   'checkbox.demo.indeterminate': 'Indeterminate',
   'checkbox.demo.disabled': 'Disabled',
   'checkbox.demo.stateSurface': 'State Surface',
@@ -790,23 +881,35 @@ export const en = {
   'checkbox.demo.disabledIndeterminate': 'Disabled indeterminate',
   'checkbox.demo.withLabel': 'With Label',
   'checkbox.demo.acceptTerms': 'Accept terms and conditions',
-  'checkbox.examples.description': 'Common checkbox patterns including indeterminate, label-linked, and disabled states.',
-  'checkbox.examples.basic.description': 'A checkbox backed by ControlValueAccessor — use ngModel or reactive forms to bind the checked state.',
-  'checkbox.usage.description': 'Import CheckboxComponent and bind state via ngModel or a reactive form control.',
+  'checkbox.examples.description':
+    'Common checkbox patterns including indeterminate, label-linked, and disabled states.',
+  'checkbox.examples.basic.description':
+    'A checkbox backed by ControlValueAccessor — use ngModel or reactive forms to bind the checked state.',
+  'checkbox.usage.description':
+    'Import CheckboxComponent and bind state via ngModel or a reactive form control.',
   'checkbox.api.description': 'Inputs supported by the sanring-checkbox component.',
   'checkbox.api.class.description': 'Additional classes merged with the checkbox button styles.',
-  'checkbox.api.id.description': 'Native id applied to the checkbox button, useful for label association.',
-  'checkbox.api.name.description': 'Native name attribute forwarded to the button for form submission.',
-  'checkbox.api.value.description': 'Native value attribute forwarded to the button for form submission.',
+  'checkbox.api.id.description':
+    'Native id applied to the checkbox button, useful for label association.',
+  'checkbox.api.name.description':
+    'Native name attribute forwarded to the button for form submission.',
+  'checkbox.api.value.description':
+    'Native value attribute forwarded to the button for form submission.',
   'checkbox.api.disabled.description': 'Disables interaction and reduces visual prominence.',
-  'checkbox.api.required.description': 'Sets aria-required on the button to signal a mandatory field.',
-  'checkbox.api.checked.description': 'Controlled checked state. Supports true, false, or "indeterminate". Use with [(checked)] for two-way binding without Angular forms.',
-  'checkbox.api.checkedChange.description': 'Emits the new CheckedState whenever the checkbox is toggled.',
+  'checkbox.api.required.description':
+    'Sets aria-required on the button to signal a mandatory field.',
+  'checkbox.api.checked.description':
+    'Controlled checked state. Supports true, false, or "indeterminate". Use with [(checked)] for two-way binding without Angular forms.',
+  'checkbox.api.checkedChange.description':
+    'Emits the new CheckedState whenever the checkbox is toggled.',
   'checkbox.api.tabIndex.description': 'Tab order index. Automatically set to -1 when disabled.',
-  'checkbox.api.ariaLabel.description': 'Accessible label for standalone checkboxes not associated with a visible <label> element.',
+  'checkbox.api.ariaLabel.description':
+    'Accessible label for standalone checkboxes not associated with a visible <label> element.',
   'checkbox.api.ariaLabelledBy.description': 'ID of an external element that labels this checkbox.',
-  'checkbox.api.ariaDescribedBy.description': 'ID of an element that provides an extended description for this checkbox.',
-  'checkbox.api.size.description': "Visual size of the checkbox. Accepts 'sm', 'md' (default), or 'lg'.",
+  'checkbox.api.ariaDescribedBy.description':
+    'ID of an element that provides an extended description for this checkbox.',
+  'checkbox.api.size.description':
+    "Visual size of the checkbox. Accepts 'sm', 'md' (default), or 'lg'.",
   'checkbox.demo.size': 'Size Variants',
   'checkbox.demo.size.sm': 'Small',
   'checkbox.demo.size.md': 'Medium',
@@ -830,8 +933,7 @@ export const en = {
   'collapsible.demo.controlledContent':
     'This panel follows external state while still supporting trigger clicks and keyboard activation.',
   'collapsible.demo.basicQuestion': 'What changed this week?',
-  'collapsible.demo.basicAnswer':
-    'We added audit exports, role presets, and quieter empty states.',
+  'collapsible.demo.basicAnswer': 'We added audit exports, role presets, and quieter empty states.',
   'collapsible.demo.workspacePreferences': 'Workspace preferences',
   'collapsible.demo.weeklyDigest': 'Send weekly digest',
   'collapsible.demo.weeklyDigestDescription': 'Receive a compact summary every Monday.',
@@ -845,12 +947,17 @@ export const en = {
     'Wrap a trigger and a content region in sanring-collapsible. The trigger controls the open state and wires ARIA attributes to the content.',
   'collapsible.composition.description':
     'Collapsible is composed from a state root plus trigger and content directives, so you can choose the native elements and styling.',
-  'collapsible.api.description': 'Inputs, outputs, and methods supported by the collapsible primitives.',
+  'collapsible.api.description':
+    'Inputs, outputs, and methods supported by the collapsible primitives.',
   'collapsible.api.class.description': 'Additional classes merged with the root element.',
-  'collapsible.api.open.description': 'Controls whether the content region is visible. Supports [(open)] two-way binding.',
-  'collapsible.api.disabled.description': 'Disables trigger interaction while preserving the current open state.',
-  'collapsible.api.toggle.description': 'Toggles the open state unless the collapsible is disabled.',
-  'collapsible.api.openChange.description': 'Emits whenever the open state changes through the model binding.',
+  'collapsible.api.open.description':
+    'Controls whether the content region is visible. Supports [(open)] two-way binding.',
+  'collapsible.api.disabled.description':
+    'Disables trigger interaction while preserving the current open state.',
+  'collapsible.api.toggle.description':
+    'Toggles the open state unless the collapsible is disabled.',
+  'collapsible.api.openChange.description':
+    'Emits whenever the open state changes through the model binding.',
 
   'intro.page.description':
     'Angular component primitives, documentation, and a registry workflow for teams that want composable building blocks they can own.',
@@ -869,7 +976,8 @@ export const en = {
     'Context Menu is package-ready and tracked on the roadmap as the next docs gap to close.',
   'intro.requirements.title': 'Requirements',
   'intro.installation.title': 'Installation',
-  'intro.installation.body': 'Install the base package when you want to consume primitives directly from @sanring/ui.',
+  'intro.installation.body':
+    'Install the base package when you want to consume primitives directly from @sanring/ui.',
   'intro.installation.tailwind':
     'Then import the generated theme file and tell Tailwind to scan package and local component source. Add this to your CSS entry file:',
   'intro.workflow.title': 'Recommended workflow',
@@ -912,7 +1020,7 @@ export const en = {
     'Override any --sanring-* token in :root. Components immediately pick up the new values — no configuration files to change.',
   'theming.darkMode.title': 'Dark / light mode',
   'theming.darkMode.body':
-    'Dark is the default — the base :root block defines all dark values. Light mode is a shallow override on :root[data-theme=\'light\']. Toggle it by setting the attribute on <html>.',
+    "Dark is the default — the base :root block defines all dark values. Light mode is a shallow override on :root[data-theme='light']. Toggle it by setting the attribute on <html>.",
   'theming.darkMode.note':
     'This differs from shadcn/ui, which adds a .dark class to <body>. The attribute approach lets you scope light/dark to any subtree, not just the whole document.',
 
@@ -923,13 +1031,13 @@ export const en = {
     'The @sanring/cli package exposes four commands — init, add, diff, and list — that read from the same component registry used by this documentation site. Run it with npx so you always get the latest version.',
   'cli.init.title': 'init',
   'cli.init.body':
-    'Run once per project. Verifies you\'re in an Angular project, writes a sanring.config.json with your chosen component path, generates src/sanring-theme.css (the --sanring-* design tokens every component reads — skipped by default if it already exists, to protect your customizations), and installs the base peer dependencies (clsx, tailwind-merge).',
+    "Run once per project. Verifies you're in an Angular project, writes a sanring.config.json with your chosen component path, generates src/sanring-theme.css (the --sanring-* design tokens every component reads — skipped by default if it already exists, to protect your customizations), and installs the base peer dependencies (clsx, tailwind-merge).",
   'cli.add.title': 'add',
   'cli.add.body':
-    'Copies one or more components\' source files into your project and installs any missing peer dependencies. If a component depends on another (e.g. file-upload depends on field and progress), the dependency is added automatically. Pass --dry-run to preview exactly which files would be created or overwritten without touching your filesystem.',
+    "Copies one or more components' source files into your project and installs any missing peer dependencies. If a component depends on another (e.g. file-upload depends on field and progress), the dependency is added automatically. Pass --dry-run to preview exactly which files would be created or overwritten without touching your filesystem.",
   'cli.diff.title': 'diff',
   'cli.diff.body':
-    'Sanring UI has no version concept — components are copied source, not npm packages — so there\'s no automatic way to know if your local files have drifted from the registry. diff compares your installed components and sanring-theme.css against the current registry line by line, showing what you\'ve customized locally and what\'s changed upstream, so you can check before running add --force. Omit the component names to check everything currently installed.',
+    "Sanring UI has no version concept — components are copied source, not npm packages — so there's no automatic way to know if your local files have drifted from the registry. diff compares your installed components and sanring-theme.css against the current registry line by line, showing what you've customized locally and what's changed upstream, so you can check before running add --force. Omit the component names to check everything currently installed.",
   'cli.list.title': 'list',
   'cli.list.body':
     'Prints every component available in the registry, along with its peer dependencies. Aliased as ls.',
@@ -946,10 +1054,14 @@ export const en = {
   'changelog.component.changeCount': 'changes',
 
   'component.radio': 'Radio Group',
-  'radio.description': 'A set of radio buttons backed by ControlValueAccessor, with full keyboard navigation (roving tabindex) and WAI-ARIA compliance.',
-  'radio.examples.basic.description': 'A RadioGroup backed by ControlValueAccessor — use ngModel or reactive forms to bind the selected value.',
-  'radio.usage.description': 'Import RadioGroupComponent and RadioItemComponent, wrap items inside the group, and bind the value.',
-  'radio.examples.description': 'Common patterns including labeled items, horizontal layout, and disabled states.',
+  'radio.description':
+    'A set of radio buttons backed by ControlValueAccessor, with full keyboard navigation (roving tabindex) and WAI-ARIA compliance.',
+  'radio.examples.basic.description':
+    'A RadioGroup backed by ControlValueAccessor — use ngModel or reactive forms to bind the selected value.',
+  'radio.usage.description':
+    'Import RadioGroupComponent and RadioItemComponent, wrap items inside the group, and bind the value.',
+  'radio.examples.description':
+    'Common patterns including labeled items, horizontal layout, and disabled states.',
   'radio.demo.withLabel': 'With Labels',
   'radio.demo.horizontal': 'Horizontal',
   'radio.demo.disabled': 'Disabled',
@@ -964,27 +1076,35 @@ export const en = {
   'radio.api.item.title': 'RadioItemComponent',
   'radio.api.item.description': 'Inputs for each individual radio button.',
   'radio.api.group.class': 'Additional classes merged with the group container.',
-  'radio.api.group.name': 'Name hint for the group; forwarded to individual items for form context.',
+  'radio.api.group.name':
+    'Name hint for the group; forwarded to individual items for form context.',
   'radio.api.group.disabled': 'Disables all items in the group.',
   'radio.api.group.required': 'Sets aria-required on the group to signal a mandatory field.',
-  'radio.api.group.orientation': 'Layout direction. Accepts RadioOrientation.Vertical (default) or RadioOrientation.Horizontal.',
-  'radio.api.group.value': 'Controlled selected value. Use with [(value)] for two-way binding without Angular forms.',
+  'radio.api.group.orientation':
+    'Layout direction. Accepts RadioOrientation.Vertical (default) or RadioOrientation.Horizontal.',
+  'radio.api.group.value':
+    'Controlled selected value. Use with [(value)] for two-way binding without Angular forms.',
   'radio.api.group.valueChange': 'Emits the new RadioValue whenever the selection changes.',
   'radio.api.group.ariaLabel': 'Accessible label for the group when no visible heading is present.',
   'radio.api.group.ariaLabelledBy': 'ID of an external element that labels the group.',
-  'radio.api.group.ariaDescribedBy': 'ID of an element that provides an extended description for the group.',
+  'radio.api.group.ariaDescribedBy':
+    'ID of an element that provides an extended description for the group.',
   'radio.api.item.class': 'Additional classes merged with the radio button.',
   'radio.api.item.id': 'Native id applied to the button; use with <label for="…"> for association.',
   'radio.api.item.value': 'The RadioValue this item represents. Required.',
   'radio.api.item.disabled': 'Disables this individual item regardless of the group state.',
-  'radio.api.item.ariaLabel': 'Accessible label for standalone items without a visible label element.',
+  'radio.api.item.ariaLabel':
+    'Accessible label for standalone items without a visible label element.',
   'radio.api.item.ariaLabelledBy': 'ID of an external element that labels this item.',
-  'radio.api.item.ariaDescribedBy': 'ID of an element that provides an extended description for this item.',
+  'radio.api.item.ariaDescribedBy':
+    'ID of an element that provides an extended description for this item.',
 
   'component.toggle': 'Toggle',
-  'toggle.description': 'A two-state button that can be toggled on or off, with WAI-ARIA aria-pressed support.',
+  'toggle.description':
+    'A two-state button that can be toggled on or off, with WAI-ARIA aria-pressed support.',
   'toggle.examples.basic.description': 'A toggle button in its default state.',
-  'toggle.usage.description': 'Import ToggleDirective and apply sanringToggle to a <button> element.',
+  'toggle.usage.description':
+    'Import ToggleDirective and apply sanringToggle to a <button> element.',
   'toggle.installation.description': 'Install the @sanring/ui package and import ToggleDirective.',
   'toggle.examples.description': 'Common toggle patterns for toolbars, filters, and settings.',
   'toggle.demo.outline': 'Outline',
@@ -998,35 +1118,47 @@ export const en = {
   'toggle.api.class.description': 'Additional classes merged with the base toggle styles.',
   'toggle.api.variant.description': "Visual style: 'default' (ghost) or 'outline' (bordered).",
   'toggle.api.size.description': "Size of the toggle button: 'sm', 'md' (default), or 'lg'.",
-  'toggle.api.pressed.description': 'Whether the toggle is active. Supports [(pressed)] two-way binding.',
+  'toggle.api.pressed.description':
+    'Whether the toggle is active. Supports [(pressed)] two-way binding.',
   'toggle.api.disabled.description': 'Disables the toggle and prevents interaction.',
 
   'component.progress': 'Progress',
-  'progress.description': 'A horizontal progress bar with WAI-ARIA progressbar semantics, shimmer sprint effect, and customisable shape and colour.',
+  'progress.description':
+    'A horizontal progress bar with WAI-ARIA progressbar semantics, shimmer sprint effect, and customisable shape and colour.',
   'progress.examples.basic.description': 'A progress bar at 60% in its default rounded style.',
-  'progress.usage.description': 'Import ProgressComponent and bind a numeric value. The directive handles all ARIA attributes automatically.',
-  'progress.installation.description': 'Install @sanring/ui and import ProgressComponent or ProgressDirective.',
-  'progress.examples.description': 'Three questions answered with live examples: shimmer effect, shape variants, and colour customisation.',
+  'progress.usage.description':
+    'Import ProgressComponent and bind a numeric value. The directive handles all ARIA attributes automatically.',
+  'progress.installation.description':
+    'Install @sanring/ui and import ProgressComponent or ProgressDirective.',
+  'progress.examples.description':
+    'Three questions answered with live examples: shimmer effect, shape variants, and colour customisation.',
   'progress.demo.shimmer': 'Shimmer Sprint Effect',
-  'progress.demo.shimmerDescription': 'Like skeleton\'s pulse, the shimmer sweeps across the fill bar while progress is in flight — giving the user a sense of active momentum.',
+  'progress.demo.shimmerDescription':
+    "Like skeleton's pulse, the shimmer sweeps across the fill bar while progress is in flight — giving the user a sense of active momentum.",
   'progress.demo.shape': 'Shape',
-  'progress.demo.shapeDescription': 'Use the shape input to switch between rounded (pill), square (flat edges), and trapezoid (angled parallelogram). All shapes wire through cn() so you can further refine with class.',
+  'progress.demo.shapeDescription':
+    'Use the shape input to switch between rounded (pill), square (flat edges), and trapezoid (angled parallelogram). All shapes wire through cn() so you can further refine with class.',
   'progress.demo.rounded': 'Rounded',
   'progress.demo.square': 'Square',
   'progress.demo.trapezoid': 'Trapezoid',
   'progress.demo.color': 'Color',
-  'progress.demo.colorDescription': 'Three layers of colour control: default CSS variable, CSS variable override per-instance, and a one-off barClass Tailwind class.',
+  'progress.demo.colorDescription':
+    'Three layers of colour control: default CSS variable, CSS variable override per-instance, and a one-off barClass Tailwind class.',
   'progress.demo.defaultColor': 'Default (CSS var)',
   'progress.demo.cssVarOverride': 'CSS variable override',
   'progress.demo.classOverride': 'barClass override',
   'progress.api.description': 'Inputs supported by sanring-progress.',
   'progress.api.class.description': 'Extra classes merged onto the track container.',
-  'progress.api.barClass.description': 'Extra classes merged onto the fill bar — use for one-off colour overrides.',
+  'progress.api.barClass.description':
+    'Extra classes merged onto the fill bar — use for one-off colour overrides.',
   'progress.api.value.description': 'Current progress value.',
   'progress.api.max.description': 'Maximum value; defaults to 100.',
-  'progress.api.shape.description': "Track shape: 'rounded' (pill, default), 'square' (flat), or 'trapezoid' (angled).",
-  'progress.api.shimmer.description': 'Enables a sweeping shimmer animation on the fill bar to signal active progress.',
-  'progress.api.ariaLabel.description': 'Accessible label for the progressbar role. Recommended when no visible label is present.',
+  'progress.api.shape.description':
+    "Track shape: 'rounded' (pill, default), 'square' (flat), or 'trapezoid' (angled).",
+  'progress.api.shimmer.description':
+    'Enables a sweeping shimmer animation on the fill bar to signal active progress.',
+  'progress.api.ariaLabel.description':
+    'Accessible label for the progressbar role. Recommended when no visible label is present.',
 
   'pagination.description':
     'Pagination primitives and a composed paginator for navigating large result sets.',
@@ -1065,11 +1197,14 @@ export const en = {
     'Styles previous, next, first, or last controls while preserving button/link semantics.',
 
   'component.spinner': 'Spinner',
-  'spinner.description': 'A lightweight animated loading indicator with three icon variants, four sizes, and full colour control via text utilities.',
+  'spinner.description':
+    'A lightweight animated loading indicator with three icon variants, four sizes, and full colour control via text utilities.',
   'spinner.examples.basic.description': 'Default spinner using the loader icon at medium size.',
-  'spinner.usage.description': 'Import SpinnerComponent and drop sanring-spinner anywhere. Text colour and size are controlled with Tailwind utilities.',
+  'spinner.usage.description':
+    'Import SpinnerComponent and drop sanring-spinner anywhere. Text colour and size are controlled with Tailwind utilities.',
   'spinner.installation.description': 'Install @sanring/ui and import SpinnerComponent.',
-  'spinner.examples.description': 'Common spinner patterns covering variants, sizes, colours, inline labels, and button loading states.',
+  'spinner.examples.description':
+    'Common spinner patterns covering variants, sizes, colours, inline labels, and button loading states.',
   'spinner.demo.variant': 'Variant',
   'spinner.demo.size': 'Size',
   'spinner.demo.color': 'Color',
@@ -1079,18 +1214,28 @@ export const en = {
   'spinner.demo.saving': 'Saving…',
   'spinner.demo.speed': 'Speed',
   'spinner.api.description': 'Inputs supported by sanring-spinner.',
-  'spinner.api.speed.description': "Rotation speed: 'slow' (2 s), 'normal' (1 s, default), or 'fast' (0.5 s). Composes the full animation value so there are no cascade-order issues.",
-  'spinner.api.variant.description': "Icon style: 'loader' (dashed ring, default), 'loader-circle' (arc), or 'pinwheel'.",
-  'spinner.api.size.description': "Size of the icon: 'sm' (16px), 'md' (20px, default), 'lg' (24px), or 'xl' (32px).",
-  'spinner.api.class.description': 'Additional classes merged onto the host element. Use Tailwind text-* utilities to change colour.',
-  'spinner.api.ariaLabel.description': "Accessible label announced by screen readers. Defaults to 'Loading'.",
+  'spinner.api.speed.description':
+    "Rotation speed: 'slow' (2 s), 'normal' (1 s, default), or 'fast' (0.5 s). Composes the full animation value so there are no cascade-order issues.",
+  'spinner.api.variant.description':
+    "Icon style: 'loader' (dashed ring, default), 'loader-circle' (arc), or 'pinwheel'.",
+  'spinner.api.size.description':
+    "Size of the icon: 'sm' (16px), 'md' (20px, default), 'lg' (24px), or 'xl' (32px).",
+  'spinner.api.class.description':
+    'Additional classes merged onto the host element. Use Tailwind text-* utilities to change colour.',
+  'spinner.api.ariaLabel.description':
+    "Accessible label announced by screen readers. Defaults to 'Loading'.",
 
   'component.toast': 'Toast',
-  'toast.description': 'A transient notification system for status updates, errors, and lightweight actions.',
-  'toast.examples.basic.description': 'Trigger a toast through ToastService and render it with a single sanring-toaster viewport.',
-  'toast.usage.description': 'Place sanring-toaster once in your app shell, then inject ToastService wherever notifications are created.',
-  'toast.installation.description': 'Import ToasterComponent for rendering and ToastService for imperative notifications.',
-  'toast.examples.description': 'Common toast patterns for semantic variants, persistent actions, and viewport positions.',
+  'toast.description':
+    'A transient notification system for status updates, errors, and lightweight actions.',
+  'toast.examples.basic.description':
+    'Trigger a toast through ToastService and render it with a single sanring-toaster viewport.',
+  'toast.usage.description':
+    'Place sanring-toaster once in your app shell, then inject ToastService wherever notifications are created.',
+  'toast.installation.description':
+    'Import ToasterComponent for rendering and ToastService for imperative notifications.',
+  'toast.examples.description':
+    'Common toast patterns for semantic variants, persistent actions, and viewport positions.',
   'toast.demo.variant': 'Variants',
   'toast.demo.action': 'Action',
   'toast.demo.position': 'Position',
@@ -1119,26 +1264,34 @@ export const en = {
   'toast.api.description': 'ToastService methods, toaster inputs, and toast option fields.',
   'toast.api.show.description': 'Creates a toast from ToastOptions and returns its generated id.',
   'toast.api.success.description': 'Creates a success toast with a title and optional options.',
-  'toast.api.error.description': 'Creates an error toast and announces it assertively through LiveAnnouncer.',
+  'toast.api.error.description':
+    'Creates an error toast and announces it assertively through LiveAnnouncer.',
   'toast.api.warning.description': 'Creates a warning toast with the warning visual treatment.',
   'toast.api.info.description': 'Creates an informational toast.',
   'toast.api.dismiss.description': 'Dismisses a toast by id and clears its timer.',
   'toast.api.dismissAll.description': 'Dismisses all visible toasts and clears every active timer.',
   'toast.api.position.description': 'Viewport position used by sanring-toaster.',
   'toast.api.maxToasts.description': 'Maximum number of toasts rendered by this toaster viewport.',
-  'toast.api.stacked.description': 'Uses overlapping stacked presentation instead of a normal list.',
-  'toast.api.toastHeight.description': 'Estimated toast height used to calculate stacked viewport height.',
-  'toast.api.duration.description': 'Auto-dismiss duration in milliseconds. Use 0 for persistent toasts.',
+  'toast.api.stacked.description':
+    'Uses overlapping stacked presentation instead of a normal list.',
+  'toast.api.toastHeight.description':
+    'Estimated toast height used to calculate stacked viewport height.',
+  'toast.api.duration.description':
+    'Auto-dismiss duration in milliseconds. Use 0 for persistent toasts.',
   'toast.api.closable.description': 'Controls whether the dismiss button is rendered.',
   'toast.api.action.description': 'Optional action button rendered inside the toast.',
 
   'component.sheet': 'Sheet',
-  'sheet.description': 'A slide-over panel anchored to any edge of the viewport — a focused alternative to a full dialog for contextual tasks and settings.',
+  'sheet.description':
+    'A slide-over panel anchored to any edge of the viewport — a focused alternative to a full dialog for contextual tasks and settings.',
   'sheet.examples.basic.description': 'A sheet that slides in from the right edge.',
-  'sheet.usage.description': 'Wrap content in sanring-sheet, add a sanringSheetTrigger button, then place sanring-sheet-content inside with the desired side.',
+  'sheet.usage.description':
+    'Wrap content in sanring-sheet, add a sanringSheetTrigger button, then place sanring-sheet-content inside with the desired side.',
   'sheet.installation.description': 'Install @sanring/ui and import the sheet primitives.',
-  'sheet.composition.description': 'Sheet is composed from a state root, trigger, content panel, and optional header/footer primitives.',
-  'sheet.examples.description': 'Common sheet patterns: different edge positions and a form layout with header and footer.',
+  'sheet.composition.description':
+    'Sheet is composed from a state root, trigger, content panel, and optional header/footer primitives.',
+  'sheet.examples.description':
+    'Common sheet patterns: different edge positions and a form layout with header and footer.',
   'sheet.demo.side': 'Side',
   'sheet.demo.open': 'Open Sheet',
   'sheet.demo.openTop': 'Top',
@@ -1155,21 +1308,29 @@ export const en = {
   'sheet.demo.saveChanges': 'Save changes',
   'sheet.api.description': 'Inputs and outputs supported by the sheet primitives.',
   'sheet.api.isOpen.description': 'Controls the open state. Supports [(isOpen)] two-way binding.',
-  'sheet.api.side.description': "Edge from which the panel slides in: 'top', 'right' (default), 'bottom', or 'left'.",
+  'sheet.api.side.description':
+    "Edge from which the panel slides in: 'top', 'right' (default), 'bottom', or 'left'.",
   'sheet.demo.noClose': 'Without Close Button',
   'sheet.demo.confirmDelete': 'Confirm deletion',
   'sheet.demo.confirmDeleteDescription': 'This action cannot be undone.',
   'sheet.demo.delete': 'Delete',
-  'sheet.api.showClose.description': 'Show or hide the built-in × close button at the top-right corner of the panel.',
+  'sheet.api.showClose.description':
+    'Show or hide the built-in × close button at the top-right corner of the panel.',
   'sheet.api.class.description': 'Additional classes merged onto the panel or host element.',
 
   'component.popover': 'Popover',
-  'popover.description': 'A floating panel positioned relative to a trigger — ideal for contextual menus, rich tooltips, and form overlays without blocking the main flow.',
-  'popover.examples.basic.description': 'Default popover anchored below its trigger, centred horizontally.',
-  'popover.usage.description': 'Wrap trigger and content inside sanring-popover. The content positions itself automatically using the trigger element\'s coordinates.',
-  'popover.installation.description': 'Install @sanring/ui and import the popover primitives or use SANRING_POPOVER_IMPORTS for convenience.',
-  'popover.composition.description': 'Popover is composed from a root, trigger directive, and content panel with optional header, title, and description.',
-  'popover.examples.description': 'Common popover patterns: alignment, user profile overlay, and form controls.',
+  'popover.description':
+    'A floating panel positioned relative to a trigger — ideal for contextual menus, rich tooltips, and form overlays without blocking the main flow.',
+  'popover.examples.basic.description':
+    'Default popover anchored below its trigger, centred horizontally.',
+  'popover.usage.description':
+    "Wrap trigger and content inside sanring-popover. The content positions itself automatically using the trigger element's coordinates.",
+  'popover.installation.description':
+    'Install @sanring/ui and import the popover primitives or use SANRING_POPOVER_IMPORTS for convenience.',
+  'popover.composition.description':
+    'Popover is composed from a root, trigger directive, and content panel with optional header, title, and description.',
+  'popover.examples.description':
+    'Common popover patterns: alignment, user profile overlay, and form controls.',
   'popover.demo.align': 'Align',
   'popover.demo.withHeader': 'With Header',
   'popover.demo.profile': 'User profile',
@@ -1177,8 +1338,10 @@ export const en = {
   'popover.demo.openProfile': 'Open profile',
   'popover.demo.close': 'Close',
   'popover.api.description': 'Inputs and model supported by the popover primitives.',
-  'popover.api.isOpen.description': 'Controls whether the popover is visible. Supports [(isOpen)] two-way binding.',
-  'popover.api.align.description': "Alignment relative to the trigger: 'start', 'center' (default), or 'end'.",
+  'popover.api.isOpen.description':
+    'Controls whether the popover is visible. Supports [(isOpen)] two-way binding.',
+  'popover.api.align.description':
+    "Alignment relative to the trigger: 'start', 'center' (default), or 'end'.",
   'popover.api.class.description': 'Additional classes merged onto the floating panel.',
 
   'hoverCard.description':
@@ -1201,10 +1364,14 @@ export const en = {
   'hoverCard.demo.delayDescription':
     'Use shorter openDelay for dense application UI and a forgiving closeDelay while the pointer moves.',
   'hoverCard.api.description': 'Inputs supported by the hover-card root and content primitives.',
-  'hoverCard.api.openDelay.description': 'Delay in milliseconds before opening after hover or focus.',
-  'hoverCard.api.closeDelay.description': 'Delay in milliseconds before closing after pointer or focus leaves.',
-  'hoverCard.api.side.description': 'Preferred side for the floating panel. CDK overlay may flip it to stay visible.',
-  'hoverCard.api.sideOffset.description': 'Distance in pixels between the trigger and floating panel.',
+  'hoverCard.api.openDelay.description':
+    'Delay in milliseconds before opening after hover or focus.',
+  'hoverCard.api.closeDelay.description':
+    'Delay in milliseconds before closing after pointer or focus leaves.',
+  'hoverCard.api.side.description':
+    'Preferred side for the floating panel. CDK overlay may flip it to stay visible.',
+  'hoverCard.api.sideOffset.description':
+    'Distance in pixels between the trigger and floating panel.',
   'hoverCard.api.class.description': 'Additional classes merged onto the floating content panel.',
 
   'command.description':
@@ -1226,32 +1393,45 @@ export const en = {
   'command.demo.openDialog': 'Search...',
   'command.demo.disabledItem': 'Archive',
   'command.api.description': 'Inputs and outputs supported by the command primitives.',
-  'command.api.value.description': 'Unique value identifying a `sanring-command-item`, emitted on selection.',
-  'command.api.disabled.description': 'Excludes the item from filtering, keyboard navigation, and selection.',
+  'command.api.value.description':
+    'Unique value identifying a `sanring-command-item`, emitted on selection.',
+  'command.api.disabled.description':
+    'Excludes the item from filtering, keyboard navigation, and selection.',
   'command.api.heading.description': 'Optional label rendered above a `sanring-command-group`.',
   'command.api.placeholder.description': 'Placeholder text for the search input.',
   'command.api.class.description': 'Additional classes merged onto the corresponding primitive.',
-  'command.api.selected.description': 'Emits a `sanring-command-item`\'s value when it is clicked or activated with Enter.',
-  'command.api.valueChange.description': 'Emits from the root `sanring-command` whenever any item is selected.',
+  'command.api.selected.description':
+    "Emits a `sanring-command-item`'s value when it is clicked or activated with Enter.",
+  'command.api.valueChange.description':
+    'Emits from the root `sanring-command` whenever any item is selected.',
   'command.api.shortcutHint.description':
     'Read-only signal on `sanring-command-dialog` with the platform-appropriate shortcut label (⌘K on Mac, Ctrl K elsewhere).',
 
-  'breadcrumb.description': 'A navigation aid showing the user\'s current location within a hierarchy — built from composable primitives with full accessibility support.',
-  'breadcrumb.examples.basic.description': 'Three-level breadcrumb using the default chevron divider.',
-  'breadcrumb.usage.description': 'Compose a breadcrumb-list of breadcrumb-items separated by breadcrumb-dividers. End the trail with breadcrumb-page for the current location.',
-  'breadcrumb.installation.description': 'Install @sanring/ui and import the breadcrumb primitives or use SANRING_BREADCRUMB_IMPORTS for convenience.',
-  'breadcrumb.composition.description': 'Breadcrumb is built from a nav root, an ordered list, items, links, a page marker, a divider, and an optional ellipsis for collapsed paths.',
-  'breadcrumb.examples.description': 'Common breadcrumb patterns: divider variants, collapsed paths with ellipsis, and custom separators.',
+  'breadcrumb.description':
+    "A navigation aid showing the user's current location within a hierarchy — built from composable primitives with full accessibility support.",
+  'breadcrumb.examples.basic.description':
+    'Three-level breadcrumb using the default chevron divider.',
+  'breadcrumb.usage.description':
+    'Compose a breadcrumb-list of breadcrumb-items separated by breadcrumb-dividers. End the trail with breadcrumb-page for the current location.',
+  'breadcrumb.installation.description':
+    'Install @sanring/ui and import the breadcrumb primitives or use SANRING_BREADCRUMB_IMPORTS for convenience.',
+  'breadcrumb.composition.description':
+    'Breadcrumb is built from a nav root, an ordered list, items, links, a page marker, a divider, and an optional ellipsis for collapsed paths.',
+  'breadcrumb.examples.description':
+    'Common breadcrumb patterns: divider variants, collapsed paths with ellipsis, and custom separators.',
   'breadcrumb.demo.divider': 'Divider',
   'breadcrumb.demo.withEllipsis': 'With Ellipsis',
   'breadcrumb.demo.customDivider': 'Custom Divider',
   'breadcrumb.api.description': 'Inputs supported by the breadcrumb primitives.',
-  'breadcrumb.api.type.description': "Divider icon: 'chevron' (default, ›) or 'dot' (·). Pass custom content via ng-content to override entirely.",
-  'breadcrumb.api.routerLink.description': 'Angular RouterLink value passed to the inner anchor element.',
+  'breadcrumb.api.type.description':
+    "Divider icon: 'chevron' (default, ›) or 'dot' (·). Pass custom content via ng-content to override entirely.",
+  'breadcrumb.api.routerLink.description':
+    'Angular RouterLink value passed to the inner anchor element.',
   'breadcrumb.api.class.description': 'Additional classes merged onto the host element.',
 
   'dropdownMenu.description': 'A floating menu for contextual actions opened from a trigger.',
-  'dropdownMenu.examples.basic.description': 'A basic action menu with a label, separator, and destructive item.',
+  'dropdownMenu.examples.basic.description':
+    'A basic action menu with a label, separator, and destructive item.',
   'dropdownMenu.usage.description':
     'Import ButtonDirective and the dropdown menu primitives first, then expose the content with a template variable (#menu="sanringDropdownMenuContent") and pass it to the trigger\'s [menu]. SANRING_DROPDOWN_MENU_IMPORTS is a convenience import for the full set; import individual primitives when you want the component dependencies to stay explicit.',
   'dropdownMenu.installation.description':
@@ -1262,24 +1442,31 @@ export const en = {
   'dropdownMenu.demo.radio': 'Radio',
   'dropdownMenu.demo.submenu': 'Submenu',
   'dropdownMenu.demo.withIcons': 'With Icons',
-  'dropdownMenu.api.description': 'Inputs, outputs, and classes supported by the dropdown menu primitives.',
+  'dropdownMenu.api.description':
+    'Inputs, outputs, and classes supported by the dropdown menu primitives.',
   'dropdownMenu.api.menu.description':
     'The menu to open, bound to the content\'s exported reference (#ref="sanringDropdownMenuContent", then [menu]="ref.menu"). Selecting any item closes the menu automatically.',
   'dropdownMenu.api.itemSelected.description':
     'Emits the value of whichever item was activated (click, Enter, or Space), right before the menu closes.',
   'dropdownMenu.api.value.description':
     'The value reported to itemSelected when this item is activated. Required by the underlying ARIA menu pattern.',
-  'dropdownMenu.api.disabled.description': 'Disables a menu item and removes it from keyboard activation.',
+  'dropdownMenu.api.disabled.description':
+    'Disables a menu item and removes it from keyboard activation.',
   'dropdownMenu.api.variant.description':
     'Controls item tone. Use destructive for actions that remove data or have serious consequences.',
   'dropdownMenu.api.class.description':
     'Additional classes merged with the corresponding dropdown menu primitive.',
 
-  'select.description': 'A composable select primitive for choosing one value from a floating listbox.',
-  'select.examples.basic.description': 'A select trigger that opens a positioned listbox and displays the selected item label.',
-  'select.usage.description': 'Import the select primitives and compose root, trigger, value, content, and item together.',
-  'select.installation.description': 'Install @sanring/ui and import SANRING_SELECT_IMPORTS for the full select primitive set.',
-  'select.examples.description': 'Common select patterns with grouped options, separators, and disabled items.',
+  'select.description':
+    'A composable select primitive for choosing one value from a floating listbox.',
+  'select.examples.basic.description':
+    'A select trigger that opens a positioned listbox and displays the selected item label.',
+  'select.usage.description':
+    'Import the select primitives and compose root, trigger, value, content, and item together.',
+  'select.installation.description':
+    'Install @sanring/ui and import SANRING_SELECT_IMPORTS for the full select primitive set.',
+  'select.examples.description':
+    'Common select patterns with grouped options, separators, and disabled items.',
   'select.demo.groups': 'Groups',
   'select.demo.itemAligned': 'Item aligned with trigger',
   'select.demo.disabledItem': 'Disabled item',
@@ -1290,16 +1477,22 @@ export const en = {
   'select.examples.field.description':
     'Wrap sanring-select in sanring-field and bind a reactive form control — the error message shows automatically once the control is invalid and touched.',
   'select.api.description': 'Inputs, models, and classes supported by the select primitives.',
-  'select.api.value.description': 'The selected value. Supports Angular forms through ControlValueAccessor.',
+  'select.api.value.description':
+    'The selected value. Supports Angular forms through ControlValueAccessor.',
   'select.api.isOpen.description': 'Controls whether the floating listbox is open.',
-  'select.api.contentPosition.description': "Controls content positioning: 'popper' aligns to the trigger edge, while 'item-aligned' aligns the selected item with the trigger.",
-  'select.api.matchTriggerWidth.description': 'Matches the floating content width to the trigger width so option label length does not change the popup size.',
+  'select.api.contentPosition.description':
+    "Controls content positioning: 'popper' aligns to the trigger edge, while 'item-aligned' aligns the selected item with the trigger.",
+  'select.api.matchTriggerWidth.description':
+    'Matches the floating content width to the trigger width so option label length does not change the popup size.',
   'select.api.itemValue.description': 'The value emitted when this option is selected.',
   'select.api.itemDisabled.description': 'Disables a single option.',
-  'select.api.indicatorPosition.description': 'Places the selected indicator before or after the item text.',
+  'select.api.indicatorPosition.description':
+    'Places the selected indicator before or after the item text.',
   'select.api.showIndicator.description': 'Controls whether the selected indicator is rendered.',
-  'select.api.customIndicator.description': 'Projects a custom selected indicator in place of the default check icon.',
-  'select.api.class.description': 'Additional classes merged with the corresponding select primitive.',
+  'select.api.customIndicator.description':
+    'Projects a custom selected indicator in place of the default check icon.',
+  'select.api.class.description':
+    'Additional classes merged with the corresponding select primitive.',
 
   'table.description':
     'Composable CDK table primitives for dense data, sortable headers, empty states, and sticky action columns.',
@@ -1321,8 +1514,7 @@ export const en = {
     'Applies Sanring table sizing, typography, and reset classes to an Angular CDK table.',
   'table.api.sanringColumnDef.description':
     'Wraps CdkColumnDef and forwards column name plus sticky and stickyEnd inputs.',
-  'table.api.cellDef.description':
-    'Template definitions for header, body, and footer cells.',
+  'table.api.cellDef.description': 'Template definitions for header, body, and footer cells.',
   'table.api.cell.description':
     'Rendered header, body, and footer cell directives with Sanring spacing and CDK cell wiring.',
   'table.api.rowDef.description':
@@ -1362,7 +1554,8 @@ export const en = {
   'combobox.demo.selectCountry': 'Select country',
   'combobox.demo.search': 'Search',
   'combobox.demo.clearButtonTitle': 'Clear Button',
-  'combobox.demo.clearButtonDescription': 'Pass showClear to render a button that resets the value and query.',
+  'combobox.demo.clearButtonDescription':
+    'Pass showClear to render a button that resets the value and query.',
   'combobox.demo.field': 'With Field',
   'combobox.demo.fieldError': 'Please choose a framework.',
   'combobox.examples.field.description':
@@ -1370,9 +1563,12 @@ export const en = {
   'combobox.api.description': 'Inputs and models supported by the combobox primitives.',
   'combobox.api.value.description':
     'Selected value controlled by the root. Use a string for single select or string array for multiple select.',
-  'combobox.api.multiple.description': 'Allows selecting more than one item and pairing the field with chips.',
-  'combobox.api.disabled.description': 'Disables the combobox input and prevents selection changes.',
-  'combobox.api.placeholder.description': 'Placeholder text for the combobox input. Pass this from i18n in app code.',
+  'combobox.api.multiple.description':
+    'Allows selecting more than one item and pairing the field with chips.',
+  'combobox.api.disabled.description':
+    'Disables the combobox input and prevents selection changes.',
+  'combobox.api.placeholder.description':
+    'Placeholder text for the combobox input. Pass this from i18n in app code.',
   'combobox.api.showClear.description':
     'Shows a clear button once a value or query is present. Ignored when the input is nested in a chip-input (multiple mode already offers per-chip removal).',
   'combobox.api.itemValue.description': 'Unique value for a combobox item.',
@@ -1381,7 +1577,8 @@ export const en = {
   'combobox.api.heading.description': 'Optional label rendered above a combobox group.',
   'combobox.api.trigger.description':
     'Directive for opening the combobox from a custom trigger element, e.g. a button styled like a Select.',
-  'combobox.api.class.description': 'Additional classes merged with the corresponding combobox primitive.',
+  'combobox.api.class.description':
+    'Additional classes merged with the corresponding combobox primitive.',
 
   'carousel.description':
     'A composable carousel built on Embla for horizontal or vertical slide navigation.',
@@ -1428,7 +1625,8 @@ export const en = {
     'Tree separates the root state container, node semantics, expandable group, and trigger interaction.',
   'tree.api.description': 'Inputs, models, and directives supported by the tree primitives.',
   'tree.api.expandedValue.description': 'Expanded node values controlled by the tree root.',
-  'tree.api.selectedValue.description': 'Currently selected node value controlled by the tree root.',
+  'tree.api.selectedValue.description':
+    'Currently selected node value controlled by the tree root.',
   'tree.api.value.description': 'Unique value for a tree node.',
   'tree.api.exportAs.description':
     'Exposes the node instance in a template reference variable — read `isExpanded()`/`isSelected()` directly instead of comparing value strings in the component class.',
@@ -1445,7 +1643,8 @@ export const en = {
   'fileUpload.api.description': 'Inputs and models supported by the sanring-file-upload component.',
   'fileUpload.api.accept.description':
     'Comma-separated list of accepted file types or extensions (e.g. "image/*,.pdf"). Defaults to accepting any file.',
-  'fileUpload.api.multiple.description': 'Allows selecting or dropping more than one file at a time.',
+  'fileUpload.api.multiple.description':
+    'Allows selecting or dropping more than one file at a time.',
   'fileUpload.api.disabled.description':
     'Disables the dropzone and trigger, and reflects setDisabledState() from reactive forms.',
   'fileUpload.api.required.description':
@@ -1503,13 +1702,15 @@ export const en = {
   'resizable.demo.inspector': 'Inspector',
   'resizable.demo.resetLayout': 'Reset layout',
   'resizable.demo.lockedPanel': 'Locked panel',
-  'resizable.demo.lockedContent': 'Disabled groups keep the layout visible but block drag and keyboard resizing.',
+  'resizable.demo.lockedContent':
+    'Disabled groups keep the layout visible but block drag and keyboard resizing.',
   'resizable.api.description': 'Inputs and models supported by the resizable primitive set.',
   'resizable.api.direction.description': 'Sets the split axis for the group.',
   'resizable.api.sizes.description':
     'Two-way bindable panel sizes, expressed as percentages. Useful for saving and restoring layouts.',
   'resizable.api.disabled.description': 'Disables pointer and keyboard resizing for the group.',
-  'resizable.api.defaultSize.description': 'Initial panel size in percent before a controlled size exists.',
+  'resizable.api.defaultSize.description':
+    'Initial panel size in percent before a controlled size exists.',
   'resizable.api.minSize.description': 'Minimum panel size in percent.',
   'resizable.api.maxSize.description': 'Maximum panel size in percent.',
   'resizable.api.collapsible.description':

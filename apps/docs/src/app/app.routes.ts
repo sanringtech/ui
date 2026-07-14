@@ -118,6 +118,13 @@ export const routes: Routes = [
                   ),
               },
               {
+                path: 'calendar',
+                loadComponent: () =>
+                  import('./pages/components/calendar/calendar-page.component').then(
+                    (m) => m.CalendarPageComponent,
+                  ),
+              },
+              {
                 path: 'card',
                 loadComponent: () =>
                   import('./pages/components/card/card-page.component').then(

@@ -105,3 +105,10 @@ export const SWITCH_THUMB_TRANSLATE_CLASSES = {
   md: 'translate-x-5',
   lg: 'translate-x-5',
 } as const;
+
+export const CALENDAR_DAY_SIZE_CLASSES = {
+  sm: 'size-7 text-xs',
+  md: 'size-9 text-sm',
+  lg: 'size-11 text-base',
+} as const;
+export const CALENDAR_WEEKDAY_TEXT_CLASS = 'text-xs font-medium text-[var(--sanring-muted)]';
