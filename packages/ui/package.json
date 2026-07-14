@@ -11,7 +11,7 @@
     "@sanring/date-picker": "^0.1.0"
   },
   "devDependencies": {
-    "@sanring/date-picker": "file:../../../date-picker/dist/date-picker"
+    "@sanring/date-picker": "^0.1.0"
   },
   "dependencies": {
     "clsx": "^2.1.1",
