@@ -908,16 +908,25 @@ export const zh: Record<TranslationKey, string> = {
     '一個命令列工具，能直接把 Sanring UI 元件的原始碼複製進你的專案——順便處理依賴安裝，程式碼完全歸你掌控。',
   'cli.overview.title': '概覽',
   'cli.overview.body':
-    '@sanring/cli 套件提供四個指令——init、add、diff、list，讀取跟這個文件站相同的元件 registry。建議用 npx 執行，隨時拿到最新版本。',
+    '@sanring/cli 套件提供七個指令——init、add、remove、info、diff、update、list，讀取跟這個文件站相同的元件 registry。建議用 npx 執行，隨時拿到最新版本。',
   'cli.init.title': 'init',
   'cli.init.body':
     '每個專案只需執行一次。會確認目前是否在 Angular 專案中，寫入 sanring.config.json 記錄你選擇的元件路徑，產生 src/sanring-theme.css（所有元件都會讀取的 --sanring-* 設計 token，已存在則預設跳過以保護你的客製化），並安裝基礎的 peer dependencies（clsx、tailwind-merge）。',
   'cli.add.title': 'add',
   'cli.add.body':
     '把一個或多個元件的原始碼複製進你的專案，並安裝缺少的 peer dependencies。如果某個元件依賴其他套件或 primitive（例如 calendar 依賴 @sanring/date-picker），依賴會自動一併安裝。加上 --dry-run 可以在不動任何檔案的情況下，預覽哪些檔案會被新增或覆寫。',
+  'cli.remove.title': 'remove',
+  'cli.remove.body':
+    '移除一個或多個已安裝的元件。如果還有其他已安裝的元件依賴它（例如 tag 還裝著就移除 badge），預設會拒絕移除，除非加上 --force。共用檔案（例如 utils.ts）不會被自動刪除——如果剩下的元件都不再需要某個共用檔案，指令只會列出來提醒你，要刪要留由你自己決定。指令別名為 rm。',
+  'cli.info.title': 'info',
+  'cli.info.body':
+    '顯示某個元件的說明、完整會安裝的檔案清單（包含自動帶進來的相依元件）、以及 peer dependencies，但不會實際寫入任何檔案。適合在真的執行 add 之前，先確認會拉進哪些東西。',
   'cli.diff.title': 'diff',
   'cli.diff.body':
     'Sanring UI 沒有版本概念——元件是複製原始碼，不是 npm 套件——所以沒有自動方式知道本地檔案跟 registry 是否有落差。diff 會把你已安裝的元件與 sanring-theme.css 拿去跟目前的 registry 逐行比對，列出哪些檔案被你客製化過、哪些 registry 端有更新，方便在執行 add --force 之前先確認不會無聲蓋掉你的修改。不帶元件名稱會檢查目前已安裝的全部項目。',
+  'cli.update.title': 'update',
+  'cli.update.body':
+    '把 registry 的更新逐一套用到已安裝的檔案。每個跟 registry 有差異的檔案都會先顯示差異，再問你要不要套用——跟 diff 只負責「回報」落差不同，update 讓你可以直接接受或跳過每個變更，不用自己手動改檔案。不帶元件名稱會檢查目前已安裝的全部項目。',
   'cli.list.title': 'list',
   'cli.list.body': '列出 registry 裡所有可用的元件與其 peer dependencies。指令別名為 ls。',
   'cli.requirements.title': '需求',

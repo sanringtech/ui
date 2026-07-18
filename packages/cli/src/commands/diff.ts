@@ -55,7 +55,7 @@ export function resolveDiffTargets(
   return { components, missing, notInstalled };
 }
 
-function printFileDiff(label: string, local: string, remote: string): boolean {
+export function printFileDiff(label: string, local: string, remote: string): boolean {
   if (local === remote) {
     console.log(pc.dim(`  ✔ ${label} (up to date)`));
     return false;

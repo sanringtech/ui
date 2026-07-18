@@ -99,8 +99,56 @@ const INLINE_CODE_CLASS =
         </ul>
       </app-component-page-section>
 
-      <!-- 4. diff -->
+      <!-- 4. remove -->
       <app-component-page-section [section]="sections[3]">
+        <p class="mt-0 text-base leading-[1.7] text-[var(--docs-muted)]">
+          {{ i18n.t('cli.remove.body') }}
+        </p>
+        <div class="mt-6 overflow-hidden rounded-[var(--sanring-radius)] border border-[var(--docs-border)]">
+          <app-component-page-code-block [code]="commands.remove" language="bash" />
+        </div>
+        <ul class="mt-4 list-none space-y-2 p-0 text-sm text-[var(--docs-muted)]">
+          <li>
+            <code [class]="inlineCodeClass">-p, --path &lt;path&gt;</code>
+            &mdash; destination path relative to cwd
+          </li>
+          <li>
+            <code [class]="inlineCodeClass">-y, --yes</code>
+            &mdash; skip the delete confirmation
+          </li>
+          <li>
+            <code [class]="inlineCodeClass">-f, --force</code>
+            &mdash; remove even if another installed component still depends on it
+          </li>
+          <li>
+            <code [class]="inlineCodeClass">--registry &lt;source&gt;</code>
+            &mdash; custom registry (URL or local path)
+          </li>
+        </ul>
+      </app-component-page-section>
+
+      <!-- 5. info -->
+      <app-component-page-section [section]="sections[4]">
+        <p class="mt-0 text-base leading-[1.7] text-[var(--docs-muted)]">
+          {{ i18n.t('cli.info.body') }}
+        </p>
+        <div class="mt-6 overflow-hidden rounded-[var(--sanring-radius)] border border-[var(--docs-border)]">
+          <app-component-page-code-block [code]="commands.info" language="bash" />
+        </div>
+        <ul class="mt-4 list-none space-y-2 p-0 text-sm text-[var(--docs-muted)]">
+          <li>
+            <code [class]="inlineCodeClass">-p, --path &lt;path&gt;</code>
+            &mdash; destination path, used only to report whether it's already installed
+          </li>
+          <li>
+            <code [class]="inlineCodeClass">--registry &lt;source&gt;</code>
+            &mdash; custom registry (URL or local path)
+          </li>
+        </ul>
+      </app-component-page-section>
+
+      <!-- 6. diff -->
+      <app-component-page-section [section]="sections[5]">
         <p class="mt-0 text-base leading-[1.7] text-[var(--docs-muted)]">
           {{ i18n.t('cli.diff.body') }}
         </p>
@@ -119,8 +167,36 @@ const INLINE_CODE_CLASS =
         </ul>
       </app-component-page-section>
 
-      <!-- 5. list -->
-      <app-component-page-section [section]="sections[4]">
+      <!-- 7. update -->
+      <app-component-page-section [section]="sections[6]">
+        <p class="mt-0 text-base leading-[1.7] text-[var(--docs-muted)]">
+          {{ i18n.t('cli.update.body') }}
+        </p>
+        <div class="mt-6 overflow-hidden rounded-[var(--sanring-radius)] border border-[var(--docs-border)]">
+          <app-component-page-code-block [code]="commands.update" language="bash" />
+        </div>
+        <ul class="mt-4 list-none space-y-2 p-0 text-sm text-[var(--docs-muted)]">
+          <li>
+            <code [class]="inlineCodeClass">-p, --path &lt;path&gt;</code>
+            &mdash; destination path relative to cwd
+          </li>
+          <li>
+            <code [class]="inlineCodeClass">-y, --yes</code>
+            &mdash; apply every change without prompting
+          </li>
+          <li>
+            <code [class]="inlineCodeClass">--dry-run</code>
+            &mdash; show what would change without writing anything
+          </li>
+          <li>
+            <code [class]="inlineCodeClass">--registry &lt;source&gt;</code>
+            &mdash; custom registry (URL or local path)
+          </li>
+        </ul>
+      </app-component-page-section>
+
+      <!-- 8. list -->
+      <app-component-page-section [section]="sections[7]">
         <p class="mt-0 text-base leading-[1.7] text-[var(--docs-muted)]">
           {{ i18n.t('cli.list.body') }}
         </p>
@@ -135,8 +211,8 @@ const INLINE_CODE_CLASS =
         </ul>
       </app-component-page-section>
 
-      <!-- 6. Requirements -->
-      <app-component-page-section [section]="sections[5]">
+      <!-- 9. Requirements -->
+      <app-component-page-section [section]="sections[8]">
         <p class="mt-0 text-base leading-[1.7] text-[var(--docs-muted)]">
           {{ i18n.t('cli.requirements.body') }}
         </p>
@@ -174,7 +250,10 @@ export class CliPageComponent {
     { id: 'overview', titleKey: 'cli.overview.title' },
     { id: 'init', titleKey: 'cli.init.title' },
     { id: 'add', titleKey: 'cli.add.title' },
+    { id: 'remove', titleKey: 'cli.remove.title' },
+    { id: 'info', titleKey: 'cli.info.title' },
     { id: 'diff', titleKey: 'cli.diff.title' },
+    { id: 'update', titleKey: 'cli.update.title' },
     { id: 'list', titleKey: 'cli.list.title' },
     { id: 'requirements', titleKey: 'cli.requirements.title' },
   ];
@@ -193,11 +272,24 @@ npx @sanring/cli@latest add calendar
 
 # preview what would change, without writing any files
 npx @sanring/cli@latest add calendar --dry-run`,
+    remove: `npx @sanring/cli@latest remove calendar
+
+# remove multiple components at once
+npx @sanring/cli@latest remove tag badge`,
+    info: `npx @sanring/cli@latest info select`,
     diff: `# check everything installed
 npx @sanring/cli@latest diff
 
 # check just one component
 npx @sanring/cli@latest diff button`,
+    update: `# check + prompt for everything installed
+npx @sanring/cli@latest update
+
+# just one component
+npx @sanring/cli@latest update accordion
+
+# apply every change without prompting
+npx @sanring/cli@latest update --yes`,
     list: `npx @sanring/cli@latest list
 npx @sanring/cli@latest ls`,
   };

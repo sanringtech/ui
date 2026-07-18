@@ -1027,16 +1027,25 @@ export const en = {
     'A command-line tool for scaffolding Sanring UI components directly into your project — copy the source, wire up dependencies, and stay in control of the code.',
   'cli.overview.title': 'Overview',
   'cli.overview.body':
-    'The @sanring/cli package exposes four commands — init, add, diff, and list — that read from the same component registry used by this documentation site. Run it with npx so you always get the latest version.',
+    'The @sanring/cli package exposes seven commands — init, add, remove, info, diff, update, and list — that read from the same component registry used by this documentation site. Run it with npx so you always get the latest version.',
   'cli.init.title': 'init',
   'cli.init.body':
     "Run once per project. Verifies you're in an Angular project, writes a sanring.config.json with your chosen component path, generates src/sanring-theme.css (the --sanring-* design tokens every component reads — skipped by default if it already exists, to protect your customizations), and installs the base peer dependencies (clsx, tailwind-merge).",
   'cli.add.title': 'add',
   'cli.add.body':
     "Copies one or more components' source files into your project and installs any missing peer dependencies. If a component depends on another package or primitive (e.g. calendar depends on @sanring/date-picker), the dependency is added automatically. Pass --dry-run to preview exactly which files would be created or overwritten without touching your filesystem.",
+  'cli.remove.title': 'remove',
+  'cli.remove.body':
+    "Removes one or more installed components. Refuses to remove a component that another still-installed component depends on (e.g. removing badge while tag is installed) unless you pass --force. Shared files like utils.ts are never deleted automatically — if none of your remaining components need one anymore, it's reported so you can delete it by hand. Aliased as rm.",
+  'cli.info.title': 'info',
+  'cli.info.body':
+    "Shows a component's description, the full file list it would install (including any dependency pulled in automatically), and its peer dependencies — without writing anything. Useful for checking what you're about to pull in before running add.",
   'cli.diff.title': 'diff',
   'cli.diff.body':
     "Sanring UI has no version concept — components are copied source, not npm packages — so there's no automatic way to know if your local files have drifted from the registry. diff compares your installed components and sanring-theme.css against the current registry line by line, showing what you've customized locally and what's changed upstream, so you can check before running add --force. Omit the component names to check everything currently installed.",
+  'cli.update.title': 'update',
+  'cli.update.body':
+    "Applies registry changes to installed files, one file at a time. For each file that differs, shows the diff and asks whether to apply it — unlike diff, which only reports drift, update lets you accept or reject each change without hand-editing. Omit component names to check everything installed.",
   'cli.list.title': 'list',
   'cli.list.body':
     'Prints every component available in the registry, along with its peer dependencies. Aliased as ls.',
