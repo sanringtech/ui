@@ -1,5 +1,11 @@
 # @sanring/cli
 
+## 0.7.1
+
+### Patch Changes
+
+- fdc764f: `sanring --help` now prints a "Quick start" block with the actual init/add command sequence and a note that no npm install is needed, instead of leaving first-time users to find that in the README.
+
 ## 0.7.0
 
 ### Minor Changes

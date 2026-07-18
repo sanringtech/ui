@@ -1,6 +1,6 @@
 {
   "name": "@sanring/cli",
-  "version": "0.7.0",
+  "version": "0.7.1",
   "description": "CLI for adding Sanring UI components to your Angular project",
   "license": "MIT",
   "type": "module",
