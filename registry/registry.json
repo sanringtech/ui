@@ -19,7 +19,7 @@
     },
     {
       "name": "theme",
-      "description": "CSS custom properties every component reads for color/radius — import this once in your global stylesheet",
+      "description": "CSS custom properties every component reads for color/radius \u2014 import this once in your global stylesheet",
       "file": "shared/theme.css"
     },
     {
@@ -280,7 +280,7 @@
     },
     {
       "name": "field",
-      "description": "Form composition primitives — Field, Label, Description, and ErrorMessage wire up layout, ARIA, and Angular Forms validation state for a control.",
+      "description": "Form composition primitives \u2014 Field, Label, Description, and ErrorMessage wire up layout, ARIA, and Angular Forms validation state for a control.",
       "sharedDeps": [
         "utils"
       ],
@@ -380,7 +380,7 @@
     },
     {
       "name": "menu",
-      "description": "Displays a menu to the user — such as a set of actions or functions.",
+      "description": "Displays a menu to the user \u2014 such as a set of actions or functions.",
       "sharedDeps": [
         "utils",
         "component-styles"
@@ -456,7 +456,7 @@
       ]
     },
     {
-      "name": "scrollArea",
+      "name": "scroll-area",
       "description": "Augments native scroll functionality for custom, cross-browser styling.",
       "sharedDeps": [
         "utils"
@@ -465,11 +465,11 @@
         "@angular/cdk": "^22.0.0"
       },
       "files": [
-        "scrollArea/scroll-area.component.ts",
-        "scrollArea/scroll-area.directive.ts",
-        "scrollArea/infinite-scroll.directive.ts",
-        "scrollArea/scroll-area.type.ts",
-        "scrollArea/index.ts"
+        "scroll-area/scroll-area.component.ts",
+        "scroll-area/scroll-area.directive.ts",
+        "scroll-area/infinite-scroll.directive.ts",
+        "scroll-area/scroll-area.type.ts",
+        "scroll-area/index.ts"
       ]
     },
     {
@@ -597,7 +597,7 @@
     },
     {
       "name": "tabs",
-      "description": "A set of layered sections of content—known as tab panels—that are displayed one at a time.",
+      "description": "A set of layered sections of content\u2014known as tab panels\u2014that are displayed one at a time.",
       "sharedDeps": [
         "utils",
         "component-styles"

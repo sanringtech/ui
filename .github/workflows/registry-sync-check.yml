@@ -1,0 +1,20 @@
+name: Registry Sync Check
+
+on:
+  pull_request:
+    branches:
+      - main
+    paths:
+      - 'apps/docs/src/app/navigation/docs-navigation.ts'
+      - 'registry/**'
+
+jobs:
+  check:
+    name: Verify docs components exist in the CLI registry
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Run registry sync check
+        run: node packages/cli/scripts/check-registry-sync.mjs
