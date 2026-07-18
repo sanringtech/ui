@@ -167,6 +167,13 @@ export const routes: Routes = [
                   ),
               },
               {
+                path: 'date-picker',
+                loadComponent: () =>
+                  import('./pages/components/date-picker/date-picker-page.component').then(
+                    (m) => m.DatePickerPageComponent,
+                  ),
+              },
+              {
                 path: 'dialog',
                 loadComponent: () =>
                   import('./pages/components/dialog/dialog-page.component').then(

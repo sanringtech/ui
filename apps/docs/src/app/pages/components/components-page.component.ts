@@ -4,7 +4,12 @@ import { ComponentPageSectionDefinition } from '../../docs-schema/component-page
 import { I18nService } from '../../i18n/i18n.service';
 import { SeoService } from '../../seo/seo.service';
 import { ComponentPageComponent } from '../../layouts/component-page';
-import { docsComponentItems, DocsComponentNavItem } from '../../navigation/docs-navigation';
+import {
+  docsComponentStatusBadgeKeys,
+  docsComponentStatusDotClass,
+  DocsComponentNavItem,
+  visibleDocsComponentItems,
+} from '../../navigation/docs-navigation';
 import { isRecentlyUpdatedComponentId } from '../changelog/component-changelog';
 
 @Component({
@@ -91,6 +96,14 @@ import { isRecentlyUpdatedComponentId } from '../changelog/component-changelog';
                         aria-hidden="true"
                       ></span>
                     }
+                    @if (item.status) {
+                      <span class="sr-only">{{ i18n.t(statusBadgeKeys[item.status]) }}</span>
+                      <span
+                        [class]="'size-2 shrink-0 rounded-full ' + statusDotClass[item.status]"
+                        [attr.title]="i18n.t(statusBadgeKeys[item.status])"
+                        aria-hidden="true"
+                      ></span>
+                    }
                   </a>
                 }
               }
@@ -115,11 +128,13 @@ export class ComponentsPageComponent {
       level: 2,
     },
   ];
-  protected readonly items: DocsComponentNavItem[] = docsComponentItems.map((item) => ({
+  protected readonly items: DocsComponentNavItem[] = visibleDocsComponentItems.map((item) => ({
     ...item,
     badge: isRecentlyUpdatedComponentId(item.id),
   }));
   protected readonly updatedItems: DocsComponentNavItem[] = this.items.filter((item) => item.badge);
+  protected readonly statusBadgeKeys = docsComponentStatusBadgeKeys;
+  protected readonly statusDotClass = docsComponentStatusDotClass;
   protected readonly i18n = inject(I18nService);
   private readonly seo = inject(SeoService);
 

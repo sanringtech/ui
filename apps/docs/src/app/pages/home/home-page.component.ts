@@ -14,7 +14,11 @@ import {
 import { ButtonDirective, ScrollAreaDirective } from '@sanring/ui';
 import { I18nService } from '../../i18n/i18n.service';
 import { TranslationKey } from '../../i18n/translations';
-import { docsComponentItems } from '../../navigation/docs-navigation';
+import {
+  docsComponentStatusBadgeKeys,
+  docsComponentStatusDotClass,
+  visibleDocsComponentItems,
+} from '../../navigation/docs-navigation';
 import { SITE_URL, SeoService } from '../../seo/seo.service';
 import { isRecentlyUpdatedComponentId } from '../changelog/component-changelog';
 
@@ -326,6 +330,14 @@ interface HomeVisualMetric {
                     aria-hidden="true"
                   ></span>
                 }
+                @if (item.status) {
+                  <span class="sr-only">{{ i18n.t(statusBadgeKeys[item.status]) }}</span>
+                  <span
+                    [class]="'size-2 shrink-0 rounded-full ' + statusDotClass[item.status]"
+                    [attr.title]="i18n.t(statusBadgeKeys[item.status])"
+                    aria-hidden="true"
+                  ></span>
+                }
               </a>
             }
           </nav>
@@ -438,13 +450,16 @@ export class HomePageComponent {
       });
     });
   }
-  protected readonly componentCount = docsComponentItems.length;
-  protected readonly componentItems = docsComponentItems.map((item) => ({
+  protected readonly componentCount = visibleDocsComponentItems.length;
+  protected readonly componentItems = visibleDocsComponentItems.map((item) => ({
     id: item.id,
     path: item.path,
     labelKey: item.labelKey,
+    status: item.status,
     isNew: isRecentlyUpdatedComponentId(item.id),
   }));
+  protected readonly statusBadgeKeys = docsComponentStatusBadgeKeys;
+  protected readonly statusDotClass = docsComponentStatusDotClass;
 
   protected readonly registryNodes = ['button', 'dialog', 'toast'];
   protected readonly visualMetrics: HomeVisualMetric[] = [

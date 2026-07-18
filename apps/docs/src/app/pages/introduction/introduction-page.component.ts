@@ -87,7 +87,7 @@ interface IntroStatusCard {
       <app-component-page-section [section]="sections[3]">
         <p class="mt-0 text-sm text-[var(--docs-muted)]">{{ i18n.t('intro.installation.body') }}</p>
         <div class="mt-4 overflow-hidden rounded-[var(--sanring-radius)] border border-[var(--docs-border)]">
-          <app-component-page-code-block [code]="installCommand" language="bash" />
+          <app-component-page-code-block [code]="cliWorkflow" language="bash" />
         </div>
         <p class="mt-6 text-sm text-[var(--docs-muted)]">{{ i18n.t('intro.installation.tailwind') }}</p>
         <div class="mt-4 overflow-hidden rounded-[var(--sanring-radius)] border border-[var(--docs-border)]">
@@ -96,13 +96,6 @@ interface IntroStatusCard {
       </app-component-page-section>
 
       <app-component-page-section [section]="sections[4]">
-        <p class="mt-0 text-sm text-[var(--docs-muted)]">{{ i18n.t('intro.workflow.body') }}</p>
-        <div class="mt-4 overflow-hidden rounded-[var(--sanring-radius)] border border-[var(--docs-border)]">
-          <app-component-page-code-block [code]="cliWorkflow" language="bash" />
-        </div>
-      </app-component-page-section>
-
-      <app-component-page-section [section]="sections[5]">
         <p class="mt-0 text-sm text-[var(--docs-muted)]">{{ i18n.t('intro.firstComponent.body') }}</p>
         <div class="mt-4 overflow-hidden rounded-[var(--sanring-radius)] border border-[var(--docs-border)]">
           <app-component-page-code-block [code]="firstComponent" language="angular-ts" />
@@ -130,7 +123,6 @@ export class IntroductionPageComponent {
     { id: 'current-coverage', titleKey: 'intro.coverage.title' },
     { id: 'requirements', titleKey: 'intro.requirements.title' },
     { id: 'installation', titleKey: 'intro.installation.title' },
-    { id: 'workflow', titleKey: 'intro.workflow.title' },
     { id: 'first-component', titleKey: 'intro.firstComponent.title' },
   ];
 
@@ -152,11 +144,8 @@ export class IntroductionPageComponent {
     },
   ];
 
-  protected readonly installCommand = `npm install @sanring/ui`;
-
   protected readonly tailwindSource = `@import './sanring-theme.css';
 
-@source "../node_modules/@sanring/ui/src";
 @source "./app/components/ui";`;
 
   protected readonly cliWorkflow = `npx @sanring/cli@latest init

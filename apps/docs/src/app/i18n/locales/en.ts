@@ -9,7 +9,6 @@ export const en = {
   'search.label': 'Search documentation',
   'search.placeholder': 'Search documentation...',
   'search.noResults': 'No results found.',
-  'actions.new': '+ New',
   'actions.copyCode': 'Copy code',
   'actions.copied': 'Copied!',
   'actions.copyFailed': 'Copy failed',
@@ -21,6 +20,8 @@ export const en = {
   'actions.selectLanguage': 'Select language',
   'sidebar.sections': 'Sections',
   'sidebar.components': 'Components',
+  'sidebar.openMenu': 'Menu',
+  'sidebar.navigationTitle': 'Navigation',
   'sidebar.introduction': 'Introduction',
   'sidebar.installation': 'Installation',
   'sidebar.theming': 'Theming',
@@ -47,6 +48,7 @@ export const en = {
   'component.collapsible': 'Collapsible',
   'component.command': 'Command',
   'component.combobox': 'Combobox',
+  'component.datePicker': 'Date Picker',
   'component.dialog': 'Dialog',
   'component.divider': 'Divider',
   'component.dropdownMenu': 'Dropdown Menu',
@@ -963,7 +965,7 @@ export const en = {
     'Angular component primitives, documentation, and a registry workflow for teams that want composable building blocks they can own.',
   'intro.whatIs.title': 'What is Sanring UI?',
   'intro.whatIs.body':
-    'Sanring UI is a source-first Angular component system. Use the docs to inspect behavior and APIs, install the package for shared primitives, or copy selected component source through the registry workflow when a product needs full local ownership.',
+    'Sanring UI is a source-first Angular component system. Use the docs to inspect behavior and APIs, then copy the components you need into your project with the CLI — no package to install, no version to depend on.',
   'intro.coverage.title': 'Current coverage',
   'intro.coverage.components.title': 'Documented components',
   'intro.coverage.components.description':
@@ -977,12 +979,9 @@ export const en = {
   'intro.requirements.title': 'Requirements',
   'intro.installation.title': 'Installation',
   'intro.installation.body':
-    'Install the base package when you want to consume primitives directly from @sanring/ui. Calendar also uses @sanring/date-picker as a peer dependency.',
+    'Sanring UI is not an npm package — there is nothing to run "npm install" on. Components are copied straight into your project with the CLI, so you own the code from the start:',
   'intro.installation.tailwind':
-    'Then import the generated theme file and tell Tailwind to scan package and local component source. Add this to your CSS entry file:',
-  'intro.workflow.title': 'Recommended workflow',
-  'intro.workflow.body':
-    'Use the CLI when you want selected component source copied into your own project instead of depending only on package exports.',
+    'Then import the generated theme file and point Tailwind at your local component source. Add this to your CSS entry file:',
   'intro.firstComponent.title': 'Add your first component',
   'intro.firstComponent.body':
     'After adding or importing a component, place the directive or component in the standalone imports array where it is used.',
@@ -1720,4 +1719,15 @@ export const en = {
   'resizable.api.withHandle.description': 'Renders the visible grip inside the handle.',
   'resizable.api.keyboardStep.description':
     'Percentage step used when resizing with arrow keys. Home and End jump to the panel boundary.',
+
+  'datePicker.description': 'A calendar-driven input for picking a single date, a range, or multiple dates.',
+
+  'status.wip.badge': 'In development',
+  'status.wip.title': 'In development',
+  'status.wip.description':
+    'This component is still being built. The API and behavior shown here may change before release.',
+  'status.maintenance.badge': 'Under maintenance',
+  'status.maintenance.title': 'Under maintenance',
+  'status.maintenance.description':
+    'This component is temporarily under maintenance and hidden from production navigation. It remains reachable directly while we work on it.',
 } as const;

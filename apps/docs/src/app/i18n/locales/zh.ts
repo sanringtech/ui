@@ -11,7 +11,6 @@ export const zh: Record<TranslationKey, string> = {
   'search.label': '搜尋文件',
   'search.placeholder': '搜尋文件...',
   'search.noResults': '找不到符合的結果。',
-  'actions.new': '+ 新增',
   'actions.copyCode': '複製程式碼',
   'actions.copied': '已複製！',
   'actions.copyFailed': '複製失敗',
@@ -23,6 +22,8 @@ export const zh: Record<TranslationKey, string> = {
   'actions.selectLanguage': '選擇語言',
   'sidebar.sections': '章節',
   'sidebar.components': '元件',
+  'sidebar.openMenu': '選單',
+  'sidebar.navigationTitle': '導覽選單',
   'sidebar.introduction': '介紹',
   'sidebar.installation': '安裝',
   'sidebar.theming': '主題',
@@ -49,6 +50,7 @@ export const zh: Record<TranslationKey, string> = {
   'component.collapsible': 'Collapsible',
   'component.command': 'Command',
   'component.combobox': 'Combobox',
+  'component.datePicker': '日期選擇器',
   'component.dialog': '對話框',
   'component.divider': '分隔線',
   'component.dropdownMenu': '下拉選單',
@@ -847,7 +849,7 @@ export const zh: Record<TranslationKey, string> = {
     'Angular 元件 primitives、文件與 registry 工作流，提供可組合且能被產品團隊掌握的建構模組。',
   'intro.whatIs.title': 'Sanring UI 是什麼？',
   'intro.whatIs.body':
-    'Sanring UI 是 source-first 的 Angular 元件系統。你可以用文件檢查行為與 API、透過套件共用 primitives，也可以在產品需要完整本地掌控時，透過 registry workflow 複製指定元件原始碼。',
+    'Sanring UI 是 source-first 的 Angular 元件系統。你可以用文件檢查行為與 API，接著透過 CLI 把需要的元件複製進自己的專案——不用裝套件，也不用依賴版本號。',
   'intro.coverage.title': '目前覆蓋範圍',
   'intro.coverage.components.title': '已文件化元件',
   'intro.coverage.components.description':
@@ -861,12 +863,9 @@ export const zh: Record<TranslationKey, string> = {
   'intro.requirements.title': '需求',
   'intro.installation.title': '安裝',
   'intro.installation.body':
-    '當你想直接從 @sanring/ui 使用 primitives 時，安裝基礎套件即可。Calendar 也會使用 @sanring/date-picker 作為 peer dependency。',
+    'Sanring UI 不是一個 npm 套件，沒有「npm install」這回事。元件原始碼會透過 CLI 直接複製進你的專案，一開始就是你自己的程式碼：',
   'intro.installation.tailwind':
-    '接著匯入產生的 theme 檔，並讓 Tailwind 掃描套件與本地元件原始碼。在你的 CSS 入口檔加入以下設定：',
-  'intro.workflow.title': '建議工作流',
-  'intro.workflow.body':
-    '當你希望把指定元件原始碼複製進自己的專案，而不只依賴 package exports 時，使用 CLI 工作流。',
+    '接著匯入產生的 theme 檔，並讓 Tailwind 掃描你本地的元件原始碼。在你的 CSS 入口檔加入以下設定：',
   'intro.firstComponent.title': '加入第一個元件',
   'intro.firstComponent.body':
     '加入或匯入元件後，將需要的 directive 或 component 放進實際使用處的 standalone imports 陣列。',
@@ -1528,4 +1527,14 @@ export const zh: Record<TranslationKey, string> = {
   'resizable.api.withHandle.description': '在 handle 中顯示可見的拖曳握把。',
   'resizable.api.keyboardStep.description':
     '使用方向鍵調整時的百分比步進；Home 與 End 會跳到 panel 邊界。',
+
+  'datePicker.description': '以日曆為基礎的輸入元件，可選取單一日期、區間或多個日期。',
+
+  'status.wip.badge': '開發中',
+  'status.wip.title': '開發中',
+  'status.wip.description': '此元件仍在開發中，這裡展示的 API 與行為在正式發布前可能會調整。',
+  'status.maintenance.badge': '維護中',
+  'status.maintenance.title': '維護中',
+  'status.maintenance.description':
+    '此元件目前維護中，已從正式環境的導覽中暫時移除；維護期間仍可透過直接連結訪問。',
 };

@@ -1,6 +1,10 @@
 import { Component, inject, Input } from '@angular/core';
 import { RouterLink, RouterLinkActive } from '@angular/router';
-import { DocsSidebarItem } from '../../navigation/docs-navigation';
+import {
+  docsComponentStatusBadgeKeys,
+  docsComponentStatusDotClass,
+  DocsSidebarItem,
+} from '../../navigation/docs-navigation';
 import { I18nService } from '../../i18n/i18n.service';
 
 @Component({
@@ -31,6 +35,14 @@ import { I18nService } from '../../i18n/i18n.service';
                 aria-hidden="true"
               ></span>
             }
+            @if (item.status) {
+              <span class="sr-only">{{ i18n.t(statusBadgeKeys[item.status]) }}</span>
+              <span
+                [class]="'ml-2 size-2 shrink-0 rounded-full ' + statusDotClass[item.status]"
+                [attr.title]="i18n.t(statusBadgeKeys[item.status])"
+                aria-hidden="true"
+              ></span>
+            }
           </a>
         }
       }
@@ -43,4 +55,6 @@ export class DocsSectionComponent {
   @Input() sectionClass = '';
 
   protected readonly i18n = inject(I18nService);
+  protected readonly statusBadgeKeys = docsComponentStatusBadgeKeys;
+  protected readonly statusDotClass = docsComponentStatusDotClass;
 }

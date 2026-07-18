@@ -1,9 +1,10 @@
 import { Component, computed, inject, signal } from '@angular/core';
 import { Router } from '@angular/router';
-import { LucideMoon, LucideSearch, LucideSun } from '@lucide/angular';
-import { ButtonDirective, CommandDialogComponent, SANRING_COMMAND_IMPORTS } from '@sanring/ui';
+import { LucideMenu, LucideMoon, LucideSearch, LucideSun } from '@lucide/angular';
+import { CommandDialogComponent, SANRING_COMMAND_IMPORTS } from '@sanring/ui';
 import { I18nService } from '../../i18n/i18n.service';
 import { docsComponentItems, docsSectionItems } from '../../navigation/docs-navigation';
+import { DocsNavStateService } from '../docs-nav-state.service';
 import { fuzzyMatch } from './fuzzy-match';
 import { HeaderActionButtonComponent } from './header-action-button.component';
 
@@ -21,15 +22,31 @@ const MAX_SEARCH_RESULTS = 8;
 @Component({
   selector: 'app-feature-list',
   imports: [
-    ButtonDirective,
     HeaderActionButtonComponent,
+    LucideMenu,
     LucideSearch,
     LucideSun,
     LucideMoon,
     SANRING_COMMAND_IMPORTS,
   ],
+  host: {
+    // header 在 max-[860px] 會 flex-wrap，這個元件變成獨自一行的 flex item。
+    // flex item 預設 min-width:auto 會被內部不縮小的按鈕群（flex-none）撐爆，
+    // 明確設 min-width:0 讓內部的搜尋框改用自身 flex-1 正確縮小。
+    class: 'block min-w-0',
+  },
   template: `
     <div class="flex min-w-0 items-center gap-6 max-[860px]:w-full max-[860px]:gap-3">
+      @if (navState.hasSidebar()) {
+        <app-header-action-button
+          class="flex-none min-[861px]:hidden"
+          [ariaLabel]="i18n.t('sidebar.openMenu')"
+          (clicked)="navState.mobileNavOpen.set(true)"
+        >
+          <svg class="size-4" lucideMenu></svg>
+        </app-header-action-button>
+      }
+
       <div class="max-[860px]:min-w-0 max-[860px]:flex-1">
         <button
           type="button"
@@ -98,10 +115,6 @@ const MAX_SEARCH_RESULTS = 8;
             <svg class="size-4" lucideSun></svg>
           }
         </app-header-action-button>
-
-        <button sanringBtn class="flex-none" type="button" variant="default" size="toolbar">
-          {{ i18n.t('actions.new') }}
-        </button>
       </div>
     </div>
   `,
@@ -110,6 +123,7 @@ export class FeatureListComponent {
   protected readonly githubLink = 'https://github.com/sanringtech';
 
   protected readonly i18n = inject(I18nService);
+  protected readonly navState = inject(DocsNavStateService);
   protected readonly isDark = signal(true);
 
   private readonly router = inject(Router);

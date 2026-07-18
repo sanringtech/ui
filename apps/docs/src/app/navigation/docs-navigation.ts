@@ -1,4 +1,17 @@
+import { isDevMode } from '@angular/core';
 import { TranslationKey } from '../i18n/translations';
+
+export type DocsComponentStatus = 'wip' | 'maintenance';
+
+export const docsComponentStatusBadgeKeys: Record<DocsComponentStatus, TranslationKey> = {
+  wip: 'status.wip.badge',
+  maintenance: 'status.maintenance.badge',
+};
+
+export const docsComponentStatusDotClass: Record<DocsComponentStatus, string> = {
+  wip: 'bg-amber-500 shadow-[0_0_0_3px_color-mix(in_srgb,#f59e0b_18%,transparent)]',
+  maintenance: 'bg-red-500 shadow-[0_0_0_3px_color-mix(in_srgb,#ef4444_18%,transparent)]',
+};
 
 export interface DocsSidebarItem {
   labelKey: TranslationKey;
@@ -6,6 +19,7 @@ export interface DocsSidebarItem {
   active?: boolean;
   badge?: boolean;
   disabled?: boolean;
+  status?: DocsComponentStatus;
 }
 
 export type DocsComponentId =
@@ -24,6 +38,7 @@ export type DocsComponentId =
   | 'collapsible'
   | 'command'
   | 'combobox'
+  | 'date-picker'
   | 'dialog'
   | 'divider'
   | 'dropdown-menu'
@@ -124,6 +139,7 @@ export const docsComponentItems: DocsComponentNavItem[] = [
     labelKey: 'component.calendar',
     path: '/components/calendar',
     active: true,
+    status: 'maintenance',
   },
   {
     id: 'card',
@@ -160,6 +176,13 @@ export const docsComponentItems: DocsComponentNavItem[] = [
     labelKey: 'component.combobox',
     path: '/components/combobox',
     active: true,
+  },
+  {
+    id: 'date-picker',
+    labelKey: 'component.datePicker',
+    path: '/components/date-picker',
+    active: true,
+    status: 'wip',
   },
   {
     id: 'dialog',
@@ -350,6 +373,14 @@ export const docsComponentItems: DocsComponentNavItem[] = [
 ];
 
 export const docsComponentItemsById = new Map(docsComponentItems.map((item) => [item.id, item]));
+
+/**
+ * Items under active maintenance are pulled from production nav (sidebar, components list,
+ * homepage) but stay reachable by direct URL and stay visible while developing locally.
+ */
+export const visibleDocsComponentItems = docsComponentItems.filter(
+  (item) => item.status !== 'maintenance' || isDevMode(),
+);
 
 const enabledDocsComponentItems = docsComponentItems.filter((item) => !item.disabled);
 
