@@ -21,13 +21,25 @@
       "name": "theme",
       "description": "CSS custom properties every component reads for color/radius — import this once in your global stylesheet",
       "file": "shared/theme.css"
+    },
+    {
+      "name": "collection-controller",
+      "description": "Keyboard active-descendant navigation helper shared by combobox and command",
+      "file": "shared/collection-controller.ts"
+    },
+    {
+      "name": "collection-state",
+      "description": "Empty/visible-item helpers shared by combobox and command",
+      "file": "shared/collection-state.ts"
     }
   ],
   "components": [
     {
       "name": "accordion",
       "description": "A vertically stacked set of interactive headings that each reveal a section of content.",
-      "sharedDeps": ["utils"],
+      "sharedDeps": [
+        "utils"
+      ],
       "peerDependencies": {
         "@angular/aria": "^22.0.0",
         "@lucide/angular": "^1.0.0"
@@ -44,7 +56,10 @@
     {
       "name": "alert",
       "description": "Displays a callout for user attention.",
-      "sharedDeps": ["utils", "component-styles"],
+      "sharedDeps": [
+        "utils",
+        "component-styles"
+      ],
       "files": [
         "alert/alert.component.ts",
         "alert/alert-title.directive.ts",
@@ -56,8 +71,13 @@
     {
       "name": "alert-dialog",
       "description": "A modal dialog that interrupts the user with important content and expects a response, and cannot be dismissed by clicking the backdrop or pressing Escape.",
-      "sharedDeps": ["utils", "component-styles"],
-      "componentDeps": ["dialog"],
+      "sharedDeps": [
+        "utils",
+        "component-styles"
+      ],
+      "componentDeps": [
+        "dialog"
+      ],
       "peerDependencies": {
         "@angular/cdk": "^22.0.0",
         "@lucide/angular": "^1.0.0"
@@ -74,7 +94,9 @@
     {
       "name": "aspect-ratio",
       "description": "Keeps media, embeds, and preview frames locked to a consistent aspect ratio.",
-      "sharedDeps": ["utils"],
+      "sharedDeps": [
+        "utils"
+      ],
       "files": [
         "aspect-ratio/aspect-ratio.directive.ts",
         "aspect-ratio/aspect-ratio.type.ts",
@@ -84,7 +106,9 @@
     {
       "name": "avatar",
       "description": "An image element with a fallback for representing the user.",
-      "sharedDeps": ["utils"],
+      "sharedDeps": [
+        "utils"
+      ],
       "peerDependencies": {
         "@angular/cdk": "^22.0.0"
       },
@@ -102,7 +126,10 @@
     {
       "name": "badge",
       "description": "Displays a badge or a component that looks like a badge.",
-      "sharedDeps": ["utils", "component-styles"],
+      "sharedDeps": [
+        "utils",
+        "component-styles"
+      ],
       "files": [
         "badge/badge.directive.ts",
         "badge/badge.type.ts",
@@ -112,7 +139,10 @@
     {
       "name": "breadcrumb",
       "description": "Displays the path to the current resource using a hierarchy of links.",
-      "sharedDeps": ["utils", "component-styles"],
+      "sharedDeps": [
+        "utils",
+        "component-styles"
+      ],
       "peerDependencies": {
         "@angular/router": "^22.0.0",
         "@lucide/angular": "^1.0.0"
@@ -132,7 +162,10 @@
     {
       "name": "button",
       "description": "Displays a button or a component that looks like a button.",
-      "sharedDeps": ["utils", "component-styles"],
+      "sharedDeps": [
+        "utils",
+        "component-styles"
+      ],
       "files": [
         "button/button.directive.ts",
         "button/button.types.ts",
@@ -142,8 +175,13 @@
     {
       "name": "calendar",
       "description": "A date field grid that allows users to select a single date or range.",
-      "sharedDeps": ["utils", "component-styles"],
-      "componentDeps": ["button"],
+      "sharedDeps": [
+        "utils",
+        "component-styles"
+      ],
+      "componentDeps": [
+        "button"
+      ],
       "peerDependencies": {
         "@lucide/angular": "^1.0.0",
         "@sanring/date-picker": "^0.1.0"
@@ -159,7 +197,10 @@
     {
       "name": "card",
       "description": "Displays a card with header, content, and footer.",
-      "sharedDeps": ["utils", "component-styles"],
+      "sharedDeps": [
+        "utils",
+        "component-styles"
+      ],
       "files": [
         "card/card.component.ts",
         "card/card-header.component.ts",
@@ -174,8 +215,13 @@
     {
       "name": "checkbox",
       "description": "A control that allows the user to toggle between checked and not checked.",
-      "sharedDeps": ["utils", "component-styles"],
-      "componentDeps": ["field"],
+      "sharedDeps": [
+        "utils",
+        "component-styles"
+      ],
+      "componentDeps": [
+        "field"
+      ],
       "peerDependencies": {
         "@angular/forms": "^22.0.0",
         "@lucide/angular": "^1.0.0"
@@ -189,7 +235,9 @@
     {
       "name": "collapsible",
       "description": "An interactive component which expands/collapses a panel.",
-      "sharedDeps": ["utils"],
+      "sharedDeps": [
+        "utils"
+      ],
       "files": [
         "collapsible/collapsible.component.ts",
         "collapsible/collapsible-trigger.directive.ts",
@@ -200,7 +248,10 @@
     {
       "name": "dialog",
       "description": "A window overlaid on either the primary window, rendering the content underneath inert.",
-      "sharedDeps": ["utils", "component-styles"],
+      "sharedDeps": [
+        "utils",
+        "component-styles"
+      ],
       "peerDependencies": {
         "@angular/cdk": "^22.0.0",
         "@lucide/angular": "^1.0.0"
@@ -230,7 +281,9 @@
     {
       "name": "field",
       "description": "Form composition primitives — Field, Label, Description, and ErrorMessage wire up layout, ARIA, and Angular Forms validation state for a control.",
-      "sharedDeps": ["utils"],
+      "sharedDeps": [
+        "utils"
+      ],
       "peerDependencies": {
         "@angular/forms": "^22.0.0"
       },
@@ -246,8 +299,13 @@
     {
       "name": "file-upload",
       "description": "Headless file selection primitives with drag-and-drop, trigger composition, validation, and file item rendering.",
-      "sharedDeps": ["utils"],
-      "componentDeps": ["field", "progress"],
+      "sharedDeps": [
+        "utils"
+      ],
+      "componentDeps": [
+        "field",
+        "progress"
+      ],
       "peerDependencies": {
         "@angular/forms": "^22.0.0",
         "@lucide/angular": "^1.0.0"
@@ -264,8 +322,13 @@
     {
       "name": "input",
       "description": "Displays a form input field.",
-      "sharedDeps": ["utils", "component-styles"],
-      "componentDeps": ["field"],
+      "sharedDeps": [
+        "utils",
+        "component-styles"
+      ],
+      "componentDeps": [
+        "field"
+      ],
       "peerDependencies": {
         "@angular/forms": "^22.0.0"
       },
@@ -277,8 +340,12 @@
     {
       "name": "textarea",
       "description": "Displays a multiline form textarea field.",
-      "sharedDeps": ["utils"],
-      "componentDeps": ["field"],
+      "sharedDeps": [
+        "utils"
+      ],
+      "componentDeps": [
+        "field"
+      ],
       "peerDependencies": {
         "@angular/forms": "^22.0.0"
       },
@@ -290,7 +357,9 @@
     {
       "name": "label",
       "description": "Renders an accessible label associated with controls.",
-      "sharedDeps": ["utils"],
+      "sharedDeps": [
+        "utils"
+      ],
       "files": [
         "label/label.directive.ts",
         "label/index.ts"
@@ -299,7 +368,10 @@
     {
       "name": "link",
       "description": "A styled anchor element.",
-      "sharedDeps": ["utils", "component-styles"],
+      "sharedDeps": [
+        "utils",
+        "component-styles"
+      ],
       "files": [
         "link/link.directive.ts",
         "link/link.type.ts",
@@ -309,7 +381,10 @@
     {
       "name": "menu",
       "description": "Displays a menu to the user — such as a set of actions or functions.",
-      "sharedDeps": ["utils", "component-styles"],
+      "sharedDeps": [
+        "utils",
+        "component-styles"
+      ],
       "peerDependencies": {
         "@angular/aria": "^22.0.0",
         "@angular/cdk": "^22.0.0"
@@ -328,7 +403,10 @@
     {
       "name": "popover",
       "description": "Displays rich content in a portal, triggered by a button.",
-      "sharedDeps": ["utils", "component-styles"],
+      "sharedDeps": [
+        "utils",
+        "component-styles"
+      ],
       "peerDependencies": {
         "@angular/cdk": "^22.0.0"
       },
@@ -346,7 +424,9 @@
     {
       "name": "progress",
       "description": "Displays an indicator showing the completion progress of a task.",
-      "sharedDeps": ["utils"],
+      "sharedDeps": [
+        "utils"
+      ],
       "files": [
         "progress/progress.component.ts",
         "progress/progress.directive.ts",
@@ -357,8 +437,13 @@
     {
       "name": "radio",
       "description": "A set of checkable buttons where no more than one can be checked at a time.",
-      "sharedDeps": ["utils", "component-styles"],
-      "componentDeps": ["field"],
+      "sharedDeps": [
+        "utils",
+        "component-styles"
+      ],
+      "componentDeps": [
+        "field"
+      ],
       "peerDependencies": {
         "@angular/forms": "^22.0.0",
         "@lucide/angular": "^1.0.0"
@@ -373,7 +458,9 @@
     {
       "name": "scrollArea",
       "description": "Augments native scroll functionality for custom, cross-browser styling.",
-      "sharedDeps": ["utils"],
+      "sharedDeps": [
+        "utils"
+      ],
       "peerDependencies": {
         "@angular/cdk": "^22.0.0"
       },
@@ -388,7 +475,10 @@
     {
       "name": "sheet",
       "description": "Extends the dialog component to display content that complements the main content of the screen.",
-      "sharedDeps": ["utils", "component-styles"],
+      "sharedDeps": [
+        "utils",
+        "component-styles"
+      ],
       "peerDependencies": {
         "@angular/cdk": "^22.0.0"
       },
@@ -408,7 +498,9 @@
     {
       "name": "skeleton",
       "description": "Use to show a placeholder while content is loading.",
-      "sharedDeps": ["utils"],
+      "sharedDeps": [
+        "utils"
+      ],
       "files": [
         "skeleton/skeleton.directive.ts",
         "skeleton/index.ts"
@@ -417,8 +509,13 @@
     {
       "name": "slider",
       "description": "A range control for selecting a numeric value.",
-      "sharedDeps": ["utils", "component-styles"],
-      "componentDeps": ["field"],
+      "sharedDeps": [
+        "utils",
+        "component-styles"
+      ],
+      "componentDeps": [
+        "field"
+      ],
       "peerDependencies": {
         "@angular/forms": "^22.0.0"
       },
@@ -430,7 +527,9 @@
     {
       "name": "spinner",
       "description": "Displays an animated loading indicator.",
-      "sharedDeps": ["utils"],
+      "sharedDeps": [
+        "utils"
+      ],
       "peerDependencies": {
         "@lucide/angular": "^1.0.0"
       },
@@ -443,7 +542,9 @@
     {
       "name": "stepper",
       "description": "Displays a multi-step workflow built on Angular CDK Stepper.",
-      "sharedDeps": ["utils"],
+      "sharedDeps": [
+        "utils"
+      ],
       "peerDependencies": {
         "@angular/cdk": "^22.0.0",
         "@lucide/angular": "^1.0.0"
@@ -463,7 +564,9 @@
     {
       "name": "timeline",
       "description": "Displays chronological events or process milestones.",
-      "sharedDeps": ["utils"],
+      "sharedDeps": [
+        "utils"
+      ],
       "files": [
         "timeline/timeline.directive.ts",
         "timeline/timeline-item.directive.ts",
@@ -476,8 +579,13 @@
     {
       "name": "switch",
       "description": "A control that allows the user to toggle between checked and not checked.",
-      "sharedDeps": ["utils", "component-styles"],
-      "componentDeps": ["field"],
+      "sharedDeps": [
+        "utils",
+        "component-styles"
+      ],
+      "componentDeps": [
+        "field"
+      ],
       "peerDependencies": {
         "@angular/forms": "^22.0.0"
       },
@@ -490,7 +598,10 @@
     {
       "name": "tabs",
       "description": "A set of layered sections of content—known as tab panels—that are displayed one at a time.",
-      "sharedDeps": ["utils", "component-styles"],
+      "sharedDeps": [
+        "utils",
+        "component-styles"
+      ],
       "peerDependencies": {
         "@angular/aria": "^22.0.0"
       },
@@ -506,8 +617,13 @@
     {
       "name": "tag",
       "description": "Displays a tag with optional dismiss button. Requires badge component.",
-      "sharedDeps": ["utils", "component-styles"],
-      "componentDeps": ["badge"],
+      "sharedDeps": [
+        "utils",
+        "component-styles"
+      ],
+      "componentDeps": [
+        "badge"
+      ],
       "peerDependencies": {
         "@lucide/angular": "^1.0.0"
       },
@@ -519,7 +635,10 @@
     {
       "name": "toast",
       "description": "A succinct message that is displayed temporarily.",
-      "sharedDeps": ["utils", "component-styles"],
+      "sharedDeps": [
+        "utils",
+        "component-styles"
+      ],
       "peerDependencies": {
         "@angular/cdk": "^22.0.0",
         "@lucide/angular": "^1.0.0"
@@ -536,7 +655,10 @@
     {
       "name": "toggle",
       "description": "A two-state button that can be either on or off.",
-      "sharedDeps": ["utils", "component-styles"],
+      "sharedDeps": [
+        "utils",
+        "component-styles"
+      ],
       "files": [
         "toggle/toggle.directive.ts",
         "toggle/toggle.types.ts",
@@ -546,7 +668,10 @@
     {
       "name": "tooltip",
       "description": "A popup that displays information related to an element when the element receives keyboard focus or the mouse hovers over it.",
-      "sharedDeps": ["utils", "component-styles"],
+      "sharedDeps": [
+        "utils",
+        "component-styles"
+      ],
       "peerDependencies": {
         "@angular/cdk": "^22.0.0"
       },
@@ -556,6 +681,241 @@
         "tooltip/tooltip-content.component.ts",
         "tooltip/tooltip.type.ts",
         "tooltip/index.ts"
+      ]
+    },
+    {
+      "name": "carousel",
+      "description": "A slideshow of panels you can page through, built on embla-carousel.",
+      "sharedDeps": [
+        "utils"
+      ],
+      "peerDependencies": {
+        "embla-carousel": "^8.6.0"
+      },
+      "files": [
+        "carousel/carousel.component.ts",
+        "carousel/carousel-content.component.ts",
+        "carousel/carousel-item.component.ts",
+        "carousel/carousel-next.directive.ts",
+        "carousel/carousel-previous.directive.ts",
+        "carousel/carousel.type.ts",
+        "carousel/index.ts"
+      ]
+    },
+    {
+      "name": "dropdown-menu",
+      "description": "A menu of actions or options triggered by a button, positioned relative to it.",
+      "sharedDeps": [
+        "utils",
+        "component-styles"
+      ],
+      "peerDependencies": {
+        "@angular/aria": "^22.0.0",
+        "@angular/cdk": "^22.0.0"
+      },
+      "files": [
+        "dropdown-menu/dropdown-menu.component.ts",
+        "dropdown-menu/dropdown-menu-content.component.ts",
+        "dropdown-menu/dropdown-menu-group.component.ts",
+        "dropdown-menu/dropdown-menu-item.directive.ts",
+        "dropdown-menu/dropdown-menu-label.component.ts",
+        "dropdown-menu/dropdown-menu-separator.component.ts",
+        "dropdown-menu/dropdown-menu-trigger.directive.ts",
+        "dropdown-menu/dropdown-menu.type.ts",
+        "dropdown-menu/index.ts"
+      ]
+    },
+    {
+      "name": "hover-card",
+      "description": "Shows a preview card when hovering or focusing a trigger.",
+      "sharedDeps": [
+        "utils",
+        "component-styles"
+      ],
+      "peerDependencies": {
+        "@angular/cdk": "^22.0.0"
+      },
+      "files": [
+        "hover-card/hover-card.component.ts",
+        "hover-card/hover-card-content.component.ts",
+        "hover-card/hover-card-trigger.directive.ts",
+        "hover-card/hover-card.type.ts",
+        "hover-card/index.ts"
+      ]
+    },
+    {
+      "name": "resizable",
+      "description": "Resizable split panels with a draggable handle between them.",
+      "sharedDeps": [
+        "utils"
+      ],
+      "peerDependencies": {
+        "@lucide/angular": "^1.0.0"
+      },
+      "files": [
+        "resizable/resizable-group.component.ts",
+        "resizable/resizable-handle.component.ts",
+        "resizable/resizable-panel.component.ts",
+        "resizable/resizable.types.ts",
+        "resizable/resizable.utils.ts",
+        "resizable/index.ts"
+      ]
+    },
+    {
+      "name": "table",
+      "description": "A composable data table with sorting, built on @angular/cdk/table.",
+      "sharedDeps": [
+        "utils"
+      ],
+      "peerDependencies": {
+        "@angular/cdk": "^22.0.0",
+        "@lucide/angular": "^1.0.0"
+      },
+      "files": [
+        "table/table.directive.ts",
+        "table/table-container.component.ts",
+        "table/caption.directive.ts",
+        "table/cell.directive.ts",
+        "table/column-def.directive.ts",
+        "table/no-data-row.directive.ts",
+        "table/row.directive.ts",
+        "table/sort.directive.ts",
+        "table/sort-header.component.ts",
+        "table/table.type.ts",
+        "table/index.ts"
+      ]
+    },
+    {
+      "name": "tree",
+      "description": "A hierarchical, expandable tree view with keyboard navigation.",
+      "sharedDeps": [
+        "utils"
+      ],
+      "peerDependencies": {
+        "@angular/cdk": "^22.0.0"
+      },
+      "files": [
+        "tree/tree.component.ts",
+        "tree/tree-group.component.ts",
+        "tree/tree-node.component.ts",
+        "tree/tree-trigger.directive.ts",
+        "tree/index.ts"
+      ]
+    },
+    {
+      "name": "select",
+      "description": "A dropdown select control with keyboard navigation, built on @angular/cdk/overlay.",
+      "sharedDeps": [
+        "utils",
+        "component-styles"
+      ],
+      "componentDeps": [
+        "field"
+      ],
+      "peerDependencies": {
+        "@angular/cdk": "^22.0.0",
+        "@angular/forms": "^22.0.0",
+        "@lucide/angular": "^1.0.0"
+      },
+      "files": [
+        "select/select.component.ts",
+        "select/select-content.component.ts",
+        "select/select-group.component.ts",
+        "select/select-item.component.ts",
+        "select/select-label.component.ts",
+        "select/select-separator.component.ts",
+        "select/select-trigger.directive.ts",
+        "select/select-value.component.ts",
+        "select/select.type.ts",
+        "select/index.ts"
+      ]
+    },
+    {
+      "name": "combobox",
+      "description": "An autocomplete input with a filterable list of suggestions.",
+      "sharedDeps": [
+        "utils",
+        "component-styles",
+        "collection-controller",
+        "collection-state"
+      ],
+      "componentDeps": [
+        "field"
+      ],
+      "peerDependencies": {
+        "@angular/cdk": "^22.0.0",
+        "@angular/forms": "^22.0.0",
+        "@lucide/angular": "^1.0.0"
+      },
+      "files": [
+        "combobox/combobox.component.ts",
+        "combobox/combobox-chip.component.ts",
+        "combobox/combobox-chip-input.component.ts",
+        "combobox/combobox-chips.component.ts",
+        "combobox/combobox-content.component.ts",
+        "combobox/combobox-empty.component.ts",
+        "combobox/combobox-group.component.ts",
+        "combobox/combobox-input.component.ts",
+        "combobox/combobox-item.component.ts",
+        "combobox/combobox-label.component.ts",
+        "combobox/combobox-list.component.ts",
+        "combobox/combobox-separator.component.ts",
+        "combobox/combobox-trigger.directive.ts",
+        "combobox/combobox-value.component.ts",
+        "combobox/index.ts"
+      ]
+    },
+    {
+      "name": "command",
+      "description": "A composable command palette / fuzzy-search list, with an optional dialog wrapper.",
+      "sharedDeps": [
+        "utils",
+        "component-styles",
+        "collection-controller",
+        "collection-state"
+      ],
+      "componentDeps": [
+        "dialog"
+      ],
+      "peerDependencies": {
+        "@angular/cdk": "^22.0.0",
+        "@lucide/angular": "^1.0.0"
+      },
+      "files": [
+        "command/command.component.ts",
+        "command/command-dialog.component.ts",
+        "command/command-empty.component.ts",
+        "command/command-group.component.ts",
+        "command/command-input.component.ts",
+        "command/command-item.component.ts",
+        "command/command-list.component.ts",
+        "command/command-shortcut.component.ts",
+        "command/index.ts"
+      ]
+    },
+    {
+      "name": "pagination",
+      "description": "Page navigation controls, with an optional page-size select built on the select component.",
+      "sharedDeps": [
+        "utils"
+      ],
+      "componentDeps": [
+        "select"
+      ],
+      "peerDependencies": {
+        "@angular/forms": "^22.0.0",
+        "@lucide/angular": "^1.0.0"
+      },
+      "files": [
+        "pagination/pagination.component.ts",
+        "pagination/paginator.component.ts",
+        "pagination/page-size-select.component.ts",
+        "pagination/pagination-item.directive.ts",
+        "pagination/pagination-list.component.ts",
+        "pagination/pagination-nav.directive.ts",
+        "pagination/disableable-nav.directive.ts",
+        "pagination/pagination.type.ts",
+        "pagination/index.ts"
       ]
     }
   ]
