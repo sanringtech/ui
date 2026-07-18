@@ -2,7 +2,7 @@ import { mkdtempSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
-import { getInstalledPackages, isAngularProject, readConfig, writeConfig } from './utils.js';
+import { getInstalledPackages, hashContent, isAngularProject, readConfig, writeConfig } from './utils.js';
 
 let dir: string;
 
@@ -62,5 +62,15 @@ describe('getInstalledPackages', () => {
   it('returns an empty set when package.json is malformed', () => {
     writeFileSync(join(dir, 'package.json'), '{ not valid json');
     expect(getInstalledPackages(dir)).toEqual(new Set());
+  });
+});
+
+describe('hashContent', () => {
+  it('is deterministic for identical content', () => {
+    expect(hashContent('const a = 1;')).toBe(hashContent('const a = 1;'));
+  });
+
+  it('differs for different content', () => {
+    expect(hashContent('const a = 1;')).not.toBe(hashContent('const a = 2;'));
   });
 });

@@ -14,7 +14,7 @@ import {
   type RegistryComponent,
   type RegistryShared,
 } from '../registry.js';
-import { getInstalledPackages, isAngularProject, readConfig } from '../utils.js';
+import { getInstalledPackages, hashContent, isAngularProject, readConfig, writeConfig } from '../utils.js';
 
 export function writeFile(dest: string, content: string, force: boolean): 'written' | 'skipped' {
   if (existsSync(dest) && !force) return 'skipped';
@@ -175,7 +175,9 @@ export const addCommand = new Command('add')
 
       // Resolve component path: CLI option > sanring.config.json > default
       const config = readConfig(cwd);
-      const componentBasePath = resolve(cwd, options.path ?? config?.componentPath ?? DEFAULT_PATH);
+      const resolvedComponentPath = options.path ?? config?.componentPath ?? DEFAULT_PATH;
+      const componentBasePath = resolve(cwd, resolvedComponentPath);
+      const installedHashes = { ...config?.installedHashes };
 
       // Fetch registry
       const registrySpinner = ora('Loading registry...').start();
@@ -257,6 +259,7 @@ export const addCommand = new Command('add')
             const content = await fetchFile(shared.file, registrySource);
             const result = writeFile(dest, content, options.force);
             if (result === 'written') {
+              installedHashes[`shared/${fileName}`] = hashContent(content);
               spinner.stopAndPersist({ symbol: pc.green('✔'), text: `shared/${fileName}` });
               written++;
             } else {
@@ -300,6 +303,7 @@ export const addCommand = new Command('add')
             const content = await fetchFile(`components/${file}`, registrySource);
             const result = writeFile(dest, content, options.force);
             if (result === 'written') {
+              installedHashes[`${component.name}/${fileName}`] = hashContent(content);
               spinner.stopAndPersist({ symbol: pc.green('✔'), text: fileName });
               written++;
             } else {
@@ -342,6 +346,10 @@ export const addCommand = new Command('add')
           }
         }
         console.log('');
+      }
+
+      if (!options.dryRun && written > 0) {
+        writeConfig(cwd, { componentPath: resolvedComponentPath, installedHashes });
       }
 
       const parts: string[] = [];

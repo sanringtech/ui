@@ -7,6 +7,7 @@ import { detectPackageManager, fetchFile, installCommand } from '../registry.js'
 import {
   CONFIG_FILE,
   getInstalledPackages,
+  hashContent,
   isAngularProject,
   readConfig,
   writeConfig,
@@ -68,6 +69,10 @@ export const initCommand = new Command('init')
       const themeContent = await fetchFile('shared/theme.css', options.registry);
       const themeResult = writeFile(themeDest, themeContent, options.force);
       if (themeResult === 'written') {
+        writeConfig(cwd, {
+          componentPath,
+          installedHashes: { [THEME_FILE_PATH]: hashContent(themeContent) },
+        });
         console.log(pc.green('✔') + ` ${THEME_FILE_PATH} written`);
       } else {
         console.log(

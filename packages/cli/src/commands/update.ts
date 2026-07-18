@@ -4,7 +4,7 @@ import { join, resolve } from 'node:path';
 import { createInterface } from 'node:readline/promises';
 import pc from 'picocolors';
 import { fetchFile, fetchRegistry } from '../registry.js';
-import { isAngularProject, readConfig } from '../utils.js';
+import { hashContent, isAngularProject, readConfig, writeConfig } from '../utils.js';
 import { writeFile } from './add.js';
 import { printFileDiff, resolveDiffTargets } from './diff.js';
 import { THEME_FILE_PATH } from './init.js';
@@ -16,6 +16,36 @@ interface PendingFile {
   dest: string;
   local: string;
   remote: string;
+}
+
+interface AutoFile {
+  label: string;
+  dest: string;
+  remote: string;
+}
+
+export type UpdateClassification =
+  | { kind: 'unchanged' }
+  | { kind: 'auto'; label: string; dest: string; remote: string }
+  | { kind: 'conflict'; label: string; dest: string; local: string; remote: string };
+
+// Tells "registry moved on but the user never touched this file" apart from
+// "the user customized it" without keeping a full copy of the original file
+// around — just the hash of its content as of the last `add`/`update`. Only
+// the first case can be applied silently; the second still needs a human to
+// look at the diff, since we'd otherwise clobber a real customization.
+export function classifyUpdate(
+  label: string,
+  dest: string,
+  local: string,
+  remote: string,
+  recordedHash: string | undefined,
+): UpdateClassification {
+  if (local === remote) return { kind: 'unchanged' };
+  if (recordedHash !== undefined && recordedHash === hashContent(local)) {
+    return { kind: 'auto', label, dest, remote };
+  }
+  return { kind: 'conflict', label, dest, local, remote };
 }
 
 async function confirmFile(label: string, yes: boolean): Promise<boolean> {
@@ -68,15 +98,32 @@ export const updateCommand = new Command('update')
         console.log(pc.dim(`  Not installed, skipping: ${notInstalled.join(', ')}`));
       }
 
-      // Gather every file that differs, same set diff.ts would compare.
+      // Gather every file that differs, same set diff.ts would compare, and
+      // sort each into "safe to apply silently" vs. "needs a human to look".
+      const installedHashes = { ...config?.installedHashes };
+      const auto: AutoFile[] = [];
       const pending: PendingFile[] = [];
+      let backfilled = 0;
+
+      function classify(label: string, dest: string, local: string, remote: string) {
+        const classification = classifyUpdate(label, dest, local, remote, installedHashes[label]);
+        if (classification.kind === 'unchanged') {
+          if (installedHashes[label] === undefined) {
+            installedHashes[label] = hashContent(local);
+            backfilled++;
+          }
+          return;
+        }
+        if (classification.kind === 'auto') auto.push(classification);
+        else pending.push(classification);
+      }
 
       const themeDest = join(cwd, THEME_FILE_PATH);
       const themeShared = registry.shared.find((s) => s.name === 'theme');
       if (themeShared && existsSync(themeDest)) {
         const remote = await fetchFile(themeShared.file, registrySource);
         const local = readFileSync(themeDest, 'utf-8');
-        if (local !== remote) pending.push({ label: THEME_FILE_PATH, dest: themeDest, local, remote });
+        classify(THEME_FILE_PATH, themeDest, local, remote);
       }
 
       const sharedNamesNeeded = new Set<string>();
@@ -91,7 +138,7 @@ export const updateCommand = new Command('update')
         if (!existsSync(dest)) continue;
         const remote = await fetchFile(shared.file, registrySource);
         const local = readFileSync(dest, 'utf-8');
-        if (local !== remote) pending.push({ label: `shared/${fileName}`, dest, local, remote });
+        classify(`shared/${fileName}`, dest, local, remote);
       }
 
       for (const component of components) {
@@ -102,34 +149,60 @@ export const updateCommand = new Command('update')
           if (!existsSync(dest)) continue;
           const remote = await fetchFile(`components/${file}`, registrySource);
           const local = readFileSync(dest, 'utf-8');
-          if (local !== remote) pending.push({ label: `${component.name}/${fileName}`, dest, local, remote });
+          classify(`${component.name}/${fileName}`, dest, local, remote);
         }
       }
 
-      if (pending.length === 0) {
+      if (auto.length === 0 && pending.length === 0) {
+        if (!options.dryRun && backfilled > 0) writeConfig(cwd, { componentPath: config?.componentPath ?? DEFAULT_PATH, installedHashes });
         console.log(pc.green('\n✔ Everything already matches the registry. Nothing to update.\n'));
         return;
       }
 
-      console.log(pc.cyan(`\n${pending.length} file${pending.length > 1 ? 's' : ''} differ from the registry:\n`));
-
       let applied = 0, skipped = 0;
-      for (const file of pending) {
-        printFileDiff(file.label, file.local, file.remote);
 
-        if (options.dryRun) {
-          console.log(pc.dim(`  – ${file.label} (dry run, would prompt to apply)\n`));
-          continue;
-        }
-
-        const confirmed = await confirmFile(file.label, options.yes);
-        if (confirmed) {
+      // Untouched since install — the registry moved on but the user never
+      // edited their copy, so there's nothing to lose by applying directly.
+      if (auto.length > 0) {
+        console.log(
+          pc.cyan(`\n${auto.length} file${auto.length > 1 ? 's' : ''} unchanged locally, applying registry update:\n`),
+        );
+        for (const file of auto) {
+          if (options.dryRun) {
+            console.log(pc.dim(`  – ${file.label} (dry run, would auto-update — no local changes)`));
+            continue;
+          }
           writeFile(file.dest, file.remote, true);
-          console.log(pc.green(`  ✔ Updated ${file.label}\n`));
+          installedHashes[file.label] = hashContent(file.remote);
+          console.log(pc.green(`  ✔ ${file.label} (auto-updated — no local changes)`));
           applied++;
-        } else {
-          console.log(pc.dim(`  – Skipped ${file.label}\n`));
-          skipped++;
+        }
+        console.log('');
+      }
+
+      // Locally modified — show the diff and ask before overwriting.
+      if (pending.length > 0) {
+        console.log(
+          pc.cyan(`${pending.length} file${pending.length > 1 ? 's' : ''} differ and were locally modified:\n`),
+        );
+        for (const file of pending) {
+          printFileDiff(file.label, file.local, file.remote);
+
+          if (options.dryRun) {
+            console.log(pc.dim(`  – ${file.label} (dry run, would prompt to apply)\n`));
+            continue;
+          }
+
+          const confirmed = await confirmFile(file.label, options.yes);
+          if (confirmed) {
+            writeFile(file.dest, file.remote, true);
+            installedHashes[file.label] = hashContent(file.remote);
+            console.log(pc.green(`  ✔ Updated ${file.label}\n`));
+            applied++;
+          } else {
+            console.log(pc.dim(`  – Skipped ${file.label}\n`));
+            skipped++;
+          }
         }
       }
 
@@ -137,6 +210,8 @@ export const updateCommand = new Command('update')
         console.log(pc.dim(`  Dry run — no files were written.\n`));
         return;
       }
+
+      writeConfig(cwd, { componentPath: config?.componentPath ?? DEFAULT_PATH, installedHashes });
 
       const parts: string[] = [];
       if (applied > 0) parts.push(pc.green(`${applied} updated`));
