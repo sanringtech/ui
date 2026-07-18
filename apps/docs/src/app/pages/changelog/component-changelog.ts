@@ -67,6 +67,10 @@ export const componentChangelog: readonly ComponentChangelogEntry[] = [
         type: 'fixed',
         text: '`sanring --version` reported a hardcoded `0.0.1` regardless of the actual published version.',
       },
+      {
+        type: 'changed',
+        text: '`sanring update` now tells apart files you never touched since installing from ones you customized — untouched files apply silently, only real customizations still show a diff and ask for confirmation. `add`/`init` record a content hash per file to make this possible.',
+      },
     ],
   },
   {
