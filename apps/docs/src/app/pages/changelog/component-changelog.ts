@@ -34,6 +34,42 @@ export interface ComponentChangelogEntry {
  */
 export const componentChangelog: readonly ComponentChangelogEntry[] = [
   {
+    date: '2026-07-18',
+    changes: [
+      {
+        type: 'fixed',
+        notable: true,
+        componentIds: [
+          'carousel',
+          'combobox',
+          'command',
+          'dropdown-menu',
+          'hover-card',
+          'pagination',
+          'resizable',
+          'select',
+          'table',
+          'tree',
+        ],
+        text: '`npx @sanring/cli add <name>` now works for these 10 components — they had docs pages but no registry entry, so the command failed for all of them.',
+      },
+      {
+        type: 'fixed',
+        componentIds: ['scroll-area'],
+        text: '`npx @sanring/cli add scroll-area` now works — the registry had it registered as `scrollArea`, so only that exact (undocumented) name was accepted.',
+      },
+      {
+        type: 'added',
+        notable: true,
+        text: 'New CLI commands: `sanring info <component>` (preview what add would install without writing anything), `sanring remove <components...>` (uninstall, refuses to break a component that still depends on it), and `sanring update` (apply registry changes to installed files one at a time, interactively).',
+      },
+      {
+        type: 'fixed',
+        text: '`sanring --version` reported a hardcoded `0.0.1` regardless of the actual published version.',
+      },
+    ],
+  },
+  {
     date: '2026-07-14',
     changes: [
       {
