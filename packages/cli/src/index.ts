@@ -3,6 +3,7 @@ import { readFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { Command } from 'commander';
+import pc from 'picocolors';
 import { addCommand } from './commands/add.js';
 import { diffCommand } from './commands/diff.js';
 import { initCommand } from './commands/init.js';
@@ -18,7 +19,18 @@ const program = new Command();
 program
   .name('sanring')
   .description('Add Sanring UI components to your Angular project')
-  .version(version);
+  .version(version)
+  .addHelpText(
+    'after',
+    `
+${pc.bold('Quick start')}
+  $ npx @sanring/cli@latest init
+  $ npx @sanring/cli@latest add button
+
+${pc.dim('No installation required — components are copied into your project as source,')}
+${pc.dim('not installed as an npm package. Docs: https://ui.sanring.dev')}
+`,
+  );
 
 program.addCommand(initCommand);
 program.addCommand(listCommand);
