@@ -1,9 +1,11 @@
-import { describe, expect, it } from 'vitest';
-import { mkdirSync, mkdtempSync, rmSync, writeFileSync } from 'node:fs';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+import { existsSync, mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { tmpdir } from 'node:os';
 import type { Registry, RegistryComponent, RegistryShared } from '../registry.js';
-import { collectOverwriteCandidates, collectPeerDeps, resolveInstallSet } from './add.js';
+import { hashContent, readConfig } from '../utils.js';
+import { writeRegistryFixture } from '../__tests__/registry-fixture.js';
+import { addCommand, collectOverwriteCandidates, collectPeerDeps, resolveInstallSet } from './add.js';
 
 function component(overrides: Partial<RegistryComponent> & { name: string }): RegistryComponent {
   return { description: '', files: [`${overrides.name}/index.ts`], ...overrides };
@@ -134,5 +136,53 @@ describe('collectOverwriteCandidates', () => {
     } finally {
       rmSync(dir, { recursive: true, force: true });
     }
+  });
+});
+
+describe('addCommand (integration)', () => {
+  let projectDir: string;
+  let registryDir: string;
+  let originalCwd: string;
+
+  beforeEach(() => {
+    originalCwd = process.cwd();
+    projectDir = mkdtempSync(join(tmpdir(), 'sanring-cli-project-'));
+    registryDir = mkdtempSync(join(tmpdir(), 'sanring-cli-registry-'));
+    writeFileSync(join(projectDir, 'angular.json'), '{}', 'utf-8');
+    writeRegistryFixture(registryDir, { utils: 'export function cn() {}\n', widget: 'export const widget = 1;\n' });
+    process.chdir(projectDir);
+    vi.spyOn(console, 'log').mockImplementation(() => {});
+  });
+
+  afterEach(() => {
+    process.chdir(originalCwd);
+    rmSync(projectDir, { recursive: true, force: true });
+    rmSync(registryDir, { recursive: true, force: true });
+    vi.restoreAllMocks();
+  });
+
+  it('writes component and shared files, and records their baseline hash', async () => {
+    await addCommand.parseAsync(['widget', '--registry', registryDir], { from: 'user' });
+
+    const componentFile = join(projectDir, 'src/app/components/ui/widget/index.ts');
+    const sharedFile = join(projectDir, 'src/app/components/ui/shared/utils.ts');
+    expect(existsSync(componentFile)).toBe(true);
+    expect(existsSync(sharedFile)).toBe(true);
+    expect(readFileSync(componentFile, 'utf-8')).toBe('export const widget = 1;\n');
+
+    const config = readConfig(projectDir);
+    expect(config?.componentPath).toBe('src/app/components/ui');
+    expect(config?.installedHashes?.['widget/index.ts']).toBe(hashContent('export const widget = 1;\n'));
+    expect(config?.installedHashes?.['shared/utils.ts']).toBe(hashContent('export function cn() {}\n'));
+  });
+
+  it('skips an existing file instead of overwriting it without --force', async () => {
+    const componentFile = join(projectDir, 'src/app/components/ui/widget/index.ts');
+    mkdirSync(join(projectDir, 'src/app/components/ui/widget'), { recursive: true });
+    writeFileSync(componentFile, 'hand-written before add ever ran\n', 'utf-8');
+
+    await addCommand.parseAsync(['widget', '--registry', registryDir], { from: 'user' });
+
+    expect(readFileSync(componentFile, 'utf-8')).toBe('hand-written before add ever ran\n');
   });
 });
