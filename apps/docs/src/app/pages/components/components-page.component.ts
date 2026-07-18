@@ -1,7 +1,8 @@
-import { Component, inject } from '@angular/core';
+import { Component, effect, inject } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { ComponentPageSectionDefinition } from '../../docs-schema/component-page.types';
 import { I18nService } from '../../i18n/i18n.service';
+import { SeoService } from '../../seo/seo.service';
 import { ComponentPageComponent } from '../../layouts/component-page';
 import { docsComponentItems, DocsComponentNavItem } from '../../navigation/docs-navigation';
 import { isRecentlyUpdatedComponentId } from '../changelog/component-changelog';
@@ -120,4 +121,14 @@ export class ComponentsPageComponent {
   }));
   protected readonly updatedItems: DocsComponentNavItem[] = this.items.filter((item) => item.badge);
   protected readonly i18n = inject(I18nService);
+  private readonly seo = inject(SeoService);
+
+  constructor() {
+    effect(() => {
+      this.seo.setPage({
+        title: this.i18n.t('nav.components'),
+        description: this.i18n.t('components.description'),
+      });
+    });
+  }
 }

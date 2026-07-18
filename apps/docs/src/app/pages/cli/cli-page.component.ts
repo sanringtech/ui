@@ -1,6 +1,7 @@
-import { Component, inject } from '@angular/core';
+import { Component, effect, inject } from '@angular/core';
 import { ComponentPageSectionDefinition } from '../../docs-schema/component-page.types';
 import { I18nService } from '../../i18n/i18n.service';
+import { SeoService } from '../../seo/seo.service';
 import {
   ComponentPageCodeBlock,
   ComponentPageComponent,
@@ -157,7 +158,17 @@ const INLINE_CODE_CLASS =
 })
 export class CliPageComponent {
   protected readonly i18n = inject(I18nService);
+  private readonly seo = inject(SeoService);
   protected readonly inlineCodeClass = INLINE_CODE_CLASS;
+
+  constructor() {
+    effect(() => {
+      this.seo.setPage({
+        title: this.i18n.t('sidebar.cli'),
+        description: this.i18n.t('cli.page.description'),
+      });
+    });
+  }
 
   protected readonly sections: readonly ComponentPageSectionDefinition[] = [
     { id: 'overview', titleKey: 'cli.overview.title' },

@@ -1,7 +1,8 @@
-import { Component, inject } from '@angular/core';
+import { Component, effect, inject } from '@angular/core';
 import { NgTemplateOutlet } from '@angular/common';
 import { ComponentPageSectionDefinition } from '../../docs-schema/component-page.types';
 import { I18nService } from '../../i18n/i18n.service';
+import { SeoService } from '../../seo/seo.service';
 import {
   ComponentPageComponent,
   ComponentPageSectionComponent,
@@ -112,6 +113,16 @@ interface RoadmapItem {
 })
 export class RoadmapPageComponent {
   protected readonly i18n = inject(I18nService);
+  private readonly seo = inject(SeoService);
+
+  constructor() {
+    effect(() => {
+      this.seo.setPage({
+        title: this.i18n.t('sidebar.roadmap'),
+        description: this.i18n.t('roadmap.page.description'),
+      });
+    });
+  }
 
   protected readonly sections: readonly ComponentPageSectionDefinition[] = [
     { id: 'shipped', titleKey: 'roadmap.shipped.title' },

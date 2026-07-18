@@ -1,6 +1,7 @@
-import { Component, inject } from '@angular/core';
+import { Component, effect, inject } from '@angular/core';
 import { ComponentPageSectionDefinition } from '../../docs-schema/component-page.types';
 import { I18nService } from '../../i18n/i18n.service';
+import { SeoService } from '../../seo/seo.service';
 import {
   ComponentPageCodeBlock,
   ComponentPageComponent,
@@ -112,7 +113,17 @@ interface IntroStatusCard {
 })
 export class IntroductionPageComponent {
   protected readonly i18n = inject(I18nService);
+  private readonly seo = inject(SeoService);
   private readonly componentCount = docsComponentItems.length;
+
+  constructor() {
+    effect(() => {
+      this.seo.setPage({
+        title: this.i18n.t('sidebar.introduction'),
+        description: this.i18n.t('intro.page.description'),
+      });
+    });
+  }
 
   protected readonly sections: readonly ComponentPageSectionDefinition[] = [
     { id: 'what-is', titleKey: 'intro.whatIs.title' },

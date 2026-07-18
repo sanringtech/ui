@@ -1,4 +1,4 @@
-import { Component, inject, Input } from '@angular/core';
+import { Component, inject, Input, OnChanges } from '@angular/core';
 import { Router } from '@angular/router';
 import { LucideArrowLeft, LucideArrowRight, LucideChevronDown, LucideCopy } from '@lucide/angular';
 import { ButtonDirective } from '@sanring/ui';
@@ -8,6 +8,7 @@ import {
   getAdjacentDocsComponent,
 } from '../../navigation/docs-navigation';
 import { I18nService } from '../../i18n/i18n.service';
+import { SeoService } from '../../seo/seo.service';
 
 @Component({
   selector: 'app-component-page-header',
@@ -61,13 +62,20 @@ import { I18nService } from '../../i18n/i18n.service';
     </header>
   `,
 })
-export class ComponentPageHeaderComponent {
+export class ComponentPageHeaderComponent implements OnChanges {
   @Input({ required: true }) title = '';
   @Input({ required: true }) description = '';
   @Input() componentId: DocsComponentId | null = null;
 
   protected readonly i18n = inject(I18nService);
   private readonly router = inject(Router);
+  private readonly seo = inject(SeoService);
+
+  ngOnChanges() {
+    if (this.title && this.description) {
+      this.seo.setPage({ title: this.title, description: this.description });
+    }
+  }
 
   protected get previousComponent() {
     return this.componentId ? getAdjacentDocsComponent(this.componentId).previous : null;

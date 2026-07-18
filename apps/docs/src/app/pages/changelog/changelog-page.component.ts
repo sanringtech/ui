@@ -1,4 +1,4 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, effect, inject, signal } from '@angular/core';
 import {
   TimelineContentDirective,
   TimelineDirective,
@@ -7,6 +7,7 @@ import {
 } from '@sanring/ui';
 import { ComponentPageSectionDefinition } from '../../docs-schema/component-page.types';
 import { I18nService } from '../../i18n/i18n.service';
+import { SeoService } from '../../seo/seo.service';
 import { ComponentPageComponent, ComponentPageSectionComponent } from '../../layouts/component-page';
 import { ComponentChangeType, componentChangelog } from './component-changelog';
 
@@ -165,7 +166,17 @@ function renderInlineCode(text: string): string {
 })
 export class ChangelogPageComponent {
   protected readonly i18n = inject(I18nService);
+  private readonly seo = inject(SeoService);
   private readonly expandedEntries = signal<ReadonlySet<string>>(new Set());
+
+  constructor() {
+    effect(() => {
+      this.seo.setPage({
+        title: this.i18n.t('sidebar.changelog'),
+        description: this.i18n.t('changelog.page.description'),
+      });
+    });
+  }
 
   protected readonly sections: readonly ComponentPageSectionDefinition[] = [
     { id: 'components', titleKey: 'changelog.component.title' },

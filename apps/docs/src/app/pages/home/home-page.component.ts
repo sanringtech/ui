@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, effect, inject } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import {
   LucideBlocks,
@@ -15,6 +15,7 @@ import { ButtonDirective, ScrollAreaDirective } from '@sanring/ui';
 import { I18nService } from '../../i18n/i18n.service';
 import { TranslationKey } from '../../i18n/translations';
 import { docsComponentItems } from '../../navigation/docs-navigation';
+import { SITE_URL, SeoService } from '../../seo/seo.service';
 import { isRecentlyUpdatedComponentId } from '../changelog/component-changelog';
 
 interface HomeFeature {
@@ -414,7 +415,29 @@ interface HomeVisualMetric {
 })
 export class HomePageComponent {
   protected readonly i18n = inject(I18nService);
+  private readonly seo = inject(SeoService);
   protected readonly releaseVersion = 'v0.5.1';
+
+  constructor() {
+    effect(() => {
+      const title = this.i18n.t('home.title');
+      const description = this.i18n.t('home.description');
+
+      this.seo.setPage({ title, description, path: '/' });
+      this.seo.setJsonLd({
+        '@context': 'https://schema.org',
+        '@type': 'WebSite',
+        name: title,
+        url: `${SITE_URL}/`,
+        description,
+        publisher: {
+          '@type': 'Organization',
+          name: title,
+          url: SITE_URL,
+        },
+      });
+    });
+  }
   protected readonly componentCount = docsComponentItems.length;
   protected readonly componentItems = docsComponentItems.map((item) => ({
     id: item.id,
