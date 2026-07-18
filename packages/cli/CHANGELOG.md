@@ -1,5 +1,15 @@
 # @sanring/cli
 
+## 0.7.0
+
+### Minor Changes
+
+- e620e62: Add 10 components that were documented on the docs site but missing from the CLI registry: carousel, combobox, command, dropdown-menu, hover-card, pagination, resizable, select, table, and tree. `npx @sanring/cli add <name>` now works for all of them. Also adds two new shared helpers (`collection-controller`, `collection-state`) used by combobox and command.
+
+### Patch Changes
+
+- 3271557: Fix `sanring --version` reporting a hardcoded `0.0.1` instead of the package's actual version. Fix `scrollArea` being registered under the wrong name — `npx @sanring/cli add scroll-area` (matching its docs page and every other kebab-case component name) now works; it previously only responded to `scrollArea`.
+
 ## 0.6.1
 
 ### Patch Changes
