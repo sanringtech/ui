@@ -80,6 +80,10 @@ export const en = {
     'Recently added or changed components will appear here after each update.',
   'components.updatedEmpty': 'No updated components yet.',
   'components.allTitle': 'All components',
+  'components.disabledNotice.title': 'Why are some components greyed out?',
+  'components.disabledNotice.description':
+    "They're still in development — their docs page exists but isn't ready to use yet, so it isn't linked from this list. Track progress on the",
+  'components.disabledNotice.roadmapLink': 'roadmap',
   'home.eyebrow': 'Angular component primitives',
   'home.title': 'Sanring UI',
   'home.description':

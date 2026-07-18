@@ -1,5 +1,7 @@
 import { Component, effect, inject } from '@angular/core';
 import { RouterLink } from '@angular/router';
+import { LucideHammer } from '@lucide/angular';
+import { AlertComponent, AlertDescriptionDirective, AlertTitleDirective } from '@sanring/ui';
 import { ComponentPageSectionDefinition } from '../../docs-schema/component-page.types';
 import { I18nService } from '../../i18n/i18n.service';
 import { SeoService } from '../../seo/seo.service';
@@ -14,7 +16,14 @@ import { isRecentlyUpdatedComponentId } from '../changelog/component-changelog';
 
 @Component({
   selector: 'app-components-page',
-  imports: [ComponentPageComponent, RouterLink],
+  imports: [
+    ComponentPageComponent,
+    RouterLink,
+    AlertComponent,
+    AlertDescriptionDirective,
+    AlertTitleDirective,
+    LucideHammer,
+  ],
   template: `
     <app-component-page [sections]="sections">
       <header class="border-b border-[var(--docs-border)] pb-10">
@@ -71,6 +80,20 @@ import { isRecentlyUpdatedComponentId } from '../changelog/component-changelog';
           >
             {{ i18n.t('components.allTitle') }}
           </h2>
+
+          @if (hasDisabledItems) {
+            <sanring-alert class="mb-6">
+              <svg lucideHammer class="size-4"></svg>
+              <h5 sanringAlertTitle>{{ i18n.t('components.disabledNotice.title') }}</h5>
+              <p sanringAlertDescription>
+                {{ i18n.t('components.disabledNotice.description') }}
+                <a routerLink="/roadmap" class="underline underline-offset-2">{{
+                  i18n.t('components.disabledNotice.roadmapLink')
+                }}</a
+                >.
+              </p>
+            </sanring-alert>
+          }
 
           <nav [attr.aria-label]="i18n.t('components.allTitle')">
             <div
@@ -133,6 +156,7 @@ export class ComponentsPageComponent {
     badge: isRecentlyUpdatedComponentId(item.id),
   }));
   protected readonly updatedItems: DocsComponentNavItem[] = this.items.filter((item) => item.badge);
+  protected readonly hasDisabledItems = this.items.some((item) => item.disabled);
   protected readonly statusBadgeKeys = docsComponentStatusBadgeKeys;
   protected readonly statusDotClass = docsComponentStatusDotClass;
   protected readonly i18n = inject(I18nService);

@@ -80,6 +80,9 @@ export const zh: Record<TranslationKey, string> = {
   'components.updatedDescription': '每次更新後，近期新增或調整的元件會顯示在這裡。',
   'components.updatedEmpty': '目前沒有已更新元件。',
   'components.allTitle': '所有元件',
+  'components.disabledNotice.title': '為什麼有些元件是灰色的？',
+  'components.disabledNotice.description': '它們還在開發中——文件頁面已經存在，但內容還沒準備好，所以清單裡先不開放點擊。可以到',
+  'components.disabledNotice.roadmapLink': 'Roadmap 頁面',
   'home.eyebrow': 'Angular component primitives',
   'home.title': 'Sanring UI',
   'home.description':
