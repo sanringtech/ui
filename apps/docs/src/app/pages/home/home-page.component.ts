@@ -318,27 +318,35 @@ interface HomeVisualMetric {
             aria-label="Component shortcuts"
           >
             @for (item of componentItems; track item.id) {
-              <a
-                class="flex min-w-0 items-center justify-between gap-3 rounded-[var(--sanring-radius)] border border-[var(--docs-border)] bg-[var(--docs-surface)] px-4 py-3 text-sm font-semibold text-[var(--docs-fg)] no-underline transition-colors hover:border-[var(--docs-border-strong)] hover:bg-[var(--docs-elevated)]"
-                [routerLink]="item.path"
-              >
-                <span class="min-w-0 truncate">{{ i18n.t(item.labelKey) }}</span>
-                @if (item.isNew) {
-                  <span class="sr-only">{{ i18n.t('home.components.newBadge') }}</span>
-                  <span
-                    class="size-2 shrink-0 rounded-full bg-[var(--docs-accent-strong)] shadow-[0_0_0_3px_color-mix(in_srgb,var(--docs-accent)_18%,transparent)]"
-                    aria-hidden="true"
-                  ></span>
-                }
-                @if (item.status) {
-                  <span class="sr-only">{{ i18n.t(statusBadgeKeys[item.status]) }}</span>
-                  <span
-                    [class]="'size-2 shrink-0 rounded-full ' + statusDotClass[item.status]"
-                    [attr.title]="i18n.t(statusBadgeKeys[item.status])"
-                    aria-hidden="true"
-                  ></span>
-                }
-              </a>
+              @if (item.disabled) {
+                <span
+                  class="flex min-w-0 items-center gap-3 rounded-[var(--sanring-radius)] border border-[var(--docs-border)] bg-[var(--docs-surface)] px-4 py-3 text-sm font-semibold text-[color-mix(in_srgb,var(--docs-muted)_45%,transparent)]"
+                >
+                  <span class="min-w-0 truncate">{{ i18n.t(item.labelKey) }}</span>
+                </span>
+              } @else {
+                <a
+                  class="flex min-w-0 items-center justify-between gap-3 rounded-[var(--sanring-radius)] border border-[var(--docs-border)] bg-[var(--docs-surface)] px-4 py-3 text-sm font-semibold text-[var(--docs-fg)] no-underline transition-colors hover:border-[var(--docs-border-strong)] hover:bg-[var(--docs-elevated)]"
+                  [routerLink]="item.path"
+                >
+                  <span class="min-w-0 truncate">{{ i18n.t(item.labelKey) }}</span>
+                  @if (item.isNew) {
+                    <span class="sr-only">{{ i18n.t('home.components.newBadge') }}</span>
+                    <span
+                      class="size-2 shrink-0 rounded-full bg-[var(--docs-accent-strong)] shadow-[0_0_0_3px_color-mix(in_srgb,var(--docs-accent)_18%,transparent)]"
+                      aria-hidden="true"
+                    ></span>
+                  }
+                  @if (item.status) {
+                    <span class="sr-only">{{ i18n.t(statusBadgeKeys[item.status]) }}</span>
+                    <span
+                      [class]="'size-2 shrink-0 rounded-full ' + statusDotClass[item.status]"
+                      [attr.title]="i18n.t(statusBadgeKeys[item.status])"
+                      aria-hidden="true"
+                    ></span>
+                  }
+                </a>
+              }
             }
           </nav>
         </div>
@@ -456,6 +464,7 @@ export class HomePageComponent {
     path: item.path,
     labelKey: item.labelKey,
     status: item.status,
+    disabled: item.disabled,
     isNew: isRecentlyUpdatedComponentId(item.id),
   }));
   protected readonly statusBadgeKeys = docsComponentStatusBadgeKeys;

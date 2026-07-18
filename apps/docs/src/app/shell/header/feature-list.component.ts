@@ -134,10 +134,12 @@ export class FeatureListComponent {
     const sectionItems = docsSectionItems
       .filter((item): item is typeof item & { path: string } => !!item.path && !item.disabled)
       .map((item) => ({ label: this.i18n.t(item.labelKey), path: item.path }));
-    const componentItems = docsComponentItems.map((item) => ({
-      label: this.i18n.t(item.labelKey),
-      path: item.path,
-    }));
+    const componentItems = docsComponentItems
+      .filter((item) => !item.disabled)
+      .map((item) => ({
+        label: this.i18n.t(item.labelKey),
+        path: item.path,
+      }));
 
     return [...sectionItems, ...componentItems];
   });
