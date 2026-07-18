@@ -159,7 +159,7 @@ export const checkboxPage = {
 
 export const checkboxPageExamples = {
   basic: `<sanring-checkbox [(ngModel)]="isChecked" />`,
-  usageImport: `import { CheckboxComponent } from '@sanring/ui';`,
+  usageImport: `import { CheckboxComponent } from './components/ui/checkbox';`,
   usageMain: `<sanring-checkbox [(ngModel)]="isChecked" />`,
   indeterminate: `<sanring-checkbox [(ngModel)]="state" />`,
   withLabel: `<div class="flex items-center gap-2">

@@ -66,7 +66,7 @@ const mediaFrameClass =
       <app-component-page-section [section]="section('installation')">
         <app-component-page-installation
           componentName="aspect-ratio"
-          manualSnippet="import { AspectRatioDirective } from '@sanring/ui';"
+          manualSnippet="import { AspectRatioDirective } from './components/ui/aspect-ratio';"
         />
       </app-component-page-section>
 

@@ -86,7 +86,7 @@ export const linkPageExamples = {
   basic: `<a sanringLink href="#basic">
   Sanring UI
 </a>`,
-  usageImport: `import { LinkDirective } from '@sanring/ui';`,
+  usageImport: `import { LinkDirective } from './components/ui/link';`,
   usageMain: `<a sanringLink href="#basic">
   Link
 </a>`,

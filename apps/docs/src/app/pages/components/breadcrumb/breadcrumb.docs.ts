@@ -93,7 +93,7 @@ export const breadcrumbPageExamples = {
 </sanring-breadcrumb>`,
 
   usageImport: `import { Component } from '@angular/core';
-import { SANRING_BREADCRUMB_IMPORTS } from '@sanring/ui';
+import { SANRING_BREADCRUMB_IMPORTS } from './components/ui/breadcrumb';
 
 @Component({
   imports: [SANRING_BREADCRUMB_IMPORTS],
@@ -111,15 +111,7 @@ export class ExampleComponent {}`,
   </sanring-breadcrumb-list>
 </sanring-breadcrumb>`,
   usageIndividualImports: `import { Component } from '@angular/core';
-import {
-  BreadcrumbComponent,
-  BreadcrumbDividerComponent,
-  BreadcrumbEllipsisComponent,
-  BreadcrumbItemComponent,
-  BreadcrumbLinkComponent,
-  BreadcrumbListComponent,
-  BreadcrumbPageComponent,
-} from '@sanring/ui';
+import { BreadcrumbComponent, BreadcrumbDividerComponent, BreadcrumbEllipsisComponent, BreadcrumbItemComponent, BreadcrumbLinkComponent, BreadcrumbListComponent, BreadcrumbPageComponent } from './components/ui/breadcrumb';
 
 @Component({
   imports: [

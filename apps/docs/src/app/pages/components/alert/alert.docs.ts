@@ -80,7 +80,7 @@ export const alertPageExamples = {
   </p>
 </sanring-alert>`,
   usageImport: `import { Component } from '@angular/core';
-import { SANRING_ALERT_IMPORTS } from '@sanring/ui';
+import { SANRING_ALERT_IMPORTS } from './components/ui/alert';
 
 @Component({
   imports: [SANRING_ALERT_IMPORTS],
@@ -94,7 +94,7 @@ export class ExampleComponent {}`,
   </p>
 </sanring-alert>`,
   usageIndividualImports: `import { Component } from '@angular/core';
-import { AlertComponent, AlertDescriptionDirective, AlertTitleDirective } from '@sanring/ui';
+import { AlertComponent, AlertDescriptionDirective, AlertTitleDirective } from './components/ui/alert';
 
 @Component({
   imports: [AlertComponent, AlertTitleDirective, AlertDescriptionDirective],

@@ -57,7 +57,7 @@ import { tagPage, tagPageExamples } from './tag.docs';
       <app-component-page-section [section]="section('installation')">
         <app-component-page-installation
           componentName="tag"
-          manualSnippet="import { TagComponent } from '@sanring/ui';"
+          manualSnippet="import { TagComponent } from './components/ui/tag';"
         />
       </app-component-page-section>
 

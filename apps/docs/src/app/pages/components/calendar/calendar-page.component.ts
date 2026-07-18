@@ -122,7 +122,7 @@ const ZH_LOCALE: CalendarLocale = {
       <app-component-page-section [section]="section('installation')">
         <app-component-page-installation
           componentName="calendar"
-          manualSnippet="import { CalendarComponent } from '@sanring/ui';"
+          manualSnippet="import { CalendarComponent } from './components/ui/calendar';"
         />
       </app-component-page-section>
 

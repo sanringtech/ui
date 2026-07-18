@@ -73,7 +73,7 @@ import { fieldPage, fieldPageExamples } from './field.docs';
       <app-component-page-section [section]="section('installation')">
         <app-component-page-installation
           componentName="field"
-          manualSnippet="import { DescriptionDirective, ErrorMessageComponent, FieldLabelDirective, SanringFieldComponent } from '@sanring/ui';"
+          manualSnippet="import { DescriptionDirective, ErrorMessageComponent, FieldLabelDirective, SanringFieldComponent } from './components/ui/field';"
         />
       </app-component-page-section>
 

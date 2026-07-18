@@ -60,7 +60,7 @@ import { badgePage, badgePageExamples } from './badge.docs';
       <app-component-page-section [section]="section('installation')">
         <app-component-page-installation
           componentName="badge"
-          manualSnippet="import { BadgeDirective } from '@sanring/ui';"
+          manualSnippet="import { BadgeDirective } from './components/ui/badge';"
         />
       </app-component-page-section>
 

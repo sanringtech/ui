@@ -77,7 +77,7 @@ import { radioGroupApiRows, radioItemApiRows, radioPage, radioPageExamples } fro
       <app-component-page-section [section]="section('installation')">
         <app-component-page-installation
           componentName="radio"
-          manualSnippet="import { SANRING_RADIO_IMPORTS } from '@sanring/ui';"
+          manualSnippet="import { SANRING_RADIO_IMPORTS } from './components/ui/radio';"
         />
       </app-component-page-section>
 

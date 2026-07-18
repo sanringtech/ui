@@ -94,7 +94,7 @@ import { tabsPage, tabsPageExamples } from './tabs.docs';
       <app-component-page-section [section]="section('installation')">
         <app-component-page-installation
           componentName="tabs"
-          manualSnippet="import { SANRING_TABS_IMPORTS } from '@sanring/ui';"
+          manualSnippet="import { SANRING_TABS_IMPORTS } from './components/ui/tabs';"
         />
       </app-component-page-section>
 

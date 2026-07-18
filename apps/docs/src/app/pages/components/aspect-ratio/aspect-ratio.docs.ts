@@ -79,7 +79,7 @@ export const aspectRatioPageExamples = {
     src="/example.jpg"
   />
 </div>`,
-  usageImport: `import { AspectRatioDirective } from '@sanring/ui';`,
+  usageImport: `import { AspectRatioDirective } from './components/ui/aspect-ratio';`,
   usageMain: `<div sanringAspectRatio="16 / 9">
   <img alt="Preview" class="h-full w-full object-cover" src="..." />
 </div>`,

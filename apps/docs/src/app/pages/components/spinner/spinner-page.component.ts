@@ -61,7 +61,7 @@ import { spinnerPage, spinnerPageExamples } from './spinner.docs';
       <app-component-page-section [section]="section('installation')">
         <app-component-page-installation
           componentName="spinner"
-          manualSnippet="import { SpinnerComponent } from '@sanring/ui';"
+          manualSnippet="import { SpinnerComponent } from './components/ui/spinner';"
         />
       </app-component-page-section>
 

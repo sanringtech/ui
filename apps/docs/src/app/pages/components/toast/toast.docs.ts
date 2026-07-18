@@ -138,7 +138,8 @@ export const toastPageExamples = {
   Show toast
 </button>`,
   usageImport: `import { Component, inject } from '@angular/core';
-import { ButtonDirective, SANRING_TOAST_IMPORTS, ToastService } from '@sanring/ui';
+import { ButtonDirective } from './components/ui/button';
+import { SANRING_TOAST_IMPORTS, ToastService } from './components/ui/toast';
 
 @Component({
   imports: [ButtonDirective, SANRING_TOAST_IMPORTS],
@@ -154,7 +155,8 @@ save() {
   });
 }`,
   usageIndividualImports: `import { Component, inject } from '@angular/core';
-import { ButtonDirective, ToastService, ToasterComponent } from '@sanring/ui';
+import { ButtonDirective } from './components/ui/button';
+import { ToastService, ToasterComponent } from './components/ui/toast';
 
 @Component({
   imports: [ButtonDirective, ToasterComponent],

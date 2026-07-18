@@ -104,7 +104,7 @@ export class ToastPositionDemoComponent {
       <app-component-page-section [section]="section('installation')">
         <app-component-page-installation
           componentName="toast"
-          manualSnippet="import { SANRING_TOAST_IMPORTS, ToastService } from '@sanring/ui';"
+          manualSnippet="import { SANRING_TOAST_IMPORTS, ToastService } from './components/ui/toast';"
         />
       </app-component-page-section>
 

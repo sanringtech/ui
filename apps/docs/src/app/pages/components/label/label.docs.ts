@@ -62,7 +62,7 @@ export const labelPage = {
 
 export const labelPageExamples = {
   basic: `<label sanringLabel for="email">Email</label>`,
-  usageImport: `import { LabelDirective } from '@sanring/ui';`,
+  usageImport: `import { LabelDirective } from './components/ui/label';`,
   usageMain: `<label sanringLabel for="email">Email</label>`,
   withInput: `<div class="grid gap-2">
   <label sanringLabel for="email">Email</label>

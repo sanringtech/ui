@@ -78,7 +78,7 @@ export const spinnerPage = {
 export const spinnerPageExamples = {
   basic: `<sanring-spinner />`,
 
-  usageImport: `import { SpinnerComponent } from '@sanring/ui';`,
+  usageImport: `import { SpinnerComponent } from './components/ui/spinner';`,
   usageMain: `<sanring-spinner ariaLabel="Fetching data" />`,
 
   variant: `<sanring-spinner variant="loader" />

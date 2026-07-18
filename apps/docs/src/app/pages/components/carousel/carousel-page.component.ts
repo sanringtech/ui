@@ -116,7 +116,7 @@ import { carouselPage, carouselPageExamples } from './carousel.docs';
       <app-component-page-section [section]="section('installation')">
         <app-component-page-installation
           componentName="carousel"
-          manualSnippet="import { SANRING_CAROUSEL_IMPORTS } from '@sanring/ui';"
+          manualSnippet="import { SANRING_CAROUSEL_IMPORTS } from './components/ui/carousel';"
         />
       </app-component-page-section>
 

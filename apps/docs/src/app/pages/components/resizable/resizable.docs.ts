@@ -121,11 +121,7 @@ export const resizablePage = {
 } as const satisfies ComponentPageDefinition;
 
 export const resizablePageExamples = {
-  usageImport: `import {
-  ResizableGroupComponent,
-  ResizableHandleComponent,
-  ResizablePanelComponent,
-} from '@sanring/ui';`,
+  usageImport: `import { ResizableGroupComponent, ResizableHandleComponent, ResizablePanelComponent } from './components/ui/resizable';`,
   usageMain: `<div class="h-64">
   <sanring-resizable-group class="rounded border" [(sizes)]="sizes">
     <sanring-resizable-panel [defaultSize]="30" [minSize]="20">

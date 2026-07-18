@@ -113,7 +113,7 @@ export const buttonPage = {
 } as const satisfies ComponentPageDefinition;
 
 export const buttonPageExamples = {
-  basic: `import { ButtonDirective } from '@sanring/ui';
+  basic: `import { ButtonDirective } from './components/ui/button';
 
 <button sanringBtn type="button" variant="outline">
   Outline
@@ -122,7 +122,7 @@ export const buttonPageExamples = {
 <button sanringBtn type="button" variant="outline" size="icon" aria-label="Settings">
   <svg class="size-4" lucideSettings></svg>
 </button>`,
-  usageImport: `import { ButtonDirective } from '@sanring/ui';`,
+  usageImport: `import { ButtonDirective } from './components/ui/button';`,
   usageMain: `<button sanringBtn type="button" variant="outline">
   Button
 </button>`,

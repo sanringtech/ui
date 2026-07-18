@@ -138,7 +138,7 @@ export const comboboxPageExamples = {
 </sanring-combobox>`,
 
   usageImport: `import { Component } from '@angular/core';
-import { SANRING_COMBOBOX_IMPORTS } from '@sanring/ui';
+import { SANRING_COMBOBOX_IMPORTS } from './components/ui/combobox';
 
 @Component({
   imports: [SANRING_COMBOBOX_IMPORTS],
@@ -146,18 +146,7 @@ import { SANRING_COMBOBOX_IMPORTS } from '@sanring/ui';
 export class ExampleComponent {}`,
 
   usageIndividualImports: `import { Component } from '@angular/core';
-import {
-  ComboboxComponent,
-  ComboboxContentComponent,
-  ComboboxEmptyComponent,
-  ComboboxGroupComponent,
-  ComboboxInputComponent,
-  ComboboxItemComponent,
-  ComboboxLabelComponent,
-  ComboboxListComponent,
-  ComboboxSeparatorComponent,
-  ComboboxTriggerDirective,
-} from '@sanring/ui';
+import { ComboboxComponent, ComboboxContentComponent, ComboboxEmptyComponent, ComboboxGroupComponent, ComboboxInputComponent, ComboboxItemComponent, ComboboxLabelComponent, ComboboxListComponent, ComboboxSeparatorComponent, ComboboxTriggerDirective } from './components/ui/combobox';
 
 @Component({
   imports: [

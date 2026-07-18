@@ -63,7 +63,7 @@ import { skeletonPage, skeletonPageExamples } from './skeleton.docs';
       <app-component-page-section [section]="section('installation')">
         <app-component-page-installation
           componentName="skeleton"
-          manualSnippet="import { SkeletonDirective } from '@sanring/ui';"
+          manualSnippet="import { SkeletonDirective } from './components/ui/skeleton';"
         />
       </app-component-page-section>
 

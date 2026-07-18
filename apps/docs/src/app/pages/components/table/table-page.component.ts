@@ -136,7 +136,7 @@ interface InvoiceRow {
       <app-component-page-section [section]="section('installation')">
         <app-component-page-installation
           componentName="table"
-          manualSnippet="import { TableDirective, TableContainerComponent } from '@sanring/ui';"
+          manualSnippet="import { TableDirective, TableContainerComponent } from './components/ui/table';"
         />
       </app-component-page-section>
 

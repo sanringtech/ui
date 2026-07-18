@@ -74,7 +74,7 @@ import { buttonPage, buttonPageExamples } from './button.docs';
       <app-component-page-section [section]="section('installation')">
         <app-component-page-installation
           componentName="button"
-          manualSnippet="import { ButtonDirective } from '@sanring/ui';"
+          manualSnippet="import { ButtonDirective } from './components/ui/button';"
         />
       </app-component-page-section>
 

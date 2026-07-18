@@ -133,7 +133,7 @@ export const avatarPageExamples = {
   <sanring-avatar-fallback>AL</sanring-avatar-fallback>
 </sanring-avatar>`,
   usageImport: `import { Component } from '@angular/core';
-import { SANRING_AVATAR_IMPORTS } from '@sanring/ui';
+import { SANRING_AVATAR_IMPORTS } from './components/ui/avatar';
 
 @Component({
   imports: [SANRING_AVATAR_IMPORTS],
@@ -144,14 +144,7 @@ export class ExampleComponent {}`,
   <sanring-avatar-fallback>AL</sanring-avatar-fallback>
 </sanring-avatar>`,
   usageIndividualImports: `import { Component } from '@angular/core';
-import {
-  AvatarBadgeDirective,
-  AvatarComponent,
-  AvatarFallbackComponent,
-  AvatarGroupComponent,
-  AvatarGroupCountComponent,
-  AvatarImageDirective,
-} from '@sanring/ui';
+import { AvatarBadgeDirective, AvatarComponent, AvatarFallbackComponent, AvatarGroupComponent, AvatarGroupCountComponent, AvatarImageDirective } from './components/ui/avatar';
 
 @Component({
   imports: [

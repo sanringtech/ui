@@ -95,7 +95,7 @@ export const cardPageExamples = {
   </sanring-card-content>
 </sanring-card>`,
   usageImport: `import { Component } from '@angular/core';
-import { SANRING_CARD_IMPORTS } from '@sanring/ui';
+import { SANRING_CARD_IMPORTS } from './components/ui/card';
 
 @Component({
   imports: [SANRING_CARD_IMPORTS],
@@ -111,14 +111,7 @@ export class ExampleComponent {}`,
   </sanring-card-content>
 </sanring-card>`,
   usageIndividualImports: `import { Component } from '@angular/core';
-import {
-  CardComponent,
-  CardContentComponent,
-  CardDescriptionDirective,
-  CardFooterComponent,
-  CardHeaderComponent,
-  CardTitleDirective,
-} from '@sanring/ui';
+import { CardComponent, CardContentComponent, CardDescriptionDirective, CardFooterComponent, CardHeaderComponent, CardTitleDirective } from './components/ui/card';
 
 @Component({
   imports: [

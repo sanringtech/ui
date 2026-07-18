@@ -97,7 +97,8 @@ export const collapsiblePage = {
 
 export const collapsiblePageExamples = {
   usageImport: `import { Component } from '@angular/core';
-import { ButtonDirective, SANRING_COLLAPSIBLE_IMPORTS } from '@sanring/ui';
+import { ButtonDirective } from './components/ui/button';
+import { SANRING_COLLAPSIBLE_IMPORTS } from './components/ui/collapsible';
 
 @Component({
   imports: [ButtonDirective, SANRING_COLLAPSIBLE_IMPORTS],
@@ -113,12 +114,8 @@ export class ExampleComponent {}`,
   </div>
 </sanring-collapsible>`,
   usageIndividualImports: `import { Component } from '@angular/core';
-import {
-  ButtonDirective,
-  CollapsibleComponent,
-  CollapsibleContentDirective,
-  CollapsibleTriggerDirective,
-} from '@sanring/ui';
+import { ButtonDirective } from './components/ui/button';
+import { CollapsibleComponent, CollapsibleContentDirective, CollapsibleTriggerDirective } from './components/ui/collapsible';
 
 @Component({
   imports: [

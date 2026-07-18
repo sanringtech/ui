@@ -77,7 +77,7 @@ import { popoverPage, popoverPageExamples } from './popover.docs';
       <app-component-page-section [section]="section('installation')">
         <app-component-page-installation
           componentName="popover"
-          manualSnippet="import { SANRING_POPOVER_IMPORTS } from '@sanring/ui';"
+          manualSnippet="import { SANRING_POPOVER_IMPORTS } from './components/ui/popover';"
         />
       </app-component-page-section>
 

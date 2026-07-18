@@ -62,7 +62,7 @@ export const textareaPage = {
 
 export const textareaPageExamples = {
   basic: `<textarea sanringTextarea placeholder="Write a note"></textarea>`,
-  usageImport: `import { TextareaDirective } from '@sanring/ui';`,
+  usageImport: `import { TextareaDirective } from './components/ui/textarea';`,
   usageMain: `<textarea sanringTextarea placeholder="Write a note"></textarea>`,
   disabled: `<textarea sanringTextarea disabled>Readonly message</textarea>`,
   resize: `<textarea sanringTextarea class="min-h-[140px] resize-y" placeholder="Longer message"></textarea>`,

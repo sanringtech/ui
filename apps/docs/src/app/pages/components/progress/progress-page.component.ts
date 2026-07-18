@@ -60,7 +60,7 @@ import { progressPage, progressPageExamples } from './progress.docs';
       <app-component-page-section [section]="section('installation')">
         <app-component-page-installation
           componentName="progress"
-          manualSnippet="import { ProgressComponent } from '@sanring/ui';"
+          manualSnippet="import { ProgressComponent } from './components/ui/progress';"
         />
       </app-component-page-section>
 

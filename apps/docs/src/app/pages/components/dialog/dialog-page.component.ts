@@ -65,7 +65,7 @@ import { dialogPage, dialogPageExamples } from './dialog.docs';
       <app-component-page-section [section]="section('installation')">
         <app-component-page-installation
           componentName="dialog"
-          manualSnippet="import { SANRING_DIALOG_IMPORTS } from '@sanring/ui';"
+          manualSnippet="import { SANRING_DIALOG_IMPORTS } from './components/ui/dialog';"
         />
       </app-component-page-section>
 

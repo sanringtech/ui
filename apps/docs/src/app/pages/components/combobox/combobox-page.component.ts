@@ -96,7 +96,7 @@ import { comboboxPage, comboboxPageExamples } from './combobox.docs';
       <app-component-page-section [section]="section('installation')">
         <app-component-page-installation
           componentName="combobox"
-          manualSnippet="import { SANRING_COMBOBOX_IMPORTS } from '@sanring/ui';"
+          manualSnippet="import { SANRING_COMBOBOX_IMPORTS } from './components/ui/combobox';"
         />
       </app-component-page-section>
 

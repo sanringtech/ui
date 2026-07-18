@@ -68,7 +68,7 @@ import { tooltipPage, tooltipPageExamples } from './tooltip.docs';
       <app-component-page-section [section]="section('installation')">
         <app-component-page-installation
           componentName="tooltip"
-          manualSnippet="import { SANRING_TOOLTIP_IMPORTS } from '@sanring/ui';"
+          manualSnippet="import { SANRING_TOOLTIP_IMPORTS } from './components/ui/tooltip';"
         />
       </app-component-page-section>
 

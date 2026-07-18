@@ -71,7 +71,7 @@ import { alertPage, alertPageExamples } from './alert.docs';
       <app-component-page-section [section]="section('installation')">
         <app-component-page-installation
           componentName="alert"
-          manualSnippet="import { SANRING_ALERT_IMPORTS } from '@sanring/ui';"
+          manualSnippet="import { SANRING_ALERT_IMPORTS } from './components/ui/alert';"
         />
       </app-component-page-section>
 

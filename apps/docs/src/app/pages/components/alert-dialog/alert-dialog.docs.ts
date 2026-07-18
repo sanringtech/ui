@@ -123,7 +123,8 @@ sanring-alert-dialog-content
   </sanring-alert-dialog-content>
 </ng-template>`,
   usageImport: `import { Component } from '@angular/core';
-import { ButtonDirective, SANRING_ALERT_DIALOG_IMPORTS } from '@sanring/ui';
+import { ButtonDirective } from './components/ui/button';
+import { SANRING_ALERT_DIALOG_IMPORTS } from './components/ui/alert-dialog';
 
 @Component({
   imports: [ButtonDirective, SANRING_ALERT_DIALOG_IMPORTS],
@@ -146,17 +147,9 @@ export class ExampleComponent {}`,
   </sanring-alert-dialog-content>
 </ng-template>`,
   usageIndividualImports: `import { Component } from '@angular/core';
-import {
-  ButtonDirective,
-  AlertDialogTriggerDirective,
-  AlertDialogContentComponent,
-  DialogHeaderComponent,
-  DialogTitleDirective,
-  DialogDescriptionDirective,
-  DialogFooterComponent,
-  AlertDialogActionDirective,
-  AlertDialogCancelDirective,
-} from '@sanring/ui';
+import { ButtonDirective } from './components/ui/button';
+import { AlertDialogTriggerDirective, AlertDialogContentComponent, AlertDialogActionDirective, AlertDialogCancelDirective } from './components/ui/alert-dialog';
+import { DialogHeaderComponent, DialogTitleDirective, DialogDescriptionDirective, DialogFooterComponent } from './components/ui/dialog';
 
 @Component({
   imports: [

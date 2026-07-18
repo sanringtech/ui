@@ -102,7 +102,7 @@ import { resizablePage, resizablePageExamples } from './resizable.docs';
       <app-component-page-section [section]="section('installation')">
         <app-component-page-installation
           componentName="resizable"
-          manualSnippet="import { ResizableGroupComponent, ResizableHandleComponent, ResizablePanelComponent } from '@sanring/ui';"
+          manualSnippet="import { ResizableGroupComponent, ResizableHandleComponent, ResizablePanelComponent } from './components/ui/resizable';"
         />
       </app-component-page-section>
 

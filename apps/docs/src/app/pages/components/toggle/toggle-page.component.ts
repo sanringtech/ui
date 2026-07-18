@@ -66,7 +66,7 @@ import { togglePage, togglePageExamples } from './toggle.docs';
       <app-component-page-section [section]="section('installation')">
         <app-component-page-installation
           componentName="toggle"
-          manualSnippet="import { ToggleDirective } from '@sanring/ui';"
+          manualSnippet="import { ToggleDirective } from './components/ui/toggle';"
         />
       </app-component-page-section>
 

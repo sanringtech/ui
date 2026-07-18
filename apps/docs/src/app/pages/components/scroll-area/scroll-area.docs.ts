@@ -114,7 +114,7 @@ export const scrollAreaPageExamples = {
   }
 </sanring-scroll-area>`,
   usageImport: `import { Component } from '@angular/core';
-import { SANRING_SCROLL_AREA_IMPORTS } from '@sanring/ui';
+import { SANRING_SCROLL_AREA_IMPORTS } from './components/ui/scrollArea';
 
 @Component({
   imports: [SANRING_SCROLL_AREA_IMPORTS],
@@ -133,7 +133,7 @@ export class ExampleComponent {}`,
   }
 </div>`,
   usageIndividualImports: `import { Component } from '@angular/core';
-import { InfiniteScrollDirective, ScrollAreaComponent, ScrollAreaDirective } from '@sanring/ui';
+import { InfiniteScrollDirective, ScrollAreaComponent, ScrollAreaDirective } from './components/ui/scrollArea';
 
 @Component({
   imports: [ScrollAreaComponent, ScrollAreaDirective, InfiniteScrollDirective],

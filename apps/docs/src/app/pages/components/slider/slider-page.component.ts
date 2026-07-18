@@ -72,7 +72,7 @@ import { sliderPage, sliderPageExamples } from './slider.docs';
       <app-component-page-section [section]="section('installation')">
         <app-component-page-installation
           componentName="slider"
-          manualSnippet="import { SliderComponent } from '@sanring/ui';"
+          manualSnippet="import { SliderComponent } from './components/ui/slider';"
         />
       </app-component-page-section>
 

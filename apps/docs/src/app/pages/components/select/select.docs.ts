@@ -143,7 +143,7 @@ export const selectPageExamples = {
 </sanring-select>`,
   usageImport: `import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { SANRING_SELECT_IMPORTS } from '@sanring/ui';
+import { SANRING_SELECT_IMPORTS } from './components/ui/select';
 
 @Component({
   imports: [FormsModule, SANRING_SELECT_IMPORTS],
@@ -160,16 +160,7 @@ export class ExampleComponent {}`,
 </sanring-select>`,
   usageIndividualImports: `import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import {
-  SelectComponent,
-  SelectContentComponent,
-  SelectGroupComponent,
-  SelectItemComponent,
-  SelectLabelComponent,
-  SelectSeparatorComponent,
-  SelectTriggerDirective,
-  SelectValueComponent,
-} from '@sanring/ui';
+import { SelectComponent, SelectContentComponent, SelectGroupComponent, SelectItemComponent, SelectLabelComponent, SelectSeparatorComponent, SelectTriggerDirective, SelectValueComponent } from './components/ui/select';
 
 @Component({
   imports: [

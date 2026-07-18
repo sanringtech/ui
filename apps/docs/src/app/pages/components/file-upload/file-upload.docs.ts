@@ -123,7 +123,7 @@ export const fileUploadPage = {
 } as const satisfies ComponentPageDefinition;
 
 export const fileUploadPageExamples = {
-  usageImport: `import { FileDropzoneComponent, FileTriggerDirective, FileUploadComponent } from '@sanring/ui';`,
+  usageImport: `import { FileDropzoneComponent, FileTriggerDirective, FileUploadComponent } from './components/ui/file-upload';`,
   usageMain: `<sanring-file-upload [(ngModel)]="files">
   <sanring-file-dropzone>
     <button sanringFileTrigger type="button">

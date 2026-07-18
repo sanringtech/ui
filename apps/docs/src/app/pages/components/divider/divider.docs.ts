@@ -72,10 +72,10 @@ export const dividerPage = {
 } as const satisfies ComponentPageDefinition;
 
 export const dividerPageExamples = {
-  basic: `import { DividerComponent } from '@sanring/ui';
+  basic: `import { DividerComponent } from './components/ui/divider';
 
 <sanring-divider />`,
-  usageImport: `import { DividerComponent } from '@sanring/ui';`,
+  usageImport: `import { DividerComponent } from './components/ui/divider';`,
   usageMain: `<sanring-divider />`,
   horizontal: `<div>
   <p>Account</p>

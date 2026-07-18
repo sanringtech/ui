@@ -99,7 +99,8 @@ export const tooltipPageExamples = {
   </sanring-tooltip-content>
 </sanring-tooltip>`,
   usageImport: `import { Component } from '@angular/core';
-import { ButtonDirective, SANRING_TOOLTIP_IMPORTS } from '@sanring/ui';
+import { ButtonDirective } from './components/ui/button';
+import { SANRING_TOOLTIP_IMPORTS } from './components/ui/tooltip';
 
 @Component({
   imports: [ButtonDirective, SANRING_TOOLTIP_IMPORTS],
@@ -114,12 +115,8 @@ export class ExampleComponent {}`,
   </sanring-tooltip-content>
 </sanring-tooltip>`,
   usageIndividualImports: `import { Component } from '@angular/core';
-import {
-  ButtonDirective,
-  TooltipComponent,
-  TooltipContentComponent,
-  TooltipTriggerDirective,
-} from '@sanring/ui';
+import { ButtonDirective } from './components/ui/button';
+import { TooltipComponent, TooltipContentComponent, TooltipTriggerDirective } from './components/ui/tooltip';
 
 @Component({
   imports: [ButtonDirective, TooltipComponent, TooltipTriggerDirective, TooltipContentComponent],

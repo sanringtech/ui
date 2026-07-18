@@ -180,7 +180,7 @@ export const radioPageExamples = {
 
   usageImport: `import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { SANRING_RADIO_IMPORTS } from '@sanring/ui';
+import { SANRING_RADIO_IMPORTS } from './components/ui/radio';
 
 @Component({
   imports: [FormsModule, SANRING_RADIO_IMPORTS],
@@ -192,7 +192,7 @@ export class ExampleComponent {}`,
 </sanring-radio-group>`,
   usageIndividualImports: `import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { RadioGroupComponent, RadioItemComponent } from '@sanring/ui';
+import { RadioGroupComponent, RadioItemComponent } from './components/ui/radio';
 
 @Component({
   imports: [FormsModule, RadioGroupComponent, RadioItemComponent],

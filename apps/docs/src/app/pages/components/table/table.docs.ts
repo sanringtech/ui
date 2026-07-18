@@ -129,22 +129,7 @@ export const tablePageExamples = {
 </sanring-table-container>`,
 
   usageImport: `import { CdkTableModule } from '@angular/cdk/table';
-import {
-  SortDirective,
-  SortHeaderComponent,
-  TableCellDefDirective,
-  TableCellDirective,
-  TableColumnDefDirective,
-  TableContainerComponent,
-  TableDirective,
-  TableHeaderCellDefDirective,
-  TableHeaderCellDirective,
-  TableHeaderRowDefDirective,
-  TableHeaderRowDirective,
-  TableNoDataRowDirective,
-  TableRowDefDirective,
-  TableRowDirective,
-} from '@sanring/ui';`,
+import { SortDirective, SortHeaderComponent, TableCellDefDirective, TableCellDirective, TableColumnDefDirective, TableContainerComponent, TableDirective, TableHeaderCellDefDirective, TableHeaderCellDirective, TableHeaderRowDefDirective, TableHeaderRowDirective, TableNoDataRowDirective, TableRowDefDirective, TableRowDirective } from './components/ui/table';`,
 
   usageMain: `<table
   cdk-table

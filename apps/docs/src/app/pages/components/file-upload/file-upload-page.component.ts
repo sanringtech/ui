@@ -90,7 +90,7 @@ import { fileUploadPage, fileUploadPageExamples } from './file-upload.docs';
       <app-component-page-section [section]="section('installation')">
         <app-component-page-installation
           componentName="file-upload"
-          manualSnippet="import { FileDropzoneComponent, FileTriggerDirective, FileUploadComponent } from '@sanring/ui';"
+          manualSnippet="import { FileDropzoneComponent, FileTriggerDirective, FileUploadComponent } from './components/ui/file-upload';"
         />
       </app-component-page-section>
 

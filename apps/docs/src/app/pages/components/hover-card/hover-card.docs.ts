@@ -99,7 +99,8 @@ export const hoverCardPageExamples = {
 </sanring-hover-card>`,
 
   usageImport: `import { Component } from '@angular/core';
-import { ButtonDirective, SANRING_HOVER_CARD_IMPORTS } from '@sanring/ui';
+import { ButtonDirective } from './components/ui/button';
+import { SANRING_HOVER_CARD_IMPORTS } from './components/ui/hover-card';
 
 @Component({
   imports: [ButtonDirective, SANRING_HOVER_CARD_IMPORTS],
@@ -107,12 +108,8 @@ import { ButtonDirective, SANRING_HOVER_CARD_IMPORTS } from '@sanring/ui';
 export class ExampleComponent {}`,
 
   usageIndividualImports: `import { Component } from '@angular/core';
-import {
-  ButtonDirective,
-  HoverCardComponent,
-  HoverCardContentComponent,
-  HoverCardTriggerDirective,
-} from '@sanring/ui';
+import { ButtonDirective } from './components/ui/button';
+import { HoverCardComponent, HoverCardContentComponent, HoverCardTriggerDirective } from './components/ui/hover-card';
 
 @Component({
   imports: [

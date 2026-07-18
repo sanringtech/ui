@@ -120,7 +120,7 @@ export const commandPageExamples = {
 </sanring-command>`,
 
   usageImport: `import { Component } from '@angular/core';
-import { SANRING_COMMAND_IMPORTS } from '@sanring/ui';
+import { SANRING_COMMAND_IMPORTS } from './components/ui/command';
 
 @Component({
   imports: [SANRING_COMMAND_IMPORTS],
@@ -128,14 +128,7 @@ import { SANRING_COMMAND_IMPORTS } from '@sanring/ui';
 export class ExampleComponent {}`,
 
   usageIndividualImports: `import { Component } from '@angular/core';
-import {
-  CommandComponent,
-  CommandInputComponent,
-  CommandListComponent,
-  CommandGroupComponent,
-  CommandItemComponent,
-  CommandEmptyComponent,
-} from '@sanring/ui';
+import { CommandComponent, CommandInputComponent, CommandListComponent, CommandGroupComponent, CommandItemComponent, CommandEmptyComponent } from './components/ui/command';
 
 @Component({
   imports: [

@@ -117,7 +117,8 @@ export const dropdownMenuPageExamples = {
   </sanring-dropdown-menu-content>
 </sanring-dropdown-menu>`,
   usageImport: `import { Component } from '@angular/core';
-import { ButtonDirective, SANRING_DROPDOWN_MENU_IMPORTS } from '@sanring/ui';
+import { ButtonDirective } from './components/ui/button';
+import { SANRING_DROPDOWN_MENU_IMPORTS } from './components/ui/dropdown-menu';
 
 @Component({
   imports: [ButtonDirective, SANRING_DROPDOWN_MENU_IMPORTS],
@@ -132,13 +133,8 @@ export class ExampleComponent {}`,
   </sanring-dropdown-menu-content>
 </sanring-dropdown-menu>`,
   usageIndividualImports: `import { Component } from '@angular/core';
-import {
-  ButtonDirective,
-  DropdownMenuComponent,
-  DropdownMenuContentComponent,
-  DropdownMenuItemDirective,
-  DropdownMenuTriggerDirective,
-} from '@sanring/ui';
+import { ButtonDirective } from './components/ui/button';
+import { DropdownMenuComponent, DropdownMenuContentComponent, DropdownMenuItemDirective, DropdownMenuTriggerDirective } from './components/ui/dropdown-menu';
 
 @Component({
   imports: [

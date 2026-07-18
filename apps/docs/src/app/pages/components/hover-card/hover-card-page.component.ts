@@ -86,7 +86,7 @@ import { hoverCardPage, hoverCardPageExamples } from './hover-card.docs';
       <app-component-page-section [section]="section('installation')">
         <app-component-page-installation
           componentName="hover-card"
-          manualSnippet="import { SANRING_HOVER_CARD_IMPORTS } from '@sanring/ui';"
+          manualSnippet="import { SANRING_HOVER_CARD_IMPORTS } from './components/ui/hover-card';"
         />
       </app-component-page-section>
 

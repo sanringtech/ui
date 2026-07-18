@@ -92,7 +92,7 @@ import { dropdownMenuPage, dropdownMenuPageExamples } from './dropdown-menu.docs
       <app-component-page-section [section]="section('installation')">
         <app-component-page-installation
           componentName="dropdown-menu"
-          manualSnippet="import { SANRING_DROPDOWN_MENU_IMPORTS } from '@sanring/ui';"
+          manualSnippet="import { SANRING_DROPDOWN_MENU_IMPORTS } from './components/ui/dropdown-menu';"
         />
       </app-component-page-section>
 

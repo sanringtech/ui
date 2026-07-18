@@ -72,7 +72,7 @@ import { accordionPage, accordionPageExamples } from './accordion.docs';
       <app-component-page-section [section]="section('installation')">
         <app-component-page-installation
           componentName="accordion"
-          manualSnippet="import { SANRING_ACCORDION_IMPORTS } from '@sanring/ui';"
+          manualSnippet="import { SANRING_ACCORDION_IMPORTS } from './components/ui/accordion';"
         />
       </app-component-page-section>
 

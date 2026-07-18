@@ -112,7 +112,7 @@ export const switchPage = {
 
 export const switchPageExamples = {
   basic: `<sanring-switch />`,
-  usageImport: `import { SwitchComponent } from '@sanring/ui';`,
+  usageImport: `import { SwitchComponent } from './components/ui/switch';`,
   usageMain: `<sanring-switch id="airplane-mode" />`,
   description: `<div class="flex items-center justify-between gap-6">
   <div class="grid gap-1">

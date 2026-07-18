@@ -151,7 +151,7 @@ export const zh: Record<TranslationKey, string> = {
   'aspectRatio.usage.description':
     '匯入 AspectRatioDirective，然後將 sanringAspectRatio 套用到要承載比例框的元素。',
   'aspectRatio.installation.description':
-    '安裝 @sanring/ui，並在渲染媒體框的 standalone component 中匯入 AspectRatioDirective。',
+    '用 CLI 加入這個元件，再到渲染媒體框的 standalone component 中匯入 AspectRatioDirective。',
   'aspectRatio.demo.media': '媒體框',
   'aspectRatio.demo.square': '正方形縮圖',
   'aspectRatio.demo.card': '卡片媒體',
@@ -182,9 +182,9 @@ export const zh: Record<TranslationKey, string> = {
     '常見 accordion 狀態，包含單一展開、多個展開、預設展開與程式化控制。',
   'accordion.examples.basic.description': '預設情況下，同一時間只會保留一個 accordion item 展開。',
   'accordion.usage.description':
-    '從 @sanring/ui 匯入 accordion primitives，並組合 root、item、trigger 與 content。',
+    '匯入 accordion primitives，並組合 root、item、trigger 與 content。',
   'accordion.installation.description':
-    '從 @sanring/ui 匯入手風琴 primitives，並在 template 中組合使用。',
+    '用 CLI 加入這個元件，再到 template 中組合手風琴 primitives。',
   'accordion.composition.description':
     '此元件拆分為 root、item、trigger、content primitives，讓每個部分都能重複使用。',
   'accordion.api.description': 'Accordion primitives 支援的 Inputs 與 Outputs。',
@@ -208,7 +208,7 @@ export const zh: Record<TranslationKey, string> = {
   'alert.examples.basic.description': 'Alert 會保留版面空間，並組合圖示、標題與描述文字。',
   'alert.usage.description': '匯入 Alert primitives，並搭配原生文字與圖示組合。',
   'alert.installation.description':
-    '從 @sanring/ui 匯入 AlertComponent、AlertTitleDirective 與 AlertDescriptionDirective。',
+    '用 CLI 加入這個元件，再匯入 AlertComponent、AlertTitleDirective 與 AlertDescriptionDirective。',
   'alert.composition.description':
     'Alert 是靜態排版 primitive，適合狀態驅動訊息；短暫事件通知應交給 Toast。',
   'alert.api.description': 'sanring-alert component 支援的 Inputs。',
@@ -261,7 +261,7 @@ export const zh: Record<TranslationKey, string> = {
   'button.examples.basic.description': '外框按鈕適合次要操作；純圖示按鈕需要提供可存取標籤。',
   'button.usage.description': '匯入 directive，並套用在原生 button 元素上。',
   'button.installation.description':
-    '從 @sanring/ui 匯入 ButtonDirective，並依照操作情境選擇合適的 variant 與 size。',
+    '用 CLI 加入這個元件，再匯入 ButtonDirective，並依照操作情境選擇合適的 variant 與 size。',
   'button.composition.description':
     '使用 variant 表達視覺優先級，使用 size 控制密度；純圖示按鈕需提供可存取標籤。',
   'button.api.description': 'sanringBtn directive 支援的 Inputs。',
@@ -283,7 +283,7 @@ export const zh: Record<TranslationKey, string> = {
   'badge.demo.synced': '已同步',
   'badge.examples.description': '常見的徽章變體，適合後設資訊與狀態標籤。',
   'badge.examples.basic.description': '徽章可作為文字、卡片、列表或連結中的精簡 inline 標籤。',
-  'badge.usage.description': '從 @sanring/ui 匯入 BadgeDirective，並將 sanringBadge 套用在元素上。',
+  'badge.usage.description': '匯入 BadgeDirective，並將 sanringBadge 套用在元素上。',
   'badge.installation.description': '匯入 BadgeDirective，並依後設資訊的優先級選擇合適 variant。',
   'badge.composition.description':
     'Badge 是 directive，可保留 span、div 或 anchor 的原生行為，同時套用一致樣式。',
@@ -301,7 +301,7 @@ export const zh: Record<TranslationKey, string> = {
   'avatar.examples.basic.description':
     '圖片載入完成後顯示圖片；圖片缺失或載入失敗時保留 fallback。',
   'avatar.usage.description':
-    '從 @sanring/ui 匯入 avatar primitives，依需求組合 image、fallback、badge 或 group。',
+    '匯入 avatar primitives，依需求組合 image、fallback、badge 或 group。',
   'avatar.installation.description':
     '使用 AvatarComponent 作為 root，並搭配 image、fallback、badge 與 group primitives。',
   'avatar.composition.description':
@@ -349,7 +349,7 @@ export const zh: Record<TranslationKey, string> = {
     '未提供 locale 時會拋出錯誤——CALENDAR_LOCALE 沒有預設值，強制你明確決定週起始日與月份/星期標籤。',
   'calendar.usage.description': '匯入 CalendarComponent，並在應用層或元件層提供 CALENDAR_LOCALE。',
   'calendar.installation.description':
-    '從 @sanring/ui 匯入 CalendarComponent，並額外安裝 @sanring/date-picker 作為 peer dependency。',
+    '用 CLI 加入這個元件（會一併安裝 @sanring/date-picker 作為 peer dependency），再匯入 CalendarComponent。',
   'calendar.api.description': 'CalendarComponent 支援的 Inputs、Outputs 與公開方法。',
   'calendar.api.class.description': '與元件基礎樣式合併的額外 class。',
   'calendar.api.size.description': '日期格子的尺寸。',
@@ -376,7 +376,7 @@ export const zh: Record<TranslationKey, string> = {
     'Card 由 root、header、title、description、content 與 footer 等小型 primitives 組成。',
   'card.usage.description': '匯入需要的 Card primitives，並搭配原生 HTML 與 utility classes 組合。',
   'card.installation.description':
-    '從 @sanring/ui 匯入 CardComponent、CardHeaderComponent、CardContentComponent、CardFooterComponent、CardTitleDirective 與 CardDescriptionDirective。',
+    '用 CLI 加入這個元件，再匯入 CardComponent、CardHeaderComponent、CardContentComponent、CardFooterComponent、CardTitleDirective 與 CardDescriptionDirective。',
   'card.composition.description':
     'Card 不綁定業務結構；你可以覆蓋 class、放入任何媒體或表單控制項，並與其他 primitives 組合。',
   'card.api.description': 'Card 家族 primitives 支援的 Inputs。',
@@ -397,7 +397,7 @@ export const zh: Record<TranslationKey, string> = {
   'dialog.usage.description':
     '匯入 Dialog primitives，並將 sanringDialogTrigger 綁定到 ng-template。',
   'dialog.installation.description':
-    'Dialog 基於 Angular CDK Dialog，從 @sanring/ui 匯入並組合對應 primitives。',
+    'Dialog 基於 Angular CDK Dialog。用 CLI 加入這個元件，再組合對應 primitives。',
   'dialog.composition.description':
     '使用 DialogContent 建立 panel，DialogHeader/DialogFooter 管理版面，選用 DialogMedia 強化重點，並透過 sanringDialogTrigger/sanringDialogClose 處理設定與關閉結果。',
   'dialog.api.description': 'Dialog primitives 支援的 Inputs。',
@@ -419,7 +419,7 @@ export const zh: Record<TranslationKey, string> = {
   'divider.examples.basic.description': '使用分隔線區隔堆疊內容、對齊列表列與 inline 群組。',
   'divider.usage.description': '匯入元件，並將它放在相關內容之間。',
   'divider.installation.description':
-    '從 @sanring/ui 匯入 DividerComponent，並放在相關區塊或控制項之間。',
+    '用 CLI 加入這個元件，再匯入 DividerComponent，並放在相關區塊或控制項之間。',
   'divider.composition.description':
     '預設使用水平分隔線處理堆疊內容；加入 inset 可對齊列表列，設定 vertical 可分隔 inline 群組。',
   'divider.api.description': 'sanring-divider component 支援的 Inputs。',
@@ -452,7 +452,7 @@ export const zh: Record<TranslationKey, string> = {
   'input.examples.description': '常見輸入模式，適合文字欄位、停用狀態與檔案上傳。',
   'input.examples.basic.description':
     '將 sanringInput 套用到原生 input，保留瀏覽器行為並取得系統樣式。',
-  'input.usage.description': '從 @sanring/ui 匯入 InputDirective，並將 sanringInput 套用到 input。',
+  'input.usage.description': '匯入 InputDirective，並將 sanringInput 套用到 input。',
   'input.installation.description':
     '在原生 input 上使用 sanringInput，並保留 type、value、disabled 與表單綁定。',
   'input.composition.description':
@@ -463,7 +463,7 @@ export const zh: Record<TranslationKey, string> = {
   'textarea.examples.basic.description':
     '將 sanringTextarea 套用到原生 textarea，保留瀏覽器編輯行為並取得 Sanring UI 欄位樣式。',
   'textarea.usage.description':
-    '從 @sanring/ui 匯入 TextareaDirective，並將 sanringTextarea 套用到 textarea。',
+    '匯入 TextareaDirective，並將 sanringTextarea 套用到 textarea。',
   'textarea.installation.description':
     '在原生 textarea 上使用 sanringTextarea，並保留 value、disabled、rows 與表單綁定。',
   'textarea.demo.disabled': '停用',
@@ -474,7 +474,7 @@ export const zh: Record<TranslationKey, string> = {
   'timeline.examples.basic.description':
     '使用 sanringTimeline 搭配原生清單標記，再自行組合分隔、節點、連接線與內容。',
   'timeline.usage.description':
-    '從 @sanring/ui 匯入 Timeline directives，並套用到清單或 div 型活動資料標記。',
+    '匯入 Timeline directives，並套用到清單或 div 型活動資料標記。',
   'timeline.installation.description':
     '安裝 Timeline primitives，並在每個事件中組合 item、separator 與 content directives。',
   'timeline.demo.horizontal': '水平',
@@ -513,7 +513,7 @@ export const zh: Record<TranslationKey, string> = {
   'slider.examples.basic.description':
     '當使用者需要直接調整有上下限的數值時，可以使用 sanring-slider。',
   'slider.usage.description':
-    '從 @sanring/ui 匯入 SliderComponent，並透過 valueChange 或 Angular 表單接收數值更新。',
+    '匯入 SliderComponent，並透過 valueChange 或 Angular 表單接收數值更新。',
   'slider.installation.description':
     '安裝 Slider component，並使用 ariaLabel 或 ariaLabelledBy 提供可存取名稱。',
   'slider.demo.step': '步進',
@@ -546,7 +546,7 @@ export const zh: Record<TranslationKey, string> = {
   'stepper.examples.basic.description':
     '使用 sanring-stepper 搭配 sanring-step panel 與 next/previous 按鈕建立多步驟流程。',
   'stepper.usage.description':
-    '從 @sanring/ui 匯入 Stepper primitives，並將 sanring-step 放在 sanring-stepper 中。',
+    '匯入 Stepper primitives，並將 sanring-step 放在 sanring-stepper 中。',
   'stepper.installation.description':
     'Stepper 基於 Angular CDK Stepper。依需求匯入 step、label、icon 與導航按鈕 primitives。',
   'stepper.demo.dashed': '虛線連接線',
@@ -594,7 +594,7 @@ export const zh: Record<TranslationKey, string> = {
   'label.examples.description': '常見 label 模式，適合獨立標籤與表單控制項。',
   'label.examples.basic.description':
     '將 sanringLabel 套用到原生 label，保留 for/id 的可存取關聯。',
-  'label.usage.description': '從 @sanring/ui 匯入 LabelDirective，並將 sanringLabel 套用到 label。',
+  'label.usage.description': '匯入 LabelDirective，並將 sanringLabel 套用到 label。',
   'label.installation.description':
     '在原生 label 元素上使用 sanringLabel，並透過 for 與 id 連接控制項。',
   'label.composition.description':
@@ -611,9 +611,9 @@ export const zh: Record<TranslationKey, string> = {
   'link.examples.basic.description':
     '將 directive 套用在原生 anchor 上，讓 href、target、routerLink 與 routerLinkActive 保持原生行為。',
   'link.usage.description':
-    '從 @sanring/ui 匯入 LinkDirective，並將 sanringLink 套用在 anchor 上。',
+    '匯入 LinkDirective，並將 sanringLink 套用在 anchor 上。',
   'link.installation.description':
-    '從 @sanring/ui 匯入 LinkDirective，並將導覽屬性保留在原生 anchor 元素上。',
+    '用 CLI 加入這個元件，再匯入 LinkDirective，並將導覽屬性保留在原生 anchor 元素上。',
   'link.composition.description':
     '外部連結使用 href；應用程式內路由使用 routerLink 搭配 routerLinkActive。',
   'link.api.description': 'sanringLink directive 支援的 Inputs。',
@@ -638,7 +638,7 @@ export const zh: Record<TranslationKey, string> = {
   'scrollArea.examples.basic.description':
     '將 sanringScrollArea 套用到固定高度容器，即可取得 overflow 行為與 CDK scroll tracking。',
   'scrollArea.usage.description':
-    '從 @sanring/ui 匯入 ScrollAreaComponent 處理方向；需要 scroll 事件時再搭配 directives。',
+    '匯入 ScrollAreaComponent 處理方向；需要 scroll 事件時再搭配 directives。',
   'scrollArea.installation.description':
     '在滾動容器上使用 sanringScrollArea；需要到底載入更多內容時，再加入 sanringInfiniteScroll。',
   'scrollArea.api.description':
@@ -658,7 +658,7 @@ export const zh: Record<TranslationKey, string> = {
   'skeleton.examples.description': '常見的骨架屏版型，適合頭像、卡片、文字、表單與表格。',
   'skeleton.examples.basic.description': '使用骨架屏在最終內容完成前保留版面空間。',
   'skeleton.usage.description':
-    '從 @sanring/ui 匯入 SkeletonDirective，並將 sanringSkeleton 套用到任意元素。',
+    '匯入 SkeletonDirective，並將 sanringSkeleton 套用到任意元素。',
   'skeleton.installation.description':
     '將 directive 套用在 div、span 或語意元素上，並透過 class 提供寬度、高度與圓角。',
   'skeleton.composition.description': '組合多個 skeleton block，讓載入狀態貼近實際內容結構。',
@@ -683,7 +683,7 @@ export const zh: Record<TranslationKey, string> = {
     '把 sanring-switch 包在 sanring-field 裡並綁定 reactive form control——控制項變成 invalid 且 touched 之後，錯誤訊息會自動顯示。',
   'switch.examples.description': '常見的 Switch 模式，包含說明文字、選項卡片、停用、驗證與尺寸。',
   'switch.examples.basic.description': 'Switch 適合用於可立即套用變更的布林設定。',
-  'switch.usage.description': '從 @sanring/ui 匯入 SwitchComponent，並搭配可存取的 label 使用。',
+  'switch.usage.description': '匯入 SwitchComponent，並搭配可存取的 label 使用。',
   'switch.api.description': 'sanring-switch component 支援的 Inputs。',
   'switch.api.class.description': '與 switch track 樣式合併的額外 class。',
   'switch.api.id.description': '套用到 switch button 的原生 id，可用於 label 關聯。',
@@ -702,7 +702,7 @@ export const zh: Record<TranslationKey, string> = {
   'tag.demo.frontend': '前端開發',
   'tag.examples.description': '常見的標籤模式，適合篩選條件、chip 與分類內容。',
   'tag.examples.basic.description': '標籤適合用於已選值或精簡的內容分類。',
-  'tag.usage.description': '從 @sanring/ui 匯入 TagComponent，並將標籤內容投影到元件內。',
+  'tag.usage.description': '匯入 TagComponent，並將標籤內容投影到元件內。',
   'tag.installation.description':
     '匯入 TagComponent；需要移除互動時可啟用 closable 並接收 remove 事件。',
   'tag.composition.description': 'Tag 組合 Badge 樣式、投影內容與可選的關閉控制。',
@@ -763,7 +763,7 @@ export const zh: Record<TranslationKey, string> = {
   'tooltip.examples.basic.description':
     '將 trigger 與 content 包在 sanring-tooltip 內。內容會在 hover 或 focus 時開啟。',
   'tooltip.usage.description':
-    '從 @sanring/ui 匯入 TooltipComponent、TooltipTriggerDirective 與 TooltipContentComponent。',
+    '匯入 TooltipComponent、TooltipTriggerDirective 與 TooltipContentComponent。',
   'tooltip.installation.description':
     '在可 focus 的元素上使用 sanringTooltipTrigger，並提供對應的 tooltip content。',
   'tooltip.composition.description': 'Tooltip 由狀態 root、trigger directive 與浮動 content 組成。',
@@ -833,7 +833,7 @@ export const zh: Record<TranslationKey, string> = {
   'collapsible.demo.requireReviewDescription': '草稿會保持鎖定，直到隊友核准。',
   'collapsible.examples.description': '常見 Collapsible 模式，適合內嵌細節、密集設定與巢狀導覽。',
   'collapsible.installation.description':
-    '從 @sanring/ui 匯入 root component、trigger directive 與 content directive。',
+    '用 CLI 加入這個元件，再匯入 root component、trigger directive 與 content directive。',
   'collapsible.usage.description':
     '將 trigger 與內容區域包在 sanring-collapsible 中。Trigger 會控制 open 狀態，並把 ARIA 屬性接到內容。',
   'collapsible.composition.description':
@@ -975,7 +975,7 @@ export const zh: Record<TranslationKey, string> = {
   'toggle.description': '可切換開關狀態的雙態按鈕，支援 WAI-ARIA aria-pressed 屬性。',
   'toggle.examples.basic.description': '預設狀態下的 toggle 按鈕。',
   'toggle.usage.description': '匯入 ToggleDirective，並將 sanringToggle 套用到 <button> 元素。',
-  'toggle.installation.description': '安裝 @sanring/ui 套件並匯入 ToggleDirective。',
+  'toggle.installation.description': '用 CLI 加入這個元件，再匯入 ToggleDirective。',
   'toggle.examples.description': '適用於工具列、篩選器與設定的常見 toggle 模式。',
   'toggle.demo.outline': 'Outline',
   'toggle.demo.withText': '含文字',
@@ -998,7 +998,7 @@ export const zh: Record<TranslationKey, string> = {
   'progress.usage.description':
     '匯入 ProgressComponent 並綁定數字 value，Directive 自動處理所有 ARIA 屬性。',
   'progress.installation.description':
-    '安裝 @sanring/ui 並匯入 ProgressComponent 或 ProgressDirective。',
+    '用 CLI 加入這個元件，再匯入 ProgressComponent 或 ProgressDirective。',
   'progress.examples.description': '以三個實例回答三個問題：閃爍效果、形狀變體、顏色客製化。',
   'progress.demo.shimmer': '閃爍衝刺效果',
   'progress.demo.shimmerDescription':
@@ -1030,7 +1030,7 @@ export const zh: Record<TranslationKey, string> = {
   'pagination.usage.description':
     '常見情境使用 PaginatorComponent；需要自訂排列時，改用底層 pagination primitives 組合。',
   'pagination.installation.description':
-    '安裝 @sanring/ui，並匯入 PaginatorComponent 或 pagination primitive set。',
+    '用 CLI 加入這個元件，再匯入 PaginatorComponent 或 pagination primitive set。',
   'pagination.demo.controlled': '受控分頁器',
   'pagination.demo.pageSize': '每頁筆數',
   'pagination.demo.primitives': 'Primitive 組合',
@@ -1062,7 +1062,7 @@ export const zh: Record<TranslationKey, string> = {
   'spinner.examples.basic.description': '預設 loader 圖示、中尺寸的 spinner。',
   'spinner.usage.description':
     '匯入 SpinnerComponent 並直接放置 sanring-spinner，透過 Tailwind 文字色彩與尺寸工具調整外觀。',
-  'spinner.installation.description': '安裝 @sanring/ui 並匯入 SpinnerComponent。',
+  'spinner.installation.description': '用 CLI 加入這個元件，再匯入 SpinnerComponent。',
   'spinner.examples.description':
     '涵蓋變體、尺寸、顏色、行內標籤與按鈕載入狀態的常見 spinner 模式。',
   'spinner.demo.variant': '變體',
@@ -1139,7 +1139,7 @@ export const zh: Record<TranslationKey, string> = {
   'sheet.examples.basic.description': '從右側邊緣滑入的 sheet。',
   'sheet.usage.description':
     '用 sanring-sheet 包裝內容，加入 sanringSheetTrigger 按鈕，再在內部放置 sanring-sheet-content 並指定 side。',
-  'sheet.installation.description': '安裝 @sanring/ui 並匯入 sheet primitives。',
+  'sheet.installation.description': '用 CLI 加入這個元件，再匯入 sheet primitives。',
   'sheet.composition.description':
     'Sheet 由狀態根節點、trigger、content 面板，以及選用的 header/footer primitives 組合而成。',
   'sheet.examples.description':
@@ -1175,7 +1175,7 @@ export const zh: Record<TranslationKey, string> = {
   'popover.usage.description':
     '將 trigger 和內容包在 sanring-popover 內，content 會自動根據 trigger 元素的座標定位。',
   'popover.installation.description':
-    '安裝 @sanring/ui 並匯入 popover primitives，或使用 SANRING_POPOVER_IMPORTS 一次匯入。',
+    '用 CLI 加入這個元件，再匯入 popover primitives，或使用 SANRING_POPOVER_IMPORTS 一次匯入。',
   'popover.composition.description':
     'Popover 由根節點、trigger 指令與內容面板組合，面板可選用 header、title、description 子元件。',
   'popover.examples.description': '常見 popover 模式：對齊方式、使用者資料卡片與表單控制項。',
@@ -1196,7 +1196,7 @@ export const zh: Record<TranslationKey, string> = {
   'hoverCard.usage.description':
     '匯入 hover-card primitives，並將 sanringHoverCardTrigger 套用到要作為浮動面板定位錨點的元素。',
   'hoverCard.installation.description':
-    '安裝 @sanring/ui，並匯入 SANRING_HOVER_CARD_IMPORTS 取得 root、trigger 與 content primitives。',
+    '用 CLI 加入這個元件，再匯入 SANRING_HOVER_CARD_IMPORTS 取得 root、trigger 與 content primitives。',
   'hoverCard.composition.description':
     'Hover Card 將延遲控制器、trigger anchor 與浮動 content panel 拆開。',
   'hoverCard.demo.trigger': '@sanring/ui',
@@ -1221,9 +1221,9 @@ export const zh: Record<TranslationKey, string> = {
   'command.examples.basic.description':
     '組合 input、list、group 與 item。輸入文字會依項目可見文字內容進行篩選。',
   'command.usage.description':
-    '從 @sanring/ui 匯入 command primitives，監聽 valueChange 回應選取事件。',
+    '匯入 command primitives，監聽 valueChange 回應選取事件。',
   'command.installation.description':
-    '安裝 @sanring/ui 後，將 command primitives 匯入負責渲染清單的 standalone component。',
+    '用 CLI 加入這個元件，再將 command primitives 匯入負責渲染清單的 standalone component。',
   'command.composition.description':
     'Command 將搜尋輸入框、可捲動清單、群組、項目與選用的 dialog 包裝分開，方便各自獨立使用。',
   'command.demo.dialog': 'Command dialog',
@@ -1252,7 +1252,7 @@ export const zh: Record<TranslationKey, string> = {
   'breadcrumb.usage.description':
     '以 breadcrumb-item 和 breadcrumb-divider 組合成 breadcrumb-list，並用 breadcrumb-page 標記當前位置。',
   'breadcrumb.installation.description':
-    '安裝 @sanring/ui 並匯入 breadcrumb primitives，或使用 SANRING_BREADCRUMB_IMPORTS 一次匯入。',
+    '用 CLI 加入這個元件，再匯入 breadcrumb primitives，或使用 SANRING_BREADCRUMB_IMPORTS 一次匯入。',
   'breadcrumb.composition.description':
     'Breadcrumb 由 nav 根節點、有序清單、項目、連結、頁面標記、分隔符組成，並提供 ellipsis 元件用於折疊路徑。',
   'breadcrumb.examples.description':
@@ -1271,7 +1271,7 @@ export const zh: Record<TranslationKey, string> = {
   'dropdownMenu.usage.description':
     '先匯入 ButtonDirective 與 dropdown menu primitives，再用 content 的 template 變數（#menu="sanringDropdownMenuContent"）提供 trigger 的 [menu]。SANRING_DROPDOWN_MENU_IMPORTS 是便利整包匯入，適合一般使用；若只需要部分 primitive，也可以個別匯入以讓依賴更明確。',
   'dropdownMenu.installation.description':
-    '安裝 @sanring/ui，並匯入 SANRING_DROPDOWN_MENU_IMPORTS 取得完整 dropdown menu primitive set；需要更細的 imports 控制時，也可改用個別 primitive。',
+    '用 CLI 加入這個元件，再匯入 SANRING_DROPDOWN_MENU_IMPORTS 取得完整 primitive set；需要更細的 imports 控制時，也可改用個別 primitive。',
   'dropdownMenu.examples.description':
     '常見 dropdown menu 模式，包含可勾選選項、radio 樣式選擇、巢狀選項與帶圖示項目。',
   'dropdownMenu.demo.checkbox': 'Checkbox',
@@ -1296,7 +1296,7 @@ export const zh: Record<TranslationKey, string> = {
   'select.usage.description':
     '匯入 select primitives，並組合 root、trigger、value、content 與 item。',
   'select.installation.description':
-    '安裝 @sanring/ui，並使用 SANRING_SELECT_IMPORTS 一次匯入完整 select primitives。',
+    '用 CLI 加入這個元件，再使用 SANRING_SELECT_IMPORTS 一次匯入完整 select primitives。',
   'select.examples.description': '常見 select 模式，包含群組選項、分隔線與停用項目。',
   'select.demo.groups': '群組',
   'select.demo.itemAligned': '項目對齊 Trigger',
@@ -1328,7 +1328,7 @@ export const zh: Record<TranslationKey, string> = {
   'table.usage.description':
     '匯入 Angular CDK table 與 Sanring table primitives，並在 template 中組合欄位、儲存格與列。',
   'table.installation.description':
-    '安裝 @sanring/ui，並與 Angular CDK table 一起匯入 table primitives。',
+    '用 CLI 加入這個元件，再與 Angular CDK table 一起匯入 table primitives。',
   'table.demo.sortable': '可排序表頭',
   'table.demo.columnSizing': '欄位比例',
   'table.demo.sticky': 'Sticky 欄位',
@@ -1357,9 +1357,9 @@ export const zh: Record<TranslationKey, string> = {
   'combobox.examples.basic.description':
     '組合 input、content、list、empty 與 item primitives 來建立可搜尋的選取器。',
   'combobox.usage.description':
-    '從 @sanring/ui 匯入 combobox primitives，並透過 root model input 綁定 value。',
+    '匯入 combobox primitives，並透過 root model input 綁定 value。',
   'combobox.installation.description':
-    '安裝 @sanring/ui 後，將 combobox primitives 匯入負責渲染建議清單的 standalone component。',
+    '用 CLI 加入這個元件，再將 combobox primitives 匯入負責渲染建議清單的 standalone component。',
   'combobox.composition.description':
     'Combobox 將輸入框、浮層內容、列表項目、群組與多選 chips 拆成獨立 primitives。',
   'combobox.demo.framework': '框架',
@@ -1405,9 +1405,9 @@ export const zh: Record<TranslationKey, string> = {
   'carousel.examples.basic.description':
     '組合 root、content、item 與導覽按鈕 directive 來建立輪播。',
   'carousel.usage.description':
-    '從 @sanring/ui 匯入 carousel primitives，並透過 opts input 傳入 Embla 設定。',
+    '匯入 carousel primitives，並透過 opts input 傳入 Embla 設定。',
   'carousel.installation.description':
-    '安裝 @sanring/ui 後，將 carousel primitives 匯入負責渲染 slides 的 standalone component。',
+    '用 CLI 加入這個元件，再將 carousel primitives 匯入負責渲染 slides 的 standalone component。',
   'carousel.composition.description':
     'Carousel 將 Embla viewport、slide item 與導覽控制分開，方便各自調整樣式。',
   'carousel.demo.featured': '精選專案',
@@ -1436,9 +1436,9 @@ export const zh: Record<TranslationKey, string> = {
   'tree.examples.basic.description':
     '組合 tree、node、trigger 與 group primitives 來建立可展開的階層結構。',
   'tree.usage.description':
-    '從 @sanring/ui 匯入 tree primitives，並用 signals 控制展開與選取狀態。',
+    '匯入 tree primitives，並用 signals 控制展開與選取狀態。',
   'tree.installation.description':
-    '安裝 @sanring/ui 後，將 tree primitives 匯入負責渲染階層資料的 standalone component。',
+    '用 CLI 加入這個元件，再將 tree primitives 匯入負責渲染階層資料的 standalone component。',
   'tree.composition.description':
     'Tree 將 root 狀態容器、node 語意、可展開 group 與 trigger 互動拆開。',
   'tree.api.description': 'tree primitives 支援的 inputs、models 與 directives。',
@@ -1492,7 +1492,7 @@ export const zh: Record<TranslationKey, string> = {
     '組合 group、panel 與 handle。拖曳時會以百分比調整 panel 尺寸，並遵守 min/max 限制。',
   'resizable.usage.description': '匯入 resizable primitives，並把 handle 放在相鄰 panel 之間。',
   'resizable.installation.description':
-    '從 @sanring/ui 匯入 ResizableGroupComponent、ResizablePanelComponent 與 ResizableHandleComponent。',
+    '用 CLI 加入這個元件，再匯入 ResizableGroupComponent、ResizablePanelComponent 與 ResizableHandleComponent。',
   'resizable.examples.controlled.description':
     '用 [(sizes)] 保存或還原分割版面；每個數值都是對應 panel 的百分比。',
   'resizable.demo.vertical': '垂直分割',

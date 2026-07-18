@@ -107,12 +107,7 @@ export const timelinePageExamples = {
     </div>
   </li>
 </ul>`,
-  usageImport: `import {
-  TimelineContentDirective,
-  TimelineDirective,
-  TimelineItemDirective,
-  TimelineSeparatorDirective,
-} from '@sanring/ui';`,
+  usageImport: `import { TimelineContentDirective, TimelineDirective, TimelineItemDirective, TimelineSeparatorDirective } from './components/ui/timeline';`,
   usageMain: `<ul sanringTimeline orientation="vertical">
   <li sanringTimelineItem>
     <span sanringTimelineSeparator></span>

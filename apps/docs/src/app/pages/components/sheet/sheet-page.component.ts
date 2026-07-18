@@ -102,7 +102,7 @@ import { sheetPage, sheetPageExamples } from './sheet.docs';
       <app-component-page-section [section]="section('installation')">
         <app-component-page-installation
           componentName="sheet"
-          manualSnippet="import { SANRING_SHEET_IMPORTS } from '@sanring/ui';"
+          manualSnippet="import { SANRING_SHEET_IMPORTS } from './components/ui/sheet';"
         />
       </app-component-page-section>
 

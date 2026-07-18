@@ -92,7 +92,7 @@ export const progressPage = {
 export const progressPageExamples = {
   basic: `<sanring-progress [value]="60" ariaLabel="Loading" />`,
 
-  usageImport: `import { ProgressComponent } from '@sanring/ui';`,
+  usageImport: `import { ProgressComponent } from './components/ui/progress';`,
 
   usageMain: `<sanring-progress [value]="progress" [max]="100" ariaLabel="Upload progress" />`,
 

@@ -58,7 +58,7 @@ import { labelPage, labelPageExamples } from './label.docs';
       <app-component-page-section [section]="section('installation')">
         <app-component-page-installation
           componentName="label"
-          manualSnippet="import { LabelDirective } from '@sanring/ui';"
+          manualSnippet="import { LabelDirective } from './components/ui/label';"
         />
       </app-component-page-section>
 

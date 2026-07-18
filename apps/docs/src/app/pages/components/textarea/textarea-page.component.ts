@@ -57,7 +57,7 @@ import { textareaPage, textareaPageExamples } from './textarea.docs';
       <app-component-page-section [section]="section('installation')">
         <app-component-page-installation
           componentName="textarea"
-          manualSnippet="import { TextareaDirective } from '@sanring/ui';"
+          manualSnippet="import { TextareaDirective } from './components/ui/textarea';"
         />
       </app-component-page-section>
 

@@ -39,7 +39,7 @@ import { collapsiblePage, collapsiblePageExamples } from './collapsible.docs';
       <app-component-page-section [section]="section('installation')">
         <app-component-page-installation
           componentName="collapsible"
-          manualSnippet="import { SANRING_COLLAPSIBLE_IMPORTS } from '@sanring/ui';"
+          manualSnippet="import { SANRING_COLLAPSIBLE_IMPORTS } from './components/ui/collapsible';"
         />
       </app-component-page-section>
 

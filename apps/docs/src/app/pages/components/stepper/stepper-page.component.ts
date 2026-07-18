@@ -128,7 +128,7 @@ import { stepperPage, stepperPageExamples } from './stepper.docs';
       <app-component-page-section [section]="section('installation')">
         <app-component-page-installation
           componentName="stepper"
-          manualSnippet="import { StepperComponent, StepComponent } from '@sanring/ui';"
+          manualSnippet="import { StepperComponent, StepComponent } from './components/ui/stepper';"
         />
       </app-component-page-section>
 

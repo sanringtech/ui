@@ -76,12 +76,8 @@ export const inputPageExamples = {
   <input sanringInput placeholder="name@sanring.dev" type="email" />
   <p sanringDescription>We'll only use this for account notifications.</p>
 </sanring-field>`,
-  usageImport: `import {
-  DescriptionDirective,
-  FieldLabelDirective,
-  InputDirective,
-  SanringFieldComponent,
-} from '@sanring/ui';`,
+  usageImport: `import { DescriptionDirective, FieldLabelDirective, SanringFieldComponent } from './components/ui/field';
+import { InputDirective } from './components/ui/input';`,
   usageMain: `<sanring-field>
   <label sanringLabel>Email</label>
   <input sanringInput placeholder="name@sanring.dev" type="email" />

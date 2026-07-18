@@ -79,7 +79,7 @@ import { breadcrumbPage, breadcrumbPageExamples } from './breadcrumb.docs';
       <app-component-page-section [section]="section('installation')">
         <app-component-page-installation
           componentName="breadcrumb"
-          manualSnippet="import { SANRING_BREADCRUMB_IMPORTS } from '@sanring/ui';"
+          manualSnippet="import { SANRING_BREADCRUMB_IMPORTS } from './components/ui/breadcrumb';"
         />
       </app-component-page-section>
 

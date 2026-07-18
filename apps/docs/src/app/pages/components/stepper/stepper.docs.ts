@@ -119,14 +119,7 @@ export const stepperPageExamples = {
     <button sanringStepperPrevious>Back</button>
   </sanring-step>
 </sanring-stepper>`,
-  usageImport: `import {
-  StepComponent,
-  StepLabelDirective,
-  StepIconDirective,
-  StepperComponent,
-  StepperNextDirective,
-  StepperPreviousDirective,
-} from '@sanring/ui';`,
+  usageImport: `import { StepComponent, StepLabelDirective, StepIconDirective, StepperComponent, StepperNextDirective, StepperPreviousDirective } from './components/ui/stepper';`,
   usageMain: `<sanring-stepper lineStyle="dashed" optionalLabel="Optional">
   <sanring-step label="Account">...</sanring-step>
   <sanring-step label="Profile" optional>...</sanring-step>

@@ -73,7 +73,8 @@ import { inputPage, inputPageExamples } from './input.docs';
       <app-component-page-section [section]="section('installation')">
         <app-component-page-installation
           componentName="input"
-          manualSnippet="import { DescriptionDirective, FieldLabelDirective, InputDirective, SanringFieldComponent } from '@sanring/ui';"
+          manualSnippet="import { DescriptionDirective, FieldLabelDirective, SanringFieldComponent } from './components/ui/field';
+import { InputDirective } from './components/ui/input';"
         />
       </app-component-page-section>
 

@@ -129,7 +129,8 @@ sanring-dialog-content
   </sanring-dialog-content>
 </ng-template>`,
   usageImport: `import { Component } from '@angular/core';
-import { ButtonDirective, SANRING_DIALOG_IMPORTS } from '@sanring/ui';
+import { ButtonDirective } from './components/ui/button';
+import { SANRING_DIALOG_IMPORTS } from './components/ui/dialog';
 
 @Component({
   imports: [ButtonDirective, SANRING_DIALOG_IMPORTS],
@@ -146,17 +147,8 @@ export class ExampleComponent {}`,
   </sanring-dialog-content>
 </ng-template>`,
   usageIndividualImports: `import { Component } from '@angular/core';
-import {
-  ButtonDirective,
-  DialogCloseDirective,
-  DialogContentComponent,
-  DialogDescriptionDirective,
-  DialogFooterComponent,
-  DialogHeaderComponent,
-  DialogMediaComponent,
-  DialogTitleDirective,
-  DialogTriggerDirective,
-} from '@sanring/ui';
+import { ButtonDirective } from './components/ui/button';
+import { DialogCloseDirective, DialogContentComponent, DialogDescriptionDirective, DialogFooterComponent, DialogHeaderComponent, DialogMediaComponent, DialogTitleDirective, DialogTriggerDirective } from './components/ui/dialog';
 
 @Component({
   imports: [

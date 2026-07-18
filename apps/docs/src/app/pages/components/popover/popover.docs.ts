@@ -79,7 +79,8 @@ export const popoverPageExamples = {
 </sanring-popover>`,
 
   usageImport: `import { Component } from '@angular/core';
-import { ButtonDirective, SANRING_POPOVER_IMPORTS } from '@sanring/ui';
+import { ButtonDirective } from './components/ui/button';
+import { SANRING_POPOVER_IMPORTS } from './components/ui/popover';
 
 @Component({
   imports: [ButtonDirective, SANRING_POPOVER_IMPORTS],
@@ -94,15 +95,8 @@ export class ExampleComponent {}`,
   </sanring-popover-content>
 </sanring-popover>`,
   usageIndividualImports: `import { Component } from '@angular/core';
-import {
-  ButtonDirective,
-  PopoverComponent,
-  PopoverContentComponent,
-  PopoverDescriptionComponent,
-  PopoverHeaderComponent,
-  PopoverTitleComponent,
-  PopoverTriggerDirective,
-} from '@sanring/ui';
+import { ButtonDirective } from './components/ui/button';
+import { PopoverComponent, PopoverContentComponent, PopoverDescriptionComponent, PopoverHeaderComponent, PopoverTitleComponent, PopoverTriggerDirective } from './components/ui/popover';
 
 @Component({
   imports: [

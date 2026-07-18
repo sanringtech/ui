@@ -141,7 +141,7 @@ export const accordionPageExamples = {
   </sanring-accordion-item>
 </sanring-accordion>`,
   usageImport: `import { Component } from '@angular/core';
-import { SANRING_ACCORDION_IMPORTS } from '@sanring/ui';
+import { SANRING_ACCORDION_IMPORTS } from './components/ui/accordion';
 
 @Component({
   imports: [SANRING_ACCORDION_IMPORTS],
@@ -158,12 +158,7 @@ export class ExampleComponent {}`,
   </sanring-accordion-item>
 </sanring-accordion>`,
   usageIndividualImports: `import { Component } from '@angular/core';
-import {
-  AccordionComponent,
-  AccordionContentComponent,
-  AccordionItemComponent,
-  AccordionTriggerComponent,
-} from '@sanring/ui';
+import { AccordionComponent, AccordionContentComponent, AccordionItemComponent, AccordionTriggerComponent } from './components/ui/accordion';
 
 @Component({
   imports: [

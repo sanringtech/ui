@@ -85,7 +85,8 @@ export const sheetPageExamples = {
 </sanring-sheet>`,
 
   usageImport: `import { Component } from '@angular/core';
-import { ButtonDirective, SANRING_SHEET_IMPORTS } from '@sanring/ui';
+import { ButtonDirective } from './components/ui/button';
+import { SANRING_SHEET_IMPORTS } from './components/ui/sheet';
 
 @Component({
   imports: [ButtonDirective, SANRING_SHEET_IMPORTS],
@@ -105,17 +106,8 @@ export class ExampleComponent {}`,
   </sanring-sheet-content>
 </sanring-sheet>`,
   usageIndividualImports: `import { Component } from '@angular/core';
-import {
-  ButtonDirective,
-  SheetCloseDirective,
-  SheetComponent,
-  SheetContentComponent,
-  SheetDescriptionComponent,
-  SheetFooterComponent,
-  SheetHeaderComponent,
-  SheetTitleComponent,
-  SheetTriggerDirective,
-} from '@sanring/ui';
+import { ButtonDirective } from './components/ui/button';
+import { SheetCloseDirective, SheetComponent, SheetContentComponent, SheetDescriptionComponent, SheetFooterComponent, SheetHeaderComponent, SheetTitleComponent, SheetTriggerDirective } from './components/ui/sheet';
 
 @Component({
   imports: [

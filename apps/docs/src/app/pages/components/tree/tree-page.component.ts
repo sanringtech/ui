@@ -149,7 +149,7 @@ import { treePage, treePageExamples } from './tree.docs';
       <app-component-page-section [section]="section('installation')">
         <app-component-page-installation
           componentName="tree"
-          manualSnippet="import { SANRING_TREE_IMPORTS } from '@sanring/ui';"
+          manualSnippet="import { SANRING_TREE_IMPORTS } from './components/ui/tree';"
         />
       </app-component-page-section>
 

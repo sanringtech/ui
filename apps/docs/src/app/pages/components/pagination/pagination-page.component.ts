@@ -87,7 +87,7 @@ interface OrderRow {
       <app-component-page-section [section]="section('installation')">
         <app-component-page-installation
           componentName="pagination"
-          manualSnippet="import { PaginatorComponent } from '@sanring/ui';"
+          manualSnippet="import { PaginatorComponent } from './components/ui/pagination';"
         />
       </app-component-page-section>
 

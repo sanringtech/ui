@@ -104,7 +104,7 @@ import { timelinePage, timelinePageExamples } from './timeline.docs';
       <app-component-page-section [section]="section('installation')">
         <app-component-page-installation
           componentName="timeline"
-          manualSnippet="import { TimelineDirective } from '@sanring/ui';"
+          manualSnippet="import { TimelineDirective } from './components/ui/timeline';"
         />
       </app-component-page-section>
 

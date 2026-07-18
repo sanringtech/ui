@@ -127,7 +127,7 @@ export const sliderPage = {
 
 export const sliderPageExamples = {
   basic: `<sanring-slider [value]="50" ariaLabel="Volume" />`,
-  usageImport: `import { SliderComponent } from '@sanring/ui';`,
+  usageImport: `import { SliderComponent } from './components/ui/slider';`,
   usageMain: `<sanring-slider
   [min]="0"
   [max]="100"

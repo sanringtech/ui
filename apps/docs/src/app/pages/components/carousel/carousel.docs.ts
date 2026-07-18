@@ -113,20 +113,14 @@ export const carouselPageExamples = {
   </div>
 </sanring-carousel>`,
 
-  usageImport: `import { SANRING_CAROUSEL_IMPORTS } from '@sanring/ui';
+  usageImport: `import { SANRING_CAROUSEL_IMPORTS } from './components/ui/carousel';
 
 @Component({
   imports: [SANRING_CAROUSEL_IMPORTS],
 })
 export class ExampleComponent {}`,
 
-  usageIndividualImports: `import {
-  CarouselComponent,
-  CarouselContentComponent,
-  CarouselItemComponent,
-  CarouselNextDirective,
-  CarouselPreviousDirective,
-} from '@sanring/ui';
+  usageIndividualImports: `import { CarouselComponent, CarouselContentComponent, CarouselItemComponent, CarouselNextDirective, CarouselPreviousDirective } from './components/ui/carousel';
 
 @Component({
   imports: [

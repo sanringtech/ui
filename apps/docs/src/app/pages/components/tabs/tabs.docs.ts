@@ -125,7 +125,7 @@ export const tabsPageExamples = {
   </sanring-tabs-content>
 </sanring-tabs>`,
   usageImport: `import { Component } from '@angular/core';
-import { SANRING_TABS_IMPORTS } from '@sanring/ui';
+import { SANRING_TABS_IMPORTS } from './components/ui/tabs';
 
 @Component({
   imports: [SANRING_TABS_IMPORTS],
@@ -145,12 +145,7 @@ export class ExampleComponent {}`,
   </sanring-tabs-content>
 </sanring-tabs>`,
   usageIndividualImports: `import { Component } from '@angular/core';
-import {
-  TabsComponent,
-  TabsContentComponent,
-  TabsListComponent,
-  TabsTriggerComponent,
-} from '@sanring/ui';
+import { TabsComponent, TabsContentComponent, TabsListComponent, TabsTriggerComponent } from './components/ui/tabs';
 
 @Component({
   imports: [TabsComponent, TabsListComponent, TabsTriggerComponent, TabsContentComponent],

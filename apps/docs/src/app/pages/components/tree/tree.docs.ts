@@ -113,7 +113,7 @@ export const treePageExamples = {
 </sanring-tree>`,
 
   usageImport: `import { Component, signal } from '@angular/core';
-import { SANRING_TREE_IMPORTS } from '@sanring/ui';
+import { SANRING_TREE_IMPORTS } from './components/ui/tree';
 
 @Component({
   imports: [SANRING_TREE_IMPORTS],
@@ -124,12 +124,7 @@ export class ExampleComponent {
 }`,
 
   usageIndividualImports: `import { Component } from '@angular/core';
-import {
-  TreeComponent,
-  TreeNodeComponent,
-  TreeGroupComponent,
-  TreeTriggerDirective,
-} from '@sanring/ui';
+import { TreeComponent, TreeNodeComponent, TreeGroupComponent, TreeTriggerDirective } from './components/ui/tree';
 
 @Component({
   imports: [

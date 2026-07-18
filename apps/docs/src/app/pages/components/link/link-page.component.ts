@@ -62,7 +62,7 @@ import { linkPage, linkPageExamples } from './link.docs';
       <app-component-page-section [section]="section('installation')">
         <app-component-page-installation
           componentName="link"
-          manualSnippet="import { LinkDirective } from '@sanring/ui';"
+          manualSnippet="import { LinkDirective } from './components/ui/link';"
         />
       </app-component-page-section>
 

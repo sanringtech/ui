@@ -81,7 +81,7 @@ import { commandPage, commandPageExamples } from './command.docs';
       <app-component-page-section [section]="section('installation')">
         <app-component-page-installation
           componentName="command"
-          manualSnippet="import { SANRING_COMMAND_IMPORTS } from '@sanring/ui';"
+          manualSnippet="import { SANRING_COMMAND_IMPORTS } from './components/ui/command';"
         />
       </app-component-page-section>
 

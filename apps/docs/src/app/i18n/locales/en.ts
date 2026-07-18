@@ -153,7 +153,7 @@ export const en = {
   'aspectRatio.usage.description':
     'Import AspectRatioDirective, then apply sanringAspectRatio to the element that should own the frame.',
   'aspectRatio.installation.description':
-    'Install @sanring/ui and import AspectRatioDirective into the standalone component that renders the media frame.',
+    'Add the component with the CLI, then import AspectRatioDirective into the standalone component that renders the media frame.',
   'aspectRatio.demo.media': 'Media frame',
   'aspectRatio.demo.square': 'Square thumbnail',
   'aspectRatio.demo.card': 'Card media',
@@ -190,9 +190,9 @@ export const en = {
   'accordion.examples.basic.description':
     'By default, only one accordion item remains open at a time.',
   'accordion.usage.description':
-    'Import the accordion primitives from @sanring/ui and compose root, item, trigger, and content together.',
+    'Import the accordion primitives and compose root, item, trigger, and content together.',
   'accordion.installation.description':
-    'Import the accordion primitives from @sanring/ui and compose them in your template.',
+    'Add the component with the CLI, then compose the accordion primitives in your template.',
   'accordion.composition.description':
     'The component is split into root, item, trigger, and content primitives so each part remains reusable.',
   'accordion.api.description': 'Inputs and outputs supported by the accordion primitives.',
@@ -220,7 +220,7 @@ export const en = {
     'Alert reserves space in the layout and combines an icon, title, and description.',
   'alert.usage.description': 'Import Alert primitives and compose them with native text and icons.',
   'alert.installation.description':
-    'Import AlertComponent, AlertTitleDirective, and AlertDescriptionDirective from @sanring/ui.',
+    'Add the component with the CLI, then import AlertComponent, AlertTitleDirective, and AlertDescriptionDirective.',
   'alert.composition.description':
     'Alert is a static layout primitive. Use it for state-driven messages, not transient toast notifications.',
   'alert.api.description': 'Inputs supported by the sanring-alert component.',
@@ -280,7 +280,7 @@ export const en = {
     'Use outline buttons for secondary actions and icon-only buttons with an accessible label.',
   'button.usage.description': 'Import the directive and apply it to a native button element.',
   'button.installation.description':
-    'Import ButtonDirective from @sanring/ui and choose a variant and size that match the action.',
+    'Add the component with the CLI, then import ButtonDirective and choose a variant and size that match the action.',
   'button.composition.description':
     'Use variants for visual priority and sizes for density, including icon-only controls with accessible labels.',
   'button.api.description': 'Inputs supported by the sanringBtn directive.',
@@ -304,7 +304,7 @@ export const en = {
   'badge.examples.basic.description':
     'Use badges as compact inline labels on text, cards, lists, or links.',
   'badge.usage.description':
-    'Import BadgeDirective from @sanring/ui and apply sanringBadge to an element.',
+    'Import BadgeDirective and apply sanringBadge to an element.',
   'badge.installation.description':
     'Import Badge and choose a variant that matches the metadata priority.',
   'badge.composition.description':
@@ -325,7 +325,7 @@ export const en = {
   'avatar.examples.basic.description':
     'Avatar shows the image after it loads and keeps the fallback visible when the image is missing or unavailable.',
   'avatar.usage.description':
-    'Import the avatar primitives from @sanring/ui and compose image, fallback, badge, or group pieces as needed.',
+    'Import the avatar primitives and compose image, fallback, badge, or group pieces as needed.',
   'avatar.installation.description':
     'Use AvatarComponent as the root and combine it with image, fallback, badge, and group primitives.',
   'avatar.composition.description':
@@ -378,7 +378,7 @@ export const en = {
   'calendar.usage.description':
     'Import CalendarComponent and provide CALENDAR_LOCALE at the app or component level.',
   'calendar.installation.description':
-    'Import CalendarComponent from @sanring/ui, and additionally install @sanring/date-picker as a peer dependency.',
+    'Add the component with the CLI — it also installs @sanring/date-picker as a peer dependency — then import CalendarComponent.',
   'calendar.api.description': 'Inputs, outputs, and public methods supported by CalendarComponent.',
   'calendar.api.class.description': 'Additional classes merged with the component base styles.',
   'calendar.api.size.description': 'Size of each day cell.',
@@ -418,7 +418,7 @@ export const en = {
   'card.usage.description':
     'Import the Card primitives you need and compose them with native HTML and utility classes.',
   'card.installation.description':
-    'Import CardComponent, CardHeaderComponent, CardContentComponent, CardFooterComponent, CardTitleDirective, and CardDescriptionDirective from @sanring/ui.',
+    'Add the component with the CLI, then import CardComponent, CardHeaderComponent, CardContentComponent, CardFooterComponent, CardTitleDirective, and CardDescriptionDirective.',
   'card.composition.description':
     'Card does not own business structure. Override classes, place any media or form controls inside, and combine it with other primitives.',
   'card.api.description': 'Inputs supported by the Card family primitives.',
@@ -439,7 +439,7 @@ export const en = {
   'dialog.usage.description':
     'Import the dialog primitives and bind sanringDialogTrigger to an ng-template.',
   'dialog.installation.description':
-    'Dialog is powered by Angular CDK Dialog. Compose the exported primitives from @sanring/ui.',
+    'Dialog is powered by Angular CDK Dialog. Add the component with the CLI, then compose the exported primitives.',
   'dialog.composition.description':
     'Use DialogContent for the panel, DialogHeader/DialogFooter for layout, optional DialogMedia for emphasis, and sanringDialogTrigger/sanringDialogClose for config and close results.',
   'dialog.api.description': 'Inputs supported by the dialog primitives.',
@@ -463,7 +463,7 @@ export const en = {
     'Use dividers to separate stacked content, aligned list rows, and inline groups.',
   'divider.usage.description': 'Import the component and place it between related content.',
   'divider.installation.description':
-    'Import DividerComponent from @sanring/ui and place it between related sections or controls.',
+    'Add the component with the CLI, then import DividerComponent and place it between related sections or controls.',
   'divider.composition.description':
     'Use the default horizontal divider for stacked content, add inset for aligned list rows, or set vertical to separate inline groups.',
   'divider.api.description': 'Inputs supported by the sanring-divider component.',
@@ -502,7 +502,7 @@ export const en = {
   'input.examples.basic.description':
     'Apply sanringInput to a native input to keep browser behavior while receiving system styling.',
   'input.usage.description':
-    'Import InputDirective from @sanring/ui and apply sanringInput to an input.',
+    'Import InputDirective and apply sanringInput to an input.',
   'input.installation.description':
     'Use sanringInput on native input elements and keep type, value, disabled, and form bindings native.',
   'input.composition.description':
@@ -514,7 +514,7 @@ export const en = {
   'textarea.examples.basic.description':
     'Apply sanringTextarea to a native textarea to keep browser editing behavior with Sanring UI field styling.',
   'textarea.usage.description':
-    'Import TextareaDirective from @sanring/ui and apply sanringTextarea to a textarea.',
+    'Import TextareaDirective and apply sanringTextarea to a textarea.',
   'textarea.installation.description':
     'Use sanringTextarea on native textarea elements and keep value, disabled, rows, and form bindings native.',
   'textarea.demo.disabled': 'Disabled',
@@ -526,7 +526,7 @@ export const en = {
   'timeline.examples.basic.description':
     'Use sanringTimeline with native list markup, then compose separators, markers, connectors, and content.',
   'timeline.usage.description':
-    'Import the timeline directives from @sanring/ui and apply them to list or div-based activity markup.',
+    'Import the timeline directives and apply them to list or div-based activity markup.',
   'timeline.installation.description':
     'Install the timeline primitives and compose item, separator, and content directives where each event renders.',
   'timeline.demo.horizontal': 'Horizontal',
@@ -572,7 +572,7 @@ export const en = {
   'slider.examples.basic.description':
     'Use sanring-slider when users need to adjust a bounded numeric value directly.',
   'slider.usage.description':
-    'Import SliderComponent from @sanring/ui and bind valueChange or Angular forms to receive numeric updates.',
+    'Import SliderComponent and bind valueChange or Angular forms to receive numeric updates.',
   'slider.installation.description':
     'Install the slider component and provide an accessible label with ariaLabel or ariaLabelledBy.',
   'slider.demo.step': 'Step',
@@ -606,7 +606,7 @@ export const en = {
   'stepper.examples.basic.description':
     'Compose sanring-stepper with sanring-step panels and next/previous buttons for multi-step flows.',
   'stepper.usage.description':
-    'Import the stepper primitives from @sanring/ui and place sanring-step children inside sanring-stepper.',
+    'Import the stepper primitives and place sanring-step children inside sanring-stepper.',
   'stepper.installation.description':
     'Stepper is built on Angular CDK Stepper. Import the primitives you need for steps, labels, icons, and navigation buttons.',
   'stepper.demo.dashed': 'Dashed connector',
@@ -662,7 +662,7 @@ export const en = {
   'label.examples.basic.description':
     'Apply sanringLabel to a native label so for/id association stays intact.',
   'label.usage.description':
-    'Import LabelDirective from @sanring/ui and apply sanringLabel to a label.',
+    'Import LabelDirective and apply sanringLabel to a label.',
   'label.installation.description':
     'Use sanringLabel on native label elements and connect them to controls with for and id.',
   'label.composition.description':
@@ -680,9 +680,9 @@ export const en = {
   'link.examples.basic.description':
     'Use the directive on a native anchor so href, target, routerLink, and routerLinkActive keep their native behavior.',
   'link.usage.description':
-    'Import LinkDirective from @sanring/ui and apply sanringLink to an anchor.',
+    'Import LinkDirective and apply sanringLink to an anchor.',
   'link.installation.description':
-    'Import LinkDirective from @sanring/ui and keep navigation attributes on the native anchor element.',
+    'Add the component with the CLI, then import LinkDirective and keep navigation attributes on the native anchor element.',
   'link.composition.description':
     'Use href for external links and routerLink with routerLinkActive for application routes.',
   'link.api.description': 'Inputs supported by the sanringLink directive.',
@@ -739,7 +739,7 @@ export const en = {
   'skeleton.examples.basic.description':
     'Use skeletons to reserve space for content before the final UI is ready.',
   'skeleton.usage.description':
-    'Import SkeletonDirective from @sanring/ui and apply sanringSkeleton to any element.',
+    'Import SkeletonDirective and apply sanringSkeleton to any element.',
   'skeleton.installation.description':
     'Use the directive on div, span, or semantic elements and provide width, height, and radius classes.',
   'skeleton.composition.description':
@@ -769,7 +769,7 @@ export const en = {
   'switch.examples.basic.description':
     'Use Switch for boolean settings where the change can apply immediately.',
   'switch.usage.description':
-    'Import SwitchComponent from @sanring/ui and pair it with an accessible label.',
+    'Import SwitchComponent and pair it with an accessible label.',
   'switch.api.description': 'Inputs supported by the sanring-switch component.',
   'switch.api.class.description': 'Additional classes merged with the switch track styles.',
   'switch.api.id.description': 'Native id applied to the switch button for label association.',
@@ -791,7 +791,7 @@ export const en = {
   'tag.examples.description': 'Common tag patterns for filters, chips, and categorized content.',
   'tag.examples.basic.description': 'Use tags for selected values or compact content categories.',
   'tag.usage.description':
-    'Import TagComponent from @sanring/ui and project label content inside it.',
+    'Import TagComponent and project label content inside it.',
   'tag.installation.description':
     'Import Tag and optionally enable closable when the tag should emit a remove event.',
   'tag.composition.description':
@@ -860,7 +860,7 @@ export const en = {
   'tooltip.examples.basic.description':
     'Wrap a trigger and content inside sanring-tooltip. The content opens on hover or focus.',
   'tooltip.usage.description':
-    'Import TooltipComponent, TooltipTriggerDirective, and TooltipContentComponent from @sanring/ui.',
+    'Import TooltipComponent, TooltipTriggerDirective, and TooltipContentComponent.',
   'tooltip.installation.description':
     'Use sanringTooltipTrigger on a focusable element and provide matching tooltip content.',
   'tooltip.composition.description':
@@ -944,7 +944,7 @@ export const en = {
   'collapsible.examples.description':
     'Common collapsible patterns for inline details, dense settings, and nested navigation.',
   'collapsible.installation.description':
-    'Import the root component with trigger and content directives from @sanring/ui.',
+    'Add the component with the CLI, then import the root component with its trigger and content directives.',
   'collapsible.usage.description':
     'Wrap a trigger and a content region in sanring-collapsible. The trigger controls the open state and wires ARIA attributes to the content.',
   'collapsible.composition.description':
@@ -1104,7 +1104,7 @@ export const en = {
   'toggle.examples.basic.description': 'A toggle button in its default state.',
   'toggle.usage.description':
     'Import ToggleDirective and apply sanringToggle to a <button> element.',
-  'toggle.installation.description': 'Install the @sanring/ui package and import ToggleDirective.',
+  'toggle.installation.description': 'Add the component with the CLI, then import ToggleDirective.',
   'toggle.examples.description': 'Common toggle patterns for toolbars, filters, and settings.',
   'toggle.demo.outline': 'Outline',
   'toggle.demo.withText': 'With Text',
@@ -1128,7 +1128,7 @@ export const en = {
   'progress.usage.description':
     'Import ProgressComponent and bind a numeric value. The directive handles all ARIA attributes automatically.',
   'progress.installation.description':
-    'Install @sanring/ui and import ProgressComponent or ProgressDirective.',
+    'Add the component with the CLI, then import ProgressComponent or ProgressDirective.',
   'progress.examples.description':
     'Three questions answered with live examples: shimmer effect, shape variants, and colour customisation.',
   'progress.demo.shimmer': 'Shimmer Sprint Effect',
@@ -1166,7 +1166,7 @@ export const en = {
   'pagination.usage.description':
     'Use PaginatorComponent for the common case, or compose the low-level pagination primitives when you need custom layout.',
   'pagination.installation.description':
-    'Install @sanring/ui and import PaginatorComponent or the pagination primitive set.',
+    'Add the component with the CLI, then import PaginatorComponent or the pagination primitive set.',
   'pagination.demo.controlled': 'Controlled paginator',
   'pagination.demo.pageSize': 'Page size',
   'pagination.demo.primitives': 'Primitive composition',
@@ -1201,7 +1201,7 @@ export const en = {
   'spinner.examples.basic.description': 'Default spinner using the loader icon at medium size.',
   'spinner.usage.description':
     'Import SpinnerComponent and drop sanring-spinner anywhere. Text colour and size are controlled with Tailwind utilities.',
-  'spinner.installation.description': 'Install @sanring/ui and import SpinnerComponent.',
+  'spinner.installation.description': 'Add the component with the CLI, then import SpinnerComponent.',
   'spinner.examples.description':
     'Common spinner patterns covering variants, sizes, colours, inline labels, and button loading states.',
   'spinner.demo.variant': 'Variant',
@@ -1286,7 +1286,7 @@ export const en = {
   'sheet.examples.basic.description': 'A sheet that slides in from the right edge.',
   'sheet.usage.description':
     'Wrap content in sanring-sheet, add a sanringSheetTrigger button, then place sanring-sheet-content inside with the desired side.',
-  'sheet.installation.description': 'Install @sanring/ui and import the sheet primitives.',
+  'sheet.installation.description': 'Add the component with the CLI, then import the sheet primitives.',
   'sheet.composition.description':
     'Sheet is composed from a state root, trigger, content panel, and optional header/footer primitives.',
   'sheet.examples.description':
@@ -1325,7 +1325,7 @@ export const en = {
   'popover.usage.description':
     "Wrap trigger and content inside sanring-popover. The content positions itself automatically using the trigger element's coordinates.",
   'popover.installation.description':
-    'Install @sanring/ui and import the popover primitives or use SANRING_POPOVER_IMPORTS for convenience.',
+    'Add the component with the CLI, then import the popover primitives, or use SANRING_POPOVER_IMPORTS for convenience.',
   'popover.composition.description':
     'Popover is composed from a root, trigger directive, and content panel with optional header, title, and description.',
   'popover.examples.description':
@@ -1350,7 +1350,7 @@ export const en = {
   'hoverCard.usage.description':
     'Import the hover-card primitives and apply sanringHoverCardTrigger to the element that should anchor the floating panel.',
   'hoverCard.installation.description':
-    'Install @sanring/ui and import SANRING_HOVER_CARD_IMPORTS for the root, trigger, and content primitives.',
+    'Add the component with the CLI, then import SANRING_HOVER_CARD_IMPORTS for the root, trigger, and content primitives.',
   'hoverCard.composition.description':
     'Hover Card separates the delay controller, trigger anchor, and floating content panel.',
   'hoverCard.demo.trigger': '@sanring/ui',
@@ -1378,9 +1378,9 @@ export const en = {
   'command.examples.basic.description':
     'Compose input, list, groups, and items. Typing filters items against their visible text.',
   'command.usage.description':
-    'Import the command primitives from @sanring/ui and listen for valueChange to react to a selection.',
+    'Import the command primitives and listen for valueChange to react to a selection.',
   'command.installation.description':
-    'Install @sanring/ui, then import the command primitives into the standalone component that renders the list.',
+    'Add the component with the CLI, then import the command primitives into the standalone component that renders the list.',
   'command.composition.description':
     'Command separates the search input, scrollable list, groups, items, and an optional dialog wrapper so each piece can be used independently.',
   'command.demo.dialog': 'Command dialog',
@@ -1413,7 +1413,7 @@ export const en = {
   'breadcrumb.usage.description':
     'Compose a breadcrumb-list of breadcrumb-items separated by breadcrumb-dividers. End the trail with breadcrumb-page for the current location.',
   'breadcrumb.installation.description':
-    'Install @sanring/ui and import the breadcrumb primitives or use SANRING_BREADCRUMB_IMPORTS for convenience.',
+    'Add the component with the CLI, then import the breadcrumb primitives, or use SANRING_BREADCRUMB_IMPORTS for convenience.',
   'breadcrumb.composition.description':
     'Breadcrumb is built from a nav root, an ordered list, items, links, a page marker, a divider, and an optional ellipsis for collapsed paths.',
   'breadcrumb.examples.description':
@@ -1434,7 +1434,7 @@ export const en = {
   'dropdownMenu.usage.description':
     'Import ButtonDirective and the dropdown menu primitives first, then expose the content with a template variable (#menu="sanringDropdownMenuContent") and pass it to the trigger\'s [menu]. SANRING_DROPDOWN_MENU_IMPORTS is a convenience import for the full set; import individual primitives when you want the component dependencies to stay explicit.',
   'dropdownMenu.installation.description':
-    'Install @sanring/ui and import SANRING_DROPDOWN_MENU_IMPORTS for the full dropdown menu primitive set, or import individual primitives when you need finer control.',
+    'Add the component with the CLI, then import SANRING_DROPDOWN_MENU_IMPORTS for the full primitive set, or import individual primitives when you need finer control.',
   'dropdownMenu.examples.description':
     'Common dropdown menu patterns inspired by menubar examples: checkable options, radio-style selection, nested choices, and icon items.',
   'dropdownMenu.demo.checkbox': 'Checkbox',
@@ -1463,7 +1463,7 @@ export const en = {
   'select.usage.description':
     'Import the select primitives and compose root, trigger, value, content, and item together.',
   'select.installation.description':
-    'Install @sanring/ui and import SANRING_SELECT_IMPORTS for the full select primitive set.',
+    'Add the component with the CLI, then import SANRING_SELECT_IMPORTS for the full select primitive set.',
   'select.examples.description':
     'Common select patterns with grouped options, separators, and disabled items.',
   'select.demo.groups': 'Groups',
@@ -1500,7 +1500,7 @@ export const en = {
   'table.usage.description':
     'Import Angular CDK table plus the Sanring table primitives, then compose columns, cells, and rows in the template.',
   'table.installation.description':
-    'Install @sanring/ui and import the table primitives with Angular CDK table.',
+    'Add the component with the CLI, then import the table primitives alongside Angular CDK table.',
   'table.demo.sortable': 'Sortable headers',
   'table.demo.columnSizing': 'Column sizing',
   'table.demo.sticky': 'Sticky columns',
@@ -1531,9 +1531,9 @@ export const en = {
   'combobox.examples.basic.description':
     'Use the input, content, list, empty, and item primitives to build a searchable picker.',
   'combobox.usage.description':
-    'Import the combobox primitives from @sanring/ui and bind value with the root model input.',
+    'Import the combobox primitives and bind value with the root model input.',
   'combobox.installation.description':
-    'Install @sanring/ui, then import the combobox primitives into the standalone component that renders suggestions.',
+    'Add the component with the CLI, then import the combobox primitives into the standalone component that renders suggestions.',
   'combobox.composition.description':
     'Combobox keeps the input, popup content, list items, groups, and multi-select chips as separate primitives.',
   'combobox.demo.framework': 'Framework',
@@ -1584,9 +1584,9 @@ export const en = {
   'carousel.examples.basic.description':
     'Compose the root, content, item, and navigation button directives to build a carousel.',
   'carousel.usage.description':
-    'Import the carousel primitives from @sanring/ui and pass Embla options through the opts input.',
+    'Import the carousel primitives and pass Embla options through the opts input.',
   'carousel.installation.description':
-    'Install @sanring/ui, then import the carousel primitives into the standalone component that renders slides.',
+    'Add the component with the CLI, then import the carousel primitives into the standalone component that renders slides.',
   'carousel.composition.description':
     'Carousel separates the Embla viewport, slide items, and navigation controls so each piece can be styled independently.',
   'carousel.demo.featured': 'Featured projects',
@@ -1617,9 +1617,9 @@ export const en = {
   'tree.examples.basic.description':
     'Compose tree, node, trigger, and group primitives to build an expandable hierarchy.',
   'tree.usage.description':
-    'Import the tree primitives from @sanring/ui and control expanded and selected values with signals.',
+    'Import the tree primitives and control expanded and selected values with signals.',
   'tree.installation.description':
-    'Install @sanring/ui, then import the tree primitives into the standalone component that renders the hierarchy.',
+    'Add the component with the CLI, then import the tree primitives into the standalone component that renders the hierarchy.',
   'tree.composition.description':
     'Tree separates the root state container, node semantics, expandable group, and trigger interaction.',
   'tree.api.description': 'Inputs, models, and directives supported by the tree primitives.',
@@ -1680,7 +1680,7 @@ export const en = {
   'resizable.usage.description':
     'Import the resizable primitives and place handles between adjacent panels.',
   'resizable.installation.description':
-    'Import ResizableGroupComponent, ResizablePanelComponent, and ResizableHandleComponent from @sanring/ui.',
+    'Add the component with the CLI, then import ResizableGroupComponent, ResizablePanelComponent, and ResizableHandleComponent.',
   'resizable.examples.controlled.description':
     'Bind [(sizes)] to persist or restore a split layout. The values are percentages for each panel.',
   'resizable.demo.vertical': 'Vertical',

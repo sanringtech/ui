@@ -62,7 +62,7 @@ import { switchPage, switchPageExamples } from './switch.docs';
       <app-component-page-section [section]="section('installation')">
         <app-component-page-installation
           componentName="switch"
-          manualSnippet="import { SwitchComponent } from '@sanring/ui';"
+          manualSnippet="import { SwitchComponent } from './components/ui/switch';"
         />
       </app-component-page-section>
 

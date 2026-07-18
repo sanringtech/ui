@@ -57,7 +57,7 @@ import { dividerPage, dividerPageExamples } from './divider.docs';
       <app-component-page-section [section]="section('installation')">
         <app-component-page-installation
           componentName="divider"
-          manualSnippet="import { DividerComponent } from '@sanring/ui';"
+          manualSnippet="import { DividerComponent } from './components/ui/divider';"
         />
       </app-component-page-section>
 

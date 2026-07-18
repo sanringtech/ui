@@ -65,7 +65,7 @@ import { alertDialogPage, alertDialogPageExamples } from './alert-dialog.docs';
       <app-component-page-section [section]="section('installation')">
         <app-component-page-installation
           componentName="alert-dialog"
-          manualSnippet="import { SANRING_ALERT_DIALOG_IMPORTS } from '@sanring/ui';"
+          manualSnippet="import { SANRING_ALERT_DIALOG_IMPORTS } from './components/ui/alert-dialog';"
         />
       </app-component-page-section>
 

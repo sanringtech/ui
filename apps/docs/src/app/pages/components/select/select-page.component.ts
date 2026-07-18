@@ -78,7 +78,7 @@ import { selectPage, selectPageExamples } from './select.docs';
       <app-component-page-section [section]="section('installation')">
         <app-component-page-installation
           componentName="select"
-          manualSnippet="import { SANRING_SELECT_IMPORTS } from '@sanring/ui';"
+          manualSnippet="import { SANRING_SELECT_IMPORTS } from './components/ui/select';"
         />
       </app-component-page-section>
 

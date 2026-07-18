@@ -76,7 +76,7 @@ import { cardPage, cardPageExamples } from './card.docs';
       <app-component-page-section [section]="section('installation')">
         <app-component-page-installation
           componentName="card"
-          manualSnippet="import { SANRING_CARD_IMPORTS } from '@sanring/ui';"
+          manualSnippet="import { SANRING_CARD_IMPORTS } from './components/ui/card';"
         />
       </app-component-page-section>
 

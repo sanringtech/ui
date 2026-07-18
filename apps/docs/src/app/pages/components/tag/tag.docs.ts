@@ -98,7 +98,7 @@ export const tagPageExamples = {
   basic: `<sanring-tag>
   Tag
 </sanring-tag>`,
-  usageImport: `import { TagComponent } from '@sanring/ui';`,
+  usageImport: `import { TagComponent } from './components/ui/tag';`,
   usageMain: `<sanring-tag variant="secondary">
   Tag
 </sanring-tag>`,

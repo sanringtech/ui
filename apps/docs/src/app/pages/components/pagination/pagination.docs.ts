@@ -129,7 +129,7 @@ export const paginationPageExamples = {
   (pageChange)="pageIndex.set($event.pageIndex)"
 />`,
 
-  usageImport: `import { PaginatorComponent } from '@sanring/ui';`,
+  usageImport: `import { PaginatorComponent } from './components/ui/pagination';`,
 
   usageMain: `<sanring-paginator
   [pageIndex]="pageIndex()"

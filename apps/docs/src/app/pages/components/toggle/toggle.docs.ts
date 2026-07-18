@@ -83,7 +83,7 @@ export const togglePageExamples = {
   <svg lucideBold class="size-4"></svg>
 </button>`,
 
-  usageImport: `import { ToggleDirective } from '@sanring/ui';`,
+  usageImport: `import { ToggleDirective } from './components/ui/toggle';`,
 
   usageMain: `<button sanringToggle [(pressed)]="isBold">
   <svg lucideBold class="size-4"></svg>

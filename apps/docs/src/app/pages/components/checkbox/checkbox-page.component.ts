@@ -69,7 +69,7 @@ import { checkboxPage, checkboxPageExamples } from './checkbox.docs';
       <app-component-page-section [section]="section('installation')">
         <app-component-page-installation
           componentName="checkbox"
-          manualSnippet="import { CheckboxComponent } from '@sanring/ui';"
+          manualSnippet="import { CheckboxComponent } from './components/ui/checkbox';"
         />
       </app-component-page-section>
 
