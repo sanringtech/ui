@@ -1,11 +1,7 @@
 import { Component, computed, inject, signal } from '@angular/core';
 import { FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
-import { LucideHammer } from '@lucide/angular';
 import { CalendarLocale, DateRange, DisabledInput, PickerGranularity } from '@sanring/date-picker';
 import {
-  AlertComponent,
-  AlertDescriptionDirective,
-  AlertTitleDirective,
   ButtonDirective,
   DatePickerComponent,
   ErrorMessageComponent,
@@ -67,9 +63,6 @@ const ZH_LOCALE: CalendarLocale = {
 @Component({
   selector: 'app-date-picker-page',
   imports: [
-    AlertComponent,
-    AlertDescriptionDirective,
-    AlertTitleDirective,
     ComponentPageApiTableComponent,
     ButtonDirective,
     DatePickerComponent,
@@ -81,7 +74,6 @@ const ZH_LOCALE: CalendarLocale = {
     ComponentPageUsageImportsComponent,
     ComponentPageSectionComponent,
     ErrorMessageComponent,
-    LucideHammer,
     ReactiveFormsModule,
     SanringFieldComponent,
   ],
@@ -92,12 +84,6 @@ const ZH_LOCALE: CalendarLocale = {
         [title]="i18n.t(page.titleKey)"
         [description]="i18n.t(page.descriptionKey)"
       />
-
-      <sanring-alert class="mb-8">
-        <svg lucideHammer class="size-4"></svg>
-        <h5 sanringAlertTitle>{{ i18n.t('status.wip.title') }}</h5>
-        <p sanringAlertDescription>{{ i18n.t('status.wip.description') }}</p>
-      </sanring-alert>
 
       <app-component-page-section [section]="section('basic')">
         <app-component-page-code-previewer [code]="examples.basic" language="angular-html">

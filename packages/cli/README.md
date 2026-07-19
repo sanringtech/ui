@@ -4,6 +4,11 @@ CLI for adding [Sanring UI](https://ui.sanring.dev) components to your Angular p
 
 > Sanring UI is a collection of open-source Angular components built on top of `@angular/aria` and `@angular/cdk`, styled with Tailwind CSS. Components are copied directly into your project — you own the code.
 
+- **No package to depend on** — components are copied as source, so there's nothing to install or version-pin.
+- **`sanring add`** pulls in whatever a component depends on automatically (other components, peer packages, shared utilities).
+- **`sanring diff`/`sanring update`** know the difference between "the registry moved on and you never touched this file" and "you customized it" — untouched files update silently, real customizations always show a diff and ask first.
+- **`sanring info`** lets you preview exactly what a component would install before running `add`.
+
 ## Links
 
 - **Documentation**: [ui.sanring.dev](https://ui.sanring.dev)
@@ -110,7 +115,7 @@ Options:
 
 ### `diff [components...]`
 
-Sanring UI has no version concept — components are copied source, not npm packages — so there's no automatic way to know if your local copy has drifted from the registry. `diff` compares your installed files (and `sanring-theme.css`) against the current registry and prints what changed, so you can see whether a file was customized locally, updated upstream, or both before running `add --force`.
+Sanring UI has no version concept — components are copied source, not npm packages — so there's no automatic way to know if your local copy has drifted from the registry. `diff` compares your installed files (and `sanring-theme.css`) against the current registry and prints what changed, labeling each one **safe to update** (the registry moved on, but you never touched this file) or **needs review** (you customized it) — then points you at `sanring update` to apply the safe ones.
 
 ```bash
 npx @sanring/cli@latest diff            # check everything installed
@@ -128,7 +133,7 @@ Options:
 
 ### `update [components...]`
 
-Applies registry changes to installed files, one file at a time. For each file that differs from the registry, shows the diff and asks whether to apply it — unlike `diff`, which only reports drift, `update` lets you accept or reject each change without hand-editing. Omit component names to check everything installed.
+Applies registry changes to installed files. Files you never touched since installing (`add`/`init` record a content hash for exactly this) are updated silently — nothing to lose, since your copy still matches what was last written. Files that differ *and* were customized still show the diff and ask before overwriting, so a real edit is never clobbered. Omit component names to check everything installed.
 
 ```bash
 npx @sanring/cli@latest update            # check + prompt for everything installed
