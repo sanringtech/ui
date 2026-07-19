@@ -1,9 +1,10 @@
-import { describe, expect, it } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { mkdirSync, mkdtempSync, rmSync } from 'node:fs';
 import { join } from 'node:path';
 import { tmpdir } from 'node:os';
 import type { Registry, RegistryComponent } from '../registry.js';
-import { listInstalledComponentNames, resolveDiffTargets } from './diff.js';
+import { hashContent } from '../utils.js';
+import { listInstalledComponentNames, printFileDiff, resolveDiffTargets } from './diff.js';
 
 function component(overrides: Partial<RegistryComponent> & { name: string }): RegistryComponent {
   return { description: '', files: [`${overrides.name}/index.ts`], ...overrides };
@@ -82,5 +83,33 @@ describe('resolveDiffTargets', () => {
     } finally {
       rmSync(dir, { recursive: true, force: true });
     }
+  });
+});
+
+describe('printFileDiff', () => {
+  beforeEach(() => {
+    vi.spyOn(console, 'log').mockImplementation(() => {});
+  });
+
+  afterEach(() => {
+    vi.restoreAllMocks();
+  });
+
+  it('reports unchanged when local already matches remote', () => {
+    expect(printFileDiff('button/index.ts', 'same', 'same')).toBe('unchanged');
+  });
+
+  it('reports auto when local matches the recorded baseline hash', () => {
+    const baseline = hashContent('old content');
+    expect(printFileDiff('button/index.ts', 'old content', 'new content', baseline)).toBe('auto');
+  });
+
+  it('reports conflict when local no longer matches the recorded baseline', () => {
+    const baseline = hashContent('old content');
+    expect(printFileDiff('button/index.ts', 'hand-edited', 'new content', baseline)).toBe('conflict');
+  });
+
+  it('reports conflict when there is no recorded baseline at all', () => {
+    expect(printFileDiff('button/index.ts', 'local', 'remote')).toBe('conflict');
   });
 });

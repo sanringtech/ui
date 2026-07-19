@@ -1,6 +1,12 @@
-import { describe, expect, it } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+import { mkdtempSync, rmSync, writeFileSync } from 'node:fs';
+import { tmpdir } from 'node:os';
+import { join } from 'node:path';
 import type { Registry, RegistryComponent } from '../registry.js';
-import { planRemoval } from './remove.js';
+import { readConfig } from '../utils.js';
+import { writeRegistryFixture } from '../__tests__/registry-fixture.js';
+import { addCommand } from './add.js';
+import { planRemoval, removeCommand } from './remove.js';
 
 function component(overrides: Partial<RegistryComponent> & { name: string }): RegistryComponent {
   return { description: '', files: [`${overrides.name}/index.ts`], ...overrides };
@@ -54,5 +60,43 @@ describe('planRemoval', () => {
   it('does not flag a shared dep still used by a remaining component', () => {
     const plan = planRemoval(['badge'], ['badge', 'button'], registry);
     expect(plan.possiblyUnusedShared).toEqual([]);
+  });
+});
+
+describe('removeCommand (integration)', () => {
+  let projectDir: string;
+  let registryDir: string;
+  let originalCwd: string;
+
+  beforeEach(async () => {
+    originalCwd = process.cwd();
+    projectDir = mkdtempSync(join(tmpdir(), 'sanring-cli-project-'));
+    registryDir = mkdtempSync(join(tmpdir(), 'sanring-cli-registry-'));
+    writeFileSync(join(projectDir, 'angular.json'), '{}', 'utf-8');
+    writeRegistryFixture(registryDir, {
+      utils: 'export function cn() {}\n',
+      widget: 'export const widget = 1;\n',
+    });
+    process.chdir(projectDir);
+    vi.spyOn(console, 'log').mockImplementation(() => {});
+
+    await addCommand.parseAsync(['widget', '--registry', registryDir], { from: 'user' });
+  });
+
+  afterEach(() => {
+    process.chdir(originalCwd);
+    rmSync(projectDir, { recursive: true, force: true });
+    rmSync(registryDir, { recursive: true, force: true });
+    vi.restoreAllMocks();
+  });
+
+  it('prunes the removed component baseline hashes but keeps shared ones', async () => {
+    expect(readConfig(projectDir)?.installedHashes?.['widget/index.ts']).toBeDefined();
+
+    await removeCommand.parseAsync(['widget', '--registry', registryDir, '--yes'], { from: 'user' });
+
+    const config = readConfig(projectDir);
+    expect(config?.installedHashes?.['widget/index.ts']).toBeUndefined();
+    expect(config?.installedHashes?.['shared/utils.ts']).toBeDefined();
   });
 });

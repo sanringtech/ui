@@ -4,7 +4,7 @@ import { existsSync, readFileSync, readdirSync } from 'node:fs';
 import { join, resolve } from 'node:path';
 import pc from 'picocolors';
 import { fetchFile, fetchRegistry, type Registry, type RegistryComponent } from '../registry.js';
-import { isAngularProject, readConfig } from '../utils.js';
+import { isAngularProject, isUntouchedSinceInstall, readConfig } from '../utils.js';
 import { THEME_FILE_PATH } from './init.js';
 
 const DEFAULT_PATH = 'src/app/components/ui';
@@ -55,13 +55,30 @@ export function resolveDiffTargets(
   return { components, missing, notInstalled };
 }
 
-export function printFileDiff(label: string, local: string, remote: string): boolean {
+export type FileDiffStatus = 'unchanged' | 'auto' | 'conflict';
+
+// `recordedHash` — the baseline captured at the last add/update, if any —
+// lets this tell "registry moved on, you never touched this file" (auto)
+// apart from "you customized it" (conflict), same distinction `update` uses
+// to decide what it can apply without asking.
+export function printFileDiff(
+  label: string,
+  local: string,
+  remote: string,
+  recordedHash?: string,
+): FileDiffStatus {
   if (local === remote) {
     console.log(pc.dim(`  ✔ ${label} (up to date)`));
-    return false;
+    return 'unchanged';
   }
 
-  console.log(pc.yellow(`  ● ${label}`));
+  const status: FileDiffStatus = isUntouchedSinceInstall(local, recordedHash) ? 'auto' : 'conflict';
+  if (status === 'auto') {
+    console.log(pc.cyan(`  ○ ${label} (registry updated, no local changes — safe to \`sanring update\`)`));
+  } else {
+    console.log(pc.yellow(`  ● ${label}`));
+  }
+
   for (const part of diffLines(local, remote)) {
     const color = part.added ? pc.green : part.removed ? pc.red : pc.dim;
     const prefix = part.added ? '+' : part.removed ? '-' : ' ';
@@ -70,7 +87,7 @@ export function printFileDiff(label: string, local: string, remote: string): boo
       console.log(color(`    ${prefix} ${line}`));
     }
   }
-  return true;
+  return status;
 }
 
 export const diffCommand = new Command('diff')
@@ -110,7 +127,13 @@ export const diffCommand = new Command('diff')
       );
     }
 
-    let changed = 0, checked = 0;
+    let changed = 0, checked = 0, autoSafe = 0;
+
+    function tally(status: ReturnType<typeof printFileDiff>) {
+      if (status === 'unchanged') return;
+      changed++;
+      if (status === 'auto') autoSafe++;
+    }
 
     // Theme file — written by `init`, not tied to any component's sharedDeps,
     // but the thing most likely to have been hand-edited for a brand.
@@ -121,7 +144,7 @@ export const diffCommand = new Command('diff')
         const remote = await fetchFile(themeShared.file, registrySource);
         const local = readFileSync(themeDest, 'utf-8');
         checked++;
-        if (printFileDiff(THEME_FILE_PATH, local, remote)) changed++;
+        tally(printFileDiff(THEME_FILE_PATH, local, remote, config?.installedHashes?.[THEME_FILE_PATH]));
       } catch (e) {
         console.warn(pc.yellow(`  ⚠ Could not fetch ${themeShared.file}: ${e instanceof Error ? e.message : e}`));
       }
@@ -141,8 +164,9 @@ export const diffCommand = new Command('diff')
       try {
         const remote = await fetchFile(shared.file, registrySource);
         const local = readFileSync(dest, 'utf-8');
+        const label = `shared/${fileName}`;
         checked++;
-        if (printFileDiff(`shared/${fileName}`, local, remote)) changed++;
+        tally(printFileDiff(label, local, remote, config?.installedHashes?.[label]));
       } catch (e) {
         console.warn(pc.yellow(`  ⚠ Could not fetch ${shared.file}: ${e instanceof Error ? e.message : e}`));
       }
@@ -157,8 +181,9 @@ export const diffCommand = new Command('diff')
         try {
           const remote = await fetchFile(`components/${file}`, registrySource);
           const local = readFileSync(dest, 'utf-8');
+          const label = `${component.name}/${fileName}`;
           checked++;
-          if (printFileDiff(`${component.name}/${fileName}`, local, remote)) changed++;
+          tally(printFileDiff(label, local, remote, config?.installedHashes?.[label]));
         } catch (e) {
           console.warn(pc.yellow(`  ⚠ Could not fetch ${file}: ${e instanceof Error ? e.message : e}`));
         }
@@ -174,9 +199,13 @@ export const diffCommand = new Command('diff')
     if (changed === 0) {
       console.log(pc.green(`✔ All ${checked} file${checked > 1 ? 's' : ''} match the registry.\n`));
     } else {
+      const reviewCount = changed - autoSafe;
+      const notes: string[] = [];
+      if (autoSafe > 0) notes.push(`${autoSafe} safe to update`);
+      if (reviewCount > 0) notes.push(`${reviewCount} need${reviewCount === 1 ? 's' : ''} review`);
       console.log(
-        pc.yellow(`● ${changed} of ${checked} file${checked > 1 ? 's' : ''} differ from the registry.`) +
-          pc.dim(' Review before running `sanring add --force`.\n'),
+        pc.yellow(`● ${changed} of ${checked} file${checked > 1 ? 's' : ''} differ from the registry`) +
+          pc.dim(` (${notes.join(', ')}). Run \`sanring update\` to apply.\n`),
       );
     }
   });

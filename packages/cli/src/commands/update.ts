@@ -4,7 +4,7 @@ import { join, resolve } from 'node:path';
 import { createInterface } from 'node:readline/promises';
 import pc from 'picocolors';
 import { fetchFile, fetchRegistry } from '../registry.js';
-import { hashContent, isAngularProject, readConfig, writeConfig } from '../utils.js';
+import { hashContent, isAngularProject, isUntouchedSinceInstall, readConfig, writeConfig } from '../utils.js';
 import { writeFile } from './add.js';
 import { printFileDiff, resolveDiffTargets } from './diff.js';
 import { THEME_FILE_PATH } from './init.js';
@@ -42,7 +42,7 @@ export function classifyUpdate(
   recordedHash: string | undefined,
 ): UpdateClassification {
   if (local === remote) return { kind: 'unchanged' };
-  if (recordedHash !== undefined && recordedHash === hashContent(local)) {
+  if (isUntouchedSinceInstall(local, recordedHash)) {
     return { kind: 'auto', label, dest, remote };
   }
   return { kind: 'conflict', label, dest, local, remote };

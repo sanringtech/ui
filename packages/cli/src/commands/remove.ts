@@ -4,7 +4,7 @@ import { join, resolve } from 'node:path';
 import { createInterface } from 'node:readline/promises';
 import pc from 'picocolors';
 import { fetchRegistry, type Registry } from '../registry.js';
-import { isAngularProject, readConfig } from '../utils.js';
+import { isAngularProject, readConfig, writeConfig } from '../utils.js';
 import { listInstalledComponentNames } from './diff.js';
 
 const DEFAULT_PATH = 'src/app/components/ui';
@@ -140,10 +140,28 @@ export const removeCommand = new Command('remove')
         return;
       }
 
+      const installedHashes = { ...config?.installedHashes };
+      let prunedHashes = false;
+
       for (const name of plan.toRemove) {
         const dir = join(componentBasePath, name);
         if (existsSync(dir)) rmSync(dir, { recursive: true, force: true });
         console.log(pc.green(`✔ Removed ${name}`));
+
+        // Drop this component's baseline-hash entries so a stale manifest
+        // doesn't accumulate — shared files are left alone since we never
+        // delete those (they may still be imported by hand-written code).
+        const prefix = `${name}/`;
+        for (const label of Object.keys(installedHashes)) {
+          if (label.startsWith(prefix)) {
+            delete installedHashes[label];
+            prunedHashes = true;
+          }
+        }
+      }
+
+      if (prunedHashes) {
+        writeConfig(cwd, { componentPath: config?.componentPath ?? DEFAULT_PATH, installedHashes });
       }
 
       if (plan.possiblyUnusedShared.length > 0) {

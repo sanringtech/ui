@@ -18,6 +18,14 @@ export function hashContent(content: string): string {
   return createHash('sha256').update(content).digest('hex');
 }
 
+// True when `local` still matches the hash recorded at the last add/update —
+// i.e. nothing has touched the file since. Shared by `update` (decides what
+// can be applied without a prompt) and `diff` (labels drift as "registry
+// moved, safe to update" vs. "you customized this, review it").
+export function isUntouchedSinceInstall(local: string, recordedHash: string | undefined): boolean {
+  return recordedHash !== undefined && recordedHash === hashContent(local);
+}
+
 export function readConfig(cwd: string): SanringConfig | null {
   const configPath = join(cwd, CONFIG_FILE);
   if (!existsSync(configPath)) return null;
