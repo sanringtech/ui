@@ -148,6 +148,7 @@ export class RoadmapPageComponent {
     { name: 'Collapsible', description: '' },
     { name: 'Command', description: '' },
     { name: 'Combobox', description: '' },
+    { name: 'Date Picker', description: '' },
     { name: 'Dialog', description: '' },
     { name: 'Divider', description: '' },
     { name: 'Dropdown Menu', description: '' },
@@ -190,14 +191,7 @@ export class RoadmapPageComponent {
     },
   ];
 
-  protected readonly tier2: RoadmapItem[] = [
-    {
-      name: 'Date Picker',
-      meta: 'next build',
-      description:
-        'Compose Calendar with popover, trigger, input formatting, and forms integration for the full date-picker workflow.',
-    },
-  ];
+  protected readonly tier2: RoadmapItem[] = [];
 
   protected readonly tier3: RoadmapItem[] = [
     {
