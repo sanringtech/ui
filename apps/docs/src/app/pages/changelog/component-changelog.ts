@@ -37,6 +37,17 @@ export const componentChangelog: readonly ComponentChangelogEntry[] = [
     date: '2026-07-19',
     changes: [
       {
+        type: 'changed',
+        notable: true,
+        componentIds: ['calendar'],
+        text: 'Calendar is out of maintenance — back in production navigation with no restrictions.',
+      },
+      {
+        type: 'added',
+        componentIds: ['calendar', 'date-picker'],
+        text: 'Calendar and Date Picker now implement `ControlValueAccessor` and can be wrapped in `sanring-field` for label, validation, and error message integration.',
+      },
+      {
         type: 'added',
         notable: true,
         componentIds: ['date-picker'],

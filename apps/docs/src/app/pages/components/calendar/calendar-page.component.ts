@@ -1,11 +1,7 @@
 import { Component, computed, inject, signal } from '@angular/core';
 import { FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
-import { LucideConstruction } from '@lucide/angular';
 import { CalendarLocale, DateInterval, DateRange, DisabledInput } from '@sanring/date-picker';
 import {
-  AlertComponent,
-  AlertDescriptionDirective,
-  AlertTitleDirective,
   ButtonDirective,
   CalendarComponent,
   ErrorMessageComponent,
@@ -66,9 +62,6 @@ const ZH_LOCALE: CalendarLocale = {
 @Component({
   selector: 'app-calendar-page',
   imports: [
-    AlertComponent,
-    AlertDescriptionDirective,
-    AlertTitleDirective,
     ComponentPageApiTableComponent,
     ButtonDirective,
     CalendarComponent,
@@ -80,7 +73,6 @@ const ZH_LOCALE: CalendarLocale = {
     ComponentPageUsageImportsComponent,
     ComponentPageSectionComponent,
     ErrorMessageComponent,
-    LucideConstruction,
     ReactiveFormsModule,
     SanringFieldComponent,
   ],
@@ -92,27 +84,19 @@ const ZH_LOCALE: CalendarLocale = {
         [description]="i18n.t(page.descriptionKey)"
       />
 
-      <sanring-alert class="mb-8" variant="destructive">
-        <svg lucideConstruction class="size-4"></svg>
-        <h5 sanringAlertTitle>{{ i18n.t('status.maintenance.title') }}</h5>
-        <p sanringAlertDescription>{{ i18n.t('status.maintenance.description') }}</p>
-      </sanring-alert>
-
-      <div class="maintenance-tape">
-        <app-component-page-section [section]="section('basic')">
-          <app-component-page-code-previewer [code]="examples.basic" language="angular-html">
-            <div previewer class="flex w-full flex-col items-center gap-3">
-              <sanring-calendar
-                [locale]="calendarLocale()"
-                (selectedDateChange)="basicSelected = $event"
-              />
-              <span class="text-sm text-[var(--docs-muted)]">
-                {{ singleSelectionText(basicSelected) }}
-              </span>
-            </div>
-          </app-component-page-code-previewer>
-        </app-component-page-section>
-      </div>
+      <app-component-page-section [section]="section('basic')">
+        <app-component-page-code-previewer [code]="examples.basic" language="angular-html">
+          <div previewer class="flex w-full flex-col items-center gap-3">
+            <sanring-calendar
+              [locale]="calendarLocale()"
+              (selectedDateChange)="basicSelected = $event"
+            />
+            <span class="text-sm text-[var(--docs-muted)]">
+              {{ singleSelectionText(basicSelected) }}
+            </span>
+          </div>
+        </app-component-page-code-previewer>
+      </app-component-page-section>
 
       <app-component-page-section [section]="section('usage')">
         <div class="grid gap-6">
@@ -132,8 +116,7 @@ const ZH_LOCALE: CalendarLocale = {
         />
       </app-component-page-section>
 
-      <div class="maintenance-tape">
-        <app-component-page-section [section]="section('example')">
+      <app-component-page-section [section]="section('example')">
         <div class="mb-4 flex justify-center">
           <button
             sanringBtn
@@ -507,44 +490,12 @@ const ZH_LOCALE: CalendarLocale = {
           </app-component-page-section>
         </div>
       </app-component-page-section>
-      </div>
 
       <app-component-page-section [section]="section('api')">
         <app-component-page-api-table [rows]="page.apiRows!" />
       </app-component-page-section>
     </app-component-page>
   `,
-  styles: [
-    `
-      .maintenance-tape {
-        position: relative;
-        margin-block: 1.5rem;
-        padding-block: 1.25rem;
-      }
-
-      .maintenance-tape::before,
-      .maintenance-tape::after {
-        content: '';
-        position: absolute;
-        left: 0;
-        right: 0;
-        height: 10px;
-        background-image: repeating-linear-gradient(
-          45deg,
-          #f5c400 0 10px,
-          #1a1a1a 10px 20px
-        );
-      }
-
-      .maintenance-tape::before {
-        top: 0;
-      }
-
-      .maintenance-tape::after {
-        bottom: 0;
-      }
-    `,
-  ],
 })
 export class CalendarPageComponent {
   protected readonly page = calendarPage;

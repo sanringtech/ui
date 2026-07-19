@@ -139,7 +139,6 @@ export const docsComponentItems: DocsComponentNavItem[] = [
     labelKey: 'component.calendar',
     path: '/components/calendar',
     active: true,
-    status: 'maintenance',
   },
   {
     id: 'card',
