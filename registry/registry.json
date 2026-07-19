@@ -184,7 +184,7 @@
       ],
       "peerDependencies": {
         "@lucide/angular": "^1.0.0",
-        "@sanring/date-picker": "^0.1.0"
+        "@sanring/date-picker": "^0.4.0"
       },
       "files": [
         "calendar/calendar.component.ts",
@@ -192,6 +192,26 @@
         "calendar/calendar-header.component.ts",
         "calendar/calendar.type.ts",
         "calendar/index.ts"
+      ]
+    },
+    {
+      "name": "date-picker",
+      "description": "A Month/Quarter/Year picker for single, range, or multi selection.",
+      "sharedDeps": [
+        "utils",
+        "component-styles"
+      ],
+      "componentDeps": [
+        "calendar"
+      ],
+      "peerDependencies": {
+        "@sanring/date-picker": "^0.4.0"
+      },
+      "files": [
+        "date-picker/date-picker.component.ts",
+        "date-picker/date-picker-cell.directive.ts",
+        "date-picker/date-picker.type.ts",
+        "date-picker/index.ts"
       ]
     },
     {

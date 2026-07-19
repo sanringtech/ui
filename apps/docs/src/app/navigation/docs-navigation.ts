@@ -183,7 +183,6 @@ export const docsComponentItems: DocsComponentNavItem[] = [
     path: '/components/date-picker',
     active: true,
     status: 'wip',
-    disabled: true,
   },
   {
     id: 'dialog',

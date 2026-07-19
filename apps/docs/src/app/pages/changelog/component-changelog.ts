@@ -34,6 +34,17 @@ export interface ComponentChangelogEntry {
  */
 export const componentChangelog: readonly ComponentChangelogEntry[] = [
   {
+    date: '2026-07-19',
+    changes: [
+      {
+        type: 'added',
+        notable: true,
+        componentIds: ['date-picker'],
+        text: 'New Date Picker component — `sanring-date-picker` wraps `GranularityPickerEngine` for Month/Quarter/Year selection, in single, range, or multi mode.',
+      },
+    ],
+  },
+  {
     date: '2026-07-18',
     changes: [
       {
