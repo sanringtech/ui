@@ -1,4 +1,5 @@
 import { Component, computed, inject, signal } from '@angular/core';
+import { FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
 import { LucideConstruction } from '@lucide/angular';
 import { CalendarLocale, DateInterval, DateRange, DisabledInput } from '@sanring/date-picker';
 import {
@@ -7,6 +8,8 @@ import {
   AlertTitleDirective,
   ButtonDirective,
   CalendarComponent,
+  ErrorMessageComponent,
+  SanringFieldComponent,
 } from '@sanring/ui';
 import { getComponentPageSection } from '../../../docs-schema/component-page.utils';
 import { I18nService } from '../../../i18n/i18n.service';
@@ -76,7 +79,10 @@ const ZH_LOCALE: CalendarLocale = {
     ComponentPageInstallationComponent,
     ComponentPageUsageImportsComponent,
     ComponentPageSectionComponent,
+    ErrorMessageComponent,
     LucideConstruction,
+    ReactiveFormsModule,
+    SanringFieldComponent,
   ],
   template: `
     <app-component-page [sections]="page.sections">
@@ -479,6 +485,26 @@ const ZH_LOCALE: CalendarLocale = {
               </div>
             </app-component-page-code-previewer>
           </app-component-page-section>
+
+          <app-component-page-section [section]="section('example-field')">
+            <app-component-page-code-previewer [code]="examples.field" language="angular-html">
+              <div previewer class="flex w-full max-w-[20rem] flex-col items-center gap-3">
+                <sanring-field class="w-full">
+                  <sanring-calendar [formControl]="meetingDateControl" [locale]="calendarLocale()" />
+                  <sanring-error-message>{{ i18n.t('calendar.demo.fieldError') }}</sanring-error-message>
+                </sanring-field>
+                <button
+                  sanringBtn
+                  variant="outline"
+                  size="sm"
+                  type="button"
+                  (click)="meetingDateControl.markAsTouched()"
+                >
+                  {{ i18n.t('calendar.demo.fieldValidate') }}
+                </button>
+              </div>
+            </app-component-page-code-previewer>
+          </app-component-page-section>
         </div>
       </app-component-page-section>
       </div>
@@ -550,6 +576,10 @@ export class CalendarPageComponent {
   };
 
   protected readonly disabledMatcher: DisabledInput = [this.isWeekend, this.summerBreak];
+
+  protected readonly meetingDateControl = new FormControl<Date | null>(null, {
+    validators: Validators.required,
+  });
 
   protected formatDate(date: Date): string {
     const year = date.getFullYear();

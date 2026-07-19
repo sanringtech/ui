@@ -67,6 +67,12 @@ export const calendarPage = {
           titleKey: 'calendar.demo.sizes',
           level: 3,
         },
+        {
+          id: 'example-field',
+          titleKey: 'calendar.demo.field',
+          descriptionKey: 'calendar.examples.field.description',
+          level: 3,
+        },
       ],
     },
     {
@@ -212,4 +218,8 @@ const summerBreak = { from: new Date(2026, 6, 20), to: new Date(2026, 6, 24) };
   sizes: `<sanring-calendar size="sm" />
 <sanring-calendar size="md" />
 <sanring-calendar size="lg" />`,
+  field: `<sanring-field>
+  <sanring-calendar [formControl]="meetingDateControl" />
+  <sanring-error-message>請選擇一個日期</sanring-error-message>
+</sanring-field>`,
 } as const;

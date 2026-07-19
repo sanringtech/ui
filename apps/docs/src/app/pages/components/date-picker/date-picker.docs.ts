@@ -48,6 +48,12 @@ export const datePickerPage = {
           titleKey: 'datePicker.demo.sizes',
           level: 3,
         },
+        {
+          id: 'example-field',
+          titleKey: 'datePicker.demo.field',
+          descriptionKey: 'datePicker.examples.field.description',
+          level: 3,
+        },
       ],
     },
     {
@@ -229,4 +235,8 @@ export class ExampleComponent {}`,
   sizes: `<sanring-date-picker size="sm" />
 <sanring-date-picker size="md" />
 <sanring-date-picker size="lg" />`,
+  field: `<sanring-field>
+  <sanring-date-picker [formControl]="fiscalQuarterControl" granularity="quarter" />
+  <sanring-error-message>請選擇一個季度</sanring-error-message>
+</sanring-field>`,
 } as const;

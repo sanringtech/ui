@@ -1,4 +1,5 @@
 import { Component, computed, inject, signal } from '@angular/core';
+import { FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
 import { LucideHammer } from '@lucide/angular';
 import { CalendarLocale, DateRange, DisabledInput, PickerGranularity } from '@sanring/date-picker';
 import {
@@ -7,6 +8,8 @@ import {
   AlertTitleDirective,
   ButtonDirective,
   DatePickerComponent,
+  ErrorMessageComponent,
+  SanringFieldComponent,
 } from '@sanring/ui';
 import { getComponentPageSection } from '../../../docs-schema/component-page.utils';
 import { I18nService } from '../../../i18n/i18n.service';
@@ -77,7 +80,10 @@ const ZH_LOCALE: CalendarLocale = {
     ComponentPageInstallationComponent,
     ComponentPageUsageImportsComponent,
     ComponentPageSectionComponent,
+    ErrorMessageComponent,
     LucideHammer,
+    ReactiveFormsModule,
+    SanringFieldComponent,
   ],
   template: `
     <app-component-page [sections]="page.sections">
@@ -266,6 +272,30 @@ const ZH_LOCALE: CalendarLocale = {
               </div>
             </app-component-page-code-previewer>
           </app-component-page-section>
+
+          <app-component-page-section [section]="section('example-field')">
+            <app-component-page-code-previewer [code]="examples.field" language="angular-html">
+              <div previewer class="flex w-full max-w-[20rem] flex-col items-center gap-3">
+                <sanring-field class="w-full">
+                  <sanring-date-picker
+                    [formControl]="fiscalQuarterControl"
+                    granularity="quarter"
+                    [locale]="datePickerLocale()"
+                  />
+                  <sanring-error-message>{{ i18n.t('datePicker.demo.fieldError') }}</sanring-error-message>
+                </sanring-field>
+                <button
+                  sanringBtn
+                  variant="outline"
+                  size="sm"
+                  type="button"
+                  (click)="fiscalQuarterControl.markAsTouched()"
+                >
+                  {{ i18n.t('datePicker.demo.fieldValidate') }}
+                </button>
+              </div>
+            </app-component-page-code-previewer>
+          </app-component-page-section>
         </div>
       </app-component-page-section>
 
@@ -307,6 +337,10 @@ export class DatePickerPageComponent {
   matrixMultiResult: Date[] = [];
 
   protected readonly isPastYear: DisabledInput = (date: Date) => date.getFullYear() < 2026;
+
+  protected readonly fiscalQuarterControl = new FormControl<Date | null>(null, {
+    validators: Validators.required,
+  });
 
   protected formatDate(date: Date): string {
     const year = date.getFullYear();

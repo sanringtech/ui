@@ -180,7 +180,8 @@
         "component-styles"
       ],
       "componentDeps": [
-        "button"
+        "button",
+        "field"
       ],
       "peerDependencies": {
         "@lucide/angular": "^1.0.0",

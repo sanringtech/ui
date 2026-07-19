@@ -11,6 +11,8 @@ export const FieldType = {
   radioGroup: 'radio-group',
   slider: 'slider',
   fileUpload: 'file-upload',
+  calendar: 'calendar',
+  datePicker: 'date-picker',
 } as const;
 
 export type FieldType = (typeof FieldType)[keyof typeof FieldType];
