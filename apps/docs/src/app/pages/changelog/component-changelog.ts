@@ -53,6 +53,15 @@ export const componentChangelog: readonly ComponentChangelogEntry[] = [
         componentIds: ['date-picker'],
         text: 'New Date Picker component — `sanring-date-picker` wraps `GranularityPickerEngine` for Month/Quarter/Year selection, in single, range, or multi mode.',
       },
+      {
+        type: 'changed',
+        componentIds: ['date-picker'],
+        text: 'Date Picker is out of development — dropped the "still in development" notice and the `wip` nav badge.',
+      },
+      {
+        type: 'changed',
+        text: 'Refreshed the `@sanring/cli` README (shown on the npm package page): `diff`/`update` docs now describe the safe-to-update vs needs-review split instead of the old "prints every diff" behavior, and added a summary of current standout features up top.',
+      },
     ],
   },
   {
