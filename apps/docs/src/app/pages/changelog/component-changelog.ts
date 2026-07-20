@@ -34,6 +34,45 @@ export interface ComponentChangelogEntry {
  */
 export const componentChangelog: readonly ComponentChangelogEntry[] = [
   {
+    date: '2026-07-20',
+    changes: [
+      {
+        type: 'added',
+        notable: true,
+        text: '`@sanring/cli` v0.10.0 — new `sanring search <query>` command: fuzzy search components by name or description, name matches ranked first, shows an install badge for already-installed components.',
+      },
+      {
+        type: 'added',
+        notable: true,
+        text: '`sanring doctor` — environment diagnostic command that checks Node.js version, Angular project detection, `sanring.config.json`, theme file, per-file hash integrity (untouched / customized / orphaned), and registry reachability. Exits 1 on hard errors for CI use. Accepts `--offline` to skip the network check.',
+      },
+      {
+        type: 'added',
+        text: '`sanring info` (no argument) now shows project context without a network call: CLI version, Angular detection, config summary, theme status, and full list of installed components. Accepts `--json` for CI/agent use.',
+      },
+      {
+        type: 'added',
+        text: '`sanring diff --exit-code` exits 1 when any file differs from the registry — use it as a CI gate to detect component drift.',
+      },
+      {
+        type: 'added',
+        text: '`sanring update --trust` promotes files with no recorded hash baseline to silent auto-update — lets pre-v0.9.0 installs catch up without false conflict prompts.',
+      },
+      {
+        type: 'fixed',
+        text: '`sanring update` silently skipped files added to a component\'s registry entry after the user\'s last install. Those files now appear as "new in registry" and are installed automatically.',
+      },
+      {
+        type: 'added',
+        text: '`sanring list --installed` / `-i` filters the list to only components already installed in the current project.',
+      },
+      {
+        type: 'added',
+        text: '`sanring add --diff` previews the line-by-line diff against local files before installing. `sanring add --view` prints the raw registry content without writing anything.',
+      },
+    ],
+  },
+  {
     date: '2026-07-19',
     changes: [
       {

@@ -96,6 +96,14 @@ const INLINE_CODE_CLASS =
             <code [class]="inlineCodeClass">--dry-run</code>
             &mdash; preview changes without writing files
           </li>
+          <li>
+            <code [class]="inlineCodeClass">--diff</code>
+            &mdash; show line-by-line diff against local files without installing
+          </li>
+          <li>
+            <code [class]="inlineCodeClass">--view</code>
+            &mdash; print raw registry file content without writing anything
+          </li>
         </ul>
       </app-component-page-section>
 
@@ -138,11 +146,15 @@ const INLINE_CODE_CLASS =
         <ul class="mt-4 list-none space-y-2 p-0 text-sm text-[var(--docs-muted)]">
           <li>
             <code [class]="inlineCodeClass">-p, --path &lt;path&gt;</code>
-            &mdash; destination path, used only to report whether it's already installed
+            &mdash; component path relative to cwd
+          </li>
+          <li>
+            <code [class]="inlineCodeClass">--json</code>
+            &mdash; output as JSON (useful for CI and coding agents)
           </li>
           <li>
             <code [class]="inlineCodeClass">--registry &lt;source&gt;</code>
-            &mdash; custom registry (URL or local path)
+            &mdash; custom registry (URL or local path; only used in component mode)
           </li>
         </ul>
       </app-component-page-section>
@@ -159,6 +171,10 @@ const INLINE_CODE_CLASS =
           <li>
             <code [class]="inlineCodeClass">-p, --path &lt;path&gt;</code>
             &mdash; destination path relative to cwd
+          </li>
+          <li>
+            <code [class]="inlineCodeClass">--exit-code</code>
+            &mdash; exit 1 when any file differs from the registry (CI gate)
           </li>
           <li>
             <code [class]="inlineCodeClass">--registry &lt;source&gt;</code>
@@ -189,6 +205,10 @@ const INLINE_CODE_CLASS =
             &mdash; show what would change without writing anything
           </li>
           <li>
+            <code [class]="inlineCodeClass">--trust</code>
+            &mdash; treat files with no recorded baseline as untouched — use for installs predating v0.9.0 hash tracking
+          </li>
+          <li>
             <code [class]="inlineCodeClass">--registry &lt;source&gt;</code>
             &mdash; custom registry (URL or local path)
           </li>
@@ -205,14 +225,62 @@ const INLINE_CODE_CLASS =
         </div>
         <ul class="mt-4 list-none space-y-2 p-0 text-sm text-[var(--docs-muted)]">
           <li>
+            <code [class]="inlineCodeClass">-i, --installed</code>
+            &mdash; only show components already installed in the current project
+          </li>
+          <li>
             <code [class]="inlineCodeClass">--registry &lt;source&gt;</code>
             &mdash; custom registry (URL or local path)
           </li>
         </ul>
       </app-component-page-section>
 
-      <!-- 9. Requirements -->
+      <!-- 9. search -->
       <app-component-page-section [section]="sections[8]">
+        <p class="mt-0 text-base leading-[1.7] text-[var(--docs-muted)]">
+          {{ i18n.t('cli.search.body') }}
+        </p>
+        <div class="mt-6 overflow-hidden rounded-[var(--sanring-radius)] border border-[var(--docs-border)]">
+          <app-component-page-code-block [code]="commands.search" language="bash" />
+        </div>
+        <ul class="mt-4 list-none space-y-2 p-0 text-sm text-[var(--docs-muted)]">
+          <li>
+            <code [class]="inlineCodeClass">-p, --path &lt;path&gt;</code>
+            &mdash; component path used to detect install status
+          </li>
+          <li>
+            <code [class]="inlineCodeClass">--registry &lt;url&gt;</code>
+            &mdash; custom registry URL
+          </li>
+        </ul>
+      </app-component-page-section>
+
+      <!-- 10. doctor -->
+      <app-component-page-section [section]="sections[9]">
+        <p class="mt-0 text-base leading-[1.7] text-[var(--docs-muted)]">
+          {{ i18n.t('cli.doctor.body') }}
+        </p>
+        <div class="mt-6 overflow-hidden rounded-[var(--sanring-radius)] border border-[var(--docs-border)]">
+          <app-component-page-code-block [code]="commands.doctor" language="bash" />
+        </div>
+        <ul class="mt-4 list-none space-y-2 p-0 text-sm text-[var(--docs-muted)]">
+          <li>
+            <code [class]="inlineCodeClass">--offline</code>
+            &mdash; skip the registry connectivity check
+          </li>
+          <li>
+            <code [class]="inlineCodeClass">-p, --path &lt;path&gt;</code>
+            &mdash; component path relative to cwd
+          </li>
+          <li>
+            <code [class]="inlineCodeClass">--registry &lt;source&gt;</code>
+            &mdash; custom registry (URL or local path)
+          </li>
+        </ul>
+      </app-component-page-section>
+
+      <!-- 11. Requirements -->
+      <app-component-page-section [section]="sections[10]">
         <p class="mt-0 text-base leading-[1.7] text-[var(--docs-muted)]">
           {{ i18n.t('cli.requirements.body') }}
         </p>
@@ -255,33 +323,50 @@ export class CliPageComponent {
     { id: 'diff', titleKey: 'cli.diff.title' },
     { id: 'update', titleKey: 'cli.update.title' },
     { id: 'list', titleKey: 'cli.list.title' },
+    { id: 'search', titleKey: 'cli.search.title' },
+    { id: 'doctor', titleKey: 'cli.doctor.title' },
     { id: 'requirements', titleKey: 'cli.requirements.title' },
   ];
 
   protected readonly commands = {
     overview: `npx @sanring/cli@latest init
-npx @sanring/cli@latest add calendar`,
+npx @sanring/cli@latest add calendar
+npx @sanring/cli@latest search button
+npx @sanring/cli@latest doctor`,
     init: `npx @sanring/cli@latest init`,
     add: `npx @sanring/cli@latest add calendar
 
 # add multiple components at once
 npx @sanring/cli@latest add calendar dialog
 
-# component dependencies are added automatically
-npx @sanring/cli@latest add calendar
-
 # preview what would change, without writing any files
-npx @sanring/cli@latest add calendar --dry-run`,
+npx @sanring/cli@latest add calendar --dry-run
+
+# see line-by-line diff against local files before installing
+npx @sanring/cli@latest add calendar --diff
+
+# print raw registry content without writing anything
+npx @sanring/cli@latest add calendar --view`,
     remove: `npx @sanring/cli@latest remove calendar
 
 # remove multiple components at once
 npx @sanring/cli@latest remove tag badge`,
-    info: `npx @sanring/cli@latest info select`,
+    info: `# project context — no network call
+npx @sanring/cli@latest info
+
+# component details
+npx @sanring/cli@latest info select
+
+# machine-readable output
+npx @sanring/cli@latest info --json`,
     diff: `# check everything installed
 npx @sanring/cli@latest diff
 
 # check just one component
-npx @sanring/cli@latest diff button`,
+npx @sanring/cli@latest diff button
+
+# exit 1 when any file differs (CI gate)
+npx @sanring/cli@latest diff --exit-code`,
     update: `# check + prompt for everything installed
 npx @sanring/cli@latest update
 
@@ -289,8 +374,22 @@ npx @sanring/cli@latest update
 npx @sanring/cli@latest update accordion
 
 # apply every change without prompting
-npx @sanring/cli@latest update --yes`,
+npx @sanring/cli@latest update --yes
+
+# for projects installed before v0.9.0 (no hash baseline)
+npx @sanring/cli@latest update --trust`,
     list: `npx @sanring/cli@latest list
-npx @sanring/cli@latest ls`,
+npx @sanring/cli@latest ls
+
+# only show installed components
+npx @sanring/cli@latest list --installed`,
+    search: `npx @sanring/cli@latest search button
+
+# search by description keyword
+npx @sanring/cli@latest search "date"`,
+    doctor: `npx @sanring/cli@latest doctor
+
+# skip registry network check
+npx @sanring/cli@latest doctor --offline`,
   };
 }

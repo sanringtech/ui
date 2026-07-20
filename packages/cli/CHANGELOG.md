@@ -1,5 +1,21 @@
 # @sanring/cli
 
+## 0.10.0
+
+### Minor Changes
+
+- 9b04366: `sanring doctor`: new command that checks your environment and project config for common issues. Reports Node.js version, Angular project detection, sanring.config.json validity, theme file presence, per-file hash integrity (untouched / customized / orphaned), and registry reachability. Use `--offline` to skip the network check. Exits with code 1 when hard errors are found so CI pipelines can gate on it.
+- b2c1d79: `sanring info` (no argument) now shows project context: CLI version, Angular detection, config path, theme file status, and the full list of installed components. Accepts `--json` for machine-readable output suitable for CI pipelines and coding agents.
+
+  `sanring info <component>` retains its existing behavior (files, peer deps, install status) and also gains `--json` output.
+
+- 9a9b5cf: New `sanring search <query>` command. Searches component names and descriptions (name matches ranked first), highlights the matched substring, and shows a ✔ badge next to already-installed components when run inside an Angular project.
+
+### Patch Changes
+
+- ddc522a: `update` now installs files that were added to a registry component after the user's last `add` — previously these were silently skipped, leaving the component incomplete even after a successful update. `diff` also now surfaces these missing files as "new in registry" so users know to run `sanring update` to pick them up.
+- 774f3f7: `sanring update --trust`: users who installed components before v0.9.0 have no recorded hash baseline. Without `--trust` every changed file would show as a conflict even if it was never customised. `--trust` promotes those no-baseline conflicts to silent auto-updates, letting pre-0.9.0 projects catch up cleanly in one pass. A note in the output shows how many files were trusted so the user can audit the assumption afterwards.
+
 ## 0.9.2
 
 ### Patch Changes
