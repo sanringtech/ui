@@ -7,6 +7,8 @@ import {
   fetchFile,
   fetchRegistry,
   installCommand,
+  installCommandParts,
+  validateRegistry,
 } from './registry.js';
 
 // Stubbed once at module scope: vi.stubGlobal calls inside describe() bodies
@@ -66,6 +68,45 @@ describe('installCommand', () => {
   });
 });
 
+describe('installCommandParts', () => {
+  it('builds argv without shell parsing', () => {
+    expect(installCommandParts('npm', ['@scope/pkg@^1.0.0', 'plain@2'])).toEqual({
+      bin: 'npm',
+      args: ['install', '@scope/pkg@^1.0.0', 'plain@2'],
+    });
+    expect(installCommandParts('pnpm', ['clsx@^2.0.0'])).toEqual({
+      bin: 'pnpm',
+      args: ['add', 'clsx@^2.0.0'],
+    });
+  });
+});
+
+describe('validateRegistry', () => {
+  it('accepts a minimal valid registry', () => {
+    expect(
+      validateRegistry({
+        name: 'test',
+        shared: [],
+        components: [{ name: 'button', description: 'Button', files: ['button/index.ts'] }],
+      }),
+    ).toEqual({
+      name: 'test',
+      shared: [],
+      components: [{ name: 'button', description: 'Button', files: ['button/index.ts'] }],
+    });
+  });
+
+  it('reports invalid registry fields with paths', () => {
+    expect(() =>
+      validateRegistry({
+        name: 'test',
+        shared: [{ name: 'utils', description: 'Utils' }],
+        components: [{ name: 'button', description: 'Button', files: 'button/index.ts' }],
+      }),
+    ).toThrow('shared[0].file must be a string; components[0].files must be an array of strings');
+  });
+});
+
 // fetchRegistry / fetchFile source-resolution priority:
 //   1. explicit local path   2. explicit URL   3. bundled local registry   4. remote fallback
 describe('fetchRegistry source resolution', () => {
@@ -81,9 +122,9 @@ describe('fetchRegistry source resolution', () => {
   });
 
   it('exits when the explicit local directory has no registry.json', async () => {
-    const exitSpy = vi.spyOn(process, 'exit').mockImplementation(((() => {
+    const exitSpy = vi.spyOn(process, 'exit').mockImplementation((() => {
       throw new Error('process.exit called');
-    }) as never));
+    }) as never);
     const dir = mkdtempSync(join(tmpdir(), 'sanring-cli-test-'));
     await expect(fetchRegistry(dir)).rejects.toThrow('process.exit called');
     exitSpy.mockRestore();
@@ -106,9 +147,23 @@ describe('fetchRegistry source resolution', () => {
 
   it('exits when the explicit URL request fails', async () => {
     fetchMock.mockResolvedValueOnce({ ok: false, status: 404 });
-    const exitSpy = vi.spyOn(process, 'exit').mockImplementation(((() => {
+    const exitSpy = vi.spyOn(process, 'exit').mockImplementation((() => {
       throw new Error('process.exit called');
-    }) as never));
+    }) as never);
+    await expect(fetchRegistry('https://example.com/registry/registry.json')).rejects.toThrow(
+      'process.exit called',
+    );
+    exitSpy.mockRestore();
+  });
+
+  it('exits when the explicit URL returns an invalid registry', async () => {
+    fetchMock.mockResolvedValueOnce({
+      ok: true,
+      json: async () => ({ name: 'bad', shared: [], components: [{ name: 'button' }] }),
+    });
+    const exitSpy = vi.spyOn(process, 'exit').mockImplementation((() => {
+      throw new Error('process.exit called');
+    }) as never);
     await expect(fetchRegistry('https://example.com/registry/registry.json')).rejects.toThrow(
       'process.exit called',
     );

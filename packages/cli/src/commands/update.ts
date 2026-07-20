@@ -4,7 +4,13 @@ import { join, resolve } from 'node:path';
 import { createInterface } from 'node:readline/promises';
 import pc from 'picocolors';
 import { fetchFile, fetchRegistry } from '../registry.js';
-import { hashContent, isAngularProject, isUntouchedSinceInstall, readConfig, writeConfig } from '../utils.js';
+import {
+  hashContent,
+  isAngularProject,
+  isUntouchedSinceInstall,
+  readConfig,
+  writeConfig,
+} from '../utils.js';
 import { writeFile } from './add.js';
 import { printFileDiff, resolveDiffTargets } from './diff.js';
 import { THEME_FILE_PATH } from './init.js';
@@ -81,8 +87,11 @@ export const updateCommand = new Command('update')
       }
 
       const config = readConfig(cwd);
-      const componentBasePath = resolve(cwd, options.path ?? config?.componentPath ?? DEFAULT_PATH);
-      const sharedDestDir = join(componentBasePath, 'shared');
+      const resolvedComponentPath = options.path ?? config?.componentPath ?? DEFAULT_PATH;
+      const componentBasePath = resolve(cwd, resolvedComponentPath);
+      const sharedDestDir = config?.sharedPath
+        ? resolve(cwd, config.sharedPath)
+        : join(componentBasePath, 'shared');
 
       const registry = await fetchRegistry(registrySource);
       const { components, missing, notInstalled } = resolveDiffTargets(
@@ -92,7 +101,9 @@ export const updateCommand = new Command('update')
       );
 
       if (missing.length > 0) {
-        console.error(pc.red(`✖ Unknown component${missing.length > 1 ? 's' : ''}: ${missing.join(', ')}`));
+        console.error(
+          pc.red(`✖ Unknown component${missing.length > 1 ? 's' : ''}: ${missing.join(', ')}`),
+        );
       }
       if (notInstalled.length > 0) {
         console.log(pc.dim(`  Not installed, skipping: ${notInstalled.join(', ')}`));
@@ -154,22 +165,33 @@ export const updateCommand = new Command('update')
       }
 
       if (auto.length === 0 && pending.length === 0) {
-        if (!options.dryRun && backfilled > 0) writeConfig(cwd, { componentPath: config?.componentPath ?? DEFAULT_PATH, installedHashes });
+        if (!options.dryRun && backfilled > 0) {
+          writeConfig(cwd, {
+            componentPath: resolvedComponentPath,
+            sharedPath: config?.sharedPath,
+            installedHashes,
+          });
+        }
         console.log(pc.green('\n✔ Everything already matches the registry. Nothing to update.\n'));
         return;
       }
 
-      let applied = 0, skipped = 0;
+      let applied = 0,
+        skipped = 0;
 
       // Untouched since install — the registry moved on but the user never
       // edited their copy, so there's nothing to lose by applying directly.
       if (auto.length > 0) {
         console.log(
-          pc.cyan(`\n${auto.length} file${auto.length > 1 ? 's' : ''} unchanged locally, applying registry update:\n`),
+          pc.cyan(
+            `\n${auto.length} file${auto.length > 1 ? 's' : ''} unchanged locally, applying registry update:\n`,
+          ),
         );
         for (const file of auto) {
           if (options.dryRun) {
-            console.log(pc.dim(`  – ${file.label} (dry run, would auto-update — no local changes)`));
+            console.log(
+              pc.dim(`  – ${file.label} (dry run, would auto-update — no local changes)`),
+            );
             continue;
           }
           writeFile(file.dest, file.remote, true);
@@ -183,7 +205,9 @@ export const updateCommand = new Command('update')
       // Locally modified — show the diff and ask before overwriting.
       if (pending.length > 0) {
         console.log(
-          pc.cyan(`${pending.length} file${pending.length > 1 ? 's' : ''} differ and were locally modified:\n`),
+          pc.cyan(
+            `${pending.length} file${pending.length > 1 ? 's' : ''} differ and were locally modified:\n`,
+          ),
         );
         for (const file of pending) {
           printFileDiff(file.label, file.local, file.remote);
@@ -211,7 +235,11 @@ export const updateCommand = new Command('update')
         return;
       }
 
-      writeConfig(cwd, { componentPath: config?.componentPath ?? DEFAULT_PATH, installedHashes });
+      writeConfig(cwd, {
+        componentPath: resolvedComponentPath,
+        sharedPath: config?.sharedPath,
+        installedHashes,
+      });
 
       const parts: string[] = [];
       if (applied > 0) parts.push(pc.green(`${applied} updated`));

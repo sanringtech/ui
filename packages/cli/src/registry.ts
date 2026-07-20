@@ -18,12 +18,23 @@ export function detectPackageManager(cwd = process.cwd()): PackageManager {
 }
 
 export function installCommand(pm: PackageManager, packages: string[]): string {
-  const pkgs = packages.join(' ');
+  const { bin, args } = installCommandParts(pm, packages);
+  return [bin, ...args].join(' ');
+}
+
+export function installCommandParts(
+  pm: PackageManager,
+  packages: string[],
+): { bin: string; args: string[] } {
   switch (pm) {
-    case 'pnpm': return `pnpm add ${pkgs}`;
-    case 'yarn': return `yarn add ${pkgs}`;
-    case 'bun':  return `bun add ${pkgs}`;
-    default:     return `npm install ${pkgs}`;
+    case 'pnpm':
+      return { bin: 'pnpm', args: ['add', ...packages] };
+    case 'yarn':
+      return { bin: 'yarn', args: ['add', ...packages] };
+    case 'bun':
+      return { bin: 'bun', args: ['add', ...packages] };
+    default:
+      return { bin: 'npm', args: ['install', ...packages] };
   }
 }
 
@@ -58,8 +69,7 @@ function getRemoteRef(): string {
 // (e.g. in monorepo dev before the package is built/published). Points at
 // the repo-root `registry/` (source of truth), not `packages/cli/registry`,
 // since the latter is gitignored and never exists in any git tag.
-const REMOTE_BASE =
-  `https://raw.githubusercontent.com/sanringtech/ui/${getRemoteRef()}/registry`;
+const REMOTE_BASE = `https://raw.githubusercontent.com/sanringtech/ui/${getRemoteRef()}/registry`;
 
 function isUrl(s: string): boolean {
   return s.startsWith('http://') || s.startsWith('https://');
@@ -99,6 +109,96 @@ export interface Registry {
   components: RegistryComponent[];
 }
 
+function isRecord(value: unknown): value is Record<string, unknown> {
+  return typeof value === 'object' && value !== null && !Array.isArray(value);
+}
+
+function isStringArray(value: unknown): value is string[] {
+  return Array.isArray(value) && value.every((item) => typeof item === 'string');
+}
+
+function isStringRecord(value: unknown): value is Record<string, string> {
+  return isRecord(value) && Object.values(value).every((item) => typeof item === 'string');
+}
+
+function validateOptionalStringArray(
+  errors: string[],
+  value: unknown,
+  path: string,
+): value is string[] | undefined {
+  if (value === undefined) return true;
+  if (isStringArray(value)) return true;
+  errors.push(`${path} must be an array of strings`);
+  return false;
+}
+
+function validateOptionalPeerDependencies(
+  errors: string[],
+  value: unknown,
+  path: string,
+): value is Record<string, string> | undefined {
+  if (value === undefined) return true;
+  if (isStringRecord(value)) return true;
+  errors.push(`${path} must be an object whose values are strings`);
+  return false;
+}
+
+export function validateRegistry(value: unknown): Registry {
+  const errors: string[] = [];
+
+  if (!isRecord(value)) {
+    throw new Error('registry must be an object');
+  }
+
+  if (typeof value.name !== 'string') errors.push('name must be a string');
+  if (!Array.isArray(value.shared)) errors.push('shared must be an array');
+  if (!Array.isArray(value.components)) errors.push('components must be an array');
+
+  if (Array.isArray(value.shared)) {
+    value.shared.forEach((item, index) => {
+      const path = `shared[${index}]`;
+      if (!isRecord(item)) {
+        errors.push(`${path} must be an object`);
+        return;
+      }
+      if (typeof item.name !== 'string') errors.push(`${path}.name must be a string`);
+      if (typeof item.description !== 'string') {
+        errors.push(`${path}.description must be a string`);
+      }
+      if (typeof item.file !== 'string') errors.push(`${path}.file must be a string`);
+      validateOptionalPeerDependencies(errors, item.peerDependencies, `${path}.peerDependencies`);
+    });
+  }
+
+  if (Array.isArray(value.components)) {
+    value.components.forEach((item, index) => {
+      const path = `components[${index}]`;
+      if (!isRecord(item)) {
+        errors.push(`${path} must be an object`);
+        return;
+      }
+      if (typeof item.name !== 'string') errors.push(`${path}.name must be a string`);
+      if (typeof item.description !== 'string') {
+        errors.push(`${path}.description must be a string`);
+      }
+      if (!isStringArray(item.files)) errors.push(`${path}.files must be an array of strings`);
+      validateOptionalStringArray(errors, item.sharedDeps, `${path}.sharedDeps`);
+      validateOptionalStringArray(errors, item.componentDeps, `${path}.componentDeps`);
+      validateOptionalPeerDependencies(errors, item.peerDependencies, `${path}.peerDependencies`);
+    });
+  }
+
+  if (errors.length > 0) {
+    throw new Error(errors.join('; '));
+  }
+
+  return {
+    name: value.name as string,
+    shared: value.shared as RegistryShared[],
+    components: value.components as RegistryComponent[],
+  };
+}
+
 // ---------------------------------------------------------------------------
 // fetchRegistry
 //   source = undefined          → local bundle → remote fallback
@@ -111,9 +211,9 @@ export async function fetchRegistry(source?: string): Promise<Registry> {
   if (source && !isUrl(source)) {
     const localJson = join(source, 'registry.json');
     try {
-      return JSON.parse(readFileSync(localJson, 'utf-8')) as Registry;
-    } catch {
-      die(`Cannot read registry at: ${localJson}`);
+      return validateRegistry(JSON.parse(readFileSync(localJson, 'utf-8')));
+    } catch (e) {
+      die(`Cannot read registry at: ${localJson}`, e);
     }
   }
 
@@ -125,9 +225,13 @@ export async function fetchRegistry(source?: string): Promise<Registry> {
   // 3. Default: local bundle
   if (existsSync(LOCAL_REGISTRY_JSON)) {
     try {
-      return JSON.parse(readFileSync(LOCAL_REGISTRY_JSON, 'utf-8')) as Registry;
-    } catch {
-      console.warn(pc.yellow('⚠ Local registry unreadable, falling back to network...'));
+      return validateRegistry(JSON.parse(readFileSync(LOCAL_REGISTRY_JSON, 'utf-8')));
+    } catch (e) {
+      console.warn(
+        pc.yellow(
+          `⚠ Local registry unreadable, falling back to network: ${e instanceof Error ? e.message : e}`,
+        ),
+      );
     }
   }
 
@@ -140,7 +244,7 @@ async function fetchRegistryFromUrl(url: string): Promise<Registry> {
   try {
     const res = await fetch(url);
     if (!res.ok) throw new Error(`HTTP ${res.status}`);
-    return (await res.json()) as Registry;
+    return validateRegistry(await res.json());
   } catch (e) {
     die(`Cannot fetch registry: ${url}`, e);
   }

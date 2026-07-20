@@ -31,9 +31,10 @@ export function resolveDiffTargets(
   registry: Registry,
 ): { components: RegistryComponent[]; missing: string[]; notInstalled: string[] } {
   const byName = new Map(registry.components.map((c) => [c.name, c]));
-  const names = requestedNames.length > 0
-    ? requestedNames
-    : listInstalledComponentNames(componentBasePath, registry);
+  const names =
+    requestedNames.length > 0
+      ? requestedNames
+      : listInstalledComponentNames(componentBasePath, registry);
 
   const components: RegistryComponent[] = [];
   const missing: string[] = [];
@@ -74,7 +75,9 @@ export function printFileDiff(
 
   const status: FileDiffStatus = isUntouchedSinceInstall(local, recordedHash) ? 'auto' : 'conflict';
   if (status === 'auto') {
-    console.log(pc.cyan(`  ○ ${label} (registry updated, no local changes — safe to \`sanring update\`)`));
+    console.log(
+      pc.cyan(`  ○ ${label} (registry updated, no local changes — safe to \`sanring update\`)`),
+    );
   } else {
     console.log(pc.yellow(`  ● ${label}`));
   }
@@ -109,7 +112,9 @@ export const diffCommand = new Command('diff')
 
     const config = readConfig(cwd);
     const componentBasePath = resolve(cwd, options.path ?? config?.componentPath ?? DEFAULT_PATH);
-    const sharedDestDir = join(componentBasePath, 'shared');
+    const sharedDestDir = config?.sharedPath
+      ? resolve(cwd, config.sharedPath)
+      : join(componentBasePath, 'shared');
 
     const registry = await fetchRegistry(registrySource);
     const { components, missing, notInstalled } = resolveDiffTargets(
@@ -119,15 +124,21 @@ export const diffCommand = new Command('diff')
     );
 
     if (missing.length > 0) {
-      console.error(pc.red(`✖ Unknown component${missing.length > 1 ? 's' : ''}: ${missing.join(', ')}`));
+      console.error(
+        pc.red(`✖ Unknown component${missing.length > 1 ? 's' : ''}: ${missing.join(', ')}`),
+      );
     }
     if (notInstalled.length > 0) {
       console.log(
-        pc.dim(`  Not installed, skipping: ${notInstalled.join(', ')} (run ${pc.white('sanring add')} first)`),
+        pc.dim(
+          `  Not installed, skipping: ${notInstalled.join(', ')} (run ${pc.white('sanring add')} first)`,
+        ),
       );
     }
 
-    let changed = 0, checked = 0, autoSafe = 0;
+    let changed = 0,
+      checked = 0,
+      autoSafe = 0;
 
     function tally(status: ReturnType<typeof printFileDiff>) {
       if (status === 'unchanged') return;
@@ -144,9 +155,15 @@ export const diffCommand = new Command('diff')
         const remote = await fetchFile(themeShared.file, registrySource);
         const local = readFileSync(themeDest, 'utf-8');
         checked++;
-        tally(printFileDiff(THEME_FILE_PATH, local, remote, config?.installedHashes?.[THEME_FILE_PATH]));
+        tally(
+          printFileDiff(THEME_FILE_PATH, local, remote, config?.installedHashes?.[THEME_FILE_PATH]),
+        );
       } catch (e) {
-        console.warn(pc.yellow(`  ⚠ Could not fetch ${themeShared.file}: ${e instanceof Error ? e.message : e}`));
+        console.warn(
+          pc.yellow(
+            `  ⚠ Could not fetch ${themeShared.file}: ${e instanceof Error ? e.message : e}`,
+          ),
+        );
       }
     }
 
@@ -168,7 +185,9 @@ export const diffCommand = new Command('diff')
         checked++;
         tally(printFileDiff(label, local, remote, config?.installedHashes?.[label]));
       } catch (e) {
-        console.warn(pc.yellow(`  ⚠ Could not fetch ${shared.file}: ${e instanceof Error ? e.message : e}`));
+        console.warn(
+          pc.yellow(`  ⚠ Could not fetch ${shared.file}: ${e instanceof Error ? e.message : e}`),
+        );
       }
     }
 
@@ -185,7 +204,9 @@ export const diffCommand = new Command('diff')
           checked++;
           tally(printFileDiff(label, local, remote, config?.installedHashes?.[label]));
         } catch (e) {
-          console.warn(pc.yellow(`  ⚠ Could not fetch ${file}: ${e instanceof Error ? e.message : e}`));
+          console.warn(
+            pc.yellow(`  ⚠ Could not fetch ${file}: ${e instanceof Error ? e.message : e}`),
+          );
         }
       }
     }
@@ -204,8 +225,9 @@ export const diffCommand = new Command('diff')
       if (autoSafe > 0) notes.push(`${autoSafe} safe to update`);
       if (reviewCount > 0) notes.push(`${reviewCount} need${reviewCount === 1 ? 's' : ''} review`);
       console.log(
-        pc.yellow(`● ${changed} of ${checked} file${checked > 1 ? 's' : ''} differ from the registry`) +
-          pc.dim(` (${notes.join(', ')}). Run \`sanring update\` to apply.\n`),
+        pc.yellow(
+          `● ${changed} of ${checked} file${checked > 1 ? 's' : ''} differ from the registry`,
+        ) + pc.dim(` (${notes.join(', ')}). Run \`sanring update\` to apply.\n`),
       );
     }
   });

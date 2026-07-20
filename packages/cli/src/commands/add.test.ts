@@ -5,7 +5,12 @@ import { tmpdir } from 'node:os';
 import type { Registry, RegistryComponent, RegistryShared } from '../registry.js';
 import { hashContent, readConfig } from '../utils.js';
 import { writeRegistryFixture } from '../__tests__/registry-fixture.js';
-import { addCommand, collectOverwriteCandidates, collectPeerDeps, resolveInstallSet } from './add.js';
+import {
+  addCommand,
+  collectOverwriteCandidates,
+  collectPeerDeps,
+  resolveInstallSet,
+} from './add.js';
 
 function component(overrides: Partial<RegistryComponent> & { name: string }): RegistryComponent {
   return { description: '', files: [`${overrides.name}/index.ts`], ...overrides };
@@ -65,12 +70,21 @@ describe('resolveInstallSet', () => {
 
 describe('collectPeerDeps', () => {
   const shared: RegistryShared[] = [
-    { name: 'utils', description: '', file: 'shared/utils.ts', peerDependencies: { clsx: '^2.0.0' } },
+    {
+      name: 'utils',
+      description: '',
+      file: 'shared/utils.ts',
+      peerDependencies: { clsx: '^2.0.0' },
+    },
   ];
 
   it('merges peerDependencies across components and their sharedDeps', () => {
     const components: RegistryComponent[] = [
-      component({ name: 'a', peerDependencies: { '@angular/cdk': '^22.0.0' }, sharedDeps: ['utils'] }),
+      component({
+        name: 'a',
+        peerDependencies: { '@angular/cdk': '^22.0.0' },
+        sharedDeps: ['utils'],
+      }),
       component({ name: 'b', peerDependencies: { '@lucide/angular': '^1.0.0' } }),
     ];
     expect(collectPeerDeps(components, shared)).toEqual({
@@ -149,7 +163,10 @@ describe('addCommand (integration)', () => {
     projectDir = mkdtempSync(join(tmpdir(), 'sanring-cli-project-'));
     registryDir = mkdtempSync(join(tmpdir(), 'sanring-cli-registry-'));
     writeFileSync(join(projectDir, 'angular.json'), '{}', 'utf-8');
-    writeRegistryFixture(registryDir, { utils: 'export function cn() {}\n', widget: 'export const widget = 1;\n' });
+    writeRegistryFixture(registryDir, {
+      utils: 'export function cn() {}\n',
+      widget: 'export const widget = 1;\n',
+    });
     process.chdir(projectDir);
     vi.spyOn(console, 'log').mockImplementation(() => {});
   });
@@ -172,8 +189,28 @@ describe('addCommand (integration)', () => {
 
     const config = readConfig(projectDir);
     expect(config?.componentPath).toBe('src/app/components/ui');
-    expect(config?.installedHashes?.['widget/index.ts']).toBe(hashContent('export const widget = 1;\n'));
-    expect(config?.installedHashes?.['shared/utils.ts']).toBe(hashContent('export function cn() {}\n'));
+    expect(config?.installedHashes?.['widget/index.ts']).toBe(
+      hashContent('export const widget = 1;\n'),
+    );
+    expect(config?.installedHashes?.['shared/utils.ts']).toBe(
+      hashContent('export function cn() {}\n'),
+    );
+  });
+
+  it('writes shared files to --shared-path and persists that path', async () => {
+    await addCommand.parseAsync(
+      ['widget', '--registry', registryDir, '--shared-path', 'src/app/shared/sanring'],
+      { from: 'user' },
+    );
+
+    const sharedFile = join(projectDir, 'src/app/shared/sanring/utils.ts');
+    expect(existsSync(sharedFile)).toBe(true);
+
+    const config = readConfig(projectDir);
+    expect(config?.sharedPath).toBe('src/app/shared/sanring');
+    expect(config?.installedHashes?.['shared/utils.ts']).toBe(
+      hashContent('export function cn() {}\n'),
+    );
   });
 
   it('skips an existing file instead of overwriting it without --force', async () => {

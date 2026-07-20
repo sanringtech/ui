@@ -17,7 +17,13 @@ describe('classifyUpdate', () => {
   it('auto-applies when local matches the recorded baseline hash', () => {
     const baseline = hashContent('old registry content');
     expect(
-      classifyUpdate('button/index.ts', '/dest', 'old registry content', 'new registry content', baseline),
+      classifyUpdate(
+        'button/index.ts',
+        '/dest',
+        'old registry content',
+        'new registry content',
+        baseline,
+      ),
     ).toEqual({
       kind: 'auto',
       label: 'button/index.ts',
@@ -29,7 +35,13 @@ describe('classifyUpdate', () => {
   it('flags a conflict when local no longer matches the recorded baseline', () => {
     const baseline = hashContent('old registry content');
     expect(
-      classifyUpdate('button/index.ts', '/dest', 'hand-edited content', 'new registry content', baseline),
+      classifyUpdate(
+        'button/index.ts',
+        '/dest',
+        'hand-edited content',
+        'new registry content',
+        baseline,
+      ),
     ).toEqual({
       kind: 'conflict',
       label: 'button/index.ts',
@@ -102,15 +114,21 @@ describe('updateCommand (integration)', () => {
 
     // Untouched file: silently brought up to date.
     expect(readFileSync(componentFile(), 'utf-8')).toBe('export const widget = 2;\n');
-    expect(logs.some((l) => l.includes('widget/index.ts') && l.includes('auto-updated'))).toBe(true);
+    expect(logs.some((l) => l.includes('widget/index.ts') && l.includes('auto-updated'))).toBe(
+      true,
+    );
 
     // Edited file: still applied (because --yes auto-confirms), but through
     // the diff/conflict path, not the silent one.
     expect(readFileSync(sharedFile(), 'utf-8')).toBe('export function cn() { return "v2"; }\n');
-    expect(logs.some((l) => l.includes('shared/utils.ts') && l.includes('auto-updated'))).toBe(false);
+    expect(logs.some((l) => l.includes('shared/utils.ts') && l.includes('auto-updated'))).toBe(
+      false,
+    );
 
     const config = readConfig(projectDir);
-    expect(config?.installedHashes?.['widget/index.ts']).toBe(hashContent('export const widget = 2;\n'));
+    expect(config?.installedHashes?.['widget/index.ts']).toBe(
+      hashContent('export const widget = 2;\n'),
+    );
     expect(config?.installedHashes?.['shared/utils.ts']).toBe(
       hashContent('export function cn() { return "v2"; }\n'),
     );
@@ -125,5 +143,39 @@ describe('updateCommand (integration)', () => {
     await updateCommand.parseAsync(['--registry', registryDir, '--yes'], { from: 'user' });
 
     expect(logs.some((l) => l.includes('Nothing to update'))).toBe(true);
+  });
+
+  it('updates shared files from the configured sharedPath', async () => {
+    const customProjectDir = mkdtempSync(join(tmpdir(), 'sanring-cli-project-'));
+    const customRegistryDir = mkdtempSync(join(tmpdir(), 'sanring-cli-registry-'));
+
+    try {
+      writeFileSync(join(customProjectDir, 'angular.json'), '{}', 'utf-8');
+      writeRegistryFixture(customRegistryDir, {
+        utils: 'export function cn() {}\n',
+        widget: 'export const widget = 1;\n',
+      });
+      process.chdir(customProjectDir);
+
+      await addCommand.parseAsync(
+        ['widget', '--registry', customRegistryDir, '--shared-path', 'src/app/shared/sanring'],
+        { from: 'user' },
+      );
+
+      writeRegistryFixture(customRegistryDir, {
+        utils: 'export function cn() { return "v2"; }\n',
+        widget: 'export const widget = 1;\n',
+      });
+
+      await updateCommand.parseAsync(['--registry', customRegistryDir, '--yes'], { from: 'user' });
+
+      const sharedFile = join(customProjectDir, 'src/app/shared/sanring/utils.ts');
+      expect(readFileSync(sharedFile, 'utf-8')).toBe('export function cn() { return "v2"; }\n');
+      expect(readConfig(customProjectDir)?.sharedPath).toBe('src/app/shared/sanring');
+    } finally {
+      rmSync(customProjectDir, { recursive: true, force: true });
+      rmSync(customRegistryDir, { recursive: true, force: true });
+      process.chdir(projectDir);
+    }
   });
 });

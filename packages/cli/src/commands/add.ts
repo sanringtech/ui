@@ -10,11 +10,18 @@ import {
   fetchFile,
   fetchRegistry,
   installCommand,
+  installCommandParts,
   type Registry,
   type RegistryComponent,
   type RegistryShared,
 } from '../registry.js';
-import { getInstalledPackages, hashContent, isAngularProject, readConfig, writeConfig } from '../utils.js';
+import {
+  getInstalledPackages,
+  hashContent,
+  isAngularProject,
+  readConfig,
+  writeConfig,
+} from '../utils.js';
 
 export function writeFile(dest: string, content: string, force: boolean): 'written' | 'skipped' {
   if (existsSync(dest) && !force) return 'skipped';
@@ -81,7 +88,11 @@ export function collectOverwriteCandidates(
 async function confirmOverwrite(candidates: OverwriteCandidate[], yes: boolean): Promise<boolean> {
   if (candidates.length === 0) return true;
 
-  console.log(pc.yellow(`  ⚠ ${candidates.length} existing file${candidates.length > 1 ? 's' : ''} would be overwritten:`));
+  console.log(
+    pc.yellow(
+      `  ⚠ ${candidates.length} existing file${candidates.length > 1 ? 's' : ''} would be overwritten:`,
+    ),
+  );
   for (const candidate of candidates) {
     console.log(pc.dim(`  – ${candidate.label}`));
   }
@@ -93,7 +104,11 @@ async function confirmOverwrite(candidates: OverwriteCandidate[], yes: boolean):
 
   if (!process.stdin.isTTY) {
     console.error(pc.red('\n✖ Refusing to overwrite files without confirmation.'));
-    console.error(pc.dim(`  Re-run with ${pc.white('--dry-run')} to preview, or ${pc.white('--force --yes')} to confirm in non-interactive environments.\n`));
+    console.error(
+      pc.dim(
+        `  Re-run with ${pc.white('--dry-run')} to preview, or ${pc.white('--force --yes')} to confirm in non-interactive environments.\n`,
+      ),
+    );
     return false;
   }
 
@@ -169,7 +184,9 @@ export const addCommand = new Command('add')
       // Angular project guard
       if (!isAngularProject(cwd)) {
         console.error(pc.red('✖ No angular.json found.'));
-        console.error(pc.dim('  Run from the root of an Angular project, or run `sanring init` first.'));
+        console.error(
+          pc.dim('  Run from the root of an Angular project, or run `sanring init` first.'),
+        );
         process.exit(1);
       }
 
@@ -177,6 +194,7 @@ export const addCommand = new Command('add')
       const config = readConfig(cwd);
       const resolvedComponentPath = options.path ?? config?.componentPath ?? DEFAULT_PATH;
       const componentBasePath = resolve(cwd, resolvedComponentPath);
+      const resolvedSharedPath = options.sharedPath ?? config?.sharedPath;
       const installedHashes = { ...config?.installedHashes };
 
       // Fetch registry
@@ -208,7 +226,9 @@ export const addCommand = new Command('add')
 
       const sharedDestDir = options.sharedPath
         ? resolve(cwd, options.sharedPath)
-        : join(componentBasePath, 'shared');
+        : config?.sharedPath
+          ? resolve(cwd, config.sharedPath)
+          : join(componentBasePath, 'shared');
 
       if (options.force && !options.dryRun) {
         const overwriteCandidates = collectOverwriteCandidates(
@@ -225,7 +245,9 @@ export const addCommand = new Command('add')
         }
       }
 
-      let written = 0, skipped = 0, failed = 0;
+      let written = 0,
+        skipped = 0,
+        failed = 0;
 
       // Shared utilities — deduped across the whole install set so a dep used
       // by multiple requested components is only fetched/written once.
@@ -238,7 +260,10 @@ export const addCommand = new Command('add')
         console.log(pc.dim('  Shared utilities:'));
         for (const depName of sharedNamesNeeded) {
           const shared = registry.shared.find((s) => s.name === depName);
-          if (!shared) { console.warn(pc.yellow(`  ⚠ Unknown shared dep "${depName}"`)); continue; }
+          if (!shared) {
+            console.warn(pc.yellow(`  ⚠ Unknown shared dep "${depName}"`));
+            continue;
+          }
           const fileName = shared.file.split('/').pop()!;
           const dest = join(sharedDestDir, fileName);
 
@@ -248,7 +273,9 @@ export const addCommand = new Command('add')
               console.log(pc.dim(`  – shared/${fileName} (exists, would skip)`));
               skipped++;
             } else {
-              console.log(pc.cyan(`  + shared/${fileName}${exists ? pc.dim(' (would overwrite)') : ''}`));
+              console.log(
+                pc.cyan(`  + shared/${fileName}${exists ? pc.dim(' (would overwrite)') : ''}`),
+              );
               written++;
             }
             continue;
@@ -263,7 +290,10 @@ export const addCommand = new Command('add')
               spinner.stopAndPersist({ symbol: pc.green('✔'), text: `shared/${fileName}` });
               written++;
             } else {
-              spinner.stopAndPersist({ symbol: pc.dim('–'), text: pc.dim(`shared/${fileName} (exists, use --force to overwrite)`) });
+              spinner.stopAndPersist({
+                symbol: pc.dim('–'),
+                text: pc.dim(`shared/${fileName} (exists, use --force to overwrite)`),
+              });
               skipped++;
             }
           } catch {
@@ -307,7 +337,10 @@ export const addCommand = new Command('add')
               spinner.stopAndPersist({ symbol: pc.green('✔'), text: fileName });
               written++;
             } else {
-              spinner.stopAndPersist({ symbol: pc.dim('–'), text: pc.dim(`${fileName} (exists, use --force to overwrite)`) });
+              spinner.stopAndPersist({
+                symbol: pc.dim('–'),
+                text: pc.dim(`${fileName} (exists, use --force to overwrite)`),
+              });
               skipped++;
             }
           } catch {
@@ -338,8 +371,8 @@ export const addCommand = new Command('add')
             console.log(pc.dim(`  Would install: ${pc.cyan(cmd)}`));
           } else {
             console.log(pc.dim(`  Installing: ${pc.cyan(cmd)}\n`));
-            const [bin, ...args] = cmd.split(' ');
-            const result = spawnSync(bin, args, { stdio: 'inherit', shell: true });
+            const { bin, args } = installCommandParts(pm, pkgs);
+            const result = spawnSync(bin, args, { stdio: 'inherit', shell: false });
             if (result.status !== 0) {
               console.warn(pc.yellow(`  ⚠ Install failed. Run manually:\n  ${pc.white(cmd)}`));
             }
@@ -349,7 +382,11 @@ export const addCommand = new Command('add')
       }
 
       if (!options.dryRun && written > 0) {
-        writeConfig(cwd, { componentPath: resolvedComponentPath, installedHashes });
+        writeConfig(cwd, {
+          componentPath: resolvedComponentPath,
+          sharedPath: resolvedSharedPath,
+          installedHashes,
+        });
       }
 
       const parts: string[] = [];

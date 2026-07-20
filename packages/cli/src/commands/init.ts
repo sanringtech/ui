@@ -3,7 +3,12 @@ import { spawnSync } from 'node:child_process';
 import { join } from 'node:path';
 import { createInterface } from 'node:readline/promises';
 import pc from 'picocolors';
-import { detectPackageManager, fetchFile, installCommand } from '../registry.js';
+import {
+  detectPackageManager,
+  fetchFile,
+  installCommand,
+  installCommandParts,
+} from '../registry.js';
 import {
   CONFIG_FILE,
   getInstalledPackages,
@@ -43,7 +48,10 @@ export const initCommand = new Command('init')
     // 2. Warn if already initialised
     const existing = readConfig(cwd);
     if (existing) {
-      console.log(pc.yellow('⚠') + pc.dim(` ${CONFIG_FILE} already exists (componentPath: ${existing.componentPath})`));
+      console.log(
+        pc.yellow('⚠') +
+          pc.dim(` ${CONFIG_FILE} already exists (componentPath: ${existing.componentPath})`),
+      );
       console.log(pc.dim('  Re-running init will overwrite it.\n'));
     }
 
@@ -60,7 +68,9 @@ export const initCommand = new Command('init')
 
     // 4. Write config
     writeConfig(cwd, { componentPath });
-    console.log(pc.green('\n✔') + ` ${CONFIG_FILE} written` + pc.dim(` (componentPath: ${componentPath})`));
+    console.log(
+      pc.green('\n✔') + ` ${CONFIG_FILE} written` + pc.dim(` (componentPath: ${componentPath})`),
+    );
 
     // 5. Write the design-token stylesheet every component reads (--sanring-*).
     // Skipped if it already exists (protects any brand-color edits) unless --force.
@@ -80,7 +90,9 @@ export const initCommand = new Command('init')
         );
       }
     } catch (e) {
-      console.warn(pc.yellow(`⚠ Could not fetch shared/theme.css: ${e instanceof Error ? e.message : e}`));
+      console.warn(
+        pc.yellow(`⚠ Could not fetch shared/theme.css: ${e instanceof Error ? e.message : e}`),
+      );
     }
 
     // 6. Install base deps if missing
@@ -94,8 +106,8 @@ export const initCommand = new Command('init')
       const pkgs = missing.map(([pkg, ver]) => `${pkg}@${ver}`);
       const cmd = installCommand(pm, pkgs);
       console.log(pc.dim(`\n  Installing base dependencies: ${pc.cyan(cmd)}\n`));
-      const [bin, ...args] = cmd.split(' ');
-      const result = spawnSync(bin, args, { stdio: 'inherit', shell: true });
+      const { bin, args } = installCommandParts(pm, pkgs);
+      const result = spawnSync(bin, args, { stdio: 'inherit', shell: false });
       if (result.status !== 0) {
         console.warn(pc.yellow(`\n  ⚠ Install failed. Run manually:\n  ${pc.white(cmd)}`));
       } else {

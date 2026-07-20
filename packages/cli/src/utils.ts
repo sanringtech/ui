@@ -6,6 +6,7 @@ export const CONFIG_FILE = 'sanring.config.json';
 
 export interface SanringConfig {
   componentPath: string;
+  sharedPath?: string;
   // Baseline hash of each installed file's content at the last point we wrote
   // it (via `add` or `update`), keyed by the same label used in diff/update
   // output (e.g. "calendar/calendar.component.ts", "shared/utils.ts").
