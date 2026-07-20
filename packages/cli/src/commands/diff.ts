@@ -97,7 +97,8 @@ export const diffCommand = new Command('diff')
   .argument('[components...]', 'component name(s) to check; omit to check everything installed')
   .option('-p, --path <path>', 'destination path relative to cwd')
   .option('--registry <source>', 'custom registry (URL or local path)')
-  .action(async (componentNames: string[], options: { path?: string; registry?: string }) => {
+  .option('--exit-code', 'exit with code 1 if any files differ (useful for CI)', false)
+  .action(async (componentNames: string[], options: { path?: string; registry?: string; exitCode: boolean }) => {
     const cwd = process.cwd();
     const registrySource = options.registry;
 
@@ -127,30 +128,20 @@ export const diffCommand = new Command('diff')
       );
     }
 
-    let changed = 0, checked = 0, autoSafe = 0;
+    // Collect jobs upfront then fetch all in parallel — avoids sequential
+    // waterfall latency when many components are installed on a remote registry.
+    type DiffJob =
+      | { kind: 'new'; label: string }
+      | { kind: 'compare'; label: string; localPath: string; remotePath: string; recordedHash?: string };
 
-    function tally(status: ReturnType<typeof printFileDiff>) {
-      if (status === 'unchanged') return;
-      changed++;
-      if (status === 'auto') autoSafe++;
-    }
+    const jobs: DiffJob[] = [];
 
-    // Theme file — written by `init`, not tied to any component's sharedDeps,
-    // but the thing most likely to have been hand-edited for a brand.
     const themeDest = join(cwd, THEME_FILE_PATH);
     const themeShared = registry.shared.find((s) => s.name === 'theme');
     if (themeShared && existsSync(themeDest)) {
-      try {
-        const remote = await fetchFile(themeShared.file, registrySource);
-        const local = readFileSync(themeDest, 'utf-8');
-        checked++;
-        tally(printFileDiff(THEME_FILE_PATH, local, remote, config?.installedHashes?.[THEME_FILE_PATH]));
-      } catch (e) {
-        console.warn(pc.yellow(`  ⚠ Could not fetch ${themeShared.file}: ${e instanceof Error ? e.message : e}`));
-      }
+      jobs.push({ kind: 'compare', label: THEME_FILE_PATH, localPath: themeDest, remotePath: themeShared.file, recordedHash: config?.installedHashes?.[THEME_FILE_PATH] });
     }
 
-    // Shared utility deps referenced by the components being diffed.
     const sharedNamesNeeded = new Set<string>();
     for (const component of components) {
       for (const depName of component.sharedDeps ?? []) sharedNamesNeeded.add(depName);
@@ -160,21 +151,11 @@ export const diffCommand = new Command('diff')
       if (!shared) continue;
       const fileName = shared.file.split('/').pop()!;
       const dest = join(sharedDestDir, fileName);
+      const label = `shared/${fileName}`;
       if (!existsSync(dest)) {
-        console.log(pc.cyan(`  + shared/${fileName} (new in registry — run \`sanring update\` to install)`));
-        checked++;
-        changed++;
-        autoSafe++;
-        continue;
-      }
-      try {
-        const remote = await fetchFile(shared.file, registrySource);
-        const local = readFileSync(dest, 'utf-8');
-        const label = `shared/${fileName}`;
-        checked++;
-        tally(printFileDiff(label, local, remote, config?.installedHashes?.[label]));
-      } catch (e) {
-        console.warn(pc.yellow(`  ⚠ Could not fetch ${shared.file}: ${e instanceof Error ? e.message : e}`));
+        jobs.push({ kind: 'new', label });
+      } else {
+        jobs.push({ kind: 'compare', label, localPath: dest, remotePath: shared.file, recordedHash: config?.installedHashes?.[label] });
       }
     }
 
@@ -183,23 +164,49 @@ export const diffCommand = new Command('diff')
       for (const file of component.files) {
         const fileName = file.split('/').pop()!;
         const dest = join(destDir, fileName);
+        const label = `${component.name}/${fileName}`;
         if (!existsSync(dest)) {
-          console.log(pc.cyan(`  + ${component.name}/${fileName} (new in registry — run \`sanring update\` to install)`));
-          checked++;
-          changed++;
-          autoSafe++;
-          continue;
-        }
-        try {
-          const remote = await fetchFile(`components/${file}`, registrySource);
-          const local = readFileSync(dest, 'utf-8');
-          const label = `${component.name}/${fileName}`;
-          checked++;
-          tally(printFileDiff(label, local, remote, config?.installedHashes?.[label]));
-        } catch (e) {
-          console.warn(pc.yellow(`  ⚠ Could not fetch ${file}: ${e instanceof Error ? e.message : e}`));
+          jobs.push({ kind: 'new', label });
+        } else {
+          jobs.push({ kind: 'compare', label, localPath: dest, remotePath: `components/${file}`, recordedHash: config?.installedHashes?.[label] });
         }
       }
+    }
+
+    const remotes = await Promise.all(
+      jobs.map(async (job): Promise<string | Error | null> => {
+        if (job.kind === 'new') return null;
+        try {
+          return await fetchFile(job.remotePath, registrySource);
+        } catch (e) {
+          return e instanceof Error ? e : new Error(String(e));
+        }
+      }),
+    );
+
+    let changed = 0, checked = 0, autoSafe = 0;
+
+    function tally(status: ReturnType<typeof printFileDiff>) {
+      if (status === 'unchanged') return;
+      changed++;
+      if (status === 'auto') autoSafe++;
+    }
+
+    for (let i = 0; i < jobs.length; i++) {
+      const job = jobs[i];
+      const result = remotes[i];
+      if (job.kind === 'new') {
+        console.log(pc.cyan(`  + ${job.label} (new in registry — run \`sanring update\` to install)`));
+        checked++; changed++; autoSafe++;
+        continue;
+      }
+      if (result instanceof Error) {
+        console.warn(pc.yellow(`  ⚠ Could not fetch ${job.remotePath}: ${result.message}`));
+        continue;
+      }
+      const local = readFileSync(job.localPath, 'utf-8');
+      checked++;
+      tally(printFileDiff(job.label, local, result as string, job.recordedHash));
     }
 
     if (checked === 0) {
@@ -220,4 +227,6 @@ export const diffCommand = new Command('diff')
           pc.dim(` (${notes.join(', ')}). Run \`sanring update\` to apply.\n`),
       );
     }
+
+    if (options.exitCode && changed > 0) process.exit(1);
   });

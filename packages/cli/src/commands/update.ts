@@ -119,12 +119,15 @@ export const updateCommand = new Command('update')
         else pending.push(classification);
       }
 
+      // Collect all jobs then fetch in parallel — avoids waterfall latency
+      // when many components or files are installed on a remote registry.
+      type UpdateJob = { label: string; dest: string; remotePath: string };
+      const jobs: UpdateJob[] = [];
+
       const themeDest = join(cwd, THEME_FILE_PATH);
       const themeShared = registry.shared.find((s) => s.name === 'theme');
       if (themeShared && existsSync(themeDest)) {
-        const remote = await fetchFile(themeShared.file, registrySource);
-        const local = readFileSync(themeDest, 'utf-8');
-        classify(THEME_FILE_PATH, themeDest, local, remote);
+        jobs.push({ label: THEME_FILE_PATH, dest: themeDest, remotePath: themeShared.file });
       }
 
       const sharedNamesNeeded = new Set<string>();
@@ -135,31 +138,28 @@ export const updateCommand = new Command('update')
         const shared = registry.shared.find((s) => s.name === depName);
         if (!shared) continue;
         const fileName = shared.file.split('/').pop()!;
-        const dest = join(sharedDestDir, fileName);
-        const label = `shared/${fileName}`;
-        const remote = await fetchFile(shared.file, registrySource);
-        if (!existsSync(dest)) {
-          added.push({ label, dest, remote });
-          continue;
-        }
-        const local = readFileSync(dest, 'utf-8');
-        classify(label, dest, local, remote);
+        jobs.push({ label: `shared/${fileName}`, dest: join(sharedDestDir, fileName), remotePath: shared.file });
       }
 
       for (const component of components) {
         const destDir = join(componentBasePath, component.name);
         for (const file of component.files) {
           const fileName = file.split('/').pop()!;
-          const dest = join(destDir, fileName);
-          const label = `${component.name}/${fileName}`;
-          const remote = await fetchFile(`components/${file}`, registrySource);
-          if (!existsSync(dest)) {
-            added.push({ label, dest, remote });
-            continue;
-          }
-          const local = readFileSync(dest, 'utf-8');
-          classify(label, dest, local, remote);
+          jobs.push({ label: `${component.name}/${fileName}`, dest: join(destDir, fileName), remotePath: `components/${file}` });
         }
+      }
+
+      const remotes = await Promise.all(jobs.map((j) => fetchFile(j.remotePath, registrySource)));
+
+      for (let i = 0; i < jobs.length; i++) {
+        const { label, dest } = jobs[i];
+        const remote = remotes[i];
+        if (!existsSync(dest)) {
+          added.push({ label, dest, remote });
+          continue;
+        }
+        const local = readFileSync(dest, 'utf-8');
+        classify(label, dest, local, remote);
       }
 
       if (added.length === 0 && auto.length === 0 && pending.length === 0) {
