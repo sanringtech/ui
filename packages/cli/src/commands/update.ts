@@ -102,6 +102,7 @@ export const updateCommand = new Command('update')
       // sort each into "safe to apply silently" vs. "needs a human to look".
       const installedHashes = { ...config?.installedHashes };
       const auto: AutoFile[] = [];
+      const added: AutoFile[] = [];
       const pending: PendingFile[] = [];
       let backfilled = 0;
 
@@ -135,10 +136,14 @@ export const updateCommand = new Command('update')
         if (!shared) continue;
         const fileName = shared.file.split('/').pop()!;
         const dest = join(sharedDestDir, fileName);
-        if (!existsSync(dest)) continue;
+        const label = `shared/${fileName}`;
         const remote = await fetchFile(shared.file, registrySource);
+        if (!existsSync(dest)) {
+          added.push({ label, dest, remote });
+          continue;
+        }
         const local = readFileSync(dest, 'utf-8');
-        classify(`shared/${fileName}`, dest, local, remote);
+        classify(label, dest, local, remote);
       }
 
       for (const component of components) {
@@ -146,20 +151,43 @@ export const updateCommand = new Command('update')
         for (const file of component.files) {
           const fileName = file.split('/').pop()!;
           const dest = join(destDir, fileName);
-          if (!existsSync(dest)) continue;
+          const label = `${component.name}/${fileName}`;
           const remote = await fetchFile(`components/${file}`, registrySource);
+          if (!existsSync(dest)) {
+            added.push({ label, dest, remote });
+            continue;
+          }
           const local = readFileSync(dest, 'utf-8');
-          classify(`${component.name}/${fileName}`, dest, local, remote);
+          classify(label, dest, local, remote);
         }
       }
 
-      if (auto.length === 0 && pending.length === 0) {
+      if (added.length === 0 && auto.length === 0 && pending.length === 0) {
         if (!options.dryRun && backfilled > 0) writeConfig(cwd, { componentPath: config?.componentPath ?? DEFAULT_PATH, installedHashes });
         console.log(pc.green('\n✔ Everything already matches the registry. Nothing to update.\n'));
         return;
       }
 
       let applied = 0, skipped = 0;
+
+      // Files present in registry but missing locally — added to the component
+      // after the user's last install. No local version to conflict with.
+      if (added.length > 0) {
+        console.log(
+          pc.cyan(`\n${added.length} new file${added.length > 1 ? 's' : ''} in registry (added since you last installed):\n`),
+        );
+        for (const file of added) {
+          if (options.dryRun) {
+            console.log(pc.dim(`  + ${file.label} (dry run, would install)`));
+            continue;
+          }
+          writeFile(file.dest, file.remote, true);
+          installedHashes[file.label] = hashContent(file.remote);
+          console.log(pc.green(`  ✔ ${file.label} (new)`));
+          applied++;
+        }
+        console.log('');
+      }
 
       // Untouched since install — the registry moved on but the user never
       // edited their copy, so there's nothing to lose by applying directly.

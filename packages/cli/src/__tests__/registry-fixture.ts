@@ -6,6 +6,8 @@ export interface RegistryFixtureContent {
   utils?: string;
   theme?: string;
   widget?: string;
+  /** Second file added to the widget component — simulates a registry adding a new file post-install. */
+  widgetExtra?: string;
 }
 
 // Writes a minimal, self-contained registry (registry.json + the files it
@@ -29,10 +31,15 @@ export function writeRegistryFixture(dir: string, content: RegistryFixtureConten
   const components: Registry['components'] = [];
   if (content.widget !== undefined) {
     writeFileSync(join(dir, 'components', 'widget', 'index.ts'), content.widget, 'utf-8');
+    const files = ['widget/index.ts'];
+    if (content.widgetExtra !== undefined) {
+      writeFileSync(join(dir, 'components', 'widget', 'extra.ts'), content.widgetExtra, 'utf-8');
+      files.push('widget/extra.ts');
+    }
     components.push({
       name: 'widget',
       description: 'fixture widget',
-      files: ['widget/index.ts'],
+      files,
       sharedDeps: content.utils !== undefined ? ['utils'] : [],
     });
   }

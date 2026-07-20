@@ -160,7 +160,13 @@ export const diffCommand = new Command('diff')
       if (!shared) continue;
       const fileName = shared.file.split('/').pop()!;
       const dest = join(sharedDestDir, fileName);
-      if (!existsSync(dest)) continue;
+      if (!existsSync(dest)) {
+        console.log(pc.cyan(`  + shared/${fileName} (new in registry — run \`sanring update\` to install)`));
+        checked++;
+        changed++;
+        autoSafe++;
+        continue;
+      }
       try {
         const remote = await fetchFile(shared.file, registrySource);
         const local = readFileSync(dest, 'utf-8');
@@ -177,7 +183,13 @@ export const diffCommand = new Command('diff')
       for (const file of component.files) {
         const fileName = file.split('/').pop()!;
         const dest = join(destDir, fileName);
-        if (!existsSync(dest)) continue;
+        if (!existsSync(dest)) {
+          console.log(pc.cyan(`  + ${component.name}/${fileName} (new in registry — run \`sanring update\` to install)`));
+          checked++;
+          changed++;
+          autoSafe++;
+          continue;
+        }
         try {
           const remote = await fetchFile(`components/${file}`, registrySource);
           const local = readFileSync(dest, 'utf-8');
