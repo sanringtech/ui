@@ -191,13 +191,44 @@ export class RoadmapPageComponent {
     },
   ];
 
-  protected readonly tier2: RoadmapItem[] = [];
+  protected readonly tier2: RoadmapItem[] = [
+    {
+      name: 'Masked Input',
+      description:
+        'A formatting directive layered on the existing Input, not a one-off credit-card component. One config drives credit card (with Luhn validation and card-brand detection), phone number, national ID, and thousand-separator amount formatting.',
+    },
+    {
+      name: 'OTP Input',
+      description:
+        'Segmented one-time-password input with auto-advance between digits and paste-splitting. Bounded scope, but the focus-management logic is nontrivial.',
+    },
+    {
+      name: 'Transfer',
+      description:
+        'Dual-list shuttle for assigning permissions or picking items between two panes. Composition of existing Checkbox, Button, and Scroll Area rather than new primitives.',
+    },
+  ];
 
   protected readonly tier3: RoadmapItem[] = [
     {
       name: 'Navigation Menu',
       description:
         'Mega menu for marketing-site top navigation. High effort, low reuse of existing pieces.',
+    },
+    {
+      name: 'Virtual Scroller',
+      description:
+        'Windowed rendering for large lists/tables. Angular CDK provides the primitive, but wrapping it into a styled, easy-to-drop-into Table/Select is real integration work.',
+    },
+    {
+      name: 'Color Picker',
+      description:
+        'Hue/saturation/alpha picker UI with swatch and hex/rgb input. New color-math and canvas/gradient rendering, no reuse of existing components.',
+    },
+    {
+      name: 'Tour / Walkthrough',
+      description:
+        'Dims the screen and spotlights a target element with a step-by-step tooltip for onboarding. Needs a step state machine plus a highlight/cutout overlay, not just Popover reuse.',
     },
   ];
 
