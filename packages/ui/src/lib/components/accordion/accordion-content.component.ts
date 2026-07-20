@@ -29,13 +29,12 @@ import { AccordionItemComponent } from './accordion-item.component';
       [attr.data-state]="item?.state() ?? 'closed'"
       [class]="contentContainerClass()"
     >
-      <ng-template ngAccordionContent>
-        <div class="overflow-hidden">
-          <div [class]="contentBodyClass()">
-            <ng-content></ng-content>
-          </div>
+      <ng-template ngAccordionContent></ng-template>
+      <div class="overflow-hidden">
+        <div [class]="contentBodyClass()">
+          <ng-content></ng-content>
         </div>
-      </ng-template>
+      </div>
     </div>
   `,
 })

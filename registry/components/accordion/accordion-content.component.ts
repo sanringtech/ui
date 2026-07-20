@@ -7,14 +7,17 @@ import {
   inject,
   input,
 } from '@angular/core';
-import { AccordionPanel as NgAccordionPanel } from '@angular/aria/accordion';
+import {
+  AccordionContent as NgAccordionContent,
+  AccordionPanel as NgAccordionPanel,
+} from '@angular/aria/accordion';
 import { cn } from '../shared/utils';
 import { AccordionItemComponent } from './accordion-item.component';
 
 @Component({
   selector: 'sanring-accordion-content',
   standalone: true,
-  imports: [NgAccordionPanel],
+  imports: [NgAccordionContent, NgAccordionPanel],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <div
@@ -25,6 +28,7 @@ import { AccordionItemComponent } from './accordion-item.component';
       [attr.data-state]="item?.state() ?? 'closed'"
       [class]="contentContainerClass()"
     >
+      <ng-template ngAccordionContent></ng-template>
       <div class="overflow-hidden">
         <div [class]="contentBodyClass()">
           <ng-content></ng-content>
