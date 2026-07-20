@@ -15,6 +15,12 @@ export const treePage = {
       level: 2,
     },
     {
+      id: 'navigation',
+      titleKey: 'tree.demo.navigation',
+      descriptionKey: 'tree.examples.navigation.description',
+      level: 2,
+    },
+    {
       id: 'usage',
       titleKey: 'toc.usage',
       descriptionKey: 'tree.usage.description',
@@ -106,6 +112,58 @@ export const treePageExamples = {
       <sanring-tree-node value="src/app.component.ts">
         <button type="button" tabindex="-1" (click)="tree.selectNode('src/app.component.ts')">
           app.component.ts
+        </button>
+      </sanring-tree-node>
+    </sanring-tree-group>
+  </sanring-tree-node>
+</sanring-tree>`,
+
+  navigation: `<sanring-tree
+  [expandedValue]="expandedValue()"
+  (expandedValueChange)="expandedValue.set($event)"
+  [selectedValue]="selectedValue()"
+  (selectedValueChange)="selectedValue.set($event)"
+  #tree
+>
+  <sanring-tree-node value="dashboard">
+    <button type="button" tabindex="-1" (click)="tree.selectNode('dashboard')">
+      Dashboard
+    </button>
+  </sanring-tree-node>
+
+  <sanring-tree-node value="reports" #reportsNode="sanringTreeNode">
+    <button type="button" tabindex="-1" sanringTreeTrigger>
+      <span [class.rotate-90]="reportsNode.isExpanded()">›</span>
+      Reports
+    </button>
+    <sanring-tree-group>
+      <sanring-tree-node value="reports/revenue">
+        <button type="button" tabindex="-1" (click)="tree.selectNode('reports/revenue')">
+          Revenue
+        </button>
+      </sanring-tree-node>
+      <sanring-tree-node value="reports/customers">
+        <button type="button" tabindex="-1" (click)="tree.selectNode('reports/customers')">
+          Customers
+        </button>
+      </sanring-tree-node>
+    </sanring-tree-group>
+  </sanring-tree-node>
+
+  <sanring-tree-node value="settings" #settingsNode="sanringTreeNode">
+    <button type="button" tabindex="-1" sanringTreeTrigger>
+      <span [class.rotate-90]="settingsNode.isExpanded()">›</span>
+      Settings
+    </button>
+    <sanring-tree-group>
+      <sanring-tree-node value="settings/profile">
+        <button type="button" tabindex="-1" (click)="tree.selectNode('settings/profile')">
+          Profile
+        </button>
+      </sanring-tree-node>
+      <sanring-tree-node value="settings/team">
+        <button type="button" tabindex="-1" (click)="tree.selectNode('settings/team')">
+          Team
         </button>
       </sanring-tree-node>
     </sanring-tree-group>

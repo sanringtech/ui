@@ -1,5 +1,15 @@
 import { Component, inject, signal } from '@angular/core';
-import { LucideChevronRight, LucideFile, LucideFolder, LucideFolderOpen } from '@lucide/angular';
+import {
+  LucideChevronRight,
+  LucideCreditCard,
+  LucideFile,
+  LucideFileText,
+  LucideFolder,
+  LucideFolderOpen,
+  LucideLayoutDashboard,
+  LucideSettings,
+  LucideUsers,
+} from '@lucide/angular';
 import { cn, SANRING_TREE_IMPORTS, TreeNodeComponent } from '@sanring/ui';
 import { getComponentPageSection } from '../../../docs-schema/component-page.utils';
 import { I18nService } from '../../../i18n/i18n.service';
@@ -20,9 +30,14 @@ import { treePage, treePageExamples } from './tree.docs';
   imports: [
     SANRING_TREE_IMPORTS,
     LucideChevronRight,
+    LucideCreditCard,
     LucideFile,
+    LucideFileText,
     LucideFolder,
     LucideFolderOpen,
+    LucideLayoutDashboard,
+    LucideSettings,
+    LucideUsers,
     ComponentPageApiTableComponent,
     ComponentPageCodeBlock,
     ComponentPageCodePreviewer,
@@ -132,6 +147,112 @@ import { treePage, treePageExamples } from './tree.docs';
         </app-component-page-code-previewer>
       </app-component-page-section>
 
+      <app-component-page-section [section]="section('navigation')">
+        <app-component-page-code-previewer [code]="examples.navigation" language="angular-html">
+          <div previewer class="w-[min(360px,100%)]">
+            <sanring-tree
+              class="rounded-[var(--sanring-radius)] border border-[var(--docs-border)] bg-[var(--docs-surface)] p-2"
+              [expandedValue]="navigationExpandedValue()"
+              (expandedValueChange)="navigationExpandedValue.set($event)"
+              [selectedValue]="navigationSelectedValue()"
+              (selectedValueChange)="navigationSelectedValue.set($event)"
+              #navigationTree
+            >
+              <sanring-tree-node value="dashboard" #dashboardNode="sanringTreeNode">
+                <button
+                  type="button"
+                  tabindex="-1"
+                  [class]="fileButtonClass(dashboardNode)"
+                  (click)="navigationTree.selectNode('dashboard')"
+                >
+                  <span class="w-4"></span>
+                  <svg lucideLayoutDashboard class="size-4 text-[var(--docs-muted)]"></svg>
+                  <span>Dashboard</span>
+                </button>
+              </sanring-tree-node>
+
+              <sanring-tree-node value="reports" #reportsNode="sanringTreeNode">
+                <button
+                  type="button"
+                  tabindex="-1"
+                  [class]="folderButtonClass(reportsNode)"
+                  sanringTreeTrigger
+                >
+                  <svg lucideChevronRight [class]="chevronClass(reportsNode)"></svg>
+                  <svg lucideFileText class="size-4 text-[var(--docs-accent-strong)]"></svg>
+                  <span>Reports</span>
+                </button>
+                <sanring-tree-group>
+                  <sanring-tree-node value="reports/revenue" #revenueNode="sanringTreeNode">
+                    <button
+                      type="button"
+                      tabindex="-1"
+                      [class]="fileButtonClass(revenueNode)"
+                      (click)="navigationTree.selectNode('reports/revenue')"
+                    >
+                      <span class="w-4"></span>
+                      <svg lucideCreditCard class="size-4 text-[var(--docs-muted)]"></svg>
+                      <span>Revenue</span>
+                    </button>
+                  </sanring-tree-node>
+                  <sanring-tree-node value="reports/customers" #customersNode="sanringTreeNode">
+                    <button
+                      type="button"
+                      tabindex="-1"
+                      [class]="fileButtonClass(customersNode)"
+                      (click)="navigationTree.selectNode('reports/customers')"
+                    >
+                      <span class="w-4"></span>
+                      <svg lucideUsers class="size-4 text-[var(--docs-muted)]"></svg>
+                      <span>Customers</span>
+                    </button>
+                  </sanring-tree-node>
+                </sanring-tree-group>
+              </sanring-tree-node>
+
+              <sanring-tree-node value="settings" #settingsNode="sanringTreeNode">
+                <button
+                  type="button"
+                  tabindex="-1"
+                  [class]="folderButtonClass(settingsNode)"
+                  sanringTreeTrigger
+                >
+                  <svg lucideChevronRight [class]="chevronClass(settingsNode)"></svg>
+                  <svg lucideSettings class="size-4 text-[var(--docs-accent-strong)]"></svg>
+                  <span>Settings</span>
+                </button>
+                <sanring-tree-group>
+                  <sanring-tree-node value="settings/profile" #profileNode="sanringTreeNode">
+                    <button
+                      type="button"
+                      tabindex="-1"
+                      [class]="fileButtonClass(profileNode)"
+                      (click)="navigationTree.selectNode('settings/profile')"
+                    >
+                      <span class="w-4"></span>
+                      <svg lucideUsers class="size-4 text-[var(--docs-muted)]"></svg>
+                      <span>Profile</span>
+                    </button>
+                  </sanring-tree-node>
+                  <sanring-tree-node value="settings/team" #teamNode="sanringTreeNode">
+                    <button
+                      type="button"
+                      tabindex="-1"
+                      [class]="fileButtonClass(teamNode)"
+                      (click)="navigationTree.selectNode('settings/team')"
+                    >
+                      <span class="w-4"></span>
+                      <svg lucideUsers class="size-4 text-[var(--docs-muted)]"></svg>
+                      <span>Team</span>
+                    </button>
+                  </sanring-tree-node>
+                </sanring-tree-group>
+              </sanring-tree-node>
+            </sanring-tree>
+          </div>
+        </app-component-page-code-previewer>
+      </app-component-page-section>
+
       <app-component-page-section [section]="section('usage')">
         <div class="grid gap-6">
           <app-component-page-usage-imports
@@ -174,6 +295,8 @@ export class TreePageComponent {
 
   protected readonly expandedValue = signal<string[]>(['src', 'src/app']);
   protected readonly selectedValue = signal<string | null>('src/app/app.component.ts');
+  protected readonly navigationExpandedValue = signal<string[]>(['reports', 'settings']);
+  protected readonly navigationSelectedValue = signal<string | null>('settings/team');
 
   private readonly baseNodeButtonClass =
     'flex h-8 w-full min-w-0 items-center gap-2 rounded-[var(--sanring-radius-xs)] px-2 text-left text-sm outline-none transition-colors focus-visible:ring-2 focus-visible:ring-[var(--docs-ring)]';

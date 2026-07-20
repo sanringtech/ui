@@ -81,7 +81,8 @@ export const zh: Record<TranslationKey, string> = {
   'components.updatedEmpty': '目前沒有已更新元件。',
   'components.allTitle': '所有元件',
   'components.disabledNotice.title': '為什麼有些元件是灰色的？',
-  'components.disabledNotice.description': '它們還在開發中——文件頁面已經存在，但內容還沒準備好，所以清單裡先不開放點擊。可以到',
+  'components.disabledNotice.description':
+    '它們還在開發中——文件頁面已經存在，但內容還沒準備好，所以清單裡先不開放點擊。可以到',
   'components.disabledNotice.roadmapLink': 'Roadmap 頁面',
   'home.eyebrow': 'Angular component primitives',
   'home.title': 'Sanring UI',
@@ -321,9 +322,7 @@ export const zh: Record<TranslationKey, string> = {
   'calendar.description':
     '以 @sanring/date-picker 的 headless 引擎為核心的日曆格線，支援單選、範圍選取與多月顯示。',
   'calendar.examples.description':
-    '以下 5 種狀態直接對應 @sanring/date-picker 官方 demo 的漸進式展示場景。',
-  'calendar.demo.basic': '基礎單選',
-  'calendar.demo.basic.description': '預設狀態：任選一天，再點同一天可取消選取。沒有任何禁用規則。',
+    '以下狀態直接對應 @sanring/date-picker 官方 demo 的漸進式展示場景。',
   'calendar.demo.noDeselect': '不可取消選取',
   'calendar.demo.noDeselect.description': 'allowDeselect = false——再次點擊已選日期不會取消。',
   'calendar.demo.disabled': '含禁用規則',
@@ -335,14 +334,6 @@ export const zh: Record<TranslationKey, string> = {
   'calendar.demo.multiMonth': '多月並排',
   'calendar.demo.multiMonth.description':
     '同時顯示兩個月份，鍵盤方向鍵可在兩個月格之間無縫移動，抵達整個視窗邊界才自動換頁。',
-  'calendar.demo.sizes': '尺寸',
-  'calendar.demo.field': '搭配 Field',
-  'calendar.examples.field.description': '包在 sanring-field 裡，整合 label、驗證與錯誤訊息。',
-  'calendar.demo.fieldError': '請選擇一個日期。',
-  'calendar.demo.fieldValidate': '驗證',
-  'calendar.demo.size.sm': '小',
-  'calendar.demo.size.md': '中',
-  'calendar.demo.size.lg': '大',
   'calendar.demo.infoBlockSeparate': '資訊區塊：獨立',
   'calendar.demo.infoBlockInline': '資訊區塊：內嵌',
   'calendar.demo.clear': '清空',
@@ -353,7 +344,7 @@ export const zh: Record<TranslationKey, string> = {
   'calendar.demo.rangeAwaitingEnd': '（請選終點）',
   'calendar.demo.rangeSeparator': ' ～ ',
   'calendar.examples.basic.description':
-    '未提供 locale 時會拋出錯誤——CALENDAR_LOCALE 沒有預設值，強制你明確決定週起始日與月份/星期標籤。',
+    '未提供 locale 時會拋出錯誤——CALENDAR_LOCALE 沒有預設值，強制你明確決定週起始日與月份/星期標籤。點擊標題中的年月文字可直接跳到任何月份或年份。',
   'calendar.usage.description': '匯入 CalendarComponent，並在應用層或元件層提供 CALENDAR_LOCALE。',
   'calendar.installation.description':
     '用 CLI 加入這個元件（會一併安裝 @sanring/date-picker 作為 peer dependency），再匯入 CalendarComponent。',
@@ -469,8 +460,7 @@ export const zh: Record<TranslationKey, string> = {
   'textarea.description': '用於原生 textarea 的多行文字表單控制項樣式 directive。',
   'textarea.examples.basic.description':
     '將 sanringTextarea 套用到原生 textarea，保留瀏覽器編輯行為並取得 Sanring UI 欄位樣式。',
-  'textarea.usage.description':
-    '匯入 TextareaDirective，並將 sanringTextarea 套用到 textarea。',
+  'textarea.usage.description': '匯入 TextareaDirective，並將 sanringTextarea 套用到 textarea。',
   'textarea.installation.description':
     '在原生 textarea 上使用 sanringTextarea，並保留 value、disabled、rows 與表單綁定。',
   'textarea.demo.disabled': '停用',
@@ -480,8 +470,7 @@ export const zh: Record<TranslationKey, string> = {
   'timeline.description': '可組合的時間軸 primitives，適合時間事件、活動紀錄與流程里程碑。',
   'timeline.examples.basic.description':
     '使用 sanringTimeline 搭配原生清單標記，再自行組合分隔、節點、連接線與內容。',
-  'timeline.usage.description':
-    '匯入 Timeline directives，並套用到清單或 div 型活動資料標記。',
+  'timeline.usage.description': '匯入 Timeline directives，並套用到清單或 div 型活動資料標記。',
   'timeline.installation.description':
     '安裝 Timeline primitives，並在每個事件中組合 item、separator 與 content directives。',
   'timeline.demo.horizontal': '水平',
@@ -617,8 +606,7 @@ export const zh: Record<TranslationKey, string> = {
   'link.examples.description': '常見的連結模式，適用於外部導覽與 Angular 路由狀態。',
   'link.examples.basic.description':
     '將 directive 套用在原生 anchor 上，讓 href、target、routerLink 與 routerLinkActive 保持原生行為。',
-  'link.usage.description':
-    '匯入 LinkDirective，並將 sanringLink 套用在 anchor 上。',
+  'link.usage.description': '匯入 LinkDirective，並將 sanringLink 套用在 anchor 上。',
   'link.installation.description':
     '用 CLI 加入這個元件，再匯入 LinkDirective，並將導覽屬性保留在原生 anchor 元素上。',
   'link.composition.description':
@@ -664,8 +652,7 @@ export const zh: Record<TranslationKey, string> = {
   'skeleton.demo.table': '表格',
   'skeleton.examples.description': '常見的骨架屏版型，適合頭像、卡片、文字、表單與表格。',
   'skeleton.examples.basic.description': '使用骨架屏在最終內容完成前保留版面空間。',
-  'skeleton.usage.description':
-    '匯入 SkeletonDirective，並將 sanringSkeleton 套用到任意元素。',
+  'skeleton.usage.description': '匯入 SkeletonDirective，並將 sanringSkeleton 套用到任意元素。',
   'skeleton.installation.description':
     '將 directive 套用在 div、span 或語意元素上，並透過 class 提供寬度、高度與圓角。',
   'skeleton.composition.description': '組合多個 skeleton block，讓載入狀態貼近實際內容結構。',
@@ -875,7 +862,7 @@ export const zh: Record<TranslationKey, string> = {
     '接著匯入產生的 theme 檔，並讓 Tailwind 掃描你本地的元件原始碼。在你的 CSS 入口檔加入以下設定：',
   'intro.firstComponent.title': '加入第一個元件',
   'intro.firstComponent.body':
-    '加入或匯入元件後，將需要的 directive 或 component 放進實際使用處的 standalone imports 陣列。',
+    '建議先從 Button 開始：它沒有額外 peer dependencies，而且能立刻看到樣式是否生效。加入後，將 ButtonDirective 放進實際使用處的 standalone imports 陣列。',
 
   'roadmap.page.description':
     '依目前 package 原始碼與文件站收錄狀態，整理現有元件覆蓋率與下一步規劃。',
@@ -921,7 +908,7 @@ export const zh: Record<TranslationKey, string> = {
     '每個專案只需執行一次。會確認目前是否在 Angular 專案中，寫入 sanring.config.json 記錄你選擇的元件路徑，產生 src/sanring-theme.css（所有元件都會讀取的 --sanring-* 設計 token，已存在則預設跳過以保護你的客製化），並安裝基礎的 peer dependencies（clsx、tailwind-merge）。',
   'cli.add.title': 'add',
   'cli.add.body':
-    '把一個或多個元件的原始碼複製進你的專案，並安裝缺少的 peer dependencies。如果某個元件依賴其他套件或 primitive（例如 calendar 依賴 @sanring/date-picker），依賴會自動一併安裝。加上 --dry-run 可以在不動任何檔案的情況下預覽哪些檔案會被新增或覆寫。用 --diff 可以在安裝前看到逐行差異，或用 --view 直接印出 registry 的原始內容，都不會寫入任何檔案。',
+    '把一個或多個元件的原始碼複製進你的專案，並安裝缺少的 peer dependencies。想做最小的第一次安裝時，建議先從 button 開始；若元件需要額外套件，CLI 會自動一併安裝。加上 --dry-run 可以在不動任何檔案的情況下預覽哪些檔案會被新增或覆寫。用 --diff 可以在安裝前看到逐行差異，或用 --view 直接印出 registry 的原始內容，都不會寫入任何檔案。',
   'cli.remove.title': 'remove',
   'cli.remove.body':
     '移除一個或多個已安裝的元件。如果還有其他已安裝的元件依賴它（例如 tag 還裝著就移除 badge），預設會拒絕移除，除非加上 --force。共用檔案（例如 utils.ts）不會被自動刪除——如果剩下的元件都不再需要某個共用檔案，指令只會列出來提醒你，要刪要留由你自己決定。指令別名為 rm。',
@@ -1243,8 +1230,7 @@ export const zh: Record<TranslationKey, string> = {
     '可搜尋的指令清單，用於快速導覽與操作，可選搭配 ⌘K / Ctrl K 快捷鍵的 dialog 包裝。',
   'command.examples.basic.description':
     '組合 input、list、group 與 item。輸入文字會依項目可見文字內容進行篩選。',
-  'command.usage.description':
-    '匯入 command primitives，監聽 valueChange 回應選取事件。',
+  'command.usage.description': '匯入 command primitives，監聽 valueChange 回應選取事件。',
   'command.installation.description':
     '用 CLI 加入這個元件，再將 command primitives 匯入負責渲染清單的 standalone component。',
   'command.composition.description':
@@ -1379,8 +1365,7 @@ export const zh: Record<TranslationKey, string> = {
   'combobox.description': '具備建議清單的自動完成輸入元件。',
   'combobox.examples.basic.description':
     '組合 input、content、list、empty 與 item primitives 來建立可搜尋的選取器。',
-  'combobox.usage.description':
-    '匯入 combobox primitives，並透過 root model input 綁定 value。',
+  'combobox.usage.description': '匯入 combobox primitives，並透過 root model input 綁定 value。',
   'combobox.installation.description':
     '用 CLI 加入這個元件，再將 combobox primitives 匯入負責渲染建議清單的 standalone component。',
   'combobox.composition.description':
@@ -1427,8 +1412,7 @@ export const zh: Record<TranslationKey, string> = {
   'carousel.description': '基於 Embla 的可組合輪播元件，支援水平與垂直方向的 slide 導覽。',
   'carousel.examples.basic.description':
     '組合 root、content、item 與導覽按鈕 directive 來建立輪播。',
-  'carousel.usage.description':
-    '匯入 carousel primitives，並透過 opts input 傳入 Embla 設定。',
+  'carousel.usage.description': '匯入 carousel primitives，並透過 opts input 傳入 Embla 設定。',
   'carousel.installation.description':
     '用 CLI 加入這個元件，再將 carousel primitives 匯入負責渲染 slides 的 standalone component。',
   'carousel.composition.description':
@@ -1458,8 +1442,10 @@ export const zh: Record<TranslationKey, string> = {
   'tree.description': '可組合的 tree primitives，適合檔案總管、巢狀導覽與階層資料。',
   'tree.examples.basic.description':
     '組合 tree、node、trigger 與 group primitives 來建立可展開的階層結構。',
-  'tree.usage.description':
-    '匯入 tree primitives，並用 signals 控制展開與選取狀態。',
+  'tree.demo.navigation': '巢狀導覽',
+  'tree.examples.navigation.description':
+    '把 tree primitives 用在側邊導覽，讓群組展開狀態與目前頁面選取狀態都由外部 signal 控制。',
+  'tree.usage.description': '匯入 tree primitives，並用 signals 控制展開與選取狀態。',
   'tree.installation.description':
     '用 CLI 加入這個元件，再將 tree primitives 匯入負責渲染階層資料的 standalone component。',
   'tree.composition.description':
@@ -1552,19 +1538,40 @@ export const zh: Record<TranslationKey, string> = {
     '使用方向鍵調整時的百分比步進；Home 與 End 會跳到 panel 邊界。',
 
   'datePicker.description': '以日曆為基礎的輸入元件，可選取單一日期、區間或多個日期。',
-  'datePicker.examples.description': '在不同粒度與選取模式下設定 date picker 的常見方式。',
+  'datePicker.examples.description':
+    '用帳務週期、財務規劃、區間與表單欄位等實際情境展示 date picker。',
   'datePicker.usage.description': '引入元件，並在 app 或元件層級提供 CALENDAR_LOCALE。',
-  'datePicker.installation.description': '從 @sanring/ui 加入 DatePickerComponent；若要使用季度粒度，另外要設定 QuarterStartMonth 的 provider。',
+  'datePicker.installation.description':
+    '從 @sanring/ui 加入 DatePickerComponent；若要使用季度粒度，另外要設定 QuarterStartMonth 的 provider。',
   'datePicker.api.description': 'DatePickerComponent 支援的 inputs、outputs 與公開方法。',
   'datePicker.examples.basic.description': '預設設定：月粒度、單選模式。',
-  'datePicker.demo.matrix': '粒度與模式矩陣',
+  'datePicker.demo.matrix': '依使用情境選擇',
+  'datePicker.demo.matrix.description':
+    '先選使用情境，範例會對應到合適的 granularity 與 selection mode。',
+  'datePicker.demo.preset.billingMonth': '帳單月份',
+  'datePicker.demo.preset.billingMonth.description': '選一個月份，用於帳單、對帳單或月報。',
+  'datePicker.demo.preset.fiscalQuarter': '財務季度',
+  'datePicker.demo.preset.fiscalQuarter.description': '選一個季度，用於財務、營收或規劃流程。',
+  'datePicker.demo.preset.planningYear': '規劃年度',
+  'datePicker.demo.preset.planningYear.description': '選整個年份，不顯示月份層級的細節。',
+  'datePicker.demo.preset.monthRange': '月份區間',
+  'datePicker.demo.preset.monthRange.description': '選起始與結束月份，用於涵蓋期間或訂閱週期。',
+  'datePicker.demo.preset.reportingMonths': '多個報表月份',
+  'datePicker.demo.preset.reportingMonths.description': '選多個不連續月份，用於比較報表。',
   'datePicker.demo.disabled': '停用規則',
   'datePicker.demo.disabled.description': '2026 年以前的年份會被停用。',
-  'datePicker.demo.sizes': '尺寸',
-  'datePicker.demo.field': '搭配 Field',
-  'datePicker.examples.field.description': '包在 sanring-field 裡，整合 label、驗證與錯誤訊息。',
-  'datePicker.demo.fieldError': '請選擇一個季度。',
-  'datePicker.demo.fieldValidate': '驗證',
+  'datePicker.demo.selectTrigger': 'Select 樣式月份觸發器',
+  'datePicker.demo.selectTrigger.description':
+    '兩個獨立的 select 樣式按鈕，各自觸發一個期間選擇 popover——適合「起始月份／結束月份」這種成對欄位。',
+  'datePicker.demo.selectTrigger.start': '起始月份',
+  'datePicker.demo.selectTrigger.end': '結束月份',
+  'datePicker.demo.field': '起訖月份欄位',
+  'datePicker.examples.field.description':
+    '用兩個 field 樣式的 popover trigger，在表單版面中選擇起始與結束月份。',
+  'datePicker.demo.field.start': '起始月份',
+  'datePicker.demo.field.end': '結束月份',
+  'datePicker.demo.field.placeholder': '選擇月份',
+  'datePicker.demo.field.summary': '已選區間：',
   'datePicker.demo.granularity.month': '月',
   'datePicker.demo.granularity.quarter': '季',
   'datePicker.demo.granularity.year': '年',
@@ -1572,12 +1579,10 @@ export const zh: Record<TranslationKey, string> = {
   'datePicker.demo.mode.range': '區間',
   'datePicker.demo.mode.multi': '多選',
   'datePicker.demo.clear': '清空',
-  'datePicker.demo.size.sm': 'Sm',
-  'datePicker.demo.size.md': 'Md',
-  'datePicker.demo.size.lg': 'Lg',
   'datePicker.api.class.description': '與元件基礎樣式合併的額外 class。',
   'datePicker.api.size.description': '每個網格 cell 的尺寸。',
-  'datePicker.api.locale.description': '覆寫此 instance 注入的 CALENDAR_LOCALE；只會用到 monthLabels（月粒度的 cell 文字）。',
+  'datePicker.api.locale.description':
+    '覆寫此 instance 注入的 CALENDAR_LOCALE；只會用到 monthLabels（月粒度的 cell 文字）。',
   'datePicker.api.granularity.description': '網格呈現的選取單位。',
   'datePicker.api.mode.description': '選取行為：單一值、區間，或多個獨立值。',
   'datePicker.api.quarterLabels.description': '四個季度 cell 的顯示文字，依財務季度順序排列。',

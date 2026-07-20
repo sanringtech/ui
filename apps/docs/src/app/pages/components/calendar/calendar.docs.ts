@@ -33,12 +33,6 @@ export const calendarPage = {
       level: 2,
       children: [
         {
-          id: 'example-basic',
-          titleKey: 'calendar.demo.basic',
-          descriptionKey: 'calendar.demo.basic.description',
-          level: 3,
-        },
-        {
           id: 'example-no-deselect',
           titleKey: 'calendar.demo.noDeselect',
           descriptionKey: 'calendar.demo.noDeselect.description',
@@ -60,17 +54,6 @@ export const calendarPage = {
           id: 'example-multi-month',
           titleKey: 'calendar.demo.multiMonth',
           descriptionKey: 'calendar.demo.multiMonth.description',
-          level: 3,
-        },
-        {
-          id: 'example-sizes',
-          titleKey: 'calendar.demo.sizes',
-          level: 3,
-        },
-        {
-          id: 'example-field',
-          titleKey: 'calendar.demo.field',
-          descriptionKey: 'calendar.examples.field.description',
           level: 3,
         },
       ],
@@ -194,7 +177,6 @@ import { CalendarComponent } from './components/ui/calendar';
 })
 export class ExampleComponent {}`,
   usageMain: `<sanring-calendar (selectedDateChange)="onSelect($event)" />`,
-  scenarioBasic: `<sanring-calendar (selectedDateChange)="onSelect($event)" />`,
   noDeselect: `<sanring-calendar [allowDeselect]="false" (selectedDateChange)="onSelect($event)" />`,
   disabled: `const isWeekend = (date: Date) => date.getDay() === 0 || date.getDay() === 6;
 const summerBreak = { from: new Date(2026, 6, 20), to: new Date(2026, 6, 24) };
@@ -215,11 +197,4 @@ const summerBreak = { from: new Date(2026, 6, 20), to: new Date(2026, 6, 24) };
   [monthsToDisplay]="2"
   (selectedRangeChange)="onRangeSelect($event)"
 />`,
-  sizes: `<sanring-calendar size="sm" />
-<sanring-calendar size="md" />
-<sanring-calendar size="lg" />`,
-  field: `<sanring-field>
-  <sanring-calendar [formControl]="meetingDateControl" />
-  <sanring-error-message>請選擇一個日期</sanring-error-message>
-</sanring-field>`,
 } as const;

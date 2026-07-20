@@ -307,8 +307,7 @@ export const en = {
   'badge.examples.description': 'Common badge variants for metadata and status labels.',
   'badge.examples.basic.description':
     'Use badges as compact inline labels on text, cards, lists, or links.',
-  'badge.usage.description':
-    'Import BadgeDirective and apply sanringBadge to an element.',
+  'badge.usage.description': 'Import BadgeDirective and apply sanringBadge to an element.',
   'badge.installation.description':
     'Import Badge and choose a variant that matches the metadata priority.',
   'badge.composition.description':
@@ -348,10 +347,7 @@ export const en = {
   'calendar.description':
     'A date grid built on the headless @sanring/date-picker engine, supporting single, range, and multi-month selection.',
   'calendar.examples.description':
-    'The 5 states below map directly onto @sanring/date-picker’s own progressive demo scenarios.',
-  'calendar.demo.basic': 'Basic single-select',
-  'calendar.demo.basic.description':
-    'Default state: pick any day, click it again to deselect. No disabled rules.',
+    'The states below map directly onto @sanring/date-picker’s own progressive demo scenarios.',
   'calendar.demo.noDeselect': 'No deselect',
   'calendar.demo.noDeselect.description':
     'allowDeselect = false — clicking the already-selected date again does not clear it.',
@@ -364,14 +360,6 @@ export const en = {
   'calendar.demo.multiMonth': 'Multi-month',
   'calendar.demo.multiMonth.description':
     'Two months rendered side by side; arrow keys move seamlessly between them and only page at the outer edge.',
-  'calendar.demo.sizes': 'Sizes',
-  'calendar.demo.field': 'With Field',
-  'calendar.examples.field.description': 'Wrapped in sanring-field for label, validation, and error message integration.',
-  'calendar.demo.fieldError': 'Please pick a date.',
-  'calendar.demo.fieldValidate': 'Validate',
-  'calendar.demo.size.sm': 'Sm',
-  'calendar.demo.size.md': 'Md',
-  'calendar.demo.size.lg': 'Lg',
   'calendar.demo.infoBlockSeparate': 'Info block: separate',
   'calendar.demo.infoBlockInline': 'Info block: inline',
   'calendar.demo.clear': 'Clear',
@@ -382,7 +370,7 @@ export const en = {
   'calendar.demo.rangeAwaitingEnd': ' (pick an end date)',
   'calendar.demo.rangeSeparator': ' – ',
   'calendar.examples.basic.description':
-    'Throws without a locale — CALENDAR_LOCALE has no default, forcing an explicit choice of week start and month/weekday labels.',
+    'Throws without a locale — CALENDAR_LOCALE has no default, forcing an explicit choice of week start and month/weekday labels. Click the month/year label to jump directly to any month or year.',
   'calendar.usage.description':
     'Import CalendarComponent and provide CALENDAR_LOCALE at the app or component level.',
   'calendar.installation.description':
@@ -509,8 +497,7 @@ export const en = {
     'Common input patterns for editable text, disabled fields, and file uploads.',
   'input.examples.basic.description':
     'Apply sanringInput to a native input to keep browser behavior while receiving system styling.',
-  'input.usage.description':
-    'Import InputDirective and apply sanringInput to an input.',
+  'input.usage.description': 'Import InputDirective and apply sanringInput to an input.',
   'input.installation.description':
     'Use sanringInput on native input elements and keep type, value, disabled, and form bindings native.',
   'input.composition.description':
@@ -521,8 +508,7 @@ export const en = {
     'A multiline form control styling directive for native textarea elements.',
   'textarea.examples.basic.description':
     'Apply sanringTextarea to a native textarea to keep browser editing behavior with Sanring UI field styling.',
-  'textarea.usage.description':
-    'Import TextareaDirective and apply sanringTextarea to a textarea.',
+  'textarea.usage.description': 'Import TextareaDirective and apply sanringTextarea to a textarea.',
   'textarea.installation.description':
     'Use sanringTextarea on native textarea elements and keep value, disabled, rows, and form bindings native.',
   'textarea.demo.disabled': 'Disabled',
@@ -669,8 +655,7 @@ export const en = {
   'label.examples.description': 'Common label patterns for standalone labels and form controls.',
   'label.examples.basic.description':
     'Apply sanringLabel to a native label so for/id association stays intact.',
-  'label.usage.description':
-    'Import LabelDirective and apply sanringLabel to a label.',
+  'label.usage.description': 'Import LabelDirective and apply sanringLabel to a label.',
   'label.installation.description':
     'Use sanringLabel on native label elements and connect them to controls with for and id.',
   'label.composition.description':
@@ -687,8 +672,7 @@ export const en = {
     'Common link patterns for external navigation and Angular router state.',
   'link.examples.basic.description':
     'Use the directive on a native anchor so href, target, routerLink, and routerLinkActive keep their native behavior.',
-  'link.usage.description':
-    'Import LinkDirective and apply sanringLink to an anchor.',
+  'link.usage.description': 'Import LinkDirective and apply sanringLink to an anchor.',
   'link.installation.description':
     'Add the component with the CLI, then import LinkDirective and keep navigation attributes on the native anchor element.',
   'link.composition.description':
@@ -776,8 +760,7 @@ export const en = {
     'Common switch patterns for labels, choice cards, disabled states, validation, and sizes.',
   'switch.examples.basic.description':
     'Use Switch for boolean settings where the change can apply immediately.',
-  'switch.usage.description':
-    'Import SwitchComponent and pair it with an accessible label.',
+  'switch.usage.description': 'Import SwitchComponent and pair it with an accessible label.',
   'switch.api.description': 'Inputs supported by the sanring-switch component.',
   'switch.api.class.description': 'Additional classes merged with the switch track styles.',
   'switch.api.id.description': 'Native id applied to the switch button for label association.',
@@ -798,8 +781,7 @@ export const en = {
   'tag.demo.frontend': 'Frontend',
   'tag.examples.description': 'Common tag patterns for filters, chips, and categorized content.',
   'tag.examples.basic.description': 'Use tags for selected values or compact content categories.',
-  'tag.usage.description':
-    'Import TagComponent and project label content inside it.',
+  'tag.usage.description': 'Import TagComponent and project label content inside it.',
   'tag.installation.description':
     'Import Tag and optionally enable closable when the tag should emit a remove event.',
   'tag.composition.description':
@@ -992,7 +974,7 @@ export const en = {
     'Then import the generated theme file and point Tailwind at your local component source. Add this to your CSS entry file:',
   'intro.firstComponent.title': 'Add your first component',
   'intro.firstComponent.body':
-    'After adding or importing a component, place the directive or component in the standalone imports array where it is used.',
+    'Start with Button: it has no extra peer dependencies and gives you an immediate visual check. After adding it, place ButtonDirective in the standalone imports array where it is used.',
 
   'roadmap.page.description':
     'Current component coverage and what is planned next, based on the actual package source and docs surface.',
@@ -1041,19 +1023,19 @@ export const en = {
     "Run once per project. Verifies you're in an Angular project, writes a sanring.config.json with your chosen component path, generates src/sanring-theme.css (the --sanring-* design tokens every component reads — skipped by default if it already exists, to protect your customizations), and installs the base peer dependencies (clsx, tailwind-merge).",
   'cli.add.title': 'add',
   'cli.add.body':
-    "Copies one or more components' source files into your project and installs any missing peer dependencies. If a component depends on another package or primitive (e.g. calendar depends on @sanring/date-picker), the dependency is added automatically. Pass --dry-run to preview exactly which files would be created or overwritten without touching your filesystem. Use --diff to see the line-by-line changes against your local files before committing, or --view to print the raw registry content without writing anything.",
+    "Copies one or more components' source files into your project and installs any missing peer dependencies. Start with button when you want the smallest first install; components with extra package requirements install those dependencies automatically. Pass --dry-run to preview exactly which files would be created or overwritten without touching your filesystem. Use --diff to see the line-by-line changes against your local files before committing, or --view to print the raw registry content without writing anything.",
   'cli.remove.title': 'remove',
   'cli.remove.body':
     "Removes one or more installed components. Refuses to remove a component that another still-installed component depends on (e.g. removing badge while tag is installed) unless you pass --force. Shared files like utils.ts are never deleted automatically — if none of your remaining components need one anymore, it's reported so you can delete it by hand. Aliased as rm.",
   'cli.info.title': 'info',
   'cli.info.body':
-    "Called without a component name, shows project context without a network call: CLI version, Angular detection, config path, theme status, and installed components. Pass a component name to see its description, the full file list it would install, and its peer dependencies — without writing anything. Both modes accept --json for CI and coding-agent use.",
+    'Called without a component name, shows project context without a network call: CLI version, Angular detection, config path, theme status, and installed components. Pass a component name to see its description, the full file list it would install, and its peer dependencies — without writing anything. Both modes accept --json for CI and coding-agent use.',
   'cli.diff.title': 'diff',
   'cli.diff.body':
     "Sanring UI has no version concept — components are copied source, not npm packages — so there's no automatic way to know if your local files have drifted from the registry. diff compares your installed components and sanring-theme.css against the current registry line by line, showing what you've customized locally and what's changed upstream, so you can check before running update. Omit the component names to check everything currently installed. Pass --exit-code to exit 1 when any file differs — useful as a CI gate.",
   'cli.update.title': 'update',
   'cli.update.body':
-    "Applies registry changes to installed files, one file at a time. Files you never touched since installing are updated silently; files you have customized show a diff and ask for confirmation. Omit component names to check everything installed. Use --trust for projects that predated v0.9.0 hash tracking — it treats all files with no recorded baseline as untouched so they catch up cleanly.",
+    'Applies registry changes to installed files, one file at a time. Files you never touched since installing are updated silently; files you have customized show a diff and ask for confirmation. Omit component names to check everything installed. Use --trust for projects that predated v0.9.0 hash tracking — it treats all files with no recorded baseline as untouched so they catch up cleanly.',
   'cli.list.title': 'list',
   'cli.list.body':
     'Prints every component available in the registry, along with its peer dependencies. Pass -i / --installed to filter to only components already installed in the current project. Aliased as ls.',
@@ -1224,7 +1206,8 @@ export const en = {
   'spinner.examples.basic.description': 'Default spinner using the loader icon at medium size.',
   'spinner.usage.description':
     'Import SpinnerComponent and drop sanring-spinner anywhere. Text colour and size are controlled with Tailwind utilities.',
-  'spinner.installation.description': 'Add the component with the CLI, then import SpinnerComponent.',
+  'spinner.installation.description':
+    'Add the component with the CLI, then import SpinnerComponent.',
   'spinner.examples.description':
     'Common spinner patterns covering variants, sizes, colours, inline labels, and button loading states.',
   'spinner.demo.variant': 'Variant',
@@ -1309,7 +1292,8 @@ export const en = {
   'sheet.examples.basic.description': 'A sheet that slides in from the right edge.',
   'sheet.usage.description':
     'Wrap content in sanring-sheet, add a sanringSheetTrigger button, then place sanring-sheet-content inside with the desired side.',
-  'sheet.installation.description': 'Add the component with the CLI, then import the sheet primitives.',
+  'sheet.installation.description':
+    'Add the component with the CLI, then import the sheet primitives.',
   'sheet.composition.description':
     'Sheet is composed from a state root, trigger, content panel, and optional header/footer primitives.',
   'sheet.examples.description':
@@ -1639,6 +1623,9 @@ export const en = {
     'Composable tree primitives for file explorers, nested navigation, and hierarchical data.',
   'tree.examples.basic.description':
     'Compose tree, node, trigger, and group primitives to build an expandable hierarchy.',
+  'tree.demo.navigation': 'Nested navigation',
+  'tree.examples.navigation.description':
+    'Use the tree primitives for sidebar navigation, with group expansion and the current page selection controlled by external signals.',
   'tree.usage.description':
     'Import the tree primitives and control expanded and selected values with signals.',
   'tree.installation.description':
@@ -1743,20 +1730,49 @@ export const en = {
   'resizable.api.keyboardStep.description':
     'Percentage step used when resizing with arrow keys. Home and End jump to the panel boundary.',
 
-  'datePicker.description': 'A calendar-driven input for picking a single date, a range, or multiple dates.',
-  'datePicker.examples.description': 'Common ways to configure the date picker across granularities and selection modes.',
-  'datePicker.usage.description': 'Import the component and provide CALENDAR_LOCALE at the app or component level.',
-  'datePicker.installation.description': 'Add the DatePickerComponent from @sanring/ui, and additionally install QuarterStartMonth-related provider setup for quarter granularity.',
-  'datePicker.api.description': 'Inputs, outputs, and public methods supported by DatePickerComponent.',
+  'datePicker.description':
+    'A calendar-driven input for picking a single date, a range, or multiple dates.',
+  'datePicker.examples.description':
+    'Practical date-picker patterns for billing periods, fiscal planning, ranges, and form fields.',
+  'datePicker.usage.description':
+    'Import the component and provide CALENDAR_LOCALE at the app or component level.',
+  'datePicker.installation.description':
+    'Add the DatePickerComponent from @sanring/ui, and additionally install QuarterStartMonth-related provider setup for quarter granularity.',
+  'datePicker.api.description':
+    'Inputs, outputs, and public methods supported by DatePickerComponent.',
   'datePicker.examples.basic.description': 'Default setup: month granularity, single selection.',
-  'datePicker.demo.matrix': 'Granularity and mode matrix',
+  'datePicker.demo.matrix': 'Pick by use case',
+  'datePicker.demo.matrix.description':
+    'Choose a scenario first; the demo maps it to the matching granularity and selection mode.',
+  'datePicker.demo.preset.billingMonth': 'Billing month',
+  'datePicker.demo.preset.billingMonth.description':
+    'Pick one month for invoices, statements, or monthly reports.',
+  'datePicker.demo.preset.fiscalQuarter': 'Fiscal quarter',
+  'datePicker.demo.preset.fiscalQuarter.description':
+    'Pick one quarter for finance, revenue, or planning workflows.',
+  'datePicker.demo.preset.planningYear': 'Planning year',
+  'datePicker.demo.preset.planningYear.description':
+    'Pick a whole year without showing month-level detail.',
+  'datePicker.demo.preset.monthRange': 'Month range',
+  'datePicker.demo.preset.monthRange.description':
+    'Pick a start and end month for coverage windows or subscriptions.',
+  'datePicker.demo.preset.reportingMonths': 'Reporting months',
+  'datePicker.demo.preset.reportingMonths.description':
+    'Pick several non-contiguous months for comparison reports.',
   'datePicker.demo.disabled': 'With disabled rule',
   'datePicker.demo.disabled.description': 'Years before 2026 are disabled.',
-  'datePicker.demo.sizes': 'Sizes',
-  'datePicker.demo.field': 'With Field',
-  'datePicker.examples.field.description': 'Wrapped in sanring-field for label, validation, and error message integration.',
-  'datePicker.demo.fieldError': 'Please pick a quarter.',
-  'datePicker.demo.fieldValidate': 'Validate',
+  'datePicker.demo.selectTrigger': 'Select-style month trigger',
+  'datePicker.demo.selectTrigger.description':
+    'Two independent select-styled buttons, each opening its own period picker popover — handy for a "start month / end month" pair of fields.',
+  'datePicker.demo.selectTrigger.start': 'Start month',
+  'datePicker.demo.selectTrigger.end': 'End month',
+  'datePicker.demo.field': 'Month range fields',
+  'datePicker.examples.field.description':
+    'Two field-style popover triggers for choosing a start and end month in a form layout.',
+  'datePicker.demo.field.start': 'Start month',
+  'datePicker.demo.field.end': 'End month',
+  'datePicker.demo.field.placeholder': 'Select month',
+  'datePicker.demo.field.summary': 'Selected range:',
   'datePicker.demo.granularity.month': 'Month',
   'datePicker.demo.granularity.quarter': 'Quarter',
   'datePicker.demo.granularity.year': 'Year',
@@ -1764,29 +1780,41 @@ export const en = {
   'datePicker.demo.mode.range': 'Range',
   'datePicker.demo.mode.multi': 'Multi',
   'datePicker.demo.clear': 'Clear',
-  'datePicker.demo.size.sm': 'Sm',
-  'datePicker.demo.size.md': 'Md',
-  'datePicker.demo.size.lg': 'Lg',
   'datePicker.api.class.description': 'Additional classes merged with the component base styles.',
   'datePicker.api.size.description': 'Size of each grid cell.',
-  'datePicker.api.locale.description': 'Overrides the injected CALENDAR_LOCALE for this instance; only monthLabels is consulted (for month-granularity cell text).',
+  'datePicker.api.locale.description':
+    'Overrides the injected CALENDAR_LOCALE for this instance; only monthLabels is consulted (for month-granularity cell text).',
   'datePicker.api.granularity.description': 'Selection unit rendered by the grid.',
-  'datePicker.api.mode.description': 'Selection behavior: single value, a range, or multiple independent values.',
-  'datePicker.api.quarterLabels.description': 'Display text for the four quarter cells, in fiscal-quarter order.',
-  'datePicker.api.yearsToDisplay.description': 'Number of cells in the year-granularity sliding window.',
-  'datePicker.api.gridColumns.description': 'Grid column count used for arrow-key focus math; defaults to 3 for month/year and 4 for quarter.',
+  'datePicker.api.mode.description':
+    'Selection behavior: single value, a range, or multiple independent values.',
+  'datePicker.api.quarterLabels.description':
+    'Display text for the four quarter cells, in fiscal-quarter order.',
+  'datePicker.api.yearsToDisplay.description':
+    'Number of cells in the year-granularity sliding window.',
+  'datePicker.api.gridColumns.description':
+    'Grid column count used for arrow-key focus math; defaults to 3 for month/year and 4 for quarter.',
   'datePicker.api.disabled.description': 'Date matcher(s) marking periods as unselectable.',
-  'datePicker.api.allowDeselect.description': 'Whether re-picking a selected value in single mode clears it.',
-  'datePicker.api.rangePeriodCountLimit.description': 'Optional min/max period-count bound on range selections.',
-  'datePicker.api.prevYearLabel.description': 'Accessible label for the previous-year navigation button.',
-  'datePicker.api.nextYearLabel.description': 'Accessible label for the next-year navigation button.',
-  'datePicker.api.selectedDateChange.description': 'Emits the selected date whenever it changes (single mode).',
-  'datePicker.api.selectedRangeChange.description': 'Emits the selected range whenever it changes (range mode).',
-  'datePicker.api.selectedDatesChange.description': 'Emits the selected dates whenever they change (multi mode).',
+  'datePicker.api.allowDeselect.description':
+    'Whether re-picking a selected value in single mode clears it.',
+  'datePicker.api.rangePeriodCountLimit.description':
+    'Optional min/max period-count bound on range selections.',
+  'datePicker.api.prevYearLabel.description':
+    'Accessible label for the previous-year navigation button.',
+  'datePicker.api.nextYearLabel.description':
+    'Accessible label for the next-year navigation button.',
+  'datePicker.api.selectedDateChange.description':
+    'Emits the selected date whenever it changes (single mode).',
+  'datePicker.api.selectedRangeChange.description':
+    'Emits the selected range whenever it changes (range mode).',
+  'datePicker.api.selectedDatesChange.description':
+    'Emits the selected dates whenever they change (multi mode).',
   'datePicker.api.isDraftActive.description': 'Whether a range selection draft is currently open.',
-  'datePicker.api.clear.description': 'Clears the current selection without changing the visible window.',
-  'datePicker.api.abortRangeDraft.description': 'Discards an in-progress range draft without committing it.',
-  'datePicker.api.removeDate.description': 'Removes a single date from the selection (multi mode only).',
+  'datePicker.api.clear.description':
+    'Clears the current selection without changing the visible window.',
+  'datePicker.api.abortRangeDraft.description':
+    'Discards an in-progress range draft without committing it.',
+  'datePicker.api.removeDate.description':
+    'Removes a single date from the selection (multi mode only).',
 
   'status.wip.badge': 'In development',
   'status.wip.title': 'In development',

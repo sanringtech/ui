@@ -22,7 +22,9 @@ interface IntroStatusCard {
   template: `
     <app-component-page [sections]="sections">
       <header class="border-b border-[var(--docs-border)] pb-10">
-        <h1 class="m-0 text-[34px] font-semibold leading-tight tracking-normal text-[var(--docs-fg)]">
+        <h1
+          class="m-0 text-[34px] font-semibold leading-tight tracking-normal text-[var(--docs-fg)]"
+        >
           {{ i18n.t('sidebar.introduction') }}
         </h1>
         <p class="mb-0 mt-4 max-w-[620px] text-base leading-[1.7] text-[var(--docs-muted)]">
@@ -86,18 +88,28 @@ interface IntroStatusCard {
 
       <app-component-page-section [section]="sections[3]">
         <p class="mt-0 text-sm text-[var(--docs-muted)]">{{ i18n.t('intro.installation.body') }}</p>
-        <div class="mt-4 overflow-hidden rounded-[var(--sanring-radius)] border border-[var(--docs-border)]">
+        <div
+          class="mt-4 overflow-hidden rounded-[var(--sanring-radius)] border border-[var(--docs-border)]"
+        >
           <app-component-page-code-block [code]="cliWorkflow" language="bash" />
         </div>
-        <p class="mt-6 text-sm text-[var(--docs-muted)]">{{ i18n.t('intro.installation.tailwind') }}</p>
-        <div class="mt-4 overflow-hidden rounded-[var(--sanring-radius)] border border-[var(--docs-border)]">
+        <p class="mt-6 text-sm text-[var(--docs-muted)]">
+          {{ i18n.t('intro.installation.tailwind') }}
+        </p>
+        <div
+          class="mt-4 overflow-hidden rounded-[var(--sanring-radius)] border border-[var(--docs-border)]"
+        >
           <app-component-page-code-block [code]="tailwindSource" language="css" />
         </div>
       </app-component-page-section>
 
       <app-component-page-section [section]="sections[4]">
-        <p class="mt-0 text-sm text-[var(--docs-muted)]">{{ i18n.t('intro.firstComponent.body') }}</p>
-        <div class="mt-4 overflow-hidden rounded-[var(--sanring-radius)] border border-[var(--docs-border)]">
+        <p class="mt-0 text-sm text-[var(--docs-muted)]">
+          {{ i18n.t('intro.firstComponent.body') }}
+        </p>
+        <div
+          class="mt-4 overflow-hidden rounded-[var(--sanring-radius)] border border-[var(--docs-border)]"
+        >
           <app-component-page-code-block [code]="firstComponent" language="angular-ts" />
         </div>
       </app-component-page-section>
@@ -149,41 +161,19 @@ export class IntroductionPageComponent {
 @source "./app/components/ui";`;
 
   protected readonly cliWorkflow = `npx @sanring/cli@latest init
-npx @sanring/cli@latest add calendar`;
+npx @sanring/cli@latest add button`;
 
-  protected readonly firstComponent = `import { CALENDAR_LOCALE } from '@sanring/date-picker';
-import { CalendarComponent } from './components/ui/calendar';
+  protected readonly firstComponent = `import { Component } from '@angular/core';
+import { ButtonDirective } from './components/ui/button';
 
 @Component({
-  imports: [CalendarComponent],
-  providers: [
-    {
-      provide: CALENDAR_LOCALE,
-      useValue: {
-        weekStartsOn: 0,
-        weekdayLabels: ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'],
-        monthLabels: [
-          'January',
-          'February',
-          'March',
-          'April',
-          'May',
-          'June',
-          'July',
-          'August',
-          'September',
-          'October',
-          'November',
-          'December',
-        ],
-      },
-    },
-  ],
+  selector: 'app-root',
+  imports: [ButtonDirective],
   template: \`
-    <sanring-calendar (selectedDateChange)="selectedDate = $event" />
+    <button sanringBtn type="button">
+      Continue
+    </button>
   \`,
 })
-export class AppComponent {
-  selectedDate: Date | null = null;
-}`;
+export class AppComponent {}`;
 }

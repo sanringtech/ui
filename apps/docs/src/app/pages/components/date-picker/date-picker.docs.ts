@@ -35,6 +35,7 @@ export const datePickerPage = {
         {
           id: 'example-matrix',
           titleKey: 'datePicker.demo.matrix',
+          descriptionKey: 'datePicker.demo.matrix.description',
           level: 3,
         },
         {
@@ -44,8 +45,9 @@ export const datePickerPage = {
           level: 3,
         },
         {
-          id: 'example-sizes',
-          titleKey: 'datePicker.demo.sizes',
+          id: 'example-select-trigger',
+          titleKey: 'datePicker.demo.selectTrigger',
+          descriptionKey: 'datePicker.demo.selectTrigger.description',
           level: 3,
         },
         {
@@ -215,7 +217,15 @@ export class ExampleComponent {}`,
   mode="single"
   (selectedDateChange)="onSelect($event)"
 />`,
-  matrix: `<sanring-date-picker
+  matrix: `const presets = [
+  { label: 'Billing month', granularity: 'month', mode: 'single' },
+  { label: 'Fiscal quarter', granularity: 'quarter', mode: 'single' },
+  { label: 'Planning year', granularity: 'year', mode: 'single' },
+  { label: 'Month range', granularity: 'month', mode: 'range' },
+  { label: 'Reporting months', granularity: 'month', mode: 'multi' },
+] as const;
+
+<sanring-date-picker
   #picker="sanringDatePicker"
   [granularity]="granularity"
   [mode]="mode"
@@ -232,11 +242,40 @@ export class ExampleComponent {}`,
   [disabled]="isPastYear"
   (selectedDateChange)="onSelect($event)"
 />`,
-  sizes: `<sanring-date-picker size="sm" />
-<sanring-date-picker size="md" />
-<sanring-date-picker size="lg" />`,
+  selectTrigger: `<sanring-popover #startPopover>
+  <button type="button" sanringPopoverTrigger>{{ startMonth ?? '起始月份' }}</button>
+  <sanring-popover-content>
+    <sanring-date-picker (selectedDateChange)="onRangeStartChange($event, startPopover)" />
+  </sanring-popover-content>
+</sanring-popover>
+
+<sanring-popover #endPopover>
+  <button type="button" sanringPopoverTrigger>{{ endMonth ?? '結束月份' }}</button>
+  <sanring-popover-content>
+    <sanring-date-picker (selectedDateChange)="onRangeEndChange($event, endPopover)" />
+  </sanring-popover-content>
+</sanring-popover>`,
   field: `<sanring-field>
-  <sanring-date-picker [formControl]="fiscalQuarterControl" granularity="quarter" />
-  <sanring-error-message>請選擇一個季度</sanring-error-message>
+  <label>Start month</label>
+  <sanring-popover #startPopover>
+    <button type="button" sanringPopoverTrigger>
+      {{ startMonth ? formatMonth(startMonth) : 'Select month' }}
+    </button>
+    <sanring-popover-content>
+      <sanring-date-picker (selectedDateChange)="onStartMonthChange($event, startPopover)" />
+    </sanring-popover-content>
+  </sanring-popover>
+</sanring-field>
+
+<sanring-field>
+  <label>End month</label>
+  <sanring-popover #endPopover>
+    <button type="button" sanringPopoverTrigger>
+      {{ endMonth ? formatMonth(endMonth) : 'Select month' }}
+    </button>
+    <sanring-popover-content>
+      <sanring-date-picker (selectedDateChange)="onEndMonthChange($event, endPopover)" />
+    </sanring-popover-content>
+  </sanring-popover>
 </sanring-field>`,
 } as const;

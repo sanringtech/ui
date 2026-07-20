@@ -17,7 +17,9 @@ const INLINE_CODE_CLASS =
   template: `
     <app-component-page [sections]="sections">
       <header class="border-b border-[var(--docs-border)] pb-10">
-        <h1 class="m-0 text-[34px] font-semibold leading-tight tracking-normal text-[var(--docs-fg)]">
+        <h1
+          class="m-0 text-[34px] font-semibold leading-tight tracking-normal text-[var(--docs-fg)]"
+        >
           {{ i18n.t('sidebar.cli') }}
         </h1>
         <p class="mb-0 mt-4 max-w-[620px] text-base leading-[1.7] text-[var(--docs-muted)]">
@@ -30,7 +32,9 @@ const INLINE_CODE_CLASS =
         <p class="mt-0 text-base leading-[1.7] text-[var(--docs-muted)]">
           {{ i18n.t('cli.overview.body') }}
         </p>
-        <div class="mt-6 overflow-hidden rounded-[var(--sanring-radius)] border border-[var(--docs-border)]">
+        <div
+          class="mt-6 overflow-hidden rounded-[var(--sanring-radius)] border border-[var(--docs-border)]"
+        >
           <app-component-page-code-block [code]="commands.overview" language="bash" />
         </div>
       </app-component-page-section>
@@ -40,13 +44,16 @@ const INLINE_CODE_CLASS =
         <p class="mt-0 text-base leading-[1.7] text-[var(--docs-muted)]">
           {{ i18n.t('cli.init.body') }}
         </p>
-        <div class="mt-6 overflow-hidden rounded-[var(--sanring-radius)] border border-[var(--docs-border)]">
+        <div
+          class="mt-6 overflow-hidden rounded-[var(--sanring-radius)] border border-[var(--docs-border)]"
+        >
           <app-component-page-code-block [code]="commands.init" language="bash" />
         </div>
         <ul class="mt-4 list-none space-y-2 p-0 text-sm text-[var(--docs-muted)]">
           <li>
             <code [class]="inlineCodeClass">-p, --path &lt;path&gt;</code>
-            &mdash; component destination path (default: <code [class]="inlineCodeClass">src/app/components/ui</code>)
+            &mdash; component destination path (default:
+            <code [class]="inlineCodeClass">src/app/components/ui</code>)
           </li>
           <li>
             <code [class]="inlineCodeClass">-y, --yes</code>
@@ -68,7 +75,9 @@ const INLINE_CODE_CLASS =
         <p class="mt-0 text-base leading-[1.7] text-[var(--docs-muted)]">
           {{ i18n.t('cli.add.body') }}
         </p>
-        <div class="mt-6 overflow-hidden rounded-[var(--sanring-radius)] border border-[var(--docs-border)]">
+        <div
+          class="mt-6 overflow-hidden rounded-[var(--sanring-radius)] border border-[var(--docs-border)]"
+        >
           <app-component-page-code-block [code]="commands.add" language="bash" />
         </div>
         <ul class="mt-4 list-none space-y-2 p-0 text-sm text-[var(--docs-muted)]">
@@ -78,7 +87,8 @@ const INLINE_CODE_CLASS =
           </li>
           <li>
             <code [class]="inlineCodeClass">-s, --shared-path &lt;path&gt;</code>
-            &mdash; destination for shared utilities (default: <code [class]="inlineCodeClass">&lt;path&gt;/shared</code>)
+            &mdash; destination for shared utilities (default:
+            <code [class]="inlineCodeClass">&lt;path&gt;/shared</code>)
           </li>
           <li>
             <code [class]="inlineCodeClass">-f, --force</code>
@@ -86,7 +96,8 @@ const INLINE_CODE_CLASS =
           </li>
           <li>
             <code [class]="inlineCodeClass">-y, --yes</code>
-            &mdash; skip overwrite confirmation when using <code [class]="inlineCodeClass">--force</code>
+            &mdash; skip overwrite confirmation when using
+            <code [class]="inlineCodeClass">--force</code>
           </li>
           <li>
             <code [class]="inlineCodeClass">--registry &lt;source&gt;</code>
@@ -112,7 +123,9 @@ const INLINE_CODE_CLASS =
         <p class="mt-0 text-base leading-[1.7] text-[var(--docs-muted)]">
           {{ i18n.t('cli.remove.body') }}
         </p>
-        <div class="mt-6 overflow-hidden rounded-[var(--sanring-radius)] border border-[var(--docs-border)]">
+        <div
+          class="mt-6 overflow-hidden rounded-[var(--sanring-radius)] border border-[var(--docs-border)]"
+        >
           <app-component-page-code-block [code]="commands.remove" language="bash" />
         </div>
         <ul class="mt-4 list-none space-y-2 p-0 text-sm text-[var(--docs-muted)]">
@@ -140,7 +153,9 @@ const INLINE_CODE_CLASS =
         <p class="mt-0 text-base leading-[1.7] text-[var(--docs-muted)]">
           {{ i18n.t('cli.info.body') }}
         </p>
-        <div class="mt-6 overflow-hidden rounded-[var(--sanring-radius)] border border-[var(--docs-border)]">
+        <div
+          class="mt-6 overflow-hidden rounded-[var(--sanring-radius)] border border-[var(--docs-border)]"
+        >
           <app-component-page-code-block [code]="commands.info" language="bash" />
         </div>
         <ul class="mt-4 list-none space-y-2 p-0 text-sm text-[var(--docs-muted)]">
@@ -164,7 +179,9 @@ const INLINE_CODE_CLASS =
         <p class="mt-0 text-base leading-[1.7] text-[var(--docs-muted)]">
           {{ i18n.t('cli.diff.body') }}
         </p>
-        <div class="mt-6 overflow-hidden rounded-[var(--sanring-radius)] border border-[var(--docs-border)]">
+        <div
+          class="mt-6 overflow-hidden rounded-[var(--sanring-radius)] border border-[var(--docs-border)]"
+        >
           <app-component-page-code-block [code]="commands.diff" language="bash" />
         </div>
         <ul class="mt-4 list-none space-y-2 p-0 text-sm text-[var(--docs-muted)]">
@@ -188,7 +205,9 @@ const INLINE_CODE_CLASS =
         <p class="mt-0 text-base leading-[1.7] text-[var(--docs-muted)]">
           {{ i18n.t('cli.update.body') }}
         </p>
-        <div class="mt-6 overflow-hidden rounded-[var(--sanring-radius)] border border-[var(--docs-border)]">
+        <div
+          class="mt-6 overflow-hidden rounded-[var(--sanring-radius)] border border-[var(--docs-border)]"
+        >
           <app-component-page-code-block [code]="commands.update" language="bash" />
         </div>
         <ul class="mt-4 list-none space-y-2 p-0 text-sm text-[var(--docs-muted)]">
@@ -206,7 +225,8 @@ const INLINE_CODE_CLASS =
           </li>
           <li>
             <code [class]="inlineCodeClass">--trust</code>
-            &mdash; treat files with no recorded baseline as untouched — use for installs predating v0.9.0 hash tracking
+            &mdash; treat files with no recorded baseline as untouched — use for installs predating
+            v0.9.0 hash tracking
           </li>
           <li>
             <code [class]="inlineCodeClass">--registry &lt;source&gt;</code>
@@ -220,7 +240,9 @@ const INLINE_CODE_CLASS =
         <p class="mt-0 text-base leading-[1.7] text-[var(--docs-muted)]">
           {{ i18n.t('cli.list.body') }}
         </p>
-        <div class="mt-6 overflow-hidden rounded-[var(--sanring-radius)] border border-[var(--docs-border)]">
+        <div
+          class="mt-6 overflow-hidden rounded-[var(--sanring-radius)] border border-[var(--docs-border)]"
+        >
           <app-component-page-code-block [code]="commands.list" language="bash" />
         </div>
         <ul class="mt-4 list-none space-y-2 p-0 text-sm text-[var(--docs-muted)]">
@@ -240,7 +262,9 @@ const INLINE_CODE_CLASS =
         <p class="mt-0 text-base leading-[1.7] text-[var(--docs-muted)]">
           {{ i18n.t('cli.search.body') }}
         </p>
-        <div class="mt-6 overflow-hidden rounded-[var(--sanring-radius)] border border-[var(--docs-border)]">
+        <div
+          class="mt-6 overflow-hidden rounded-[var(--sanring-radius)] border border-[var(--docs-border)]"
+        >
           <app-component-page-code-block [code]="commands.search" language="bash" />
         </div>
         <ul class="mt-4 list-none space-y-2 p-0 text-sm text-[var(--docs-muted)]">
@@ -260,7 +284,9 @@ const INLINE_CODE_CLASS =
         <p class="mt-0 text-base leading-[1.7] text-[var(--docs-muted)]">
           {{ i18n.t('cli.doctor.body') }}
         </p>
-        <div class="mt-6 overflow-hidden rounded-[var(--sanring-radius)] border border-[var(--docs-border)]">
+        <div
+          class="mt-6 overflow-hidden rounded-[var(--sanring-radius)] border border-[var(--docs-border)]"
+        >
           <app-component-page-code-block [code]="commands.doctor" language="bash" />
         </div>
         <ul class="mt-4 list-none space-y-2 p-0 text-sm text-[var(--docs-muted)]">
@@ -330,24 +356,24 @@ export class CliPageComponent {
 
   protected readonly commands = {
     overview: `npx @sanring/cli@latest init
-npx @sanring/cli@latest add calendar
+npx @sanring/cli@latest add button
 npx @sanring/cli@latest search button
 npx @sanring/cli@latest doctor`,
     init: `npx @sanring/cli@latest init`,
-    add: `npx @sanring/cli@latest add calendar
+    add: `npx @sanring/cli@latest add button
 
 # add multiple components at once
-npx @sanring/cli@latest add calendar dialog
+npx @sanring/cli@latest add button badge
 
 # preview what would change, without writing any files
-npx @sanring/cli@latest add calendar --dry-run
+npx @sanring/cli@latest add button --dry-run
 
 # see line-by-line diff against local files before installing
-npx @sanring/cli@latest add calendar --diff
+npx @sanring/cli@latest add button --diff
 
 # print raw registry content without writing anything
-npx @sanring/cli@latest add calendar --view`,
-    remove: `npx @sanring/cli@latest remove calendar
+npx @sanring/cli@latest add button --view`,
+    remove: `npx @sanring/cli@latest remove button
 
 # remove multiple components at once
 npx @sanring/cli@latest remove tag badge`,

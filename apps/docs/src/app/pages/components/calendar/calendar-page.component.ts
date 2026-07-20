@@ -1,12 +1,6 @@
 import { Component, computed, inject, signal } from '@angular/core';
-import { FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
 import { CalendarLocale, DateInterval, DateRange, DisabledInput } from '@sanring/date-picker';
-import {
-  ButtonDirective,
-  CalendarComponent,
-  ErrorMessageComponent,
-  SanringFieldComponent,
-} from '@sanring/ui';
+import { ButtonDirective, CalendarComponent } from '@sanring/ui';
 import { getComponentPageSection } from '../../../docs-schema/component-page.utils';
 import { I18nService } from '../../../i18n/i18n.service';
 import {
@@ -72,9 +66,6 @@ const ZH_LOCALE: CalendarLocale = {
     ComponentPageInstallationComponent,
     ComponentPageUsageImportsComponent,
     ComponentPageSectionComponent,
-    ErrorMessageComponent,
-    ReactiveFormsModule,
-    SanringFieldComponent,
   ],
   template: `
     <app-component-page [sections]="page.sections">
@@ -133,59 +124,6 @@ const ZH_LOCALE: CalendarLocale = {
         </div>
 
         <div class="grid gap-2">
-          <app-component-page-section [section]="section('example-basic')">
-            <app-component-page-code-previewer
-              [code]="examples.scenarioBasic"
-              language="angular-html"
-            >
-              <div previewer class="flex w-full flex-col items-center gap-3">
-                <div
-                  class="w-full max-w-[20rem] rounded-[var(--sanring-radius)] border border-[var(--docs-border)] p-4"
-                >
-                  <sanring-calendar
-                    #basicCal="sanringCalendar"
-                    [locale]="calendarLocale()"
-                    (selectedDateChange)="basicScenarioSelected = $event"
-                  />
-                  @if (!showInfoBlock()) {
-                    <div class="mt-4 flex items-center justify-between gap-2 text-sm">
-                      <span class="text-[var(--docs-muted)]">{{
-                        singleSelectionText(basicScenarioSelected)
-                      }}</span>
-                      <button
-                        sanringBtn
-                        variant="outline"
-                        size="sm"
-                        type="button"
-                        (click)="basicCal.clear()"
-                      >
-                        {{ i18n.t('calendar.demo.clear') }}
-                      </button>
-                    </div>
-                  }
-                </div>
-                @if (showInfoBlock()) {
-                  <div
-                    class="flex w-full max-w-[20rem] items-center justify-between gap-2 rounded-[var(--sanring-radius)] border border-[var(--docs-border)] px-3 py-2 text-sm"
-                  >
-                    <span class="text-[var(--docs-muted)]">{{
-                      singleSelectionText(basicScenarioSelected)
-                    }}</span>
-                    <button
-                      sanringBtn
-                      variant="outline"
-                      size="sm"
-                      type="button"
-                      (click)="basicCal.clear()"
-                    >
-                      {{ i18n.t('calendar.demo.clear') }}
-                    </button>
-                  </div>
-                }
-              </div>
-            </app-component-page-code-previewer>
-          </app-component-page-section>
-
           <app-component-page-section [section]="section('example-no-deselect')">
             <app-component-page-code-previewer [code]="examples.noDeselect" language="angular-html">
               <div previewer class="flex w-full flex-col items-center gap-3">
@@ -444,50 +382,6 @@ const ZH_LOCALE: CalendarLocale = {
             </app-component-page-code-previewer>
           </app-component-page-section>
 
-          <app-component-page-section [section]="section('example-sizes')">
-            <app-component-page-code-previewer [code]="examples.sizes" language="angular-html">
-              <div previewer class="flex w-full flex-wrap items-start justify-center gap-8">
-                <div class="flex flex-col items-center gap-2">
-                  <sanring-calendar size="sm" [locale]="calendarLocale()" />
-                  <span class="text-xs text-[var(--docs-muted)]">{{
-                    i18n.t('calendar.demo.size.sm')
-                  }}</span>
-                </div>
-                <div class="flex flex-col items-center gap-2">
-                  <sanring-calendar size="md" [locale]="calendarLocale()" />
-                  <span class="text-xs text-[var(--docs-muted)]">{{
-                    i18n.t('calendar.demo.size.md')
-                  }}</span>
-                </div>
-                <div class="flex flex-col items-center gap-2">
-                  <sanring-calendar size="lg" [locale]="calendarLocale()" />
-                  <span class="text-xs text-[var(--docs-muted)]">{{
-                    i18n.t('calendar.demo.size.lg')
-                  }}</span>
-                </div>
-              </div>
-            </app-component-page-code-previewer>
-          </app-component-page-section>
-
-          <app-component-page-section [section]="section('example-field')">
-            <app-component-page-code-previewer [code]="examples.field" language="angular-html">
-              <div previewer class="flex w-full max-w-[20rem] flex-col items-center gap-3">
-                <sanring-field class="w-full">
-                  <sanring-calendar [formControl]="meetingDateControl" [locale]="calendarLocale()" />
-                  <sanring-error-message>{{ i18n.t('calendar.demo.fieldError') }}</sanring-error-message>
-                </sanring-field>
-                <button
-                  sanringBtn
-                  variant="outline"
-                  size="sm"
-                  type="button"
-                  (click)="meetingDateControl.markAsTouched()"
-                >
-                  {{ i18n.t('calendar.demo.fieldValidate') }}
-                </button>
-              </div>
-            </app-component-page-code-previewer>
-          </app-component-page-section>
         </div>
       </app-component-page-section>
 
@@ -510,7 +404,6 @@ export class CalendarPageComponent {
   protected readonly showInfoBlock = signal(true);
 
   basicSelected: Date | null = null;
-  basicScenarioSelected: Date | null = null;
   noDeselectSelected: Date | null = null;
   disabledSelected: Date | null = null;
   rangeSelected: DateRange = { start: null, end: null };
@@ -527,10 +420,6 @@ export class CalendarPageComponent {
   };
 
   protected readonly disabledMatcher: DisabledInput = [this.isWeekend, this.summerBreak];
-
-  protected readonly meetingDateControl = new FormControl<Date | null>(null, {
-    validators: Validators.required,
-  });
 
   protected formatDate(date: Date): string {
     const year = date.getFullYear();

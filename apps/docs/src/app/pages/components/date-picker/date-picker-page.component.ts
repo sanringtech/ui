@@ -1,11 +1,11 @@
 import { Component, computed, inject, signal } from '@angular/core';
-import { FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
 import { CalendarLocale, DateRange, DisabledInput, PickerGranularity } from '@sanring/date-picker';
 import {
   ButtonDirective,
   DatePickerComponent,
-  ErrorMessageComponent,
+  PopoverComponent,
   SanringFieldComponent,
+  SANRING_POPOVER_IMPORTS,
 } from '@sanring/ui';
 import { getComponentPageSection } from '../../../docs-schema/component-page.utils';
 import { I18nService } from '../../../i18n/i18n.service';
@@ -60,6 +60,15 @@ const ZH_LOCALE: CalendarLocale = {
   ],
 };
 
+type DatePickerMode = 'single' | 'range' | 'multi';
+
+interface DatePickerPreset {
+  readonly titleKey: TranslationKey;
+  readonly descriptionKey: TranslationKey;
+  readonly granularity: PickerGranularity;
+  readonly mode: DatePickerMode;
+}
+
 @Component({
   selector: 'app-date-picker-page',
   imports: [
@@ -73,9 +82,8 @@ const ZH_LOCALE: CalendarLocale = {
     ComponentPageInstallationComponent,
     ComponentPageUsageImportsComponent,
     ComponentPageSectionComponent,
-    ErrorMessageComponent,
-    ReactiveFormsModule,
     SanringFieldComponent,
+    SANRING_POPOVER_IMPORTS,
   ],
   template: `
     <app-component-page [sections]="page.sections">
@@ -121,36 +129,49 @@ const ZH_LOCALE: CalendarLocale = {
         <div class="grid gap-2">
           <app-component-page-section [section]="section('example-matrix')">
             <app-component-page-code-previewer [code]="examples.matrix" language="angular-html">
-              <div previewer class="flex w-full flex-col items-center gap-4">
-                <div class="flex flex-wrap justify-center gap-1">
-                  @for (g of granularities; track g) {
+              <div previewer class="grid w-full gap-4 lg:grid-cols-[minmax(0,1fr)_20rem]">
+                <div class="grid gap-3 sm:grid-cols-2">
+                  @for (preset of presets; track preset.titleKey) {
                     <button
-                      sanringBtn
                       type="button"
-                      size="sm"
-                      [variant]="granularity() === g ? 'default' : 'outline'"
-                      (click)="granularity.set(g)"
+                      class="rounded-[var(--sanring-radius)] border p-3 text-left transition-colors"
+                      [style.border-color]="
+                        isActivePreset(preset)
+                          ? 'var(--sanring-border-strong)'
+                          : 'var(--docs-border)'
+                      "
+                      [style.background]="
+                        isActivePreset(preset)
+                          ? 'var(--sanring-surface-strong)'
+                          : 'var(--docs-panel)'
+                      "
+                      [attr.aria-pressed]="isActivePreset(preset)"
+                      (click)="applyPreset(preset)"
                     >
-                      {{ i18n.t(granularityLabelKeys[g]) }}
-                    </button>
-                  }
-                </div>
-                <div class="flex flex-wrap justify-center gap-1">
-                  @for (m of modes; track m) {
-                    <button
-                      sanringBtn
-                      type="button"
-                      size="sm"
-                      [variant]="mode() === m ? 'default' : 'outline'"
-                      (click)="mode.set(m)"
-                    >
-                      {{ i18n.t(modeLabelKeys[m]) }}
+                      <span class="block text-sm font-semibold text-[var(--docs-fg)]">
+                        {{ i18n.t(preset.titleKey) }}
+                      </span>
+                      <span class="mt-1 block text-xs leading-5 text-[var(--docs-muted)]">
+                        {{ i18n.t(preset.descriptionKey) }}
+                      </span>
+                      <span class="mt-3 flex flex-wrap gap-1">
+                        <span
+                          class="rounded-[var(--sanring-radius)] bg-[var(--docs-active)] px-2 py-1 text-[11px] font-medium text-[var(--docs-fg)]"
+                        >
+                          {{ i18n.t(granularityLabelKeys[preset.granularity]) }}
+                        </span>
+                        <span
+                          class="rounded-[var(--sanring-radius)] bg-[var(--docs-active)] px-2 py-1 text-[11px] font-medium text-[var(--docs-fg)]"
+                        >
+                          {{ i18n.t(modeLabelKeys[preset.mode]) }}
+                        </span>
+                      </span>
                     </button>
                   }
                 </div>
 
                 <div
-                  class="w-full max-w-[20rem] rounded-[var(--sanring-radius)] border border-[var(--docs-border)] p-4"
+                  class="w-full rounded-[var(--sanring-radius)] border border-[var(--docs-border)] p-4"
                 >
                   <sanring-date-picker
                     #matrixPicker="sanringDatePicker"
@@ -161,41 +182,60 @@ const ZH_LOCALE: CalendarLocale = {
                     (selectedRangeChange)="matrixRangeResult = $event"
                     (selectedDatesChange)="matrixMultiResult = $event"
                   />
-                  <div class="mt-4 flex items-center justify-between gap-2 text-sm">
-                    <span class="min-w-0 flex-1 truncate text-[var(--docs-muted)]">
-                      @switch (mode()) {
-                        @case ('single') {
-                          {{ singleSelectionText(matrixSingleResult) }}
+                  <div class="mt-4 grid gap-3 text-sm">
+                    <div>
+                      <div class="font-medium text-[var(--docs-fg)]">
+                        {{ activePresetTitle() }}
+                      </div>
+                      <div class="mt-1 flex flex-wrap gap-1">
+                        <span
+                          class="rounded-[var(--sanring-radius)] bg-[var(--docs-active)] px-2 py-1 text-[11px] font-medium text-[var(--docs-fg)]"
+                        >
+                          {{ i18n.t(granularityLabelKeys[granularity()]) }}
+                        </span>
+                        <span
+                          class="rounded-[var(--sanring-radius)] bg-[var(--docs-active)] px-2 py-1 text-[11px] font-medium text-[var(--docs-fg)]"
+                        >
+                          {{ i18n.t(modeLabelKeys[mode()]) }}
+                        </span>
+                      </div>
+                    </div>
+                    <div class="flex items-center justify-between gap-2">
+                      <span class="min-w-0 flex-1 truncate text-[var(--docs-muted)]">
+                        @switch (mode()) {
+                          @case ('single') {
+                            {{ singleSelectionText(matrixSingleResult) }}
+                          }
+                          @case ('range') {
+                            {{ rangeSelectionText(matrixRangeResult) }}
+                          }
+                          @case ('multi') {
+                            {{ multiSelectionText(matrixMultiResult) }}
+                          }
                         }
-                        @case ('range') {
-                          {{ rangeSelectionText(matrixRangeResult) }}
+                      </span>
+                      <div class="flex shrink-0 gap-1">
+                        @if (mode() === 'range' && matrixPicker.isDraftActive()) {
+                          <button
+                            sanringBtn
+                            variant="ghost"
+                            size="sm"
+                            type="button"
+                            (click)="matrixPicker.abortRangeDraft()"
+                          >
+                            {{ i18n.t('calendar.demo.abortDraft') }}
+                          </button>
                         }
-                        @case ('multi') {
-                          {{ multiSelectionText(matrixMultiResult) }}
-                        }
-                      }
-                    </span>
-                    <div class="flex shrink-0 gap-1">
-                      @if (mode() === 'range' && matrixPicker.isDraftActive()) {
                         <button
                           sanringBtn
-                          variant="ghost"
+                          variant="outline"
                           size="sm"
                           type="button"
-                          (click)="matrixPicker.abortRangeDraft()"
+                          (click)="matrixPicker.clear()"
                         >
-                          {{ i18n.t('calendar.demo.abortDraft') }}
+                          {{ i18n.t('datePicker.demo.clear') }}
                         </button>
-                      }
-                      <button
-                        sanringBtn
-                        variant="outline"
-                        size="sm"
-                        type="button"
-                        (click)="matrixPicker.clear()"
-                      >
-                        {{ i18n.t('datePicker.demo.clear') }}
-                      </button>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -234,51 +274,100 @@ const ZH_LOCALE: CalendarLocale = {
             </app-component-page-code-previewer>
           </app-component-page-section>
 
-          <app-component-page-section [section]="section('example-sizes')">
-            <app-component-page-code-previewer [code]="examples.sizes" language="angular-html">
-              <div previewer class="flex w-full flex-wrap items-start justify-center gap-8">
-                <div class="flex flex-col items-center gap-2">
-                  <sanring-date-picker size="sm" [locale]="datePickerLocale()" />
-                  <span class="text-xs text-[var(--docs-muted)]">{{
-                    i18n.t('datePicker.demo.size.sm')
-                  }}</span>
-                </div>
-                <div class="flex flex-col items-center gap-2">
-                  <sanring-date-picker size="md" [locale]="datePickerLocale()" />
-                  <span class="text-xs text-[var(--docs-muted)]">{{
-                    i18n.t('datePicker.demo.size.md')
-                  }}</span>
-                </div>
-                <div class="flex flex-col items-center gap-2">
-                  <sanring-date-picker size="lg" [locale]="datePickerLocale()" />
-                  <span class="text-xs text-[var(--docs-muted)]">{{
-                    i18n.t('datePicker.demo.size.lg')
-                  }}</span>
-                </div>
+          <app-component-page-section [section]="section('example-select-trigger')">
+            <app-component-page-code-previewer
+              [code]="examples.selectTrigger"
+              language="angular-html"
+            >
+              <div previewer class="flex w-full flex-wrap items-start justify-center gap-6">
+                <sanring-popover #startPopover>
+                  <button type="button" sanringPopoverTrigger [class]="selectTriggerClass">
+                    <span class="truncate">{{
+                      rangeStart
+                        ? formatMonth(rangeStart)
+                        : i18n.t('datePicker.demo.selectTrigger.start')
+                    }}</span>
+                  </button>
+                  <sanring-popover-content>
+                    <sanring-date-picker
+                      [locale]="datePickerLocale()"
+                      (selectedDateChange)="onRangeStartChange($event, startPopover)"
+                    />
+                  </sanring-popover-content>
+                </sanring-popover>
+
+                <sanring-popover #endPopover>
+                  <button type="button" sanringPopoverTrigger [class]="selectTriggerClass">
+                    <span class="truncate">{{
+                      rangeEnd ? formatMonth(rangeEnd) : i18n.t('datePicker.demo.selectTrigger.end')
+                    }}</span>
+                  </button>
+                  <sanring-popover-content>
+                    <sanring-date-picker
+                      [locale]="datePickerLocale()"
+                      (selectedDateChange)="onRangeEndChange($event, endPopover)"
+                    />
+                  </sanring-popover-content>
+                </sanring-popover>
               </div>
             </app-component-page-code-previewer>
           </app-component-page-section>
 
           <app-component-page-section [section]="section('example-field')">
             <app-component-page-code-previewer [code]="examples.field" language="angular-html">
-              <div previewer class="flex w-full max-w-[20rem] flex-col items-center gap-3">
-                <sanring-field class="w-full">
-                  <sanring-date-picker
-                    [formControl]="fiscalQuarterControl"
-                    granularity="quarter"
-                    [locale]="datePickerLocale()"
-                  />
-                  <sanring-error-message>{{ i18n.t('datePicker.demo.fieldError') }}</sanring-error-message>
-                </sanring-field>
-                <button
-                  sanringBtn
-                  variant="outline"
-                  size="sm"
-                  type="button"
-                  (click)="fiscalQuarterControl.markAsTouched()"
+              <div previewer class="w-full max-w-[28rem]">
+                <div class="grid gap-3 sm:grid-cols-2">
+                  <sanring-field>
+                    <label class="text-sm font-medium text-[var(--docs-fg)]">
+                      {{ i18n.t('datePicker.demo.field.start') }}
+                    </label>
+                    <sanring-popover #fieldStartPopover>
+                      <button type="button" sanringPopoverTrigger [class]="fieldTriggerClass">
+                        <span class="truncate">{{
+                          fieldRangeStart
+                            ? formatMonth(fieldRangeStart)
+                            : i18n.t('datePicker.demo.field.placeholder')
+                        }}</span>
+                      </button>
+                      <sanring-popover-content>
+                        <sanring-date-picker
+                          [locale]="datePickerLocale()"
+                          (selectedDateChange)="onFieldRangeStartChange($event, fieldStartPopover)"
+                        />
+                      </sanring-popover-content>
+                    </sanring-popover>
+                  </sanring-field>
+
+                  <sanring-field>
+                    <label class="text-sm font-medium text-[var(--docs-fg)]">
+                      {{ i18n.t('datePicker.demo.field.end') }}
+                    </label>
+                    <sanring-popover #fieldEndPopover>
+                      <button type="button" sanringPopoverTrigger [class]="fieldTriggerClass">
+                        <span class="truncate">{{
+                          fieldRangeEnd
+                            ? formatMonth(fieldRangeEnd)
+                            : i18n.t('datePicker.demo.field.placeholder')
+                        }}</span>
+                      </button>
+                      <sanring-popover-content>
+                        <sanring-date-picker
+                          [locale]="datePickerLocale()"
+                          (selectedDateChange)="onFieldRangeEndChange($event, fieldEndPopover)"
+                        />
+                      </sanring-popover-content>
+                    </sanring-popover>
+                  </sanring-field>
+                </div>
+
+                <div
+                  class="mt-4 rounded-[var(--sanring-radius)] bg-[var(--docs-active)] px-3 py-2 text-sm text-[var(--docs-muted)]"
                 >
-                  {{ i18n.t('datePicker.demo.fieldValidate') }}
-                </button>
+                  {{ i18n.t('datePicker.demo.field.summary') }}
+                  <span class="font-medium text-[var(--docs-fg)]">
+                    {{ fieldRangeText() }}
+                  </span>
+                </div>
               </div>
             </app-component-page-code-previewer>
           </app-component-page-section>
@@ -300,17 +389,48 @@ export class DatePickerPageComponent {
     this.i18n.locale() === 'zh' ? ZH_LOCALE : EN_LOCALE,
   );
 
-  protected readonly granularities: PickerGranularity[] = ['month', 'quarter', 'year'];
-  protected readonly modes: Array<'single' | 'range' | 'multi'> = ['single', 'range', 'multi'];
   protected readonly granularity = signal<PickerGranularity>('month');
-  protected readonly mode = signal<'single' | 'range' | 'multi'>('single');
+  protected readonly mode = signal<DatePickerMode>('single');
+
+  protected readonly presets: DatePickerPreset[] = [
+    {
+      titleKey: 'datePicker.demo.preset.billingMonth',
+      descriptionKey: 'datePicker.demo.preset.billingMonth.description',
+      granularity: 'month',
+      mode: 'single',
+    },
+    {
+      titleKey: 'datePicker.demo.preset.fiscalQuarter',
+      descriptionKey: 'datePicker.demo.preset.fiscalQuarter.description',
+      granularity: 'quarter',
+      mode: 'single',
+    },
+    {
+      titleKey: 'datePicker.demo.preset.planningYear',
+      descriptionKey: 'datePicker.demo.preset.planningYear.description',
+      granularity: 'year',
+      mode: 'single',
+    },
+    {
+      titleKey: 'datePicker.demo.preset.monthRange',
+      descriptionKey: 'datePicker.demo.preset.monthRange.description',
+      granularity: 'month',
+      mode: 'range',
+    },
+    {
+      titleKey: 'datePicker.demo.preset.reportingMonths',
+      descriptionKey: 'datePicker.demo.preset.reportingMonths.description',
+      granularity: 'month',
+      mode: 'multi',
+    },
+  ];
 
   protected readonly granularityLabelKeys: Record<PickerGranularity, TranslationKey> = {
     month: 'datePicker.demo.granularity.month',
     quarter: 'datePicker.demo.granularity.quarter',
     year: 'datePicker.demo.granularity.year',
   };
-  protected readonly modeLabelKeys: Record<'single' | 'range' | 'multi', TranslationKey> = {
+  protected readonly modeLabelKeys: Record<DatePickerMode, TranslationKey> = {
     single: 'datePicker.demo.mode.single',
     range: 'datePicker.demo.mode.range',
     multi: 'datePicker.demo.mode.multi',
@@ -321,18 +441,66 @@ export class DatePickerPageComponent {
   matrixSingleResult: Date | null = null;
   matrixRangeResult: DateRange = { start: null, end: null };
   matrixMultiResult: Date[] = [];
+  rangeStart: Date | null = null;
+  rangeEnd: Date | null = null;
+  fieldRangeStart: Date | null = null;
+  fieldRangeEnd: Date | null = null;
+
+  protected readonly selectTriggerClass =
+    'flex h-10 w-[180px] items-center justify-between gap-2 rounded-[var(--sanring-radius)] border border-[var(--sanring-border-strong)] bg-[var(--sanring-surface)] px-3 py-2 text-sm text-[var(--sanring-foreground)] transition-colors hover:bg-[var(--sanring-surface-strong)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--sanring-border-strong)]';
+  protected readonly fieldTriggerClass =
+    'flex h-10 w-full items-center justify-between gap-2 rounded-[var(--sanring-radius)] border border-[var(--sanring-border-strong)] bg-[var(--sanring-surface)] px-3 py-2 text-left text-sm text-[var(--sanring-foreground)] transition-colors hover:bg-[var(--sanring-surface-strong)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--sanring-border-strong)]';
+
+  protected onRangeStartChange(date: Date | null, popover: PopoverComponent): void {
+    this.rangeStart = date;
+    popover.setOpen(false);
+  }
+
+  protected onRangeEndChange(date: Date | null, popover: PopoverComponent): void {
+    this.rangeEnd = date;
+    popover.setOpen(false);
+  }
 
   protected readonly isPastYear: DisabledInput = (date: Date) => date.getFullYear() < 2026;
 
-  protected readonly fiscalQuarterControl = new FormControl<Date | null>(null, {
-    validators: Validators.required,
-  });
+  protected onFieldRangeStartChange(date: Date | null, popover: PopoverComponent): void {
+    this.fieldRangeStart = date;
+    popover.setOpen(false);
+  }
+
+  protected onFieldRangeEndChange(date: Date | null, popover: PopoverComponent): void {
+    this.fieldRangeEnd = date;
+    popover.setOpen(false);
+  }
+
+  protected applyPreset(preset: DatePickerPreset): void {
+    this.granularity.set(preset.granularity);
+    this.mode.set(preset.mode);
+    this.matrixSingleResult = null;
+    this.matrixRangeResult = { start: null, end: null };
+    this.matrixMultiResult = [];
+  }
+
+  protected isActivePreset(preset: DatePickerPreset): boolean {
+    return this.granularity() === preset.granularity && this.mode() === preset.mode;
+  }
+
+  protected activePresetTitle(): string {
+    const preset = this.presets.find((item) => this.isActivePreset(item));
+    return preset ? this.i18n.t(preset.titleKey) : '';
+  }
 
   protected formatDate(date: Date): string {
     const year = date.getFullYear();
     const month = String(date.getMonth() + 1).padStart(2, '0');
     const day = String(date.getDate()).padStart(2, '0');
     return `${year}-${month}-${day}`;
+  }
+
+  protected formatMonth(date: Date): string {
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    return `${year}-${month}`;
   }
 
   protected singleSelectionText(date: Date | null): string {
@@ -346,6 +514,14 @@ export class DatePickerPageComponent {
       return `${this.i18n.t('calendar.demo.rangeStart')}${this.formatDate(range.start)}${this.i18n.t('calendar.demo.rangeAwaitingEnd')}`;
     }
     return `${this.formatDate(range.start)}${this.i18n.t('calendar.demo.rangeSeparator')}${this.formatDate(range.end)}`;
+  }
+
+  protected fieldRangeText(): string {
+    if (!this.fieldRangeStart && !this.fieldRangeEnd)
+      return this.i18n.t('calendar.demo.noSelection');
+    const start = this.fieldRangeStart ? this.formatMonth(this.fieldRangeStart) : '...';
+    const end = this.fieldRangeEnd ? this.formatMonth(this.fieldRangeEnd) : '...';
+    return `${start}${this.i18n.t('calendar.demo.rangeSeparator')}${end}`;
   }
 
   protected multiSelectionText(dates: Date[]): string {
