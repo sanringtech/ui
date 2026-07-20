@@ -11,14 +11,17 @@ import {
   fetchRegistry,
   installCommand,
   installCommandParts,
+  type RegistryIndex,
   type Registry,
   type RegistryComponent,
   type RegistryShared,
+  createRegistryIndex,
 } from '../registry.js';
 import {
   getInstalledPackages,
   hashContent,
   isAngularProject,
+  fetchTextTargetsConcurrent,
   readConfig,
   writeConfig,
 } from '../utils.js';
@@ -38,13 +41,17 @@ export interface OverwriteCandidate {
 
 export function collectPeerDeps(
   components: RegistryComponent[],
-  sharedItems: RegistryShared[],
+  sharedItems: RegistryShared[] | RegistryIndex,
 ): Record<string, string> {
   const deps: Record<string, string> = {};
+  const sharedByName = Array.isArray(sharedItems)
+    ? new Map(sharedItems.map((shared) => [shared.name, shared]))
+    : sharedItems.sharedByName;
+
   for (const component of components) {
     Object.assign(deps, component.peerDependencies);
     for (const depName of component.sharedDeps ?? []) {
-      const shared = sharedItems.find((s) => s.name === depName);
+      const shared = sharedByName.get(depName);
       if (shared?.peerDependencies) Object.assign(deps, shared.peerDependencies);
     }
   }
@@ -53,19 +60,22 @@ export function collectPeerDeps(
 
 export function collectOverwriteCandidates(
   components: RegistryComponent[],
-  sharedItems: RegistryShared[],
+  sharedItems: RegistryShared[] | RegistryIndex,
   componentBasePath: string,
   sharedDestDir: string,
 ): OverwriteCandidate[] {
   const candidates: OverwriteCandidate[] = [];
   const sharedNamesNeeded = new Set<string>();
+  const sharedByName = Array.isArray(sharedItems)
+    ? new Map(sharedItems.map((shared) => [shared.name, shared]))
+    : sharedItems.sharedByName;
 
   for (const component of components) {
     for (const depName of component.sharedDeps ?? []) sharedNamesNeeded.add(depName);
   }
 
   for (const depName of sharedNamesNeeded) {
-    const shared = sharedItems.find((item) => item.name === depName);
+    const shared = sharedByName.get(depName);
     if (!shared) continue;
 
     const fileName = shared.file.split('/').pop()!;
@@ -124,9 +134,12 @@ async function confirmOverwrite(candidates: OverwriteCandidate[], yes: boolean):
 // `listbox` instead of just printing a notice telling the user to run it again.
 export function resolveInstallSet(
   requestedNames: string[],
-  registry: Registry,
+  registry: Registry | RegistryIndex,
 ): { toInstall: RegistryComponent[]; autoAdded: string[]; missing: string[] } {
-  const byName = new Map(registry.components.map((c) => [c.name, c]));
+  const byName =
+    'componentsByName' in registry
+      ? registry.componentsByName
+      : createRegistryIndex(registry).componentsByName;
   const requestedSet = new Set(requestedNames);
   const seen = new Set<string>();
   const toInstall: RegistryComponent[] = [];
@@ -156,6 +169,21 @@ export function resolveInstallSet(
 }
 
 const DEFAULT_PATH = 'src/app/components/ui';
+const FILE_FETCH_CONCURRENCY = 6;
+
+interface SharedJob {
+  shared: RegistryShared;
+  fileName: string;
+  dest: string;
+  remotePath: string;
+}
+
+interface ComponentFileJob {
+  file: string;
+  fileName: string;
+  dest: string;
+  remotePath: string;
+}
 
 export const addCommand = new Command('add')
   .description('Add one or more components to your project')
@@ -200,12 +228,13 @@ export const addCommand = new Command('add')
       // Fetch registry
       const registrySpinner = ora('Loading registry...').start();
       const registry = await fetchRegistry(registrySource);
+      const registryIndex = createRegistryIndex(registry);
       registrySpinner.stop();
 
-      const { toInstall, autoAdded, missing } = resolveInstallSet(componentNames, registry);
+      const { toInstall, autoAdded, missing } = resolveInstallSet(componentNames, registryIndex);
 
       if (missing.length > 0) {
-        const available = registry.components.map((c) => c.name).join(', ');
+        const available = registryIndex.componentNames.join(', ');
         console.error(
           pc.red(`✖ Component${missing.length > 1 ? 's' : ''} not found: ${missing.join(', ')}`),
         );
@@ -233,7 +262,7 @@ export const addCommand = new Command('add')
       if (options.force && !options.dryRun) {
         const overwriteCandidates = collectOverwriteCandidates(
           toInstall,
-          registry.shared,
+          registryIndex,
           componentBasePath,
           sharedDestDir,
         );
@@ -258,15 +287,18 @@ export const addCommand = new Command('add')
 
       if (sharedNamesNeeded.size > 0) {
         console.log(pc.dim('  Shared utilities:'));
-        for (const depName of sharedNamesNeeded) {
-          const shared = registry.shared.find((s) => s.name === depName);
+        const sharedJobs: SharedJob[] = [...sharedNamesNeeded].flatMap((depName) => {
+          const shared = registryIndex.sharedByName.get(depName);
           if (!shared) {
             console.warn(pc.yellow(`  ⚠ Unknown shared dep "${depName}"`));
-            continue;
+            return [];
           }
           const fileName = shared.file.split('/').pop()!;
           const dest = join(sharedDestDir, fileName);
+          return [{ shared, fileName, dest, remotePath: shared.file }];
+        });
 
+        for (const { fileName, dest } of sharedJobs) {
           if (options.dryRun) {
             const exists = existsSync(dest);
             if (exists && !options.force) {
@@ -280,25 +312,32 @@ export const addCommand = new Command('add')
             }
             continue;
           }
+        }
 
-          const spinner = ora({ text: pc.dim(`shared/${fileName}`), prefixText: ' ' }).start();
-          try {
-            const content = await fetchFile(shared.file, registrySource);
-            const result = writeFile(dest, content, options.force);
-            if (result === 'written') {
-              installedHashes[`shared/${fileName}`] = hashContent(content);
-              spinner.stopAndPersist({ symbol: pc.green('✔'), text: `shared/${fileName}` });
+        if (!options.dryRun) {
+          const sharedResults = await fetchTextTargetsConcurrent(
+            sharedJobs,
+            FILE_FETCH_CONCURRENCY,
+            (remotePath) => fetchFile(remotePath, registrySource),
+          );
+
+          for (const result of sharedResults) {
+            if (!result.ok) {
+              console.log(pc.yellow(`  ⚠ shared/${result.fileName} (fetch failed)`));
+              failed++;
+              continue;
+            }
+            const writeResult = writeFile(result.dest, result.content, options.force);
+            if (writeResult === 'written') {
+              installedHashes[`shared/${result.fileName}`] = hashContent(result.content);
+              console.log(pc.green(`  ✔ shared/${result.fileName}`));
               written++;
             } else {
-              spinner.stopAndPersist({
-                symbol: pc.dim('–'),
-                text: pc.dim(`shared/${fileName} (exists, use --force to overwrite)`),
-              });
+              console.log(
+                pc.dim(`  – shared/${result.fileName} (exists, use --force to overwrite)`),
+              );
               skipped++;
             }
-          } catch {
-            spinner.fail(pc.yellow(`shared/${fileName} (fetch failed)`));
-            failed++;
           }
         }
         console.log('');
@@ -312,10 +351,13 @@ export const addCommand = new Command('add')
           : component.name;
         console.log(pc.dim(`  ${label}:`));
 
-        for (const file of component.files) {
+        const fileJobs: ComponentFileJob[] = component.files.map((file) => {
           const fileName = file.split('/').pop()!;
           const dest = join(destDir, fileName);
+          return { file, fileName, dest, remotePath: `components/${file}` };
+        });
 
+        for (const { fileName, dest } of fileJobs) {
           if (options.dryRun) {
             const exists = existsSync(dest);
             if (exists && !options.force) {
@@ -327,32 +369,37 @@ export const addCommand = new Command('add')
             }
             continue;
           }
+        }
 
-          const spinner = ora({ text: pc.dim(fileName), prefixText: ' ' }).start();
-          try {
-            const content = await fetchFile(`components/${file}`, registrySource);
-            const result = writeFile(dest, content, options.force);
-            if (result === 'written') {
-              installedHashes[`${component.name}/${fileName}`] = hashContent(content);
-              spinner.stopAndPersist({ symbol: pc.green('✔'), text: fileName });
+        if (!options.dryRun) {
+          const fileResults = await fetchTextTargetsConcurrent(
+            fileJobs,
+            FILE_FETCH_CONCURRENCY,
+            (remotePath) => fetchFile(remotePath, registrySource),
+          );
+
+          for (const result of fileResults) {
+            if (!result.ok) {
+              console.log(pc.yellow(`  ⚠ ${result.fileName} (fetch failed)`));
+              failed++;
+              continue;
+            }
+            const writeResult = writeFile(result.dest, result.content, options.force);
+            if (writeResult === 'written') {
+              installedHashes[`${component.name}/${result.fileName}`] = hashContent(result.content);
+              console.log(pc.green(`  ✔ ${result.fileName}`));
               written++;
             } else {
-              spinner.stopAndPersist({
-                symbol: pc.dim('–'),
-                text: pc.dim(`${fileName} (exists, use --force to overwrite)`),
-              });
+              console.log(pc.dim(`  – ${result.fileName} (exists, use --force to overwrite)`));
               skipped++;
             }
-          } catch {
-            spinner.fail(pc.yellow(`${fileName} (fetch failed)`));
-            failed++;
           }
         }
         console.log('');
       }
 
       // Peer dependencies — collected once across the whole install set.
-      const allPeerDeps = collectPeerDeps(toInstall, registry.shared);
+      const allPeerDeps = collectPeerDeps(toInstall, registryIndex);
       if (Object.keys(allPeerDeps).length > 0) {
         const installed = getInstalledPackages(cwd);
         const missingDeps = Object.entries(allPeerDeps).filter(([pkg]) => !installed.has(pkg));

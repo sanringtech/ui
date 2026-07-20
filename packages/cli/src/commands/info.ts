@@ -4,7 +4,7 @@ import { join, resolve } from 'node:path';
 import ora from 'ora';
 import pc from 'picocolors';
 import { collectPeerDeps, resolveInstallSet } from './add.js';
-import { fetchRegistry } from '../registry.js';
+import { createRegistryIndex, fetchRegistry } from '../registry.js';
 import { isAngularProject, readConfig } from '../utils.js';
 
 const DEFAULT_PATH = 'src/app/components/ui';
@@ -12,7 +12,10 @@ const DEFAULT_PATH = 'src/app/components/ui';
 export const infoCommand = new Command('info')
   .description('Show what a component installs without actually installing it')
   .argument('<component>', 'component name')
-  .option('-p, --path <path>', 'destination path relative to cwd (used to check if already installed)')
+  .option(
+    '-p, --path <path>',
+    'destination path relative to cwd (used to check if already installed)',
+  )
   .option('--registry <source>', 'custom registry (URL or local path)')
   .action(async (componentName: string, options: { path?: string; registry?: string }) => {
     const cwd = process.cwd();
@@ -20,12 +23,13 @@ export const infoCommand = new Command('info')
 
     const registrySpinner = ora('Loading registry...').start();
     const registry = await fetchRegistry(registrySource);
+    const registryIndex = createRegistryIndex(registry);
     registrySpinner.stop();
 
-    const { toInstall, autoAdded, missing } = resolveInstallSet([componentName], registry);
+    const { toInstall, autoAdded, missing } = resolveInstallSet([componentName], registryIndex);
 
     if (missing.length > 0) {
-      const available = registry.components.map((c) => c.name).join(', ');
+      const available = registryIndex.componentNames.join(', ');
       console.error(pc.red(`✖ Component not found: ${componentName}`));
       console.error(pc.dim(`  Available: ${available}`));
       process.exit(1);
@@ -56,7 +60,7 @@ export const infoCommand = new Command('info')
       }
     }
 
-    const peerDeps = collectPeerDeps(toInstall, registry.shared);
+    const peerDeps = collectPeerDeps(toInstall, registryIndex);
     if (Object.keys(peerDeps).length > 0) {
       console.log(pc.dim('\nPeer dependencies:'));
       for (const [pkg, ver] of Object.entries(peerDeps)) {

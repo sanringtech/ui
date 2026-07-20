@@ -3,7 +3,12 @@ import { existsSync, rmSync } from 'node:fs';
 import { join, resolve } from 'node:path';
 import { createInterface } from 'node:readline/promises';
 import pc from 'picocolors';
-import { fetchRegistry, type Registry } from '../registry.js';
+import {
+  createRegistryIndex,
+  fetchRegistry,
+  type Registry,
+  type RegistryIndex,
+} from '../registry.js';
 import { isAngularProject, readConfig, writeConfig } from '../utils.js';
 import { listInstalledComponentNames } from './diff.js';
 
@@ -27,10 +32,13 @@ export interface RemovalPlan {
 export function planRemoval(
   requestedNames: string[],
   installedNames: string[],
-  registry: Registry,
+  registry: Registry | RegistryIndex,
 ): RemovalPlan {
   const installedSet = new Set(installedNames);
-  const byName = new Map(registry.components.map((c) => [c.name, c]));
+  const byName =
+    'componentsByName' in registry
+      ? registry.componentsByName
+      : createRegistryIndex(registry).componentsByName;
 
   const toRemove = requestedNames.filter((n) => installedSet.has(n));
   const notInstalled = requestedNames.filter((n) => !installedSet.has(n));
@@ -54,7 +62,9 @@ export function planRemoval(
     for (const dep of byName.get(name)?.sharedDeps ?? []) sharedUsedByRemoved.add(dep);
   }
 
-  const possiblyUnusedShared = [...sharedUsedByRemoved].filter((dep) => !sharedStillNeeded.has(dep));
+  const possiblyUnusedShared = [...sharedUsedByRemoved].filter(
+    (dep) => !sharedStillNeeded.has(dep),
+  );
 
   return { toRemove, notInstalled, blockedBy, possiblyUnusedShared };
 }
@@ -63,7 +73,9 @@ async function confirmRemoval(names: string[], yes: boolean): Promise<boolean> {
   if (yes) return true;
   if (!process.stdin.isTTY) {
     console.error(pc.red('\n✖ Refusing to remove files without confirmation.'));
-    console.error(pc.dim(`  Re-run with ${pc.white('--yes')} to confirm in non-interactive environments.\n`));
+    console.error(
+      pc.dim(`  Re-run with ${pc.white('--yes')} to confirm in non-interactive environments.\n`),
+    );
     return false;
   }
   const rl = createInterface({ input: process.stdin, output: process.stdout });
@@ -100,14 +112,13 @@ export const removeCommand = new Command('remove')
       const componentBasePath = resolve(cwd, options.path ?? config?.componentPath ?? DEFAULT_PATH);
 
       const registry = await fetchRegistry(registrySource);
-      const installed = listInstalledComponentNames(componentBasePath, registry);
-      const plan = planRemoval(componentNames, installed, registry);
+      const registryIndex = createRegistryIndex(registry);
+      const installed = listInstalledComponentNames(componentBasePath, registryIndex);
+      const plan = planRemoval(componentNames, installed, registryIndex);
 
       if (plan.notInstalled.length > 0) {
         console.error(
-          pc.red(
-            `✖ Not installed, nothing to remove: ${plan.notInstalled.join(', ')}`,
-          ),
+          pc.red(`✖ Not installed, nothing to remove: ${plan.notInstalled.join(', ')}`),
         );
       }
 
@@ -117,17 +128,25 @@ export const removeCommand = new Command('remove')
       }
 
       if (plan.blockedBy.size > 0 && !options.force) {
-        console.error(pc.red('\n✖ Refusing to remove — other installed components still depend on this:\n'));
+        console.error(
+          pc.red('\n✖ Refusing to remove — other installed components still depend on this:\n'),
+        );
         for (const [name, dependents] of plan.blockedBy) {
           console.error(`  ${pc.bold(name)} ${pc.dim('is required by')} ${dependents.join(', ')}`);
         }
-        console.error(pc.dim(`\n  Remove ${pc.white([...plan.blockedBy.keys()].join(', '))} last, or re-run with ${pc.white('--force')}.\n`));
+        console.error(
+          pc.dim(
+            `\n  Remove ${pc.white([...plan.blockedBy.keys()].join(', '))} last, or re-run with ${pc.white('--force')}.\n`,
+          ),
+        );
         process.exit(1);
         return;
       }
 
       if (plan.blockedBy.size > 0 && options.force) {
-        console.warn(pc.yellow('\n⚠ Proceeding with --force — this will leave a dangling import in:\n'));
+        console.warn(
+          pc.yellow('\n⚠ Proceeding with --force — this will leave a dangling import in:\n'),
+        );
         for (const [name, dependents] of plan.blockedBy) {
           console.warn(`  ${dependents.join(', ')} ${pc.dim(`(imports ${name})`)}`);
         }

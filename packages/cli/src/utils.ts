@@ -60,3 +60,42 @@ export function getInstalledPackages(cwd: string): Set<string> {
 export function isAngularProject(cwd: string): boolean {
   return existsSync(join(cwd, 'angular.json'));
 }
+
+export async function mapConcurrent<T, R>(
+  items: T[],
+  limit: number,
+  worker: (item: T, index: number) => Promise<R>,
+): Promise<R[]> {
+  if (items.length === 0) return [];
+  const concurrency = Math.max(1, Math.min(limit, items.length));
+  const results = new Array<R>(items.length);
+  let nextIndex = 0;
+
+  async function runWorker() {
+    while (nextIndex < items.length) {
+      const index = nextIndex++;
+      results[index] = await worker(items[index], index);
+    }
+  }
+
+  await Promise.all(Array.from({ length: concurrency }, () => runWorker()));
+  return results;
+}
+
+export type TextFetchResult<T extends { remotePath: string }> =
+  | (T & { ok: true; content: string })
+  | (T & { ok: false; error: unknown });
+
+export function fetchTextTargetsConcurrent<T extends { remotePath: string }>(
+  targets: T[],
+  limit: number,
+  fetcher: (remotePath: string) => Promise<string>,
+): Promise<TextFetchResult<T>[]> {
+  return mapConcurrent(targets, limit, async (target) => {
+    try {
+      return { ...target, ok: true, content: await fetcher(target.remotePath) };
+    } catch (error) {
+      return { ...target, ok: false, error };
+    }
+  });
+}

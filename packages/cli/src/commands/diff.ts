@@ -3,11 +3,32 @@ import { diffLines } from 'diff';
 import { existsSync, readFileSync, readdirSync } from 'node:fs';
 import { join, resolve } from 'node:path';
 import pc from 'picocolors';
-import { fetchFile, fetchRegistry, type Registry, type RegistryComponent } from '../registry.js';
-import { isAngularProject, isUntouchedSinceInstall, readConfig } from '../utils.js';
+import {
+  createRegistryIndex,
+  fetchFile,
+  fetchRegistry,
+  type Registry,
+  type RegistryComponent,
+  type RegistryIndex,
+} from '../registry.js';
+import {
+  fetchTextTargetsConcurrent,
+  isAngularProject,
+  isUntouchedSinceInstall,
+  readConfig,
+} from '../utils.js';
 import { THEME_FILE_PATH } from './init.js';
 
 const DEFAULT_PATH = 'src/app/components/ui';
+const FILE_FETCH_CONCURRENCY = 6;
+
+interface DiffTarget {
+  label: string;
+  dest: string;
+  remotePath: string;
+  warnPath: string;
+  recordedHash?: string;
+}
 
 // Sanring UI has no version concept — components are copied source, not npm
 // packages — so "up to date" only ever means "identical to what's in the
@@ -16,10 +37,14 @@ const DEFAULT_PATH = 'src/app/components/ui';
 
 export function listInstalledComponentNames(
   componentBasePath: string,
-  registry: Registry,
+  registry: Registry | RegistryIndex,
 ): string[] {
   if (!existsSync(componentBasePath)) return [];
-  const known = new Set(registry.components.map((c) => c.name));
+  const known = new Set(
+    'componentNames' in registry
+      ? registry.componentNames
+      : createRegistryIndex(registry).componentNames,
+  );
   return readdirSync(componentBasePath, { withFileTypes: true })
     .filter((entry) => entry.isDirectory() && known.has(entry.name))
     .map((entry) => entry.name);
@@ -28,13 +53,14 @@ export function listInstalledComponentNames(
 export function resolveDiffTargets(
   requestedNames: string[],
   componentBasePath: string,
-  registry: Registry,
+  registry: Registry | RegistryIndex,
 ): { components: RegistryComponent[]; missing: string[]; notInstalled: string[] } {
-  const byName = new Map(registry.components.map((c) => [c.name, c]));
+  const registryIndex = 'componentsByName' in registry ? registry : createRegistryIndex(registry);
+  const byName = registryIndex.componentsByName;
   const names =
     requestedNames.length > 0
       ? requestedNames
-      : listInstalledComponentNames(componentBasePath, registry);
+      : listInstalledComponentNames(componentBasePath, registryIndex);
 
   const components: RegistryComponent[] = [];
   const missing: string[] = [];
@@ -117,10 +143,11 @@ export const diffCommand = new Command('diff')
       : join(componentBasePath, 'shared');
 
     const registry = await fetchRegistry(registrySource);
+    const registryIndex = createRegistryIndex(registry);
     const { components, missing, notInstalled } = resolveDiffTargets(
       componentNames,
       componentBasePath,
-      registry,
+      registryIndex,
     );
 
     if (missing.length > 0) {
@@ -139,6 +166,7 @@ export const diffCommand = new Command('diff')
     let changed = 0,
       checked = 0,
       autoSafe = 0;
+    const diffTargets: DiffTarget[] = [];
 
     function tally(status: ReturnType<typeof printFileDiff>) {
       if (status === 'unchanged') return;
@@ -149,22 +177,15 @@ export const diffCommand = new Command('diff')
     // Theme file — written by `init`, not tied to any component's sharedDeps,
     // but the thing most likely to have been hand-edited for a brand.
     const themeDest = join(cwd, THEME_FILE_PATH);
-    const themeShared = registry.shared.find((s) => s.name === 'theme');
+    const themeShared = registryIndex.sharedByName.get('theme');
     if (themeShared && existsSync(themeDest)) {
-      try {
-        const remote = await fetchFile(themeShared.file, registrySource);
-        const local = readFileSync(themeDest, 'utf-8');
-        checked++;
-        tally(
-          printFileDiff(THEME_FILE_PATH, local, remote, config?.installedHashes?.[THEME_FILE_PATH]),
-        );
-      } catch (e) {
-        console.warn(
-          pc.yellow(
-            `  ⚠ Could not fetch ${themeShared.file}: ${e instanceof Error ? e.message : e}`,
-          ),
-        );
-      }
+      diffTargets.push({
+        label: THEME_FILE_PATH,
+        dest: themeDest,
+        remotePath: themeShared.file,
+        warnPath: themeShared.file,
+        recordedHash: config?.installedHashes?.[THEME_FILE_PATH],
+      });
     }
 
     // Shared utility deps referenced by the components being diffed.
@@ -173,22 +194,19 @@ export const diffCommand = new Command('diff')
       for (const depName of component.sharedDeps ?? []) sharedNamesNeeded.add(depName);
     }
     for (const depName of sharedNamesNeeded) {
-      const shared = registry.shared.find((s) => s.name === depName);
+      const shared = registryIndex.sharedByName.get(depName);
       if (!shared) continue;
       const fileName = shared.file.split('/').pop()!;
       const dest = join(sharedDestDir, fileName);
       if (!existsSync(dest)) continue;
-      try {
-        const remote = await fetchFile(shared.file, registrySource);
-        const local = readFileSync(dest, 'utf-8');
-        const label = `shared/${fileName}`;
-        checked++;
-        tally(printFileDiff(label, local, remote, config?.installedHashes?.[label]));
-      } catch (e) {
-        console.warn(
-          pc.yellow(`  ⚠ Could not fetch ${shared.file}: ${e instanceof Error ? e.message : e}`),
-        );
-      }
+      const label = `shared/${fileName}`;
+      diffTargets.push({
+        label,
+        dest,
+        remotePath: shared.file,
+        warnPath: shared.file,
+        recordedHash: config?.installedHashes?.[label],
+      });
     }
 
     for (const component of components) {
@@ -197,18 +215,44 @@ export const diffCommand = new Command('diff')
         const fileName = file.split('/').pop()!;
         const dest = join(destDir, fileName);
         if (!existsSync(dest)) continue;
-        try {
-          const remote = await fetchFile(`components/${file}`, registrySource);
-          const local = readFileSync(dest, 'utf-8');
-          const label = `${component.name}/${fileName}`;
-          checked++;
-          tally(printFileDiff(label, local, remote, config?.installedHashes?.[label]));
-        } catch (e) {
-          console.warn(
-            pc.yellow(`  ⚠ Could not fetch ${file}: ${e instanceof Error ? e.message : e}`),
-          );
-        }
+        const label = `${component.name}/${fileName}`;
+        diffTargets.push({
+          label,
+          dest,
+          remotePath: `components/${file}`,
+          warnPath: file,
+          recordedHash: config?.installedHashes?.[label],
+        });
       }
+    }
+
+    const comparisons = await fetchTextTargetsConcurrent(
+      diffTargets.map((target) => ({
+        ...target,
+        local: readFileSync(target.dest, 'utf-8'),
+      })),
+      FILE_FETCH_CONCURRENCY,
+      (remotePath) => fetchFile(remotePath, registrySource),
+    );
+
+    for (const comparison of comparisons) {
+      if ('error' in comparison) {
+        console.warn(
+          pc.yellow(
+            `  ⚠ Could not fetch ${comparison.warnPath}: ${comparison.error instanceof Error ? comparison.error.message : comparison.error}`,
+          ),
+        );
+        continue;
+      }
+      checked++;
+      tally(
+        printFileDiff(
+          comparison.label,
+          comparison.local,
+          comparison.content,
+          comparison.recordedHash,
+        ),
+      );
     }
 
     if (checked === 0) {

@@ -109,6 +109,22 @@ export interface Registry {
   components: RegistryComponent[];
 }
 
+export interface RegistryIndex {
+  registry: Registry;
+  componentsByName: Map<string, RegistryComponent>;
+  sharedByName: Map<string, RegistryShared>;
+  componentNames: string[];
+}
+
+export function createRegistryIndex(registry: Registry): RegistryIndex {
+  return {
+    registry,
+    componentsByName: new Map(registry.components.map((component) => [component.name, component])),
+    sharedByName: new Map(registry.shared.map((shared) => [shared.name, shared])),
+    componentNames: registry.components.map((component) => component.name),
+  };
+}
+
 function isRecord(value: unknown): value is Record<string, unknown> {
   return typeof value === 'object' && value !== null && !Array.isArray(value);
 }

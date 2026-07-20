@@ -3,11 +3,12 @@ import { existsSync, readFileSync } from 'node:fs';
 import { join, resolve } from 'node:path';
 import { createInterface } from 'node:readline/promises';
 import pc from 'picocolors';
-import { fetchFile, fetchRegistry } from '../registry.js';
+import { createRegistryIndex, fetchFile, fetchRegistry } from '../registry.js';
 import {
   hashContent,
   isAngularProject,
   isUntouchedSinceInstall,
+  fetchTextTargetsConcurrent,
   readConfig,
   writeConfig,
 } from '../utils.js';
@@ -16,6 +17,13 @@ import { printFileDiff, resolveDiffTargets } from './diff.js';
 import { THEME_FILE_PATH } from './init.js';
 
 const DEFAULT_PATH = 'src/app/components/ui';
+const FILE_FETCH_CONCURRENCY = 6;
+
+interface UpdateTarget {
+  label: string;
+  dest: string;
+  remotePath: string;
+}
 
 interface PendingFile {
   label: string;
@@ -94,10 +102,11 @@ export const updateCommand = new Command('update')
         : join(componentBasePath, 'shared');
 
       const registry = await fetchRegistry(registrySource);
+      const registryIndex = createRegistryIndex(registry);
       const { components, missing, notInstalled } = resolveDiffTargets(
         componentNames,
         componentBasePath,
-        registry,
+        registryIndex,
       );
 
       if (missing.length > 0) {
@@ -114,6 +123,7 @@ export const updateCommand = new Command('update')
       const installedHashes = { ...config?.installedHashes };
       const auto: AutoFile[] = [];
       const pending: PendingFile[] = [];
+      const updateTargets: UpdateTarget[] = [];
       let backfilled = 0;
 
       function classify(label: string, dest: string, local: string, remote: string) {
@@ -130,11 +140,13 @@ export const updateCommand = new Command('update')
       }
 
       const themeDest = join(cwd, THEME_FILE_PATH);
-      const themeShared = registry.shared.find((s) => s.name === 'theme');
+      const themeShared = registryIndex.sharedByName.get('theme');
       if (themeShared && existsSync(themeDest)) {
-        const remote = await fetchFile(themeShared.file, registrySource);
-        const local = readFileSync(themeDest, 'utf-8');
-        classify(THEME_FILE_PATH, themeDest, local, remote);
+        updateTargets.push({
+          label: THEME_FILE_PATH,
+          dest: themeDest,
+          remotePath: themeShared.file,
+        });
       }
 
       const sharedNamesNeeded = new Set<string>();
@@ -142,14 +154,16 @@ export const updateCommand = new Command('update')
         for (const depName of component.sharedDeps ?? []) sharedNamesNeeded.add(depName);
       }
       for (const depName of sharedNamesNeeded) {
-        const shared = registry.shared.find((s) => s.name === depName);
+        const shared = registryIndex.sharedByName.get(depName);
         if (!shared) continue;
         const fileName = shared.file.split('/').pop()!;
         const dest = join(sharedDestDir, fileName);
         if (!existsSync(dest)) continue;
-        const remote = await fetchFile(shared.file, registrySource);
-        const local = readFileSync(dest, 'utf-8');
-        classify(`shared/${fileName}`, dest, local, remote);
+        updateTargets.push({
+          label: `shared/${fileName}`,
+          dest,
+          remotePath: shared.file,
+        });
       }
 
       for (const component of components) {
@@ -158,10 +172,33 @@ export const updateCommand = new Command('update')
           const fileName = file.split('/').pop()!;
           const dest = join(destDir, fileName);
           if (!existsSync(dest)) continue;
-          const remote = await fetchFile(`components/${file}`, registrySource);
-          const local = readFileSync(dest, 'utf-8');
-          classify(`${component.name}/${fileName}`, dest, local, remote);
+          updateTargets.push({
+            label: `${component.name}/${fileName}`,
+            dest,
+            remotePath: `components/${file}`,
+          });
         }
+      }
+
+      const updateComparisons = await fetchTextTargetsConcurrent(
+        updateTargets.map((target) => ({
+          ...target,
+          local: readFileSync(target.dest, 'utf-8'),
+        })),
+        FILE_FETCH_CONCURRENCY,
+        (remotePath) => fetchFile(remotePath, registrySource),
+      );
+
+      for (const comparison of updateComparisons) {
+        if (!comparison.ok) {
+          console.warn(
+            pc.yellow(
+              `  ⚠ Could not fetch ${comparison.remotePath}: ${comparison.error instanceof Error ? comparison.error.message : comparison.error}`,
+            ),
+          );
+          continue;
+        }
+        classify(comparison.label, comparison.dest, comparison.local, comparison.content);
       }
 
       if (auto.length === 0 && pending.length === 0) {
