@@ -181,7 +181,8 @@
       ],
       "componentDeps": [
         "button",
-        "field"
+        "field",
+        "popover"
       ],
       "peerDependencies": {
         "@lucide/angular": "^1.0.0",

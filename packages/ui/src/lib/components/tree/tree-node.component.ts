@@ -67,6 +67,11 @@ export class TreeNodeComponent implements TreeKeyManagerItem {
     this.el.nativeElement.focus();
   }
 
+  makeFocusable(): void {
+    // CDK calls this during initial setup to mark an item as the roving tab stop
+    // without moving DOM focus or emitting a focus-change event.
+  }
+
   unfocus(): void {
     // 交給瀏覽器原生 blur/下一個 focus 目標處理，這裡不用主動做什麼
   }

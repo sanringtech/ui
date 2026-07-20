@@ -29,9 +29,14 @@ import { Observable, Subject } from 'rxjs';
 import { cn } from '../../utils';
 import { CALENDAR_WEEKDAY_TEXT_CLASS } from '../component-styles';
 import { FieldType, SanringFieldControl, SANRING_FIELD_CONTROL } from '../field/field.type';
+import { PopoverComponent } from '../popover/popover.component';
+import { PopoverContentComponent } from '../popover/popover-content.component';
 import { CalendarDayDirective } from './calendar-day.directive';
 import { CalendarHeaderComponent } from './calendar-header.component';
 import { CalendarSize, CalendarValue } from './calendar.type';
+
+const JUMP_YEAR_RANGE_PAST = 100;
+const JUMP_YEAR_RANGE_FUTURE = 50;
 
 let nextCalendarId = 0;
 
@@ -39,7 +44,7 @@ let nextCalendarId = 0;
   selector: 'sanring-calendar',
   standalone: true,
   exportAs: 'sanringCalendar',
-  imports: [CalendarHeaderComponent, CalendarDayDirective],
+  imports: [CalendarHeaderComponent, CalendarDayDirective, PopoverComponent, PopoverContentComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
   hostDirectives: [CalendarGridDirective],
   providers: [
@@ -72,15 +77,42 @@ let nextCalendarId = 0;
     <div [class]="engine.monthGrids().length > 1 ? 'flex gap-6' : 'block'">
       @for (monthGrid of engine.monthGrids(); track $index) {
         <div class="min-w-60 flex-1">
-          <sanring-calendar-header
-            [label]="monthLabel(monthGrid)"
-            [showPrev]="$first"
-            [showNext]="$last"
-            [prevMonthLabel]="prevMonthLabel()"
-            [nextMonthLabel]="nextMonthLabel()"
-            (prev)="engine.prevMonth()"
-            (next)="engine.nextMonth()"
-          />
+          <sanring-popover>
+            <sanring-calendar-header
+              [label]="monthLabel(monthGrid)"
+              [showPrev]="$first"
+              [showNext]="$last"
+              [labelClickable]="$first"
+              [prevMonthLabel]="prevMonthLabel()"
+              [nextMonthLabel]="nextMonthLabel()"
+              (prev)="engine.prevMonth()"
+              (next)="engine.nextMonth()"
+            />
+            @if ($first) {
+              <sanring-popover-content class="flex gap-2">
+                <select
+                  class="rounded-[var(--sanring-radius)] border border-[var(--sanring-border-strong)] bg-[var(--sanring-surface)] px-2 py-1 text-sm text-[var(--sanring-foreground)]"
+                  [attr.aria-label]="jumpMonthLabel()"
+                  [value]="viewMonth(monthGrid)"
+                  (change)="onJumpMonthChange($event, monthGrid)"
+                >
+                  @for (opt of monthOptions(); track opt.value) {
+                    <option [value]="opt.value">{{ opt.label }}</option>
+                  }
+                </select>
+                <select
+                  class="rounded-[var(--sanring-radius)] border border-[var(--sanring-border-strong)] bg-[var(--sanring-surface)] px-2 py-1 text-sm text-[var(--sanring-foreground)]"
+                  [attr.aria-label]="jumpYearLabel()"
+                  [value]="viewYear(monthGrid)"
+                  (change)="onJumpYearChange($event, monthGrid)"
+                >
+                  @for (y of yearOptions(); track y) {
+                    <option [value]="y">{{ y }}</option>
+                  }
+                </select>
+              </sanring-popover-content>
+            }
+          </sanring-popover>
 
           <div class="mb-1 grid grid-cols-7 gap-1 text-center" role="row" aria-hidden="true">
             @for (label of weekdayLabels(); track $index) {
@@ -124,6 +156,8 @@ export class CalendarComponent implements ControlValueAccessor, OnInit {
   readonly ariaDescribedBy = input<string | undefined>();
   readonly prevMonthLabel = input('上一月');
   readonly nextMonthLabel = input('下一月');
+  readonly jumpMonthLabel = input('選擇月份');
+  readonly jumpYearLabel = input('選擇年份');
 
   readonly selectedDateChange = output<Date | null>();
   readonly selectedRangeChange = output<DateRange>();
@@ -262,6 +296,39 @@ export class CalendarComponent implements ControlValueAccessor, OnInit {
     return `${current.date.getFullYear()} ${locale.monthLabels[current.date.getMonth()]}`;
   }
 
+  protected readonly monthOptions = computed(() => {
+    const locale = this.resolvedLocale();
+    if (!locale) return [];
+    return locale.monthLabels.map((label, value) => ({ value, label }));
+  });
+
+  protected readonly yearOptions = computed(() => {
+    const currentYear = new Date().getFullYear();
+    const years: number[] = [];
+    for (let y = currentYear - JUMP_YEAR_RANGE_PAST; y <= currentYear + JUMP_YEAR_RANGE_FUTURE; y++) {
+      years.push(y);
+    }
+    return years;
+  });
+
+  protected viewMonth(days: readonly CalendarDay[]): number {
+    return days[7].date.getMonth();
+  }
+
+  protected viewYear(days: readonly CalendarDay[]): number {
+    return days[7].date.getFullYear();
+  }
+
+  protected onJumpMonthChange(event: Event, days: readonly CalendarDay[]): void {
+    const month = Number((event.target as HTMLSelectElement).value);
+    this.engine.setViewDate(new Date(this.viewYear(days), month, 1));
+  }
+
+  protected onJumpYearChange(event: Event, days: readonly CalendarDay[]): void {
+    const year = Number((event.target as HTMLSelectElement).value);
+    this.engine.setViewDate(new Date(year, this.viewMonth(days), 1));
+  }
+
   protected toWeeks(grid: readonly CalendarDay[]): CalendarDay[][] {
     const rows: CalendarDay[][] = [];
     for (let i = 0; i < 42; i += 7) rows.push(grid.slice(i, i + 7) as CalendarDay[]);
@@ -290,12 +357,15 @@ export class CalendarComponent implements ControlValueAccessor, OnInit {
   writeValue(value: CalendarValue): void {
     if (this.mode() === 'range') {
       if (value && typeof value === 'object' && 'start' in value) {
-        this.engine.setSelectedRange(value as DateRange);
+        const range = value as DateRange;
+        this.engine.setSelectedRange(range);
+        if (range.start) this.engine.setViewDate(range.start);
       } else {
         this.engine.clearSelection();
       }
     } else if (value instanceof Date) {
       this.engine.setSelectedDate(value);
+      this.engine.setViewDate(value);
     } else {
       this.engine.clearSelection();
     }
