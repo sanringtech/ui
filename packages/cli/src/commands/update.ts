@@ -66,10 +66,11 @@ export const updateCommand = new Command('update')
   .option('-y, --yes', 'apply every change without prompting', false)
   .option('--dry-run', 'show what would change without writing anything', false)
   .option('--registry <source>', 'custom registry (URL or local path)')
+  .option('--trust', 'treat files with no recorded baseline as untouched — use this for installs predating v0.9.0 hash tracking', false)
   .action(
     async (
       componentNames: string[],
-      options: { path?: string; yes: boolean; dryRun: boolean; registry?: string },
+      options: { path?: string; yes: boolean; dryRun: boolean; registry?: string; trust: boolean },
     ) => {
       const cwd = process.cwd();
       const registrySource = options.registry;
@@ -105,6 +106,7 @@ export const updateCommand = new Command('update')
       const added: AutoFile[] = [];
       const pending: PendingFile[] = [];
       let backfilled = 0;
+      let trusted = 0;
 
       function classify(label: string, dest: string, local: string, remote: string) {
         const classification = classifyUpdate(label, dest, local, remote, installedHashes[label]);
@@ -113,6 +115,13 @@ export const updateCommand = new Command('update')
             installedHashes[label] = hashContent(local);
             backfilled++;
           }
+          return;
+        }
+        // --trust: no baseline recorded (pre-0.9.0 install) → the user asserts
+        // they haven't customized this file, so promote conflict → auto.
+        if (options.trust && classification.kind === 'conflict' && installedHashes[label] === undefined) {
+          auto.push({ label: classification.label, dest: classification.dest, remote: classification.remote });
+          trusted++;
           return;
         }
         if (classification.kind === 'auto') auto.push(classification);
@@ -192,8 +201,14 @@ export const updateCommand = new Command('update')
       // Untouched since install — the registry moved on but the user never
       // edited their copy, so there's nothing to lose by applying directly.
       if (auto.length > 0) {
+        const trustNote =
+          options.trust && trusted > 0
+            ? pc.dim(` (${trusted} via --trust — no baseline recorded, assumed untouched)`)
+            : '';
         console.log(
-          pc.cyan(`\n${auto.length} file${auto.length > 1 ? 's' : ''} unchanged locally, applying registry update:\n`),
+          pc.cyan(`\n${auto.length} file${auto.length > 1 ? 's' : ''} unchanged locally, applying registry update:`) +
+            trustNote +
+            '\n',
         );
         for (const file of auto) {
           if (options.dryRun) {

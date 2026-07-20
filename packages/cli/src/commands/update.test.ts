@@ -2,7 +2,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { existsSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
-import { hashContent, readConfig } from '../utils.js';
+import { hashContent, readConfig, writeConfig } from '../utils.js';
 import { writeRegistryFixture } from '../__tests__/registry-fixture.js';
 import { addCommand } from './add.js';
 import { classifyUpdate, updateCommand } from './update.js';
@@ -140,6 +140,35 @@ describe('updateCommand (integration)', () => {
     // Hash should be recorded so future updates track it correctly.
     const config = readConfig(projectDir);
     expect(config?.installedHashes?.['widget/extra.ts']).toBe(hashContent('export const extra = 1;\n'));
+  });
+
+  it('--trust promotes no-baseline conflicts to auto-update (pre-0.9.0 installs)', async () => {
+    // Simulate a pre-0.9.0 install: strip all recorded hashes so the config
+    // looks like what users had before hash tracking was introduced.
+    const configBefore = readConfig(projectDir)!;
+    writeConfig(projectDir, { componentPath: configBefore.componentPath, installedHashes: {} });
+
+    // Registry moves on after the stripped install.
+    writeRegistryFixture(registryDir, {
+      utils: 'export function cn() { return "v2"; }\n',
+      widget: 'export const widget = 2;\n',
+    });
+
+    logs = [];
+    vi.spyOn(console, 'log').mockImplementation((...args: unknown[]) => {
+      logs.push(args.join(' '));
+    });
+
+    // Without --trust, the missing baseline would classify both as conflict.
+    // With --trust, they should be promoted to auto without any prompts.
+    await updateCommand.parseAsync(['--registry', registryDir, '--trust'], { from: 'user' });
+
+    expect(readFileSync(componentFile(), 'utf-8')).toBe('export const widget = 2;\n');
+    expect(readFileSync(sharedFile(), 'utf-8')).toBe('export function cn() { return "v2"; }\n');
+    // Both files went through the auto (not conflict) path.
+    expect(logs.some((l) => l.includes('auto-updated'))).toBe(true);
+    // trust note should appear in the header
+    expect(logs.some((l) => l.includes('--trust'))).toBe(true);
   });
 
   it('reports nothing to do when local files already match the registry', async () => {
