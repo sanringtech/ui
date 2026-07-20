@@ -1,5 +1,24 @@
 # @sanring/cli
 
+## 0.11.0
+
+### Minor Changes
+
+- 87a49eb: `calendar`'s header label is now clickable, opening a popover with month/year `<select>` jump controls (±100/50 years from today) instead of only stepping one month at a time. `calendar`'s registry entry now declares `popover` as a `componentDep`, so `sanring add date-picker`/`sanring add calendar` also installs it.
+
+  Fixes two bugs surfaced by that feature:
+  - `popover`: `triggerOrigin` is now a signal instead of a plain property. A trigger nested inside an `OnPush` child component (like the calendar header's label button) gets assigned after the popover content's first change-detection pass, so a plain property read stayed `undefined` forever — the overlay never positioned correctly.
+  - `tree`: `TreeNodeComponent` implements the no-op `makeFocusable()` the CDK `TreeKeyManager` requires to set the initial roving tab stop, fixing keyboard navigation.
+
+### Patch Changes
+
+- 87a49eb: Internal performance work, no behavior change: `add`/`diff`/`update`/`info`/`remove` now look up components and shared entries through a `createRegistryIndex` map instead of repeated `Array.find`/`.map` scans over the registry, and component/shared file fetches in `add`/`diff`/`update` run through a bounded concurrent worker pool instead of one `await` at a time — noticeable on multi-file components and custom remote registries.
+- 87a49eb: Fix `add`/`init` installing peer dependencies via `spawnSync(..., { shell: true })` on a command string split on spaces — a custom `--registry` could supply a package name/version containing shell metacharacters that would be interpreted by the shell. Both commands now build `{ bin, args }` directly and run with `shell: false`.
+
+  `add --shared-path` is now saved to `sanring.config.json`. Previously only the initial install respected it; `diff`/`update`/`remove` always assumed shared utilities lived at `<componentPath>/shared`, so projects using a custom shared path saw drift on every subsequent command.
+
+  `fetchRegistry` now validates the parsed JSON shape (local bundle, `--registry <path>`, and remote fetch) and reports which field is malformed, instead of letting a bad registry fail later inside an unrelated command with a confusing error.
+
 ## 0.10.0
 
 ### Minor Changes
