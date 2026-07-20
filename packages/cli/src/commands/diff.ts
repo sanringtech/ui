@@ -22,14 +22,6 @@ import { THEME_FILE_PATH } from './init.js';
 const DEFAULT_PATH = 'src/app/components/ui';
 const FILE_FETCH_CONCURRENCY = 6;
 
-interface DiffTarget {
-  label: string;
-  dest: string;
-  remotePath: string;
-  warnPath: string;
-  recordedHash?: string;
-}
-
 // Sanring UI has no version concept — components are copied source, not npm
 // packages — so "up to date" only ever means "identical to what's in the
 // registry right now." This command exists to make drift *visible* before
@@ -126,152 +118,183 @@ export const diffCommand = new Command('diff')
   .argument('[components...]', 'component name(s) to check; omit to check everything installed')
   .option('-p, --path <path>', 'destination path relative to cwd')
   .option('--registry <source>', 'custom registry (URL or local path)')
-  .action(async (componentNames: string[], options: { path?: string; registry?: string }) => {
-    const cwd = process.cwd();
-    const registrySource = options.registry;
+  .option('--exit-code', 'exit with code 1 if any files differ (useful for CI)', false)
+  .action(
+    async (
+      componentNames: string[],
+      options: { path?: string; registry?: string; exitCode: boolean },
+    ) => {
+      const cwd = process.cwd();
+      const registrySource = options.registry;
 
-    if (!isAngularProject(cwd)) {
-      console.error(pc.red('✖ No angular.json found.'));
-      console.error(pc.dim('  Run from the root of an Angular project.'));
-      process.exit(1);
-    }
-
-    const config = readConfig(cwd);
-    const componentBasePath = resolve(cwd, options.path ?? config?.componentPath ?? DEFAULT_PATH);
-    const sharedDestDir = config?.sharedPath
-      ? resolve(cwd, config.sharedPath)
-      : join(componentBasePath, 'shared');
-
-    const registry = await fetchRegistry(registrySource);
-    const registryIndex = createRegistryIndex(registry);
-    const { components, missing, notInstalled } = resolveDiffTargets(
-      componentNames,
-      componentBasePath,
-      registryIndex,
-    );
-
-    if (missing.length > 0) {
-      console.error(
-        pc.red(`✖ Unknown component${missing.length > 1 ? 's' : ''}: ${missing.join(', ')}`),
-      );
-    }
-    if (notInstalled.length > 0) {
-      console.log(
-        pc.dim(
-          `  Not installed, skipping: ${notInstalled.join(', ')} (run ${pc.white('sanring add')} first)`,
-        ),
-      );
-    }
-
-    let changed = 0,
-      checked = 0,
-      autoSafe = 0;
-    const diffTargets: DiffTarget[] = [];
-
-    function tally(status: ReturnType<typeof printFileDiff>) {
-      if (status === 'unchanged') return;
-      changed++;
-      if (status === 'auto') autoSafe++;
-    }
-
-    // Theme file — written by `init`, not tied to any component's sharedDeps,
-    // but the thing most likely to have been hand-edited for a brand.
-    const themeDest = join(cwd, THEME_FILE_PATH);
-    const themeShared = registryIndex.sharedByName.get('theme');
-    if (themeShared && existsSync(themeDest)) {
-      diffTargets.push({
-        label: THEME_FILE_PATH,
-        dest: themeDest,
-        remotePath: themeShared.file,
-        warnPath: themeShared.file,
-        recordedHash: config?.installedHashes?.[THEME_FILE_PATH],
-      });
-    }
-
-    // Shared utility deps referenced by the components being diffed.
-    const sharedNamesNeeded = new Set<string>();
-    for (const component of components) {
-      for (const depName of component.sharedDeps ?? []) sharedNamesNeeded.add(depName);
-    }
-    for (const depName of sharedNamesNeeded) {
-      const shared = registryIndex.sharedByName.get(depName);
-      if (!shared) continue;
-      const fileName = shared.file.split('/').pop()!;
-      const dest = join(sharedDestDir, fileName);
-      if (!existsSync(dest)) continue;
-      const label = `shared/${fileName}`;
-      diffTargets.push({
-        label,
-        dest,
-        remotePath: shared.file,
-        warnPath: shared.file,
-        recordedHash: config?.installedHashes?.[label],
-      });
-    }
-
-    for (const component of components) {
-      const destDir = join(componentBasePath, component.name);
-      for (const file of component.files) {
-        const fileName = file.split('/').pop()!;
-        const dest = join(destDir, fileName);
-        if (!existsSync(dest)) continue;
-        const label = `${component.name}/${fileName}`;
-        diffTargets.push({
-          label,
-          dest,
-          remotePath: `components/${file}`,
-          warnPath: file,
-          recordedHash: config?.installedHashes?.[label],
-        });
+      if (!isAngularProject(cwd)) {
+        console.error(pc.red('✖ No angular.json found.'));
+        console.error(pc.dim('  Run from the root of an Angular project.'));
+        process.exit(1);
       }
-    }
 
-    const comparisons = await fetchTextTargetsConcurrent(
-      diffTargets.map((target) => ({
-        ...target,
-        local: readFileSync(target.dest, 'utf-8'),
-      })),
-      FILE_FETCH_CONCURRENCY,
-      (remotePath) => fetchFile(remotePath, registrySource),
-    );
+      const config = readConfig(cwd);
+      const componentBasePath = resolve(cwd, options.path ?? config?.componentPath ?? DEFAULT_PATH);
+      const sharedDestDir = config?.sharedPath
+        ? resolve(cwd, config.sharedPath)
+        : join(componentBasePath, 'shared');
 
-    for (const comparison of comparisons) {
-      if ('error' in comparison) {
-        console.warn(
-          pc.yellow(
-            `  ⚠ Could not fetch ${comparison.warnPath}: ${comparison.error instanceof Error ? comparison.error.message : comparison.error}`,
+      const registry = await fetchRegistry(registrySource);
+      const registryIndex = createRegistryIndex(registry);
+      const { components, missing, notInstalled } = resolveDiffTargets(
+        componentNames,
+        componentBasePath,
+        registryIndex,
+      );
+
+      if (missing.length > 0) {
+        console.error(
+          pc.red(`✖ Unknown component${missing.length > 1 ? 's' : ''}: ${missing.join(', ')}`),
+        );
+      }
+      if (notInstalled.length > 0) {
+        console.log(
+          pc.dim(
+            `  Not installed, skipping: ${notInstalled.join(', ')} (run ${pc.white('sanring add')} first)`,
           ),
         );
-        continue;
       }
-      checked++;
-      tally(
-        printFileDiff(
-          comparison.label,
-          comparison.local,
-          comparison.content,
-          comparison.recordedHash,
-        ),
-      );
-    }
 
-    if (checked === 0) {
-      console.log(pc.dim('\n  Nothing to compare — no installed files found.\n'));
-      return;
-    }
+      // Collect jobs upfront then fetch compare targets with bounded concurrency —
+      // avoids sequential waterfall latency (and hammering a remote registry
+      // unbounded) when many components are installed.
+      type DiffJob =
+        | { kind: 'new'; label: string }
+        | {
+            kind: 'compare';
+            label: string;
+            localPath: string;
+            remotePath: string;
+            recordedHash?: string;
+          };
 
-    console.log('');
-    if (changed === 0) {
-      console.log(pc.green(`✔ All ${checked} file${checked > 1 ? 's' : ''} match the registry.\n`));
-    } else {
-      const reviewCount = changed - autoSafe;
-      const notes: string[] = [];
-      if (autoSafe > 0) notes.push(`${autoSafe} safe to update`);
-      if (reviewCount > 0) notes.push(`${reviewCount} need${reviewCount === 1 ? 's' : ''} review`);
-      console.log(
-        pc.yellow(
-          `● ${changed} of ${checked} file${checked > 1 ? 's' : ''} differ from the registry`,
-        ) + pc.dim(` (${notes.join(', ')}). Run \`sanring update\` to apply.\n`),
+      const jobs: DiffJob[] = [];
+
+      const themeDest = join(cwd, THEME_FILE_PATH);
+      const themeShared = registryIndex.sharedByName.get('theme');
+      if (themeShared && existsSync(themeDest)) {
+        jobs.push({
+          kind: 'compare',
+          label: THEME_FILE_PATH,
+          localPath: themeDest,
+          remotePath: themeShared.file,
+          recordedHash: config?.installedHashes?.[THEME_FILE_PATH],
+        });
+      }
+
+      const sharedNamesNeeded = new Set<string>();
+      for (const component of components) {
+        for (const depName of component.sharedDeps ?? []) sharedNamesNeeded.add(depName);
+      }
+      for (const depName of sharedNamesNeeded) {
+        const shared = registryIndex.sharedByName.get(depName);
+        if (!shared) continue;
+        const fileName = shared.file.split('/').pop()!;
+        const dest = join(sharedDestDir, fileName);
+        const label = `shared/${fileName}`;
+        if (!existsSync(dest)) {
+          jobs.push({ kind: 'new', label });
+        } else {
+          jobs.push({
+            kind: 'compare',
+            label,
+            localPath: dest,
+            remotePath: shared.file,
+            recordedHash: config?.installedHashes?.[label],
+          });
+        }
+      }
+
+      for (const component of components) {
+        const destDir = join(componentBasePath, component.name);
+        for (const file of component.files) {
+          const fileName = file.split('/').pop()!;
+          const dest = join(destDir, fileName);
+          const label = `${component.name}/${fileName}`;
+          if (!existsSync(dest)) {
+            jobs.push({ kind: 'new', label });
+          } else {
+            jobs.push({
+              kind: 'compare',
+              label,
+              localPath: dest,
+              remotePath: `components/${file}`,
+              recordedHash: config?.installedHashes?.[label],
+            });
+          }
+        }
+      }
+
+      let changed = 0,
+        checked = 0,
+        autoSafe = 0;
+
+      function tally(status: ReturnType<typeof printFileDiff>) {
+        if (status === 'unchanged') return;
+        changed++;
+        if (status === 'auto') autoSafe++;
+      }
+
+      const compareJobs = jobs.filter((job) => job.kind === 'compare');
+      const results = await fetchTextTargetsConcurrent(
+        compareJobs,
+        FILE_FETCH_CONCURRENCY,
+        (remotePath) => fetchFile(remotePath, registrySource),
       );
-    }
-  });
+      const resultByLabel = new Map(results.map((result) => [result.label, result]));
+
+      for (const job of jobs) {
+        if (job.kind === 'new') {
+          console.log(
+            pc.cyan(`  + ${job.label} (new in registry — run \`sanring update\` to install)`),
+          );
+          checked++;
+          changed++;
+          autoSafe++;
+          continue;
+        }
+        const result = resultByLabel.get(job.label)!;
+        if (!result.ok) {
+          console.warn(
+            pc.yellow(
+              `  ⚠ Could not fetch ${job.remotePath}: ${result.error instanceof Error ? result.error.message : result.error}`,
+            ),
+          );
+          continue;
+        }
+        const local = readFileSync(job.localPath, 'utf-8');
+        checked++;
+        tally(printFileDiff(job.label, local, result.content, job.recordedHash));
+      }
+
+      if (checked === 0) {
+        console.log(pc.dim('\n  Nothing to compare — no installed files found.\n'));
+        return;
+      }
+
+      console.log('');
+      if (changed === 0) {
+        console.log(
+          pc.green(`✔ All ${checked} file${checked > 1 ? 's' : ''} match the registry.\n`),
+        );
+      } else {
+        const reviewCount = changed - autoSafe;
+        const notes: string[] = [];
+        if (autoSafe > 0) notes.push(`${autoSafe} safe to update`);
+        if (reviewCount > 0)
+          notes.push(`${reviewCount} need${reviewCount === 1 ? 's' : ''} review`);
+        console.log(
+          pc.yellow(
+            `● ${changed} of ${checked} file${checked > 1 ? 's' : ''} differ from the registry`,
+          ) + pc.dim(` (${notes.join(', ')}). Run \`sanring update\` to apply.\n`),
+        );
+      }
+
+      if (options.exitCode && changed > 0) process.exit(1);
+    },
+  );

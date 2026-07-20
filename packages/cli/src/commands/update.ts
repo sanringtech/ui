@@ -19,12 +19,6 @@ import { THEME_FILE_PATH } from './init.js';
 const DEFAULT_PATH = 'src/app/components/ui';
 const FILE_FETCH_CONCURRENCY = 6;
 
-interface UpdateTarget {
-  label: string;
-  dest: string;
-  remotePath: string;
-}
-
 interface PendingFile {
   label: string;
   dest: string;
@@ -80,10 +74,15 @@ export const updateCommand = new Command('update')
   .option('-y, --yes', 'apply every change without prompting', false)
   .option('--dry-run', 'show what would change without writing anything', false)
   .option('--registry <source>', 'custom registry (URL or local path)')
+  .option(
+    '--trust',
+    'treat files with no recorded baseline as untouched — use this for installs predating v0.9.0 hash tracking',
+    false,
+  )
   .action(
     async (
       componentNames: string[],
-      options: { path?: string; yes: boolean; dryRun: boolean; registry?: string },
+      options: { path?: string; yes: boolean; dryRun: boolean; registry?: string; trust: boolean },
     ) => {
       const cwd = process.cwd();
       const registrySource = options.registry;
@@ -122,9 +121,10 @@ export const updateCommand = new Command('update')
       // sort each into "safe to apply silently" vs. "needs a human to look".
       const installedHashes = { ...config?.installedHashes };
       const auto: AutoFile[] = [];
+      const added: AutoFile[] = [];
       const pending: PendingFile[] = [];
-      const updateTargets: UpdateTarget[] = [];
       let backfilled = 0;
+      let trusted = 0;
 
       function classify(label: string, dest: string, local: string, remote: string) {
         const classification = classifyUpdate(label, dest, local, remote, installedHashes[label]);
@@ -135,18 +135,34 @@ export const updateCommand = new Command('update')
           }
           return;
         }
+        // --trust: no baseline recorded (pre-0.9.0 install) → the user asserts
+        // they haven't customized this file, so promote conflict → auto.
+        if (
+          options.trust &&
+          classification.kind === 'conflict' &&
+          installedHashes[label] === undefined
+        ) {
+          auto.push({
+            label: classification.label,
+            dest: classification.dest,
+            remote: classification.remote,
+          });
+          trusted++;
+          return;
+        }
         if (classification.kind === 'auto') auto.push(classification);
         else pending.push(classification);
       }
 
+      // Collect all jobs then fetch in parallel — avoids waterfall latency
+      // when many components or files are installed on a remote registry.
+      type UpdateJob = { label: string; dest: string; remotePath: string };
+      const jobs: UpdateJob[] = [];
+
       const themeDest = join(cwd, THEME_FILE_PATH);
       const themeShared = registryIndex.sharedByName.get('theme');
       if (themeShared && existsSync(themeDest)) {
-        updateTargets.push({
-          label: THEME_FILE_PATH,
-          dest: themeDest,
-          remotePath: themeShared.file,
-        });
+        jobs.push({ label: THEME_FILE_PATH, dest: themeDest, remotePath: themeShared.file });
       }
 
       const sharedNamesNeeded = new Set<string>();
@@ -157,11 +173,9 @@ export const updateCommand = new Command('update')
         const shared = registryIndex.sharedByName.get(depName);
         if (!shared) continue;
         const fileName = shared.file.split('/').pop()!;
-        const dest = join(sharedDestDir, fileName);
-        if (!existsSync(dest)) continue;
-        updateTargets.push({
+        jobs.push({
           label: `shared/${fileName}`,
-          dest,
+          dest: join(sharedDestDir, fileName),
           remotePath: shared.file,
         });
       }
@@ -170,38 +184,39 @@ export const updateCommand = new Command('update')
         const destDir = join(componentBasePath, component.name);
         for (const file of component.files) {
           const fileName = file.split('/').pop()!;
-          const dest = join(destDir, fileName);
-          if (!existsSync(dest)) continue;
-          updateTargets.push({
+          jobs.push({
             label: `${component.name}/${fileName}`,
-            dest,
+            dest: join(destDir, fileName),
             remotePath: `components/${file}`,
           });
         }
       }
 
-      const updateComparisons = await fetchTextTargetsConcurrent(
-        updateTargets.map((target) => ({
-          ...target,
-          local: readFileSync(target.dest, 'utf-8'),
-        })),
+      const remoteResults = await fetchTextTargetsConcurrent(
+        jobs,
         FILE_FETCH_CONCURRENCY,
         (remotePath) => fetchFile(remotePath, registrySource),
       );
 
-      for (const comparison of updateComparisons) {
-        if (!comparison.ok) {
+      for (const result of remoteResults) {
+        if (!result.ok) {
           console.warn(
             pc.yellow(
-              `  ⚠ Could not fetch ${comparison.remotePath}: ${comparison.error instanceof Error ? comparison.error.message : comparison.error}`,
+              `  ⚠ Could not fetch ${result.remotePath}: ${result.error instanceof Error ? result.error.message : result.error}`,
             ),
           );
           continue;
         }
-        classify(comparison.label, comparison.dest, comparison.local, comparison.content);
+        const { label, dest, content: remote } = result;
+        if (!existsSync(dest)) {
+          added.push({ label, dest, remote });
+          continue;
+        }
+        const local = readFileSync(dest, 'utf-8');
+        classify(label, dest, local, remote);
       }
 
-      if (auto.length === 0 && pending.length === 0) {
+      if (added.length === 0 && auto.length === 0 && pending.length === 0) {
         if (!options.dryRun && backfilled > 0) {
           writeConfig(cwd, {
             componentPath: resolvedComponentPath,
@@ -216,13 +231,40 @@ export const updateCommand = new Command('update')
       let applied = 0,
         skipped = 0;
 
+      // Files present in registry but missing locally — added to the component
+      // after the user's last install. No local version to conflict with.
+      if (added.length > 0) {
+        console.log(
+          pc.cyan(
+            `\n${added.length} new file${added.length > 1 ? 's' : ''} in registry (added since you last installed):\n`,
+          ),
+        );
+        for (const file of added) {
+          if (options.dryRun) {
+            console.log(pc.dim(`  + ${file.label} (dry run, would install)`));
+            continue;
+          }
+          writeFile(file.dest, file.remote, true);
+          installedHashes[file.label] = hashContent(file.remote);
+          console.log(pc.green(`  ✔ ${file.label} (new)`));
+          applied++;
+        }
+        console.log('');
+      }
+
       // Untouched since install — the registry moved on but the user never
       // edited their copy, so there's nothing to lose by applying directly.
       if (auto.length > 0) {
+        const trustNote =
+          options.trust && trusted > 0
+            ? pc.dim(` (${trusted} via --trust — no baseline recorded, assumed untouched)`)
+            : '';
         console.log(
           pc.cyan(
-            `\n${auto.length} file${auto.length > 1 ? 's' : ''} unchanged locally, applying registry update:\n`,
-          ),
+            `\n${auto.length} file${auto.length > 1 ? 's' : ''} unchanged locally, applying registry update:`,
+          ) +
+            trustNote +
+            '\n',
         );
         for (const file of auto) {
           if (options.dryRun) {

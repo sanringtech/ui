@@ -6,10 +6,12 @@ import { Command } from 'commander';
 import pc from 'picocolors';
 import { addCommand } from './commands/add.js';
 import { diffCommand } from './commands/diff.js';
+import { doctorCommand } from './commands/doctor.js';
 import { infoCommand } from './commands/info.js';
 import { initCommand } from './commands/init.js';
 import { listCommand } from './commands/list.js';
 import { removeCommand } from './commands/remove.js';
+import { searchCommand } from './commands/search.js';
 import { updateCommand } from './commands/update.js';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
@@ -37,10 +39,12 @@ ${pc.dim('not installed as an npm package. Docs: https://ui.sanring.dev')}
 
 program.addCommand(initCommand);
 program.addCommand(listCommand);
+program.addCommand(searchCommand);
 program.addCommand(infoCommand);
 program.addCommand(addCommand);
 program.addCommand(removeCommand);
 program.addCommand(diffCommand);
 program.addCommand(updateCommand);
+program.addCommand(doctorCommand);
 
 program.parse();

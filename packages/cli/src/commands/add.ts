@@ -1,6 +1,6 @@
 import { Command } from 'commander';
 import { spawnSync } from 'node:child_process';
-import { existsSync, mkdirSync, writeFileSync } from 'node:fs';
+import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { dirname, join, resolve } from 'node:path';
 import { createInterface } from 'node:readline/promises';
 import ora from 'ora';
@@ -25,6 +25,7 @@ import {
   readConfig,
   writeConfig,
 } from '../utils.js';
+import { printFileDiff } from './diff.js';
 
 export function writeFile(dest: string, content: string, force: boolean): 'written' | 'skipped' {
   if (existsSync(dest) && !force) return 'skipped';
@@ -194,6 +195,8 @@ export const addCommand = new Command('add')
   .option('-y, --yes', 'skip overwrite confirmation when using --force', false)
   .option('--registry <source>', 'custom registry (URL or local path)')
   .option('--dry-run', 'preview changes without writing files', false)
+  .option('--diff', 'show diff between registry and local files without installing', false)
+  .option('--view', 'show registry file contents without installing', false)
   .action(
     async (
       componentNames: string[],
@@ -204,6 +207,8 @@ export const addCommand = new Command('add')
         yes: boolean;
         registry?: string;
         dryRun: boolean;
+        diff: boolean;
+        view: boolean;
       },
     ) => {
       const cwd = process.cwd();
@@ -248,6 +253,50 @@ export const addCommand = new Command('add')
         autoAdded.length > 0
           ? pc.dim(` (+ ${autoAdded.length} dependency: ${autoAdded.join(', ')})`)
           : '';
+
+      // --diff: show diff between registry and local without installing
+      if (options.diff) {
+        console.log(pc.cyan(`\nDiff: ${pc.bold(requestedLabel)}${autoLabel}\n`));
+        for (const component of toInstall) {
+          const destDir = join(componentBasePath, component.name);
+          const label = autoAdded.includes(component.name)
+            ? `${component.name} ${pc.dim('(dependency)')}`
+            : component.name;
+          console.log(pc.dim(`  ${label}:`));
+          for (const file of component.files) {
+            const fileName = file.split('/').pop()!;
+            const dest = join(destDir, fileName);
+            const fileLabel = `${component.name}/${fileName}`;
+            if (!existsSync(dest)) {
+              console.log(pc.cyan(`  + ${fileLabel} (new, not yet installed)`));
+              continue;
+            }
+            const remote = await fetchFile(`components/${file}`, registrySource);
+            const local = readFileSync(dest, 'utf-8');
+            printFileDiff(fileLabel, local, remote, config?.installedHashes?.[fileLabel]);
+          }
+          console.log('');
+        }
+        return;
+      }
+
+      // --view: show raw registry file contents without installing
+      if (options.view) {
+        console.log(pc.cyan(`\nView: ${pc.bold(requestedLabel)}${autoLabel}\n`));
+        for (const component of toInstall) {
+          const label = autoAdded.includes(component.name)
+            ? `${component.name} ${pc.dim('(dependency)')}`
+            : component.name;
+          for (const file of component.files) {
+            const fileName = file.split('/').pop()!;
+            console.log(pc.bold(`── ${label}/${fileName} ──\n`));
+            const content = await fetchFile(`components/${file}`, registrySource);
+            console.log(content);
+          }
+        }
+        return;
+      }
+
       console.log(pc.cyan(`\nAdding ${pc.bold(requestedLabel)}${autoLabel}...\n`));
       if (options.dryRun) {
         console.log(pc.dim('  Dry run — no files will be written.\n'));
