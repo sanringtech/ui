@@ -39,6 +39,38 @@ export const componentChangelog: readonly ComponentChangelogEntry[] = [
       {
         type: 'added',
         notable: true,
+        componentIds: ['calendar'],
+        text: 'Calendar header label is now clickable, opening a popover with month/year jump `<select>` controls (±100/50 years from today) instead of only stepping one month at a time.',
+      },
+      {
+        type: 'fixed',
+        componentIds: ['popover'],
+        text: '`triggerOrigin` is now a signal instead of a plain property, fixing overlay positioning for triggers nested inside an `OnPush` child component (e.g. Calendar\'s clickable header label).',
+      },
+      {
+        type: 'fixed',
+        componentIds: ['tree'],
+        text: 'Implemented the no-op `makeFocusable()` the CDK `TreeKeyManager` requires, fixing keyboard navigation (roving tab stop was never set).',
+      },
+      {
+        type: 'fixed',
+        text: '`@sanring/cli` v0.11.0 — `add`/`init` no longer run peer-dependency installs through `spawnSync(..., { shell: true })` on a joined command string; a custom `--registry` supplying a crafted package name/version could reach the shell. Both now build `{ bin, args }` directly with `shell: false`.',
+      },
+      {
+        type: 'fixed',
+        text: '`add --shared-path` is now persisted to `sanring.config.json` — previously only the initial install respected it, so `diff`/`update`/`remove` drifted for projects using a custom shared path.',
+      },
+      {
+        type: 'changed',
+        text: '`fetchRegistry` validates the parsed JSON shape (local bundle, `--registry <path>`, and remote fetch) and reports which field is malformed instead of failing later inside an unrelated command.',
+      },
+      {
+        type: 'changed',
+        text: '`add`/`diff`/`update`/`info`/`remove` look up registry entries through an indexed map instead of repeated array scans, and file fetches in `add`/`diff`/`update` run with bounded concurrency instead of one at a time.',
+      },
+      {
+        type: 'added',
+        notable: true,
         text: '`@sanring/cli` v0.10.0 — new `sanring search <query>` command: fuzzy search components by name or description, name matches ranked first, shows an install badge for already-installed components.',
       },
       {
