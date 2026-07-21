@@ -34,6 +34,32 @@ export interface ComponentChangelogEntry {
  */
 export const componentChangelog: readonly ComponentChangelogEntry[] = [
   {
+    date: '2026-07-21',
+    changes: [
+      {
+        type: 'added',
+        notable: true,
+        componentIds: ['calendar'],
+        text: '`orientation` input (`\'horizontal\' | \'vertical\'`) controls how multiple months (`monthsToDisplay > 1`) are laid out.',
+      },
+      {
+        type: 'fixed',
+        componentIds: ['calendar'],
+        text: 'The month/year jump popover always showed the first option (e.g. January / the earliest year) instead of the month/year actually being viewed — the `<select>`\'s `[value]` binding raced against its `@for`-rendered `<option>`s. Fixed by binding `[selected]` on each `<option>` directly.',
+      },
+      {
+        type: 'fixed',
+        componentIds: ['calendar'],
+        text: 'The month/year jump `<select>`s were left-aligned with dead space in the popover; they now share the row evenly with centered text.',
+      },
+      {
+        type: 'fixed',
+        componentIds: ['tabs'],
+        text: 'Triggers are now `cursor-pointer` instead of the default cursor.',
+      },
+    ],
+  },
+  {
     date: '2026-07-20',
     changes: [
       {
