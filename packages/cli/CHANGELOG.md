@@ -1,5 +1,15 @@
 # @sanring/cli
 
+## 0.12.0
+
+### Minor Changes
+
+- `calendar` gains an `orientation` input (`'horizontal' | 'vertical'`) controlling how multiple months (`monthsToDisplay > 1`) are laid out — purely presentational, the underlying engine's month-grid order is untouched.
+
+  Fixes two bugs in the month/year jump popover added last release:
+  - The jump `<select>`s' native `[value]` binding raced against their `@for`-rendered `<option>`s, so on open they always showed the first option (e.g. "January" / the earliest year) instead of the month/year currently being viewed. Fixed by binding `[selected]` on each `<option>` directly.
+  - The two selects were left-aligned with dead space in the popover; they now share the row evenly (`flex-1`) with centered text.
+
 ## 0.11.0
 
 ### Minor Changes
