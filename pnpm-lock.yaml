@@ -36,8 +36,8 @@ importers:
         specifier: ^1.18.0
         version: 1.18.0(@angular/common@22.0.1(@angular/core@22.0.1(@angular/compiler@22.0.1)(rxjs@7.8.2))(rxjs@7.8.2))(@angular/core@22.0.1(@angular/compiler@22.0.1)(rxjs@7.8.2))
       '@sanring/date-picker':
-        specifier: ^0.4.0
-        version: 0.4.0(@angular/common@22.0.1(@angular/core@22.0.1(@angular/compiler@22.0.1)(rxjs@7.8.2))(rxjs@7.8.2))(@angular/core@22.0.1(@angular/compiler@22.0.1)(rxjs@7.8.2))
+        specifier: ^0.5.0
+        version: 0.5.0(@angular/common@22.0.1(@angular/core@22.0.1(@angular/compiler@22.0.1)(rxjs@7.8.2))(rxjs@7.8.2))(@angular/core@22.0.1(@angular/compiler@22.0.1)(rxjs@7.8.2))
       clsx:
         specifier: ^2.1.1
         version: 2.1.1
@@ -165,8 +165,8 @@ importers:
         version: 2.8.1
     devDependencies:
       '@sanring/date-picker':
-        specifier: ^0.4.0
-        version: 0.4.0(@angular/common@22.0.1(@angular/core@22.0.1(@angular/compiler@22.0.1)(rxjs@7.8.2))(rxjs@7.8.2))(@angular/core@22.0.1(@angular/compiler@22.0.1)(rxjs@7.8.2))
+        specifier: ^0.5.0
+        version: 0.5.0(@angular/common@22.0.1(@angular/core@22.0.1(@angular/compiler@22.0.1)(rxjs@7.8.2))(rxjs@7.8.2))(@angular/core@22.0.1(@angular/compiler@22.0.1)(rxjs@7.8.2))
 
 packages:
 
@@ -1983,8 +1983,8 @@ packages:
     engines: {node: '>=18.0.0', npm: '>=8.0.0'}
     hasBin: true
 
-  '@sanring/date-picker@0.4.0':
-    resolution: {integrity: sha512-fkAL6CErBuADi2g0B7O8iAdhIYSluMcCI3fZowpHZLp1YQt44Z9pHP+R96jlIfCNrb9dczCpC7fcl0gdij1nvg==}
+  '@sanring/date-picker@0.5.0':
+    resolution: {integrity: sha512-gtv0mj1M+IizrvFQ7csT/+/jR2a2Na2ESqDVTR3cd4bEJQMbDBYc6f3WPjl/WAU+m852Gtw545Udud5x8xLbDA==}
     peerDependencies:
       '@angular/common': ^22.0.0
       '@angular/core': ^22.0.0
@@ -5900,7 +5900,7 @@ snapshots:
     optionalDependencies:
       fsevents: 2.3.3
 
-  '@sanring/date-picker@0.4.0(@angular/common@22.0.1(@angular/core@22.0.1(@angular/compiler@22.0.1)(rxjs@7.8.2))(rxjs@7.8.2))(@angular/core@22.0.1(@angular/compiler@22.0.1)(rxjs@7.8.2))':
+  '@sanring/date-picker@0.5.0(@angular/common@22.0.1(@angular/core@22.0.1(@angular/compiler@22.0.1)(rxjs@7.8.2))(rxjs@7.8.2))(@angular/core@22.0.1(@angular/compiler@22.0.1)(rxjs@7.8.2))':
     dependencies:
       '@angular/common': 22.0.1(@angular/core@22.0.1(@angular/compiler@22.0.1)(rxjs@7.8.2))(rxjs@7.8.2)
       '@angular/core': 22.0.1(@angular/compiler@22.0.1)(rxjs@7.8.2)
