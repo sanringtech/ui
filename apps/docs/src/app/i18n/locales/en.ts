@@ -359,9 +359,9 @@ export const en = {
     'First click sets the start (enters Draft), second click commits the range; "Abort draft" rolls it back.',
   'calendar.demo.multiMonth': 'Multi-month',
   'calendar.demo.multiMonth.description':
-    'Two months rendered side by side; arrow keys move seamlessly between them and only page at the outer edge.',
-  'calendar.demo.infoBlockSeparate': 'Info block: separate',
-  'calendar.demo.infoBlockInline': 'Info block: inline',
+    'Two months rendered together; arrow keys move seamlessly between them and only page at the outer edge. orientation is purely presentational — it never changes month order, just flex-direction.',
+  'calendar.demo.multiMonth.tab.horizontal': 'Horizontal',
+  'calendar.demo.multiMonth.tab.vertical': 'Vertical',
   'calendar.demo.clear': 'Clear',
   'calendar.demo.abortDraft': 'Abort draft',
   'calendar.demo.noSelection': 'Not selected',
@@ -369,6 +369,16 @@ export const en = {
   'calendar.demo.rangeStart': 'Start: ',
   'calendar.demo.rangeAwaitingEnd': ' (pick an end date)',
   'calendar.demo.rangeSeparator': ' – ',
+  'calendar.demo.weekStart': 'Week start order',
+  'calendar.demo.weekStart.description':
+    'weekStartsOn reorders the grid itself, not just the header text — swap it independently of any language or label choice.',
+  'calendar.demo.weekStart.sunFirst': 'weekStartsOn: 0 (Sunday-first)',
+  'calendar.demo.weekStart.monFirst': 'weekStartsOn: 1 (Monday-first)',
+  'calendar.demo.customLocale': 'Custom locale',
+  'calendar.demo.customLocale.description':
+    'weekdayLabels and monthLabels are plain string arrays with no built-in default — swap in any script without touching week-start order.',
+  'calendar.demo.customLocale.tab.zh': 'Chinese',
+  'calendar.demo.customLocale.tab.ja': 'Japanese',
   'calendar.examples.basic.description':
     'Throws without a locale — CALENDAR_LOCALE has no default, forcing an explicit choice of week start and month/weekday labels. Click the month/year label to jump directly to any month or year.',
   'calendar.usage.description':
@@ -382,7 +392,9 @@ export const en = {
     'Overrides the injected CALENDAR_LOCALE; falls back to the injected token when omitted.',
   'calendar.api.mode.description':
     'Single or range selection mode; switching resets the current selection.',
-  'calendar.api.monthsToDisplay.description': 'Number of months rendered side by side.',
+  'calendar.api.monthsToDisplay.description': 'Number of months rendered together.',
+  'calendar.api.orientation.description':
+    'Layout direction for multiple months (monthsToDisplay > 1). Purely presentational — the engine only guarantees array order, not screen position.',
   'calendar.api.disabled.description':
     'Disabled-date matcher: a single date, an array, an interval, or a predicate function.',
   'calendar.api.allowDeselect.description':

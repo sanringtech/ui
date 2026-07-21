@@ -1,6 +1,6 @@
-import { Component, computed, inject, signal } from '@angular/core';
+import { Component, computed, inject } from '@angular/core';
 import { CalendarLocale, DateInterval, DateRange, DisabledInput } from '@sanring/date-picker';
-import { ButtonDirective, CalendarComponent } from '@sanring/ui';
+import { ButtonDirective, CalendarComponent, SANRING_TABS_IMPORTS } from '@sanring/ui';
 import { getComponentPageSection } from '../../../docs-schema/component-page.utils';
 import { I18nService } from '../../../i18n/i18n.service';
 import {
@@ -53,6 +53,20 @@ const ZH_LOCALE: CalendarLocale = {
   ],
 };
 
+/**
+ * Week-start-order demo: identical abbreviated labels, only weekStartsOn
+ * differs — isolates reordering from every other locale concern (a separate
+ * example section from Custom locale, which is only about swapping scripts).
+ */
+const EN_MON_FIRST_LOCALE: CalendarLocale = { ...EN_LOCALE, weekStartsOn: 1 };
+
+/** weekStartsOn stays 0 (same as ZH_LOCALE) — Custom locale is about script, not order. */
+const JA_LOCALE: CalendarLocale = {
+  weekStartsOn: 0,
+  weekdayLabels: ['日', '月', '火', '水', '木', '金', '土'],
+  monthLabels: ZH_LOCALE.monthLabels,
+};
+
 @Component({
   selector: 'app-calendar-page',
   imports: [
@@ -66,6 +80,7 @@ const ZH_LOCALE: CalendarLocale = {
     ComponentPageInstallationComponent,
     ComponentPageUsageImportsComponent,
     ComponentPageSectionComponent,
+    SANRING_TABS_IMPORTS,
   ],
   template: `
     <app-component-page [sections]="page.sections">
@@ -108,21 +123,6 @@ const ZH_LOCALE: CalendarLocale = {
       </app-component-page-section>
 
       <app-component-page-section [section]="section('example')">
-        <div class="mb-4 flex justify-center">
-          <button
-            sanringBtn
-            type="button"
-            [variant]="showInfoBlock() ? 'default' : 'outline'"
-            (click)="showInfoBlock.set(!showInfoBlock())"
-          >
-            {{
-              showInfoBlock()
-                ? i18n.t('calendar.demo.infoBlockSeparate')
-                : i18n.t('calendar.demo.infoBlockInline')
-            }}
-          </button>
-        </div>
-
         <div class="grid gap-2">
           <app-component-page-section [section]="section('example-no-deselect')">
             <app-component-page-code-previewer [code]="examples.noDeselect" language="angular-html">
@@ -136,41 +136,23 @@ const ZH_LOCALE: CalendarLocale = {
                     [locale]="calendarLocale()"
                     (selectedDateChange)="noDeselectSelected = $event"
                   />
-                  @if (!showInfoBlock()) {
-                    <div class="mt-4 flex items-center justify-between gap-2 text-sm">
-                      <span class="text-[var(--docs-muted)]">{{
-                        singleSelectionText(noDeselectSelected)
-                      }}</span>
-                      <button
-                        sanringBtn
-                        variant="outline"
-                        size="sm"
-                        type="button"
-                        (click)="noDeselectCal.clear()"
-                      >
-                        {{ i18n.t('calendar.demo.clear') }}
-                      </button>
-                    </div>
-                  }
                 </div>
-                @if (showInfoBlock()) {
-                  <div
-                    class="flex w-full max-w-[20rem] items-center justify-between gap-2 rounded-[var(--sanring-radius)] border border-[var(--docs-border)] px-3 py-2 text-sm"
+                <div
+                  class="flex w-full max-w-[20rem] items-center justify-between gap-2 rounded-[var(--sanring-radius)] border border-[var(--docs-border)] px-3 py-2 text-sm"
+                >
+                  <span class="text-[var(--docs-muted)]">{{
+                    singleSelectionText(noDeselectSelected)
+                  }}</span>
+                  <button
+                    sanringBtn
+                    variant="outline"
+                    size="sm"
+                    type="button"
+                    (click)="noDeselectCal.clear()"
                   >
-                    <span class="text-[var(--docs-muted)]">{{
-                      singleSelectionText(noDeselectSelected)
-                    }}</span>
-                    <button
-                      sanringBtn
-                      variant="outline"
-                      size="sm"
-                      type="button"
-                      (click)="noDeselectCal.clear()"
-                    >
-                      {{ i18n.t('calendar.demo.clear') }}
-                    </button>
-                  </div>
-                }
+                    {{ i18n.t('calendar.demo.clear') }}
+                  </button>
+                </div>
               </div>
             </app-component-page-code-previewer>
           </app-component-page-section>
@@ -188,41 +170,23 @@ const ZH_LOCALE: CalendarLocale = {
                     [locale]="calendarLocale()"
                     (selectedDateChange)="disabledSelected = $event"
                   />
-                  @if (!showInfoBlock()) {
-                    <div class="mt-4 flex items-center justify-between gap-2 text-sm">
-                      <span class="text-[var(--docs-muted)]">{{
-                        singleSelectionText(disabledSelected)
-                      }}</span>
-                      <button
-                        sanringBtn
-                        variant="outline"
-                        size="sm"
-                        type="button"
-                        (click)="disabledCal.clear()"
-                      >
-                        {{ i18n.t('calendar.demo.clear') }}
-                      </button>
-                    </div>
-                  }
                 </div>
-                @if (showInfoBlock()) {
-                  <div
-                    class="flex w-full max-w-[20rem] items-center justify-between gap-2 rounded-[var(--sanring-radius)] border border-[var(--docs-border)] px-3 py-2 text-sm"
+                <div
+                  class="flex w-full max-w-[20rem] items-center justify-between gap-2 rounded-[var(--sanring-radius)] border border-[var(--docs-border)] px-3 py-2 text-sm"
+                >
+                  <span class="text-[var(--docs-muted)]">{{
+                    singleSelectionText(disabledSelected)
+                  }}</span>
+                  <button
+                    sanringBtn
+                    variant="outline"
+                    size="sm"
+                    type="button"
+                    (click)="disabledCal.clear()"
                   >
-                    <span class="text-[var(--docs-muted)]">{{
-                      singleSelectionText(disabledSelected)
-                    }}</span>
-                    <button
-                      sanringBtn
-                      variant="outline"
-                      size="sm"
-                      type="button"
-                      (click)="disabledCal.clear()"
-                    >
-                      {{ i18n.t('calendar.demo.clear') }}
-                    </button>
-                  </div>
-                }
+                    {{ i18n.t('calendar.demo.clear') }}
+                  </button>
+                </div>
               </div>
             </app-component-page-code-previewer>
           </app-component-page-section>
@@ -239,97 +203,83 @@ const ZH_LOCALE: CalendarLocale = {
                     [locale]="calendarLocale()"
                     (selectedRangeChange)="rangeSelected = $event"
                   />
-                  @if (!showInfoBlock()) {
-                    <div class="mt-4 flex items-center justify-between gap-2 text-sm">
-                      <span class="min-w-0 flex-1 truncate text-[var(--docs-muted)]">{{
-                        rangeSelectionText(rangeSelected)
-                      }}</span>
-                      <div class="flex shrink-0 gap-1">
-                        @if (rangeCal.isDraftActive()) {
-                          <button
-                            sanringBtn
-                            variant="ghost"
-                            size="sm"
-                            type="button"
-                            (click)="rangeCal.abortRangeDraft()"
-                          >
-                            {{ i18n.t('calendar.demo.abortDraft') }}
-                          </button>
-                        }
-                        <button
-                          sanringBtn
-                          variant="outline"
-                          size="sm"
-                          type="button"
-                          (click)="rangeCal.clear()"
-                        >
-                          {{ i18n.t('calendar.demo.clear') }}
-                        </button>
-                      </div>
-                    </div>
-                  }
                 </div>
-                @if (showInfoBlock()) {
-                  <div
-                    class="flex w-full max-w-[20rem] items-center justify-between gap-2 rounded-[var(--sanring-radius)] border border-[var(--docs-border)] px-3 py-2 text-sm"
-                  >
-                    <span class="min-w-0 flex-1 truncate text-[var(--docs-muted)]">{{
-                      rangeSelectionText(rangeSelected)
-                    }}</span>
-                    <div class="flex shrink-0 gap-1">
-                      @if (rangeCal.isDraftActive()) {
-                        <button
-                          sanringBtn
-                          variant="ghost"
-                          size="sm"
-                          type="button"
-                          (click)="rangeCal.abortRangeDraft()"
-                        >
-                          {{ i18n.t('calendar.demo.abortDraft') }}
-                        </button>
-                      }
+                <div
+                  class="flex w-full max-w-[20rem] items-center justify-between gap-2 rounded-[var(--sanring-radius)] border border-[var(--docs-border)] px-3 py-2 text-sm"
+                >
+                  <span class="min-w-0 flex-1 truncate text-[var(--docs-muted)]">{{
+                    rangeSelectionText(rangeSelected)
+                  }}</span>
+                  <div class="flex shrink-0 gap-1">
+                    @if (rangeCal.isDraftActive()) {
                       <button
                         sanringBtn
-                        variant="outline"
+                        variant="ghost"
                         size="sm"
                         type="button"
-                        (click)="rangeCal.clear()"
+                        (click)="rangeCal.abortRangeDraft()"
                       >
-                        {{ i18n.t('calendar.demo.clear') }}
+                        {{ i18n.t('calendar.demo.abortDraft') }}
                       </button>
-                    </div>
+                    }
+                    <button
+                      sanringBtn
+                      variant="outline"
+                      size="sm"
+                      type="button"
+                      (click)="rangeCal.clear()"
+                    >
+                      {{ i18n.t('calendar.demo.clear') }}
+                    </button>
                   </div>
-                }
+                </div>
               </div>
             </app-component-page-code-previewer>
           </app-component-page-section>
 
           <app-component-page-section [section]="section('example-multi-month')">
-            <app-component-page-code-previewer [code]="examples.multiMonth" language="angular-html">
-              <div previewer class="flex w-full flex-col items-center gap-3">
-                <div
-                  class="w-full rounded-[var(--sanring-radius)] border border-[var(--docs-border)] p-4"
+            <sanring-tabs defaultValue="horizontal">
+              <sanring-tabs-list>
+                <sanring-tabs-trigger value="horizontal">
+                  {{ i18n.t('calendar.demo.multiMonth.tab.horizontal') }}
+                </sanring-tabs-trigger>
+                <sanring-tabs-trigger value="vertical">
+                  {{ i18n.t('calendar.demo.multiMonth.tab.vertical') }}
+                </sanring-tabs-trigger>
+              </sanring-tabs-list>
+
+              <sanring-tabs-content value="horizontal">
+                <app-component-page-code-previewer
+                  [code]="examples.multiMonthHorizontal"
+                  language="angular-html"
                 >
-                  <sanring-calendar
-                    #multiMonthCal="sanringCalendar"
-                    mode="range"
-                    [monthsToDisplay]="2"
-                    [locale]="calendarLocale()"
-                    (selectedRangeChange)="multiMonthSelected = $event"
-                  />
-                  @if (!showInfoBlock()) {
-                    <div class="mt-4 flex items-center justify-between gap-2 text-sm">
+                  <div previewer class="flex w-full flex-col items-center gap-3">
+                    <div
+                      class="w-full rounded-[var(--sanring-radius)] border border-[var(--docs-border)] p-4"
+                    >
+                      <sanring-calendar
+                        #multiMonthHorizontalCal="sanringCalendar"
+                        mode="range"
+                        [monthsToDisplay]="2"
+                        orientation="horizontal"
+                        [locale]="calendarLocale()"
+                        (selectedRangeChange)="multiMonthHorizontalSelected = $event"
+                      />
+                    </div>
+                    <div
+                      class="flex w-full items-center justify-between gap-2 rounded-[var(--sanring-radius)] border border-[var(--docs-border)] px-3 py-2 text-sm"
+                    >
                       <span class="min-w-0 flex-1 truncate text-[var(--docs-muted)]">{{
-                        rangeSelectionText(multiMonthSelected)
+                        rangeSelectionText(multiMonthHorizontalSelected)
                       }}</span>
                       <div class="flex shrink-0 gap-1">
-                        @if (multiMonthCal.isDraftActive()) {
+                        @if (multiMonthHorizontalCal.isDraftActive()) {
                           <button
                             sanringBtn
                             variant="ghost"
                             size="sm"
                             type="button"
-                            (click)="multiMonthCal.abortRangeDraft()"
+                            (click)="multiMonthHorizontalCal.abortRangeDraft()"
                           >
                             {{ i18n.t('calendar.demo.abortDraft') }}
                           </button>
@@ -339,47 +289,177 @@ const ZH_LOCALE: CalendarLocale = {
                           variant="outline"
                           size="sm"
                           type="button"
-                          (click)="multiMonthCal.clear()"
+                          (click)="multiMonthHorizontalCal.clear()"
                         >
                           {{ i18n.t('calendar.demo.clear') }}
                         </button>
                       </div>
                     </div>
-                  }
-                </div>
-                @if (showInfoBlock()) {
-                  <div
-                    class="flex w-full items-center justify-between gap-2 rounded-[var(--sanring-radius)] border border-[var(--docs-border)] px-3 py-2 text-sm"
-                  >
-                    <span class="min-w-0 flex-1 truncate text-[var(--docs-muted)]">{{
-                      rangeSelectionText(multiMonthSelected)
-                    }}</span>
-                    <div class="flex shrink-0 gap-1">
-                      @if (multiMonthCal.isDraftActive()) {
+                  </div>
+                </app-component-page-code-previewer>
+              </sanring-tabs-content>
+
+              <sanring-tabs-content value="vertical">
+                <app-component-page-code-previewer
+                  [code]="examples.multiMonthVertical"
+                  language="angular-html"
+                >
+                  <div previewer class="flex w-full flex-col items-center gap-3">
+                    <div
+                      class="w-full max-w-[20rem] rounded-[var(--sanring-radius)] border border-[var(--docs-border)] p-4"
+                    >
+                      <sanring-calendar
+                        #multiMonthVerticalCal="sanringCalendar"
+                        mode="range"
+                        [monthsToDisplay]="2"
+                        orientation="vertical"
+                        [locale]="calendarLocale()"
+                        (selectedRangeChange)="multiMonthVerticalSelected = $event"
+                      />
+                    </div>
+                    <div
+                      class="flex w-full max-w-[20rem] items-center justify-between gap-2 rounded-[var(--sanring-radius)] border border-[var(--docs-border)] px-3 py-2 text-sm"
+                    >
+                      <span class="min-w-0 flex-1 truncate text-[var(--docs-muted)]">{{
+                        rangeSelectionText(multiMonthVerticalSelected)
+                      }}</span>
+                      <div class="flex shrink-0 gap-1">
+                        @if (multiMonthVerticalCal.isDraftActive()) {
+                          <button
+                            sanringBtn
+                            variant="ghost"
+                            size="sm"
+                            type="button"
+                            (click)="multiMonthVerticalCal.abortRangeDraft()"
+                          >
+                            {{ i18n.t('calendar.demo.abortDraft') }}
+                          </button>
+                        }
                         <button
                           sanringBtn
-                          variant="ghost"
+                          variant="outline"
                           size="sm"
                           type="button"
-                          (click)="multiMonthCal.abortRangeDraft()"
+                          (click)="multiMonthVerticalCal.clear()"
                         >
-                          {{ i18n.t('calendar.demo.abortDraft') }}
+                          {{ i18n.t('calendar.demo.clear') }}
                         </button>
-                      }
-                      <button
-                        sanringBtn
-                        variant="outline"
-                        size="sm"
-                        type="button"
-                        (click)="multiMonthCal.clear()"
-                      >
-                        {{ i18n.t('calendar.demo.clear') }}
-                      </button>
+                      </div>
                     </div>
                   </div>
-                }
-              </div>
-            </app-component-page-code-previewer>
+                </app-component-page-code-previewer>
+              </sanring-tabs-content>
+            </sanring-tabs>
+          </app-component-page-section>
+
+          <app-component-page-section [section]="section('example-week-start')">
+            <sanring-tabs defaultValue="sunFirst">
+              <sanring-tabs-list>
+                <sanring-tabs-trigger value="sunFirst">
+                  {{ i18n.t('calendar.demo.weekStart.sunFirst') }}
+                </sanring-tabs-trigger>
+                <sanring-tabs-trigger value="monFirst">
+                  {{ i18n.t('calendar.demo.weekStart.monFirst') }}
+                </sanring-tabs-trigger>
+              </sanring-tabs-list>
+
+              <sanring-tabs-content value="sunFirst">
+                <app-component-page-code-previewer
+                  [code]="examples.weekStartSunFirst"
+                  language="angular-html"
+                >
+                  <div previewer class="flex w-full flex-col items-center gap-3">
+                    <div
+                      class="w-full max-w-[20rem] rounded-[var(--sanring-radius)] border border-[var(--docs-border)] p-4"
+                    >
+                      <sanring-calendar
+                        [locale]="enSunFirstLocale"
+                        (selectedDateChange)="weekStartSunSelected = $event"
+                      />
+                    </div>
+                    <span class="text-sm text-[var(--docs-muted)]">{{
+                      singleSelectionText(weekStartSunSelected)
+                    }}</span>
+                  </div>
+                </app-component-page-code-previewer>
+              </sanring-tabs-content>
+
+              <sanring-tabs-content value="monFirst">
+                <app-component-page-code-previewer
+                  [code]="examples.weekStartMonFirst"
+                  language="angular-html"
+                >
+                  <div previewer class="flex w-full flex-col items-center gap-3">
+                    <div
+                      class="w-full max-w-[20rem] rounded-[var(--sanring-radius)] border border-[var(--docs-border)] p-4"
+                    >
+                      <sanring-calendar
+                        [locale]="enMonFirstLocale"
+                        (selectedDateChange)="weekStartMonSelected = $event"
+                      />
+                    </div>
+                    <span class="text-sm text-[var(--docs-muted)]">{{
+                      singleSelectionText(weekStartMonSelected)
+                    }}</span>
+                  </div>
+                </app-component-page-code-previewer>
+              </sanring-tabs-content>
+            </sanring-tabs>
+          </app-component-page-section>
+
+          <app-component-page-section [section]="section('example-custom-locale')">
+            <sanring-tabs defaultValue="zh">
+              <sanring-tabs-list>
+                <sanring-tabs-trigger value="zh">
+                  {{ i18n.t('calendar.demo.customLocale.tab.zh') }}
+                </sanring-tabs-trigger>
+                <sanring-tabs-trigger value="ja">
+                  {{ i18n.t('calendar.demo.customLocale.tab.ja') }}
+                </sanring-tabs-trigger>
+              </sanring-tabs-list>
+
+              <sanring-tabs-content value="zh">
+                <app-component-page-code-previewer
+                  [code]="examples.customLocaleZh"
+                  language="angular-html"
+                >
+                  <div previewer class="flex w-full flex-col items-center gap-3">
+                    <div
+                      class="w-full max-w-[20rem] rounded-[var(--sanring-radius)] border border-[var(--docs-border)] p-4"
+                    >
+                      <sanring-calendar
+                        [locale]="zhLocale"
+                        (selectedDateChange)="customLocaleZhSelected = $event"
+                      />
+                    </div>
+                    <span class="text-sm text-[var(--docs-muted)]">{{
+                      singleSelectionText(customLocaleZhSelected)
+                    }}</span>
+                  </div>
+                </app-component-page-code-previewer>
+              </sanring-tabs-content>
+
+              <sanring-tabs-content value="ja">
+                <app-component-page-code-previewer
+                  [code]="examples.customLocaleJa"
+                  language="angular-html"
+                >
+                  <div previewer class="flex w-full flex-col items-center gap-3">
+                    <div
+                      class="w-full max-w-[20rem] rounded-[var(--sanring-radius)] border border-[var(--docs-border)] p-4"
+                    >
+                      <sanring-calendar
+                        [locale]="jaLocale"
+                        (selectedDateChange)="customLocaleJaSelected = $event"
+                      />
+                    </div>
+                    <span class="text-sm text-[var(--docs-muted)]">{{
+                      singleSelectionText(customLocaleJaSelected)
+                    }}</span>
+                  </div>
+                </app-component-page-code-previewer>
+              </sanring-tabs-content>
+            </sanring-tabs>
           </app-component-page-section>
 
         </div>
@@ -400,14 +480,21 @@ export class CalendarPageComponent {
     this.i18n.locale() === 'zh' ? ZH_LOCALE : EN_LOCALE,
   );
 
-  /** Mirrors date-picker's demo toggle between an inline vs. a separate selection-summary block. */
-  protected readonly showInfoBlock = signal(true);
-
   basicSelected: Date | null = null;
   noDeselectSelected: Date | null = null;
   disabledSelected: Date | null = null;
   rangeSelected: DateRange = { start: null, end: null };
-  multiMonthSelected: DateRange = { start: null, end: null };
+  multiMonthHorizontalSelected: DateRange = { start: null, end: null };
+  multiMonthVerticalSelected: DateRange = { start: null, end: null };
+  weekStartSunSelected: Date | null = null;
+  weekStartMonSelected: Date | null = null;
+  customLocaleZhSelected: Date | null = null;
+  customLocaleJaSelected: Date | null = null;
+
+  protected readonly enSunFirstLocale = EN_LOCALE;
+  protected readonly enMonFirstLocale = EN_MON_FIRST_LOCALE;
+  protected readonly zhLocale = ZH_LOCALE;
+  protected readonly jaLocale = JA_LOCALE;
 
   protected readonly isWeekend = (date: Date): boolean => {
     const day = date.getDay();

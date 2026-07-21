@@ -56,6 +56,18 @@ export const calendarPage = {
           descriptionKey: 'calendar.demo.multiMonth.description',
           level: 3,
         },
+        {
+          id: 'example-week-start',
+          titleKey: 'calendar.demo.weekStart',
+          descriptionKey: 'calendar.demo.weekStart.description',
+          level: 3,
+        },
+        {
+          id: 'example-custom-locale',
+          titleKey: 'calendar.demo.customLocale',
+          descriptionKey: 'calendar.demo.customLocale.description',
+          level: 3,
+        },
       ],
     },
     {
@@ -95,6 +107,12 @@ export const calendarPage = {
       type: 'number',
       defaultValue: '1',
       descriptionKey: 'calendar.api.monthsToDisplay.description',
+    },
+    {
+      property: 'orientation',
+      type: "'horizontal' | 'vertical'",
+      defaultValue: "'horizontal'",
+      descriptionKey: 'calendar.api.orientation.description',
     },
     {
       property: 'disabled',
@@ -192,9 +210,46 @@ const summerBreak = { from: new Date(2026, 6, 20), to: new Date(2026, 6, 24) };
   (selectedRangeChange)="onRangeSelect($event)"
 />
 <button type="button" (click)="cal.abortRangeDraft()">中止草稿</button>`,
-  multiMonth: `<sanring-calendar
+  multiMonthHorizontal: `<sanring-calendar
   mode="range"
   [monthsToDisplay]="2"
+  orientation="horizontal"
   (selectedRangeChange)="onRangeSelect($event)"
 />`,
+  multiMonthVertical: `<sanring-calendar
+  mode="range"
+  [monthsToDisplay]="2"
+  orientation="vertical"
+  (selectedRangeChange)="onRangeSelect($event)"
+/>`,
+  weekStartSunFirst: `const sunFirst: CalendarLocale = {
+  weekStartsOn: 0, // Sunday-first
+  weekdayLabels: ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'],
+  monthLabels: [/* … */],
+};
+
+<sanring-calendar [locale]="sunFirst" (selectedDateChange)="onSelect($event)" />`,
+  weekStartMonFirst: `// Same labels as the Sunday-first locale — only weekStartsOn changes,
+// so the grid itself reorders, not just the header text.
+const monFirst: CalendarLocale = {
+  weekStartsOn: 1, // Monday-first
+  weekdayLabels: ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'],
+  monthLabels: [/* … */],
+};
+
+<sanring-calendar [locale]="monFirst" (selectedDateChange)="onSelect($event)" />`,
+  customLocaleZh: `const zhLocale: CalendarLocale = {
+  weekStartsOn: 0,
+  weekdayLabels: ['日', '一', '二', '三', '四', '五', '六'],
+  monthLabels: ['1月', '2月', '3月', /* … */ '12月'],
+};
+
+<sanring-calendar [locale]="zhLocale" (selectedDateChange)="onSelect($event)" />`,
+  customLocaleJa: `const jaLocale: CalendarLocale = {
+  weekStartsOn: 0,
+  weekdayLabels: ['日', '月', '火', '水', '木', '金', '土'], // any script, any length
+  monthLabels: ['1月', '2月', '3月', /* … */ '12月'],
+};
+
+<sanring-calendar [locale]="jaLocale" (selectedDateChange)="onSelect($event)" />`,
 } as const;

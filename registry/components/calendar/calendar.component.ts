@@ -33,7 +33,7 @@ import { PopoverComponent } from '../popover/popover.component';
 import { PopoverContentComponent } from '../popover/popover-content.component';
 import { CalendarDayDirective } from './calendar-day.directive';
 import { CalendarHeaderComponent } from './calendar-header.component';
-import { CalendarSize, CalendarValue } from './calendar.type';
+import { CalendarOrientation, CalendarSize, CalendarValue } from './calendar.type';
 
 const JUMP_YEAR_RANGE_PAST = 100;
 const JUMP_YEAR_RANGE_FUTURE = 50;
@@ -74,7 +74,7 @@ let nextCalendarId = 0;
     '(blur)': 'onBlur()',
   },
   template: `
-    <div [class]="engine.monthGrids().length > 1 ? 'flex gap-6' : 'block'">
+    <div [class]="monthsWrapperClass()">
       @for (monthGrid of engine.monthGrids(); track $index) {
         <div class="min-w-60 flex-1">
           <sanring-popover>
@@ -89,25 +89,25 @@ let nextCalendarId = 0;
               (next)="engine.nextMonth()"
             />
             @if ($first) {
-              <sanring-popover-content class="flex gap-2">
+              <sanring-popover-content class="flex items-center gap-2">
                 <select
-                  class="rounded-[var(--sanring-radius)] border border-[var(--sanring-border-strong)] bg-[var(--sanring-surface)] px-2 py-1 text-sm text-[var(--sanring-foreground)]"
+                  class="flex-1 rounded-[var(--sanring-radius)] border border-[var(--sanring-border-strong)] bg-[var(--sanring-surface)] px-2 py-1 text-center text-sm text-[var(--sanring-foreground)]"
                   [attr.aria-label]="jumpMonthLabel()"
-                  [value]="viewMonth(monthGrid)"
                   (change)="onJumpMonthChange($event, monthGrid)"
                 >
                   @for (opt of monthOptions(); track opt.value) {
-                    <option [value]="opt.value">{{ opt.label }}</option>
+                    <option [value]="opt.value" [selected]="opt.value === viewMonth(monthGrid)">
+                      {{ opt.label }}
+                    </option>
                   }
                 </select>
                 <select
-                  class="rounded-[var(--sanring-radius)] border border-[var(--sanring-border-strong)] bg-[var(--sanring-surface)] px-2 py-1 text-sm text-[var(--sanring-foreground)]"
+                  class="flex-1 rounded-[var(--sanring-radius)] border border-[var(--sanring-border-strong)] bg-[var(--sanring-surface)] px-2 py-1 text-center text-sm text-[var(--sanring-foreground)]"
                   [attr.aria-label]="jumpYearLabel()"
-                  [value]="viewYear(monthGrid)"
                   (change)="onJumpYearChange($event, monthGrid)"
                 >
                   @for (y of yearOptions(); track y) {
-                    <option [value]="y">{{ y }}</option>
+                    <option [value]="y" [selected]="y === viewYear(monthGrid)">{{ y }}</option>
                   }
                 </select>
               </sanring-popover-content>
@@ -150,6 +150,7 @@ export class CalendarComponent implements ControlValueAccessor, OnInit {
   readonly locale = input<CalendarLocale | undefined>(undefined);
   readonly mode = input<'single' | 'range'>('single');
   readonly monthsToDisplay = input<number>(1);
+  readonly orientation = input<CalendarOrientation>('horizontal');
   readonly disabled = input<DisabledInput | undefined>(undefined);
   readonly allowDeselect = input<boolean>(true);
   readonly required = input(false, { transform: booleanAttribute });
@@ -168,6 +169,12 @@ export class CalendarComponent implements ControlValueAccessor, OnInit {
       this.class(),
     ),
   );
+
+  /** Purely presentational: engine.monthGrids() stays an ordered array, this only decides flex-direction. */
+  protected readonly monthsWrapperClass = computed(() => {
+    if (this.engine.monthGrids().length <= 1) return 'block';
+    return this.orientation() === 'vertical' ? 'flex flex-col gap-6' : 'flex gap-6';
+  });
 
   protected readonly weekdayTextClass = CALENDAR_WEEKDAY_TEXT_CLASS;
 

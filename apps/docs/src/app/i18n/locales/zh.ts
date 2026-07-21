@@ -331,11 +331,11 @@ export const zh: Record<TranslationKey, string> = {
   'calendar.demo.range': '區間選取',
   'calendar.demo.range.description':
     '第一次點擊設定起點（進入 Draft），第二次點擊提交區間；可用「中止草稿」按鈕回溯。',
-  'calendar.demo.multiMonth': '多月並排',
+  'calendar.demo.multiMonth': '多月顯示',
   'calendar.demo.multiMonth.description':
-    '同時顯示兩個月份，鍵盤方向鍵可在兩個月格之間無縫移動，抵達整個視窗邊界才自動換頁。',
-  'calendar.demo.infoBlockSeparate': '資訊區塊：獨立',
-  'calendar.demo.infoBlockInline': '資訊區塊：內嵌',
+    '同時顯示兩個月份，鍵盤方向鍵可在兩個月格之間無縫移動，抵達整個視窗邊界才自動換頁。orientation 純粹是版面呈現——不會改變月份順序，只切換 flex-direction。',
+  'calendar.demo.multiMonth.tab.horizontal': '水平並排',
+  'calendar.demo.multiMonth.tab.vertical': '垂直堆疊',
   'calendar.demo.clear': '清空',
   'calendar.demo.abortDraft': '中止草稿',
   'calendar.demo.noSelection': '尚未選取',
@@ -343,6 +343,16 @@ export const zh: Record<TranslationKey, string> = {
   'calendar.demo.rangeStart': '起點：',
   'calendar.demo.rangeAwaitingEnd': '（請選終點）',
   'calendar.demo.rangeSeparator': ' ～ ',
+  'calendar.demo.weekStart': '一週起始日',
+  'calendar.demo.weekStart.description':
+    'weekStartsOn 調整的是網格本身的排序，不只是標題文字——跟語言、標籤內容完全無關，可以獨立切換。',
+  'calendar.demo.weekStart.sunFirst': 'weekStartsOn: 0（週日開頭）',
+  'calendar.demo.weekStart.monFirst': 'weekStartsOn: 1（週一開頭）',
+  'calendar.demo.customLocale': '自訂語系',
+  'calendar.demo.customLocale.description':
+    'weekdayLabels 與 monthLabels 就是普通的字串陣列，沒有內建預設值——可以換成任何文字系統，且不會動到一週起始日的排序。',
+  'calendar.demo.customLocale.tab.zh': '中文',
+  'calendar.demo.customLocale.tab.ja': '日文',
   'calendar.examples.basic.description':
     '未提供 locale 時會拋出錯誤——CALENDAR_LOCALE 沒有預設值，強制你明確決定週起始日與月份/星期標籤。點擊標題中的年月文字可直接跳到任何月份或年份。',
   'calendar.usage.description': '匯入 CalendarComponent，並在應用層或元件層提供 CALENDAR_LOCALE。',
@@ -353,7 +363,9 @@ export const zh: Record<TranslationKey, string> = {
   'calendar.api.size.description': '日期格子的尺寸。',
   'calendar.api.locale.description': '覆蓋注入的 CALENDAR_LOCALE；未提供時退回使用注入的 token。',
   'calendar.api.mode.description': '單選或範圍選取模式，切換時會重置選取狀態。',
-  'calendar.api.monthsToDisplay.description': '同時顯示的月份數量（並排顯示）。',
+  'calendar.api.monthsToDisplay.description': '同時顯示的月份數量。',
+  'calendar.api.orientation.description':
+    '多月顯示（monthsToDisplay > 1）時的排列方向。純屬版面呈現——引擎只保證陣列順序正確，不管畫面上怎麼擺。',
   'calendar.api.disabled.description':
     '停用日期的比對條件：單一日期、陣列、區間或 predicate 函式。',
   'calendar.api.allowDeselect.description': '再次點選已選取的日期時是否可取消選取。',
