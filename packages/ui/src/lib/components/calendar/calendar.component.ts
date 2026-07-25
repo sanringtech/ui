@@ -25,6 +25,7 @@ import {
   DateRange,
   DisabledInput,
 } from '@sanring/date-picker';
+import { LucideChevronDown } from '@lucide/angular';
 import { Observable, Subject } from 'rxjs';
 import { cn } from '../../utils';
 import { CALENDAR_WEEKDAY_TEXT_CLASS } from '../component-styles';
@@ -44,7 +45,13 @@ let nextCalendarId = 0;
   selector: 'sanring-calendar',
   standalone: true,
   exportAs: 'sanringCalendar',
-  imports: [CalendarHeaderComponent, CalendarDayDirective, PopoverComponent, PopoverContentComponent],
+  imports: [
+    CalendarHeaderComponent,
+    CalendarDayDirective,
+    PopoverComponent,
+    PopoverContentComponent,
+    LucideChevronDown,
+  ],
   changeDetection: ChangeDetectionStrategy.OnPush,
   hostDirectives: [CalendarGridDirective],
   providers: [
@@ -89,27 +96,43 @@ let nextCalendarId = 0;
               (next)="engine.nextMonth()"
             />
             @if ($first) {
-              <sanring-popover-content class="flex items-center gap-2">
-                <select
-                  class="flex-1 rounded-[var(--sanring-radius)] border border-[var(--sanring-border-strong)] bg-[var(--sanring-surface)] px-2 py-1 text-center text-sm text-[var(--sanring-foreground)]"
-                  [attr.aria-label]="jumpMonthLabel()"
-                  (change)="onJumpMonthChange($event, monthGrid)"
-                >
-                  @for (opt of monthOptions(); track opt.value) {
-                    <option [value]="opt.value" [selected]="opt.value === viewMonth(monthGrid)">
-                      {{ opt.label }}
-                    </option>
-                  }
-                </select>
-                <select
-                  class="flex-1 rounded-[var(--sanring-radius)] border border-[var(--sanring-border-strong)] bg-[var(--sanring-surface)] px-2 py-1 text-center text-sm text-[var(--sanring-foreground)]"
-                  [attr.aria-label]="jumpYearLabel()"
-                  (change)="onJumpYearChange($event, monthGrid)"
-                >
-                  @for (y of yearOptions(); track y) {
-                    <option [value]="y" [selected]="y === viewYear(monthGrid)">{{ y }}</option>
-                  }
-                </select>
+              <sanring-popover-content
+                class="flex items-center gap-3 rounded-[var(--sanring-radius-lg)] p-5"
+              >
+                <div class="relative flex-1">
+                  <select
+                    class="w-full appearance-none rounded-[var(--sanring-radius)] border border-[var(--sanring-border-strong)] bg-[var(--sanring-surface)] py-1.5 pl-3 pr-8 text-center text-sm text-[var(--sanring-foreground)]"
+                    [attr.aria-label]="jumpMonthLabel()"
+                    (change)="onJumpMonthChange($event, monthGrid)"
+                  >
+                    @for (opt of monthOptions(); track opt.value) {
+                      <option [value]="opt.value" [selected]="opt.value === viewMonth(monthGrid)">
+                        {{ opt.label }}
+                      </option>
+                    }
+                  </select>
+                  <svg
+                    lucideChevronDown
+                    [size]="14"
+                    class="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-[var(--sanring-muted)]"
+                  ></svg>
+                </div>
+                <div class="relative flex-1">
+                  <select
+                    class="w-full appearance-none rounded-[var(--sanring-radius)] border border-[var(--sanring-border-strong)] bg-[var(--sanring-surface)] py-1.5 pl-3 pr-8 text-center text-sm text-[var(--sanring-foreground)]"
+                    [attr.aria-label]="jumpYearLabel()"
+                    (change)="onJumpYearChange($event, monthGrid)"
+                  >
+                    @for (y of yearOptions(); track y) {
+                      <option [value]="y" [selected]="y === viewYear(monthGrid)">{{ y }}</option>
+                    }
+                  </select>
+                  <svg
+                    lucideChevronDown
+                    [size]="14"
+                    class="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-[var(--sanring-muted)]"
+                  ></svg>
+                </div>
               </sanring-popover-content>
             }
           </sanring-popover>

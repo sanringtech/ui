@@ -1,5 +1,11 @@
 # @sanring/cli
 
+## 0.13.1
+
+### Patch Changes
+
+- `calendar`'s month/year jump popover selects now show a chevron-down indicator and use consistent padding/spacing, making it visually clearer that they're dropdowns.
+
 ## 0.13.0
 
 ### Minor Changes

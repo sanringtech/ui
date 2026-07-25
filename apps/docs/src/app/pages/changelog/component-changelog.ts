@@ -42,6 +42,11 @@ export const componentChangelog: readonly ComponentChangelogEntry[] = [
         componentIds: ['switch'],
         text: '`switch` accepts projected icons on its thumb via `[sanringSwitchIconChecked]` / `[sanringSwitchIconUnchecked]` named slots, which toggle automatically with the checked state.',
       },
+      {
+        type: 'changed',
+        componentIds: ['calendar'],
+        text: 'The month/year jump popover selects now show a chevron-down indicator and use consistent padding/spacing.',
+      },
     ],
   },
   {
