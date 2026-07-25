@@ -1,5 +1,11 @@
 # @sanring/cli
 
+## 0.13.0
+
+### Minor Changes
+
+- `switch`'s thumb now accepts projected icons via two named slots — `[sanringSwitchIconChecked]` and `[sanringSwitchIconUnchecked]` — that toggle automatically with the switch's checked state (e.g. a sun/moon icon riding the thumb of a theme toggle). Omitting them is fully backward compatible.
+
 ## 0.12.0
 
 ### Minor Changes

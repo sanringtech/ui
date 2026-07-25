@@ -1,5 +1,6 @@
 import { Component, inject } from '@angular/core';
 import { FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
+import { LucideMoon, LucideSun } from '@lucide/angular';
 import { ErrorMessageComponent, LabelDirective, SanringFieldComponent, SwitchComponent } from '@sanring/ui';
 import { getComponentPageSection } from '../../../docs-schema/component-page.utils';
 import { I18nService } from '../../../i18n/i18n.service';
@@ -31,6 +32,8 @@ import { switchPage, switchPageExamples } from './switch.docs';
     ComponentPageInstallationComponent,
     ComponentPageUsageImportsComponent,
     ComponentPageSectionComponent,
+    LucideMoon,
+    LucideSun,
   ],
   template: `
     <app-component-page [sections]="page.sections">
@@ -142,6 +145,45 @@ import { switchPage, switchPageExamples } from './switch.docs';
                 <sanring-switch size="sm" checked />
                 <sanring-switch checked />
                 <sanring-switch size="lg" checked />
+              </div>
+            </app-component-page-code-previewer>
+          </app-component-page-section>
+
+          <app-component-page-section [section]="section('example-icon')">
+            <app-component-page-code-previewer [code]="examples.icon" language="angular-html">
+              <div previewer class="flex items-center justify-center">
+                <div class="group inline-flex items-center gap-3">
+                  <svg
+                    lucideSun
+                    class="size-4 text-[var(--docs-fg)] transition-colors group-has-[[data-state=checked]]:text-[var(--docs-muted)]"
+                  ></svg>
+                  <sanring-switch checked [attr.aria-label]="i18n.t('switch.demo.toggleTheme')" />
+                  <svg
+                    lucideMoon
+                    class="size-4 text-[var(--docs-muted)] transition-colors group-has-[[data-state=checked]]:text-[var(--docs-fg)]"
+                  ></svg>
+                </div>
+              </div>
+            </app-component-page-code-previewer>
+          </app-component-page-section>
+
+          <app-component-page-section [section]="section('example-icon-thumb')">
+            <app-component-page-code-previewer [code]="examples.iconThumb" language="angular-html">
+              <div previewer class="flex items-center justify-center">
+                <sanring-switch checked [attr.aria-label]="i18n.t('switch.demo.toggleTheme')">
+                  <svg sanringSwitchIconChecked lucideMoon class="size-3"></svg>
+                  <svg sanringSwitchIconUnchecked lucideSun class="size-3"></svg>
+                </sanring-switch>
+              </div>
+            </app-component-page-code-previewer>
+          </app-component-page-section>
+
+          <app-component-page-section [section]="section('example-color')">
+            <app-component-page-code-previewer [code]="examples.color" language="angular-html">
+              <div previewer class="flex items-center justify-center gap-4">
+                <sanring-switch checked class="data-[state=checked]:bg-emerald-500" />
+                <sanring-switch checked class="data-[state=checked]:bg-blue-500" />
+                <sanring-switch checked class="data-[state=checked]:bg-amber-500" />
               </div>
             </app-component-page-code-previewer>
           </app-component-page-section>

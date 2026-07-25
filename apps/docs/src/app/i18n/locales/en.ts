@@ -757,6 +757,10 @@ export const en = {
   'switch.demo.disabled': 'Disabled',
   'switch.demo.invalid': 'Invalid',
   'switch.demo.size': 'Size',
+  'switch.demo.icon': 'Icon (Adjacent)',
+  'switch.demo.iconThumb': 'Icon (On Thumb)',
+  'switch.demo.color': 'Custom Color',
+  'switch.demo.toggleTheme': 'Toggle theme',
   'switch.demo.marketingTitle': 'Marketing emails',
   'switch.demo.marketingDescription': 'Receive product news and launch updates.',
   'switch.demo.notificationsTitle': 'Enable notifications',
@@ -766,6 +770,8 @@ export const en = {
   'switch.demo.field': 'With Field',
   'switch.demo.acceptTerms': 'Accept terms',
   'switch.demo.fieldError': 'You must enable this setting to continue.',
+  'switch.examples.iconThumb.description':
+    'Project icons into the thumb via the sanringSwitchIconChecked / sanringSwitchIconUnchecked named slots — the matching icon shows automatically based on the switch state.',
   'switch.examples.field.description':
     'Wrap sanring-switch in sanring-field and bind a reactive form control — the error message shows automatically once the control is invalid and touched.',
   'switch.examples.description':

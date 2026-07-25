@@ -676,6 +676,10 @@ export const zh: Record<TranslationKey, string> = {
   'switch.demo.disabled': '停用',
   'switch.demo.invalid': '無效狀態',
   'switch.demo.size': '尺寸',
+  'switch.demo.icon': '圖示（switch 外側）',
+  'switch.demo.iconThumb': '圖示（按鈕內）',
+  'switch.demo.color': '自訂顏色',
+  'switch.demo.toggleTheme': '切換主題',
   'switch.demo.marketingTitle': '行銷郵件',
   'switch.demo.marketingDescription': '接收產品消息與發布更新。',
   'switch.demo.notificationsTitle': '啟用通知',
@@ -685,6 +689,8 @@ export const zh: Record<TranslationKey, string> = {
   'switch.demo.field': '搭配 Field',
   'switch.demo.acceptTerms': '接受條款',
   'switch.demo.fieldError': '必須啟用此設定才能繼續。',
+  'switch.examples.iconThumb.description':
+    '透過具名 slot sanringSwitchIconChecked / sanringSwitchIconUnchecked 把圖示投影進 thumb，圖示會依開關狀態自動顯示對應那一個。',
   'switch.examples.field.description':
     '把 sanring-switch 包在 sanring-field 裡並綁定 reactive form control——控制項變成 invalid 且 touched 之後，錯誤訊息會自動顯示。',
   'switch.examples.description': '常見的 Switch 模式，包含說明文字、選項卡片、停用、驗證與尺寸。',

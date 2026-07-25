@@ -56,6 +56,22 @@ export const switchPage = {
           level: 3,
         },
         {
+          id: 'example-icon',
+          titleKey: 'switch.demo.icon',
+          level: 3,
+        },
+        {
+          id: 'example-icon-thumb',
+          titleKey: 'switch.demo.iconThumb',
+          descriptionKey: 'switch.examples.iconThumb.description',
+          level: 3,
+        },
+        {
+          id: 'example-color',
+          titleKey: 'switch.demo.color',
+          level: 3,
+        },
+        {
           id: 'example-field',
           titleKey: 'switch.demo.field',
           descriptionKey: 'switch.examples.field.description',
@@ -143,6 +159,26 @@ export const switchPageExamples = {
   <sanring-switch size="sm" checked />
   <sanring-switch checked />
   <sanring-switch size="lg" checked />
+</div>`,
+  icon: `<div class="group inline-flex items-center gap-3">
+  <svg
+    lucideSun
+    class="size-4 text-[var(--sanring-foreground)] transition-colors group-has-[[data-state=checked]]:text-[var(--sanring-muted)]"
+  ></svg>
+  <sanring-switch checked aria-label="Toggle theme" />
+  <svg
+    lucideMoon
+    class="size-4 text-[var(--sanring-muted)] transition-colors group-has-[[data-state=checked]]:text-[var(--sanring-foreground)]"
+  ></svg>
+</div>`,
+  iconThumb: `<sanring-switch checked aria-label="Toggle theme">
+  <svg sanringSwitchIconChecked lucideMoon class="size-3"></svg>
+  <svg sanringSwitchIconUnchecked lucideSun class="size-3"></svg>
+</sanring-switch>`,
+  color: `<div class="flex items-center gap-4">
+  <sanring-switch checked class="data-[state=checked]:bg-emerald-500" />
+  <sanring-switch checked class="data-[state=checked]:bg-blue-500" />
+  <sanring-switch checked class="data-[state=checked]:bg-amber-500" />
 </div>`,
   field: `<sanring-field>
   <div class="flex items-center justify-between gap-4">

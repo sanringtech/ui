@@ -34,6 +34,17 @@ export interface ComponentChangelogEntry {
  */
 export const componentChangelog: readonly ComponentChangelogEntry[] = [
   {
+    date: '2026-07-26',
+    changes: [
+      {
+        type: 'added',
+        notable: true,
+        componentIds: ['switch'],
+        text: '`switch` accepts projected icons on its thumb via `[sanringSwitchIconChecked]` / `[sanringSwitchIconUnchecked]` named slots, which toggle automatically with the checked state.',
+      },
+    ],
+  },
+  {
     date: '2026-07-21',
     changes: [
       {
