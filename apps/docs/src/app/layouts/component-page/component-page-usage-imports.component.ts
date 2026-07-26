@@ -16,25 +16,29 @@ import { ComponentPageCodeBlock } from './component-page-code-block.component';
     class: 'block min-w-0',
   },
   template: `
-    @if (individualCode()) {
-      <sanring-tabs class="w-full min-w-0" defaultValue="convenience" variant="line">
-        <sanring-tabs-list class="mb-3 gap-4">
-          <sanring-tabs-trigger value="convenience" class="px-0 text-base">
+    <sanring-tabs class="w-full min-w-0" defaultValue="convenience" variant="line">
+      <div class="-mx-1 overflow-x-auto px-1">
+        <sanring-tabs-list class="mb-4 min-w-full gap-2 px-2">
+          <sanring-tabs-trigger value="convenience" class="px-3 text-sm font-medium">
             {{ i18n.t('docs.usage.imports.convenience') }}
           </sanring-tabs-trigger>
-          <sanring-tabs-trigger value="individual" class="px-0 text-base">
-            {{ i18n.t('docs.usage.imports.individual') }}
-          </sanring-tabs-trigger>
+          @if (individualCode()) {
+            <sanring-tabs-trigger value="individual" class="px-3 text-sm font-medium">
+              {{ i18n.t('docs.usage.imports.individual') }}
+            </sanring-tabs-trigger>
+          }
         </sanring-tabs-list>
+      </div>
 
-        <sanring-tabs-content value="convenience" class="mt-0 min-w-0">
-          <div
-            class="min-w-0 overflow-hidden rounded-[var(--sanring-radius)] border border-[var(--docs-border)]"
-          >
-            <app-component-page-code-block [code]="code()" language="typescript" />
-          </div>
-        </sanring-tabs-content>
+      <sanring-tabs-content value="convenience" class="mt-0 min-w-0">
+        <div
+          class="min-w-0 overflow-hidden rounded-[var(--sanring-radius)] border border-[var(--docs-border)]"
+        >
+          <app-component-page-code-block [code]="code()" language="typescript" />
+        </div>
+      </sanring-tabs-content>
 
+      @if (individualCode()) {
         <sanring-tabs-content value="individual" class="mt-0 min-w-0">
           <div
             class="min-w-0 overflow-hidden rounded-[var(--sanring-radius)] border border-[var(--docs-border)]"
@@ -42,14 +46,8 @@ import { ComponentPageCodeBlock } from './component-page-code-block.component';
             <app-component-page-code-block [code]="individualCode()" language="typescript" />
           </div>
         </sanring-tabs-content>
-      </sanring-tabs>
-    } @else {
-      <div
-        class="min-w-0 overflow-hidden rounded-[var(--sanring-radius)] border border-[var(--docs-border)]"
-      >
-        <app-component-page-code-block [code]="code()" language="typescript" />
-      </div>
-    }
+      }
+    </sanring-tabs>
   `,
 })
 export class ComponentPageUsageImportsComponent {

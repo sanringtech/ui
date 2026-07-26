@@ -29,12 +29,16 @@ type PackageManager = 'pnpm' | 'npm' | 'yarn' | 'bun';
       variant="line"
       (valueChange)="handleModeChange($event)"
     >
-      <sanring-tabs-list class="mb-3 gap-4">
-        <sanring-tabs-trigger value="command" class="px-0 text-base">
-          Command
-        </sanring-tabs-trigger>
-        <sanring-tabs-trigger value="manual" class="px-0 text-base"> Manual </sanring-tabs-trigger>
-      </sanring-tabs-list>
+      <div class="-mx-1 overflow-x-auto px-1">
+        <sanring-tabs-list class="mb-4 min-w-full gap-2 px-2">
+          <sanring-tabs-trigger value="command" class="px-3 text-sm font-medium">
+            Command
+          </sanring-tabs-trigger>
+          <sanring-tabs-trigger value="manual" class="px-3 text-sm font-medium">
+            Manual
+          </sanring-tabs-trigger>
+        </sanring-tabs-list>
+      </div>
 
       <sanring-tabs-content value="command" class="mt-0">
         <div
