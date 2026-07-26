@@ -38,6 +38,7 @@ export type DocsComponentId =
   | 'collapsible'
   | 'command'
   | 'combobox'
+  | 'context-menu'
   | 'date-picker'
   | 'dialog'
   | 'divider'
@@ -174,6 +175,12 @@ export const docsComponentItems: DocsComponentNavItem[] = [
     id: 'combobox',
     labelKey: 'component.combobox',
     path: '/components/combobox',
+    active: true,
+  },
+  {
+    id: 'context-menu',
+    labelKey: 'component.contextMenu',
+    path: '/components/context-menu',
     active: true,
   },
   {

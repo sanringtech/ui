@@ -167,6 +167,13 @@ export const routes: Routes = [
                   ),
               },
               {
+                path: 'context-menu',
+                loadComponent: () =>
+                  import('./pages/components/context-menu/context-menu-page.component').then(
+                    (m) => m.ContextMenuPageComponent,
+                  ),
+              },
+              {
                 path: 'date-picker',
                 loadComponent: () =>
                   import('./pages/components/date-picker/date-picker-page.component').then(
