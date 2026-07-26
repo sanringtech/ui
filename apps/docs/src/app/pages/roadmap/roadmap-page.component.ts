@@ -12,11 +12,68 @@ interface RoadmapItem {
   name: string;
   description: string;
   meta?: string;
+  tone?: 'updated';
+}
+
+interface RoadmapComponentRow {
+  items: RoadmapItem[];
+  duration: number;
 }
 
 @Component({
   selector: 'app-roadmap-page',
   imports: [ComponentPageComponent, ComponentPageSectionComponent, NgTemplateOutlet],
+  styles: [
+    `
+      .documented-components {
+        --roadmap-row-gap: 0.75rem;
+        mask-image: linear-gradient(
+          90deg,
+          transparent,
+          #000 2.5rem,
+          #000 calc(100% - 2.5rem),
+          transparent
+        );
+      }
+
+      .documented-components__track {
+        animation: documented-components-pan var(--roadmap-row-duration) ease-in-out infinite
+          alternate;
+        animation-delay: var(--roadmap-row-delay);
+        gap: var(--roadmap-row-gap);
+        width: max-content;
+      }
+
+      .documented-components__row:nth-child(even) .documented-components__track {
+        animation-direction: alternate-reverse;
+      }
+
+      @keyframes documented-components-pan {
+        from {
+          transform: translateX(0);
+        }
+        to {
+          transform: translateX(calc(-50% - (var(--roadmap-row-gap) / 2)));
+        }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        .documented-components {
+          mask-image: none;
+        }
+
+        .documented-components__track {
+          animation: none;
+          flex-wrap: wrap;
+          width: auto;
+        }
+
+        .documented-components__duplicate {
+          display: none;
+        }
+      }
+    `,
+  ],
   template: `
     <app-component-page [sections]="sections">
       <header class="border-b border-[var(--docs-border)] pb-10">
@@ -34,16 +91,42 @@ interface RoadmapItem {
         <p class="mt-0 text-sm text-[var(--docs-muted)]">
           {{ i18n.t('roadmap.shipped.description') }}
         </p>
-        <div class="mt-5 flex flex-wrap gap-2">
-          @for (item of shipped; track item.name) {
-            <span
-              class="rounded-[var(--sanring-radius)] border border-[var(--docs-border)] bg-[var(--docs-panel)] px-3 py-1.5 text-sm font-medium text-[var(--docs-fg)]"
-            >
-              {{ item.name }}
-            </span>
+        <div class="documented-components mt-5 grid gap-3 overflow-hidden py-1">
+          @for (row of shippedRows; track $index) {
+            <div class="documented-components__row min-w-0 overflow-hidden">
+              <div
+                class="documented-components__track flex items-center"
+                [style.--roadmap-row-duration]="row.duration + 's'"
+                [style.--roadmap-row-delay]="-$index * 1.75 + 's'"
+              >
+                @for (item of row.items; track item.name) {
+                  <ng-container
+                    [ngTemplateOutlet]="componentChip"
+                    [ngTemplateOutletContext]="{ item: item }"
+                  />
+                }
+                @for (item of row.items; track item.name) {
+                  <span class="documented-components__duplicate contents" aria-hidden="true">
+                    <ng-container
+                      [ngTemplateOutlet]="componentChip"
+                      [ngTemplateOutletContext]="{ item: item }"
+                    />
+                  </span>
+                }
+              </div>
+            </div>
           }
         </div>
       </app-component-page-section>
+
+      <ng-template #componentChip let-item="item">
+        <span
+          [class]="componentChipClass(item)"
+          [attr.aria-label]="item.tone === 'updated' ? item.name + ', recently updated' : item.name"
+        >
+          {{ item.name }}
+        </span>
+      </ng-template>
 
       <app-component-page-section [section]="sections[1]">
         <p class="mt-0 text-sm text-[var(--docs-muted)]">
@@ -141,13 +224,14 @@ export class RoadmapPageComponent {
     { name: 'Badge', description: '' },
     { name: 'Breadcrumb', description: '' },
     { name: 'Button', description: '' },
-    { name: 'Calendar', description: '' },
+    { name: 'Calendar', description: '', tone: 'updated' },
     { name: 'Card', description: '' },
     { name: 'Carousel', description: '' },
     { name: 'Checkbox', description: '' },
     { name: 'Collapsible', description: '' },
     { name: 'Command', description: '' },
     { name: 'Combobox', description: '' },
+    { name: 'Context Menu', description: '', tone: 'updated' },
     { name: 'Date Picker', description: '' },
     { name: 'Dialog', description: '' },
     { name: 'Divider', description: '' },
@@ -170,7 +254,7 @@ export class RoadmapPageComponent {
     { name: 'Slider', description: '' },
     { name: 'Spinner', description: '' },
     { name: 'Stepper', description: '' },
-    { name: 'Switch', description: '' },
+    { name: 'Switch', description: '', tone: 'updated' },
     { name: 'Table', description: '' },
     { name: 'Tag', description: '' },
     { name: 'Tabs', description: '' },
@@ -182,14 +266,9 @@ export class RoadmapPageComponent {
     { name: 'Tree', description: '' },
   ];
 
-  protected readonly tier1: RoadmapItem[] = [
-    {
-      name: 'Context Menu',
-      meta: 'package-ready',
-      description:
-        'Implemented in package source as menu primitives for right-click workflows. Needs docs examples, navigation entry, and registry wiring.',
-    },
-  ];
+  protected readonly shippedRows: RoadmapComponentRow[] = this.createComponentRows(this.shipped);
+
+  protected readonly tier1: RoadmapItem[] = [];
 
   protected readonly tier2: RoadmapItem[] = [
     {
@@ -239,4 +318,24 @@ export class RoadmapPageComponent {
         'Potential future category, but it likely belongs in a separate package or recipe layer rather than core primitives.',
     },
   ];
+
+  private createComponentRows(items: RoadmapItem[]): RoadmapComponentRow[] {
+    const rowSize = 10;
+
+    return Array.from({ length: Math.ceil(items.length / rowSize) }, (_, index) => ({
+      items: items.slice(index * rowSize, index * rowSize + rowSize),
+      duration: 22 + index * 3,
+    }));
+  }
+
+  protected componentChipClass(item: RoadmapItem) {
+    const base =
+      'shrink-0 rounded-[var(--sanring-radius)] border px-3 py-1.5 text-sm font-medium shadow-sm transition-colors';
+
+    if (item.tone === 'updated') {
+      return `${base} border-[color-mix(in_srgb,var(--docs-accent)_62%,var(--docs-border))] bg-[color-mix(in_srgb,var(--docs-accent)_18%,var(--docs-panel))] text-[var(--docs-accent-strong)]`;
+    }
+
+    return `${base} border-[var(--docs-border)] bg-[var(--docs-panel)] text-[var(--docs-fg)]`;
+  }
 }

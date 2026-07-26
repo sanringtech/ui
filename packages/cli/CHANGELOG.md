@@ -1,5 +1,11 @@
 # @sanring/cli
 
+## 0.14.0
+
+### Minor Changes
+
+- New `context-menu` component: a right-click menu positioned at the pointer via `@angular/cdk/overlay`, with checkbox items, radio groups, and nested submenus that open on hover with viewport-aware flipping. Install with `sanring add context-menu`.
+
 ## 0.13.1
 
 ### Patch Changes

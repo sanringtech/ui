@@ -39,6 +39,12 @@ export const componentChangelog: readonly ComponentChangelogEntry[] = [
       {
         type: 'added',
         notable: true,
+        componentIds: ['context-menu'],
+        text: 'New `context-menu` component: a right-click menu positioned at the pointer via `@angular/cdk/overlay`, with checkbox items, radio groups, and nested submenus.',
+      },
+      {
+        type: 'added',
+        notable: true,
         componentIds: ['switch'],
         text: '`switch` accepts projected icons on its thumb via `[sanringSwitchIconChecked]` / `[sanringSwitchIconUnchecked]` named slots, which toggle automatically with the checked state.',
       },
