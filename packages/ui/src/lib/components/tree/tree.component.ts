@@ -1,6 +1,15 @@
 import { TreeKeyManager } from '@angular/cdk/a11y';
 import { toObservable } from '@angular/core/rxjs-interop';
-import { Component, Injector, computed, contentChildren, inject, input, model, signal } from '@angular/core';
+import {
+  Component,
+  Injector,
+  computed,
+  contentChildren,
+  inject,
+  input,
+  model,
+  signal,
+} from '@angular/core';
 import { map } from 'rxjs';
 import { cn } from '../../utils';
 import { TreeNodeComponent } from './tree-node.component';
@@ -40,7 +49,9 @@ export class TreeComponent {
     if (nodes.length === 0) return null;
     return nodes.find((node) => node.value() === this.selectedValue()) ?? nodes[0];
   });
-  private readonly activeNode = computed(() => this.explicitActiveNode() ?? this.fallbackActiveNode());
+  private readonly activeNode = computed(
+    () => this.explicitActiveNode() ?? this.fallbackActiveNode(),
+  );
 
   protected readonly treeClass = computed(() => cn('flex flex-col gap-1 w-full', this.class()));
 
