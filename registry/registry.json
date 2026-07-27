@@ -969,6 +969,26 @@
         "context-menu/context-menu.type.ts",
         "context-menu/index.ts"
       ]
+    },
+    {
+      "name": "transfer",
+      "description": "A dual-list control for moving items between two panes, e.g. assigning permissions.",
+      "sharedDeps": [
+        "utils"
+      ],
+      "componentDeps": [
+        "checkbox"
+      ],
+      "files": [
+        "transfer/transfer.component.ts",
+        "transfer/transfer-panel.component.ts",
+        "transfer/transfer-header.component.ts",
+        "transfer/transfer-list.component.ts",
+        "transfer/transfer-item.component.ts",
+        "transfer/transfer-action.directive.ts",
+        "transfer/transfer.type.ts",
+        "transfer/index.ts"
+      ]
     }
   ]
 }

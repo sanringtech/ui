@@ -391,6 +391,13 @@ export const routes: Routes = [
                   ),
               },
               {
+                path: 'transfer',
+                loadComponent: () =>
+                  import('./pages/components/transfer/transfer-page.component').then(
+                    (m) => m.TransferPageComponent,
+                  ),
+              },
+              {
                 path: 'tree',
                 loadComponent: () =>
                   import('./pages/components/tree/tree-page.component').then(

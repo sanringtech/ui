@@ -52,3 +52,4 @@ export * from './lib/components/timeline';
 export * from './lib/components/toast';
 export * from './lib/components/tooltip';
 export * from './lib/components/tree';
+export * from './lib/components/transfer';

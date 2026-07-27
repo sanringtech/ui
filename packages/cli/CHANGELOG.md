@@ -1,5 +1,17 @@
 # @sanring/cli
 
+## 0.16.0
+
+### Minor Changes
+
+- `transfer` restyled to match the design system's tokens (border/surface/radius/hover), and gained `mode="one-way"` (read-only target panel), per-panel search via `setQuery()`, and per-panel pagination via `pageSize`/`nextPage()`/`previousPage()`.
+
+## 0.15.0
+
+### Minor Changes
+
+- New `transfer` component: a dual-list shuttle for moving items between two panes (e.g. assigning permissions), composed from the existing `checkbox` component. Install with `sanring add transfer`.
+
 ## 0.14.0
 
 ### Minor Changes

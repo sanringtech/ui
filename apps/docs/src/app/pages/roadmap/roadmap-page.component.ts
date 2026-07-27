@@ -263,6 +263,7 @@ export class RoadmapPageComponent {
     { name: 'Toggle', description: '' },
     { name: 'Toast', description: '' },
     { name: 'Tooltip', description: '' },
+    { name: 'Transfer', description: '', tone: 'updated' },
     { name: 'Tree', description: '' },
   ];
 
@@ -280,11 +281,6 @@ export class RoadmapPageComponent {
       name: 'OTP Input',
       description:
         'Segmented one-time-password input with auto-advance between digits and paste-splitting. Bounded scope, but the focus-management logic is nontrivial.',
-    },
-    {
-      name: 'Transfer',
-      description:
-        'Dual-list shuttle for assigning permissions or picking items between two panes. Composition of existing Checkbox, Button, and Scroll Area rather than new primitives.',
     },
   ];
 

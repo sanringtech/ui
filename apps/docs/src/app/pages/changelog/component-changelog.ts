@@ -34,6 +34,22 @@ export interface ComponentChangelogEntry {
  */
 export const componentChangelog: readonly ComponentChangelogEntry[] = [
   {
+    date: '2026-07-27',
+    changes: [
+      {
+        type: 'added',
+        notable: true,
+        componentIds: ['transfer'],
+        text: 'New `transfer` component: a dual-list shuttle for moving items between two panes (e.g. assigning permissions), composed from the existing `checkbox` component.',
+      },
+      {
+        type: 'changed',
+        componentIds: ['transfer'],
+        text: '`transfer` restyled to use the design system\'s border/surface/radius tokens, and gained `mode="one-way"`, per-panel search (`setQuery`), and per-panel pagination (`pageSize`).',
+      },
+    ],
+  },
+  {
     date: '2026-07-26',
     changes: [
       {

@@ -70,6 +70,7 @@ export type DocsComponentId =
   | 'toggle'
   | 'toast'
   | 'tooltip'
+  | 'transfer'
   | 'tree';
 
 export interface DocsComponentNavItem extends DocsSidebarItem {
@@ -367,6 +368,12 @@ export const docsComponentItems: DocsComponentNavItem[] = [
     id: 'tooltip',
     labelKey: 'component.tooltip',
     path: '/components/tooltip',
+    active: true,
+  },
+  {
+    id: 'transfer',
+    labelKey: 'component.transfer',
+    path: '/components/transfer',
     active: true,
   },
   {
