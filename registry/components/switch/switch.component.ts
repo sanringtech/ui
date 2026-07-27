@@ -31,6 +31,9 @@ let nextUniqueId = 0;
 @Component({
   selector: 'sanring-switch',
   standalone: true,
+  // host 設 inline-flex，讓內部 <button> 變成 flex item（被 blockify），
+  // 不再以 inline-level box 參與行框排版，避免 baseline 留白造成 track 下緣多出空間。
+  host: { class: 'inline-flex' },
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,
