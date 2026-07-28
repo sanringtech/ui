@@ -1,5 +1,6 @@
 import { ChangeDetectionStrategy, Component, computed, inject, input, signal } from '@angular/core';
 import { cn } from '../../utils';
+import { CheckedState } from '../checkbox/checkbox.types';
 import { TransferComponent } from './transfer.component';
 import { TransferDirection } from './transfer.type';
 
@@ -83,6 +84,50 @@ export class TransferPanelComponent {
     if (!this.interactive()) return;
     if (this.direction() === 'source') this.transfer.toggleSourceSelected(key);
     else this.transfer.toggleTargetSelected(key);
+  }
+
+  // 可被勾選的項目（非 disabled、對應 filteredItems 全集，跨分頁）
+  readonly selectableItems = computed(() =>
+    this.filteredItems().filter((item) => !item.disabled),
+  );
+
+  // 目前已勾選（暫存中、尚未移動）的數量
+  readonly selectedCount = computed(() =>
+    this.selectableItems().filter((item) => this.isSelected(item.key)).length,
+  );
+
+  readonly allSelected = computed(() => {
+    const selectable = this.selectableItems();
+    return selectable.length > 0 && selectable.every((item) => this.isSelected(item.key));
+  });
+
+  readonly someSelected = computed(
+    () => !this.allSelected() && this.selectableItems().some((item) => this.isSelected(item.key)),
+  );
+
+  // 給 header checkbox 的 [checked] 綁定：true / false / 'indeterminate'
+  readonly selectAllChecked = computed((): CheckedState => {
+    if (this.allSelected()) return true;
+    if (this.someSelected()) return 'indeterminate';
+    return false;
+  });
+
+  selectAll(): void {
+    if (!this.interactive()) return;
+    const keys = this.selectableItems().map((item) => item.key);
+    if (this.direction() === 'source') this.transfer.setSourceSelectedKeys(keys);
+    else this.transfer.setTargetSelectedKeys(keys);
+  }
+
+  deselectAll(): void {
+    if (!this.interactive()) return;
+    if (this.direction() === 'source') this.transfer.setSourceSelectedKeys([]);
+    else this.transfer.setTargetSelectedKeys([]);
+  }
+
+  toggleSelectAll(): void {
+    if (this.allSelected()) this.deselectAll();
+    else this.selectAll();
   }
 
   setQuery(value: string): void {

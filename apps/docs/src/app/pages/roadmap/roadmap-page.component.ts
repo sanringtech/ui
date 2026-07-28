@@ -242,6 +242,7 @@ export class RoadmapPageComponent {
     { name: 'Input', description: '' },
     { name: 'Label', description: '' },
     { name: 'Link', description: '' },
+    { name: 'OTP Input', description: '', tone: 'updated' },
     { name: 'Pagination', description: '' },
     { name: 'Popover', description: '' },
     { name: 'Progress', description: '' },

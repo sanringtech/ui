@@ -125,6 +125,10 @@
     <lastmod>2026-07-18</lastmod>
   </url>
   <url>
+    <loc>https://ui.sanring.dev/components/otp-input</loc>
+    <lastmod>2026-07-28</lastmod>
+  </url>
+  <url>
     <loc>https://ui.sanring.dev/components/pagination</loc>
     <lastmod>2026-07-18</lastmod>
   </url>
@@ -210,7 +214,7 @@
   </url>
   <url>
     <loc>https://ui.sanring.dev/components/transfer</loc>
-    <lastmod>2026-07-27</lastmod>
+    <lastmod>2026-07-28</lastmod>
   </url>
   <url>
     <loc>https://ui.sanring.dev/components/tree</loc>

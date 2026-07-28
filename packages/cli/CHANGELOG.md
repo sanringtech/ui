@@ -1,5 +1,12 @@
 # @sanring/cli
 
+## 0.17.0
+
+### Minor Changes
+
+- New `otp-input` component: a one-time password input with individual character slots, keyboard navigation, and paste support. Install with `sanring add otp-input`.
+- `transfer` gains a select-all control and a selected-item count display in each panel header, and fixes a click handler bug on list items.
+
 ## 0.16.0
 
 ### Minor Changes

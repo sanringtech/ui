@@ -34,6 +34,27 @@ export interface ComponentChangelogEntry {
  */
 export const componentChangelog: readonly ComponentChangelogEntry[] = [
   {
+    date: '2026-07-28',
+    changes: [
+      {
+        type: 'added',
+        notable: true,
+        componentIds: ['otp-input'],
+        text: 'New `otp-input` component: a one-time password input with individual character slots, keyboard navigation, and paste support.',
+      },
+      {
+        type: 'changed',
+        componentIds: ['transfer'],
+        text: '`transfer` gains a select-all control and a selected-item count display in each panel header.',
+      },
+      {
+        type: 'fixed',
+        componentIds: ['transfer'],
+        text: 'Clicking a list item now toggles its selection correctly.',
+      },
+    ],
+  },
+  {
     date: '2026-07-27',
     changes: [
       {
