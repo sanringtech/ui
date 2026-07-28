@@ -10,6 +10,7 @@ export const FieldType = {
   checkbox: 'checkbox',
   radioGroup: 'radio-group',
   slider: 'slider',
+  otpInput: 'otp-input',
   fileUpload: 'file-upload',
   calendar: 'calendar',
   datePicker: 'date-picker',

@@ -989,6 +989,28 @@
         "transfer/transfer.type.ts",
         "transfer/index.ts"
       ]
+    },
+    {
+      "name": "otp-input",
+      "description": "A one-time password input with individual character slots, keyboard navigation, and paste support.",
+      "sharedDeps": [
+        "utils",
+        "component-styles"
+      ],
+      "componentDeps": [
+        "field"
+      ],
+      "peerDependencies": {
+        "@angular/forms": "^22.0.0"
+      },
+      "files": [
+        "otp-input/otp-input.component.ts",
+        "otp-input/otp-input-slot.component.ts",
+        "otp-input/otp-input-separator.component.ts",
+        "otp-input/otp-input.context.ts",
+        "otp-input/otp-input.types.ts",
+        "otp-input/index.ts"
+      ]
     }
   ]
 }

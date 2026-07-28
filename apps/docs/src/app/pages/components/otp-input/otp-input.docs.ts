@@ -1,0 +1,224 @@
+import {
+  ComponentPageApiRow,
+  ComponentPageDefinition,
+} from '../../../docs-schema/component-page.types';
+
+export const otpInputPage = {
+  componentId: 'otp-input',
+  titleKey: 'component.otpInput',
+  descriptionKey: 'otpInput.description',
+  sections: [
+    {
+      id: 'basic',
+      titleKey: 'toc.basic',
+      descriptionKey: 'otpInput.examples.basic.description',
+      level: 2,
+    },
+    {
+      id: 'usage',
+      titleKey: 'toc.usage',
+      descriptionKey: 'otpInput.usage.description',
+      level: 2,
+    },
+    {
+      id: 'installation',
+      titleKey: 'sidebar.installation',
+      descriptionKey: 'otpInput.installation.description',
+      level: 2,
+    },
+    {
+      id: 'example',
+      titleKey: 'toc.examples',
+      level: 2,
+      children: [
+        { id: 'example-pattern', titleKey: 'otpInput.demo.pattern', level: 3 },
+        { id: 'example-separator', titleKey: 'otpInput.demo.separator', level: 3 },
+        { id: 'example-disabled', titleKey: 'otpInput.demo.disabled', level: 3 },
+        { id: 'example-controlled', titleKey: 'otpInput.demo.controlled', level: 3 },
+        {
+          id: 'example-invalid',
+          titleKey: 'otpInput.demo.invalid',
+          descriptionKey: 'otpInput.examples.invalid.description',
+          level: 3,
+        },
+        { id: 'example-four-digits', titleKey: 'otpInput.demo.fourDigits', level: 3 },
+        { id: 'example-alphanumeric', titleKey: 'otpInput.demo.alphanumeric', level: 3 },
+        {
+          id: 'example-form',
+          titleKey: 'otpInput.demo.form',
+          descriptionKey: 'otpInput.examples.form.description',
+          level: 3,
+        },
+      ],
+    },
+    {
+      id: 'api',
+      titleKey: 'toc.apiReference',
+      descriptionKey: 'otpInput.api.description',
+      level: 2,
+    },
+  ],
+  apiRows: [
+    {
+      property: 'class',
+      type: 'string',
+      defaultValue: "''",
+      descriptionKey: 'otpInput.api.class.description',
+    },
+    {
+      property: 'id',
+      type: 'string',
+      defaultValue: 'generated',
+      descriptionKey: 'otpInput.api.id.description',
+    },
+    {
+      property: 'length',
+      type: 'number',
+      defaultValue: '6',
+      descriptionKey: 'otpInput.api.length.description',
+    },
+    {
+      property: 'value',
+      type: 'string',
+      defaultValue: "''",
+      descriptionKey: 'otpInput.api.value.description',
+    },
+    {
+      property: 'type',
+      type: "'numeric' | 'alphanumeric' | 'text'",
+      defaultValue: "'numeric'",
+      descriptionKey: 'otpInput.api.type.description',
+    },
+    {
+      property: 'pattern',
+      type: 'RegExp | string | null',
+      defaultValue: 'null',
+      descriptionKey: 'otpInput.api.pattern.description',
+    },
+    {
+      property: 'size',
+      type: "'sm' | 'md' | 'lg'",
+      defaultValue: "'md'",
+      descriptionKey: 'otpInput.api.size.description',
+    },
+    {
+      property: 'orientation',
+      type: "'horizontal' | 'vertical'",
+      defaultValue: "'horizontal'",
+      descriptionKey: 'otpInput.api.orientation.description',
+    },
+    {
+      property: 'textAlign',
+      type: "'left' | 'center' | 'right'",
+      defaultValue: "'center'",
+      descriptionKey: 'otpInput.api.textAlign.description',
+    },
+    {
+      property: 'separatorAt',
+      type: 'number | readonly number[] | null',
+      defaultValue: 'null',
+      descriptionKey: 'otpInput.api.separatorAt.description',
+    },
+    {
+      property: 'disabled',
+      type: 'boolean',
+      defaultValue: 'false',
+      descriptionKey: 'otpInput.api.disabled.description',
+    },
+    {
+      property: 'readOnly',
+      type: 'boolean',
+      defaultValue: 'false',
+      descriptionKey: 'otpInput.api.readOnly.description',
+    },
+    {
+      property: 'valueChange',
+      type: 'EventEmitter<string>',
+      defaultValue: '—',
+      descriptionKey: 'otpInput.api.valueChange.description',
+    },
+    {
+      property: 'stateChange',
+      type: 'EventEmitter<OtpInputValueChangeEvent>',
+      defaultValue: '—',
+      descriptionKey: 'otpInput.api.stateChange.description',
+    },
+    {
+      property: 'complete',
+      type: 'EventEmitter<OtpInputCompleteEvent>',
+      defaultValue: '—',
+      descriptionKey: 'otpInput.api.complete.description',
+    },
+  ] satisfies readonly ComponentPageApiRow[],
+} as const satisfies ComponentPageDefinition;
+
+export const otpInputPageExamples = {
+  basic: `<sanring-otp-input
+  [length]="6"
+  ariaLabel="Verification code"
+  (valueChange)="code = $event"
+/>`,
+  usageImport: `import {
+  OtpInputComponent,
+  OtpInputSeparatorComponent,
+  OtpInputSlotComponent,
+} from './components/ui/otp-input';`,
+  usageMain: `<sanring-otp-input
+  [length]="6"
+  [value]="code"
+  ariaLabel="Verification code"
+  (valueChange)="code = $event"
+  (complete)="verify($event.value)"
+/>`,
+  pattern: `<sanring-otp-input
+  [length]="6"
+  [pattern]="digitsOnlyPattern"
+  ariaLabel="Digits only"
+/>`,
+  separator: `<sanring-otp-input [length]="6" ariaLabel="Verification code">
+  <sanring-otp-input-slot [index]="0" />
+  <sanring-otp-input-slot [index]="1" />
+  <sanring-otp-input-slot [index]="2" />
+  <sanring-otp-input-separator />
+  <sanring-otp-input-slot [index]="3" />
+  <sanring-otp-input-slot [index]="4" />
+  <sanring-otp-input-slot [index]="5" />
+</sanring-otp-input>`,
+  disabled: `<sanring-otp-input [value]="'123456'" disabled ariaLabel="Verification code" />`,
+  controlled: `<sanring-otp-input
+  [value]="controlledCode"
+  ariaLabel="Verification code"
+  (valueChange)="controlledCode = $event"
+/>
+
+<p>Enter your one-time password.</p>`,
+  invalid: `<sanring-field>
+  <label sanringLabel for="invalid-otp-code">Verification code</label>
+  <sanring-otp-input id="invalid-otp-code" [formControl]="invalidCodeControl" ariaLabel="Verification code" />
+  <sanring-error-message>Invalid verification code.</sanring-error-message>
+</sanring-field>`,
+  fourDigits: `<sanring-otp-input
+  [length]="4"
+  [pattern]="digitsOnlyPattern"
+  ariaLabel="PIN code"
+/>`,
+  alphanumeric: `<sanring-otp-input
+  type="alphanumeric"
+  [length]="5"
+  ariaLabel="Recovery code"
+/>`,
+  form: `<form class="grid gap-4" (ngSubmit)="verify()">
+  <sanring-field>
+    <label sanringLabel for="otp-code-field">Verification code</label>
+    <sanring-otp-input id="otp-code-field" [formControl]="codeControl" ariaLabel="Verification code" />
+    <sanring-error-message>Enter the 6-digit code.</sanring-error-message>
+  </sanring-field>
+
+  <button sanringBtn type="submit">Verify</button>
+</form>`,
+  field: `<sanring-field>
+  <label sanringLabel for="otp-code-field">Verification code</label>
+  <sanring-otp-input id="otp-code-field" [formControl]="codeControl" ariaLabel="Verification code" />
+  <sanring-error-message>Enter the 6-digit code.</sanring-error-message>
+</sanring-field>`,
+} as const;

@@ -47,6 +47,7 @@ export type DocsComponentId =
   | 'file-upload'
   | 'hover-card'
   | 'input'
+  | 'otp-input'
   | 'label'
   | 'link'
   | 'pagination'
@@ -230,6 +231,12 @@ export const docsComponentItems: DocsComponentNavItem[] = [
     id: 'input',
     labelKey: 'component.input',
     path: '/components/input',
+    active: true,
+  },
+  {
+    id: 'otp-input',
+    labelKey: 'component.otpInput',
+    path: '/components/otp-input',
     active: true,
   },
   {

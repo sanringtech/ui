@@ -230,6 +230,13 @@ export const routes: Routes = [
                   ),
               },
               {
+                path: 'otp-input',
+                loadComponent: () =>
+                  import('./pages/components/otp-input/otp-input-page.component').then(
+                    (m) => m.OtpInputPageComponent,
+                  ),
+              },
+              {
                 path: 'label',
                 loadComponent: () =>
                   import('./pages/components/label/label-page.component').then(

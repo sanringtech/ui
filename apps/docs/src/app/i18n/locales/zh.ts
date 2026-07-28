@@ -59,6 +59,7 @@ export const zh: Record<TranslationKey, string> = {
   'component.fileUpload': '檔案上傳',
   'component.hoverCard': 'Hover Card',
   'component.input': '輸入框',
+  'component.otpInput': 'OTP 輸入框',
   'component.label': '標籤文字',
   'component.link': '連結',
   'component.pagination': '分頁器',
@@ -471,6 +472,54 @@ export const zh: Record<TranslationKey, string> = {
     'Input 可搭配 Label 建立可存取表單，也能與 Card、Alert 組成更完整的工作流程。',
   'input.api.description': 'sanringInput directive 支援的 Inputs。',
   'input.api.class.description': '與基礎輸入框樣式合併的額外 class。',
+  'otpInput.description': '一次性驗證碼輸入控制項，支援貼上、鍵盤導覽與 Angular 表單。',
+  'otpInput.examples.basic.description':
+    '當使用者需要逐格輸入短驗證碼時，可以使用 sanring-otp-input。',
+  'otpInput.usage.description':
+    '匯入 OtpInputComponent，並透過 valueChange 或 Angular 表單接收驗證碼字串。',
+  'otpInput.installation.description':
+    '安裝 OTP input component，並使用 ariaLabel 或 ariaLabelledBy 提供可存取名稱。',
+  'otpInput.demo.pattern': 'Pattern',
+  'otpInput.demo.separator': '分隔符',
+  'otpInput.demo.alphanumeric': '英數驗證碼',
+  'otpInput.demo.disabled': '停用',
+  'otpInput.demo.controlled': '受控',
+  'otpInput.demo.invalid': '無效狀態',
+  'otpInput.demo.fourDigits': '四位數',
+  'otpInput.demo.form': '表單',
+  'otpInput.demo.field': '搭配 Field',
+  'otpInput.demo.verificationCode': '驗證碼',
+  'otpInput.demo.digitsOnly': '僅限數字',
+  'otpInput.demo.recoveryCode': '復原碼',
+  'otpInput.demo.pinCode': 'PIN 碼',
+  'otpInput.demo.controlledDescription': '請輸入你的一次性密碼。',
+  'otpInput.demo.invalidError': '驗證碼無效。',
+  'otpInput.demo.fieldError': '請輸入 6 位數驗證碼。',
+  'otpInput.demo.verifyLogin': '驗證登入',
+  'otpInput.demo.formDescription': '請輸入我們寄到你信箱的驗證碼。',
+  'otpInput.demo.verify': '驗證',
+  'otpInput.examples.invalid.description':
+    '綁定表單控制項並標記為 touched，即可讓每個 slot 呈現 invalid 狀態。',
+  'otpInput.examples.field.description':
+    '把 sanring-otp-input 包在 sanring-field 裡，沿用表單系統的 label、description 與 validation message。',
+  'otpInput.examples.form.description': '搭配 sanring-field 與送出按鈕，建立完整的驗證碼表單。',
+  'otpInput.api.description': 'sanring-otp-input 支援的 Inputs 與 Outputs。',
+  'otpInput.api.class.description': '與 OTP input 根元素合併的額外 class。',
+  'otpInput.api.id.description': '群組 id，預設會自動產生。',
+  'otpInput.api.length.description': '驗證碼 slot 數量。',
+  'otpInput.api.value.description': '目前驗證碼字串。不符合 type 的字元會被忽略。',
+  'otpInput.api.type.description': '輸入與貼上時使用的字元過濾規則。',
+  'otpInput.api.pattern.description': '自訂字元 pattern。提供時會優先於 type 的內建過濾規則。',
+  'otpInput.api.size.description': '每個 slot 的視覺尺寸。',
+  'otpInput.api.orientation.description': '控制 slot 水平或垂直排列。',
+  'otpInput.api.textAlign.description': '每個 slot 內的文字對齊。',
+  'otpInput.api.separatorAt.description':
+    '預設渲染時要插入 sanring-otp-input-separator 的 slot 邊界位置，可傳單一數字或多個位置。',
+  'otpInput.api.disabled.description': '停用所有 slot 並阻止使用者互動。',
+  'otpInput.api.readOnly.description': '顯示目前值，但禁止編輯。',
+  'otpInput.api.valueChange.description': '使用者互動後送出下一個驗證碼字串。',
+  'otpInput.api.stateChange.description': '送出下一個驗證碼字串、slot metadata 與完成狀態。',
+  'otpInput.api.complete.description': '每個 slot 都有值時觸發。',
   'textarea.description': '用於原生 textarea 的多行文字表單控制項樣式 directive。',
   'textarea.examples.basic.description':
     '將 sanringTextarea 套用到原生 textarea，保留瀏覽器編輯行為並取得 Sanring UI 欄位樣式。',
@@ -1507,8 +1556,10 @@ export const zh: Record<TranslationKey, string> = {
   'transfer.demo.add': '加入',
   'transfer.demo.remove': '移除',
   'transfer.demo.searchPlaceholder': '搜尋...',
+  'transfer.demo.clearSearch': '清除搜尋',
   'transfer.demo.previousPage': '上一頁',
   'transfer.demo.nextPage': '下一頁',
+  'transfer.demo.selectAll': '標題列全選',
   'transfer.api.description': 'Transfer primitives 支援的 Inputs，以及 transfer item 的資料結構。',
   'transfer.api.items.description':
     '兩個面板共用的完整資料集。key 出現在 selectedKeys 裡的項目會顯示在目標面板，其餘顯示在來源面板。',
@@ -1518,6 +1569,8 @@ export const zh: Record<TranslationKey, string> = {
     "此面板要渲染哪一側的項目：'source' 為尚未被選取的項目，'target' 為已經被移過去的項目。必填。",
   'transfer.api.panelClass.description': '與面板容器合併的額外 class。',
   'transfer.api.headerClass.description': '與面板標題列合併的額外 class。',
+  'transfer.api.isShow.description':
+    '為 true 時，在 header 尾端自動渲染「已勾選數/總數」計數標籤。',
   'transfer.api.actionClass.description':
     '與 [sanringTransferAction] 容器合併的額外 class，通常放在兩個面板中間。',
   'transfer.api.itemKey.description': '項目的唯一識別碼，用來追蹤勾選狀態與所在面板。',
@@ -1533,6 +1586,12 @@ export const zh: Record<TranslationKey, string> = {
   'transfer.api.pageNav.description': '切換到下一頁／上一頁，超出範圍時不會有作用。',
   'transfer.api.interactive.description':
     'one-way 模式下的 target 面板會是 false，內部用來停用它的 checkbox。',
+  'transfer.api.selectableItems.description':
+    '過濾後的完整清單中所有非 disabled 的項目（不受分頁限制）。適合在標題列顯示可選數量。',
+  'transfer.api.selectAllChecked.description':
+    "全選 checkbox 的狀態：全部勾選時為 true、部分勾選時為 'indeterminate'、無勾選時為 false。",
+  'transfer.api.selectAllMethods.description':
+    '勾選 / 取消勾選 / 切換面板內所有非 disabled 項目。interactive() 為 false 時 selectAll / deselectAll 為 no-op。',
 
   'tree.description': '可組合的 tree primitives，適合檔案總管、巢狀導覽與階層資料。',
   'tree.examples.basic.description':

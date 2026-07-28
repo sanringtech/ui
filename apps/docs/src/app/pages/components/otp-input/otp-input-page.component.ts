@@ -1,0 +1,279 @@
+import { Component, inject, signal } from '@angular/core';
+import { FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
+import {
+  ButtonDirective,
+  ErrorMessageComponent,
+  LabelDirective,
+  OtpInputComponent,
+  OtpInputSeparatorComponent,
+  OtpInputSlotComponent,
+  SanringFieldComponent,
+} from '@sanring/ui';
+import { getComponentPageSection } from '../../../docs-schema/component-page.utils';
+import { I18nService } from '../../../i18n/i18n.service';
+import {
+  ComponentPageApiTableComponent,
+  ComponentPageCodeBlock,
+  ComponentPageCodePreviewer,
+  ComponentPageComponent,
+  ComponentPageHeaderComponent,
+  ComponentPageInstallationComponent,
+  ComponentPageUsageImportsComponent,
+  ComponentPageSectionComponent,
+} from '../../../layouts/component-page';
+import { otpInputPage, otpInputPageExamples } from './otp-input.docs';
+
+@Component({
+  selector: 'app-otp-input-page',
+  imports: [
+    ReactiveFormsModule,
+    ComponentPageApiTableComponent,
+    ComponentPageCodeBlock,
+    ComponentPageCodePreviewer,
+    ComponentPageComponent,
+    ComponentPageHeaderComponent,
+    ComponentPageInstallationComponent,
+    ComponentPageUsageImportsComponent,
+    ComponentPageSectionComponent,
+    ButtonDirective,
+    ErrorMessageComponent,
+    LabelDirective,
+    OtpInputComponent,
+    OtpInputSeparatorComponent,
+    OtpInputSlotComponent,
+    SanringFieldComponent,
+  ],
+  template: `
+    <app-component-page [sections]="page.sections">
+      <app-component-page-header
+        [componentId]="page.componentId"
+        [title]="i18n.t(page.titleKey)"
+        [description]="i18n.t(page.descriptionKey)"
+      />
+
+      <app-component-page-section [section]="section('basic')">
+        <app-component-page-code-previewer [code]="examples.basic" language="angular-html">
+          <div previewer class="grid w-full max-w-sm gap-3 px-4">
+            <sanring-otp-input
+              [length]="6"
+              [value]="basicValue()"
+              [ariaLabel]="i18n.t('otpInput.demo.verificationCode')"
+              (valueChange)="basicValue.set($event)"
+            />
+            <span class="font-mono text-sm text-[var(--docs-muted)]">{{
+              basicValue() || '------'
+            }}</span>
+          </div>
+        </app-component-page-code-previewer>
+      </app-component-page-section>
+
+      <app-component-page-section [section]="section('usage')">
+        <div class="grid gap-6">
+          <app-component-page-usage-imports [code]="examples.usageImport" />
+          <div
+            class="overflow-hidden rounded-[var(--sanring-radius)] border border-[var(--docs-border)]"
+          >
+            <app-component-page-code-block [code]="examples.usageMain" language="angular-html" />
+          </div>
+        </div>
+      </app-component-page-section>
+
+      <app-component-page-section [section]="section('installation')">
+        <app-component-page-installation
+          componentName="otp-input"
+          manualSnippet="import { OtpInputComponent } from './components/ui/otp-input';"
+        />
+      </app-component-page-section>
+
+      <app-component-page-section [section]="section('example')">
+        <div class="grid gap-2">
+          <app-component-page-section [section]="section('example-pattern')">
+            <app-component-page-code-previewer [code]="examples.pattern" language="angular-html">
+              <div previewer class="grid w-full max-w-sm gap-3 px-4">
+                <sanring-otp-input
+                  [length]="6"
+                  [pattern]="digitsOnlyPattern"
+                  [value]="patternValue()"
+                  [ariaLabel]="i18n.t('otpInput.demo.digitsOnly')"
+                  (valueChange)="patternValue.set($event)"
+                />
+              </div>
+            </app-component-page-code-previewer>
+          </app-component-page-section>
+
+          <app-component-page-section [section]="section('example-separator')">
+            <app-component-page-code-previewer [code]="examples.separator" language="angular-html">
+              <div previewer class="grid w-full max-w-sm gap-3 px-4">
+                <sanring-otp-input
+                  [length]="6"
+                  [value]="separatorValue()"
+                  [ariaLabel]="i18n.t('otpInput.demo.verificationCode')"
+                  (valueChange)="separatorValue.set($event)"
+                >
+                  <sanring-otp-input-slot [index]="0" />
+                  <sanring-otp-input-slot [index]="1" />
+                  <sanring-otp-input-slot [index]="2" />
+                  <sanring-otp-input-separator />
+                  <sanring-otp-input-slot [index]="3" />
+                  <sanring-otp-input-slot [index]="4" />
+                  <sanring-otp-input-slot [index]="5" />
+                </sanring-otp-input>
+              </div>
+            </app-component-page-code-previewer>
+          </app-component-page-section>
+
+          <app-component-page-section [section]="section('example-disabled')">
+            <app-component-page-code-previewer [code]="examples.disabled" language="angular-html">
+              <div previewer class="grid w-full max-w-sm gap-3 px-4">
+                <sanring-otp-input
+                  [value]="'123456'"
+                  disabled
+                  [ariaLabel]="i18n.t('otpInput.demo.verificationCode')"
+                />
+              </div>
+            </app-component-page-code-previewer>
+          </app-component-page-section>
+
+          <app-component-page-section [section]="section('example-controlled')">
+            <app-component-page-code-previewer [code]="examples.controlled" language="angular-html">
+              <div previewer class="grid w-full max-w-sm gap-3 px-4">
+                <sanring-otp-input
+                  [value]="controlledValue()"
+                  [ariaLabel]="i18n.t('otpInput.demo.verificationCode')"
+                  (valueChange)="controlledValue.set($event)"
+                />
+                <p class="text-sm text-[var(--docs-muted)]">
+                  {{ i18n.t('otpInput.demo.controlledDescription') }}
+                </p>
+                <span class="font-mono text-sm text-[var(--docs-muted)]">
+                  {{ controlledValue() || '------' }}
+                </span>
+              </div>
+            </app-component-page-code-previewer>
+          </app-component-page-section>
+
+          <app-component-page-section [section]="section('example-invalid')">
+            <app-component-page-code-previewer [code]="examples.invalid" language="angular-html">
+              <div previewer class="grid w-full max-w-sm gap-3 px-4">
+                <sanring-field>
+                  <label sanringLabel for="invalid-otp-code">
+                    {{ i18n.t('otpInput.demo.verificationCode') }}
+                  </label>
+                  <sanring-otp-input
+                    id="invalid-otp-code"
+                    [formControl]="invalidCodeControl"
+                    [ariaLabel]="i18n.t('otpInput.demo.verificationCode')"
+                  />
+                  <sanring-error-message>{{
+                    i18n.t('otpInput.demo.invalidError')
+                  }}</sanring-error-message>
+                </sanring-field>
+              </div>
+            </app-component-page-code-previewer>
+          </app-component-page-section>
+
+          <app-component-page-section [section]="section('example-four-digits')">
+            <app-component-page-code-previewer [code]="examples.fourDigits" language="angular-html">
+              <div previewer class="grid w-full max-w-sm gap-3 px-4">
+                <sanring-otp-input
+                  [length]="4"
+                  [pattern]="digitsOnlyPattern"
+                  [value]="pinValue()"
+                  [ariaLabel]="i18n.t('otpInput.demo.pinCode')"
+                  (valueChange)="pinValue.set($event)"
+                />
+              </div>
+            </app-component-page-code-previewer>
+          </app-component-page-section>
+
+          <app-component-page-section [section]="section('example-alphanumeric')">
+            <app-component-page-code-previewer
+              [code]="examples.alphanumeric"
+              language="angular-html"
+            >
+              <div previewer class="grid w-full max-w-sm gap-3 px-4">
+                <sanring-otp-input
+                  type="alphanumeric"
+                  [length]="5"
+                  [value]="recoveryValue()"
+                  [ariaLabel]="i18n.t('otpInput.demo.recoveryCode')"
+                  (valueChange)="recoveryValue.set($event)"
+                />
+              </div>
+            </app-component-page-code-previewer>
+          </app-component-page-section>
+
+          <app-component-page-section [section]="section('example-form')">
+            <app-component-page-code-previewer [code]="examples.form" language="angular-html">
+              <form previewer class="grid w-full max-w-sm gap-4 px-4" (ngSubmit)="verifyCode()">
+                <div class="grid gap-1">
+                  <h4 class="text-sm font-semibold text-[var(--docs-fg)]">
+                    {{ i18n.t('otpInput.demo.verifyLogin') }}
+                  </h4>
+                  <p class="text-sm text-[var(--docs-muted)]">
+                    {{ i18n.t('otpInput.demo.formDescription') }}
+                  </p>
+                </div>
+
+                <sanring-field>
+                  <label sanringLabel for="otp-code-field">
+                    {{ i18n.t('otpInput.demo.verificationCode') }}
+                  </label>
+                  <sanring-otp-input
+                    id="otp-code-field"
+                    [formControl]="codeControl"
+                    [ariaLabel]="i18n.t('otpInput.demo.verificationCode')"
+                  />
+                  <sanring-error-message>{{
+                    i18n.t('otpInput.demo.fieldError')
+                  }}</sanring-error-message>
+                </sanring-field>
+
+                <button sanringBtn type="submit">
+                  {{ i18n.t('otpInput.demo.verify') }}
+                </button>
+              </form>
+            </app-component-page-code-previewer>
+          </app-component-page-section>
+        </div>
+      </app-component-page-section>
+
+      <app-component-page-section [section]="section('api')">
+        <app-component-page-api-table [rows]="page.apiRows!" />
+      </app-component-page-section>
+    </app-component-page>
+  `,
+})
+export class OtpInputPageComponent {
+  protected readonly page = otpInputPage;
+  protected readonly examples = otpInputPageExamples;
+  protected readonly i18n = inject(I18nService);
+  protected readonly digitsOnlyPattern = /^[0-9]$/;
+  protected readonly basicValue = signal('');
+  protected readonly patternValue = signal('');
+  protected readonly separatorValue = signal('123456');
+  protected readonly controlledValue = signal('');
+  protected readonly pinValue = signal('');
+  protected readonly recoveryValue = signal('A1B2C');
+  protected readonly invalidCodeControl = new FormControl('000000', {
+    nonNullable: true,
+    validators: [Validators.pattern(/^123456$/)],
+  });
+  protected readonly codeControl = new FormControl('', {
+    nonNullable: true,
+    validators: [Validators.required, Validators.minLength(6)],
+  });
+
+  constructor() {
+    this.invalidCodeControl.markAsTouched();
+    this.codeControl.markAsTouched();
+  }
+
+  protected verifyCode(): void {
+    this.codeControl.markAsTouched();
+  }
+
+  protected section(id: string) {
+    return getComponentPageSection(this.page, id);
+  }
+}
