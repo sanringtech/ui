@@ -1,5 +1,5 @@
 import { Component, computed, inject, signal } from '@angular/core';
-import { CalendarLocale, DateRange, DisabledInput, PickerGranularity } from '@sanring/date-picker';
+import { CalendarLocale, DateRange, DisabledInput, PickerGranularity } from '@sanring/date-picker-core';
 import {
   ButtonDirective,
   DatePickerComponent,

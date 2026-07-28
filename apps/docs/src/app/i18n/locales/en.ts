@@ -348,9 +348,9 @@ export const en = {
   'avatar.api.overlap.description': 'Stack overlap amount in rem for avatar groups.',
   'avatar.api.count.description': 'Number displayed by the avatar group count item.',
   'calendar.description':
-    'A date grid built on the headless @sanring/date-picker engine, supporting single, range, and multi-month selection.',
+    'A date grid built on the headless @sanring/date-picker-core engine, supporting single, range, and multi-month selection.',
   'calendar.examples.description':
-    'The states below map directly onto @sanring/date-picker’s own progressive demo scenarios.',
+    'The states below map directly onto @sanring/date-picker-core’s own progressive demo scenarios.',
   'calendar.demo.noDeselect': 'No deselect',
   'calendar.demo.noDeselect.description':
     'allowDeselect = false — clicking the already-selected date again does not clear it.',
@@ -387,7 +387,7 @@ export const en = {
   'calendar.usage.description':
     'Import CalendarComponent and provide CALENDAR_LOCALE at the app or component level.',
   'calendar.installation.description':
-    'Add the component with the CLI — it also installs @sanring/date-picker as a peer dependency — then import CalendarComponent.',
+    'Add the component with the CLI — it also installs @sanring/date-picker-core as a peer dependency — then import CalendarComponent.',
   'calendar.api.description': 'Inputs, outputs, and public methods supported by CalendarComponent.',
   'calendar.api.class.description': 'Additional classes merged with the component base styles.',
   'calendar.api.size.description': 'Size of each day cell.',

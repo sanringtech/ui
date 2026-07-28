@@ -323,9 +323,9 @@ export const zh: Record<TranslationKey, string> = {
   'avatar.api.overlap.description': '頭像群組的堆疊重疊量，單位為 rem。',
   'avatar.api.count.description': '頭像群組數量項目顯示的數字。',
   'calendar.description':
-    '以 @sanring/date-picker 的 headless 引擎為核心的日曆格線，支援單選、範圍選取與多月顯示。',
+    '以 @sanring/date-picker-core 的 headless 引擎為核心的日曆格線，支援單選、範圍選取與多月顯示。',
   'calendar.examples.description':
-    '以下狀態直接對應 @sanring/date-picker 官方 demo 的漸進式展示場景。',
+    '以下狀態直接對應 @sanring/date-picker-core 官方 demo 的漸進式展示場景。',
   'calendar.demo.noDeselect': '不可取消選取',
   'calendar.demo.noDeselect.description': 'allowDeselect = false——再次點擊已選日期不會取消。',
   'calendar.demo.disabled': '含禁用規則',
@@ -360,7 +360,7 @@ export const zh: Record<TranslationKey, string> = {
     '未提供 locale 時會拋出錯誤——CALENDAR_LOCALE 沒有預設值，強制你明確決定週起始日與月份/星期標籤。點擊標題中的年月文字可直接跳到任何月份或年份。',
   'calendar.usage.description': '匯入 CalendarComponent，並在應用層或元件層提供 CALENDAR_LOCALE。',
   'calendar.installation.description':
-    '用 CLI 加入這個元件（會一併安裝 @sanring/date-picker 作為 peer dependency），再匯入 CalendarComponent。',
+    '用 CLI 加入這個元件（會一併安裝 @sanring/date-picker-core 作為 peer dependency），再匯入 CalendarComponent。',
   'calendar.api.description': 'CalendarComponent 支援的 Inputs、Outputs 與公開方法。',
   'calendar.api.class.description': '與元件基礎樣式合併的額外 class。',
   'calendar.api.size.description': '日期格子的尺寸。',

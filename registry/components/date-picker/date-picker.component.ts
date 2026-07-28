@@ -28,7 +28,7 @@ import {
   PickerGranularity,
   QuarterStartMonth,
   RangePeriodCountLimit,
-} from '@sanring/date-picker';
+} from '@sanring/date-picker-core';
 import { Observable, Subject } from 'rxjs';
 import { CalendarHeaderComponent } from '../calendar/calendar-header.component';
 import { cn } from '../shared/utils';

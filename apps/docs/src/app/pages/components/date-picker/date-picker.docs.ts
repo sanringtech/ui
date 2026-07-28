@@ -192,7 +192,7 @@ export const datePickerPage = {
 export const datePickerPageExamples = {
   basic: `<sanring-date-picker (selectedDateChange)="selectedDate = $event" />`,
   usageImport: `import { Component } from '@angular/core';
-import { CALENDAR_LOCALE } from '@sanring/date-picker';
+import { CALENDAR_LOCALE } from '@sanring/date-picker-core';
 import { DatePickerComponent } from './components/ui/date-picker';
 
 @Component({

@@ -1,5 +1,5 @@
 import { Directive, HostListener, computed, inject, input } from '@angular/core';
-import { CalendarDay, CalendarEngine } from '@sanring/date-picker';
+import { CalendarDay, CalendarEngine } from '@sanring/date-picker-core';
 import { cn } from '../../utils';
 import { CALENDAR_DAY_SIZE_CLASSES } from '../component-styles';
 import { CalendarSize } from './calendar.type';

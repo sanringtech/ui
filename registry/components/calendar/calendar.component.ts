@@ -24,7 +24,7 @@ import {
   CalendarLocale,
   DateRange,
   DisabledInput,
-} from '@sanring/date-picker';
+} from '@sanring/date-picker-core';
 import { LucideChevronDown } from '@lucide/angular';
 import { Observable, Subject } from 'rxjs';
 import { cn } from '../shared/utils';

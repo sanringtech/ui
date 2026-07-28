@@ -1,6 +1,6 @@
 import { ApplicationConfig, provideBrowserGlobalErrorListeners } from '@angular/core';
 import { provideRouter, withInMemoryScrolling } from '@angular/router';
-import { CALENDAR_QUARTER_STARTS_ON } from '@sanring/date-picker';
+import { CALENDAR_QUARTER_STARTS_ON } from '@sanring/date-picker-core';
 
 import { routes } from './app.routes';
 

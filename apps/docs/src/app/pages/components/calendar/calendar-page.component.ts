@@ -1,5 +1,5 @@
 import { Component, computed, inject } from '@angular/core';
-import { CalendarLocale, DateInterval, DateRange, DisabledInput } from '@sanring/date-picker';
+import { CalendarLocale, DateInterval, DateRange, DisabledInput } from '@sanring/date-picker-core';
 import { ButtonDirective, CalendarComponent, SANRING_TABS_IMPORTS } from '@sanring/ui';
 import { getComponentPageSection } from '../../../docs-schema/component-page.utils';
 import { I18nService } from '../../../i18n/i18n.service';

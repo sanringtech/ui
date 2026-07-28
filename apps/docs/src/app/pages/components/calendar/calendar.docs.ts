@@ -174,7 +174,7 @@ export const calendarPage = {
 export const calendarPageExamples = {
   basic: `<sanring-calendar (selectedDateChange)="selectedDate = $event" />`,
   usageImport: `import { Component } from '@angular/core';
-import { CALENDAR_LOCALE } from '@sanring/date-picker';
+import { CALENDAR_LOCALE } from '@sanring/date-picker-core';
 import { CalendarComponent } from './components/ui/calendar';
 
 @Component({

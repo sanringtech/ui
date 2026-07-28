@@ -36,7 +36,7 @@ function getRegistryComponentNames() {
 
 // Documented components that intentionally have no registry entry, with why.
 const EXPECTED_GAPS = {
-  'date-picker': 'real published npm package (@sanring/date-picker), not CLI-copied source',
+  'date-picker': 'real published npm package (@sanring/date-picker-core), not CLI-copied source',
 };
 
 const documented = getDocumentedComponentIds();
