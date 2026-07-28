@@ -16,12 +16,12 @@ import { TransferItem } from './transfer.type';
       [checked]="checked()"
       [disabled]="isDisabled()"
       [ariaLabel]="item().label"
-      (checkedChange)="panel.toggleSelected(item().key)"
     />
     {{ item().label }}
   `,
   host: {
     '[class]': 'itemClass()',
+    '(click)': 'panel.toggleSelected(item().key)',
   },
 })
 export class TransferItemComponent {

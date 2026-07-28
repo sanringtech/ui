@@ -70,4 +70,13 @@ export class TransferComponent {
     this.selectedKeys.update((keys) => keys.filter((key) => !moving.has(key)));
     this.targetSelectedKeys.set([]);
   }
+
+  setSourceSelectedKeys(keys: string[]): void {
+    this.sourceSelectedKeys.set(keys);
+  }
+
+  setTargetSelectedKeys(keys: string[]): void {
+    if (this.mode() === 'one-way') return;
+    this.targetSelectedKeys.set(keys);
+  }
 }

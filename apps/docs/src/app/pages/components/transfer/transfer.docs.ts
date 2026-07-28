@@ -68,6 +68,11 @@ export const transferPage = {
           titleKey: 'transfer.demo.pagination',
           level: 3,
         },
+        {
+          id: 'example-select-all',
+          titleKey: 'transfer.demo.selectAll',
+          level: 3,
+        },
       ],
     },
     {
@@ -107,6 +112,12 @@ export const transferPage = {
       type: 'string',
       defaultValue: 'undefined',
       descriptionKey: 'transfer.api.headerClass.description',
+    },
+    {
+      property: 'TransferHeaderComponent.isShow',
+      type: 'boolean',
+      defaultValue: 'false',
+      descriptionKey: 'transfer.api.isShow.description',
     },
     {
       property: 'TransferActionDirective.class',
@@ -168,6 +179,24 @@ export const transferPage = {
       defaultValue: 'false',
       descriptionKey: 'transfer.api.itemDisabled.description',
     },
+    {
+      property: 'TransferPanelComponent.selectableItems',
+      type: 'TransferItem[]',
+      defaultValue: '—',
+      descriptionKey: 'transfer.api.selectableItems.description',
+    },
+    {
+      property: 'TransferPanelComponent.selectAllChecked',
+      type: "boolean | 'indeterminate'",
+      defaultValue: '—',
+      descriptionKey: 'transfer.api.selectAllChecked.description',
+    },
+    {
+      property: 'TransferPanelComponent.selectAll() / deselectAll() / toggleSelectAll()',
+      type: 'void',
+      defaultValue: '—',
+      descriptionKey: 'transfer.api.selectAllMethods.description',
+    },
   ] satisfies readonly ComponentPageApiRow[],
 } as const satisfies ComponentPageDefinition;
 
@@ -183,8 +212,16 @@ export const transferPageExamples = {
     └── sanring-transfer-list
         └── sanring-transfer-item (generated from items)`,
   basic: `<sanring-transfer #transfer [items]="items" [(selectedKeys)]="selectedKeys">
-  <sanring-transfer-panel direction="source" class="h-72 w-56">
-    <sanring-transfer-header>Available</sanring-transfer-header>
+  <sanring-transfer-panel direction="source" class="h-72 w-56" #sourcePanel="sanringTransferPanel">
+    <sanring-transfer-header isShow>
+      <sanring-checkbox
+        size="sm"
+        [checked]="sourcePanel.selectAllChecked()"
+        [disabled]="!sourcePanel.interactive()"
+        (checkedChange)="sourcePanel.toggleSelectAll()"
+      />
+      <span>Available</span>
+    </sanring-transfer-header>
     <sanring-transfer-list />
   </sanring-transfer-panel>
 
@@ -197,8 +234,16 @@ export const transferPageExamples = {
     </button>
   </div>
 
-  <sanring-transfer-panel direction="target" class="h-72 w-56">
-    <sanring-transfer-header>Selected</sanring-transfer-header>
+  <sanring-transfer-panel direction="target" class="h-72 w-56" #targetPanel="sanringTransferPanel">
+    <sanring-transfer-header isShow>
+      <sanring-checkbox
+        size="sm"
+        [checked]="targetPanel.selectAllChecked()"
+        [disabled]="!targetPanel.interactive()"
+        (checkedChange)="targetPanel.toggleSelectAll()"
+      />
+      <span>Selected</span>
+    </sanring-transfer-header>
     <sanring-transfer-list />
   </sanring-transfer-panel>
 </sanring-transfer>`,
@@ -226,32 +271,15 @@ export class ExampleComponent {}`,
   </sanring-transfer-panel>
 </sanring-transfer>`,
   disabled: `<sanring-transfer #transfer [items]="itemsWithDisabled" [(selectedKeys)]="selectedKeys">
-  <sanring-transfer-panel direction="source" class="h-72 w-56">
-    <sanring-transfer-header>Available</sanring-transfer-header>
-    <sanring-transfer-list />
-  </sanring-transfer-panel>
-
-  <div sanringTransferAction>
-    <button sanringBtn variant="outline" size="icon" (click)="transfer.moveToTarget()">
-      <svg lucideChevronRight class="size-4"></svg>
-    </button>
-    <button sanringBtn variant="outline" size="icon" (click)="transfer.moveToSource()">
-      <svg lucideChevronLeft class="size-4"></svg>
-    </button>
-  </div>
-
-  <sanring-transfer-panel direction="target" class="h-72 w-56">
-    <sanring-transfer-header>Selected</sanring-transfer-header>
-    <sanring-transfer-list />
-  </sanring-transfer-panel>
-</sanring-transfer>`,
-  headerCount: `<sanring-transfer #transfer [items]="items" [(selectedKeys)]="counted">
-  <sanring-transfer-panel direction="source" class="h-72 w-56">
-    <sanring-transfer-header>
+  <sanring-transfer-panel direction="source" class="h-72 w-56" #sourcePanel="sanringTransferPanel">
+    <sanring-transfer-header isShow>
+      <sanring-checkbox
+        size="sm"
+        [checked]="sourcePanel.selectAllChecked()"
+        [disabled]="!sourcePanel.interactive()"
+        (checkedChange)="sourcePanel.toggleSelectAll()"
+      />
       <span>Available</span>
-      <span class="text-xs text-[var(--docs-muted)]">
-        {{ items.length - counted.length }}
-      </span>
     </sanring-transfer-header>
     <sanring-transfer-list />
   </sanring-transfer-panel>
@@ -265,17 +293,66 @@ export class ExampleComponent {}`,
     </button>
   </div>
 
-  <sanring-transfer-panel direction="target" class="h-72 w-56">
-    <sanring-transfer-header>
+  <sanring-transfer-panel direction="target" class="h-72 w-56" #targetPanel="sanringTransferPanel">
+    <sanring-transfer-header isShow>
+      <sanring-checkbox
+        size="sm"
+        [checked]="targetPanel.selectAllChecked()"
+        [disabled]="!targetPanel.interactive()"
+        (checkedChange)="targetPanel.toggleSelectAll()"
+      />
       <span>Selected</span>
-      <span class="text-xs text-[var(--docs-muted)]">{{ counted.length }}</span>
+    </sanring-transfer-header>
+    <sanring-transfer-list />
+  </sanring-transfer-panel>
+</sanring-transfer>`,
+  headerCount: `<sanring-transfer #transfer [items]="items" [(selectedKeys)]="selectedKeys">
+  <sanring-transfer-panel direction="source" class="h-72 w-56" #sourcePanel="sanringTransferPanel">
+    <sanring-transfer-header isShow>
+      <sanring-checkbox
+        size="sm"
+        [checked]="sourcePanel.selectAllChecked()"
+        [disabled]="!sourcePanel.interactive()"
+        (checkedChange)="sourcePanel.toggleSelectAll()"
+      />
+      <span>Available</span>
+    </sanring-transfer-header>
+    <sanring-transfer-list />
+  </sanring-transfer-panel>
+
+  <div sanringTransferAction>
+    <button sanringBtn variant="outline" size="icon" (click)="transfer.moveToTarget()">
+      <svg lucideChevronRight class="size-4"></svg>
+    </button>
+    <button sanringBtn variant="outline" size="icon" (click)="transfer.moveToSource()">
+      <svg lucideChevronLeft class="size-4"></svg>
+    </button>
+  </div>
+
+  <sanring-transfer-panel direction="target" class="h-72 w-56" #targetPanel="sanringTransferPanel">
+    <sanring-transfer-header isShow>
+      <sanring-checkbox
+        size="sm"
+        [checked]="targetPanel.selectAllChecked()"
+        [disabled]="!targetPanel.interactive()"
+        (checkedChange)="targetPanel.toggleSelectAll()"
+      />
+      <span>Selected</span>
     </sanring-transfer-header>
     <sanring-transfer-list />
   </sanring-transfer-panel>
 </sanring-transfer>`,
   customActions: `<sanring-transfer #transfer [items]="items" [(selectedKeys)]="selectedKeys">
-  <sanring-transfer-panel direction="source" class="h-72 w-56">
-    <sanring-transfer-header>Available</sanring-transfer-header>
+  <sanring-transfer-panel direction="source" class="h-72 w-56" #sourcePanel="sanringTransferPanel">
+    <sanring-transfer-header isShow>
+      <sanring-checkbox
+        size="sm"
+        [checked]="sourcePanel.selectAllChecked()"
+        [disabled]="!sourcePanel.interactive()"
+        (checkedChange)="sourcePanel.toggleSelectAll()"
+      />
+      <span>Available</span>
+    </sanring-transfer-header>
     <sanring-transfer-list />
   </sanring-transfer-panel>
 
@@ -290,14 +367,30 @@ export class ExampleComponent {}`,
     </button>
   </div>
 
-  <sanring-transfer-panel direction="target" class="h-72 w-56">
-    <sanring-transfer-header>Selected</sanring-transfer-header>
+  <sanring-transfer-panel direction="target" class="h-72 w-56" #targetPanel="sanringTransferPanel">
+    <sanring-transfer-header isShow>
+      <sanring-checkbox
+        size="sm"
+        [checked]="targetPanel.selectAllChecked()"
+        [disabled]="!targetPanel.interactive()"
+        (checkedChange)="targetPanel.toggleSelectAll()"
+      />
+      <span>Selected</span>
+    </sanring-transfer-header>
     <sanring-transfer-list />
   </sanring-transfer-panel>
 </sanring-transfer>`,
   oneWay: `<sanring-transfer #transfer [items]="items" [(selectedKeys)]="selectedKeys" mode="one-way">
-  <sanring-transfer-panel direction="source" class="h-72 w-56">
-    <sanring-transfer-header>Available</sanring-transfer-header>
+  <sanring-transfer-panel direction="source" class="h-72 w-56" #sourcePanel="sanringTransferPanel">
+    <sanring-transfer-header isShow>
+      <sanring-checkbox
+        size="sm"
+        [checked]="sourcePanel.selectAllChecked()"
+        [disabled]="!sourcePanel.interactive()"
+        (checkedChange)="sourcePanel.toggleSelectAll()"
+      />
+      <span>Available</span>
+    </sanring-transfer-header>
     <sanring-transfer-list />
   </sanring-transfer-panel>
 
@@ -307,22 +400,51 @@ export class ExampleComponent {}`,
     </button>
   </div>
 
-  <!-- one-way 模式下 target 面板是唯讀展示，checkbox 會自動變成 disabled -->
-  <sanring-transfer-panel direction="target" class="h-72 w-56">
-    <sanring-transfer-header>Selected</sanring-transfer-header>
+  <!-- one-way: target panel is read-only, checkbox is automatically disabled -->
+  <sanring-transfer-panel direction="target" class="h-72 w-56" #targetPanel="sanringTransferPanel">
+    <sanring-transfer-header isShow>
+      <sanring-checkbox
+        size="sm"
+        [checked]="targetPanel.selectAllChecked()"
+        [disabled]="!targetPanel.interactive()"
+        (checkedChange)="targetPanel.toggleSelectAll()"
+      />
+      <span>Selected</span>
+    </sanring-transfer-header>
     <sanring-transfer-list />
   </sanring-transfer-panel>
 </sanring-transfer>`,
   search: `<sanring-transfer #transfer [items]="items" [(selectedKeys)]="selectedKeys">
   <sanring-transfer-panel direction="source" class="h-72 w-56" #sourcePanel="sanringTransferPanel">
-    <sanring-transfer-header>Available</sanring-transfer-header>
-    <input
-      sanringInput
-      type="search"
-      placeholder="Search..."
-      class="mx-2 my-1.5 h-8 text-xs"
-      (input)="sourcePanel.setQuery($any($event.target).value)"
-    />
+    <sanring-transfer-header isShow>
+      <sanring-checkbox
+        size="sm"
+        [checked]="sourcePanel.selectAllChecked()"
+        [disabled]="!sourcePanel.interactive()"
+        (checkedChange)="sourcePanel.toggleSelectAll()"
+      />
+      <span>Available</span>
+    </sanring-transfer-header>
+    <div class="relative mx-2 my-1.5">
+      <input
+        #srcInput
+        sanringInput
+        type="text"
+        placeholder="Search..."
+        class="h-8 w-full pr-6 text-xs"
+        (input)="srcQuery.set(srcInput.value); sourcePanel.setQuery(srcInput.value)"
+      />
+      @if (srcQuery()) {
+        <button
+          type="button"
+          class="absolute right-2 top-1/2 -translate-y-1/2 text-[var(--sanring-muted)] transition-colors hover:text-[var(--sanring-foreground)]"
+          aria-label="Clear search"
+          (click)="srcQuery.set(''); sourcePanel.setQuery(''); srcInput.value = ''"
+        >
+          <svg lucideX class="size-3"></svg>
+        </button>
+      }
+    </div>
     <sanring-transfer-list />
   </sanring-transfer-panel>
 
@@ -336,14 +458,71 @@ export class ExampleComponent {}`,
   </div>
 
   <sanring-transfer-panel direction="target" class="h-72 w-56" #targetPanel="sanringTransferPanel">
-    <sanring-transfer-header>Selected</sanring-transfer-header>
-    <input
-      sanringInput
-      type="search"
-      placeholder="Search..."
-      class="mx-2 my-1.5 h-8 text-xs"
-      (input)="targetPanel.setQuery($any($event.target).value)"
-    />
+    <sanring-transfer-header isShow>
+      <sanring-checkbox
+        size="sm"
+        [checked]="targetPanel.selectAllChecked()"
+        [disabled]="!targetPanel.interactive()"
+        (checkedChange)="targetPanel.toggleSelectAll()"
+      />
+      <span>Selected</span>
+    </sanring-transfer-header>
+    <div class="relative mx-2 my-1.5">
+      <input
+        #tgtInput
+        sanringInput
+        type="text"
+        placeholder="Search..."
+        class="h-8 w-full pr-6 text-xs"
+        (input)="tgtQuery.set(tgtInput.value); targetPanel.setQuery(tgtInput.value)"
+      />
+      @if (tgtQuery()) {
+        <button
+          type="button"
+          class="absolute right-2 top-1/2 -translate-y-1/2 text-[var(--sanring-muted)] transition-colors hover:text-[var(--sanring-foreground)]"
+          aria-label="Clear search"
+          (click)="tgtQuery.set(''); targetPanel.setQuery(''); tgtInput.value = ''"
+        >
+          <svg lucideX class="size-3"></svg>
+        </button>
+      }
+    </div>
+    <sanring-transfer-list />
+  </sanring-transfer-panel>
+</sanring-transfer>`,
+  selectAll: `<sanring-transfer #transfer [items]="items" [(selectedKeys)]="selectedKeys">
+  <sanring-transfer-panel direction="source" class="h-72 w-56" #sourcePanel="sanringTransferPanel">
+    <sanring-transfer-header isShow>
+      <sanring-checkbox
+        size="sm"
+        [checked]="sourcePanel.selectAllChecked()"
+        [disabled]="!sourcePanel.interactive()"
+        (checkedChange)="sourcePanel.toggleSelectAll()"
+      />
+      <span>Available</span>
+    </sanring-transfer-header>
+    <sanring-transfer-list />
+  </sanring-transfer-panel>
+
+  <div sanringTransferAction>
+    <button sanringBtn variant="outline" size="icon" (click)="transfer.moveToTarget()">
+      <svg lucideChevronRight class="size-4"></svg>
+    </button>
+    <button sanringBtn variant="outline" size="icon" (click)="transfer.moveToSource()">
+      <svg lucideChevronLeft class="size-4"></svg>
+    </button>
+  </div>
+
+  <sanring-transfer-panel direction="target" class="h-72 w-56" #targetPanel="sanringTransferPanel">
+    <sanring-transfer-header isShow>
+      <sanring-checkbox
+        size="sm"
+        [checked]="targetPanel.selectAllChecked()"
+        [disabled]="!targetPanel.interactive()"
+        (checkedChange)="targetPanel.toggleSelectAll()"
+      />
+      <span>Selected</span>
+    </sanring-transfer-header>
     <sanring-transfer-list />
   </sanring-transfer-panel>
 </sanring-transfer>`,
@@ -354,7 +533,15 @@ export class ExampleComponent {}`,
     [pageSize]="4"
     #sourcePanel="sanringTransferPanel"
   >
-    <sanring-transfer-header>Available</sanring-transfer-header>
+    <sanring-transfer-header isShow>
+      <sanring-checkbox
+        size="sm"
+        [checked]="sourcePanel.selectAllChecked()"
+        [disabled]="!sourcePanel.interactive()"
+        (checkedChange)="sourcePanel.toggleSelectAll()"
+      />
+      <span>Available</span>
+    </sanring-transfer-header>
     <sanring-transfer-list />
     <div class="flex items-center justify-between border-t px-2 py-1.5 text-xs">
       <button sanringBtn variant="ghost" size="sm" [disabled]="!sourcePanel.hasPreviousPage()" (click)="sourcePanel.previousPage()">
@@ -376,8 +563,16 @@ export class ExampleComponent {}`,
     </button>
   </div>
 
-  <sanring-transfer-panel direction="target" class="h-72 w-56">
-    <sanring-transfer-header>Selected</sanring-transfer-header>
+  <sanring-transfer-panel direction="target" class="h-72 w-56" #targetPanel="sanringTransferPanel">
+    <sanring-transfer-header isShow>
+      <sanring-checkbox
+        size="sm"
+        [checked]="targetPanel.selectAllChecked()"
+        [disabled]="!targetPanel.interactive()"
+        (checkedChange)="targetPanel.toggleSelectAll()"
+      />
+      <span>Selected</span>
+    </sanring-transfer-header>
     <sanring-transfer-list />
   </sanring-transfer-panel>
 </sanring-transfer>`,
