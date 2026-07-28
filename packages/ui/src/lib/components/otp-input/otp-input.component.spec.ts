@@ -71,8 +71,8 @@ function setInputValue(input: HTMLInputElement, value: string): void {
 }
 
 function slotValues(fixture: { nativeElement: HTMLElement }): string[] {
-  return Array.from(fixture.nativeElement.querySelectorAll<HTMLInputElement>('input')).map(
-    (input) => input.value,
+  return Array.from(fixture.nativeElement.querySelectorAll<HTMLElement>('[data-otp-slot]')).map(
+    (slot) => slot.textContent?.trim() ?? '',
   );
 }
 
@@ -81,14 +81,16 @@ describe('OtpInputComponent', () => {
     const fixture = TestBed.createComponent(OtpInputTestHost);
     fixture.detectChanges();
 
-    expect(fixture.nativeElement.querySelectorAll('input')).toHaveLength(4);
+    expect(fixture.nativeElement.querySelectorAll('input')).toHaveLength(1);
+    expect(fixture.nativeElement.querySelectorAll('[data-otp-slot]')).toHaveLength(4);
   });
 
   it('supports projected slots and separators', () => {
     const fixture = TestBed.createComponent(OtpInputComposedTestHost);
     fixture.detectChanges();
 
-    expect(fixture.nativeElement.querySelectorAll('input')).toHaveLength(6);
+    expect(fixture.nativeElement.querySelectorAll('input')).toHaveLength(1);
+    expect(fixture.nativeElement.querySelectorAll('[data-otp-slot]')).toHaveLength(6);
     expect(
       fixture.nativeElement.querySelector('sanring-otp-input-separator')?.textContent,
     ).toContain('-');
@@ -103,6 +105,7 @@ describe('OtpInputComponent', () => {
     fixture.detectChanges();
 
     expect(inputAt(fixture, 0).value).toBe('1');
+    expect(slotValues(fixture)).toEqual(['1', '', '', '']);
     expect(fixture.componentInstance.latestValue).toBe('1');
     expect(fixture.componentInstance.latestState?.complete).toBe(false);
   });
@@ -116,6 +119,7 @@ describe('OtpInputComponent', () => {
     fixture.detectChanges();
 
     expect(inputAt(fixture, 0).value).toBe('A');
+    expect(slotValues(fixture)).toEqual(['A', '', '', '']);
     expect(fixture.componentInstance.latestValue).toBe('A');
   });
 
@@ -140,7 +144,11 @@ describe('OtpInputComponent', () => {
     fixture.componentInstance.value = '1234';
     fixture.detectChanges();
 
-    inputAt(fixture, 1).dispatchEvent(
+    const slots = (fixture.nativeElement as HTMLElement).querySelectorAll<HTMLElement>(
+      '[data-otp-slot]',
+    );
+    slots[1].dispatchEvent(new PointerEvent('pointerdown', { bubbles: true }));
+    inputAt(fixture, 0).dispatchEvent(
       new KeyboardEvent('keydown', { key: 'Backspace', bubbles: true }),
     );
     fixture.detectChanges();

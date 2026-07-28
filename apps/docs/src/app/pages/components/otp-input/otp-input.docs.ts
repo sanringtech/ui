@@ -155,8 +155,9 @@ export const otpInputPage = {
 export const otpInputPageExamples = {
   basic: `<sanring-otp-input
   [length]="6"
+  size="lg"
+  autocomplete="one-time-code"
   ariaLabel="Verification code"
-  (valueChange)="code = $event"
 />`,
   usageImport: `import {
   OtpInputComponent,
@@ -173,9 +174,17 @@ export const otpInputPageExamples = {
   pattern: `<sanring-otp-input
   [length]="6"
   [pattern]="digitsOnlyPattern"
+  size="lg"
+  autocomplete="one-time-code"
   ariaLabel="Digits only"
 />`,
-  separator: `<sanring-otp-input [length]="6" ariaLabel="Verification code">
+  separator: `<sanring-otp-input
+  [length]="6"
+  [value]="'123456'"
+  size="lg"
+  autocomplete="one-time-code"
+  ariaLabel="Verification code"
+>
   <sanring-otp-input-slot [index]="0" />
   <sanring-otp-input-slot [index]="1" />
   <sanring-otp-input-slot [index]="2" />
@@ -184,33 +193,56 @@ export const otpInputPageExamples = {
   <sanring-otp-input-slot [index]="4" />
   <sanring-otp-input-slot [index]="5" />
 </sanring-otp-input>`,
-  disabled: `<sanring-otp-input [value]="'123456'" disabled ariaLabel="Verification code" />`,
+  disabled: `<sanring-otp-input
+  [value]="'123456'"
+  size="lg"
+  autocomplete="one-time-code"
+  disabled
+  ariaLabel="Verification code"
+/>`,
   controlled: `<sanring-otp-input
   [value]="controlledCode"
+  size="lg"
+  autocomplete="one-time-code"
   ariaLabel="Verification code"
   (valueChange)="controlledCode = $event"
-/>
-
-<p>Enter your one-time password.</p>`,
+/>`,
   invalid: `<sanring-field>
   <label sanringLabel for="invalid-otp-code">Verification code</label>
-  <sanring-otp-input id="invalid-otp-code" [formControl]="invalidCodeControl" ariaLabel="Verification code" />
+  <sanring-otp-input
+    id="invalid-otp-code"
+    [formControl]="invalidCodeControl"
+    size="lg"
+    autocomplete="one-time-code"
+    ariaLabel="Verification code"
+  />
   <sanring-error-message>Invalid verification code.</sanring-error-message>
 </sanring-field>`,
   fourDigits: `<sanring-otp-input
   [length]="4"
   [pattern]="digitsOnlyPattern"
+  size="lg"
+  autocomplete="one-time-code"
   ariaLabel="PIN code"
 />`,
   alphanumeric: `<sanring-otp-input
   type="alphanumeric"
   [length]="5"
+  [value]="'A1B2C'"
+  size="lg"
+  autocomplete="one-time-code"
   ariaLabel="Recovery code"
 />`,
   form: `<form class="grid gap-4" (ngSubmit)="verify()">
   <sanring-field>
     <label sanringLabel for="otp-code-field">Verification code</label>
-    <sanring-otp-input id="otp-code-field" [formControl]="codeControl" ariaLabel="Verification code" />
+    <sanring-otp-input
+      id="otp-code-field"
+      [formControl]="codeControl"
+      size="lg"
+      autocomplete="one-time-code"
+      ariaLabel="Verification code"
+    />
     <sanring-error-message>Enter the 6-digit code.</sanring-error-message>
   </sanring-field>
 

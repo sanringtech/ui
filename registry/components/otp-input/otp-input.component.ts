@@ -16,12 +16,13 @@ import {
   output,
   signal,
   untracked,
+  viewChild,
 } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR, NgControl, Validators } from '@angular/forms';
 import { Observable, Subject } from 'rxjs';
 import { cn, uniqueId } from '../shared/utils';
-import { FIELD_SIZE_CLASS, SELECTION_CONTROL_FOCUS_CLASS } from '../shared/component-styles';
+import { FIELD_SIZE_CLASS } from '../shared/component-styles';
 import { FieldType, SANRING_FIELD_CONTROL, SanringFieldControl } from '../field/field.type';
 import { OTP_INPUT_ROOT, OtpInputRootContext } from './otp-input.context';
 import { OtpInputSeparatorComponent } from './otp-input-separator.component';
@@ -41,9 +42,9 @@ import {
 } from './otp-input.types';
 
 const OTP_INPUT_SIZE_CLASSES: Record<OtpInputSize, string> = {
-  sm: 'size-8 text-sm',
-  md: 'size-10 text-sm',
-  lg: 'size-12 text-base',
+  sm: 'size-9 text-base',
+  md: 'size-11 text-lg',
+  lg: 'size-14 text-2xl',
 };
 
 const OTP_INPUT_TEXT_ALIGN_CLASSES: Record<OtpInputTextAlign, string> = {
@@ -78,7 +79,6 @@ const OTP_INPUT_TEXT_ALIGN_CLASSES: Record<OtpInputTextAlign, string> = {
   ],
   host: {
     '[class]': 'hostClass()',
-    '[attr.id]': 'id()',
     '[attr.role]': '"group"',
     '[attr.aria-label]': 'ariaLabel()',
     '[attr.aria-labelledby]': 'ariaLabelledBy()',
@@ -88,8 +88,40 @@ const OTP_INPUT_TEXT_ALIGN_CLASSES: Record<OtpInputTextAlign, string> = {
     '[attr.aria-disabled]': 'isDisabled() || null',
     '[attr.data-disabled]': 'isDisabled() || null',
     '[attr.data-invalid]': 'errorState || null',
+    '(pointerdown)': 'onHostPointerDown($event)',
   },
   template: `
+    <input
+      #otpInput
+      [class]="inputClass()"
+      [id]="id()"
+      [attr.name]="name()"
+      type="search"
+      [attr.inputmode]="inputMode()"
+      [attr.autocomplete]="autocomplete()"
+      autocapitalize="off"
+      autocorrect="off"
+      spellcheck="false"
+      data-1p-ignore="true"
+      data-bwignore="true"
+      data-form-type="other"
+      data-lpignore="true"
+      [attr.aria-label]="ariaLabel()"
+      [attr.aria-labelledby]="ariaLabelledBy()"
+      [attr.aria-describedby]="computedAriaDescribedBy()"
+      [attr.aria-invalid]="errorState ? 'true' : null"
+      [attr.aria-required]="fieldRequired ? 'true' : null"
+      [value]="valueSignal()"
+      [readOnly]="readOnly()"
+      [disabled]="isDisabled()"
+      [attr.maxlength]="slotCount()"
+      (focus)="onInputFocus()"
+      (blur)="onInputBlur()"
+      (input)="onInput($event)"
+      (keydown)="onInputKeydown($event)"
+      (paste)="onInputPaste($event)"
+    />
+
     <ng-content />
 
     @if (!hasProjectedSlots()) {
@@ -177,10 +209,17 @@ export class OtpInputComponent implements ControlValueAccessor, OnInit, OtpInput
 
   protected readonly hostClass = computed(() =>
     cn(
-      'inline-flex gap-2',
+      'relative inline-flex',
       this.orientation() === 'vertical' ? 'flex-col' : 'flex-row items-center',
       this.isDisabled() && 'cursor-not-allowed opacity-50',
       this.class(),
+    ),
+  );
+
+  protected readonly inputClass = computed(() =>
+    cn(
+      'pointer-events-none absolute left-1/2 top-1/2 size-px -translate-x-1/2 -translate-y-1/2 opacity-0',
+      'border-0 bg-transparent p-0 text-transparent outline-none',
     ),
   );
 
@@ -195,7 +234,7 @@ export class OtpInputComponent implements ControlValueAccessor, OnInit, OtpInput
   private readonly destroyRef = inject(DestroyRef);
   private readonly stateChangesSubject = new Subject<void>();
   readonly stateChanges: Observable<void> = this.stateChangesSubject.asObservable();
-  private readonly slotInputRefs = new Map<number, ElementRef<HTMLInputElement>>();
+  private readonly otpInput = viewChild<ElementRef<HTMLInputElement>>('otpInput');
 
   private onChange: (value: OtpInputValue) => void = () => {};
   private onTouched: () => void = () => {};
@@ -287,16 +326,30 @@ export class OtpInputComponent implements ControlValueAccessor, OnInit, OtpInput
   }
 
   getSlotClass(slot: OtpInputSlot, className?: string): string {
+    const isHorizontal = this.orientation() === 'horizontal';
+    const isFirst = slot.index === 0;
+    const isLast = slot.index === this.slotCount() - 1;
+
     return cn(
-      'peer rounded-[var(--sanring-radius)] border border-[var(--sanring-border-strong)]',
+      'relative inline-flex cursor-text select-none items-center justify-center border border-[var(--sanring-border-strong)]',
       'bg-[var(--sanring-surface)] text-[var(--sanring-foreground)]',
       FIELD_SIZE_CLASS,
-      SELECTION_CONTROL_FOCUS_CLASS,
       OTP_INPUT_SIZE_CLASSES[this.size()] ?? OTP_INPUT_SIZE_CLASSES.md,
       OTP_INPUT_TEXT_ALIGN_CLASSES[this.textAlign()] ?? OTP_INPUT_TEXT_ALIGN_CLASSES.center,
-      'disabled:cursor-not-allowed disabled:opacity-50',
+      'font-normal shadow-sm outline-none transition-[background-color,border-color,box-shadow,color,transform] duration-200 ease-out',
+      this.isDisabled() && 'cursor-not-allowed opacity-50',
+      isHorizontal && !isFirst && '-ms-px',
+      isHorizontal && isFirst && 'rounded-l-2xl',
+      isHorizontal && isLast && 'rounded-r-2xl',
+      !isHorizontal && !isFirst && '-mt-px',
+      !isHorizontal && isFirst && 'rounded-t-2xl',
+      !isHorizontal && isLast && 'rounded-b-2xl',
+      !isFirst && !isLast && 'rounded-none',
       this.readOnly() && 'cursor-default',
-      slot.state === 'invalid' && 'border-red-500 focus-visible:ring-red-500',
+      slot.state === 'active' &&
+        'z-10 border-[var(--sanring-ring)] shadow-md ring-2 ring-[var(--sanring-border-strong)] ring-offset-2 ring-offset-[var(--sanring-background)]',
+      slot.state === 'filled' && 'text-[var(--sanring-foreground)]',
+      slot.state === 'invalid' && 'z-10 border-red-500',
       className,
     );
   }
@@ -305,62 +358,39 @@ export class OtpInputComponent implements ControlValueAccessor, OnInit, OtpInput
     return `${this.id()}-slot-${index}`;
   }
 
-  getSlotName(index: number): string | null {
-    return index === 0 ? (this.name() ?? null) : null;
-  }
-
-  getSlotInputMode(): 'numeric' | 'text' {
-    return this.inputMode();
-  }
-
-  getSlotAutocomplete(index: number): OtpInputAutocomplete | 'off' {
-    return index === 0 ? this.autocomplete() : 'off';
-  }
-
   getSlotAriaLabel(index: number): string {
     return `Digit ${index + 1} of ${this.slotCount()}`;
   }
 
-  isSlotReadOnly(): boolean {
-    return this.readOnly();
+  onHostPointerDown(event: PointerEvent): void {
+    if (event.target !== event.currentTarget) return;
+    this.focus();
   }
 
-  isSlotDisabled(): boolean {
-    return this.isDisabled();
+  onSlotPointerDown(event: PointerEvent, index: number): void {
+    if (this.isDisabled() || this.readOnly()) return;
+    event.preventDefault();
+    event.stopPropagation();
+    this.focusSlot(index);
   }
 
-  registerSlot(index: number, elementRef: ElementRef<HTMLInputElement>): void {
-    this.slotInputRefs.set(index, elementRef);
-  }
-
-  unregisterSlot(index: number, elementRef: ElementRef<HTMLInputElement>): void {
-    if (this.slotInputRefs.get(index) === elementRef) {
-      this.slotInputRefs.delete(index);
-    }
-  }
-
-  onSlotFocus(index: number): void {
+  onInputFocus(): void {
     this.focused = true;
-    this.focusedIndex.set(index);
+    if (this.focusedIndex() === null) {
+      const nextIndex = this.findFirstEmptyIndex();
+      this.focusedIndex.set(nextIndex === -1 ? this.slotCount() - 1 : nextIndex);
+    }
     this.emitStateChanges();
   }
 
-  onSlotBlur(): void {
-    queueMicrotask(() => {
-      const activeElement = document.activeElement;
-      const stillInside = Array.from(this.slotInputRefs.values()).some(
-        (ref) => ref.nativeElement === activeElement,
-      );
-
-      if (stillInside) return;
-      this.focused = false;
-      this.focusedIndex.set(null);
-      this.onTouched();
-      this.emitStateChanges();
-    });
+  onInputBlur(): void {
+    this.focused = false;
+    this.focusedIndex.set(null);
+    this.onTouched();
+    this.emitStateChanges();
   }
 
-  onSlotInput(event: Event, index: number): void {
+  onInput(event: Event): void {
     if (this.isDisabled() || this.readOnly()) return;
 
     const inputEl = event.target as HTMLInputElement;
@@ -368,14 +398,23 @@ export class OtpInputComponent implements ControlValueAccessor, OnInit, OtpInput
 
     if (!chars.length) {
       inputEl.value = '';
-      this.updateSlot(index, '', true);
+      this.setValue('', true);
       return;
     }
 
-    this.applyCharacters(index, chars, true);
+    if (chars.length === 1) {
+      const index = this.getActiveInputIndex();
+      this.updateSlot(index, chars[0], true);
+      this.focusSlot(Math.min(index + 1, this.slotCount() - 1));
+      return;
+    }
+
+    this.setValue(chars.join(''), true);
+    this.focusSlot(Math.min(chars.length, this.slotCount() - 1));
   }
 
-  onSlotKeydown(event: KeyboardEvent, index: number): void {
+  onInputKeydown(event: KeyboardEvent): void {
+    const index = this.getActiveInputIndex();
     const payload = this.getKeydownEvent(event, index);
     this.slotKeydown.emit(payload);
 
@@ -406,10 +445,21 @@ export class OtpInputComponent implements ControlValueAccessor, OnInit, OtpInput
         event.preventDefault();
         this.updateSlot(index, '', true);
         break;
+      default:
+        if (this.isCharacterKey(event)) {
+          const [char] = this.getAllowedCharacters(event.key);
+          event.preventDefault();
+
+          if (!char) return;
+
+          this.updateSlot(index, char, true);
+          this.focusSlot(Math.min(index + 1, this.slotCount() - 1));
+        }
+        break;
     }
   }
 
-  onSlotPaste(event: ClipboardEvent, index: number): void {
+  onInputPaste(event: ClipboardEvent): void {
     if (this.isDisabled() || this.readOnly()) return;
 
     const text = event.clipboardData?.getData('text') ?? '';
@@ -417,6 +467,7 @@ export class OtpInputComponent implements ControlValueAccessor, OnInit, OtpInput
     if (!chars.length) return;
 
     event.preventDefault();
+    const index = this.getActiveInputIndex();
     this.applyCharacters(index, chars, true);
     this.pasted.emit({
       value: this.valueSignal(),
@@ -561,11 +612,28 @@ export class OtpInputComponent implements ControlValueAccessor, OnInit, OtpInput
     return this.slots().findIndex((slot) => !slot.value);
   }
 
+  private getActiveInputIndex(): number {
+    const focusedIndex = this.focusedIndex();
+    if (focusedIndex !== null) return focusedIndex;
+
+    const nextIndex = this.findFirstEmptyIndex();
+    return nextIndex === -1 ? this.slotCount() - 1 : nextIndex;
+  }
+
+  private isCharacterKey(event: KeyboardEvent): boolean {
+    return event.key.length === 1 && !event.metaKey && !event.ctrlKey && !event.altKey;
+  }
+
   private focusSlot(index: number, options?: FocusOptions): void {
+    const nextIndex = Math.min(Math.max(index, 0), this.slotCount() - 1);
+    this.focused = true;
+    this.focusedIndex.set(nextIndex);
+    this.emitStateChanges();
+
     queueMicrotask(() => {
-      const input = this.slotInputRefs.get(index)?.nativeElement;
+      const input = this.otpInput()?.nativeElement;
       input?.focus(options);
-      input?.select();
+      input?.setSelectionRange(input.value.length, input.value.length);
     });
   }
 

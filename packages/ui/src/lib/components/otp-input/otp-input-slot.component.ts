@@ -1,41 +1,44 @@
-import {
-  Component,
-  computed,
-  effect,
-  ElementRef,
-  inject,
-  input,
-  numberAttribute,
-  viewChild,
-} from '@angular/core';
+import { Component, computed, inject, input, numberAttribute } from '@angular/core';
 import { OTP_INPUT_ROOT } from './otp-input.context';
 
 @Component({
   selector: 'sanring-otp-input-slot',
   standalone: true,
+  styles: [
+    `
+      :host {
+        display: contents;
+      }
+
+      span[data-state='active'] {
+        transform: translateY(-1px);
+      }
+
+      span[data-state='filled'] {
+        animation: sanring-otp-slot-fill 160ms cubic-bezier(0.2, 0.8, 0.2, 1);
+      }
+
+      @keyframes sanring-otp-slot-fill {
+        0% {
+          transform: scale(0.96);
+        }
+
+        100% {
+          transform: scale(1);
+        }
+      }
+    `,
+  ],
   template: `
-    <input
-      #slotInput
+    <span
       [class]="slotClass()"
       [id]="root.getSlotId(index())"
-      [attr.name]="root.getSlotName(index())"
-      [attr.type]="'text'"
-      [attr.inputmode]="root.getSlotInputMode()"
-      [attr.autocomplete]="root.getSlotAutocomplete(index())"
-      [attr.aria-label]="root.getSlotAriaLabel(index())"
-      [attr.aria-invalid]="root.errorState ? 'true' : null"
-      [attr.aria-required]="root.fieldRequired ? 'true' : null"
+      aria-hidden="true"
+      data-otp-slot
       [attr.data-state]="slot().state"
-      [value]="slot().value"
-      [readOnly]="root.isSlotReadOnly()"
-      [disabled]="root.isSlotDisabled()"
-      maxlength="1"
-      (focus)="root.onSlotFocus(index())"
-      (blur)="root.onSlotBlur()"
-      (input)="root.onSlotInput($event, index())"
-      (keydown)="root.onSlotKeydown($event, index())"
-      (paste)="root.onSlotPaste($event, index())"
-    />
+      (pointerdown)="root.onSlotPointerDown($event, index())"
+      >{{ slot().value }}</span
+    >
   `,
 })
 export class OtpInputSlotComponent {
@@ -43,19 +46,7 @@ export class OtpInputSlotComponent {
   readonly class = input<string | undefined>();
 
   protected readonly root = inject(OTP_INPUT_ROOT);
-  private readonly slotInput = viewChild<ElementRef<HTMLInputElement>>('slotInput');
 
   protected readonly slot = computed(() => this.root.getSlot(this.index()));
   protected readonly slotClass = computed(() => this.root.getSlotClass(this.slot(), this.class()));
-
-  constructor() {
-    effect((onCleanup) => {
-      const elementRef = this.slotInput();
-      const index = this.index();
-      if (!elementRef) return;
-
-      this.root.registerSlot(index, elementRef);
-      onCleanup(() => this.root.unregisterSlot(index, elementRef));
-    });
-  }
 }
