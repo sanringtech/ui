@@ -1,0 +1,43 @@
+export const resizableTranslations = {
+  'resizable.description': '可拖曳調整尺寸的分割面板，適合編輯器、儀表板與檢視器版面。',
+  'resizable.examples.basic.description':
+    '組合 group、panel 與 handle。拖曳時會以百分比調整 panel 尺寸，並遵守 min/max 限制。',
+  'resizable.usage.description': '匯入 resizable primitives，並把 handle 放在相鄰 panel 之間。',
+  'resizable.installation.description':
+    '用 CLI 加入這個元件，再匯入 ResizableGroupComponent、ResizablePanelComponent 與 ResizableHandleComponent。',
+  'resizable.examples.controlled.description':
+    '用 [(sizes)] 保存或還原分割版面；每個數值都是對應 panel 的百分比。',
+  'resizable.demo.vertical': '垂直分割',
+  'resizable.demo.controlled': '受控尺寸',
+  'resizable.demo.disabled': '停用',
+  'resizable.demo.navigation': '導覽',
+  'resizable.demo.editor': '編輯器',
+  'resizable.demo.one': 'One',
+  'resizable.demo.two': 'Two',
+  'resizable.demo.three': 'Three',
+  'resizable.demo.dragHint': '拖曳分隔線',
+  'resizable.demo.preview': '預覽',
+  'resizable.demo.previewHint': '垂直拖曳以顯示更多 console 空間。',
+  'resizable.demo.consoleReady': '> preview ready',
+  'resizable.demo.consoleResize': '> drag handle to resize panes',
+  'resizable.demo.files': '檔案',
+  'resizable.demo.canvas': '畫布',
+  'resizable.demo.inspector': '檢查器',
+  'resizable.demo.resetLayout': '重設版面',
+  'resizable.demo.lockedPanel': '鎖定面板',
+  'resizable.demo.lockedContent': '停用後仍保留目前版面，但會阻止拖曳與鍵盤調整。',
+  'resizable.api.description': 'resizable primitive set 支援的 inputs 與 models。',
+  'resizable.api.direction.description': '設定 group 的分割方向。',
+  'resizable.api.sizes.description':
+    '可雙向綁定的 panel 尺寸，以百分比表示；適合保存與還原 layout。',
+  'resizable.api.disabled.description': '停用整個 group 的 pointer 與鍵盤調整。',
+  'resizable.api.defaultSize.description': '尚未有受控尺寸時使用的初始 panel 百分比。',
+  'resizable.api.minSize.description': 'panel 允許的最小百分比。',
+  'resizable.api.maxSize.description': 'panel 允許的最大百分比。',
+  'resizable.api.collapsible.description': '允許 panel 低於 minSize 後吸附收合到 collapsedSize。',
+  'resizable.api.collapsedSize.description': 'collapsible panel 吸附收合後的尺寸，以百分比表示。',
+  'resizable.api.withHandle.description': '在 handle 中顯示可見的拖曳握把。',
+  'resizable.api.keyboardStep.description':
+    '使用方向鍵調整時的百分比步進；Home 與 End 會跳到 panel 邊界。',
+
+} as const;

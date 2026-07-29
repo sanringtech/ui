@@ -1,0 +1,33 @@
+export const tooltipTranslations = {
+  'tooltip.description': '在 trigger hover 或 focus 時顯示補充資訊的小型浮動面板。',
+  'tooltip.demo.hover': '移到我上方',
+  'tooltip.demo.basicContent': '有用的補充說明。',
+  'tooltip.demo.side': '顯示方向',
+  'tooltip.demo.top': '上方',
+  'tooltip.demo.right': '右側',
+  'tooltip.demo.bottom': '下方',
+  'tooltip.demo.left': '左側',
+  'tooltip.demo.topContent': '上方提示',
+  'tooltip.demo.rightContent': '右側提示',
+  'tooltip.demo.bottomContent': '下方提示',
+  'tooltip.demo.leftContent': '左側提示',
+  'tooltip.demo.delay': '延遲顯示',
+  'tooltip.demo.delayContent': '600ms 後開啟。',
+  'tooltip.demo.customContent': '自訂內容',
+  'tooltip.demo.status': '狀態',
+  'tooltip.demo.statusTitle': '工作區已同步',
+  'tooltip.demo.statusDescription': '剛剛完成更新。',
+  'tooltip.examples.description': '常見 Tooltip 模式，包含簡短提示、延遲顯示與精簡結構化內容。',
+  'tooltip.examples.basic.description':
+    '將 trigger 與 content 包在 sanring-tooltip 內。內容會在 hover 或 focus 時開啟。',
+  'tooltip.usage.description':
+    '匯入 TooltipComponent、TooltipTriggerDirective 與 TooltipContentComponent。',
+  'tooltip.installation.description':
+    '在可 focus 的元素上使用 sanringTooltipTrigger，並提供對應的 tooltip content。',
+  'tooltip.composition.description': 'Tooltip 由狀態 root、trigger directive 與浮動 content 組成。',
+  'tooltip.api.description': 'Tooltip primitives 支援的 Inputs。',
+  'tooltip.api.delayDuration.description': 'tooltip 開啟前的延遲毫秒數。',
+  'tooltip.api.side.description': 'tooltip 優先顯示的位置，空間不足時會使用 fallback 位置。',
+  'tooltip.api.sideOffset.description': 'trigger 與浮動內容之間的距離。',
+  'tooltip.api.class.description': '與 root 或 content 樣式合併的額外 class。',
+} as const;

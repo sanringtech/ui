@@ -1,0 +1,41 @@
+export const radioTranslations = {
+  'radio.description':
+    '一組單選按鈕，透過 ControlValueAccessor 相容 Angular 表單，內建 Roving Tabindex 鍵盤導航與完整 WAI-ARIA 規範。',
+  'radio.examples.basic.description':
+    'RadioGroup 實作 ControlValueAccessor，使用 ngModel 或 reactive form 綁定選取值。',
+  'radio.usage.description':
+    '匯入 RadioGroupComponent 與 RadioItemComponent，在群組內放置選項並綁定值。',
+  'radio.examples.description': '常見模式，包含搭配標籤、水平排列與停用狀態。',
+  'radio.demo.withLabel': '搭配標籤',
+  'radio.demo.horizontal': '水平排列',
+  'radio.demo.disabled': '停用',
+  'radio.demo.field': '搭配 Field',
+  'radio.demo.planFree': '免費方案',
+  'radio.demo.planPro': '專業方案',
+  'radio.demo.fieldError': '請選擇一個方案。',
+  'radio.examples.field.description':
+    '把 sanring-radio-group 包在 sanring-field 裡並綁定 reactive form control——控制項變成 invalid 且 touched 之後，錯誤訊息會自動顯示。',
+  'radio.api.group.title': 'RadioGroupComponent',
+  'radio.api.group.description': '群組容器的 Inputs 與 Outputs。',
+  'radio.api.item.title': 'RadioItemComponent',
+  'radio.api.item.description': '單一選項的 Inputs。',
+  'radio.api.group.class': '與群組容器樣式合併的額外 class。',
+  'radio.api.group.name': '群組名稱提示，供表單情境使用。',
+  'radio.api.group.disabled': '停用群組內所有選項。',
+  'radio.api.group.required': '在群組上設定 aria-required，標示必填欄位。',
+  'radio.api.group.orientation':
+    '排列方向，接受 RadioOrientation.Vertical（預設）或 RadioOrientation.Horizontal。',
+  'radio.api.group.value': '受控選取值，可使用 [(value)] 進行雙向綁定，無需 Angular 表單。',
+  'radio.api.group.valueChange': '每次選取變更時發出新的 RadioValue。',
+  'radio.api.group.ariaLabel': '無可見標題時作為群組的無障礙標籤。',
+  'radio.api.group.ariaLabelledBy': '標示此群組的外部元素 ID。',
+  'radio.api.group.ariaDescribedBy': '提供此群組延伸說明的元素 ID。',
+  'radio.api.item.class': '與選項按鈕樣式合併的額外 class。',
+  'radio.api.item.id': '套用到按鈕的原生 id，可搭配 <label for="…"> 關聯。',
+  'radio.api.item.value': '此選項代表的 RadioValue，必填。',
+  'radio.api.item.disabled': '停用此單一選項，不受群組狀態影響。',
+  'radio.api.item.ariaLabel': '無可見 label 元素時的無障礙標籤。',
+  'radio.api.item.ariaLabelledBy': '標示此選項的外部元素 ID。',
+  'radio.api.item.ariaDescribedBy': '提供此選項延伸說明的元素 ID。',
+
+} as const;

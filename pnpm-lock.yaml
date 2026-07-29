@@ -35,7 +35,7 @@ importers:
       '@lucide/angular':
         specifier: ^1.18.0
         version: 1.18.0(@angular/common@22.0.1(@angular/core@22.0.1(@angular/compiler@22.0.1)(rxjs@7.8.2))(rxjs@7.8.2))(@angular/core@22.0.1(@angular/compiler@22.0.1)(rxjs@7.8.2))
-      '@sanring/date-picker':
+      '@sanring/date-picker-core':
         specifier: ^0.5.0
         version: 0.5.0(@angular/common@22.0.1(@angular/core@22.0.1(@angular/compiler@22.0.1)(rxjs@7.8.2))(rxjs@7.8.2))(@angular/core@22.0.1(@angular/compiler@22.0.1)(rxjs@7.8.2))
       clsx:
@@ -164,7 +164,7 @@ importers:
         specifier: ^2.3.0
         version: 2.8.1
     devDependencies:
-      '@sanring/date-picker':
+      '@sanring/date-picker-core':
         specifier: ^0.5.0
         version: 0.5.0(@angular/common@22.0.1(@angular/core@22.0.1(@angular/compiler@22.0.1)(rxjs@7.8.2))(rxjs@7.8.2))(@angular/core@22.0.1(@angular/compiler@22.0.1)(rxjs@7.8.2))
 
@@ -1983,8 +1983,8 @@ packages:
     engines: {node: '>=18.0.0', npm: '>=8.0.0'}
     hasBin: true
 
-  '@sanring/date-picker@0.5.0':
-    resolution: {integrity: sha512-gtv0mj1M+IizrvFQ7csT/+/jR2a2Na2ESqDVTR3cd4bEJQMbDBYc6f3WPjl/WAU+m852Gtw545Udud5x8xLbDA==}
+  '@sanring/date-picker-core@0.5.0':
+    resolution: {integrity: sha512-/ljLAas495+qKT47BuQIr9Opw4Rd1HtCOcZ0kIv4x5HCoT0B6U/sDNhLZZXN3Ecj2J/M/0UFa0CZGfyl1X5EoA==}
     peerDependencies:
       '@angular/common': ^22.0.0
       '@angular/core': ^22.0.0
@@ -5900,7 +5900,7 @@ snapshots:
     optionalDependencies:
       fsevents: 2.3.3
 
-  '@sanring/date-picker@0.5.0(@angular/common@22.0.1(@angular/core@22.0.1(@angular/compiler@22.0.1)(rxjs@7.8.2))(rxjs@7.8.2))(@angular/core@22.0.1(@angular/compiler@22.0.1)(rxjs@7.8.2))':
+  '@sanring/date-picker-core@0.5.0(@angular/common@22.0.1(@angular/core@22.0.1(@angular/compiler@22.0.1)(rxjs@7.8.2))(rxjs@7.8.2))(@angular/core@22.0.1(@angular/compiler@22.0.1)(rxjs@7.8.2))':
     dependencies:
       '@angular/common': 22.0.1(@angular/core@22.0.1(@angular/compiler@22.0.1)(rxjs@7.8.2))(rxjs@7.8.2)
       '@angular/core': 22.0.1(@angular/compiler@22.0.1)(rxjs@7.8.2)

@@ -232,7 +232,7 @@ export class RoadmapPageComponent {
     { name: 'Command', description: '' },
     { name: 'Combobox', description: '' },
     { name: 'Context Menu', description: '', tone: 'updated' },
-    { name: 'Date Picker', description: '' },
+    { name: 'Date Picker', description: '', tone: 'updated' },
     { name: 'Dialog', description: '' },
     { name: 'Divider', description: '' },
     { name: 'Dropdown Menu', description: '' },

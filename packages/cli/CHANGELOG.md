@@ -1,5 +1,12 @@
 # @sanring/cli
 
+## 0.17.1
+
+### Patch Changes
+
+- `calendar` and `date-picker`'s `peerDependencies` now point at `@sanring/date-picker-core` instead of `@sanring/date-picker` — the upstream project renamed its headless engine package and reassigned `@sanring/date-picker` to an unrelated composed-widget package.
+- `otp-input` no longer inserts a typed digit twice on mobile devices — the browser can ignore `keydown`'s `preventDefault()` on virtual keyboards, so the manual keydown update and the browser's own `input` event were both applying the same keystroke.
+
 ## 0.17.0
 
 ### Minor Changes

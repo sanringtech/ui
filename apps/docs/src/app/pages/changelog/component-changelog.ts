@@ -52,6 +52,16 @@ export const componentChangelog: readonly ComponentChangelogEntry[] = [
         componentIds: ['transfer'],
         text: 'Clicking a list item now toggles its selection correctly.',
       },
+      {
+        type: 'changed',
+        componentIds: ['calendar', 'date-picker'],
+        text: '`calendar` and `date-picker`\'s headless engine peer dependency is now `@sanring/date-picker-core` (was `@sanring/date-picker`, which the upstream project reassigned to a different, composed-widget package).',
+      },
+      {
+        type: 'fixed',
+        componentIds: ['otp-input'],
+        text: '`otp-input` no longer inserts a typed digit twice on mobile, where the browser can ignore `keydown`\'s `preventDefault()` on virtual keyboards.',
+      },
     ],
   },
   {

@@ -238,6 +238,10 @@ export class OtpInputComponent implements ControlValueAccessor, OnInit, OtpInput
 
   private onChange: (value: OtpInputValue) => void = () => {};
   private onTouched: () => void = () => {};
+  // 手機虛擬鍵盤常常不理會 keydown 的 preventDefault()，字元還是會被瀏覽器插入
+  // 原生 input，導致 keydown 跟隨後補發的 input 事件各寫入一次、畫面顯示兩次。
+  // 用這個旗標讓 onInput 偵測到「已經由 keydown 處理過」時直接略過、只把畫面同步回目前的值。
+  private suppressNextInput = false;
 
   constructor() {
     effect(() => {
@@ -394,6 +398,13 @@ export class OtpInputComponent implements ControlValueAccessor, OnInit, OtpInput
     if (this.isDisabled() || this.readOnly()) return;
 
     const inputEl = event.target as HTMLInputElement;
+
+    if (this.suppressNextInput) {
+      this.suppressNextInput = false;
+      inputEl.value = this.valueSignal();
+      return;
+    }
+
     const chars = this.getAllowedCharacters(inputEl.value);
 
     if (!chars.length) {
@@ -439,10 +450,12 @@ export class OtpInputComponent implements ControlValueAccessor, OnInit, OtpInput
         break;
       case 'Backspace':
         event.preventDefault();
+        this.armSuppressNextInput();
         this.handleBackspace(index);
         break;
       case 'Delete':
         event.preventDefault();
+        this.armSuppressNextInput();
         this.updateSlot(index, '', true);
         break;
       default:
@@ -452,6 +465,7 @@ export class OtpInputComponent implements ControlValueAccessor, OnInit, OtpInput
 
           if (!char) return;
 
+          this.armSuppressNextInput();
           this.updateSlot(index, char, true);
           this.focusSlot(Math.min(index + 1, this.slotCount() - 1));
         }
@@ -473,6 +487,16 @@ export class OtpInputComponent implements ControlValueAccessor, OnInit, OtpInput
       value: this.valueSignal(),
       slots: this.slots(),
       originalEvent: event,
+    });
+  }
+
+  // 旗標只需要蓋住「同一次按鍵補發的 input 事件」，不能一直卡著，否則會誤吃到
+  // 之後真正合法的 input 事件（例如簡訊一鍵帶入驗證碼的 autofill）。因此設完
+  // 立刻排一個 setTimeout 兜底清除，讓它最多只存活到當前這輪事件處理完。
+  private armSuppressNextInput(): void {
+    this.suppressNextInput = true;
+    setTimeout(() => {
+      this.suppressNextInput = false;
     });
   }
 

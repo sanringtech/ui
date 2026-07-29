@@ -1,0 +1,23 @@
+export const tagTranslations = {
+  'tag.description': '建立在 Badge 上的精簡可移除或靜態標籤，適用於篩選、選取與分類。',
+  'tag.demo.default': '標籤',
+  'tag.demo.closable': '可關閉',
+  'tag.demo.variants': '變體',
+  'tag.demo.list': '標籤群組',
+  'tag.demo.secondary': '次要',
+  'tag.demo.outline': '外框',
+  'tag.demo.destructive': '危險',
+  'tag.demo.frontend': '前端開發',
+  'tag.examples.description': '常見的標籤模式，適合篩選條件、chip 與分類內容。',
+  'tag.examples.basic.description': '標籤適合用於已選值或精簡的內容分類。',
+  'tag.usage.description': '匯入 TagComponent，並將標籤內容投影到元件內。',
+  'tag.installation.description':
+    '匯入 TagComponent；需要移除互動時可啟用 closable 並接收 remove 事件。',
+  'tag.composition.description': 'Tag 組合 Badge 樣式、投影內容與可選的關閉控制。',
+  'tag.api.description': 'sanring-tag component 支援的 Inputs 與 Outputs。',
+  'tag.api.class.description': '與內層徽章樣式合併的額外 class。',
+  'tag.api.variant.description': '將視覺變體傳遞給內層 Badge。',
+  'tag.api.closable.description': '顯示精簡移除按鈕，並支援 attribute shorthand。',
+  'tag.api.removeAriaLabel.description': '移除按鈕的無障礙標籤。',
+  'tag.api.remove.description': '點擊移除按鈕時觸發。',
+} as const;
