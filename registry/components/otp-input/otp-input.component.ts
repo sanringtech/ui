@@ -491,12 +491,18 @@ export class OtpInputComponent implements ControlValueAccessor, OnInit, OtpInput
   }
 
   // 旗標只需要蓋住「同一次按鍵補發的 input 事件」，不能一直卡著，否則會誤吃到
-  // 之後真正合法的 input 事件（例如簡訊一鍵帶入驗證碼的 autofill）。因此設完
-  // 立刻排一個 setTimeout 兜底清除，讓它最多只存活到當前這輪事件處理完。
+  // 之後真正合法的 input 事件（例如簡訊一鍵帶入驗證碼的 autofill）。
+  // iOS Safari/Chrome 的虛擬鍵盤透過獨立的鍵盤程序非同步回補字元，這個回補
+  // 事件常常比 setTimeout(0) 這種單一 macrotask 還晚才送達，導致旗標提早被
+  // 清掉、補發的 input 事件沒被擋到而重複寫入。改用兩層 requestAnimationFrame
+  // （至少等滿一個畫面更新週期）換取更寬裕的緩衝時間，讓 iOS 有機會把補發事件
+  // 送到再清旗標。
   private armSuppressNextInput(): void {
     this.suppressNextInput = true;
-    setTimeout(() => {
-      this.suppressNextInput = false;
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        this.suppressNextInput = false;
+      });
     });
   }
 
