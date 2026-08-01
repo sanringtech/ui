@@ -56,6 +56,7 @@ const PEEK_PX = 12;
               [enterClass]="enterClass()"
               [dismissLabel]="dismissLabel()"
               (dismissed)="toastSvc.dismiss(toast.id)"
+              (leaveAnimationEnd)="toastSvc.completeLeave(toast.id)"
             />
           </div>
         }
@@ -71,6 +72,7 @@ const PEEK_PX = 12;
             [toast]="toast"
             [enterClass]="enterClass()"
             (dismissed)="toastSvc.dismiss(toast.id)"
+            (leaveAnimationEnd)="toastSvc.completeLeave(toast.id)"
           />
         }
       </div>

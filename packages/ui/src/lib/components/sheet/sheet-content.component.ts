@@ -6,9 +6,11 @@ import {
   Component,
   DestroyRef,
   ElementRef,
+  Injector,
   TemplateRef,
   ViewChild,
   ViewContainerRef,
+  afterNextRender,
   computed,
   effect,
   inject,
@@ -25,6 +27,8 @@ import {
 import { SheetComponent } from './sheet.component';
 import type { SheetSide } from './sheet.type';
 
+// 退場動畫實際時長由 CSS（--animate-sheet-out-*）決定，這裡只是 animationend
+// 沒觸發時的保底上限，數字不必跟 CSS 精準同步。
 const LEAVE_DURATION_MS = 200;
 
 const SIDE_CLASSES: Record<SheetSide, string> = {
@@ -75,6 +79,7 @@ const SIDE_LEAVE: Record<SheetSide, string> = {
         [attr.aria-labelledby]="sheet.titleId"
         [attr.aria-describedby]="sheet.descId"
         [class]="panelClass()"
+        (animationend)="onLeaveAnimationEnd($event)"
       >
         <ng-content></ng-content>
       </div>
@@ -87,6 +92,7 @@ export class SheetContentComponent {
   private readonly overlay = inject(Overlay);
   private readonly overlayContainer = inject(OverlayContainer);
   private readonly viewContainerRef = inject(ViewContainerRef);
+  private readonly injector = inject(Injector);
 
   @ViewChild('contentTemplate') private contentTemplateRef!: TemplateRef<unknown>;
   @ViewChild('panelDiv') private panelDiv?: ElementRef<HTMLElement>;
@@ -135,10 +141,12 @@ export class SheetContentComponent {
       }
     });
 
-    // Focus panel when opened
+    // Focus panel when opened. afterNextRender 等的是「Angular 這輪 DOM 變更真的
+    // commit 完」，跟 overlay portal 何時掛進 DOM 是同一個時間點，不像裸的
+    // setTimeout(0) 只是賭一個任意 macrotask，遇到較慢的 attach 就可能撲空。
     effect(() => {
       if (this.sheet.isOpen()) {
-        setTimeout(() => this.panelDiv?.nativeElement.focus());
+        afterNextRender(() => this.panelDiv?.nativeElement.focus(), { injector: this.injector });
       }
     });
 
@@ -233,8 +241,21 @@ export class SheetContentComponent {
     this.hiddenSiblings = [];
   }
 
+  /** 退場 CSS 動畫（animate-sheet-out-*）真的播完時觸發，是結束 leaving 狀態的主要途徑 */
+  protected onLeaveAnimationEnd(event: AnimationEvent): void {
+    if (event.target !== event.currentTarget || !this._leaving()) return;
+    this._endLeave();
+  }
+
   private _startLeave(): void {
     this._leaving.set(true);
-    this._leaveTimer = setTimeout(() => this._leaving.set(false), LEAVE_DURATION_MS);
+    // 保底 timer：animationend 因故沒觸發時（例如動畫被中途打斷）避免卡在 leaving 狀態出不來
+    this._leaveTimer = setTimeout(() => this._endLeave(), LEAVE_DURATION_MS);
+  }
+
+  private _endLeave(): void {
+    clearTimeout(this._leaveTimer);
+    this._leaveTimer = undefined;
+    this._leaving.set(false);
   }
 }

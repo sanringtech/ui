@@ -19,6 +19,8 @@ import { OVERLAY_SURFACE_CLASS, POPOVER_SURFACE_CLASS } from '../shared/componen
 import { HoverCardComponent } from './hover-card.component';
 import { HoverCardSide } from './hover-card.type';
 
+// 退場動畫實際時長由 CSS（--animate-popover-out）決定，這裡只是 animationend
+// 沒觸發時的保底上限，數字不必跟 CSS 精準同步。
 const LEAVE_DURATION_MS = 150;
 
 @Component({
@@ -46,6 +48,7 @@ const LEAVE_DURATION_MS = 150;
           (mouseleave)="hoverCard.close()"
           (focusin)="hoverCard.open()"
           (focusout)="hoverCard.close()"
+          (animationend)="onLeaveAnimationEnd($event)"
         >
           <ng-content></ng-content>
         </div>
@@ -120,13 +123,25 @@ export class HoverCardContentComponent {
   }
 
   protected onDetach(): void {
-    clearTimeout(this._leaveTimer);
-    this._leaving.set(false);
+    this._endLeave();
+  }
+
+  /** 退場 CSS 動畫（animate-popover-out）真的播完時觸發，是結束 leaving 狀態的主要途徑 */
+  protected onLeaveAnimationEnd(event: AnimationEvent): void {
+    if (event.target !== event.currentTarget || !this._leaving()) return;
+    this._endLeave();
   }
 
   private _startLeave(): void {
     this._leaving.set(true);
-    this._leaveTimer = setTimeout(() => this._leaving.set(false), LEAVE_DURATION_MS);
+    // 保底 timer：animationend 因故沒觸發時（例如動畫被中途打斷）避免卡在 leaving 狀態出不來
+    this._leaveTimer = setTimeout(() => this._endLeave(), LEAVE_DURATION_MS);
+  }
+
+  private _endLeave(): void {
+    clearTimeout(this._leaveTimer);
+    this._leaveTimer = undefined;
+    this._leaving.set(false);
   }
 
   private getPositions(side: HoverCardSide, offset: number): ConnectionPositionPair[] {

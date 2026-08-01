@@ -5,6 +5,10 @@ import type { Toast, ToastOptions } from './toast.types';
 
 let _nextId = 0;
 
+// 退場動畫實際時長由 CSS（--animate-toast-leave）決定，這裡只是 ToastComponent 沒能
+// 透過 animationend 呼叫 completeLeave() 時的保底上限，數字不必跟 CSS 精準同步。
+const LEAVE_FALLBACK_MS = 200;
+
 /**
  * Headless 設計：不帶 providedIn，由消費端決定 scope。
  *
@@ -26,7 +30,8 @@ export class ToastService {
   private readonly _timers    = new Map<string, ReturnType<typeof setTimeout>>();
   private readonly _startedAt = new Map<string, number>();
   private readonly _remaining = new Map<string, number>();
-  // Leaving-animation timers: keyed by id, fires after 200ms to actually remove the DOM
+  // Leaving-animation fallback timers: keyed by id. Normally superseded by
+  // completeLeave() firing from the component's animationend handler first.
   private readonly _leavingTimers = new Map<string, ReturnType<typeof setTimeout>>();
 
   readonly toasts = this._toasts.asReadonly();
@@ -84,12 +89,18 @@ export class ToastService {
     this._toasts.update(prev =>
       prev.map(t => t.id === id ? { ...t, leaving: true } : t),
     );
-    // 2. 動畫播完（200ms）後才真正移除 DOM
-    const handle = setTimeout(() => {
-      this._toasts.update(prev => prev.filter(t => t.id !== id));
-      this._leavingTimers.delete(id);
-    }, 200);
+    // 2. 主要路徑：ToastComponent 偵測到 animationend 後呼叫 completeLeave() 真正移除。
+    //    這個 timer 只是它因故沒觸發時的保底機制，避免卡在 leaving 狀態出不來。
+    const handle = setTimeout(() => this.completeLeave(id), LEAVE_FALLBACK_MS);
     this._leavingTimers.set(id, handle);
+  }
+
+  /** 退場 CSS 動畫真的播完時由 ToastComponent 呼叫；也是保底 timer 到期時的呼叫對象 */
+  completeLeave(id: string): void {
+    const handle = this._leavingTimers.get(id);
+    if (handle !== undefined) clearTimeout(handle);
+    this._leavingTimers.delete(id);
+    this._toasts.update(prev => prev.filter(t => t.id !== id));
   }
 
   dismissAll(): void {

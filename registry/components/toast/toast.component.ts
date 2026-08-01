@@ -38,7 +38,7 @@ const TYPE_ICON_CLASS: Partial<Record<ToastType, string>> = {
     '(keydown.escape)': 'dismissed.emit()',
   },
   template: `
-    <div [class]="cardClass()">
+    <div [class]="cardClass()" (animationend)="onAnimationEnd($event)">
       <!-- Type icon -->
       @switch (toast().type) {
         @case ('success') {
@@ -105,6 +105,8 @@ export class ToastComponent {
   readonly dismissLabel = input<string>('Dismiss notification');
 
   readonly dismissed = output<void>();
+  /** 退場 CSS 動畫（animate-toast-leave）真的播完時觸發，讓外部知道可以真正移除這筆 toast */
+  readonly leaveAnimationEnd = output<void>();
 
   protected readonly cardClass = computed(() =>
     cn(
@@ -119,6 +121,11 @@ export class ToastComponent {
   protected readonly iconClass = computed(() =>
     cn(TOAST_ICON_CLASS, TYPE_ICON_CLASS[this.toast().type] ?? ''),
   );
+
+  protected onAnimationEnd(event: AnimationEvent): void {
+    if (event.target !== event.currentTarget || !this.toast().leaving) return;
+    this.leaveAnimationEnd.emit();
+  }
 
   protected actionBtnClass(extra?: string) {
     return cn(

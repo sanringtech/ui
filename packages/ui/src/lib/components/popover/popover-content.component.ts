@@ -22,6 +22,8 @@ import { PopoverComponent } from './popover.component';
 import type { PopoverAlign } from './popover.type';
 
 const GAP = 8;
+// 退場動畫實際時長由 CSS（--animate-popover-out）決定，這裡只是 animationend
+// 沒觸發時的保底上限，數字不必跟 CSS 精準同步。
 const LEAVE_DURATION_MS = 150;
 
 type PopoverPlacement = 'top' | 'bottom';
@@ -81,6 +83,7 @@ function getPlacementFromPosition(position: ConnectionPositionPair): PopoverPlac
           [attr.aria-describedby]="popover.descId"
           [attr.data-placement]="renderedPlacement()"
           [class]="panelClass()"
+          (animationend)="onLeaveAnimationEnd($event)"
         >
           <ng-content></ng-content>
         </div>
@@ -153,11 +156,16 @@ export class PopoverContentComponent {
   }
 
   protected onDetach(): void {
-    clearTimeout(this._leaveTimer);
-    this._leaving.set(false);
+    this._endLeave();
     if (this.popover.isOpen()) {
       this.popover.setOpen(false);
     }
+  }
+
+  /** 退場 CSS 動畫（animate-popover-out）真的播完時觸發，是結束 leaving 狀態的主要途徑 */
+  protected onLeaveAnimationEnd(event: AnimationEvent): void {
+    if (event.target !== event.currentTarget || !this._leaving()) return;
+    this._endLeave();
   }
 
   protected handleOverlayKeydown(event: KeyboardEvent): void {
@@ -173,6 +181,13 @@ export class PopoverContentComponent {
 
   private _startLeave(): void {
     this._leaving.set(true);
-    this._leaveTimer = setTimeout(() => this._leaving.set(false), LEAVE_DURATION_MS);
+    // 保底 timer：animationend 因故沒觸發時（例如動畫被中途打斷）避免卡在 leaving 狀態出不來
+    this._leaveTimer = setTimeout(() => this._endLeave(), LEAVE_DURATION_MS);
+  }
+
+  private _endLeave(): void {
+    clearTimeout(this._leaveTimer);
+    this._leaveTimer = undefined;
+    this._leaving.set(false);
   }
 }
