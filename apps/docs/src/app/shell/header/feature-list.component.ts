@@ -1,9 +1,16 @@
 import { Component, computed, inject, signal } from '@angular/core';
 import { Router } from '@angular/router';
 import { LucideMenu, LucideMoon, LucideSearch, LucideSun } from '@lucide/angular';
-import { CommandDialogComponent, SANRING_COMMAND_IMPORTS } from '@sanring/ui';
+import { CommandDialogComponent, SANRING_COMMAND_IMPORTS, SANRING_SHEET_IMPORTS } from '@sanring/ui';
 import { I18nService } from '../../i18n/i18n.service';
-import { docsComponentItems, docsSectionItems } from '../../navigation/docs-navigation';
+import {
+  docsComponentItems,
+  docsSectionItems,
+  visibleDocsComponentItems,
+} from '../../navigation/docs-navigation';
+import { isRecentlyUpdatedComponentId } from '../../pages/changelog/component-changelog';
+import { DocsComponentsListComponent } from '../sidebar/docs-components-list.component';
+import { DocsSectionComponent } from '../sidebar/docs-section.component';
 import { DocsNavStateService } from '../docs-nav-state.service';
 import { fuzzyMatch } from './fuzzy-match';
 import { HeaderActionButtonComponent } from './header-action-button.component';
@@ -23,11 +30,14 @@ const MAX_SEARCH_RESULTS = 8;
   selector: 'app-feature-list',
   imports: [
     HeaderActionButtonComponent,
+    DocsComponentsListComponent,
+    DocsSectionComponent,
     LucideMenu,
     LucideSearch,
     LucideSun,
     LucideMoon,
     SANRING_COMMAND_IMPORTS,
+    SANRING_SHEET_IMPORTS,
   ],
   host: {
     // header 在 max-[860px] 會 flex-wrap，這個元件變成獨自一行的 flex item。
@@ -37,15 +47,41 @@ const MAX_SEARCH_RESULTS = 8;
   },
   template: `
     <div class="flex min-w-0 items-center gap-6 max-[860px]:w-full max-[860px]:gap-3">
-      @if (navState.hasSidebar()) {
+      <sanring-sheet [(isOpen)]="navState.mobileNavOpen">
         <app-header-action-button
-          class="flex-none min-[861px]:hidden"
+          class="hidden flex-none max-[980px]:block"
           [ariaLabel]="i18n.t('sidebar.openMenu')"
           (clicked)="navState.mobileNavOpen.set(true)"
         >
           <svg class="size-4" lucideMenu></svg>
         </app-header-action-button>
-      }
+
+        <sanring-sheet-content side="left" class="flex flex-col">
+          <sanring-sheet-header>
+            <sanring-sheet-title>{{ i18n.t('sidebar.navigationTitle') }}</sanring-sheet-title>
+          </sanring-sheet-header>
+
+          <div
+            sanringSheetClose
+            class="min-h-0 flex-1 overflow-auto px-6 pb-6"
+          >
+            <app-docs-section
+              [title]="i18n.t('sidebar.sections')"
+              [items]="mobileNavigationItems"
+            />
+
+            @if (navState.hasSidebar()) {
+              <app-docs-components-list />
+            } @else {
+              <app-docs-section
+                [title]="i18n.t('sidebar.components')"
+                [items]="mobileComponentItems"
+                sectionClass="mt-11"
+              />
+            }
+          </div>
+        </sanring-sheet-content>
+      </sanring-sheet>
 
       <div class="max-[860px]:min-w-0 max-[860px]:flex-1">
         <button
@@ -129,6 +165,14 @@ export class FeatureListComponent {
   private readonly router = inject(Router);
 
   protected readonly query = signal('');
+  protected readonly mobileNavigationItems = [
+    { labelKey: 'nav.home' as const, path: '/', active: true },
+    ...docsSectionItems,
+  ];
+  protected readonly mobileComponentItems = visibleDocsComponentItems.map((item) => ({
+    ...item,
+    badge: isRecentlyUpdatedComponentId(item.id),
+  }));
 
   private readonly searchIndex = computed<SearchItem[]>(() => {
     const sectionItems = docsSectionItems
