@@ -56,7 +56,7 @@ Options:
 
 ### `add <components...>`
 
-Copy one or more components into your project and install their peer dependencies. If a component depends on another (e.g. `tag` depends on `badge`), the dependency is added automatically and labeled `(dependency)` in the output — no need to run `add` again.
+Copy one or more components into your project and install their peer dependencies. If a peer dependency is already present but its version spec differs from the registry, `add` prompts to install the registry version spec so copied components stay aligned. If a component depends on another (e.g. `tag` depends on `badge`), the dependency is added automatically and labeled `(dependency)` in the output — no need to run `add` again.
 
 ```bash
 npx @sanring/cli@latest add accordion
