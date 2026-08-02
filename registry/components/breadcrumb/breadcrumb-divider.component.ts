@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, computed, input } from '@angular/core';
 import { LucideChevronRight, LucideDot } from '@lucide/angular';
 import { cn } from '../shared/utils';
-import { BREADCRUMB_SEPARATOR_ICON_CLASS } from '../shared/component-styles';
+import { BREADCRUMB_SEPARATOR_ICON_CLASS } from './breadcrumb.styles';
 import { BreadcrumbDividerType } from './breadcrumb.type';
 
 @Component({

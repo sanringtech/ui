@@ -14,6 +14,7 @@ import {
   output,
   signal,
 } from '@angular/core';
+import { _IdGenerator } from '@angular/cdk/a11y';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR, NgControl, Validators } from '@angular/forms';
 import {
@@ -28,18 +29,16 @@ import {
 import { LucideChevronDown } from '@lucide/angular';
 import { Observable, Subject } from 'rxjs';
 import { cn } from '../../utils';
-import { CALENDAR_WEEKDAY_TEXT_CLASS } from '../component-styles';
 import { FieldType, SanringFieldControl, SANRING_FIELD_CONTROL } from '../field/field.type';
 import { PopoverComponent } from '../popover/popover.component';
 import { PopoverContentComponent } from '../popover/popover-content.component';
 import { CalendarDayDirective } from './calendar-day.directive';
 import { CalendarHeaderComponent } from './calendar-header.component';
+import { CALENDAR_WEEKDAY_TEXT_CLASS } from './calendar.styles';
 import { CalendarOrientation, CalendarSize, CalendarValue } from './calendar.type';
 
 const JUMP_YEAR_RANGE_PAST = 100;
 const JUMP_YEAR_RANGE_FUTURE = 50;
-
-let nextCalendarId = 0;
 
 @Component({
   selector: 'sanring-calendar',
@@ -143,15 +142,17 @@ let nextCalendarId = 0;
             }
           </div>
 
-          <div
-            class="grid grid-cols-7 gap-1"
-            role="grid"
-            [attr.aria-label]="monthLabel(monthGrid)"
-          >
+          <div class="grid grid-cols-7 gap-1" role="grid" [attr.aria-label]="monthLabel(monthGrid)">
             @for (week of toWeeks(monthGrid); track $index) {
               <div role="row" class="contents">
                 @for (day of week; track day.date.getTime()) {
-                  <button type="button" role="gridcell" sanringCalendarDay [day]="day" [size]="size()">
+                  <button
+                    type="button"
+                    role="gridcell"
+                    sanringCalendarDay
+                    [day]="day"
+                    [size]="size()"
+                  >
                     {{ day.date.getDate() }}
                   </button>
                 }
@@ -168,7 +169,7 @@ export class CalendarComponent implements ControlValueAccessor, OnInit {
   private readonly injectedLocale = inject(CALENDAR_LOCALE, { optional: true });
 
   readonly class = input<string | undefined>();
-  readonly id = input(`sanring-calendar-${nextCalendarId++}`);
+  readonly id = input(inject(_IdGenerator).getId('sanring-calendar-', true));
   readonly size = input<CalendarSize>('md');
   readonly locale = input<CalendarLocale | undefined>(undefined);
   readonly mode = input<'single' | 'range'>('single');
@@ -335,7 +336,11 @@ export class CalendarComponent implements ControlValueAccessor, OnInit {
   protected readonly yearOptions = computed(() => {
     const currentYear = new Date().getFullYear();
     const years: number[] = [];
-    for (let y = currentYear - JUMP_YEAR_RANGE_PAST; y <= currentYear + JUMP_YEAR_RANGE_FUTURE; y++) {
+    for (
+      let y = currentYear - JUMP_YEAR_RANGE_PAST;
+      y <= currentYear + JUMP_YEAR_RANGE_FUTURE;
+      y++
+    ) {
       years.push(y);
     }
     return years;

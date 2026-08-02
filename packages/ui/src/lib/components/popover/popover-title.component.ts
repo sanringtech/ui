@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, computed, inject, input } from '@angular/core';
 import { cn } from '../../utils';
-import { COMPACT_TITLE_TEXT_CLASS } from '../component-styles';
+import { COMPACT_TITLE_TEXT_CLASS } from './popover.styles';
 import { PopoverComponent } from './popover.component';
 
 @Component({

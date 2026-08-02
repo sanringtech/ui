@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, computed, input } from '@angular/core';
 import { cn } from '../../utils';
-import { BREADCRUMB_TEXT_CLASS } from '../component-styles';
+import { BREADCRUMB_TEXT_CLASS } from './breadcrumb.styles';
 
 @Component({
   selector: 'sanring-breadcrumb-list',

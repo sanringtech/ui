@@ -13,7 +13,7 @@ import {
 import { LucideCheck } from '@lucide/angular';
 import { SelectComponent } from './select.component';
 import { cn } from '../shared/utils';
-import { SELECT_ITEM_SIZE_CLASS } from '../shared/component-styles';
+import { SELECT_ITEM_SIZE_CLASS } from './select.styles';
 import { SelectIndicatorPosition, SelectValue } from './select.type';
 
 @Component({

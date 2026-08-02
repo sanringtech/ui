@@ -19,17 +19,11 @@ import {
   untracked,
 } from '@angular/core';
 import { cn } from '../../utils';
-import {
-  OVERLAY_BACKDROP_CLASS,
-  OVERLAY_SURFACE_CLASS,
-  SHEET_SURFACE_CLASS,
-} from '../component-styles';
+import { OVERLAY_SURFACE_CLASS } from '../component-styles';
+import { SHEET_LEAVE_DURATION_MS } from '../component-timing';
 import { SheetComponent } from './sheet.component';
+import { OVERLAY_BACKDROP_CLASS, SHEET_SURFACE_CLASS } from './sheet.styles';
 import type { SheetSide } from './sheet.type';
-
-// 退場動畫實際時長由 CSS（--animate-sheet-out-*）決定，這裡只是 animationend
-// 沒觸發時的保底上限，數字不必跟 CSS 精準同步。
-const LEAVE_DURATION_MS = 200;
 
 const SIDE_CLASSES: Record<SheetSide, string> = {
   top:    'inset-x-0 top-0 border-b border-[var(--sanring-border)]',
@@ -171,12 +165,12 @@ export class SheetContentComponent {
     });
   }
 
-  protected onEscape(): void {
+  onEscape(): void {
     if (this.sheet.isOpen()) this.requestClose();
   }
 
   /** Trigger close with leave animation (used by backdrop click & Escape in content) */
-  protected requestClose(): void {
+  requestClose(): void {
     if (this._leaving() || !this.sheet.isOpen()) return;
     this.sheet.setOpen(false);
     // isOpen change is picked up by the effect above
@@ -242,7 +236,7 @@ export class SheetContentComponent {
   }
 
   /** 退場 CSS 動畫（animate-sheet-out-*）真的播完時觸發，是結束 leaving 狀態的主要途徑 */
-  protected onLeaveAnimationEnd(event: AnimationEvent): void {
+  onLeaveAnimationEnd(event: AnimationEvent): void {
     if (event.target !== event.currentTarget || !this._leaving()) return;
     this._endLeave();
   }
@@ -250,7 +244,7 @@ export class SheetContentComponent {
   private _startLeave(): void {
     this._leaving.set(true);
     // 保底 timer：animationend 因故沒觸發時（例如動畫被中途打斷）避免卡在 leaving 狀態出不來
-    this._leaveTimer = setTimeout(() => this._endLeave(), LEAVE_DURATION_MS);
+    this._leaveTimer = setTimeout(() => this._endLeave(), SHEET_LEAVE_DURATION_MS);
   }
 
   private _endLeave(): void {

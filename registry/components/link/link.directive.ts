@@ -1,6 +1,6 @@
 import { Directive, computed, input } from '@angular/core';
 import { cn } from '../shared/utils';
-import { LINK_TEXT_CLASS } from '../shared/component-styles';
+import { LINK_TEXT_CLASS } from './link.styles';
 import { LinkTarget } from './link.type';
 
 // 1. 神級型別：既有自動提示，又能相容所有字串

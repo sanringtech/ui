@@ -1,6 +1,6 @@
 import { Directive, computed, input } from '@angular/core';
 import { cn } from '../shared/utils';
-import { BADGE_SIZE_CLASS, BADGE_TEXT_CLASS } from '../shared/component-styles';
+import { BADGE_SIZE_CLASS, BADGE_TEXT_CLASS } from './badge.styles';
 import { BadgeVariant } from './badge.type';
 
 @Directive({

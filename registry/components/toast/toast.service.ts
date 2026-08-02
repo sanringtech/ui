@@ -1,13 +1,8 @@
 import { Injectable, inject, signal } from '@angular/core';
-import { LiveAnnouncer } from '@angular/cdk/a11y';
+import { LiveAnnouncer, _IdGenerator } from '@angular/cdk/a11y';
 import { TOAST_CONFIG } from './toast.config';
 import type { Toast, ToastOptions } from './toast.types';
-
-let _nextId = 0;
-
-// 退場動畫實際時長由 CSS（--animate-toast-leave）決定，這裡只是 ToastComponent 沒能
-// 透過 animationend 呼叫 completeLeave() 時的保底上限，數字不必跟 CSS 精準同步。
-const LEAVE_FALLBACK_MS = 200;
+import { TOAST_LEAVE_FALLBACK_MS } from '../shared/component-timing';
 
 /**
  * Headless 設計：不帶 providedIn，由消費端決定 scope。
@@ -22,12 +17,13 @@ const LEAVE_FALLBACK_MS = 200;
  */
 @Injectable()
 export class ToastService {
-  private readonly announcer  = inject(LiveAnnouncer);
-  private readonly config     = inject(TOAST_CONFIG);
-  private readonly _toasts    = signal<Toast[]>([]);
+  private readonly announcer = inject(LiveAnnouncer);
+  private readonly config = inject(TOAST_CONFIG);
+  private readonly idGenerator = inject(_IdGenerator);
+  private readonly _toasts = signal<Toast[]>([]);
 
   // Auto-dismiss timer tracking (three maps for pause/resume support):
-  private readonly _timers    = new Map<string, ReturnType<typeof setTimeout>>();
+  private readonly _timers = new Map<string, ReturnType<typeof setTimeout>>();
   private readonly _startedAt = new Map<string, number>();
   private readonly _remaining = new Map<string, number>();
   // Leaving-animation fallback timers: keyed by id. Normally superseded by
@@ -37,7 +33,7 @@ export class ToastService {
   readonly toasts = this._toasts.asReadonly();
 
   show(options: ToastOptions): string {
-    const id = `sanring-toast-${++_nextId}`;
+    const id = this.idGenerator.getId('sanring-toast-', true);
     const toast: Toast = {
       type: 'default',
       duration: this.config.defaultDuration,
@@ -46,11 +42,10 @@ export class ToastService {
       id,
     };
 
-    this._toasts.update(prev => {
+    this._toasts.update((prev) => {
       const next = [...prev, toast];
       if (next.length > this.config.maxVisible) {
-        next.slice(0, next.length - this.config.maxVisible)
-            .forEach(t => this._clearTimer(t.id));
+        next.slice(0, next.length - this.config.maxVisible).forEach((t) => this._clearTimer(t.id));
         return next.slice(next.length - this.config.maxVisible);
       }
       return next;
@@ -86,12 +81,10 @@ export class ToastService {
   dismiss(id: string): void {
     this._clearTimer(id);
     // 1. 標記 leaving → 觸發退場 CSS 動畫（animate-toast-leave）
-    this._toasts.update(prev =>
-      prev.map(t => t.id === id ? { ...t, leaving: true } : t),
-    );
+    this._toasts.update((prev) => prev.map((t) => (t.id === id ? { ...t, leaving: true } : t)));
     // 2. 主要路徑：ToastComponent 偵測到 animationend 後呼叫 completeLeave() 真正移除。
     //    這個 timer 只是它因故沒觸發時的保底機制，避免卡在 leaving 狀態出不來。
-    const handle = setTimeout(() => this.completeLeave(id), LEAVE_FALLBACK_MS);
+    const handle = setTimeout(() => this.completeLeave(id), TOAST_LEAVE_FALLBACK_MS);
     this._leavingTimers.set(id, handle);
   }
 
@@ -100,16 +93,16 @@ export class ToastService {
     const handle = this._leavingTimers.get(id);
     if (handle !== undefined) clearTimeout(handle);
     this._leavingTimers.delete(id);
-    this._toasts.update(prev => prev.filter(t => t.id !== id));
+    this._toasts.update((prev) => prev.filter((t) => t.id !== id));
   }
 
   dismissAll(): void {
     // 取消所有進行中的退場動畫計時器
-    this._leavingTimers.forEach(handle => clearTimeout(handle));
+    this._leavingTimers.forEach((handle) => clearTimeout(handle));
     this._leavingTimers.clear();
     // 合併 _timers 與 _remaining 的 id，確保 paused 狀態下也能全部清除
     const allIds = new Set([...this._timers.keys(), ...this._remaining.keys()]);
-    allIds.forEach(id => this._clearTimer(id));
+    allIds.forEach((id) => this._clearTimer(id));
     this._toasts.set([]);
   }
 

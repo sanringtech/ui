@@ -13,14 +13,10 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 // 1. 引入 LucideAngularModule 與需要的 X icon
 import { LucideX } from '@lucide/angular';
 import { cn } from '../../utils';
-import {
-  DIALOG_SURFACE_CLASS,
-  OVERLAY_ABSOLUTE_CLOSE_BUTTON_CLASS,
-  OVERLAY_CLOSE_ICON_CLASS,
-  OVERLAY_SURFACE_CLASS,
-} from '../component-styles';
+import { OVERLAY_CLOSE_ICON_CLASS, OVERLAY_SURFACE_CLASS } from '../component-styles';
 import { DialogDescriptionDirective } from './dialog-description.directive';
 import { DialogTitleDirective } from './dialog-title.directive';
+import { DIALOG_SURFACE_CLASS, OVERLAY_ABSOLUTE_CLOSE_BUTTON_CLASS } from './dialog.styles';
 
 @Component({
   selector: 'sanring-dialog-content',

@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, computed, input } from '@angular/core';
 import { LucideEllipsis } from '@lucide/angular';
 import { cn } from '../shared/utils';
-import { BREADCRUMB_ICON_SIZE_CLASS } from '../shared/component-styles';
+import { BREADCRUMB_ICON_SIZE_CLASS } from './breadcrumb.styles';
 
 @Component({
   selector: 'sanring-breadcrumb-ellipsis',

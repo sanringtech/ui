@@ -5,7 +5,7 @@ import {
   OverlayModule,
 } from '@angular/cdk/overlay';
 import { cn } from '../shared/utils';
-import { TOOLTIP_ARROW_CLASS, TOOLTIP_SURFACE_CLASS } from '../shared/component-styles';
+import { TOOLTIP_ARROW_CLASS, TOOLTIP_SURFACE_CLASS } from './tooltip.styles';
 import { TooltipComponent } from './tooltip.component';
 import { TooltipSide } from './tooltip.type';
 

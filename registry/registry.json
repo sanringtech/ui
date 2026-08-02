@@ -18,6 +18,11 @@
       "file": "shared/component-styles.ts"
     },
     {
+      "name": "component-timing",
+      "description": "Numeric timing constants (leave-animation fallback durations) shared by overlay components",
+      "file": "shared/component-timing.ts"
+    },
+    {
       "name": "theme",
       "description": "CSS custom properties every component reads for color/radius \u2014 import this once in your global stylesheet",
       "file": "shared/theme.css"
@@ -42,7 +47,7 @@
       ],
       "peerDependencies": {
         "@angular/aria": "^22.0.0",
-        "@lucide/angular": "^1.0.0"
+        "@lucide/angular": "^1.18.0"
       },
       "files": [
         "accordion/accordion.component.ts",
@@ -64,6 +69,7 @@
         "alert/alert.component.ts",
         "alert/alert-title.directive.ts",
         "alert/alert-description.directive.ts",
+        "alert/alert.styles.ts",
         "alert/alert.type.ts",
         "alert/index.ts"
       ]
@@ -80,7 +86,7 @@
       ],
       "peerDependencies": {
         "@angular/cdk": "^22.0.0",
-        "@lucide/angular": "^1.0.0"
+        "@lucide/angular": "^1.18.0"
       },
       "files": [
         "alert-dialog/alert-dialog.service.ts",
@@ -132,6 +138,7 @@
       ],
       "files": [
         "badge/badge.directive.ts",
+        "badge/badge.styles.ts",
         "badge/badge.type.ts",
         "badge/index.ts"
       ]
@@ -145,7 +152,7 @@
       ],
       "peerDependencies": {
         "@angular/router": "^22.0.0",
-        "@lucide/angular": "^1.0.0"
+        "@lucide/angular": "^1.18.0"
       },
       "files": [
         "breadcrumb/breadcrumb.component.ts",
@@ -155,6 +162,7 @@
         "breadcrumb/breadcrumb-page.component.ts",
         "breadcrumb/breadcrumb-divider.component.ts",
         "breadcrumb/breadcrumb-ellipsis.component.ts",
+        "breadcrumb/breadcrumb.styles.ts",
         "breadcrumb/breadcrumb.type.ts",
         "breadcrumb/index.ts"
       ]
@@ -168,6 +176,7 @@
       ],
       "files": [
         "button/button.directive.ts",
+        "button/button.styles.ts",
         "button/button.types.ts",
         "button/index.ts"
       ]
@@ -185,13 +194,14 @@
         "popover"
       ],
       "peerDependencies": {
-        "@lucide/angular": "^1.0.0",
+        "@lucide/angular": "^1.18.0",
         "@sanring/date-picker-core": "^0.5.0"
       },
       "files": [
         "calendar/calendar.component.ts",
         "calendar/calendar-day.directive.ts",
         "calendar/calendar-header.component.ts",
+        "calendar/calendar.styles.ts",
         "calendar/calendar.type.ts",
         "calendar/index.ts"
       ]
@@ -212,6 +222,7 @@
       "files": [
         "date-picker/date-picker.component.ts",
         "date-picker/date-picker-cell.directive.ts",
+        "date-picker/date-picker.styles.ts",
         "date-picker/date-picker.type.ts",
         "date-picker/index.ts"
       ]
@@ -230,6 +241,7 @@
         "card/card-description.directive.ts",
         "card/card-content.component.ts",
         "card/card-footer.component.ts",
+        "card/card.styles.ts",
         "card/card.type.ts",
         "card/index.ts"
       ]
@@ -246,10 +258,11 @@
       ],
       "peerDependencies": {
         "@angular/forms": "^22.0.0",
-        "@lucide/angular": "^1.0.0"
+        "@lucide/angular": "^1.18.0"
       },
       "files": [
         "checkbox/checkbox.component.ts",
+        "checkbox/checkbox.styles.ts",
         "checkbox/checkbox.types.ts",
         "checkbox/index.ts"
       ]
@@ -276,7 +289,7 @@
       ],
       "peerDependencies": {
         "@angular/cdk": "^22.0.0",
-        "@lucide/angular": "^1.0.0"
+        "@lucide/angular": "^1.18.0"
       },
       "files": [
         "dialog/dialog.service.ts",
@@ -288,6 +301,7 @@
         "dialog/dialog-description.directive.ts",
         "dialog/dialog-trigger.directive.ts",
         "dialog/dialog-close.directive.ts",
+        "dialog/dialog.styles.ts",
         "dialog/index.ts"
       ]
     },
@@ -330,7 +344,7 @@
       ],
       "peerDependencies": {
         "@angular/forms": "^22.0.0",
-        "@lucide/angular": "^1.0.0"
+        "@lucide/angular": "^1.18.0"
       },
       "files": [
         "file-upload/file-upload.component.ts",
@@ -396,6 +410,7 @@
       ],
       "files": [
         "link/link.directive.ts",
+        "link/link.styles.ts",
         "link/link.type.ts",
         "link/index.ts"
       ]
@@ -427,7 +442,8 @@
       "description": "Displays rich content in a portal, triggered by a button.",
       "sharedDeps": [
         "utils",
-        "component-styles"
+        "component-styles",
+        "component-timing"
       ],
       "peerDependencies": {
         "@angular/cdk": "^22.0.0"
@@ -439,6 +455,7 @@
         "popover/popover-header.component.ts",
         "popover/popover-title.component.ts",
         "popover/popover-description.component.ts",
+        "popover/popover.styles.ts",
         "popover/popover.type.ts",
         "popover/index.ts"
       ]
@@ -468,11 +485,12 @@
       ],
       "peerDependencies": {
         "@angular/forms": "^22.0.0",
-        "@lucide/angular": "^1.0.0"
+        "@lucide/angular": "^1.18.0"
       },
       "files": [
         "radio/radio-group.component.ts",
         "radio/radio-item.component.ts",
+        "radio/radio.styles.ts",
         "radio/radio.types.ts",
         "radio/index.ts"
       ]
@@ -499,7 +517,8 @@
       "description": "Extends the dialog component to display content that complements the main content of the screen.",
       "sharedDeps": [
         "utils",
-        "component-styles"
+        "component-styles",
+        "component-timing"
       ],
       "peerDependencies": {
         "@angular/cdk": "^22.0.0"
@@ -513,6 +532,7 @@
         "sheet/sheet-footer.component.ts",
         "sheet/sheet-title.component.ts",
         "sheet/sheet-description.component.ts",
+        "sheet/sheet.styles.ts",
         "sheet/sheet.type.ts",
         "sheet/index.ts"
       ]
@@ -553,7 +573,7 @@
         "utils"
       ],
       "peerDependencies": {
-        "@lucide/angular": "^1.0.0"
+        "@lucide/angular": "^1.18.0"
       },
       "files": [
         "spinner/spinner.component.ts",
@@ -569,7 +589,7 @@
       ],
       "peerDependencies": {
         "@angular/cdk": "^22.0.0",
-        "@lucide/angular": "^1.0.0"
+        "@lucide/angular": "^1.18.0"
       },
       "files": [
         "stepper/step.component.ts",
@@ -613,6 +633,7 @@
       },
       "files": [
         "switch/switch.component.ts",
+        "switch/switch.styles.ts",
         "switch/switch.type.ts",
         "switch/index.ts"
       ]
@@ -632,6 +653,7 @@
         "tabs/tabs-list.component.ts",
         "tabs/tabs-trigger.component.ts",
         "tabs/tabs-content.component.ts",
+        "tabs/tabs.styles.ts",
         "tabs/tabs.type.ts",
         "tabs/index.ts"
       ]
@@ -647,10 +669,11 @@
         "badge"
       ],
       "peerDependencies": {
-        "@lucide/angular": "^1.0.0"
+        "@lucide/angular": "^1.18.0"
       },
       "files": [
         "tag/tag.component.ts",
+        "tag/tag.styles.ts",
         "tag/index.ts"
       ]
     },
@@ -659,17 +682,19 @@
       "description": "A succinct message that is displayed temporarily.",
       "sharedDeps": [
         "utils",
-        "component-styles"
+        "component-styles",
+        "component-timing"
       ],
       "peerDependencies": {
         "@angular/cdk": "^22.0.0",
-        "@lucide/angular": "^1.0.0"
+        "@lucide/angular": "^1.18.0"
       },
       "files": [
         "toast/toast.service.ts",
         "toast/toast.component.ts",
         "toast/toaster.component.ts",
         "toast/toast.config.ts",
+        "toast/toast.styles.ts",
         "toast/toast.types.ts",
         "toast/index.ts"
       ]
@@ -683,6 +708,7 @@
       ],
       "files": [
         "toggle/toggle.directive.ts",
+        "toggle/toggle.styles.ts",
         "toggle/toggle.types.ts",
         "toggle/index.ts"
       ]
@@ -701,6 +727,7 @@
         "tooltip/tooltip.component.ts",
         "tooltip/tooltip-trigger.directive.ts",
         "tooltip/tooltip-content.component.ts",
+        "tooltip/tooltip.styles.ts",
         "tooltip/tooltip.type.ts",
         "tooltip/index.ts"
       ]
@@ -752,7 +779,8 @@
       "description": "Shows a preview card when hovering or focusing a trigger.",
       "sharedDeps": [
         "utils",
-        "component-styles"
+        "component-styles",
+        "component-timing"
       ],
       "peerDependencies": {
         "@angular/cdk": "^22.0.0"
@@ -772,7 +800,7 @@
         "utils"
       ],
       "peerDependencies": {
-        "@lucide/angular": "^1.0.0"
+        "@lucide/angular": "^1.18.0"
       },
       "files": [
         "resizable/resizable-group.component.ts",
@@ -791,7 +819,7 @@
       ],
       "peerDependencies": {
         "@angular/cdk": "^22.0.0",
-        "@lucide/angular": "^1.0.0"
+        "@lucide/angular": "^1.18.0"
       },
       "files": [
         "table/table.directive.ts",
@@ -837,7 +865,7 @@
       "peerDependencies": {
         "@angular/cdk": "^22.0.0",
         "@angular/forms": "^22.0.0",
-        "@lucide/angular": "^1.0.0"
+        "@lucide/angular": "^1.18.0"
       },
       "files": [
         "select/select.component.ts",
@@ -848,6 +876,7 @@
         "select/select-separator.component.ts",
         "select/select-trigger.directive.ts",
         "select/select-value.component.ts",
+        "select/select.styles.ts",
         "select/select.type.ts",
         "select/index.ts"
       ]
@@ -867,7 +896,7 @@
       "peerDependencies": {
         "@angular/cdk": "^22.0.0",
         "@angular/forms": "^22.0.0",
-        "@lucide/angular": "^1.0.0"
+        "@lucide/angular": "^1.18.0"
       },
       "files": [
         "combobox/combobox.component.ts",
@@ -901,7 +930,7 @@
       ],
       "peerDependencies": {
         "@angular/cdk": "^22.0.0",
-        "@lucide/angular": "^1.0.0"
+        "@lucide/angular": "^1.18.0"
       },
       "files": [
         "command/command.component.ts",
@@ -926,7 +955,7 @@
       ],
       "peerDependencies": {
         "@angular/forms": "^22.0.0",
-        "@lucide/angular": "^1.0.0"
+        "@lucide/angular": "^1.18.0"
       },
       "files": [
         "pagination/pagination.component.ts",
@@ -949,7 +978,7 @@
       ],
       "peerDependencies": {
         "@angular/cdk": "^22.0.0",
-        "@lucide/angular": "^1.0.0"
+        "@lucide/angular": "^1.18.0"
       },
       "files": [
         "context-menu/context-menu.component.ts",

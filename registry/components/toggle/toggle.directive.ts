@@ -1,6 +1,7 @@
 import { Directive, booleanAttribute, computed, input, model } from '@angular/core';
 import { cn } from '../shared/utils';
-import { COMPACT_CONTROL_SIZE_CLASSES, CONTROL_TEXT_CLASS } from '../shared/component-styles';
+import { CONTROL_TEXT_CLASS } from '../shared/component-styles';
+import { COMPACT_CONTROL_SIZE_CLASSES } from './toggle.styles';
 import type { ToggleSize, ToggleVariant } from './toggle.types';
 
 @Directive({

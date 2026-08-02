@@ -1,6 +1,6 @@
 import { Directive, computed, input } from '@angular/core';
 import { cn } from '../shared/utils';
-import { ALERT_DESCRIPTION_TEXT_CLASS } from '../shared/component-styles';
+import { ALERT_DESCRIPTION_TEXT_CLASS } from './alert.styles';
 
 @Directive({
   selector: '[sanringAlertDescription]',

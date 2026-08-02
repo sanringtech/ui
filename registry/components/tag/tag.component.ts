@@ -2,7 +2,7 @@ import { booleanAttribute, Component, computed, input, output } from '@angular/c
 import { LucideX } from '@lucide/angular';
 import { cn } from '../shared/utils';
 import { BadgeDirective, type BadgeVariant } from '../badge';
-import { TAG_CLOSE_BUTTON_CLASS, TAG_CLOSE_ICON_CLASS } from '../shared/component-styles';
+import { TAG_CLOSE_BUTTON_CLASS, TAG_CLOSE_ICON_CLASS } from './tag.styles';
 
 @Component({
   selector: 'sanring-tag',

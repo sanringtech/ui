@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, computed, input } from '@angular/core';
 import { cn } from '../../utils';
-import { BREADCRUMB_CURRENT_PAGE_CLASS } from '../component-styles';
+import { BREADCRUMB_CURRENT_PAGE_CLASS } from './breadcrumb.styles';
 
 @Component({
   selector: 'sanring-breadcrumb-page',

@@ -15,17 +15,11 @@ import {
   untracked,
 } from '@angular/core';
 import { cn } from '../shared/utils';
-import {
-  OVERLAY_BACKDROP_CLASS,
-  OVERLAY_SURFACE_CLASS,
-  SHEET_SURFACE_CLASS,
-} from '../shared/component-styles';
+import { OVERLAY_SURFACE_CLASS } from '../shared/component-styles';
+import { SHEET_LEAVE_DURATION_MS } from '../shared/component-timing';
 import { SheetComponent } from './sheet.component';
+import { OVERLAY_BACKDROP_CLASS, SHEET_SURFACE_CLASS } from './sheet.styles';
 import type { SheetSide } from './sheet.type';
-
-// 退場動畫實際時長由 CSS（--animate-sheet-out-*）決定，這裡只是 animationend
-// 沒觸發時的保底上限，數字不必跟 CSS 精準同步。
-const LEAVE_DURATION_MS = 200;
 
 const SIDE_CLASSES: Record<SheetSide, string> = {
   top:    'inset-x-0 top-0 border-b border-[var(--sanring-border)]',
@@ -178,7 +172,7 @@ export class SheetContentComponent {
   private _startLeave(): void {
     this._leaving.set(true);
     // 保底 timer：animationend 因故沒觸發時（例如動畫被中途打斷）避免卡在 leaving 狀態出不來
-    this._leaveTimer = setTimeout(() => this._endLeave(), LEAVE_DURATION_MS);
+    this._leaveTimer = setTimeout(() => this._endLeave(), SHEET_LEAVE_DURATION_MS);
   }
 
   private _endLeave(): void {

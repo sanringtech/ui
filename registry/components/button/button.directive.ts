@@ -1,6 +1,7 @@
 import { Directive, ElementRef, HostListener, booleanAttribute, computed, inject, input } from '@angular/core';
 import { cn } from '../shared/utils';
-import { CONTROL_SIZE_CLASSES, CONTROL_TEXT_CLASS } from '../shared/component-styles';
+import { CONTROL_TEXT_CLASS } from '../shared/component-styles';
+import { CONTROL_SIZE_CLASSES } from './button.styles';
 import type { ButtonSize, ButtonVariant } from './button.types';
 
 @Directive({

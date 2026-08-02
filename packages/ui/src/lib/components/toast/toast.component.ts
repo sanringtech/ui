@@ -7,16 +7,15 @@ import {
   LucideX,
 } from '@lucide/angular';
 import { cn } from '../../utils';
+import { OVERLAY_CLOSE_ICON_CLASS, OVERLAY_SURFACE_CLASS } from '../component-styles';
 import {
   OVERLAY_CLOSE_BUTTON_CLASS,
-  OVERLAY_CLOSE_ICON_CLASS,
-  OVERLAY_SURFACE_CLASS,
   TOAST_ACTION_BUTTON_CLASS,
   TOAST_DESCRIPTION_TEXT_CLASS,
   TOAST_ICON_CLASS,
   TOAST_SURFACE_CLASS,
   TOAST_TITLE_TEXT_CLASS,
-} from '../component-styles';
+} from './toast.styles';
 import type { Toast, ToastAction, ToastType } from './toast.types';
 
 const TYPE_ICON_CLASS: Partial<Record<ToastType, string>> = {

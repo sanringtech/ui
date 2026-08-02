@@ -1,6 +1,6 @@
 import { Directive, computed, input } from '@angular/core';
 import { cn } from '../../utils';
-import { SECTION_TITLE_TEXT_CLASS } from '../component-styles';
+import { SECTION_TITLE_TEXT_CLASS } from './card.styles';
 
 @Directive({
   selector:

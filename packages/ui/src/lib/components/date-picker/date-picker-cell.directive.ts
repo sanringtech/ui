@@ -1,7 +1,7 @@
 import { Directive, HostListener, computed, inject, input } from '@angular/core';
 import { GranularityCell, GranularityPickerEngine } from '@sanring/date-picker-core';
 import { cn } from '../../utils';
-import { GRANULARITY_CELL_SIZE_CLASSES } from '../component-styles';
+import { GRANULARITY_CELL_SIZE_CLASSES } from './date-picker.styles';
 import { DatePickerSize } from './date-picker.type';
 
 @Directive({
