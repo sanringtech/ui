@@ -18,13 +18,11 @@ import {
 } from '@angular/core';
 import { cn } from '../../utils';
 import { OVERLAY_SURFACE_CLASS, POPOVER_SURFACE_CLASS } from '../component-styles';
+import { POPOVER_LEAVE_DURATION_MS } from '../component-timing';
 import { PopoverComponent } from './popover.component';
 import type { PopoverAlign } from './popover.type';
 
 const GAP = 8;
-// 退場動畫實際時長由 CSS（--animate-popover-out）決定，這裡只是 animationend
-// 沒觸發時的保底上限，數字不必跟 CSS 精準同步。
-const LEAVE_DURATION_MS = 150;
 
 type PopoverPlacement = 'top' | 'bottom';
 
@@ -149,13 +147,13 @@ export class PopoverContentComponent {
     ),
   );
 
-  protected requestClose(): void {
+  requestClose(): void {
     if (this._leaving() || !this.popover.isOpen()) return;
     this.popover.setOpen(false);
     // isOpen change triggers the effect which calls _startLeave
   }
 
-  protected onDetach(): void {
+  onDetach(): void {
     this._endLeave();
     if (this.popover.isOpen()) {
       this.popover.setOpen(false);
@@ -163,26 +161,26 @@ export class PopoverContentComponent {
   }
 
   /** 退場 CSS 動畫（animate-popover-out）真的播完時觸發，是結束 leaving 狀態的主要途徑 */
-  protected onLeaveAnimationEnd(event: AnimationEvent): void {
+  onLeaveAnimationEnd(event: AnimationEvent): void {
     if (event.target !== event.currentTarget || !this._leaving()) return;
     this._endLeave();
   }
 
-  protected handleOverlayKeydown(event: KeyboardEvent): void {
+  handleOverlayKeydown(event: KeyboardEvent): void {
     if (event.key !== 'Escape') return;
     event.preventDefault();
     event.stopPropagation();
     this.requestClose();
   }
 
-  protected handlePositionChange(event: ConnectedOverlayPositionChange): void {
+  handlePositionChange(event: ConnectedOverlayPositionChange): void {
     this.renderedPlacement.set(getPlacementFromPosition(event.connectionPair));
   }
 
   private _startLeave(): void {
     this._leaving.set(true);
     // 保底 timer：animationend 因故沒觸發時（例如動畫被中途打斷）避免卡在 leaving 狀態出不來
-    this._leaveTimer = setTimeout(() => this._endLeave(), LEAVE_DURATION_MS);
+    this._leaveTimer = setTimeout(() => this._endLeave(), POPOVER_LEAVE_DURATION_MS);
   }
 
   private _endLeave(): void {
