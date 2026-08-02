@@ -151,6 +151,9 @@ importers:
       '@angular/core':
         specifier: ^22.0.0
         version: 22.0.1(@angular/compiler@22.0.1)(rxjs@7.8.2)
+      '@lucide/angular':
+        specifier: ^1.18.0
+        version: 1.18.0(@angular/common@22.0.1(@angular/core@22.0.1(@angular/compiler@22.0.1)(rxjs@7.8.2))(rxjs@7.8.2))(@angular/core@22.0.1(@angular/compiler@22.0.1)(rxjs@7.8.2))
       clsx:
         specifier: ^2.1.1
         version: 2.1.1
