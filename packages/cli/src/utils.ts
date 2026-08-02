@@ -42,19 +42,64 @@ export function writeConfig(cwd: string, config: SanringConfig): void {
   writeFileSync(configPath, JSON.stringify(config, null, 2) + '\n', 'utf-8');
 }
 
-export function getInstalledPackages(cwd: string): Set<string> {
+export function getInstalledPackageSpecs(cwd: string): Map<string, string> {
   const pkgPath = join(cwd, 'package.json');
-  if (!existsSync(pkgPath)) return new Set();
+  if (!existsSync(pkgPath)) return new Map();
   try {
     const pkg = JSON.parse(readFileSync(pkgPath, 'utf-8'));
-    return new Set([
-      ...Object.keys(pkg.dependencies ?? {}),
-      ...Object.keys(pkg.devDependencies ?? {}),
-      ...Object.keys(pkg.peerDependencies ?? {}),
+    return new Map([
+      ...Object.entries<string>(pkg.dependencies ?? {}),
+      ...Object.entries<string>(pkg.devDependencies ?? {}),
+      ...Object.entries<string>(pkg.peerDependencies ?? {}),
     ]);
   } catch {
-    return new Set();
+    return new Map();
   }
+}
+
+export function getInstalledPackages(cwd: string): Set<string> {
+  return new Set(getInstalledPackageSpecs(cwd).keys());
+}
+
+type VersionTuple = [major: number, minor: number, patch: number];
+
+function parseMinimumVersion(spec: string): VersionTuple | null {
+  const match = spec.match(/(\d+)\.(\d+)\.(\d+)/);
+  if (!match) return null;
+  return [Number(match[1]), Number(match[2]), Number(match[3])];
+}
+
+function compareVersions(a: VersionTuple, b: VersionTuple): number {
+  for (let i = 0; i < a.length; i++) {
+    const diff = a[i] - b[i];
+    if (diff !== 0) return diff;
+  }
+  return 0;
+}
+
+export function satisfiesMinimumPackageSpec(installedSpec: string, requiredSpec: string): boolean {
+  if (installedSpec === requiredSpec) return true;
+
+  const installed = parseMinimumVersion(installedSpec);
+  const required = parseMinimumVersion(requiredSpec);
+  if (!installed || !required) return false;
+  if (compareVersions(installed, required) < 0) return false;
+
+  if (requiredSpec.startsWith('^')) {
+    if (required[0] > 0) return installed[0] === required[0];
+    if (required[1] > 0) return installed[0] === required[0] && installed[1] === required[1];
+    return installed[0] === required[0] && installed[1] === required[1] && installed[2] === required[2];
+  }
+
+  if (requiredSpec.startsWith('~')) {
+    return installed[0] === required[0] && installed[1] === required[1];
+  }
+
+  if (requiredSpec.startsWith('>=')) {
+    return true;
+  }
+
+  return installed[0] === required[0] && installed[1] === required[1] && installed[2] === required[2];
 }
 
 export function isAngularProject(cwd: string): boolean {

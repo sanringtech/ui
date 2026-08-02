@@ -4,11 +4,13 @@ import { join } from 'node:path';
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 import {
   getInstalledPackages,
+  getInstalledPackageSpecs,
   fetchTextTargetsConcurrent,
   hashContent,
   isAngularProject,
   mapConcurrent,
   readConfig,
+  satisfiesMinimumPackageSpec,
   writeConfig,
 } from './utils.js';
 
@@ -70,6 +72,45 @@ describe('getInstalledPackages', () => {
   it('returns an empty set when package.json is malformed', () => {
     writeFileSync(join(dir, 'package.json'), '{ not valid json');
     expect(getInstalledPackages(dir)).toEqual(new Set());
+  });
+});
+
+describe('getInstalledPackageSpecs', () => {
+  it('keeps installed package version specs', () => {
+    writeFileSync(
+      join(dir, 'package.json'),
+      JSON.stringify({
+        dependencies: { a: '^1.0.0' },
+        devDependencies: { b: '~2.0.0' },
+        peerDependencies: { c: '>=3.0.0' },
+      }),
+    );
+
+    expect(getInstalledPackageSpecs(dir)).toEqual(
+      new Map([
+        ['a', '^1.0.0'],
+        ['b', '~2.0.0'],
+        ['c', '>=3.0.0'],
+      ]),
+    );
+  });
+});
+
+describe('satisfiesMinimumPackageSpec', () => {
+  it('accepts the same version spec', () => {
+    expect(satisfiesMinimumPackageSpec('^1.18.0', '^1.18.0')).toBe(true);
+  });
+
+  it('accepts newer compatible caret ranges', () => {
+    expect(satisfiesMinimumPackageSpec('^1.20.0', '^1.18.0')).toBe(true);
+  });
+
+  it('rejects older caret ranges', () => {
+    expect(satisfiesMinimumPackageSpec('^1.0.0', '^1.18.0')).toBe(false);
+  });
+
+  it('rejects incompatible major versions for caret ranges', () => {
+    expect(satisfiesMinimumPackageSpec('^2.0.0', '^1.18.0')).toBe(false);
   });
 });
 
