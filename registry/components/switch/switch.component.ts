@@ -13,20 +13,19 @@ import {
   input,
   signal,
 } from '@angular/core';
+import { _IdGenerator } from '@angular/cdk/a11y';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR, NgControl, Validators } from '@angular/forms';
 import { Observable, Subject } from 'rxjs';
 import { cn } from '../shared/utils';
+import { SELECTION_CONTROL_FOCUS_CLASS } from '../shared/component-styles';
+import { FieldType, SanringFieldControl, SANRING_FIELD_CONTROL } from '../field/field.type';
 import {
-  SELECTION_CONTROL_FOCUS_CLASS,
   SWITCH_THUMB_SIZE_CLASSES,
   SWITCH_THUMB_TRANSLATE_CLASSES,
   SWITCH_TRACK_SIZE_CLASSES,
-} from '../shared/component-styles';
-import { FieldType, SanringFieldControl, SANRING_FIELD_CONTROL } from '../field/field.type';
+} from './switch.styles';
 import { SwitchSize } from './switch.type';
-
-let nextUniqueId = 0;
 
 @Component({
   selector: 'sanring-switch',
@@ -83,7 +82,7 @@ let nextUniqueId = 0;
 })
 export class SwitchComponent implements ControlValueAccessor, OnInit {
   readonly class = input<string | undefined>();
-  readonly id = input(`sanring-switch-${nextUniqueId++}`);
+  readonly id = input(inject(_IdGenerator).getId('sanring-switch-', true));
   readonly checked = input(false, { transform: booleanAttribute });
   readonly disabled = input(false, { transform: booleanAttribute });
   readonly invalid = input(false, { transform: booleanAttribute });

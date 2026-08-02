@@ -8,18 +8,17 @@ import {
   inject,
   input,
 } from '@angular/core';
+import { _IdGenerator } from '@angular/cdk/a11y';
 import { LucideCircle } from '@lucide/angular';
 import { cn } from '../../utils';
 import {
   RADIO_INDICATOR_ICON_CLASS,
-  RADIO_SIZE_CLASS,
   SELECTION_CONTROL_BASE_CLASS,
   SELECTION_CONTROL_FOCUS_CLASS,
 } from '../component-styles';
 import { RadioGroupComponent } from './radio-group.component';
+import { RADIO_SIZE_CLASS } from './radio.styles';
 import { RadioValue } from './radio.types';
-
-let nextUniqueId = 0;
 
 @Component({
   selector: 'sanring-radio-item',
@@ -59,7 +58,7 @@ export class RadioItemComponent {
   protected readonly radioIndicatorIconClass = RADIO_INDICATOR_ICON_CLASS;
 
   readonly class = input<string | undefined>();
-  readonly id = input(`sanring-radio-${nextUniqueId++}`);
+  readonly id = input(inject(_IdGenerator).getId('sanring-radio-', true));
   readonly value = input.required<RadioValue>();
   readonly disabled = input(false, { transform: booleanAttribute });
   readonly ariaLabel = input<string | undefined>();

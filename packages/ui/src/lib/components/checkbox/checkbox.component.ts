@@ -15,22 +15,16 @@ import {
   output,
   signal,
 } from '@angular/core';
+import { _IdGenerator } from '@angular/cdk/a11y';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR, NgControl, Validators } from '@angular/forms';
 import { LucideCheck, LucideMinus } from '@lucide/angular';
 import { Observable, Subject } from 'rxjs';
 import { cn } from '../../utils';
-import {
-  CHECKBOX_ICON_SIZE_CLASSES,
-  CHECKBOX_SIZE_CLASSES,
-  CHECKBOX_STATE_CLASS,
-  SELECTION_CONTROL_BASE_CLASS,
-  SELECTION_CONTROL_FOCUS_CLASS,
-} from '../component-styles';
+import { SELECTION_CONTROL_BASE_CLASS, SELECTION_CONTROL_FOCUS_CLASS } from '../component-styles';
 import { FieldType, SanringFieldControl, SANRING_FIELD_CONTROL } from '../field/field.type';
+import { CHECKBOX_ICON_SIZE_CLASSES, CHECKBOX_SIZE_CLASSES, CHECKBOX_STATE_CLASS } from './checkbox.styles';
 import { CheckedState, CheckboxSize } from './checkbox.types';
-
-let nextUniqueId = 0;
 
 @Component({
   selector: 'sanring-checkbox',
@@ -91,7 +85,7 @@ let nextUniqueId = 0;
 })
 export class CheckboxComponent implements ControlValueAccessor, OnInit {
   readonly class = input<string | undefined>();
-  readonly id = input(`sanring-checkbox-${nextUniqueId++}`);
+  readonly id = input(inject(_IdGenerator).getId('sanring-checkbox-', true));
   readonly disabled = input(false, { transform: booleanAttribute });
   readonly name = input<string | undefined>();
   readonly value = input<string | undefined>();
@@ -107,15 +101,13 @@ export class CheckboxComponent implements ControlValueAccessor, OnInit {
 
   protected checkedSignal = signal<CheckedState>(false);
   protected readonly isDisabled = computed(() => this.disabled() || this.disabledState());
-  protected readonly iconSizeClass = computed(
-    () => CHECKBOX_ICON_SIZE_CLASSES[this.size()] ?? CHECKBOX_ICON_SIZE_CLASSES['md'],
-  );
+  protected readonly iconSizeClass = computed(() => CHECKBOX_ICON_SIZE_CLASSES[this.size()]);
   protected readonly checkboxClass = computed(() =>
     cn(
       SELECTION_CONTROL_BASE_CLASS,
       SELECTION_CONTROL_FOCUS_CLASS,
       'rounded-[var(--sanring-radius-xs)] border border-primary',
-      CHECKBOX_SIZE_CLASSES[this.size()] ?? CHECKBOX_SIZE_CLASSES['md'],
+      CHECKBOX_SIZE_CLASSES[this.size()],
       CHECKBOX_STATE_CLASS,
       // 讀 this.errorState（getter）而不是直接寫條件，是為了讓下面 stateVersion 的橋接生效，
       // 否則 ngControl.invalid/touched 不是 signal，這個 computed 不會在驗證狀態改變時重算
@@ -147,7 +139,9 @@ export class CheckboxComponent implements ControlValueAccessor, OnInit {
 
   private readonly fieldDescribedByIds = signal<string[]>([]);
   protected readonly computedAriaDescribedBy = computed(() => {
-    const ids = [this.ariaDescribedBy(), ...this.fieldDescribedByIds()].filter((v): v is string => !!v);
+    const ids = [this.ariaDescribedBy(), ...this.fieldDescribedByIds()].filter(
+      (v): v is string => !!v,
+    );
     return ids.length ? ids.join(' ') : undefined;
   });
 
