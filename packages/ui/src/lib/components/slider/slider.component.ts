@@ -16,14 +16,13 @@ import {
   signal,
   untracked,
 } from '@angular/core';
+import { _IdGenerator } from '@angular/cdk/a11y';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR, NgControl, Validators } from '@angular/forms';
 import { Observable, Subject } from 'rxjs';
 import { cn } from '../../utils';
 import { SELECTION_CONTROL_FOCUS_CLASS } from '../component-styles';
 import { FieldType, SanringFieldControl, SANRING_FIELD_CONTROL } from '../field/field.type';
-
-let nextUniqueId = 0;
 
 @Component({
   selector: 'sanring-slider',
@@ -71,18 +70,18 @@ let nextUniqueId = 0;
     <div
       class="relative h-2 w-full grow overflow-hidden rounded-full bg-[var(--sanring-border-strong)]"
     >
-      <div class="absolute h-full bg-[var(--sanring-foreground)]" [style.width.%]="percentage()"></div>
+      <div
+        class="absolute h-full bg-[var(--sanring-foreground)]"
+        [style.width.%]="percentage()"
+      ></div>
     </div>
 
-    <span
-      [class]="thumbClass()"
-      [style.left.%]="percentage()"
-    ></span>
+    <span [class]="thumbClass()" [style.left.%]="percentage()"></span>
   `,
 })
 export class SliderComponent implements ControlValueAccessor, OnInit {
   readonly class = input<string | undefined>();
-  readonly id = input(`sanring-slider-${nextUniqueId++}`);
+  readonly id = input(inject(_IdGenerator).getId('sanring-slider-', true));
   readonly min = input(0, { transform: numberAttribute });
   readonly max = input(100, { transform: numberAttribute });
   readonly step = input(1, { transform: numberAttribute });
@@ -148,7 +147,9 @@ export class SliderComponent implements ControlValueAccessor, OnInit {
   private readonly fieldDescribedByIds = signal<string[]>([]);
 
   protected readonly computedAriaDescribedBy = computed(() => {
-    const ids = [this.ariaDescribedBy(), ...this.fieldDescribedByIds()].filter((v): v is string => !!v);
+    const ids = [this.ariaDescribedBy(), ...this.fieldDescribedByIds()].filter(
+      (v): v is string => !!v,
+    );
     return ids.length ? ids.join(' ') : undefined;
   });
 

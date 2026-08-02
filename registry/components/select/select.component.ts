@@ -1,12 +1,21 @@
 import { CdkOverlayOrigin } from '@angular/cdk/overlay';
-import { Component, DestroyRef, ElementRef, Injector, OnInit, forwardRef, inject, model, signal } from '@angular/core';
+import {
+  Component,
+  DestroyRef,
+  ElementRef,
+  Injector,
+  OnInit,
+  forwardRef,
+  inject,
+  model,
+  signal,
+} from '@angular/core';
+import { _IdGenerator } from '@angular/cdk/a11y';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR, NgControl, Validators } from '@angular/forms';
 import { Subject } from 'rxjs';
 import { FieldType, SanringFieldControl, SANRING_FIELD_CONTROL } from '../field/field.type';
 import { SelectValue } from './select.type';
-
-let nextSelectId = 0;
 
 @Component({
   selector: 'sanring-select',
@@ -27,8 +36,8 @@ let nextSelectId = 0;
 export class SelectComponent<T extends SelectValue = SelectValue>
   implements ControlValueAccessor, SanringFieldControl<T>, OnInit
 {
-  readonly id = `sanring-select-${nextSelectId++}`;
-  readonly contentId = `sanring-select-content-${nextSelectId++}`;
+  readonly id = inject(_IdGenerator).getId('sanring-select-', true);
+  readonly contentId = inject(_IdGenerator).getId('sanring-select-content-', true);
 
   // 🧠 元件的核心狀態
   readonly isOpen = model<boolean>(false); // 選單開關狀態

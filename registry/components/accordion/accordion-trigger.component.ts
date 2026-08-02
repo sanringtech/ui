@@ -1,4 +1,12 @@
-import { ChangeDetectionStrategy, Component, computed, inject, input } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  computed,
+  effect,
+  inject,
+  input,
+  viewChild,
+} from '@angular/core';
 import { AccordionTrigger as NgAccordionTrigger } from '@angular/aria/accordion';
 import { LucideChevronDown } from '@lucide/angular';
 import { cn } from '../shared/utils';
@@ -35,9 +43,21 @@ import { AccordionTriggerVariant } from './accordion.type';
 })
 export class AccordionTriggerComponent {
   protected item = inject(AccordionItemComponent);
+  private readonly trigger = viewChild(NgAccordionTrigger);
 
   readonly class = input<string | undefined>();
   readonly variant = input<AccordionTriggerVariant>('default');
+
+  constructor() {
+    effect(() => {
+      const trigger = this.trigger();
+      const expanded = this.item.isExpanded();
+
+      if (trigger && trigger.expanded() !== expanded) {
+        trigger.expanded.set(expanded);
+      }
+    });
+  }
 
   protected readonly triggerClass = computed(() =>
     cn(

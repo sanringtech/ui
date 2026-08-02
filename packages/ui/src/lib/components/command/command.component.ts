@@ -11,11 +11,10 @@ import {
   signal,
   untracked,
 } from '@angular/core';
+import { _IdGenerator } from '@angular/cdk/a11y';
 import { cn } from '../../utils';
 import { CollectionController } from '../shared/collection-controller';
 import { CommandItemComponent } from './command-item.component';
-
-let nextCommandId = 0;
 
 @Component({
   selector: 'sanring-command',
@@ -34,7 +33,7 @@ export class CommandComponent {
   readonly shouldFilter = input(true, { transform: booleanAttribute });
   readonly valueChange = output<string>();
 
-  readonly listId = `sanring-command-list-${nextCommandId++}`;
+  readonly listId = inject(_IdGenerator).getId('sanring-command-list-', true);
   readonly searchQuery = signal('');
 
   private readonly injector = inject(Injector);

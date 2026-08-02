@@ -12,10 +12,9 @@ import {
   signal,
   untracked,
 } from '@angular/core';
+import { _IdGenerator } from '@angular/cdk/a11y';
 import { AccordionPanel as NgAccordionPanel } from '@angular/aria/accordion';
 import { cn } from '../shared/utils';
-
-let nextAccordionItemId = 0;
 
 @Component({
   selector: 'sanring-accordion-item',
@@ -30,7 +29,7 @@ let nextAccordionItemId = 0;
 })
 export class AccordionItemComponent {
   private readonly injector = inject(Injector);
-  readonly id = `sanring-accordion-item-${nextAccordionItemId++}`;
+  readonly id = inject(_IdGenerator).getId('sanring-accordion-item-', true);
   private readonly expandedState = signal(false);
   readonly panel = signal<NgAccordionPanel | null>(null);
   readonly class = input<string | undefined>();
@@ -49,7 +48,9 @@ export class AccordionItemComponent {
     });
   }
 
-  protected readonly itemClass = computed(() => cn('border-b border-[var(--sanring-border)]', this.class()));
+  protected readonly itemClass = computed(() =>
+    cn('border-b border-[var(--sanring-border)]', this.class()),
+  );
 
   registerPanel(panel: NgAccordionPanel) {
     this.panel.set(panel);

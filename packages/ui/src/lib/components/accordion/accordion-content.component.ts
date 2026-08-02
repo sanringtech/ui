@@ -2,6 +2,7 @@ import {
   AfterViewInit,
   ChangeDetectionStrategy,
   Component,
+  ElementRef,
   ViewChild,
   computed,
   inject,
@@ -22,10 +23,12 @@ import { AccordionItemComponent } from './accordion-item.component';
   template: `
     <div
       ngAccordionPanel
+      #panelElement
       #panel="ngAccordionPanel"
       [preserveContent]="true"
       data-accordion-content
-      [id]="item?.id + '-content'"
+      [id]="item ? item.id + '-content' : ''"
+      [attr.aria-labelledby]="item ? item.id + '-header' : null"
       [attr.data-state]="item?.state() ?? 'closed'"
       [class]="contentContainerClass()"
     >
@@ -42,12 +45,17 @@ export class AccordionContentComponent implements AfterViewInit {
   protected readonly item = inject(AccordionItemComponent, { optional: true });
 
   @ViewChild(NgAccordionPanel) private panel?: NgAccordionPanel;
+  @ViewChild('panelElement') private panelElement?: ElementRef<HTMLElement>;
 
   readonly class = input<string | undefined>();
 
   ngAfterViewInit() {
     if (this.item && this.panel) {
       this.item.registerPanel(this.panel);
+    }
+
+    if (this.item && this.panelElement) {
+      this.panelElement.nativeElement.setAttribute('aria-labelledby', `${this.item.id}-header`);
     }
   }
 

@@ -12,6 +12,7 @@ import {
   numberAttribute,
   signal,
 } from '@angular/core';
+import { _IdGenerator } from '@angular/cdk/a11y';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR, NgControl, Validators } from '@angular/forms';
 import { Observable, Subject } from 'rxjs';
@@ -64,7 +65,7 @@ export class FileUploadComponent implements ControlValueAccessor, OnInit {
   // 3. 給子元件 (Dropzone/Trigger) 呼叫的 API
   // ==========================================
 
-  readonly id = `sanring-file-upload-${nextFileUploadId++}`;
+  readonly id = inject(_IdGenerator).getId('sanring-file-upload-', true);
   focused = false;
   ngControl: NgControl | null = null;
 
@@ -90,7 +91,9 @@ export class FileUploadComponent implements ControlValueAccessor, OnInit {
 
   get errorState(): boolean {
     this.stateVersion();
-    return this.rejectedFiles().length > 0 || !!(this.ngControl?.invalid && this.ngControl?.touched);
+    return (
+      this.rejectedFiles().length > 0 || !!(this.ngControl?.invalid && this.ngControl?.touched)
+    );
   }
 
   get isDisabled(): boolean {
@@ -316,8 +319,6 @@ interface FileValidationResult {
   accepted: File[];
   rejected: FileRejection[];
 }
-
-let nextFileUploadId = 0;
 
 function nullableNumberAttribute(value: unknown): number | null {
   if (value === null || value === undefined || value === '') return null;

@@ -1,4 +1,4 @@
-import { Highlightable } from '@angular/cdk/a11y';
+import { Highlightable, _IdGenerator } from '@angular/cdk/a11y';
 import {
   Component,
   ElementRef,
@@ -17,8 +17,6 @@ import {
 } from '../component-styles';
 import { isCollectionItemVisible } from '../shared/collection-state';
 import { CommandComponent } from './command.component';
-
-let nextItemId = 0;
 
 @Component({
   selector: 'sanring-command-item',
@@ -44,13 +42,14 @@ export class CommandItemComponent implements Highlightable {
   // Highlightable/ListKeyManagerOption 要求 disabled 是一般 boolean 屬性，signal input
   // 沒辦法同名共用，所以底層 input 改名 disabledInput，再用 alias 讓範本上還是寫
   // `disabled`（跟這個 library 其他元件的慣例一致），下面用 getter 轉成 Highlightable 要的形狀。
+  // eslint-disable-next-line @angular-eslint/no-input-rename
   readonly disabledInput = input(false, { alias: 'disabled', transform: booleanAttribute });
   readonly class = input<string | undefined>();
 
   /** 點擊或按下 Enter 時觸發，帶出這個項目的 value */
   readonly selected = output<string>();
 
-  readonly id = `sanring-command-item-${nextItemId++}`;
+  readonly id = inject(_IdGenerator).getId('sanring-command-item-', true);
 
   protected readonly command = inject(CommandComponent);
   private readonly el = inject(ElementRef<HTMLElement>);

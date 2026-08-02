@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, booleanAttribute, inject, input } from '@angular/core';
 import { AccordionGroup as NgAccordionGroup } from '@angular/aria/accordion';
 
 @Component({
@@ -8,7 +8,7 @@ import { AccordionGroup as NgAccordionGroup } from '@angular/aria/accordion';
   hostDirectives: [
     {
       directive: NgAccordionGroup,
-      inputs: ['multiExpandable: multi', 'disabled', 'softDisabled', 'wrap'],
+      inputs: ['disabled', 'softDisabled', 'wrap'],
     },
   ],
   // 父容器只需要負責接收裡面的 Item 即可
@@ -21,6 +21,21 @@ import { AccordionGroup as NgAccordionGroup } from '@angular/aria/accordion';
 })
 export class AccordionComponent {
   private readonly accordion = inject(NgAccordionGroup);
+  readonly multi = input(false, { transform: booleanAttribute });
+
+  constructor() {
+    const accordion = this.accordion as NgAccordionGroup & {
+      multiExpandable: () => boolean;
+      _pattern: {
+        inputs: { multiExpandable: () => boolean };
+        expansionBehavior: { inputs: { multiExpandable: () => boolean } };
+      };
+    };
+
+    accordion.multiExpandable = this.multi;
+    accordion._pattern.inputs.multiExpandable = this.multi;
+    accordion._pattern.expansionBehavior.inputs.multiExpandable = this.multi;
+  }
 
   openAll() {
     this.accordion.expandAll();

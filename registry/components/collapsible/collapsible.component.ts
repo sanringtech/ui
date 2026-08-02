@@ -3,12 +3,12 @@ import {
   Component,
   booleanAttribute,
   computed,
+  inject,
   input,
   model,
 } from '@angular/core';
+import { _IdGenerator } from '@angular/cdk/a11y';
 import { cn } from '../shared/utils';
-
-let _nextId = 0;
 
 @Component({
   selector: 'sanring-collapsible',
@@ -26,13 +26,13 @@ export class CollapsibleComponent {
   readonly open = model<boolean>(false);
   readonly disabled = input(false, { transform: booleanAttribute });
 
-  private readonly _id = ++_nextId;
-  readonly contentId = `sanring-collapsible-${this._id}-content`;
-  readonly triggerId = `sanring-collapsible-${this._id}-trigger`;
+  private readonly _id = inject(_IdGenerator).getId('sanring-collapsible-', true);
+  readonly contentId = `${this._id}-content`;
+  readonly triggerId = `${this._id}-trigger`;
 
   toggle(): void {
     if (this.disabled()) return;
-    this.open.update(v => !v);
+    this.open.update((v) => !v);
   }
 
   protected readonly hostClass = computed(() => cn(this.class()));

@@ -14,6 +14,7 @@ import {
   output,
   signal,
 } from '@angular/core';
+import { _IdGenerator } from '@angular/cdk/a11y';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR, NgControl, Validators } from '@angular/forms';
 import {
@@ -41,8 +42,6 @@ const DEFAULT_GRID_COLUMNS: Record<PickerGranularity, number> = {
   quarter: 4,
   year: 3,
 };
-
-let nextDatePickerId = 0;
 
 function quarterIndexOf(date: Date, quarterStartMonth: QuarterStartMonth): number {
   return Math.floor(((date.getMonth() - quarterStartMonth + 12) % 12) / 3);
@@ -117,12 +116,17 @@ export class DatePickerComponent implements ControlValueAccessor, OnInit {
   private readonly injectedQuarterStartsOn = inject(CALENDAR_QUARTER_STARTS_ON, { optional: true });
 
   readonly class = input<string | undefined>();
-  readonly id = input(`sanring-date-picker-${nextDatePickerId++}`);
+  readonly id = input(inject(_IdGenerator).getId('sanring-date-picker-', true));
   readonly size = input<DatePickerSize>('md');
   readonly locale = input<CalendarLocale | undefined>(undefined);
   readonly granularity = input<PickerGranularity>('month');
   readonly mode = input<'single' | 'range' | 'multi'>('single');
-  readonly quarterLabels = input<readonly [string, string, string, string]>(['Q1', 'Q2', 'Q3', 'Q4']);
+  readonly quarterLabels = input<readonly [string, string, string, string]>([
+    'Q1',
+    'Q2',
+    'Q3',
+    'Q4',
+  ]);
   readonly yearsToDisplay = input<number>(12);
   readonly gridColumns = input<number | undefined>(undefined);
   readonly disabled = input<DisabledInput | undefined>(undefined);

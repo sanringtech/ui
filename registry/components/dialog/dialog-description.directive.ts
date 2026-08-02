@@ -1,9 +1,8 @@
 // dialog-description.directive.ts
-import { Directive, computed, input } from '@angular/core';
+import { Directive, computed, inject, input } from '@angular/core';
+import { _IdGenerator } from '@angular/cdk/a11y';
 import { cn } from '../shared/utils';
 import { DESCRIPTION_TEXT_CLASS } from '../shared/component-styles';
-
-let nextDialogDescriptionId = 0;
 
 @Directive({
   selector: '[sanringDialogDescription]',
@@ -14,13 +13,10 @@ let nextDialogDescriptionId = 0;
   },
 })
 export class DialogDescriptionDirective {
-  readonly id = input(`sanring-dialog-description-${nextDialogDescriptionId++}`);
+  readonly id = input(inject(_IdGenerator).getId('sanring-dialog-description-', true));
   readonly class = input<string | undefined>();
 
   protected readonly dialogDescriptionClass = computed(() =>
-    cn(
-      DESCRIPTION_TEXT_CLASS,
-      this.class(),
-    ),
+    cn(DESCRIPTION_TEXT_CLASS, this.class()),
   );
 }

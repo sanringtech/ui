@@ -1,8 +1,7 @@
 import { CdkOverlayOrigin } from '@angular/cdk/overlay';
-import { ChangeDetectionStrategy, Component, input, model, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, input, model, signal } from '@angular/core';
+import { _IdGenerator } from '@angular/cdk/a11y';
 import type { PopoverAlign } from './popover.type';
-
-let _nextPopoverId = 0;
 
 @Component({
   selector: 'sanring-popover',
@@ -11,17 +10,17 @@ let _nextPopoverId = 0;
   template: `<ng-content></ng-content>`,
 })
 export class PopoverComponent {
-  private readonly _id = ++_nextPopoverId;
+  private readonly _id = inject(_IdGenerator).getId('sanring-popover-', true);
 
   readonly isOpen = model(false);
-  readonly align  = input<PopoverAlign>('center');
+  readonly align = input<PopoverAlign>('center');
 
   /** 供 PopoverTitle 綁定 id，讓面板 aria-labelledby 自動關聯 */
-  readonly titleId = `sanring-popover-${this._id}-title`;
+  readonly titleId = `${this._id}-title`;
   /** 供 PopoverDescription 綁定 id，讓面板 aria-describedby 自動關聯 */
-  readonly descId  = `sanring-popover-${this._id}-desc`;
+  readonly descId = `${this._id}-desc`;
   /** 供 trigger aria-controls 與 content id 關聯 */
-  readonly contentId = `sanring-popover-${this._id}-content`;
+  readonly contentId = `${this._id}-content`;
 
   /**
    * 由 PopoverTriggerDirective 登記，供 CDK ConnectedOverlay 定位。

@@ -14,6 +14,7 @@ import {
   output,
   signal,
 } from '@angular/core';
+import { _IdGenerator } from '@angular/cdk/a11y';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR, NgControl, Validators } from '@angular/forms';
 import { Observable, Subject } from 'rxjs';
@@ -21,8 +22,6 @@ import { cn } from '../shared/utils';
 import { FieldType, SanringFieldControl, SANRING_FIELD_CONTROL } from '../field/field.type';
 import { RadioOrientation, RadioValue } from './radio.types';
 import { RadioItemComponent } from './radio-item.component';
-
-let nextGroupId = 0;
 
 @Component({
   selector: 'sanring-radio-group',
@@ -66,8 +65,8 @@ let nextGroupId = 0;
 })
 export class RadioGroupComponent implements ControlValueAccessor, OnInit {
   readonly class = input<string | undefined>();
-  readonly id = input(`sanring-radio-group-${nextGroupId++}`);
-  readonly name = input(`sanring-radio-group-${nextGroupId++}`);
+  readonly id = input(inject(_IdGenerator).getId('sanring-radio-group-', true));
+  readonly name = input(inject(_IdGenerator).getId('sanring-radio-group-', true));
   readonly required = input(false, { transform: booleanAttribute });
   readonly disabled = input(false, { transform: booleanAttribute });
   readonly orientation = input<RadioOrientation>(RadioOrientation.Vertical);
@@ -92,8 +91,8 @@ export class RadioGroupComponent implements ControlValueAccessor, OnInit {
   private _focusedItem: RadioItemComponent | null = null;
 
   readonly activeTabItem = computed(() => {
-    const items = this._items().filter(i => !i.disabled());
-    return items.find(i => i.value() === this.valueSignal()) ?? items[0] ?? null;
+    const items = this._items().filter((i) => !i.disabled());
+    return items.find((i) => i.value() === this.valueSignal()) ?? items[0] ?? null;
   });
 
   // ==========================================
@@ -112,7 +111,9 @@ export class RadioGroupComponent implements ControlValueAccessor, OnInit {
   private readonly fieldDescribedByIds = signal<string[]>([]);
 
   protected readonly computedAriaDescribedBy = computed(() => {
-    const ids = [this.ariaDescribedBy(), ...this.fieldDescribedByIds()].filter((v): v is string => !!v);
+    const ids = [this.ariaDescribedBy(), ...this.fieldDescribedByIds()].filter(
+      (v): v is string => !!v,
+    );
     return ids.length ? ids.join(' ') : undefined;
   });
 
@@ -183,7 +184,7 @@ export class RadioGroupComponent implements ControlValueAccessor, OnInit {
   }
 
   onKeydown(event: KeyboardEvent): void {
-    const items = this._items().filter(i => !i.disabled());
+    const items = this._items().filter((i) => !i.disabled());
     if (items.length === 0) return;
 
     const currentIndex = this._focusedItem ? items.indexOf(this._focusedItem) : -1;

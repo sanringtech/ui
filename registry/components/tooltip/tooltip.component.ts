@@ -1,8 +1,7 @@
-import { Component, OnDestroy, computed, input, signal } from '@angular/core';
+import { Component, OnDestroy, computed, inject, input, signal } from '@angular/core';
+import { _IdGenerator } from '@angular/cdk/a11y';
 import { CdkOverlayOrigin } from '@angular/cdk/overlay';
 import { cn } from '../shared/utils';
-
-let nextTooltipId = 0;
 
 @Component({
   selector: 'sanring-tooltip',
@@ -19,7 +18,7 @@ export class TooltipComponent implements OnDestroy {
 
   readonly isOpen = signal(false);
   readonly triggerOrigin = signal<CdkOverlayOrigin | null>(null);
-  readonly contentId = `sanring-tooltip-${++nextTooltipId}`;
+  readonly contentId = inject(_IdGenerator).getId('sanring-tooltip-', true);
   protected readonly tooltipClass = computed(() => cn(this.class()));
 
   private timeoutId?: ReturnType<typeof setTimeout>;
