@@ -222,4 +222,55 @@ describe('addCommand (integration)', () => {
 
     expect(readFileSync(componentFile, 'utf-8')).toBe('hand-written before add ever ran\n');
   });
+
+  it('prompts to update peer dependencies when the installed version spec differs', async () => {
+    const logs: string[] = [];
+    vi.mocked(console.log).mockImplementation((...args: unknown[]) => {
+      logs.push(args.join(' '));
+    });
+
+    writeFileSync(
+      join(projectDir, 'package.json'),
+      JSON.stringify({ dependencies: { '@lucide/angular': '^1.0.0' } }),
+      'utf-8',
+    );
+    const registryJsonPath = join(registryDir, 'registry.json');
+    const registryJson = JSON.parse(readFileSync(registryJsonPath, 'utf-8')) as Registry;
+    registryJson.components[0].peerDependencies = { '@lucide/angular': '^1.18.0' };
+    writeFileSync(registryJsonPath, JSON.stringify(registryJson, null, 2), 'utf-8');
+
+    await addCommand.parseAsync(['widget', '--registry', registryDir, '--dry-run'], {
+      from: 'user',
+    });
+
+    expect(logs.some((line) => line.includes('Updating peer dependencies'))).toBe(true);
+    expect(
+      logs.some((line) => line.includes('Would install: npm install @lucide/angular@^1.18.0')),
+    ).toBe(true);
+  });
+
+  it('does not update peer dependencies when the installed version spec already satisfies the minimum', async () => {
+    const logs: string[] = [];
+    vi.mocked(console.log).mockImplementation((...args: unknown[]) => {
+      logs.push(args.join(' '));
+    });
+
+    writeFileSync(
+      join(projectDir, 'package.json'),
+      JSON.stringify({ dependencies: { '@lucide/angular': '^1.20.0' } }),
+      'utf-8',
+    );
+    const registryJsonPath = join(registryDir, 'registry.json');
+    const registryJson = JSON.parse(readFileSync(registryJsonPath, 'utf-8')) as Registry;
+    registryJson.components[0].peerDependencies = { '@lucide/angular': '^1.18.0' };
+    writeFileSync(registryJsonPath, JSON.stringify(registryJson, null, 2), 'utf-8');
+
+    await addCommand.parseAsync(['widget', '--registry', registryDir, '--dry-run'], {
+      from: 'user',
+    });
+
+    expect(logs.some((line) => line.includes('Already installed: @lucide/angular'))).toBe(true);
+    expect(logs.some((line) => line.includes('Updating peer dependencies'))).toBe(false);
+    expect(logs.some((line) => line.includes('Would install:'))).toBe(false);
+  });
 });

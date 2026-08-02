@@ -18,11 +18,12 @@ import {
   createRegistryIndex,
 } from '../registry.js';
 import {
-  getInstalledPackages,
+  getInstalledPackageSpecs,
   hashContent,
   isAngularProject,
   fetchTextTargetsConcurrent,
   readConfig,
+  satisfiesMinimumPackageSpec,
   writeConfig,
 } from '../utils.js';
 import { printFileDiff } from './diff.js';
@@ -450,17 +451,37 @@ export const addCommand = new Command('add')
       // Peer dependencies — collected once across the whole install set.
       const allPeerDeps = collectPeerDeps(toInstall, registryIndex);
       if (Object.keys(allPeerDeps).length > 0) {
-        const installed = getInstalledPackages(cwd);
+        const installed = getInstalledPackageSpecs(cwd);
         const missingDeps = Object.entries(allPeerDeps).filter(([pkg]) => !installed.has(pkg));
-        const already = Object.keys(allPeerDeps).filter((pkg) => installed.has(pkg));
+        const outdatedDeps = Object.entries(allPeerDeps).filter(([pkg, ver]) => {
+          const installedSpec = installed.get(pkg);
+          return installedSpec !== undefined && !satisfiesMinimumPackageSpec(installedSpec, ver);
+        });
+        const already = Object.entries(allPeerDeps)
+          .filter(([pkg, ver]) => {
+            const installedSpec = installed.get(pkg);
+            return installedSpec !== undefined && satisfiesMinimumPackageSpec(installedSpec, ver);
+          })
+          .map(([pkg]) => pkg);
+        const depsToInstall = [...missingDeps, ...outdatedDeps];
 
         if (already.length > 0) {
           console.log(pc.dim(`  Already installed: ${already.map((p) => pc.green(p)).join(', ')}`));
         }
 
-        if (missingDeps.length > 0) {
+        if (outdatedDeps.length > 0) {
+          console.log(
+            pc.dim(
+              `  Updating peer dependencies: ${outdatedDeps
+                .map(([pkg, ver]) => `${pc.yellow(pkg)} ${installed.get(pkg)} → ${ver}`)
+                .join(', ')}`,
+            ),
+          );
+        }
+
+        if (depsToInstall.length > 0) {
           const pm = detectPackageManager(cwd);
-          const pkgs = missingDeps.map(([pkg, ver]) => `${pkg}@${ver}`);
+          const pkgs = depsToInstall.map(([pkg, ver]) => `${pkg}@${ver}`);
           const cmd = installCommand(pm, pkgs);
 
           if (options.dryRun) {
