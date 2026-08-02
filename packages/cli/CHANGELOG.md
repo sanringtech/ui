@@ -1,5 +1,11 @@
 # @sanring/cli
 
+## 0.17.2
+
+### Patch Changes
+
+- 27be1c0: Update component peer dependency handling so `sanring add` also prompts to install peer dependencies when the consumer project has a different version spec, keeping copied components aligned with the registry metadata.
+
 ## 0.17.1
 
 ### Patch Changes
