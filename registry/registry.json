@@ -416,28 +416,6 @@
       ]
     },
     {
-      "name": "menu",
-      "description": "Displays a menu to the user \u2014 such as a set of actions or functions.",
-      "sharedDeps": [
-        "utils",
-        "component-styles"
-      ],
-      "peerDependencies": {
-        "@angular/aria": "^22.0.0",
-        "@angular/cdk": "^22.0.0"
-      },
-      "files": [
-        "menu/menu.component.ts",
-        "menu/menu-trigger.directive.ts",
-        "menu/menu-content.component.ts",
-        "menu/menu-content.directive.ts",
-        "menu/menu-item.directive.ts",
-        "menu/menu-label.component.ts",
-        "menu/menu.type.ts",
-        "menu/index.ts"
-      ]
-    },
-    {
       "name": "popover",
       "description": "Displays rich content in a portal, triggered by a button.",
       "sharedDeps": [
