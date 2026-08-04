@@ -6,11 +6,15 @@ on:
       - main
     paths:
       - 'apps/docs/src/app/navigation/docs-navigation.ts'
+      - 'apps/docs/src/app/app.routes.ts'
+      - 'apps/docs/src/app/pages/components/**'
+      - 'packages/ui/src/lib/components/**'
+      - 'packages/ui/src/public-api.ts'
       - 'registry/**'
 
 jobs:
   check:
-    name: Verify docs components exist in the CLI registry
+    name: Verify component is consistent across registry, packages/ui, public-api and docs
     runs-on: ubuntu-latest
     steps:
       - name: Checkout

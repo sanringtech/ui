@@ -6,8 +6,10 @@
 
 ## P1 — registry / packages/ui / docs / public-api 一致性
 
-- [ ] 建立一致性檢查,確保每個正式元件在 `registry`、`packages/ui`、docs navigation/page、`public-api.ts` 的狀態一致
+- [x] 建立一致性檢查,確保每個正式元件在 `registry`、`packages/ui`、docs navigation/page、`public-api.ts` 的狀態一致
 - [x] 移除殘留 `menu` registry 元件,避免和 `dropdown-menu` / `context-menu` 語意重疊
+
+**已完成**:擴充 `packages/cli/scripts/check-registry-sync.mjs`,原本只檢查 docs↔registry 兩面,現在同時檢查四面八個方向：registry.json 內部完整性(`files` 是否真的存在)、registry.json↔`registry/components/`、registry.json↔`packages/ui` lib(這正是先前 `menu` bug 的那種落差)、`packages/ui` lib↔`public-api.ts`、docs nav id↔registry.json、docs nav id↔`packages/ui` lib、docs nav id↔docs page 檔案、docs nav id↔`app.routes.ts` 路由註冊。文件化但缺實作/路由的方向一律 fail CI;實作了但還沒文件化的方向只 warn(視為正常 WIP)。用手動模擬 drift(假 registry entry、註解掉一個 public-api export)驗證過腳本抓得到,目前 50 個正式元件在全部八個方向都一致,`pnpm lint`/腳本本身都是綠的。同步把 `.github/workflows/registry-sync-check.yml` 的 `paths` 觸發範圍擴大,涵蓋新檢查會用到的檔案,避免新檢查形同虛設。
 
 **現況**:`menu` 曾只存在於 `registry` / README,沒有 `packages/ui` lib、沒有 docs page、也沒有 public API export。此類落差會讓 CLI 可安裝清單、文件站、套件開發 surface 彼此不同步。
 
@@ -29,7 +31,26 @@
 
 ---
 
-## P3 — 每個 component 至少有最低 spec
+## P3 — 建立 component audit matrix 並逐一盤點 lib
+
+- [ ] 建立 `COMPONENT_AUDIT.md` 或等價盤點表,列出 50 個正式 component 的品質狀態與下一步 action
+- [ ] 依風險分批檢查 `packages/ui` / `registry` / docs,不要用無順序的人工掃描
+
+**盤點欄位**:每個 component 至少記錄 `registry/package/docs/public-api 一致性`、`spec 狀態`、`a11y`、`keyboard`、`API 穩定性`、`SSR/hydration 安全`、`docs 完整度`、`風險等級`、`下一步 action`。
+
+**建議順序**:
+
+1. 高風險互動元件:`dialog`、`alert-dialog`、`popover`、`select`、`combobox`、`command`、`dropdown-menu`、`context-menu`、`tooltip`、`sheet`
+2. form/control 元件:`input`、`field`、`checkbox`、`radio`、`switch`、`slider`、`date-picker`、`calendar`、`file-upload`、`otp-input`、`textarea`
+3. display/layout 元件:`accordion`、`tabs`、`table`、`carousel`、`resizable`、`avatar`、`breadcrumb`、`card`、`alert`、`badge`、`progress`、`skeleton`、`spinner`、`tag`、`timeline`、`tree`
+
+**風險**:如果沒有盤點矩陣,逐一檢查 lib 很容易變成「看過但沒有結論」,也會先花時間在低風險元件,延後發現真正影響 production 採用的互動/a11y/API 問題。
+
+**成本**:中。先建立矩陣成本低,但後續每批元件需要逐一補結論與 follow-up。
+
+---
+
+## P4 — 每個 component 至少有最低 spec
 
 - [ ] 補齊無 spec 元件的最低測試:render、class merging、a11y/keyboard 核心行為
 
@@ -41,7 +62,7 @@
 
 ---
 
-## P4 — docs 要成為採用入口
+## P5 — docs 要成為採用入口
 
 - [ ] 補齊每個 component docs 的採用資訊:usage、installation、API、accessibility notes、keyboard behavior、controlled/uncontrolled 或 state 說明
 
@@ -53,7 +74,7 @@
 
 ---
 
-## P5 — docs 站沒有搜尋功能
+## P6 — docs 站沒有搜尋功能
 
 - [x] 幫 docs 站加上搜尋(至少支援元件名稱/描述搜尋,理想上做成 Cmd+K 面板)
 
@@ -63,7 +84,7 @@
 
 ---
 
-## P6 — 沒有 MCP server 整合
+## P7 — 沒有 MCP server 整合
 
 - [ ] 評估幫 `@sanring/cli` 加上 MCP server 支援,讓 Claude Code / Cursor 等 AI agent 能直接查詢、安裝元件
 
@@ -73,7 +94,7 @@
 
 ---
 
-## P7 — 沒有自訂/第三方 registry 支援
+## P8 — 沒有自訂/第三方 registry 支援
 
 - [ ] 評估支援 `@namespace/component` 語法 + `sanring build` 指令,讓團隊可以架自己的私有 registry
 
@@ -83,7 +104,7 @@
 
 ---
 
-## P8 — `sanring init` 沒有 monorepo/workspace 偵測
+## P9 — `sanring init` 沒有 monorepo/workspace 偵測
 
 - [ ] 評估 `init` 指令加上 monorepo 結構偵測與對應處理邏輯
 
@@ -93,7 +114,7 @@
 
 ---
 
-## P9 — 品質關卡類(優先度較低,長期補強)
+## P10 — 品質關卡類(優先度較低,長期補強)
 
 - [ ] 自動化 a11y 測試(如 axe-core),目前 UI library 完全沒有無障礙迴歸的自動把關,只能靠人工肉眼抓
 - [ ] 視覺回歸測試(如 Chromatic / Playwright screenshot),CSS 改動有沒有意外破壞其他元件外觀,現在沒有自動偵測
