@@ -33,7 +33,7 @@
 
 ## P3 — 建立 component audit matrix 並逐一盤點 lib
 
-- [ ] 建立 `COMPONENT_AUDIT.md` 或等價盤點表,列出 50 個正式 component 的品質狀態與下一步 action
+- [x] 建立 `COMPONENT_AUDIT.md` 或等價盤點表,列出 50 個正式 component 的品質狀態與下一步 action
 - [ ] 依風險分批檢查 `packages/ui` / `registry` / docs,不要用無順序的人工掃描
 
 **盤點欄位**:每個 component 至少記錄 `registry/package/docs/public-api 一致性`、`spec 狀態`、`a11y`、`keyboard`、`API 穩定性`、`SSR/hydration 安全`、`docs 完整度`、`風險等級`、`下一步 action`。

@@ -32,6 +32,9 @@ jobs:
       - name: Lint
         run: pnpm lint
 
+      - name: Verify COMPONENT_AUDIT.md matches packages/ui on disk
+        run: node packages/cli/scripts/check-component-audit-sync.mjs
+
   test:
     name: Test (@sanring/ui)
     runs-on: ubuntu-latest
