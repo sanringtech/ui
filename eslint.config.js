@@ -4,7 +4,15 @@ const tseslint = require('typescript-eslint');
 
 module.exports = tseslint.config(
   {
-    ignores: ['.angular/**', '.claude/**', 'dist/**', 'coverage/**', 'node_modules/**'],
+    ignores: [
+      '.angular/**',
+      '.claude/**',
+      'dist/**',
+      'coverage/**',
+      'node_modules/**',
+      // build 產物：registry/** 同步過去的複本，見 CONTRIBUTING.md
+      'packages/cli/registry/**',
+    ],
   },
   {
     files: ['**/*.ts'],

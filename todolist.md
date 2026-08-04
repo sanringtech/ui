@@ -6,7 +6,7 @@
 
 ## P0 — PR 沒有測試/型別檢查關卡
 
-- [ ] 新增 PR 觸發的 CI workflow,跑 `pnpm test`、`tsc --noEmit`、`pnpm lint`
+- [x] 新增 PR 觸發的 CI workflow,跑 `pnpm test`、`tsc --noEmit`、`pnpm lint`
 
 **現況**:`.github/workflows/` 目前只有 4 個 workflow——`registry-sync-check`(檢查 docs 導覽跟 `registry.json` 對不對得上)、`require-changeset`(檢查有沒有補 changeset)、`release`、`deploy-docs`(只在 push 到 `main` 時觸發)。**沒有任何一個 PR 觸發的 workflow 會跑 `ng test`、`tsc --noEmit`、或 `eslint`。**
 

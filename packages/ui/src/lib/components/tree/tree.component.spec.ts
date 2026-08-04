@@ -70,10 +70,6 @@ describe('TreeComponent', () => {
     return fixture;
   }
 
-  function treeItems(root: HTMLElement) {
-    return Array.from(root.querySelectorAll<HTMLElement>('[role="treeitem"]'));
-  }
-
   function itemByValue(root: HTMLElement, value: string) {
     const item = root.querySelector<HTMLElement>(`[role="treeitem"][value="${value}"]`);
     if (!item) throw new Error(`Expected tree item with value "${value}"`);

@@ -1,0 +1,109 @@
+name: CI
+
+on:
+  pull_request:
+    branches:
+      - main
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  lint:
+    name: Lint
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Lint
+        run: pnpm lint
+
+  test:
+    name: Test (@sanring/ui)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Test
+        run: pnpm test
+
+  test-cli:
+    name: Test (@sanring/cli)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Test
+        run: pnpm --filter @sanring/cli test
+
+  typecheck:
+    name: Type check
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      # @sanring/ui 跟 docs 的 tsconfig 是給 Angular compiler 用的（缺 composite/rootDir 設定，
+      # 無法直接跑獨立的 `tsc -b`），型別檢查要靠 `ng build`——跟 deploy-docs.yml 用的方式一致，
+      # 差別是這裡在 PR 階段就先擋，不用等 merge 到 main 才發現。
+      - name: Type check @sanring/ui
+        run: pnpm exec ng build @sanring/ui
+
+      - name: Type check docs
+        run: pnpm exec ng build docs
+
+      # @sanring/cli 是純 Node/TS，沒有 Angular 模板那層，可以直接用 tsc --noEmit。
+      - name: Type check @sanring/cli
+        run: pnpm --filter @sanring/cli exec tsc --noEmit

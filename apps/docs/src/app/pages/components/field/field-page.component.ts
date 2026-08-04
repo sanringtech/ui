@@ -51,6 +51,9 @@ import { fieldPage, fieldPageExamples } from './field.docs';
         <app-component-page-code-previewer [code]="examples.basic" language="angular-html">
           <div previewer class="w-[min(360px,100%)]">
             <sanring-field>
+              <!-- sanringLabel 會在執行期把 for 動態綁到 sanring-field 對應 input 的 id，
+                   eslint 的靜態分析看不到這層 host binding，屬於已知的 false positive -->
+              <!-- eslint-disable-next-line @angular-eslint/template/label-has-associated-control -->
               <label sanringLabel>Email</label>
               <input sanringInput placeholder="name@sanring.dev" type="email" />
               <p sanringDescription>We'll only use this for account notifications.</p>
@@ -91,6 +94,7 @@ import { fieldPage, fieldPageExamples } from './field.docs';
             <app-component-page-code-previewer [code]="examples.floating" language="angular-html">
               <div previewer class="w-[min(360px,100%)]">
                 <sanring-field floating>
+                  <!-- eslint-disable-next-line @angular-eslint/template/label-has-associated-control -->
                   <label sanringLabel>Email</label>
                   <input sanringInput placeholder="" type="email" />
                 </sanring-field>
@@ -102,6 +106,7 @@ import { fieldPage, fieldPageExamples } from './field.docs';
             <app-component-page-code-previewer [code]="examples.validation" language="angular-html">
               <div previewer class="w-[min(360px,100%)]">
                 <sanring-field>
+                  <!-- eslint-disable-next-line @angular-eslint/template/label-has-associated-control -->
                   <label sanringLabel>Email</label>
                   <input sanringInput [formControl]="emailControl" placeholder="name@sanring.dev" />
                   <sanring-error-message>Email is required.</sanring-error-message>
@@ -114,6 +119,7 @@ import { fieldPage, fieldPageExamples } from './field.docs';
             <app-component-page-code-previewer [code]="examples.disabled" language="angular-html">
               <div previewer class="w-[min(360px,100%)]">
                 <sanring-field>
+                  <!-- eslint-disable-next-line @angular-eslint/template/label-has-associated-control -->
                   <label sanringLabel>Disabled email</label>
                   <input sanringInput disabled value="readonly@sanring.dev" />
                 </sanring-field>

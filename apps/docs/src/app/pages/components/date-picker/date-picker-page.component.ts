@@ -318,11 +318,16 @@ interface DatePickerPreset {
               <div previewer class="w-full max-w-[28rem]">
                 <div class="grid gap-3 sm:grid-cols-2">
                   <sanring-field>
-                    <label class="text-sm font-medium text-[var(--docs-fg)]">
+                    <label for="date-picker-field-start" class="text-sm font-medium text-[var(--docs-fg)]">
                       {{ i18n.t('datePicker.demo.field.start') }}
                     </label>
                     <sanring-popover #fieldStartPopover>
-                      <button type="button" sanringPopoverTrigger [class]="fieldTriggerClass">
+                      <button
+                        id="date-picker-field-start"
+                        type="button"
+                        sanringPopoverTrigger
+                        [class]="fieldTriggerClass"
+                      >
                         <span class="truncate">{{
                           fieldRangeStart
                             ? formatMonth(fieldRangeStart)
@@ -339,11 +344,16 @@ interface DatePickerPreset {
                   </sanring-field>
 
                   <sanring-field>
-                    <label class="text-sm font-medium text-[var(--docs-fg)]">
+                    <label for="date-picker-field-end" class="text-sm font-medium text-[var(--docs-fg)]">
                       {{ i18n.t('datePicker.demo.field.end') }}
                     </label>
                     <sanring-popover #fieldEndPopover>
-                      <button type="button" sanringPopoverTrigger [class]="fieldTriggerClass">
+                      <button
+                        id="date-picker-field-end"
+                        type="button"
+                        sanringPopoverTrigger
+                        [class]="fieldTriggerClass"
+                      >
                         <span class="truncate">{{
                           fieldRangeEnd
                             ? formatMonth(fieldRangeEnd)

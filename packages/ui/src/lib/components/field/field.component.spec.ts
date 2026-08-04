@@ -10,6 +10,9 @@ import { LabelDirective } from './label.directive';
   imports: [SanringFieldComponent, LabelDirective, InputDirective],
   template: `
     <sanring-field [floating]="floating">
+      <!-- sanringLabel 會在執行期把 for 動態綁到 sanring-field 對應 input 的 id，
+           eslint 的靜態分析看不到這層 host binding，屬於已知的 false positive -->
+      <!-- eslint-disable-next-line @angular-eslint/template/label-has-associated-control -->
       <label sanringLabel>Email</label>
       <input sanringInput placeholder="name@sanring.dev" type="email" />
     </sanring-field>

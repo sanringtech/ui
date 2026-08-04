@@ -49,6 +49,10 @@ import { ComboboxComponent } from './combobox.component';
 export class ComboboxItemComponent implements Highlightable {
   readonly value = input.required<string>();
   readonly label = input<string>();
+  // Highlightable/ListKeyManagerOption 要求 disabled 是一般 boolean 屬性，signal input
+  // 沒辦法同名共用，所以底層 input 改名 disabledInput，再用 alias 讓範本上還是寫
+  // `disabled`（跟這個 library 其他元件的慣例一致），下面用 getter 轉成 Highlightable 要的形狀。
+  // eslint-disable-next-line @angular-eslint/no-input-rename
   readonly disabledInput = input(false, { alias: 'disabled', transform: booleanAttribute });
   readonly class = input<string | undefined>();
 
