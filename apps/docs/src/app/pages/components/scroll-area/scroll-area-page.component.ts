@@ -77,7 +77,7 @@ interface ScrollAreaDemoItem {
       <app-component-page-section [section]="section('installation')">
         <app-component-page-installation
           componentName="scroll-area"
-          manualSnippet="import { SANRING_SCROLL_AREA_IMPORTS } from './components/ui/scrollArea';"
+          manualSnippet="import { SANRING_SCROLL_AREA_IMPORTS } from './components/ui/scroll-area';"
         />
       </app-component-page-section>
 
