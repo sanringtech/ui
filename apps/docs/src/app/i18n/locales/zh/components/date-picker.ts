@@ -41,6 +41,8 @@ export const datePickerTranslations = {
   'datePicker.demo.mode.range': '區間',
   'datePicker.demo.mode.multi': '多選',
   'datePicker.demo.clear': '清空',
+  'datePicker.api.id.description':
+    'host id，用於 field 關聯與 imperative focus；未提供時自動產生。',
   'datePicker.api.class.description': '與元件基礎樣式合併的額外 class。',
   'datePicker.api.size.description': '每個網格 cell 的尺寸。',
   'datePicker.api.locale.description':
@@ -52,6 +54,10 @@ export const datePickerTranslations = {
   'datePicker.api.gridColumns.description': '用於方向鍵焦點運算的網格欄數；月/年預設 3，季預設 4。',
   'datePicker.api.disabled.description': '標記為不可選取的日期比對器。',
   'datePicker.api.allowDeselect.description': '單選模式下，重新點選已選取的值是否會清空。',
+  'datePicker.api.required.description':
+    '將 picker 標記為必填，供 field 整合與 aria-required 使用。',
+  'datePicker.api.ariaDescribedBy.description':
+    '描述 picker 的 helper text id；會與 Field 提供的描述 id 合併。',
   'datePicker.api.rangePeriodCountLimit.description': '區間選取的最小/最大週期數限制（選填）。',
   'datePicker.api.prevYearLabel.description': '上一年導覽按鈕的無障礙標籤。',
   'datePicker.api.nextYearLabel.description': '下一年導覽按鈕的無障礙標籤。',
@@ -62,5 +68,6 @@ export const datePickerTranslations = {
   'datePicker.api.clear.description': '清空目前選取，不改變目前顯示的視窗範圍。',
   'datePicker.api.abortRangeDraft.description': '捨棄進行中的區間選取草稿，不提交它。',
   'datePicker.api.removeDate.description': '從選取集合中移除單一日期（僅限多選模式）。',
+  'datePicker.api.focus.description': '將焦點移到 date-picker host 元素。',
 
 } as const;

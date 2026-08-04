@@ -27,7 +27,11 @@ export const tabsTranslations = {
   'tabs.api.description': 'Inputs and outputs supported by the tabs primitives.',
   'tabs.api.defaultValue.description': 'Initial tab value selected when the component is created.',
   'tabs.api.orientation.description':
-    'Controls horizontal or vertical tabs layout and keyboard navigation.',
+    'Controls the horizontal/vertical grid layout of sanring-tabs itself. Does not drive keyboard navigation — set orientation on sanring-tabs-list too, to the same value, for Arrow-key navigation to match.',
+  'tabs.api.listOrientation.description':
+    'Drives the actual keyboard-navigation axis (Arrow Left/Right vs Up/Down) — set to the same value as the orientation on sanring-tabs, since the two are not synced automatically.',
+  'tabs.api.selectionMode.description':
+    "'follow' (default) selects a tab as soon as it receives focus via keyboard (automatic activation, per the ARIA APG tabs pattern). 'explicit' requires Enter/Space to select the focused tab (manual activation) — useful when switching tabs is expensive (e.g. triggers a network request).",
   'tabs.api.variant.description': 'Controls the visual treatment of the trigger list.',
   'tabs.api.value.description': 'Required value used to pair a trigger with its content panel.',
   'tabs.api.disabled.description':

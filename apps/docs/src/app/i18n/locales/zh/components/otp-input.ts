@@ -33,6 +33,7 @@ export const otpInputTranslations = {
   'otpInput.api.description': 'sanring-otp-input 支援的 Inputs 與 Outputs。',
   'otpInput.api.class.description': '與 OTP input 根元素合併的額外 class。',
   'otpInput.api.id.description': '群組 id，預設會自動產生。',
+  'otpInput.api.name.description': '轉發到隱藏原生 input 的 name，供表單情境使用。',
   'otpInput.api.length.description': '驗證碼 slot 數量。',
   'otpInput.api.value.description': '目前驗證碼字串。不符合 type 的字元會被忽略。',
   'otpInput.api.type.description': '輸入與貼上時使用的字元過濾規則。',
@@ -42,9 +43,18 @@ export const otpInputTranslations = {
   'otpInput.api.textAlign.description': '每個 slot 內的文字對齊。',
   'otpInput.api.separatorAt.description':
     '預設渲染時要插入 sanring-otp-input-separator 的 slot 邊界位置，可傳單一數字或多個位置。',
+  'otpInput.api.autocomplete.description':
+    '轉發到隱藏原生 input 的 autocomplete 提示，預設為 one-time-code。',
   'otpInput.api.disabled.description': '停用所有 slot 並阻止使用者互動。',
   'otpInput.api.readOnly.description': '顯示目前值，但禁止編輯。',
+  'otpInput.api.required.description': '將 OTP input 標記為必填，供 field 整合與 aria-required 使用。',
+  'otpInput.api.ariaLabel.description': '沒有可見 label 時，提供給群組與隱藏 input 的無障礙標籤。',
+  'otpInput.api.ariaLabelledBy.description': '用來命名 OTP input 的可見 label 元素 id。',
+  'otpInput.api.ariaDescribedBy.description':
+    '描述 OTP input 的 helper text id；會與 Field 提供的描述 id 合併。',
   'otpInput.api.valueChange.description': '使用者互動後送出下一個驗證碼字串。',
   'otpInput.api.stateChange.description': '送出下一個驗證碼字串、slot metadata 與完成狀態。',
   'otpInput.api.complete.description': '每個 slot 都有值時觸發。',
+  'otpInput.api.pasted.description': '貼上事件處理後，送出正規化後的貼上資訊。',
+  'otpInput.api.slotKeydown.description': '送出單一 slot 的鍵盤 metadata，供進階自訂 slot 行為使用。',
 } as const;

@@ -31,9 +31,14 @@ export const switchTranslations = {
   'switch.api.description': 'Inputs supported by the sanring-switch component.',
   'switch.api.class.description': 'Additional classes merged with the switch track styles.',
   'switch.api.id.description': 'Native id applied to the switch button for label association.',
-  'switch.api.checked.description': 'Initial checked state for the switch.',
+  'switch.api.checked.description':
+    'Controlled checked state. Use with [(checked)] for two-way binding without Angular forms.',
+  'switch.api.checkedChange.description': 'Emits the new boolean state whenever the switch is toggled.',
   'switch.api.disabled.description': 'Disables interaction and reduces visual emphasis.',
   'switch.api.invalid.description':
     'Applies an invalid visual state and exposes aria-invalid for validation feedback.',
+  'switch.api.ariaLabel.description':
+    'Accessible label for standalone switches not associated with a visible <label> element.',
+  'switch.api.ariaLabelledBy.description': 'ID of an external element that labels this switch.',
   'switch.api.size.description': 'Controls switch density: sm, md, or lg.',
 } as const;

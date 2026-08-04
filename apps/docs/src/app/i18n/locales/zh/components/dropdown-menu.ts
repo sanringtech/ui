@@ -16,6 +16,10 @@ export const dropdownMenuTranslations = {
     '要開啟的選單，綁定到 content 匯出的參照（#ref="sanringDropdownMenuContent"，再用 [menu]="ref.menu"）。選中任一 item 都會自動關閉選單。',
   'dropdownMenu.api.itemSelected.description':
     '被啟用的 item（點擊、按 Enter 或 Space）觸發時送出對應的 value，緊接著選單就會關閉。',
+  'dropdownMenu.api.id.description': '轉發到底層 @angular/aria menu content 的 id。',
+  'dropdownMenu.api.wrap.description': '鍵盤導覽抵達最後一個可用項目後，是否循環回第一個項目。',
+  'dropdownMenu.api.typeaheadDelay.description':
+    '@angular/aria menu typeahead 重置輸入搜尋 buffer 前等待的毫秒數。',
   'dropdownMenu.api.value.description':
     'item 被啟用時透過 itemSelected 送出的值。底層 ARIA menu pattern 要求必填。',
   'dropdownMenu.api.disabled.description': '停用 menu item，並移除鍵盤啟用行為。',

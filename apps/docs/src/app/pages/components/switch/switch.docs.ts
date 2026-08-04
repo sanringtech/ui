@@ -106,6 +106,12 @@ export const switchPage = {
       descriptionKey: 'switch.api.checked.description',
     },
     {
+      property: 'checkedChange',
+      type: 'EventEmitter<boolean>',
+      defaultValue: '—',
+      descriptionKey: 'switch.api.checkedChange.description',
+    },
+    {
       property: 'disabled',
       type: 'boolean',
       defaultValue: 'false',
@@ -116,6 +122,18 @@ export const switchPage = {
       type: 'boolean',
       defaultValue: 'false',
       descriptionKey: 'switch.api.invalid.description',
+    },
+    {
+      property: 'ariaLabel',
+      type: 'string',
+      defaultValue: 'undefined',
+      descriptionKey: 'switch.api.ariaLabel.description',
+    },
+    {
+      property: 'ariaLabelledBy',
+      type: 'string',
+      defaultValue: 'undefined',
+      descriptionKey: 'switch.api.ariaLabelledBy.description',
     },
     {
       property: 'size',
@@ -165,13 +183,13 @@ export const switchPageExamples = {
     lucideSun
     class="size-4 text-[var(--sanring-foreground)] transition-colors group-has-[[data-state=checked]]:text-[var(--sanring-muted)]"
   ></svg>
-  <sanring-switch checked aria-label="Toggle theme" />
+  <sanring-switch checked ariaLabel="Toggle theme" />
   <svg
     lucideMoon
     class="size-4 text-[var(--sanring-muted)] transition-colors group-has-[[data-state=checked]]:text-[var(--sanring-foreground)]"
   ></svg>
 </div>`,
-  iconThumb: `<sanring-switch checked aria-label="Toggle theme">
+  iconThumb: `<sanring-switch checked ariaLabel="Toggle theme">
   <svg sanringSwitchIconChecked lucideMoon class="size-3"></svg>
   <svg sanringSwitchIconUnchecked lucideSun class="size-3"></svg>
 </sanring-switch>`,

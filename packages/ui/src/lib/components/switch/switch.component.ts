@@ -11,6 +11,7 @@ import {
   forwardRef,
   inject,
   input,
+  output,
   signal,
 } from '@angular/core';
 import { _IdGenerator } from '@angular/cdk/a11y';
@@ -55,6 +56,8 @@ import { SwitchSize } from './switch.type';
       [attr.aria-checked]="checkedSignal()"
       [attr.aria-invalid]="invalid() || errorState ? 'true' : null"
       [attr.aria-required]="fieldRequired ? 'true' : null"
+      [attr.aria-label]="ariaLabel()"
+      [attr.aria-labelledby]="ariaLabelledBy()"
       [attr.aria-describedby]="computedAriaDescribedBy()"
       [attr.data-state]="checkedSignal() ? 'checked' : 'unchecked'"
       [disabled]="isDisabled()"
@@ -86,7 +89,11 @@ export class SwitchComponent implements ControlValueAccessor, OnInit {
   readonly checked = input(false, { transform: booleanAttribute });
   readonly disabled = input(false, { transform: booleanAttribute });
   readonly invalid = input(false, { transform: booleanAttribute });
+  readonly ariaLabel = input<string | undefined>();
+  readonly ariaLabelledBy = input<string | undefined>();
   readonly size = input<SwitchSize>('md');
+
+  readonly checkedChange = output<boolean>();
 
   protected readonly checkedSignal = signal(false);
   protected readonly isDisabled = computed(() => this.disabled() || this.disabledState());
@@ -182,6 +189,7 @@ export class SwitchComponent implements ControlValueAccessor, OnInit {
     this.checkedSignal.set(!this.checkedSignal());
     this.onChange(this.checkedSignal());
     this.onTouched();
+    this.checkedChange.emit(this.checkedSignal());
     this.emitStateChanges();
   }
 

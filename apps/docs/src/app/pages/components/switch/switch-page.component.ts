@@ -157,7 +157,7 @@ import { switchPage, switchPageExamples } from './switch.docs';
                     lucideSun
                     class="size-4 text-[var(--docs-fg)] transition-colors group-has-[[data-state=checked]]:text-[var(--docs-muted)]"
                   ></svg>
-                  <sanring-switch checked [attr.aria-label]="i18n.t('switch.demo.toggleTheme')" />
+                  <sanring-switch checked [ariaLabel]="i18n.t('switch.demo.toggleTheme')" />
                   <svg
                     lucideMoon
                     class="size-4 text-[var(--docs-muted)] transition-colors group-has-[[data-state=checked]]:text-[var(--docs-fg)]"
@@ -170,7 +170,7 @@ import { switchPage, switchPageExamples } from './switch.docs';
           <app-component-page-section [section]="section('example-icon-thumb')">
             <app-component-page-code-previewer [code]="examples.iconThumb" language="angular-html">
               <div previewer class="flex items-center justify-center">
-                <sanring-switch checked [attr.aria-label]="i18n.t('switch.demo.toggleTheme')">
+                <sanring-switch checked [ariaLabel]="i18n.t('switch.demo.toggleTheme')">
                   <svg sanringSwitchIconChecked lucideMoon class="size-3"></svg>
                   <svg sanringSwitchIconUnchecked lucideSun class="size-3"></svg>
                 </sanring-switch>

@@ -39,6 +39,7 @@ export const calendarTranslations = {
   'calendar.installation.description':
     '用 CLI 加入這個元件（會一併安裝 @sanring/date-picker-core 作為 peer dependency），再匯入 CalendarComponent。',
   'calendar.api.description': 'CalendarComponent 支援的 Inputs、Outputs 與公開方法。',
+  'calendar.api.id.description': 'host id，用於 field 關聯與 imperative focus；未提供時自動產生。',
   'calendar.api.class.description': '與元件基礎樣式合併的額外 class。',
   'calendar.api.size.description': '日期格子的尺寸。',
   'calendar.api.locale.description': '覆蓋注入的 CALENDAR_LOCALE；未提供時退回使用注入的 token。',
@@ -49,11 +50,17 @@ export const calendarTranslations = {
   'calendar.api.disabled.description':
     '停用日期的比對條件：單一日期、陣列、區間或 predicate 函式。',
   'calendar.api.allowDeselect.description': '再次點選已選取的日期時是否可取消選取。',
+  'calendar.api.required.description': '將 calendar 標記為必填，供 field 整合與 aria-required 使用。',
+  'calendar.api.ariaDescribedBy.description':
+    '描述 calendar 的 helper text id；會與 Field 提供的描述 id 合併。',
   'calendar.api.prevMonthLabel.description': '上一月按鈕的 aria-label，供 i18n 覆蓋。',
   'calendar.api.nextMonthLabel.description': '下一月按鈕的 aria-label，供 i18n 覆蓋。',
+  'calendar.api.jumpMonthLabel.description': '年月跳轉 popover 中月份 select 的 aria-label。',
+  'calendar.api.jumpYearLabel.description': '年月跳轉 popover 中年份 select 的 aria-label。',
   'calendar.api.selectedDateChange.description': '單選模式下，選取日期變化時發出。',
   'calendar.api.selectedRangeChange.description': '範圍模式下，選取範圍變化時發出。',
   'calendar.api.isDraftActive.description': '範圍模式下，是否已選第一個端點、正等待第二個端點。',
   'calendar.api.clear.description': '清空目前選取（範圍模式會連同進行中的草稿一併清除）。',
   'calendar.api.abortRangeDraft.description': '中止進行中的範圍草稿，不影響已提交的範圍。',
+  'calendar.api.focus.description': '將焦點移到 calendar host 元素。',
 } as const;

@@ -67,6 +67,12 @@ export const datePickerPage = {
   ],
   apiRows: [
     {
+      property: 'id',
+      type: 'string',
+      defaultValue: 'auto-generated',
+      descriptionKey: 'datePicker.api.id.description',
+    },
+    {
       property: 'class',
       type: 'string',
       defaultValue: "''",
@@ -127,6 +133,18 @@ export const datePickerPage = {
       descriptionKey: 'datePicker.api.allowDeselect.description',
     },
     {
+      property: 'required',
+      type: 'boolean',
+      defaultValue: 'false',
+      descriptionKey: 'datePicker.api.required.description',
+    },
+    {
+      property: 'ariaDescribedBy',
+      type: 'string | undefined',
+      defaultValue: 'undefined',
+      descriptionKey: 'datePicker.api.ariaDescribedBy.description',
+    },
+    {
       property: 'rangePeriodCountLimit',
       type: 'RangePeriodCountLimit | undefined',
       defaultValue: 'undefined',
@@ -185,6 +203,12 @@ export const datePickerPage = {
       type: '(date: Date): void',
       defaultValue: '—',
       descriptionKey: 'datePicker.api.removeDate.description',
+    },
+    {
+      property: 'focus()',
+      type: '(options?: FocusOptions): void',
+      defaultValue: '—',
+      descriptionKey: 'datePicker.api.focus.description',
     },
   ] satisfies readonly ComponentPageApiRow[],
 } as const satisfies ComponentPageDefinition;

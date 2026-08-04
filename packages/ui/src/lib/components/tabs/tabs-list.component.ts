@@ -10,6 +10,13 @@ import { TabsComponent } from './tabs.component';
   hostDirectives: [
     {
       directive: NgTabList,
+      // orientation 在這裡是獨立的 pass-through input，跟 sanring-tabs 自己的 orientation
+      // 沒有自動同步——sanring-tabs 的 orientation 只影響版面 CSS grid 排列跟
+      // [attr.data-orientation]，真正驅動鍵盤導覽方向（Arrow Left/Right vs Up/Down）的是
+      // 這裡 NgTabList 的 orientation。兩處都要設成一樣的值，否則版面看起來是一個方向、
+      // 鍵盤實際導覽卻是另一個方向。曾嘗試用 host binding 讓這裡自動讀 sanring-tabs 的值、
+      // 不讓消費者個別覆寫，但 Angular 的 host binding 語法無法綁定到 hostDirectives
+      // pass-through 以外的 input（NG8002），只能維持兩處都要手動設定，已在文件中說明。
       inputs: ['orientation', 'selectionMode', 'wrap', 'softDisabled', 'focusMode', 'disabled'],
     },
   ],

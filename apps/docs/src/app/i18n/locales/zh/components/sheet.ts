@@ -25,11 +25,10 @@ export const sheetTranslations = {
   'sheet.api.description': 'sheet primitives 支援的 inputs 與 outputs。',
   'sheet.api.isOpen.description': '控制開啟狀態，支援 [(isOpen)] 雙向綁定。',
   'sheet.api.side.description': "面板滑入的邊緣：'top'、'right'（預設）、'bottom' 或 'left'。",
-  'sheet.demo.noClose': '不含關閉按鈕',
+  'sheet.demo.customClose': '自訂關閉按鈕',
   'sheet.demo.confirmDelete': '確認刪除',
   'sheet.demo.confirmDeleteDescription': '此操作無法復原。',
   'sheet.demo.delete': '刪除',
-  'sheet.api.showClose.description': '顯示或隱藏面板右上角的內建 × 關閉按鈕。',
   'sheet.api.class.description': '合併到面板或 host 元素的額外 class。',
 
 } as const;

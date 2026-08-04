@@ -84,6 +84,18 @@ export const tabsPage = {
       descriptionKey: 'tabs.api.orientation.description',
     },
     {
+      property: 'sanring-tabs-list [orientation]',
+      type: 'TabsOrientation',
+      defaultValue: "'horizontal'",
+      descriptionKey: 'tabs.api.listOrientation.description',
+    },
+    {
+      property: 'sanring-tabs-list [selectionMode]',
+      type: "'explicit' | 'follow'",
+      defaultValue: "'follow'",
+      descriptionKey: 'tabs.api.selectionMode.description',
+    },
+    {
       property: 'variant',
       type: 'TabsVariant',
       defaultValue: "'default'",

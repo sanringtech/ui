@@ -75,6 +75,12 @@ export const progressPage = {
       descriptionKey: 'progress.api.ariaLabel.description',
     },
     {
+      property: 'ariaValueText',
+      type: 'string',
+      defaultValue: '—',
+      descriptionKey: 'progress.api.ariaValueText.description',
+    },
+    {
       property: 'barClass',
       type: 'string',
       defaultValue: "''",

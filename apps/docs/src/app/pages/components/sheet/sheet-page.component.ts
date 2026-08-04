@@ -362,15 +362,23 @@ import { sheetPage, sheetPageExamples } from './sheet.docs';
             </app-component-page-code-previewer>
           </app-component-page-section>
 
-          <!-- No Close Button -->
-          <app-component-page-section [section]="section('example-no-close')">
-            <app-component-page-code-previewer [code]="examples.noClose" language="angular-html">
+          <!-- Custom Close Button -->
+          <app-component-page-section [section]="section('example-custom-close')">
+            <app-component-page-code-previewer [code]="examples.customClose" language="angular-html">
               <div previewer class="flex items-center justify-center">
                 <sanring-sheet>
                   <button sanringBtn variant="destructive" sanringSheetTrigger>
                     {{ i18n.t('sheet.demo.delete') }}…
                   </button>
                   <sanring-sheet-content>
+                    <button
+                      type="button"
+                      sanringSheetClose
+                      aria-label="Close"
+                      class="absolute right-4 top-4 rounded-[var(--sanring-radius-xs)] p-0.5 opacity-70 transition-opacity hover:opacity-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--sanring-border-strong)]"
+                    >
+                      <svg lucideX class="size-4"></svg>
+                    </button>
                     <sanring-sheet-header>
                       <sanring-sheet-title>{{
                         i18n.t('sheet.demo.confirmDelete')

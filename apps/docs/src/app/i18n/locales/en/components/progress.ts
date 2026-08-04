@@ -35,5 +35,7 @@ export const progressTranslations = {
     'Enables a sweeping shimmer animation on the fill bar to signal active progress.',
   'progress.api.ariaLabel.description':
     'Accessible label for the progressbar role. Recommended when no visible label is present.',
+  'progress.api.ariaValueText.description':
+    'Human-readable text announced instead of the raw percentage, e.g. "3 of 5 steps complete".',
 
 } as const;

@@ -34,7 +34,7 @@ export const sheetPage = {
       children: [
         { id: 'example-side', titleKey: 'sheet.demo.side', level: 3 },
         { id: 'example-with-form', titleKey: 'sheet.demo.withForm', level: 3 },
-        { id: 'example-no-close', titleKey: 'sheet.demo.noClose', level: 3 },
+        { id: 'example-custom-close', titleKey: 'sheet.demo.customClose', level: 3 },
       ],
     },
     { id: 'api', titleKey: 'toc.apiReference', descriptionKey: 'sheet.api.description', level: 2 },
@@ -51,12 +51,6 @@ export const sheetPage = {
       type: "'top' | 'right' | 'bottom' | 'left'",
       defaultValue: "'right'",
       descriptionKey: 'sheet.api.side.description',
-    },
-    {
-      property: 'showClose',
-      type: 'boolean',
-      defaultValue: 'true',
-      descriptionKey: 'sheet.api.showClose.description',
     },
     {
       property: 'class',
@@ -183,12 +177,17 @@ export class ExampleComponent {}`,
     </sanring-sheet-footer>
   </sanring-sheet-content>
 </sanring-sheet>`,
-  noClose: `<!-- [showClose]="false" hides the built-in × button;
-     use sanringSheetClose on any element to close instead -->
+  customClose: `<!-- The sheet does not render a built-in close button.
+     Place sanringSheetClose on any button you want to use as a close control. -->
 <sanring-sheet>
   <button sanringBtn sanringSheetTrigger>Open</button>
 
-  <sanring-sheet-content [showClose]="false">
+  <sanring-sheet-content>
+    <button type="button" sanringSheetClose aria-label="Close"
+      class="absolute right-4 top-4 ...">
+      <svg lucideX class="size-4"></svg>
+    </button>
+
     <sanring-sheet-header>
       <sanring-sheet-title>Confirm deletion</sanring-sheet-title>
       <sanring-sheet-description>

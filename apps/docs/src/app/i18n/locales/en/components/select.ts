@@ -20,7 +20,11 @@ export const selectTranslations = {
     'Wrap sanring-select in sanring-field and bind a reactive form control — the error message shows automatically once the control is invalid and touched.',
   'select.api.description': 'Inputs, models, and classes supported by the select primitives.',
   'select.api.value.description':
-    'The selected value. Supports Angular forms through ControlValueAccessor.',
+    'Read-only selected value getter. Bind with ngModel/formControl for value updates.',
+  'select.api.id.description':
+    'Generated id applied to the trigger and used by Field focus integration.',
+  'select.api.contentId.description':
+    'Generated id applied to the listbox and referenced by aria-controls while open.',
   'select.api.isOpen.description': 'Controls whether the floating listbox is open.',
   'select.api.contentPosition.description':
     "Controls content positioning: 'popper' aligns to the trigger edge, while 'item-aligned' aligns the selected item with the trigger.",
@@ -31,6 +35,7 @@ export const selectTranslations = {
   'select.api.indicatorPosition.description':
     'Places the selected indicator before or after the item text.',
   'select.api.showIndicator.description': 'Controls whether the selected indicator is rendered.',
+  'select.api.placeholder.description': 'Text shown by sanring-select-value when no value is selected.',
   'select.api.customIndicator.description':
     'Projects a custom selected indicator in place of the default check icon.',
   'select.api.class.description':

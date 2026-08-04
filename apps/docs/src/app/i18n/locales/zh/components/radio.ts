@@ -19,6 +19,7 @@ export const radioTranslations = {
   'radio.api.group.description': '群組容器的 Inputs 與 Outputs。',
   'radio.api.item.title': 'RadioItemComponent',
   'radio.api.item.description': '單一選項的 Inputs。',
+  'radio.api.group.id': '套用到 radiogroup 元素的 id，預設會自動產生。',
   'radio.api.group.class': '與群組容器樣式合併的額外 class。',
   'radio.api.group.name': '群組名稱提示，供表單情境使用。',
   'radio.api.group.disabled': '停用群組內所有選項。',

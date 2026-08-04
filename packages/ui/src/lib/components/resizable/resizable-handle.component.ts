@@ -23,6 +23,9 @@ import { ResizableGroupComponent } from './resizable-group.component';
     '[attr.data-orientation]': 'group.direction()',
     '[attr.aria-orientation]': 'group.direction()',
     '[attr.aria-disabled]': 'isDisabled() ? "true" : null',
+    '[attr.aria-valuenow]': 'ariaValueNow()',
+    '[attr.aria-valuemin]': 'ariaValueMin()',
+    '[attr.aria-valuemax]': 'ariaValueMax()',
     '[attr.tabindex]': 'isDisabled() ? -1 : 0',
     '[class]': 'handleClass()',
     '(mousedown)': 'onDragStart($event)',
@@ -40,6 +43,18 @@ export class ResizableHandleComponent {
   private readonly elementRef = inject(ElementRef<HTMLElement>);
 
   protected readonly isDisabled = computed(() => this.disabled() || this.group.disabled());
+
+  // The handle's "value" is the size (%) of the panel immediately before it — the thing a
+  // keyboard user is actually adjusting when they press Arrow/Home/End here.
+  private readonly beforePanel = computed(() =>
+    this.group.getBeforePanel(this.elementRef.nativeElement),
+  );
+  protected readonly ariaValueNow = computed(() => {
+    const size = this.beforePanel()?.currentSize();
+    return size === undefined ? null : Math.round(size);
+  });
+  protected readonly ariaValueMin = computed(() => this.beforePanel()?.minSize() ?? null);
+  protected readonly ariaValueMax = computed(() => this.beforePanel()?.maxSize() ?? null);
 
   protected readonly handleClass = computed(() =>
     cn(

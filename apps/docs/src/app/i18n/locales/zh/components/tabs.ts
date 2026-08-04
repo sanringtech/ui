@@ -23,7 +23,12 @@ export const tabsTranslations = {
     'Tabs 拆分為 root、list、trigger 與 content primitives，讓版面與內容面板保持彈性。',
   'tabs.api.description': 'Tabs primitives 支援的 Inputs 與 Outputs。',
   'tabs.api.defaultValue.description': '元件建立時預設選取的 tab value。',
-  'tabs.api.orientation.description': '控制水平或垂直頁籤版面與鍵盤導覽方向。',
+  'tabs.api.orientation.description':
+    '控制 sanring-tabs 自己的水平/垂直版面(CSS grid)。不會驅動鍵盤導覽方向——要在 sanring-tabs-list 上也設同樣的值,方向鍵導覽才會跟版面一致。',
+  'tabs.api.listOrientation.description':
+    '真正驅動鍵盤導覽方向(方向鍵是 Left/Right 還是 Up/Down)的欄位——要跟 sanring-tabs 的 orientation 設成一樣的值,兩者不會自動同步。',
+  'tabs.api.selectionMode.description':
+    "'follow'(預設)只要用鍵盤把焦點移到某個頁籤就會立即選取(自動啟用,符合 ARIA APG 的 tabs pattern)。'explicit' 則要按 Enter/Space 才會選取目前 focus 的頁籤(手動啟用)——適合切換頁籤成本較高的情境(例如會觸發網路請求)。",
   'tabs.api.variant.description': '控制 trigger list 的視覺樣式。',
   'tabs.api.value.description': '用來配對 trigger 與 content panel 的必要值。',
   'tabs.api.disabled.description': '避免 trigger 被選取，並從鍵盤導覽中略過。',

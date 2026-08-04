@@ -79,6 +79,12 @@ export const calendarPage = {
   ],
   apiRows: [
     {
+      property: 'id',
+      type: 'string',
+      defaultValue: 'auto-generated',
+      descriptionKey: 'calendar.api.id.description',
+    },
+    {
       property: 'class',
       type: 'string',
       defaultValue: "''",
@@ -127,6 +133,18 @@ export const calendarPage = {
       descriptionKey: 'calendar.api.allowDeselect.description',
     },
     {
+      property: 'required',
+      type: 'boolean',
+      defaultValue: 'false',
+      descriptionKey: 'calendar.api.required.description',
+    },
+    {
+      property: 'ariaDescribedBy',
+      type: 'string | undefined',
+      defaultValue: 'undefined',
+      descriptionKey: 'calendar.api.ariaDescribedBy.description',
+    },
+    {
       property: 'prevMonthLabel',
       type: 'string',
       defaultValue: "'上一月'",
@@ -137,6 +155,18 @@ export const calendarPage = {
       type: 'string',
       defaultValue: "'下一月'",
       descriptionKey: 'calendar.api.nextMonthLabel.description',
+    },
+    {
+      property: 'jumpMonthLabel',
+      type: 'string',
+      defaultValue: "'選擇月份'",
+      descriptionKey: 'calendar.api.jumpMonthLabel.description',
+    },
+    {
+      property: 'jumpYearLabel',
+      type: 'string',
+      defaultValue: "'選擇年份'",
+      descriptionKey: 'calendar.api.jumpYearLabel.description',
     },
     {
       property: 'selectedDateChange',
@@ -167,6 +197,12 @@ export const calendarPage = {
       type: '(): void',
       defaultValue: '—',
       descriptionKey: 'calendar.api.abortRangeDraft.description',
+    },
+    {
+      property: 'focus()',
+      type: '(options?: FocusOptions): void',
+      defaultValue: '—',
+      descriptionKey: 'calendar.api.focus.description',
     },
   ] satisfies readonly ComponentPageApiRow[],
 } as const satisfies ComponentPageDefinition;

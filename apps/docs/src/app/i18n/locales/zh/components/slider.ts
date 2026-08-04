@@ -26,6 +26,7 @@ export const sliderTranslations = {
   'slider.api.step.description': '拖曳取整與鍵盤調整時使用的遞增量。',
   'slider.api.value.description': '目前數值。會限制在 min/max 之間，並依 step 對齊。',
   'slider.api.disabled.description': '停用 pointer 與鍵盤互動。',
+  'slider.api.tabIndex.description': 'slider host 的 tab 順序；停用時會自動變成 -1。',
   'slider.api.valueChange.description': '使用者互動後送出下一個數值。',
   'slider.api.ariaLabel.description': '沒有可見標籤時使用的可存取名稱。',
   'slider.api.ariaLabelledBy.description': '用來命名 slider 的可見 label 元素 id。',

@@ -18,6 +18,12 @@ export const dropdownMenuTranslations = {
     'The menu to open, bound to the content\'s exported reference (#ref="sanringDropdownMenuContent", then [menu]="ref.menu"). Selecting any item closes the menu automatically.',
   'dropdownMenu.api.itemSelected.description':
     'Emits the value of whichever item was activated (click, Enter, or Space), right before the menu closes.',
+  'dropdownMenu.api.id.description':
+    'ID forwarded to the underlying @angular/aria menu content.',
+  'dropdownMenu.api.wrap.description':
+    'Whether keyboard navigation wraps from the last enabled item back to the first.',
+  'dropdownMenu.api.typeaheadDelay.description':
+    'Delay, in milliseconds, used by @angular/aria menu typeahead before resetting the typed search buffer.',
   'dropdownMenu.api.value.description':
     'The value reported to itemSelected when this item is activated. Required by the underlying ARIA menu pattern.',
   'dropdownMenu.api.disabled.description':

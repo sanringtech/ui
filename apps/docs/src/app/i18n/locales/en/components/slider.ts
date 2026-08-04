@@ -28,6 +28,8 @@ export const sliderTranslations = {
   'slider.api.value.description':
     'Current numeric value. Values are clamped to min/max and snapped to step.',
   'slider.api.disabled.description': 'Disables pointer and keyboard interaction.',
+  'slider.api.tabIndex.description':
+    'Tab order index for the slider host. Automatically becomes -1 while disabled.',
   'slider.api.valueChange.description': 'Emits the next numeric value after user interaction.',
   'slider.api.ariaLabel.description': 'Accessible label when no visible label is associated.',
   'slider.api.ariaLabelledBy.description': 'Id of the visible label element that names the slider.',

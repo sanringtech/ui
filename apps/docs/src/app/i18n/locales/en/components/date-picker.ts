@@ -49,6 +49,8 @@ export const datePickerTranslations = {
   'datePicker.demo.mode.range': 'Range',
   'datePicker.demo.mode.multi': 'Multi',
   'datePicker.demo.clear': 'Clear',
+  'datePicker.api.id.description':
+    'Host id used for field association and imperative focus targeting. Generated when omitted.',
   'datePicker.api.class.description': 'Additional classes merged with the component base styles.',
   'datePicker.api.size.description': 'Size of each grid cell.',
   'datePicker.api.locale.description':
@@ -65,6 +67,10 @@ export const datePickerTranslations = {
   'datePicker.api.disabled.description': 'Date matcher(s) marking periods as unselectable.',
   'datePicker.api.allowDeselect.description':
     'Whether re-picking a selected value in single mode clears it.',
+  'datePicker.api.required.description':
+    'Marks the picker as required for field integration and aria-required.',
+  'datePicker.api.ariaDescribedBy.description':
+    'ID of helper text that describes the picker; merged with Field-provided description ids.',
   'datePicker.api.rangePeriodCountLimit.description':
     'Optional min/max period-count bound on range selections.',
   'datePicker.api.prevYearLabel.description':
@@ -84,5 +90,6 @@ export const datePickerTranslations = {
     'Discards an in-progress range draft without committing it.',
   'datePicker.api.removeDate.description':
     'Removes a single date from the selection (multi mode only).',
+  'datePicker.api.focus.description': 'Moves focus to the date-picker host element.',
 
 } as const;

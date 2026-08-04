@@ -1,4 +1,13 @@
-import { Directive, ElementRef, OnDestroy, computed, inject, input, signal } from '@angular/core';
+import {
+  Directive,
+  ElementRef,
+  OnDestroy,
+  afterNextRender,
+  computed,
+  inject,
+  input,
+  signal,
+} from '@angular/core';
 import { cn } from '../../utils';
 import { AvatarComponent } from './avatar.component';
 import { AvatarStatus } from './avatar.types';
@@ -21,7 +30,9 @@ export class AvatarImageDirective implements OnDestroy {
 
   private readonly avatar = inject(AvatarComponent, { optional: true });
   private readonly elementRef = inject<ElementRef<HTMLImageElement>>(ElementRef);
-  private readonly srcObserver = new MutationObserver(() => this.syncImageStateFromSrc());
+  // MutationObserver is browser-only — constructing/observing it eagerly would throw during
+  // SSR (no polyfill guaranteed). Deferred to afterNextRender, which never runs on the server.
+  private srcObserver: MutationObserver | null = null;
 
   protected readonly displayStyle = computed(() =>
     this.imageState() === 'loaded' ? 'block' : 'none',
@@ -34,9 +45,13 @@ export class AvatarImageDirective implements OnDestroy {
 
   constructor() {
     this.syncImageStateFromSrc();
-    this.srcObserver.observe(this.elementRef.nativeElement, {
-      attributeFilter: ['src'],
-      attributes: true,
+
+    afterNextRender(() => {
+      this.srcObserver = new MutationObserver(() => this.syncImageStateFromSrc());
+      this.srcObserver.observe(this.elementRef.nativeElement, {
+        attributeFilter: ['src'],
+        attributes: true,
+      });
     });
   }
 
@@ -51,7 +66,7 @@ export class AvatarImageDirective implements OnDestroy {
   }
 
   ngOnDestroy() {
-    this.srcObserver.disconnect();
+    this.srcObserver?.disconnect();
   }
 
   private syncImageStateFromSrc() {

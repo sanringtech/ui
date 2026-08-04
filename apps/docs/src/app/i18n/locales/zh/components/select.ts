@@ -17,7 +17,10 @@ export const selectTranslations = {
   'select.examples.field.description':
     '把 sanring-select 包在 sanring-field 裡並綁定 reactive form control——控制項變成 invalid 且 touched 之後，錯誤訊息會自動顯示。',
   'select.api.description': 'select primitives 支援的 inputs、models 與 class。',
-  'select.api.value.description': '目前選取的值，透過 ControlValueAccessor 支援 Angular 表單。',
+  'select.api.value.description':
+    '唯讀的目前選取值 getter；值更新請透過 ngModel/formControl 綁定。',
+  'select.api.id.description': '自動產生並套用到 trigger 的 id，也供 Field focus 整合使用。',
+  'select.api.contentId.description': '自動產生並套用到 listbox 的 id，開啟時由 aria-controls 參照。',
   'select.api.isOpen.description': '控制浮動 listbox 是否開啟。',
   'select.api.contentPosition.description':
     "控制 content 定位模式：'popper' 對齊 trigger 邊緣，'item-aligned' 讓已選項目貼齊 trigger。",
@@ -27,6 +30,7 @@ export const selectTranslations = {
   'select.api.itemDisabled.description': '停用單一 option。',
   'select.api.indicatorPosition.description': '設定選取圖示顯示在文字前方或後方。',
   'select.api.showIndicator.description': '控制是否渲染選取圖示。',
+  'select.api.placeholder.description': '未選取任何值時，sanring-select-value 顯示的提示文字。',
   'select.api.customIndicator.description': '投影自訂選取圖案，以取代預設 check icon。',
   'select.api.class.description': '合併到對應 select primitive 的額外 class。',
 

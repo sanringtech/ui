@@ -41,6 +41,8 @@ export const calendarTranslations = {
   'calendar.installation.description':
     'Add the component with the CLI — it also installs @sanring/date-picker-core as a peer dependency — then import CalendarComponent.',
   'calendar.api.description': 'Inputs, outputs, and public methods supported by CalendarComponent.',
+  'calendar.api.id.description':
+    'Host id used for field association and imperative focus targeting. Generated when omitted.',
   'calendar.api.class.description': 'Additional classes merged with the component base styles.',
   'calendar.api.size.description': 'Size of each day cell.',
   'calendar.api.locale.description':
@@ -54,10 +56,18 @@ export const calendarTranslations = {
     'Disabled-date matcher: a single date, an array, an interval, or a predicate function.',
   'calendar.api.allowDeselect.description':
     'Whether re-clicking the selected date clears the selection.',
+  'calendar.api.required.description':
+    'Marks the calendar as required for field integration and aria-required.',
+  'calendar.api.ariaDescribedBy.description':
+    'ID of helper text that describes the calendar; merged with Field-provided description ids.',
   'calendar.api.prevMonthLabel.description':
     'aria-label for the previous-month button, overridable for i18n.',
   'calendar.api.nextMonthLabel.description':
     'aria-label for the next-month button, overridable for i18n.',
+  'calendar.api.jumpMonthLabel.description':
+    'aria-label for the month select in the jump popover.',
+  'calendar.api.jumpYearLabel.description':
+    'aria-label for the year select in the jump popover.',
   'calendar.api.selectedDateChange.description':
     'Emits when the selected date changes in single mode.',
   'calendar.api.isDraftActive.description':
@@ -66,6 +76,7 @@ export const calendarTranslations = {
     'Clears the current selection (also discards an in-progress range draft).',
   'calendar.api.abortRangeDraft.description':
     'Aborts an in-progress range draft without touching the committed range.',
+  'calendar.api.focus.description': 'Moves focus to the calendar host element.',
   'calendar.api.selectedRangeChange.description':
     'Emits when the selected range changes in range mode.',
 } as const;

@@ -48,7 +48,7 @@ import { RadioItemComponent } from './radio-item.component';
       [attr.aria-label]="ariaLabel()"
       [attr.aria-labelledby]="ariaLabelledBy()"
       [attr.aria-describedby]="computedAriaDescribedBy()"
-      [attr.aria-required]="required() || null"
+      [attr.aria-required]="fieldRequired ? 'true' : null"
       [attr.aria-invalid]="errorState ? 'true' : null"
       [attr.aria-disabled]="isDisabled() || null"
       [attr.aria-orientation]="orientation()"

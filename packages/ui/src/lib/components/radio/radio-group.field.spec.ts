@@ -32,6 +32,11 @@ describe('RadioGroupComponent + SanringFieldComponent integration', () => {
     const fixture = TestBed.createComponent(RadioGroupFieldTestHost);
     fixture.detectChanges();
 
+    // Required comes only from Validators.required (no literal [required] input on the
+    // template) — aria-required must still be set on the group.
+    const group = fixture.nativeElement.querySelector('[role="radiogroup"]') as HTMLElement;
+    expect(group.getAttribute('aria-required')).toBe('true');
+
     const errorEl = fixture.nativeElement.querySelector('sanring-error-message') as HTMLElement;
     expect(errorEl.classList.contains('hidden')).toBe(true);
 
@@ -39,7 +44,6 @@ describe('RadioGroupComponent + SanringFieldComponent integration', () => {
     fixture.detectChanges();
 
     expect(errorEl.classList.contains('hidden')).toBe(false);
-    const group = fixture.nativeElement.querySelector('[role="radiogroup"]') as HTMLElement;
     expect(group.getAttribute('aria-invalid')).toBe('true');
 
     (fixture.nativeElement.querySelector('[role="radio"]') as HTMLElement).click();

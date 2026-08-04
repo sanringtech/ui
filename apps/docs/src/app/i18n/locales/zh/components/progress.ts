@@ -31,5 +31,7 @@ export const progressTranslations = {
     "進度條形狀：'rounded'（圓角，預設）、'square'（方形）、'trapezoid'（梯形）。",
   'progress.api.shimmer.description': '在填充 bar 上啟用掃光閃爍動畫，標示進度正在進行。',
   'progress.api.ariaLabel.description': '進度條的無障礙標籤，建議在沒有可見標籤時提供。',
+  'progress.api.ariaValueText.description':
+    '取代原始百分比朗讀的可讀文字，例如「已完成 5 步驟中的 3 步」。',
 
 } as const;

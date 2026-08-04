@@ -74,6 +74,18 @@ export const selectPage = {
       descriptionKey: 'select.api.value.description',
     },
     {
+      property: 'SelectComponent.id',
+      type: 'string',
+      defaultValue: 'generated',
+      descriptionKey: 'select.api.id.description',
+    },
+    {
+      property: 'SelectComponent.contentId',
+      type: 'string',
+      defaultValue: 'generated',
+      descriptionKey: 'select.api.contentId.description',
+    },
+    {
       property: 'SelectComponent.isOpen',
       type: 'boolean',
       defaultValue: 'false',
@@ -114,6 +126,12 @@ export const selectPage = {
       type: 'boolean',
       defaultValue: 'true',
       descriptionKey: 'select.api.showIndicator.description',
+    },
+    {
+      property: 'SelectValueComponent.placeholder',
+      type: 'string',
+      defaultValue: "''",
+      descriptionKey: 'select.api.placeholder.description',
     },
     {
       property: '[sanringSelectItemIndicator]',

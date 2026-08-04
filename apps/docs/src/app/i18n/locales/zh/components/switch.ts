@@ -28,8 +28,12 @@ export const switchTranslations = {
   'switch.api.description': 'sanring-switch component 支援的 Inputs。',
   'switch.api.class.description': '與 switch track 樣式合併的額外 class。',
   'switch.api.id.description': '套用到 switch button 的原生 id，可用於 label 關聯。',
-  'switch.api.checked.description': 'switch 的初始選取狀態。',
+  'switch.api.checked.description':
+    '受控的勾選狀態。可使用 [(checked)] 進行雙向綁定，無需 Angular 表單。',
+  'switch.api.checkedChange.description': '每次切換時發出新的布林狀態。',
   'switch.api.disabled.description': '停用互動並降低視覺強度。',
   'switch.api.invalid.description': '套用驗證錯誤時的無效視覺狀態，並輸出 aria-invalid。',
+  'switch.api.ariaLabel.description': '獨立使用（無可見 label 元素關聯）時的無障礙標籤。',
+  'switch.api.ariaLabelledBy.description': '標示此 switch 的外部元素 ID。',
   'switch.api.size.description': '控制 switch 密度，可使用 sm、md 或 lg。',
 } as const;

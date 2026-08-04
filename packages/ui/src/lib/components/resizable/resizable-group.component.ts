@@ -89,6 +89,17 @@ export class ResizableGroupComponent {
     this.destroyRef.onDestroy(() => this.stopDrag());
   }
 
+  /**
+   * The panel immediately before a given handle, in DOM order. Used by
+   * ResizableHandleComponent to expose aria-valuenow/min/max for the panel it actually
+   * controls — panels/elementRef are private to this class, so the handle can't compute
+   * this itself.
+   */
+  getBeforePanel(handleElement: HTMLElement): ResizablePanelComponent | undefined {
+    const beforeIndex = getPanelIndexBeforeHandle(this.elementRef.nativeElement, handleElement);
+    return this.panels()[beforeIndex];
+  }
+
   startDrag(handleElement: HTMLElement, event: ResizablePointerEvent): void {
     if (this.disabled()) return;
 

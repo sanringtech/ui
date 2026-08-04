@@ -28,12 +28,10 @@ export const sheetTranslations = {
   'sheet.api.isOpen.description': 'Controls the open state. Supports [(isOpen)] two-way binding.',
   'sheet.api.side.description':
     "Edge from which the panel slides in: 'top', 'right' (default), 'bottom', or 'left'.",
-  'sheet.demo.noClose': 'Without Close Button',
+  'sheet.demo.customClose': 'Custom Close Button',
   'sheet.demo.confirmDelete': 'Confirm deletion',
   'sheet.demo.confirmDeleteDescription': 'This action cannot be undone.',
   'sheet.demo.delete': 'Delete',
-  'sheet.api.showClose.description':
-    'Show or hide the built-in × close button at the top-right corner of the panel.',
   'sheet.api.class.description': 'Additional classes merged onto the panel or host element.',
 
 } as const;

@@ -93,6 +93,12 @@ export const sliderPage = {
       descriptionKey: 'slider.api.disabled.description',
     },
     {
+      property: 'tabIndex',
+      type: 'number',
+      defaultValue: '0',
+      descriptionKey: 'slider.api.tabIndex.description',
+    },
+    {
       property: 'valueChange',
       type: 'EventEmitter<number>',
       defaultValue: '—',

@@ -72,6 +72,12 @@ export const otpInputPage = {
       descriptionKey: 'otpInput.api.id.description',
     },
     {
+      property: 'name',
+      type: 'string | undefined',
+      defaultValue: 'undefined',
+      descriptionKey: 'otpInput.api.name.description',
+    },
+    {
       property: 'length',
       type: 'number',
       defaultValue: '6',
@@ -120,6 +126,12 @@ export const otpInputPage = {
       descriptionKey: 'otpInput.api.separatorAt.description',
     },
     {
+      property: 'autocomplete',
+      type: 'OtpInputAutocomplete',
+      defaultValue: "'one-time-code'",
+      descriptionKey: 'otpInput.api.autocomplete.description',
+    },
+    {
       property: 'disabled',
       type: 'boolean',
       defaultValue: 'false',
@@ -130,6 +142,30 @@ export const otpInputPage = {
       type: 'boolean',
       defaultValue: 'false',
       descriptionKey: 'otpInput.api.readOnly.description',
+    },
+    {
+      property: 'required',
+      type: 'boolean',
+      defaultValue: 'false',
+      descriptionKey: 'otpInput.api.required.description',
+    },
+    {
+      property: 'ariaLabel',
+      type: 'string | undefined',
+      defaultValue: 'undefined',
+      descriptionKey: 'otpInput.api.ariaLabel.description',
+    },
+    {
+      property: 'ariaLabelledBy',
+      type: 'string | undefined',
+      defaultValue: 'undefined',
+      descriptionKey: 'otpInput.api.ariaLabelledBy.description',
+    },
+    {
+      property: 'ariaDescribedBy',
+      type: 'string | undefined',
+      defaultValue: 'undefined',
+      descriptionKey: 'otpInput.api.ariaDescribedBy.description',
     },
     {
       property: 'valueChange',
@@ -148,6 +184,18 @@ export const otpInputPage = {
       type: 'EventEmitter<OtpInputCompleteEvent>',
       defaultValue: '—',
       descriptionKey: 'otpInput.api.complete.description',
+    },
+    {
+      property: 'pasted',
+      type: 'EventEmitter<OtpInputPasteEvent>',
+      defaultValue: '—',
+      descriptionKey: 'otpInput.api.pasted.description',
+    },
+    {
+      property: 'slotKeydown',
+      type: 'EventEmitter<OtpInputKeydownEvent>',
+      defaultValue: '—',
+      descriptionKey: 'otpInput.api.slotKeydown.description',
     },
   ] satisfies readonly ComponentPageApiRow[],
 } as const satisfies ComponentPageDefinition;

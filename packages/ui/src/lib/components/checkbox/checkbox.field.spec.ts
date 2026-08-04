@@ -19,6 +19,14 @@ class CheckboxFieldTestHost {
   readonly control = new FormControl<CheckedState>(false, { validators: [Validators.requiredTrue] });
 }
 
+@Component({
+  imports: [CheckboxComponent, ReactiveFormsModule],
+  template: `<sanring-checkbox [formControl]="control" />`,
+})
+class CheckboxRequiredValidatorTestHost {
+  readonly control = new FormControl<CheckedState>(false, { validators: [Validators.required] });
+}
+
 describe('CheckboxComponent + SanringFieldComponent integration', () => {
   it('does not throw when self-injecting NgControl alongside NG_VALUE_ACCESSOR (regression: NG0200)', () => {
     const fixture = TestBed.createComponent(CheckboxFieldTestHost);
@@ -44,5 +52,13 @@ describe('CheckboxComponent + SanringFieldComponent integration', () => {
 
     expect(errorEl.classList.contains('hidden')).toBe(true);
     expect(button.getAttribute('aria-invalid')).toBeNull();
+  });
+
+  it('sets aria-required when required comes only from Validators.required, not a literal [required] input', () => {
+    const fixture = TestBed.createComponent(CheckboxRequiredValidatorTestHost);
+    fixture.detectChanges();
+
+    const button = fixture.nativeElement.querySelector('button[role="checkbox"]') as HTMLElement;
+    expect(button.getAttribute('aria-required')).toBe('true');
   });
 });

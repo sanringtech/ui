@@ -6,7 +6,12 @@ import { ProgressComponent } from './progress.component';
 @Component({
   imports: [ProgressComponent],
   template: `
-    <sanring-progress [value]="30" [max]="100" ariaLabel="Upload progress" />
+    <sanring-progress
+      [value]="30"
+      [max]="100"
+      ariaLabel="Upload progress"
+      ariaValueText="3 of 10 files uploaded"
+    />
     <sanring-progress [value]="150" [max]="100" />
     <sanring-progress [value]="5" [max]="0" />
   `,
@@ -34,6 +39,7 @@ describe('ProgressComponent', () => {
     expect(bar.getAttribute('aria-valuemin')).toBe('0');
     expect(bar.getAttribute('aria-valuemax')).toBe('100');
     expect(bar.getAttribute('aria-label')).toBe('Upload progress');
+    expect(bar.getAttribute('aria-valuetext')).toBe('3 of 10 files uploaded');
 
     const fill = bar.querySelector('div') as HTMLElement;
     expect(fill.style.width).toBe('30%');

@@ -70,6 +70,12 @@ export const radioPage = {
 
 export const radioGroupApiRows = [
   {
+    property: 'id',
+    type: 'string',
+    defaultValue: 'generated',
+    descriptionKey: 'radio.api.group.id',
+  },
+  {
     property: 'class',
     type: 'string',
     defaultValue: "''",
