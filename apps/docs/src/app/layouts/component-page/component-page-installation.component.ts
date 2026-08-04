@@ -45,7 +45,7 @@ type PackageManager = 'pnpm' | 'npm' | 'yarn' | 'bun';
           class="w-full overflow-hidden rounded-[var(--sanring-radius-lg)] border border-[var(--docs-border)] bg-[var(--docs-code)]"
         >
           <div
-            class="flex min-w-0 items-center gap-2 border-b border-[var(--docs-border)] px-3 py-2"
+            class="flex min-w-0 flex-wrap items-center gap-2 border-b border-[var(--docs-border)] px-3 py-2"
           >
             <span
               class="grid size-6 shrink-0 place-items-center rounded-[var(--sanring-radius-sm)] border border-[var(--docs-border)] bg-[var(--docs-bg)] font-mono text-xs text-[var(--docs-fg)]"
@@ -53,7 +53,7 @@ type PackageManager = 'pnpm' | 'npm' | 'yarn' | 'bun';
               &gt;_
             </span>
 
-            <div class="flex min-w-0 flex-1 items-center gap-1 overflow-x-auto">
+            <div class="order-3 flex min-w-0 basis-full items-center gap-1 overflow-x-auto sm:order-none sm:basis-auto">
               @for (manager of packageManagers; track manager) {
                 <button
                   type="button"
@@ -67,7 +67,7 @@ type PackageManager = 'pnpm' | 'npm' | 'yarn' | 'bun';
 
             <button
               type="button"
-              class="grid size-8 shrink-0 place-items-center rounded-[var(--sanring-radius-sm)] text-[var(--docs-muted)] transition-colors hover:bg-[var(--docs-elevated)] hover:text-[var(--docs-fg)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--docs-border-strong)]"
+              class="ml-auto grid size-8 shrink-0 place-items-center rounded-[var(--sanring-radius-sm)] text-[var(--docs-muted)] transition-colors hover:bg-[var(--docs-elevated)] hover:text-[var(--docs-fg)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--docs-border-strong)]"
               [attr.aria-label]="i18n.t('actions.copyCode')"
               (click)="copyCurrentCode()"
             >
@@ -76,7 +76,7 @@ type PackageManager = 'pnpm' | 'npm' | 'yarn' | 'bun';
           </div>
 
           <pre
-            class="m-0 overflow-x-auto px-4 py-4 font-mono text-sm leading-7 text-[#cbd5e1]"
+            class="m-0 overflow-x-auto px-4 py-4 font-mono text-[13px] leading-6 text-[#cbd5e1] sm:text-sm sm:leading-7"
           ><code>{{ command() }}</code></pre>
         </div>
       </sanring-tabs-content>
@@ -100,7 +100,7 @@ type PackageManager = 'pnpm' | 'npm' | 'yarn' | 'bun';
           </div>
 
           <pre
-            class="m-0 overflow-x-auto px-4 py-4 font-mono text-sm leading-7 text-[#cbd5e1]"
+            class="m-0 overflow-x-auto px-4 py-4 font-mono text-[13px] leading-6 text-[#cbd5e1] sm:text-sm sm:leading-7"
           ><code>{{ manualSnippet() }}</code></pre>
         </div>
       </sanring-tabs-content>

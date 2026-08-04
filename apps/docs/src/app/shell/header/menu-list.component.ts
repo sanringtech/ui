@@ -7,7 +7,7 @@ import { menuItems, type MenuItem } from '../../navigation/menu-navigation';
   selector: 'app-menu-list',
   imports: [RouterLink, RouterLinkActive],
   template: `
-    <nav class="flex min-w-0 items-center gap-3" aria-label="Primary">
+    <nav class="flex min-w-0 items-center gap-3 max-[860px]:hidden" aria-label="Primary">
       <a
         class="mr-1 inline-flex size-10 flex-none items-center justify-center rounded-[var(--sanring-radius)] border border-[color-mix(in_srgb,var(--docs-accent)_36%,var(--docs-border))] bg-[color-mix(in_srgb,var(--docs-accent)_8%,var(--docs-surface))] transition-colors hover:bg-[color-mix(in_srgb,var(--docs-accent)_14%,var(--docs-elevated))]"
         routerLink="/"

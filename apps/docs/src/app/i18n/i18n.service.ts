@@ -36,6 +36,6 @@ export class I18nService {
   }
 
   t(key: TranslationKey) {
-    return translations[this.locale()][key];
+    return translations[this.locale()][key] ?? translations[defaultLocale][key] ?? key;
   }
 }

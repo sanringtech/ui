@@ -57,35 +57,35 @@ interface HomeVisualMetric {
     LucideTerminalSquare,
   ],
   template: `
-    <section class="relative isolate mx-auto flex w-full max-w-[1280px] flex-col gap-16 overflow-hidden px-8 pb-24 pt-14 max-[860px]:gap-12 max-[860px]:px-5 max-[860px]:pt-9">
+    <section class="relative isolate mx-auto flex w-full max-w-[1280px] flex-col gap-16 overflow-hidden px-8 pb-24 pt-14 max-[860px]:gap-12 max-[860px]:px-5 max-[860px]:pt-9 max-[520px]:gap-10 max-[520px]:px-4 max-[520px]:pb-16">
       <div class="home-particles" aria-hidden="true"></div>
 
       <div class="relative z-10 grid items-center gap-12 lg:grid-cols-[minmax(0,0.95fr)_minmax(520px,1.05fr)] max-[1080px]:grid-cols-1">
         <div class="min-w-0">
-          <div class="mb-6 flex flex-wrap items-center gap-3">
+          <div class="mb-6 flex flex-wrap items-center gap-3 max-[520px]:gap-2">
             <span
-              class="inline-flex h-9 items-center rounded-[var(--sanring-radius)] border border-[var(--docs-border)] bg-[var(--docs-elevated)] px-3 font-mono text-sm font-semibold text-[var(--docs-fg)] shadow-[0_10px_30px_color-mix(in_srgb,var(--docs-bg)_52%,transparent)]"
+              class="inline-flex h-9 items-center rounded-[var(--sanring-radius)] border border-[var(--docs-border)] bg-[var(--docs-elevated)] px-3 font-mono text-sm font-semibold text-[var(--docs-fg)] shadow-[0_10px_30px_color-mix(in_srgb,var(--docs-bg)_52%,transparent)] max-[520px]:h-8 max-[520px]:text-xs"
             >
               {{ releaseVersion }}
             </span>
             <a
-              class="inline-flex h-9 items-center gap-2 rounded-[var(--sanring-radius)] border border-[color-mix(in_srgb,var(--docs-accent)_30%,var(--docs-border))] bg-[color-mix(in_srgb,var(--docs-accent)_10%,var(--docs-elevated))] px-3 text-sm font-semibold text-[var(--docs-accent-strong)] no-underline transition-colors hover:border-[color-mix(in_srgb,var(--docs-accent)_55%,var(--docs-border))] hover:bg-[color-mix(in_srgb,var(--docs-accent)_16%,var(--docs-elevated))]"
+              class="inline-flex h-9 min-w-0 items-center gap-2 rounded-[var(--sanring-radius)] border border-[color-mix(in_srgb,var(--docs-accent)_30%,var(--docs-border))] bg-[color-mix(in_srgb,var(--docs-accent)_10%,var(--docs-elevated))] px-3 text-sm font-semibold text-[var(--docs-accent-strong)] no-underline transition-colors hover:border-[color-mix(in_srgb,var(--docs-accent)_55%,var(--docs-border))] hover:bg-[color-mix(in_srgb,var(--docs-accent)_16%,var(--docs-elevated))] max-[520px]:h-8 max-[520px]:text-xs"
               routerLink="/changelog"
             >
               <svg class="size-4" lucideRocket></svg>
-              <span>{{ i18n.t('home.release.label') }}</span>
+              <span class="min-w-0 truncate">{{ i18n.t('home.release.label') }}</span>
               <svg class="size-4" lucideChevronRight></svg>
             </a>
           </div>
 
           <div
-            class="mb-6 inline-flex items-center gap-2 rounded-full border border-[color-mix(in_srgb,var(--docs-accent)_42%,var(--docs-border))] bg-[color-mix(in_srgb,var(--docs-accent)_9%,var(--docs-surface))] px-3 py-1 text-sm font-medium text-[var(--docs-muted)]"
+            class="mb-6 inline-flex max-w-full items-center gap-2 rounded-full border border-[color-mix(in_srgb,var(--docs-accent)_42%,var(--docs-border))] bg-[color-mix(in_srgb,var(--docs-accent)_9%,var(--docs-surface))] px-3 py-1 text-sm font-medium text-[var(--docs-muted)] max-[520px]:text-xs"
           >
             <svg class="size-4 text-[var(--docs-accent-strong)]" lucideSparkles></svg>
-            {{ i18n.t('home.eyebrow') }}
+            <span class="min-w-0 truncate">{{ i18n.t('home.eyebrow') }}</span>
           </div>
 
-          <h1 class="m-0 max-w-[760px] text-[56px] font-semibold leading-[1.04] tracking-normal text-[var(--docs-fg)] max-[860px]:text-[40px] max-[520px]:text-[34px]">
+          <h1 class="m-0 max-w-[760px] text-[56px] font-semibold leading-[1.04] tracking-normal text-[var(--docs-fg)] max-[860px]:text-[40px] max-[520px]:text-[32px]">
             {{ i18n.t('home.title') }}
           </h1>
 
@@ -93,10 +93,10 @@ interface HomeVisualMetric {
             {{ i18n.t('home.description') }}
           </p>
 
-          <div class="mt-8 flex flex-wrap items-center gap-3">
+          <div class="mt-8 flex flex-wrap items-center gap-3 max-[520px]:grid max-[520px]:grid-cols-1">
             <a
               sanringBtn
-              class="min-w-[124px] border-[var(--docs-accent)] bg-[var(--docs-accent)] font-semibold text-[var(--docs-accent-fg)] hover:bg-[var(--docs-accent-strong)]"
+              class="min-w-[124px] border-[var(--docs-accent)] bg-[var(--docs-accent)] font-semibold text-[var(--docs-accent-fg)] hover:bg-[var(--docs-accent-strong)] max-[520px]:w-full max-[520px]:justify-center"
               routerLink="/components"
               variant="default"
               size="md"
@@ -106,7 +106,7 @@ interface HomeVisualMetric {
             </a>
             <a
               sanringBtn
-              class="min-w-[112px] font-semibold"
+              class="min-w-[112px] font-semibold max-[520px]:w-full max-[520px]:justify-center"
               routerLink="/components/button"
               variant="outline"
               size="md"
@@ -117,23 +117,23 @@ interface HomeVisualMetric {
         </div>
 
         <div
-          class="relative min-h-[430px] min-w-0 overflow-hidden rounded-[var(--sanring-radius)] border border-[var(--docs-border)] bg-[var(--docs-panel)] p-5 shadow-[0_24px_80px_color-mix(in_srgb,var(--docs-bg)_72%,transparent)]"
+          class="relative min-h-[430px] min-w-0 overflow-hidden rounded-[var(--sanring-radius)] border border-[var(--docs-border)] bg-[var(--docs-panel)] p-5 shadow-[0_24px_80px_color-mix(in_srgb,var(--docs-bg)_72%,transparent)] max-[640px]:min-h-0 max-[640px]:p-4"
         >
           <div
             class="pointer-events-none absolute inset-0 opacity-60 [background-image:linear-gradient(color-mix(in_srgb,var(--docs-border)_44%,transparent)_1px,transparent_1px),linear-gradient(90deg,color-mix(in_srgb,var(--docs-border)_44%,transparent)_1px,transparent_1px)] [background-size:28px_28px]"
             aria-hidden="true"
           ></div>
 
-          <div class="relative z-10 flex items-center justify-between gap-4">
-            <div>
+          <div class="relative z-10 flex items-center justify-between gap-4 max-[520px]:items-start">
+            <div class="min-w-0">
               <p class="m-0 text-sm font-medium text-[var(--docs-muted)]">
                 {{ i18n.t('home.visual.eyebrow') }}
               </p>
-              <h2 class="m-0 mt-1 text-xl font-semibold text-[var(--docs-fg)]">
+              <h2 class="m-0 mt-1 text-xl font-semibold text-[var(--docs-fg)] max-[520px]:text-lg">
                 {{ i18n.t('home.visual.title') }}
               </h2>
             </div>
-            <div class="inline-flex items-center gap-2 rounded-[var(--sanring-radius)] border border-[color-mix(in_srgb,var(--docs-success-fg)_30%,var(--docs-border))] bg-[color-mix(in_srgb,var(--docs-success-bg)_70%,var(--docs-surface))] px-3 py-1.5 text-xs font-semibold text-[var(--docs-success-fg)]">
+            <div class="inline-flex shrink-0 items-center gap-2 rounded-[var(--sanring-radius)] border border-[color-mix(in_srgb,var(--docs-success-fg)_30%,var(--docs-border))] bg-[color-mix(in_srgb,var(--docs-success-bg)_70%,var(--docs-surface))] px-3 py-1.5 text-xs font-semibold text-[var(--docs-success-fg)] max-[520px]:px-2">
               <span
                 class="size-2 rounded-full bg-[var(--docs-success-fg)] shadow-[0_0_0_4px_color-mix(in_srgb,var(--docs-success-fg)_16%,transparent)]"
                 aria-hidden="true"
@@ -142,9 +142,9 @@ interface HomeVisualMetric {
             </div>
           </div>
 
-          <div class="relative z-10 mt-8 grid gap-4">
+          <div class="relative z-10 mt-8 grid gap-4 max-[520px]:mt-5">
             <div class="grid grid-cols-[minmax(0,0.85fr)_minmax(0,1.15fr)] items-stretch gap-4 max-[1180px]:grid-cols-1">
-              <div class="rounded-[var(--sanring-radius)] border border-[var(--docs-border)] bg-[color-mix(in_srgb,var(--docs-surface)_82%,transparent)] p-4 backdrop-blur">
+              <div class="rounded-[var(--sanring-radius)] border border-[var(--docs-border)] bg-[color-mix(in_srgb,var(--docs-surface)_82%,transparent)] p-4 backdrop-blur max-[520px]:p-3">
                 <div class="flex items-center gap-2 text-sm font-semibold text-[var(--docs-fg)]">
                   <svg class="size-4 text-[var(--docs-accent-strong)]" lucideBlocks></svg>
                   {{ i18n.t('home.visual.registry') }}
@@ -163,7 +163,7 @@ interface HomeVisualMetric {
                 </div>
               </div>
 
-              <div class="rounded-[var(--sanring-radius)] border border-[var(--docs-border)] bg-[color-mix(in_srgb,var(--docs-code)_86%,transparent)] p-4 font-mono text-sm leading-7 text-[var(--docs-fg)] backdrop-blur">
+              <div class="rounded-[var(--sanring-radius)] border border-[var(--docs-border)] bg-[color-mix(in_srgb,var(--docs-code)_86%,transparent)] p-4 font-mono text-sm leading-7 text-[var(--docs-fg)] backdrop-blur max-[520px]:p-3 max-[520px]:text-[13px] max-[520px]:leading-6">
                 <div class="flex items-center gap-2 text-[var(--docs-muted)]">
                   <svg class="size-4" lucideTerminalSquare></svg>
                   {{ i18n.t('home.visual.command') }}
@@ -183,7 +183,7 @@ interface HomeVisualMetric {
               </div>
             </div>
 
-            <div class="grid grid-cols-3 gap-3 max-[520px]:grid-cols-1">
+            <div class="grid grid-cols-3 gap-3 max-[720px]:grid-cols-1">
               @for (metric of visualMetrics; track metric.labelKey) {
                 <div class="rounded-[var(--sanring-radius)] border border-[var(--docs-border)] bg-[color-mix(in_srgb,var(--docs-surface)_82%,transparent)] p-3 backdrop-blur">
                   <p class="m-0 text-[20px] font-semibold leading-none text-[var(--docs-accent-strong)]">
@@ -200,7 +200,7 @@ interface HomeVisualMetric {
       </div>
 
       <section
-        class="relative z-10 grid gap-4 rounded-[var(--sanring-radius)] border border-[var(--docs-border)] bg-[var(--docs-panel)] p-4 lg:grid-cols-[minmax(240px,0.9fr)_repeat(3,minmax(0,1fr))] max-[900px]:grid-cols-1"
+        class="relative z-10 grid gap-4 rounded-[var(--sanring-radius)] border border-[var(--docs-border)] bg-[var(--docs-panel)] p-4 lg:grid-cols-[minmax(240px,0.9fr)_repeat(3,minmax(0,1fr))] max-[900px]:grid-cols-1 max-[520px]:p-3"
         aria-labelledby="home-snapshot-title"
       >
         <div class="flex min-w-0 items-center gap-3 border-r border-[var(--docs-border)] pr-4 max-[900px]:border-r-0 max-[900px]:border-b max-[900px]:pb-4 max-[900px]:pr-0">
@@ -218,19 +218,19 @@ interface HomeVisualMetric {
         </div>
 
         @for (highlight of highlights; track highlight.labelKey) {
-          <div class="min-w-0 rounded-[var(--sanring-radius)] border border-[var(--docs-border)] bg-[var(--docs-surface)] p-4">
+          <div class="min-w-0 rounded-[var(--sanring-radius)] border border-[var(--docs-border)] bg-[var(--docs-surface)] p-4 max-[520px]:p-3">
             @if (highlight.kind === 'package') {
               <p class="m-0 text-sm font-medium text-[var(--docs-fg)]">
                 {{ i18n.t(highlight.labelKey) }}
               </p>
               <p
-                class="m-0 mt-2 min-w-0 overflow-hidden text-ellipsis whitespace-nowrap font-mono text-sm font-semibold leading-tight text-[var(--docs-accent-strong)]"
+                class="m-0 mt-2 min-w-0 break-words font-mono text-sm font-semibold leading-tight text-[var(--docs-accent-strong)]"
                 [title]="highlight.value"
               >
                 {{ highlight.value }}
               </p>
             } @else {
-              <p class="m-0 min-w-0 whitespace-nowrap text-[22px] font-semibold leading-tight text-[var(--docs-accent-strong)]">
+              <p class="m-0 min-w-0 break-words text-[22px] font-semibold leading-tight text-[var(--docs-accent-strong)]">
                 {{ highlight.value }}
               </p>
               <p class="m-0 mt-1 text-sm font-medium text-[var(--docs-fg)]">
@@ -249,7 +249,7 @@ interface HomeVisualMetric {
           <p class="m-0 text-sm font-semibold uppercase text-[var(--docs-muted)]">
             {{ i18n.t('home.highlights.eyebrow') }}
           </p>
-          <h2 class="m-0 mt-2 text-[30px] font-semibold leading-tight text-[var(--docs-fg)]">
+          <h2 class="m-0 mt-2 text-[30px] font-semibold leading-tight text-[var(--docs-fg)] max-[520px]:text-[26px]">
             {{ i18n.t('home.highlights.title') }}
           </h2>
           <p class="m-0 mt-3 text-base leading-7 text-[var(--docs-muted)]">
@@ -259,7 +259,7 @@ interface HomeVisualMetric {
 
         <div class="grid grid-cols-4 gap-4 max-[980px]:grid-cols-2 max-[620px]:grid-cols-1">
           @for (feature of features; track feature.titleKey) {
-            <article class="rounded-[var(--sanring-radius)] border border-[var(--docs-border)] bg-[var(--docs-surface)] p-5">
+            <article class="rounded-[var(--sanring-radius)] border border-[var(--docs-border)] bg-[var(--docs-surface)] p-5 max-[520px]:p-4">
               <div class="mb-5 inline-flex rounded-[var(--sanring-radius-sm)] border border-[color-mix(in_srgb,var(--docs-accent)_28%,var(--docs-border))] bg-[color-mix(in_srgb,var(--docs-accent)_8%,var(--docs-elevated))] p-2 text-[var(--docs-accent-strong)]">
                 @switch (feature.icon) {
                   @case ('layers') {
@@ -292,7 +292,7 @@ interface HomeVisualMetric {
           <p class="m-0 text-sm font-semibold uppercase text-[var(--docs-muted)]">
             {{ i18n.t('home.components.eyebrow') }}
           </p>
-          <h2 class="m-0 mt-2 text-[30px] font-semibold leading-tight text-[var(--docs-fg)]">
+          <h2 class="m-0 mt-2 text-[30px] font-semibold leading-tight text-[var(--docs-fg)] max-[520px]:text-[26px]">
             {{ i18n.t('home.components.title') }}
           </h2>
           <p class="m-0 mt-4 text-base leading-7 text-[var(--docs-muted)]">
@@ -301,8 +301,8 @@ interface HomeVisualMetric {
           </p>
         </div>
 
-        <div class="rounded-[var(--sanring-radius)] border border-[var(--docs-border)] bg-[var(--docs-panel)] p-4">
-          <div class="mb-4 flex items-center justify-between gap-4 border-b border-[var(--docs-border)] pb-4">
+        <div class="rounded-[var(--sanring-radius)] border border-[var(--docs-border)] bg-[var(--docs-panel)] p-4 max-[520px]:p-3">
+          <div class="mb-4 flex items-center justify-between gap-4 border-b border-[var(--docs-border)] pb-4 max-[520px]:gap-3">
             <p class="m-0 text-sm font-semibold text-[var(--docs-fg)]">
               {{ i18n.t('home.components.panelTitle') }}
             </p>
@@ -314,19 +314,19 @@ interface HomeVisualMetric {
           <nav
             sanringScrollArea
             [hideScrollbar]="true"
-            class="grid max-h-[360px] grid-cols-3 gap-3 pr-1 max-[760px]:grid-cols-2 max-[480px]:grid-cols-1"
+            class="grid max-h-[360px] grid-cols-3 gap-3 pr-1 max-[760px]:grid-cols-2 max-[520px]:max-h-[420px] max-[480px]:grid-cols-1"
             aria-label="Component shortcuts"
           >
             @for (item of componentItems; track item.id) {
               @if (item.disabled) {
                 <span
-                  class="flex min-w-0 items-center gap-3 rounded-[var(--sanring-radius)] border border-[var(--docs-border)] bg-[var(--docs-surface)] px-4 py-3 text-sm font-semibold text-[color-mix(in_srgb,var(--docs-muted)_45%,transparent)]"
+                  class="flex min-w-0 items-center gap-3 rounded-[var(--sanring-radius)] border border-[var(--docs-border)] bg-[var(--docs-surface)] px-4 py-3 text-sm font-semibold text-[color-mix(in_srgb,var(--docs-muted)_45%,transparent)] max-[520px]:px-3"
                 >
                   <span class="min-w-0 truncate">{{ i18n.t(item.labelKey) }}</span>
                 </span>
               } @else {
                 <a
-                  class="flex min-w-0 items-center justify-between gap-3 rounded-[var(--sanring-radius)] border border-[var(--docs-border)] bg-[var(--docs-surface)] px-4 py-3 text-sm font-semibold text-[var(--docs-fg)] no-underline transition-colors hover:border-[var(--docs-border-strong)] hover:bg-[var(--docs-elevated)]"
+                  class="flex min-w-0 items-center justify-between gap-3 rounded-[var(--sanring-radius)] border border-[var(--docs-border)] bg-[var(--docs-surface)] px-4 py-3 text-sm font-semibold text-[var(--docs-fg)] no-underline transition-colors hover:border-[var(--docs-border-strong)] hover:bg-[var(--docs-elevated)] max-[520px]:px-3"
                   [routerLink]="item.path"
                 >
                   <span class="min-w-0 truncate">{{ i18n.t(item.labelKey) }}</span>

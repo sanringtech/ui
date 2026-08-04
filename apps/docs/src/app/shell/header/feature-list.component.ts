@@ -1,5 +1,5 @@
 import { Component, computed, inject, signal } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { LucideMenu, LucideMoon, LucideSearch, LucideSun } from '@lucide/angular';
 import { CommandDialogComponent, SANRING_COMMAND_IMPORTS, SANRING_SHEET_IMPORTS } from '@sanring/ui';
 import { I18nService } from '../../i18n/i18n.service';
@@ -31,6 +31,7 @@ const MAX_SEARCH_RESULTS = 8;
   selector: 'app-feature-list',
   imports: [
     HeaderActionButtonComponent,
+    RouterLink,
     DocsComponentsListComponent,
     DocsSectionComponent,
     LucideMenu,
@@ -47,24 +48,38 @@ const MAX_SEARCH_RESULTS = 8;
     class: 'block min-w-0',
   },
   template: `
-    <div class="flex min-w-0 items-center gap-6 max-[860px]:w-full max-[860px]:gap-3">
+    <div class="flex min-w-0 items-center gap-6 max-[860px]:grid max-[860px]:w-full max-[860px]:grid-cols-[auto_1fr_auto] max-[860px]:gap-3">
       <sanring-sheet [(isOpen)]="navState.mobileNavOpen">
         <app-header-action-button
-          class="hidden flex-none max-[980px]:block"
+          class="hidden flex-none max-[980px]:block max-[860px]:col-start-1 max-[860px]:row-start-1"
           [ariaLabel]="i18n.t('sidebar.openMenu')"
           (clicked)="navState.mobileNavOpen.set(true)"
         >
           <svg class="size-4" lucideMenu></svg>
         </app-header-action-button>
 
-        <sanring-sheet-content side="left" class="flex flex-col">
-          <sanring-sheet-header>
-            <sanring-sheet-title>{{ i18n.t('sidebar.navigationTitle') }}</sanring-sheet-title>
-          </sanring-sheet-header>
+        <sanring-sheet-content side="left" class="flex max-w-[min(92vw,360px)] flex-col border-r border-[var(--docs-border)] bg-[var(--docs-bg)] p-0">
+          <div class="border-b border-[var(--docs-border)] px-5 pb-5 pt-6">
+            <a
+              class="inline-flex items-center gap-3 text-[var(--docs-fg)] no-underline"
+              routerLink="/"
+              sanringSheetClose
+            >
+              <span class="grid size-10 shrink-0 place-items-center rounded-[var(--sanring-radius)] border border-[color-mix(in_srgb,var(--docs-accent)_36%,var(--docs-border))] bg-[color-mix(in_srgb,var(--docs-accent)_8%,var(--docs-surface))]">
+                <img class="size-6" src="sanring_ui.svg" alt="" />
+              </span>
+              <span class="min-w-0">
+                <span class="block truncate text-base font-semibold">Sanring UI</span>
+                <span class="mt-0.5 block truncate text-xs text-[var(--docs-muted)]">
+                  {{ i18n.t('home.eyebrow') }}
+                </span>
+              </span>
+            </a>
+          </div>
 
           <div
             sanringSheetClose
-            class="min-h-0 flex-1 overflow-auto px-6 pb-6"
+            class="min-h-0 flex-1 overflow-auto px-5 py-5"
           >
             <app-docs-section
               [title]="i18n.t('sidebar.sections')"
@@ -72,19 +87,27 @@ const MAX_SEARCH_RESULTS = 8;
             />
 
             @if (navState.hasSidebar()) {
-              <app-docs-components-list />
+              <app-docs-components-list sectionClass="mt-8 border-t border-[var(--docs-border)] pt-5" />
             } @else {
               <app-docs-section
                 [title]="i18n.t('sidebar.components')"
                 [items]="mobileComponentItems"
-                sectionClass="mt-11"
+                sectionClass="mt-8 border-t border-[var(--docs-border)] pt-5"
               />
             }
           </div>
         </sanring-sheet-content>
       </sanring-sheet>
 
-      <div class="max-[860px]:min-w-0 max-[860px]:flex-1">
+      <a
+        class="hidden min-w-0 items-center justify-self-start rounded-[var(--sanring-radius)] border border-[color-mix(in_srgb,var(--docs-accent)_36%,var(--docs-border))] bg-[color-mix(in_srgb,var(--docs-accent)_8%,var(--docs-surface))] px-3 py-2 no-underline transition-colors hover:bg-[color-mix(in_srgb,var(--docs-accent)_14%,var(--docs-elevated))] max-[860px]:inline-flex"
+        routerLink="/"
+        [attr.aria-label]="i18n.t('nav.home')"
+      >
+        <img class="size-6 shrink-0" src="sanring_ui.svg" alt="" />
+      </a>
+
+      <div class="max-[860px]:col-span-3 max-[860px]:row-start-2 max-[860px]:min-w-0">
         <button
           type="button"
           class="flex h-10 w-[330px] items-center gap-2 rounded-[var(--sanring-radius)] border border-[var(--docs-border)] bg-[var(--docs-elevated)] px-3 text-sm text-[var(--docs-muted)] transition-colors hover:border-[var(--docs-border-strong)] max-[980px]:w-[min(46vw,300px)] max-[860px]:w-full"
@@ -135,7 +158,7 @@ const MAX_SEARCH_RESULTS = 8;
         </sanring-command-dialog>
       </div>
 
-      <div class="flex flex-none items-center gap-4 max-[860px]:gap-3">
+      <div class="flex flex-none items-center gap-4 max-[860px]:col-start-3 max-[860px]:row-start-1 max-[860px]:justify-self-end max-[860px]:gap-3">
         <app-header-action-button ariaLabel="GitHub" (clicked)="gotoGithub()">
           <svg
             class="size-5"

@@ -15,7 +15,9 @@ export const localeLabels: Record<Locale, { label: string; shortLabel: string; h
 
 export type TranslationKey = keyof typeof en;
 
-export const translations: Record<Locale, Record<TranslationKey, string>> = {
+export type TranslationCatalog = Record<TranslationKey, string>;
+
+export const translations = {
   en,
   zh,
-};
+} satisfies Record<Locale, TranslationCatalog>;
