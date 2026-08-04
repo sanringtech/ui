@@ -17,6 +17,7 @@ import { HeaderActionButtonComponent } from './header-action-button.component';
 
 interface SearchItem {
   label: string;
+  description?: string;
   path: string;
 }
 
@@ -115,11 +116,18 @@ const MAX_SEARCH_RESULTS = 8;
                 {{ i18n.t('search.noResults') }}
               </sanring-command-empty>
               @for (item of filteredItems(); track item.path) {
-                <sanring-command-item [value]="item.path" class="px-4 py-3">
-                  <span class="min-w-0 flex-1 truncate">{{ item.label }}</span>
-                  <span class="ml-auto shrink-0 truncate text-xs text-[var(--sanring-muted)]">{{
-                    item.path
-                  }}</span>
+                <sanring-command-item [value]="item.path" class="flex-col items-start gap-0.5 px-4 py-3">
+                  <div class="flex w-full items-center gap-2">
+                    <span class="min-w-0 flex-1 truncate">{{ item.label }}</span>
+                    <span class="ml-auto shrink-0 truncate text-xs text-[var(--sanring-muted)]">{{
+                      item.path
+                    }}</span>
+                  </div>
+                  @if (item.description) {
+                    <span class="w-full truncate text-xs text-[var(--sanring-muted)]">{{
+                      item.description
+                    }}</span>
+                  }
                 </sanring-command-item>
               }
             </sanring-command-list>
@@ -182,6 +190,7 @@ export class FeatureListComponent {
       .filter((item) => !item.disabled)
       .map((item) => ({
         label: this.i18n.t(item.labelKey),
+        description: this.i18n.t(item.descriptionKey),
         path: item.path,
       }));
 
@@ -198,8 +207,15 @@ export class FeatureListComponent {
 
     const matches: SearchResult[] = [];
     for (const item of index) {
-      const score = fuzzyMatch(query, item.label);
-      if (score !== null) matches.push({ ...item, score });
+      const labelScore = fuzzyMatch(query, item.label);
+      const descriptionScore = item.description ? fuzzyMatch(query, item.description) : null;
+      if (labelScore === null && descriptionScore === null) continue;
+
+      // 名稱命中永遠排在描述命中前面：加一個固定的大偏移量，只在名稱沒中時才退而求其次
+      // 用描述分數，讓使用者可以用功能敘述（例如「floating label」）找到元件，但不會蓋過
+      // 直接打對名稱的結果。
+      const score = labelScore !== null ? labelScore + 10_000 : (descriptionScore as number);
+      matches.push({ ...item, score });
     }
 
     return matches.sort((a, b) => b.score - a.score).slice(0, MAX_SEARCH_RESULTS);

@@ -4,29 +4,66 @@
 
 ---
 
-## P0 — PR 沒有測試/型別檢查關卡
+## P1 — registry / packages/ui / docs / public-api 一致性
 
-- [x] 新增 PR 觸發的 CI workflow,跑 `pnpm test`、`tsc --noEmit`、`pnpm lint`
+- [ ] 建立一致性檢查,確保每個正式元件在 `registry`、`packages/ui`、docs navigation/page、`public-api.ts` 的狀態一致
+- [x] 移除殘留 `menu` registry 元件,避免和 `dropdown-menu` / `context-menu` 語意重疊
 
-**現況**:`.github/workflows/` 目前只有 4 個 workflow——`registry-sync-check`(檢查 docs 導覽跟 `registry.json` 對不對得上)、`require-changeset`(檢查有沒有補 changeset)、`release`、`deploy-docs`(只在 push 到 `main` 時觸發)。**沒有任何一個 PR 觸發的 workflow 會跑 `ng test`、`tsc --noEmit`、或 `eslint`。**
+**現況**:`menu` 曾只存在於 `registry` / README,沒有 `packages/ui` lib、沒有 docs page、也沒有 public API export。此類落差會讓 CLI 可安裝清單、文件站、套件開發 surface 彼此不同步。
 
-**風險**:PR 只要沒漏測 changeset、沒改到 docs-navigation 對不上 registry,測試是紅的、型別是錯的照樣能顯示綠勾勾、直接合併進 `main`。`deploy-docs.yml` 雖然會跑 `ng build docs`(能抓到型別錯誤),但那是**合併之後**才跑,已經太晚。
+**風險**:使用者可能透過 CLI 安裝到未文件化、未測試、或不是正式 library surface 的元件;反過來 docs 也可能介紹 CLI 無法安裝的元件。
 
-**成本**:低,一個新 workflow 檔案,約半小時工。
-
----
-
-## P1 — docs 站沒有搜尋功能
-
-- [ ] 幫 docs 站加上搜尋(至少支援元件名稱/描述搜尋,理想上做成 Cmd+K 面板)
-
-**現況**:`apps/docs/src/app` 底下找不到任何搜尋元件,使用者要找元件只能靠側邊導覽樹狀點選。CLI 本身其實已經有 `sanring search` 指令(依名稱/描述搜尋元件),但這個能力沒有對應到 docs 網站上。
-
-**對比**:shadcn 文件站有很顯眼的 Cmd+K 搜尋。
+**成本**:中低。已有 `packages/cli/scripts/check-registry-sync.mjs`,可擴充成同時檢查 registry、docs、package lib、public API。
 
 ---
 
-## P2 — 沒有 MCP server 整合
+## P2 — lint 要能乾淨通過
+
+- [x] 修復目前 `pnpm lint` 的既有錯誤,讓 lint 成為可被 CI 信任的品質門檻
+
+**現況**:已在 P0 CI workflow 那次一併修好(見 commit `3c516aa`)。15 個既有錯誤——docs template label association(`sanringLabel` 動態 `for` 綁定的已知 false positive,補了有註明原因的 disable comment;date-picker 兩處是真的沒關聯,補上 `id`/`for`)、`combobox` input alias(套用跟 `command-item` 一致的既有慣例)、死掉的 spec unused var——全部修好,`pnpm lint` 目前是綠的。
+
+**風險**:主流元件庫不能長期讓 lint 紅燈;否則外部貢獻、CI、release gate 都會失去可信度,真正的新問題也容易被舊錯誤淹沒。
+
+**成本**:中。多數是局部修正,但要小心不要為了過 lint 破壞 accessibility 或既有 API。
+
+---
+
+## P3 — 每個 component 至少有最低 spec
+
+- [ ] 補齊無 spec 元件的最低測試:render、class merging、a11y/keyboard 核心行為
+
+**現況**:不少元件目前沒有 `.spec.ts`,例如 `alert`、`avatar`、`badge`、`breadcrumb`、`calendar`、`card`、`carousel`、`command`、`context-menu`、`date-picker`、`divider`、`hover-card`、`label`、`link`、`resizable`、`spinner`、`table`。
+
+**風險**:headless component library 的信任感很大一部分來自互動與 a11y 穩定性。沒有最低 spec 時,重構 styling、ARIA、keyboard 行為都容易出現隱性退化。
+
+**成本**:中高。可先從高風險互動元件開始: `dialog`、`alert-dialog`、`popover`、`select`、`combobox`、`command`、`dropdown-menu`、`context-menu`、`tooltip`。
+
+---
+
+## P4 — docs 要成為採用入口
+
+- [ ] 補齊每個 component docs 的採用資訊:usage、installation、API、accessibility notes、keyboard behavior、controlled/uncontrolled 或 state 說明
+
+**現況**:docs page 覆蓋度已不錯,但主流採用入口需要更穩定的資訊架構。`menu` 缺頁問題已改以移除 `menu` 解決;後續重點是讓保留下來的正式元件文件完整、可預期。
+
+**風險**:即使元件可用,若文件缺少 a11y、keyboard、state model 與 API 說明,使用者會很難判斷它是否適合 production。
+
+**成本**:中。可搭配 component audit matrix 逐一補,避免每頁格式與深度不一致。
+
+---
+
+## P5 — docs 站沒有搜尋功能
+
+- [x] 幫 docs 站加上搜尋(至少支援元件名稱/描述搜尋,理想上做成 Cmd+K 面板)
+
+**現況(更新)**:查證後發現 `apps/docs/src/app/shell/header/feature-list.component.ts` 其實已經有完整的 Cmd+K 搜尋面板(快捷鍵、fuzzy match、鍵盤導覽都做了),原本的「找不到任何搜尋元件」現況查證是舊的、不準。真正的落差只有：搜尋索引只比對翻譯過的元件名稱(`labelKey`),沒有比對描述文字，跟這裡「至少支援名稱/描述搜尋」的要求還差一步。
+
+**已完成**:`docsComponentItems`(`apps/docs/src/app/navigation/docs-navigation.ts`)每筆補上 `descriptionKey`(對應各元件 `.docs.ts` 裡本來就有的 `page.descriptionKey`，型別化、雙語言都不用另外維護);`feature-list.component.ts` 的 `searchIndex`/`filteredItems` 改成先比對名稱、名稱沒中才退而求其次比對描述(用固定偏移量讓名稱命中永遠排前面);結果項目改成兩行式，名稱下面帶一行描述摘要。已用 Playwright 手動驗證：搜尋不在名稱裡的描述字串(如 "vertically stacked")能正確命中 Accordion 並正常導頁。
+
+---
+
+## P6 — 沒有 MCP server 整合
 
 - [ ] 評估幫 `@sanring/cli` 加上 MCP server 支援,讓 Claude Code / Cursor 等 AI agent 能直接查詢、安裝元件
 
@@ -36,7 +73,7 @@
 
 ---
 
-## P3 — 沒有自訂/第三方 registry 支援
+## P7 — 沒有自訂/第三方 registry 支援
 
 - [ ] 評估支援 `@namespace/component` 語法 + `sanring build` 指令,讓團隊可以架自己的私有 registry
 
@@ -46,7 +83,7 @@
 
 ---
 
-## P4 — `sanring init` 沒有 monorepo/workspace 偵測
+## P8 — `sanring init` 沒有 monorepo/workspace 偵測
 
 - [ ] 評估 `init` 指令加上 monorepo 結構偵測與對應處理邏輯
 
@@ -56,7 +93,7 @@
 
 ---
 
-## P5 — 品質關卡類(優先度較低,長期補強)
+## P9 — 品質關卡類(優先度較低,長期補強)
 
 - [ ] 自動化 a11y 測試(如 axe-core),目前 UI library 完全沒有無障礙迴歸的自動把關,只能靠人工肉眼抓
 - [ ] 視覺回歸測試(如 Chromatic / Playwright screenshot),CSS 改動有沒有意外破壞其他元件外觀,現在沒有自動偵測
@@ -66,5 +103,6 @@
 
 ## 查證後確認「不算差距」的項目(備查,避免重複討論)
 
+- **PR 沒有測試/型別檢查關卡**:原 P0 已完成,目前不再放主 todo。已新增 PR 觸發的 CI workflow,跑 `pnpm test`、`tsc --noEmit`、`pnpm lint`。
 - **可編輯 playground(Monaco/StackBlitz 匯出)**:查證後 shadcn 自己的元件文件頁也是「靜態 demo + 程式碼區塊」,沒有即時可編輯的 playground,兩邊打平,不是缺口。
 - **文件版本切換(per-CLI-version docs)**:shadcn 文件站同樣沒有明顯的版本切換機制,兩邊打平,不是缺口。
