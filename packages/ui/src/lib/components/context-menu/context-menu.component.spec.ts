@@ -1,0 +1,255 @@
+import { Component } from '@angular/core';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { OverlayContainer } from '@angular/cdk/overlay';
+
+import { ContextMenuCheckboxItemComponent } from './context-menu-checkbox-item.component';
+import { ContextMenuContentComponent } from './context-menu-content.component';
+import { ContextMenuItemComponent } from './context-menu-item.component';
+import { ContextMenuRadioGroupComponent } from './context-menu-radio-group.component';
+import { ContextMenuRadioItemComponent } from './context-menu-radio-item.component';
+import { ContextMenuSubContentComponent } from './context-menu-sub-content.component';
+import { ContextMenuSubTriggerComponent } from './context-menu-sub-trigger.component';
+import { ContextMenuSubComponent } from './context-menu-sub.component';
+import { ContextMenuTriggerDirective } from './context-menu-trigger.directive';
+import { ContextMenuComponent } from './context-menu.component';
+
+@Component({
+  imports: [
+    ContextMenuComponent,
+    ContextMenuTriggerDirective,
+    ContextMenuContentComponent,
+    ContextMenuItemComponent,
+    ContextMenuCheckboxItemComponent,
+    ContextMenuRadioGroupComponent,
+    ContextMenuRadioItemComponent,
+    ContextMenuSubComponent,
+    ContextMenuSubTriggerComponent,
+    ContextMenuSubContentComponent,
+  ],
+  template: `
+    <sanring-context-menu (itemSelected)="onItemSelected($event)">
+      <div sanringContextMenuTrigger>Right click here</div>
+
+      <sanring-context-menu-content>
+        <sanring-context-menu-item value="back">Back</sanring-context-menu-item>
+        <sanring-context-menu-item value="forward" [disabled]="true">Forward</sanring-context-menu-item>
+        <sanring-context-menu-item value="reload">Reload</sanring-context-menu-item>
+
+        <sanring-context-menu-checkbox-item [(checked)]="showBookmarks">
+          Show Bookmarks
+        </sanring-context-menu-checkbox-item>
+
+        <sanring-context-menu-radio-group [(value)]="panelPosition">
+          <sanring-context-menu-radio-item value="left">Left</sanring-context-menu-radio-item>
+          <sanring-context-menu-radio-item value="right">Right</sanring-context-menu-radio-item>
+        </sanring-context-menu-radio-group>
+
+        <sanring-context-menu-sub>
+          <sanring-context-menu-sub-trigger>More Tools</sanring-context-menu-sub-trigger>
+          <sanring-context-menu-sub-content>
+            <sanring-context-menu-item value="save-page">Save Page</sanring-context-menu-item>
+            <sanring-context-menu-item value="print">Print</sanring-context-menu-item>
+          </sanring-context-menu-sub-content>
+        </sanring-context-menu-sub>
+      </sanring-context-menu-content>
+    </sanring-context-menu>
+  `,
+})
+class ContextMenuTestHost {
+  showBookmarks = false;
+  panelPosition = 'left';
+  lastSelected: unknown = null;
+
+  onItemSelected(value: unknown) {
+    this.lastSelected = value;
+  }
+}
+
+// CDK's overlay keydownEvents listener reads event.keyCode for some downstream consumers and
+// requires cancelable/bubbles to behave like a real browser event — set every relevant field
+// explicitly rather than relying on the KeyboardEvent constructor's (unreliable in jsdom)
+// mapping from `key` to legacy properties.
+function keydown(key: string): KeyboardEvent {
+  return new KeyboardEvent('keydown', { key, bubbles: true, cancelable: true });
+}
+
+describe('ContextMenuComponent', () => {
+  let overlayContainer: OverlayContainer;
+
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      imports: [ContextMenuTestHost],
+    }).compileComponents();
+
+    overlayContainer = TestBed.inject(OverlayContainer);
+  });
+
+  afterEach(() => {
+    overlayContainer.ngOnDestroy();
+  });
+
+  async function createFixture(): Promise<ComponentFixture<ContextMenuTestHost>> {
+    const fixture = TestBed.createComponent(ContextMenuTestHost);
+    fixture.detectChanges();
+    return fixture;
+  }
+
+  function trigger(fixture: ComponentFixture<ContextMenuTestHost>): HTMLElement {
+    return (fixture.nativeElement as HTMLElement).querySelector(
+      '[sanringcontextmenutrigger]',
+    ) as HTMLElement;
+  }
+
+  async function openMenu(fixture: ComponentFixture<ContextMenuTestHost>): Promise<void> {
+    trigger(fixture).dispatchEvent(
+      new MouseEvent('contextmenu', { bubbles: true, cancelable: true, clientX: 10, clientY: 10 }),
+    );
+    fixture.detectChanges();
+    await fixture.whenStable();
+    fixture.detectChanges();
+  }
+
+  // Scoped the same way focusAdjacentMenuItem scopes itself: only items whose nearest
+  // role="menu" ancestor is the root menu — a closed submenu's items stay in the DOM (just
+  // hidden via CSS) until opened, so an unscoped query would also pick those up.
+  function menuItems(): HTMLElement[] {
+    const menu = overlayContainer.getContainerElement().querySelector('[role="menu"]') as HTMLElement;
+    return Array.from(menu.querySelectorAll<HTMLElement>('[role^="menuitem"]')).filter(
+      (item) => item.closest('[role="menu"]') === menu,
+    );
+  }
+
+  it('opens on right-click and renders its items', async () => {
+    const fixture = await createFixture();
+
+    expect(trigger(fixture).getAttribute('aria-expanded')).toBe('false');
+
+    await openMenu(fixture);
+
+    expect(trigger(fixture).getAttribute('aria-expanded')).toBe('true');
+    const menu = overlayContainer.getContainerElement().querySelector('[role="menu"]');
+    expect(menu).toBeTruthy();
+    expect(menuItems().map((el) => el.textContent?.trim())).toEqual([
+      'Back',
+      'Forward',
+      'Reload',
+      'Show Bookmarks',
+      'Left',
+      'Right',
+      'More Tools',
+    ]);
+  });
+
+  it('moves focus between enabled items with ArrowDown/ArrowUp, skipping the disabled one', async () => {
+    const fixture = await createFixture();
+    await openMenu(fixture);
+
+    const [back, forward, reload, , , , moreTools] = menuItems();
+    expect(forward.getAttribute('aria-disabled')).toBe('true');
+
+    // Nothing focused yet — ArrowDown lands on the first enabled item.
+    document.activeElement?.dispatchEvent(keydown('ArrowDown'));
+    fixture.detectChanges();
+    expect(document.activeElement).toBe(back);
+
+    // Forward is disabled and excluded entirely, so the next ArrowDown skips straight to Reload.
+    document.activeElement?.dispatchEvent(keydown('ArrowDown'));
+    fixture.detectChanges();
+    expect(document.activeElement).toBe(reload);
+
+    // ArrowUp from the first item wraps back around to the last enabled item (the submenu
+    // trigger).
+    back.focus();
+    document.activeElement?.dispatchEvent(keydown('ArrowUp'));
+    fixture.detectChanges();
+    expect(document.activeElement).toBe(moreTools);
+  });
+
+  it('selects the focused item on Enter, emits itemSelected, and closes the menu', async () => {
+    const fixture = await createFixture();
+    const host = fixture.componentInstance;
+    await openMenu(fixture);
+
+    const [back] = menuItems();
+    back.focus();
+    back.dispatchEvent(keydown('Enter'));
+    fixture.detectChanges();
+
+    expect(host.lastSelected).toBe('back');
+    expect(trigger(fixture).getAttribute('aria-expanded')).toBe('false');
+  });
+
+  it('closes on Escape', async () => {
+    const fixture = await createFixture();
+    await openMenu(fixture);
+
+    document.activeElement?.dispatchEvent(keydown('Escape'));
+    fixture.detectChanges();
+
+    expect(trigger(fixture).getAttribute('aria-expanded')).toBe('false');
+  });
+
+  it('toggles a checkbox item on click without closing the menu', async () => {
+    const fixture = await createFixture();
+    const host = fixture.componentInstance;
+    await openMenu(fixture);
+
+    const checkboxItem = overlayContainer
+      .getContainerElement()
+      .querySelector('[role="menuitemcheckbox"]') as HTMLElement;
+    expect(checkboxItem.getAttribute('aria-checked')).toBe('false');
+
+    checkboxItem.click();
+    fixture.detectChanges();
+
+    expect(host.showBookmarks).toBe(true);
+    expect(checkboxItem.getAttribute('aria-checked')).toBe('true');
+    expect(trigger(fixture).getAttribute('aria-expanded')).toBe('true');
+  });
+
+  it('selects a radio item and reflects the shared group value', async () => {
+    const fixture = await createFixture();
+    const host = fixture.componentInstance;
+    await openMenu(fixture);
+
+    const radioItems = overlayContainer
+      .getContainerElement()
+      .querySelectorAll<HTMLElement>('[role="menuitemradio"]');
+    expect(radioItems[0].getAttribute('aria-checked')).toBe('true');
+    expect(radioItems[1].getAttribute('aria-checked')).toBe('false');
+
+    radioItems[1].click();
+    fixture.detectChanges();
+
+    expect(host.panelPosition).toBe('right');
+    expect(radioItems[0].getAttribute('aria-checked')).toBe('false');
+    expect(radioItems[1].getAttribute('aria-checked')).toBe('true');
+  });
+
+  it('opens a submenu on ArrowRight/Enter and closes it with ArrowLeft, restoring focus to the sub-trigger', async () => {
+    const fixture = await createFixture();
+    await openMenu(fixture);
+
+    const subTrigger = overlayContainer
+      .getContainerElement()
+      .querySelector('[aria-haspopup="menu"]') as HTMLElement;
+    subTrigger.focus();
+    subTrigger.dispatchEvent(keydown('ArrowRight'));
+    fixture.detectChanges();
+    await fixture.whenStable();
+    fixture.detectChanges();
+
+    expect(subTrigger.getAttribute('aria-expanded')).toBe('true');
+    const subContentHost = overlayContainer
+      .getContainerElement()
+      .querySelector('sanring-context-menu-sub-content') as HTMLElement;
+    const subItems = Array.from(subContentHost.querySelectorAll<HTMLElement>('[role="menuitem"]'));
+    expect(subItems.map((el) => el.textContent?.trim())).toEqual(['Save Page', 'Print']);
+
+    document.activeElement?.dispatchEvent(keydown('ArrowLeft'));
+    fixture.detectChanges();
+
+    expect(subTrigger.getAttribute('aria-expanded')).toBe('false');
+    expect(document.activeElement).toBe(subTrigger);
+  });
+});

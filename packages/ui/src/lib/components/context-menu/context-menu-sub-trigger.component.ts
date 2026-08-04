@@ -22,6 +22,7 @@ import { ContextMenuSubComponent } from './context-menu-sub.component';
     'aria-haspopup': 'menu',
     '[attr.aria-expanded]': 'sub.isOpen() ? "true" : "false"',
     '[attr.data-state]': 'sub.isOpen() ? "open" : "closed"',
+    '[attr.aria-disabled]': 'disabled() ? "true" : null',
     '[attr.data-disabled]': 'disabled() ? "" : null',
     '[attr.tabindex]': 'disabled() ? "-1" : "0"',
     '[class]': 'itemClass()',

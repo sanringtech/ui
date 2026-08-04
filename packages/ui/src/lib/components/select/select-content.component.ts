@@ -2,16 +2,20 @@ import {
   ChangeDetectionStrategy,
   Component,
   ElementRef,
+  Injector,
   ViewChild,
   booleanAttribute,
   computed,
+  contentChildren,
   inject,
   input,
   signal,
 } from '@angular/core';
+import { FocusKeyManager } from '@angular/cdk/a11y';
 import { CdkConnectedOverlay, ConnectionPositionPair, Overlay, OverlayModule } from '@angular/cdk/overlay';
 import { SelectComponent } from './select.component';
 import { SelectContentPosition } from './select.type';
+import { SelectItemComponent } from './select-item.component';
 import { cn } from '../../utils';
 import { OVERLAY_SURFACE_CLASS } from '../component-styles';
 
@@ -94,6 +98,7 @@ const SELECT_ITEM_ALIGNED_POSITIONS: ConnectionPositionPair[] = [
 export class SelectContentComponent {
   protected readonly select = inject(SelectComponent);
   private readonly overlay = inject(Overlay);
+  private readonly injector = inject(Injector);
 
   @ViewChild(CdkConnectedOverlay) private connectedOverlay?: CdkConnectedOverlay;
   @ViewChild('content') private contentRef?: ElementRef<HTMLElement>;
@@ -101,6 +106,15 @@ export class SelectContentComponent {
   readonly class = input<string | undefined>();
   readonly position = input<SelectContentPosition>('popper');
   readonly matchTriggerWidth = input(false, { transform: booleanAttribute });
+
+  // DOM-order content children, handed to a FocusKeyManager so ArrowUp/ArrowDown move real
+  // focus between options (previously Arrow keys only opened the trigger — see
+  // COMPONENT_AUDIT.md's Batch 1 Findings for `select`).
+  private readonly items = contentChildren(SelectItemComponent, { descendants: true });
+  private readonly keyManager = new FocusKeyManager(this.items, this.injector)
+    .withWrap()
+    .withVerticalOrientation()
+    .skipPredicate((item) => item.disabled);
 
   private readonly itemAlignedOffsetY = signal(0);
 
@@ -128,19 +142,37 @@ export class SelectContentComponent {
   }
 
   protected handleAttach(): void {
-    if (this.position() !== 'item-aligned') return;
-
     queueMicrotask(() => {
-      const selectedItem = this.contentRef?.nativeElement.querySelector<HTMLElement>('[data-state="checked"]');
-      this.itemAlignedOffsetY.set(selectedItem?.offsetTop ?? 0);
-      this.connectedOverlay?.overlayRef.updatePosition();
+      if (this.position() === 'item-aligned') {
+        const selectedItem = this.contentRef?.nativeElement.querySelector<HTMLElement>('[data-state="checked"]');
+        this.itemAlignedOffsetY.set(selectedItem?.offsetTop ?? 0);
+        this.connectedOverlay?.overlayRef.updatePosition();
+      }
+
+      this.focusInitialItem();
     });
   }
 
+  // Moves real DOM focus onto the currently-selected option (or the first enabled one) as
+  // soon as the listbox is on screen, so keyboard users land somewhere navigable instead of
+  // having to Tab in from the trigger.
+  private focusInitialItem(): void {
+    const items = this.items();
+    if (items.length === 0) return;
+
+    const selected = items.find((item) => item.value() === this.select.selectedValue());
+    const target = selected && !selected.disabled ? selected : items.find((item) => !item.disabled);
+    if (target) this.keyManager.setActiveItem(target);
+  }
+
   protected handleOverlayKeydown(event: KeyboardEvent): void {
-    if (event.key !== 'Escape') return;
-    event.preventDefault();
-    event.stopPropagation();
-    this.close();
+    if (event.key === 'Escape') {
+      event.preventDefault();
+      event.stopPropagation();
+      this.close();
+      return;
+    }
+
+    this.keyManager.onKeydown(event);
   }
 }

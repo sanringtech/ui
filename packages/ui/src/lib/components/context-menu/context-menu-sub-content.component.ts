@@ -17,6 +17,7 @@ import {
 } from '@angular/core';
 import { cn } from '../../utils';
 import { OVERLAY_SURFACE_CLASS } from '../component-styles';
+import { focusAdjacentMenuItem } from '../shared/menu-navigation';
 import { ContextMenuComponent } from './context-menu.component';
 import { ContextMenuSubComponent } from './context-menu-sub.component';
 
@@ -112,6 +113,13 @@ export class ContextMenuSubContentComponent {
         event.stopPropagation();
         this.sub.close();
         this.sub.triggerRef()?.nativeElement.focus();
+        return;
+      }
+
+      if (event.key === 'ArrowDown' || event.key === 'ArrowUp') {
+        event.preventDefault();
+        event.stopPropagation();
+        focusAdjacentMenuItem(this.elementRef.nativeElement, event.key === 'ArrowDown' ? 1 : -1);
       }
     });
   }

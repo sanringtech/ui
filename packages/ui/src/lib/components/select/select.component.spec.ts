@@ -26,6 +26,7 @@ import { SelectValueComponent } from './select-value.component';
       <sanring-select-content>
         <sanring-select-item value="apple">Apple</sanring-select-item>
         <sanring-select-item value="banana" [disabled]="true">Banana</sanring-select-item>
+        <sanring-select-item value="cherry">Cherry</sanring-select-item>
       </sanring-select-content>
     </sanring-select>
 
@@ -41,6 +42,19 @@ import { SelectValueComponent } from './select-value.component';
 })
 class SelectTestHost {
   disabledControl = new FormControl({ value: null, disabled: true });
+}
+
+// CDK's ListKeyManager (which FocusKeyManager/SelectContentComponent's arrow-key handling
+// delegates to) reads event.keyCode, which the KeyboardEvent constructor's init dict can't
+// set (it's a read-only getter) — same workaround already used in stepper.component.spec.ts
+// and command.component.spec.ts.
+const DOWN_ARROW = 40;
+const UP_ARROW = 38;
+
+function arrowKeydown(keyCode: number): KeyboardEvent {
+  const event = new KeyboardEvent('keydown', { bubbles: true });
+  Object.defineProperty(event, 'keyCode', { get: () => keyCode });
+  return event;
 }
 
 describe('SelectComponent', () => {
@@ -118,6 +132,66 @@ describe('SelectComponent', () => {
     fixture.detectChanges();
 
     expect(trigger.getAttribute('aria-expanded')).toBe('true');
+  });
+
+  it('moves real focus to the first enabled option as soon as the listbox opens', async () => {
+    const fixture = TestBed.createComponent(SelectTestHost);
+    fixture.detectChanges();
+
+    const trigger = triggers(fixture)[0];
+    trigger.click();
+    fixture.detectChanges();
+    await fixture.whenStable();
+
+    const options = overlayContainer.getContainerElement().querySelectorAll('[role="option"]');
+    expect(document.activeElement).toBe(options[0]);
+  });
+
+  it('moves the active option with ArrowDown/ArrowUp, wrapping over the disabled item', async () => {
+    const fixture = TestBed.createComponent(SelectTestHost);
+    fixture.detectChanges();
+
+    const trigger = triggers(fixture)[0];
+    trigger.click();
+    fixture.detectChanges();
+    await fixture.whenStable();
+
+    const options = Array.from(
+      overlayContainer.getContainerElement().querySelectorAll<HTMLElement>('[role="option"]'),
+    );
+    const [apple, banana, cherry] = options;
+
+    // Banana is disabled — ArrowDown from Apple should skip it and land on Cherry.
+    document.activeElement?.dispatchEvent(arrowKeydown(DOWN_ARROW));
+    fixture.detectChanges();
+    expect(document.activeElement).toBe(cherry);
+    expect(banana.getAttribute('aria-disabled')).toBe('true');
+
+    // Wraps back to Apple, still skipping Banana.
+    document.activeElement?.dispatchEvent(arrowKeydown(DOWN_ARROW));
+    fixture.detectChanges();
+    expect(document.activeElement).toBe(apple);
+
+    // ArrowUp from Apple wraps the other direction, skipping Banana again, landing on Cherry.
+    document.activeElement?.dispatchEvent(arrowKeydown(UP_ARROW));
+    fixture.detectChanges();
+    expect(document.activeElement).toBe(cherry);
+  });
+
+  it('selects the focused option on Enter', async () => {
+    const fixture = TestBed.createComponent(SelectTestHost);
+    fixture.detectChanges();
+
+    const trigger = triggers(fixture)[0];
+    trigger.click();
+    fixture.detectChanges();
+    await fixture.whenStable();
+
+    document.activeElement?.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true }));
+    fixture.detectChanges();
+
+    expect(trigger.getAttribute('aria-expanded')).toBe('false');
+    expect(trigger.textContent?.trim()).toBe('Apple');
   });
 
   it('opens on ArrowDown when closed', () => {
