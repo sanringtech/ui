@@ -436,7 +436,7 @@ interface HomeVisualMetric {
 export class HomePageComponent {
   protected readonly i18n = inject(I18nService);
   private readonly seo = inject(SeoService);
-  protected readonly releaseVersion = 'v0.17.2';
+  protected readonly releaseVersion = 'v0.18.0';
 
   constructor() {
     effect(() => {

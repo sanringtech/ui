@@ -34,6 +34,17 @@ export interface ComponentChangelogEntry {
  */
 export const componentChangelog: readonly ComponentChangelogEntry[] = [
   {
+    date: '2026-08-05',
+    changes: [
+      {
+        type: 'added',
+        notable: true,
+        componentIds: ['sidebar'],
+        text: 'New `sidebar` component: a composable application shell sidebar with rail mode, inset layout, sub-menus, action buttons, and badge indicators.',
+      },
+    ],
+  },
+  {
     date: '2026-07-28',
     changes: [
       {
