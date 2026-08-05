@@ -29,6 +29,7 @@ export * from './lib/components/hover-card';
 export * from './lib/components/input';
 export * from './lib/components/label';
 export * from './lib/components/link';
+export * from './lib/components/navigation-menu';
 export * from './lib/components/otp-input';
 export * from './lib/components/dropdown-menu';
 export * from './lib/components/pagination';
