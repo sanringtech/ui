@@ -85,7 +85,21 @@
 
 ---
 
-## P6 — docs 站沒有搜尋功能
+## P6 — package-only 使用者的 theme token 入口
+
+- [ ] 讓不透過 CLI/registry、只安裝 `@sanring/ui` package 的使用者也能清楚取得預設 theme CSS
+
+**現況**:`registry/shared/theme.css` 已經提供完整 `--sanring-*` CSS custom properties,`registry/registry.json` 也已把 `theme` 宣告為 shared dependency;`sanring init` 會產生 `src/sanring-theme.css`,docs theming page 也有說明。但如果使用者只從 npm 安裝 `@sanring/ui`,目前不夠直覺地知道 `bg-[var(--sanring-border)]`、`text-[var(--sanring-foreground)]` 等 token 要從哪裡設定。
+
+**建議方向**:讓 package 也提供穩定 CSS 入口,例如 `@import '@sanring/ui/theme.css';`,並在 README / installation / theming docs 明確說明兩種路徑：CLI 使用者跑 `sanring init`;package-only 使用者 import package 內建 theme CSS 或自行定義同名 `--sanring-*` token。
+
+**風險**:元件本身可用,但樣式 token 沒載入時會出現顏色/邊框/背景失效,使用者會誤以為元件壞掉。這會直接影響 package 採用體驗,尤其是沒有走 Sanring CLI 的使用者。
+
+**成本**:中低。需要確認 package build 是否能輸出 CSS asset、`package.json` exports 是否能暴露 `./theme.css`,以及 docs/README 是否同步補上安裝方式。
+
+---
+
+## P7 — docs 站沒有搜尋功能
 
 - [x] 幫 docs 站加上搜尋(至少支援元件名稱/描述搜尋,理想上做成 Cmd+K 面板)
 
@@ -95,7 +109,7 @@
 
 ---
 
-## P7 — 沒有 MCP server 整合
+## P8 — 沒有 MCP server 整合
 
 - [ ] 評估幫 `@sanring/cli` 加上 MCP server 支援,讓 Claude Code / Cursor 等 AI agent 能直接查詢、安裝元件
 
@@ -105,7 +119,7 @@
 
 ---
 
-## P8 — 沒有自訂/第三方 registry 支援
+## P9 — 沒有自訂/第三方 registry 支援
 
 - [ ] 評估支援 `@namespace/component` 語法 + `sanring build` 指令,讓團隊可以架自己的私有 registry
 
@@ -115,7 +129,7 @@
 
 ---
 
-## P9 — `sanring init` 沒有 monorepo/workspace 偵測
+## P10 — `sanring init` 沒有 monorepo/workspace 偵測
 
 - [ ] 評估 `init` 指令加上 monorepo 結構偵測與對應處理邏輯
 
@@ -125,11 +139,25 @@
 
 ---
 
-## P10 — 品質關卡類(優先度較低,長期補強)
+## P11 — 品質關卡類(優先度較低,長期補強)
 
 - [ ] 自動化 a11y 測試(如 axe-core),目前 UI library 完全沒有無障礙迴歸的自動把關,只能靠人工肉眼抓
 - [ ] 視覺回歸測試(如 Chromatic / Playwright screenshot),CSS 改動有沒有意外破壞其他元件外觀,現在沒有自動偵測
 - [ ] CLI 補真正的 e2e 測試(拉一個全新 Angular 專案、真的跑 `sanring add`、真的 `ng build`)——現有的 `add.test.ts`/`doctor.test.ts` 等是對假的檔案系統 mock 驗證邏輯,不是「CLI 真的能在使用者機器上跑起來」的保證
+
+---
+
+## P12 — Masked Input 是否需要獨立套件(比照 date-picker-core)
+
+- [ ] 評估 Masked Input(roadmap tier2 規劃中)的遮罩引擎是否要比照 `@sanring/date-picker-core` 拆成獨立套件
+
+**現況**:查證 `@sanring/date-picker-core`(headless Angular calendar engine,純邏輯零 DOM/CSS,有自己的獨立 repo)發現它會被拆分的關鍵理由是「同一套引擎被 `calendar` 跟 `date-picker` 兩個元件共用」,而不只是「邏輯複雜、值得獨立測試」。Masked Input 目前規劃只疊加在單一 `Input` directive 上,還沒有第二個消費者。
+
+**建議方向**:先不拆獨立套件。把遮罩演算法(字串 + cursor 位置 + mask config → 格式化後字串 + 新 cursor 位置)寫成 `packages/ui` 內一個零 Angular 依賴的純函式模組,可以獨立單元測試,但不用背獨立 repo/版本協調的重量。等真的出現第二個消費者(例如某個 table 欄位編輯器也要用同一套遮罩)再拆成獨立套件。
+
+**風險**:太早拆套件會增加版本協調與跨 repo 維護成本,卻沒有實際的重用收益;太晚拆則要在多個消費者之間做痛苦的遷移。
+
+**成本**:低(目前只是紀錄架構決策,Masked Input 本身還沒開工實作)。
 
 ---
 
