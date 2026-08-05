@@ -46,7 +46,7 @@ export class NavigationMenuSubTriggerComponent {
 
   protected readonly triggerClass = computed(() =>
     cn(
-      'relative flex w-full cursor-default select-none items-center justify-start gap-2 rounded-[var(--sanring-radius-xs)] px-3 py-2 text-sm outline-none',
+      'relative flex w-full cursor-default select-none items-center justify-start gap-2 rounded-[var(--sanring-radius)] px-3 py-2 text-sm outline-none',
       'text-[var(--sanring-foreground)] transition-colors',
       'hover:bg-[var(--sanring-surface-strong)] focus:bg-[var(--sanring-surface-strong)] data-[state=open]:bg-[var(--sanring-surface-strong)]',
       'data-[disabled]:pointer-events-none data-[disabled]:opacity-50',

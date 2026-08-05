@@ -51,7 +51,7 @@ export class NavigationMenuSubContentComponent {
   protected readonly contentClass = computed(() =>
     cn(
       OVERLAY_SURFACE_CLASS,
-      'z-50 block min-w-40 overflow-hidden rounded-[var(--sanring-radius-sm)] p-1 outline-none',
+      'z-50 block min-w-40 overflow-hidden rounded-[var(--sanring-radius-lg)] p-2 outline-none',
       !this.sub.open() && 'hidden',
       this.class(),
     ),
