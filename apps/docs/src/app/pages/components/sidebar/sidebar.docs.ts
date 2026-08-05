@@ -40,6 +40,7 @@ export const sidebarPage = {
       children: [
         { id: 'example-icon', titleKey: 'sidebar.demo.iconMode', level: 3 },
         { id: 'example-offcanvas', titleKey: 'sidebar.demo.offcanvasMode', level: 3 },
+        { id: 'example-none', titleKey: 'sidebar.demo.noneMode', level: 3 },
       ],
     },
     {
@@ -112,31 +113,36 @@ export const sidebarPage = {
 } as const satisfies ComponentPageDefinition;
 
 export const sidebarPageExamples = {
-  basic: `<div class="flex min-h-[360px]">
-  <sanring-sidebar
-    id="workspace-sidebar"
-    sanringSidebarTrigger
-    collapsible="icon"
-    [open]="sidebarOpen()"
-    (openChange)="sidebarOpen.set($event)"
-  >
+  basic: `<sanring-sidebar-provider collapsible="icon" #provider>
+  @let isOpen = provider.isOpen();
+  <div class="flex min-h-[620px]">
+  <sanring-sidebar>
   <sanring-sidebar-header>
-    <div class="flex min-w-0 items-center gap-3 px-2" [class.justify-center]="!sidebarOpen()">
-      <div class="flex size-9 shrink-0 items-center justify-center rounded-lg bg-black text-white">
-        <svg lucidePanelsTopLeft class="size-5"></svg>
-      </div>
-      @if (sidebarOpen()) {
-        <div class="min-w-0">
-          <div class="truncate text-sm font-semibold">Acme Inc</div>
-          <div class="truncate text-xs text-muted-foreground">Enterprise</div>
-        </div>
-      }
-    </div>
+    <sanring-dropdown-menu>
+      <button type="button" sanringDropdownMenuTrigger [menu]="teamMenu.menu" side="right">
+        <svg lucideGalleryVerticalEnd class="size-5"></svg>
+        @if (isOpen) {
+          <span class="min-w-0 text-left">
+            <span class="block truncate text-sm font-semibold">Acme Inc</span>
+            <span class="block truncate text-xs text-muted-foreground">Enterprise</span>
+          </span>
+          <svg lucideChevronsUpDown class="ml-auto size-4"></svg>
+        }
+      </button>
+      <sanring-dropdown-menu-content #teamMenu="sanringDropdownMenuContent" class="w-64">
+        <sanring-dropdown-menu-label>Teams</sanring-dropdown-menu-label>
+        <button type="button" sanringDropdownMenuItem value="acme">Acme Inc</button>
+        <button type="button" sanringDropdownMenuItem value="acme-corp">Acme Corp.</button>
+        <button type="button" sanringDropdownMenuItem value="evil-corp">Evil Corp.</button>
+        <sanring-dropdown-menu-separator />
+        <button type="button" sanringDropdownMenuItem value="add-team">Add team</button>
+      </sanring-dropdown-menu-content>
+    </sanring-dropdown-menu>
   </sanring-sidebar-header>
 
   <sanring-sidebar-content>
     <sanring-sidebar-group>
-      @if (sidebarOpen()) {
+      @if (isOpen) {
         <sanring-sidebar-group-label>Platform</sanring-sidebar-group-label>
       }
       <sanring-sidebar-group-content>
@@ -145,15 +151,15 @@ export const sidebarPageExamples = {
             <sanring-collapsible [open]="true">
               <button type="button" sanringSidebarMenuButton active sanringCollapsibleTrigger>
                 <svg lucideLayoutDashboard class="size-4 shrink-0"></svg>
-                @if (sidebarOpen()) {
+                @if (isOpen) {
                   <span class="truncate">Dashboard</span>
                   <svg lucideChevronRight class="ml-auto size-4 shrink-0"></svg>
                 }
               </button>
-              @if (sidebarOpen()) {
+              @if (isOpen) {
                 <sanring-sidebar-menu-sub sanringCollapsibleContent>
                   <sanring-sidebar-menu-sub-item>
-                    <a href="#" class="block px-2 py-1.5 text-sm">Overview</a>
+                    <a href="#" class="block rounded-md px-2 py-1.5 text-sm hover:bg-muted">Overview</a>
                   </sanring-sidebar-menu-sub-item>
                   <sanring-sidebar-menu-sub-item>
                     <a href="#" class="block px-2 py-1.5 text-sm">Reports</a>
@@ -167,12 +173,12 @@ export const sidebarPageExamples = {
             <sanring-collapsible>
               <button type="button" sanringSidebarMenuButton sanringCollapsibleTrigger>
                 <svg lucideUsers class="size-4 shrink-0"></svg>
-                @if (sidebarOpen()) {
+                @if (isOpen) {
                   <span class="truncate">Customers</span>
                   <svg lucideChevronRight class="ml-auto size-4 shrink-0"></svg>
                 }
               </button>
-              @if (sidebarOpen()) {
+              @if (isOpen) {
                 <sanring-sidebar-menu-sub sanringCollapsibleContent>
                   <sanring-sidebar-menu-sub-item>
                     <a href="#" class="block px-2 py-1.5 text-sm">Accounts</a>
@@ -189,12 +195,12 @@ export const sidebarPageExamples = {
             <sanring-collapsible>
               <button type="button" sanringSidebarMenuButton sanringCollapsibleTrigger>
                 <svg lucideBell class="size-4 shrink-0"></svg>
-                @if (sidebarOpen()) {
+                @if (isOpen) {
                   <span class="truncate">Notifications</span>
                   <svg lucideChevronRight class="ml-auto size-4 shrink-0"></svg>
                 }
               </button>
-              @if (sidebarOpen()) {
+              @if (isOpen) {
                 <sanring-sidebar-menu-sub sanringCollapsibleContent>
                   <sanring-sidebar-menu-sub-item>
                     <a href="#" class="block px-2 py-1.5 text-sm">Inbox</a>
@@ -209,36 +215,96 @@ export const sidebarPageExamples = {
         </sanring-sidebar-menu>
       </sanring-sidebar-group-content>
     </sanring-sidebar-group>
+
+    @if (isOpen) {
+      <sanring-sidebar-group>
+        <sanring-sidebar-group-label>Projects</sanring-sidebar-group-label>
+        <sanring-sidebar-group-content>
+          <sanring-sidebar-menu>
+            <sanring-sidebar-menu-item>
+              <a href="#" sanringSidebarMenuButton>
+                <svg lucideFrame class="size-4 shrink-0"></svg>
+                <span>Design Engineering</span>
+              </a>
+              <sanring-dropdown-menu>
+                <button
+                  type="button"
+                  sanringSidebarMenuAction
+                  sanringDropdownMenuTrigger
+                  [menu]="projectMenu.menu"
+                  side="right"
+                  aria-label="Project actions"
+                >
+                  <svg lucideEllipsis class="size-4"></svg>
+                </button>
+                <sanring-dropdown-menu-content #projectMenu="sanringDropdownMenuContent" class="w-48">
+                  <button type="button" sanringDropdownMenuItem value="view-project">View Project</button>
+                  <button type="button" sanringDropdownMenuItem value="share-project">Share Project</button>
+                  <sanring-dropdown-menu-separator />
+                  <button type="button" sanringDropdownMenuItem value="delete-project" variant="destructive">
+                    Delete Project
+                  </button>
+                </sanring-dropdown-menu-content>
+              </sanring-dropdown-menu>
+            </sanring-sidebar-menu-item>
+            <sanring-sidebar-menu-item>
+              <a href="#" sanringSidebarMenuButton>
+                <svg lucideChartPie class="size-4 shrink-0"></svg>
+                <span>Sales & Marketing</span>
+              </a>
+            </sanring-sidebar-menu-item>
+            <sanring-sidebar-menu-item>
+              <a href="#" sanringSidebarMenuButton>
+                <svg lucideMap class="size-4 shrink-0"></svg>
+                <span>Travel</span>
+              </a>
+            </sanring-sidebar-menu-item>
+          </sanring-sidebar-menu>
+        </sanring-sidebar-group-content>
+      </sanring-sidebar-group>
+    }
   </sanring-sidebar-content>
 
   <sanring-sidebar-footer>
-    <button type="button" sanringSidebarMenuButton>
-      <svg lucideSettings class="size-4 shrink-0"></svg>
-      @if (sidebarOpen()) {
-        <span class="truncate">Settings</span>
-      }
-    </button>
+    <sanring-dropdown-menu>
+      <button type="button" sanringDropdownMenuTrigger [menu]="accountMenu.menu" side="right" align="end">
+        <img src="https://i.pravatar.cc/80?img=5" alt="" class="size-9 rounded-full" />
+        @if (isOpen) {
+          <span class="min-w-0 flex-1 text-left">
+            <span class="block truncate text-sm font-medium">shadcn</span>
+            <span class="block truncate text-xs text-muted-foreground">m@example.com</span>
+          </span>
+          <svg lucideChevronsUpDown class="size-4"></svg>
+        }
+      </button>
+      <sanring-dropdown-menu-content #accountMenu="sanringDropdownMenuContent" class="w-64">
+        <button type="button" sanringDropdownMenuItem value="upgrade">Upgrade to Pro</button>
+        <sanring-dropdown-menu-separator />
+        <button type="button" sanringDropdownMenuItem value="account">Account</button>
+        <button type="button" sanringDropdownMenuItem value="billing">Billing</button>
+        <button type="button" sanringDropdownMenuItem value="notifications">Notifications</button>
+        <sanring-dropdown-menu-separator />
+        <button type="button" sanringDropdownMenuItem value="logout">Log out</button>
+      </sanring-dropdown-menu-content>
+    </sanring-dropdown-menu>
   </sanring-sidebar-footer>
   <button sanringSidebarRail aria-label="Toggle sidebar"></button>
 </sanring-sidebar>
 
 <main sanringSidebarInset class="p-6">
-  <button
-    type="button"
-    aria-controls="workspace-sidebar"
-    [attr.aria-expanded]="sidebarOpen()"
-    (click)="sidebarOpen.set(!sidebarOpen())"
-  >
+  <button type="button" sanringSidebarTrigger aria-label="Toggle sidebar">
     <svg lucidePanelsTopLeft class="size-5"></svg>
   </button>
 </main>
-</div>`,
+</div>
+</sanring-sidebar-provider>`,
   usageImport: `import { Component } from '@angular/core';
 import { SANRING_COLLAPSIBLE_IMPORTS } from './components/ui/collapsible';
+import { SANRING_DROPDOWN_MENU_IMPORTS } from './components/ui/dropdown-menu';
 import { SANRING_SIDEBAR_IMPORTS } from './components/ui/sidebar';
 
 @Component({
-  imports: [SANRING_COLLAPSIBLE_IMPORTS, SANRING_SIDEBAR_IMPORTS],
+  imports: [SANRING_COLLAPSIBLE_IMPORTS, SANRING_DROPDOWN_MENU_IMPORTS, SANRING_SIDEBAR_IMPORTS],
 })
 export class ExampleComponent {}`,
   usageMain: `<sanring-sidebar collapsible="icon">
@@ -268,13 +334,21 @@ export class ExampleComponent {}`,
 </sanring-sidebar>`,
   usageIndividualImports: `import { Component } from '@angular/core';
 import { CollapsibleComponent, CollapsibleContentDirective, CollapsibleTriggerDirective } from './components/ui/collapsible';
-import { SidebarComponent, SidebarContentComponent, SidebarFooterComponent, SidebarGroupComponent, SidebarGroupContentComponent, SidebarGroupLabelComponent, SidebarHeaderComponent, SidebarInsetDirective, SidebarMenuActionDirective, SidebarMenuBadgeComponent, SidebarMenuButtonDirective, SidebarMenuComponent, SidebarMenuItemComponent, SidebarMenuSubComponent, SidebarMenuSubItemComponent, SidebarRailDirective, SidebarTriggerDirective } from './components/ui/sidebar';
+import { DropdownMenuComponent, DropdownMenuContentComponent, DropdownMenuItemDirective, DropdownMenuLabelComponent, DropdownMenuSeparatorComponent, DropdownMenuTriggerDirective } from './components/ui/dropdown-menu';
+import { SidebarProviderComponent, SidebarComponent, SidebarContentComponent, SidebarFooterComponent, SidebarGroupComponent, SidebarGroupContentComponent, SidebarGroupLabelComponent, SidebarHeaderComponent, SidebarInsetDirective, SidebarMenuActionDirective, SidebarMenuBadgeComponent, SidebarMenuButtonDirective, SidebarMenuComponent, SidebarMenuItemComponent, SidebarMenuSubComponent, SidebarMenuSubItemComponent, SidebarRailDirective, SidebarTriggerDirective } from './components/ui/sidebar';
 
 @Component({
   imports: [
     CollapsibleComponent,
     CollapsibleTriggerDirective,
     CollapsibleContentDirective,
+    DropdownMenuComponent,
+    DropdownMenuTriggerDirective,
+    DropdownMenuContentComponent,
+    DropdownMenuLabelComponent,
+    DropdownMenuItemDirective,
+    DropdownMenuSeparatorComponent,
+    SidebarProviderComponent,
     SidebarComponent,
     SidebarHeaderComponent,
     SidebarContentComponent,
@@ -295,7 +369,7 @@ import { SidebarComponent, SidebarContentComponent, SidebarFooterComponent, Side
   ],
 })
 export class ExampleComponent {}`,
-  composition: `app-shell
+  composition: `sanring-sidebar-provider        ← owns open/collapsible state
 ├── sanring-sidebar
 │   ├── sanring-sidebar-header
 │   ├── sanring-sidebar-content
@@ -312,27 +386,69 @@ export class ExampleComponent {}`,
 │   ├── sanring-sidebar-footer
 │   └── [sanringSidebarRail]
 ├── [sanringSidebarInset]
-└── [sanringSidebarTrigger]`,
-  iconMode: `<sanring-sidebar collapsible="icon">
-  <sanring-sidebar-header>
-    <button type="button" sanringSidebarTrigger aria-label="Toggle sidebar">SR</button>
-  </sanring-sidebar-header>
+└── [sanringSidebarTrigger]  ← can live anywhere inside the provider`,
+  iconMode: `<sanring-sidebar-provider collapsible="icon" #provider>
+  @let isOpen = provider.isOpen();
+  <div class="flex min-h-[320px]">
+    <sanring-sidebar>
+      <sanring-sidebar-header>
+        <button type="button" sanringSidebarTrigger aria-label="Toggle sidebar">
+          <svg lucideMenu class="size-4"></svg>
+        </button>
+      </sanring-sidebar-header>
+      <sanring-sidebar-content>
+        <sanring-sidebar-menu>
+          <sanring-sidebar-menu-item>
+            <a sanringSidebarMenuButton active href="#">
+              <svg lucideLayoutDashboard class="size-4 shrink-0"></svg>
+              @if (isOpen) { <span class="truncate">Dashboard</span> }
+            </a>
+          </sanring-sidebar-menu-item>
+          <sanring-sidebar-menu-item>
+            <a sanringSidebarMenuButton href="#">
+              <svg lucideSettings class="size-4 shrink-0"></svg>
+              @if (isOpen) { <span class="truncate">Settings</span> }
+            </a>
+          </sanring-sidebar-menu-item>
+        </sanring-sidebar-menu>
+      </sanring-sidebar-content>
+      <button sanringSidebarRail aria-label="Toggle sidebar"></button>
+    </sanring-sidebar>
+    <main class="flex-1 p-6">Content</main>
+  </div>
+</sanring-sidebar-provider>`,
+  offcanvasMode: `<sanring-sidebar-provider collapsible="offcanvas">
+  <button type="button" sanringSidebarTrigger>Toggle sidebar</button>
+
+  <div class="flex min-h-[320px]">
+    <sanring-sidebar>
+      ...
+    </sanring-sidebar>
+    <main class="flex-1">Content</main>
+  </div>
+</sanring-sidebar-provider>`,
+  noneMode: `<sanring-sidebar collapsible="none">
   <sanring-sidebar-content>
-    ...
+    <sanring-sidebar-menu>
+      <sanring-sidebar-menu-item>
+        <a sanringSidebarMenuButton active href="#">
+          <svg lucideLayoutDashboard class="size-4 shrink-0"></svg>
+          <span>Dashboard</span>
+        </a>
+      </sanring-sidebar-menu-item>
+      <sanring-sidebar-menu-item>
+        <a sanringSidebarMenuButton href="#">
+          <svg lucideUsers class="size-4 shrink-0"></svg>
+          <span>Customers</span>
+        </a>
+      </sanring-sidebar-menu-item>
+      <sanring-sidebar-menu-item>
+        <a sanringSidebarMenuButton href="#">
+          <svg lucideSettings class="size-4 shrink-0"></svg>
+          <span>Settings</span>
+        </a>
+      </sanring-sidebar-menu-item>
+    </sanring-sidebar-menu>
   </sanring-sidebar-content>
 </sanring-sidebar>`,
-  offcanvasMode: `<button type="button" (click)="sidebarOpen.set(!sidebarOpen())">
-  Toggle sidebar
-</button>
-
-<div class="flex min-h-[320px]">
-  <sanring-sidebar
-    collapsible="offcanvas"
-    [open]="sidebarOpen()"
-    (openChange)="sidebarOpen.set($event)"
-  >
-    ...
-  </sanring-sidebar>
-  <main class="flex-1">Content</main>
-</div>`,
 } as const;
