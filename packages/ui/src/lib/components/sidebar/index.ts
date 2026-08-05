@@ -1,3 +1,4 @@
+export * from './sidebar-context';
 export * from './sidebar.component';
 export * from './sidebar-content.component';
 export * from './sidebar-footer.component';
@@ -13,6 +14,7 @@ export * from './sidebar-menu-button.directive';
 export * from './sidebar-menu-item.component';
 export * from './sidebar-menu-sub.component';
 export * from './sidebar-menu-sub-item.component';
+export * from './sidebar-provider.component';
 export * from './sidebar-rail.directive';
 export * from './sidebar-trigger.directive';
 export * from './sidebar.type';
@@ -31,11 +33,13 @@ import { SidebarMenuItemComponent } from './sidebar-menu-item.component';
 import { SidebarMenuSubItemComponent } from './sidebar-menu-sub-item.component';
 import { SidebarMenuSubComponent } from './sidebar-menu-sub.component';
 import { SidebarMenuComponent } from './sidebar-menu.component';
+import { SidebarProviderComponent } from './sidebar-provider.component';
 import { SidebarRailDirective } from './sidebar-rail.directive';
 import { SidebarTriggerDirective } from './sidebar-trigger.directive';
 import { SidebarComponent } from './sidebar.component';
 
 export const SANRING_SIDEBAR_IMPORTS = [
+  SidebarProviderComponent,
   SidebarComponent,
   SidebarHeaderComponent,
   SidebarContentComponent,

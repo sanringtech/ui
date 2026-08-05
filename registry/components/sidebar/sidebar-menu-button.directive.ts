@@ -8,7 +8,7 @@ import {
   input,
 } from '@angular/core';
 import { cn } from '../shared/utils';
-import { SidebarComponent } from './sidebar.component';
+import { SIDEBAR_CONTEXT } from './sidebar-context';
 
 @Directive({
   selector: '[sanringSidebarMenuButton]',
@@ -24,7 +24,7 @@ import { SidebarComponent } from './sidebar.component';
 })
 export class SidebarMenuButtonDirective {
   private readonly elementRef = inject<ElementRef<HTMLElement>>(ElementRef);
-  private readonly sidebar = inject(SidebarComponent, { optional: true });
+  private readonly ctx = inject(SIDEBAR_CONTEXT, { optional: true });
 
   readonly class = input<string | undefined>();
   readonly active = input(false, { transform: booleanAttribute });
@@ -32,7 +32,7 @@ export class SidebarMenuButtonDirective {
 
   protected readonly isButton = this.elementRef.nativeElement.tagName.toLowerCase() === 'button';
   private readonly isIconRail = computed(
-    () => this.sidebar?.collapsible() === 'icon' && !this.sidebar.isOpen(),
+    () => this.ctx?.collapsible() === 'icon' && !this.ctx.isOpen(),
   );
 
   protected readonly buttonClass = computed(() =>

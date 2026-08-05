@@ -439,6 +439,8 @@
         "sidebar/sidebar-menu-sub-item.component.ts",
         "sidebar/sidebar-rail.directive.ts",
         "sidebar/sidebar.type.ts",
+        "sidebar/sidebar-context.ts",
+        "sidebar/sidebar-provider.component.ts",
         "sidebar/index.ts"
       ]
     },
