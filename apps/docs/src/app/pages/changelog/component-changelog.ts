@@ -40,7 +40,22 @@ export const componentChangelog: readonly ComponentChangelogEntry[] = [
         type: 'added',
         notable: true,
         componentIds: ['navigation-menu'],
-        text: 'New `navigation-menu` component: horizontal or vertical top-level navigation with trigger-opened content panels, an optional shared `sanring-navigation-menu-viewport` + indicator, and link/label/description/separator primitives.',
+        text: 'New `navigation-menu` component: horizontal or vertical top-level navigation with trigger-opened content panels and link/label/description/separator primitives.',
+      },
+      {
+        type: 'added',
+        componentIds: ['navigation-menu'],
+        text: 'Clicking outside an open `navigation-menu` panel closes it — this is always-on behavior, not an opt-in prop.',
+      },
+      {
+        type: 'added',
+        componentIds: ['navigation-menu'],
+        text: 'Added `sanring-navigation-menu-viewport` — one shared, fixed-size panel centered under the trigger group, instead of a differently sized panel per trigger.',
+      },
+      {
+        type: 'added',
+        componentIds: ['navigation-menu'],
+        text: 'Added `sanring-navigation-menu-sub` submenu flyouts, positioned with CDK Overlay (viewport collision fallback) and opened on hover-intent, click, or keyboard.',
       },
     ],
   },

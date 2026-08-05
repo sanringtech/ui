@@ -252,6 +252,7 @@ export class RoadmapPageComponent {
     { name: 'Scroll Area', description: '' },
     { name: 'Select', description: '' },
     { name: 'Sheet', description: '' },
+    { name: 'Sidebar', description: '', tone: 'updated' },
     { name: 'Skeleton', description: '' },
     { name: 'Slider', description: '' },
     { name: 'Spinner', description: '' },
@@ -278,11 +279,6 @@ export class RoadmapPageComponent {
       name: 'Masked Input',
       description:
         'A formatting directive layered on the existing Input, not a one-off credit-card component. One config drives credit card (with Luhn validation and card-brand detection), phone number, national ID, and thousand-separator amount formatting.',
-    },
-    {
-      name: 'OTP Input',
-      description:
-        'Segmented one-time-password input with auto-advance between digits and paste-splitting. Bounded scope, but the focus-management logic is nontrivial.',
     },
   ];
 
