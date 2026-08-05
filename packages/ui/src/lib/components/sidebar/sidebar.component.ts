@@ -39,6 +39,7 @@ export class SidebarComponent {
   protected readonly hostClass = computed(() =>
     cn(
       'flex h-full min-w-0 flex-col overflow-hidden border-r border-[var(--sanring-border)] bg-[var(--sanring-background)]',
+      'relative',
       'transition-[width,border-color] duration-200 ease-out',
       this.isOpen() && 'w-64',
       !this.isOpen() && this.collapsible() === 'icon' && 'w-14',

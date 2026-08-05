@@ -139,61 +139,75 @@ export const sidebarPageExamples = {
       @if (sidebarOpen()) {
         <sanring-sidebar-group-label>Platform</sanring-sidebar-group-label>
       }
-      <sanring-sidebar-menu>
-        <sanring-sidebar-menu-item>
-          <sanring-collapsible [open]="true">
-            <button type="button" sanringSidebarMenuButton active sanringCollapsibleTrigger>
-              <svg lucideLayoutDashboard class="size-4 shrink-0"></svg>
+      <sanring-sidebar-group-content>
+        <sanring-sidebar-menu>
+          <sanring-sidebar-menu-item>
+            <sanring-collapsible [open]="true">
+              <button type="button" sanringSidebarMenuButton active sanringCollapsibleTrigger>
+                <svg lucideLayoutDashboard class="size-4 shrink-0"></svg>
+                @if (sidebarOpen()) {
+                  <span class="truncate">Dashboard</span>
+                  <svg lucideChevronRight class="ml-auto size-4 shrink-0"></svg>
+                }
+              </button>
               @if (sidebarOpen()) {
-                <span class="truncate">Dashboard</span>
-                <svg lucideChevronRight class="ml-auto size-4 shrink-0"></svg>
+                <sanring-sidebar-menu-sub sanringCollapsibleContent>
+                  <sanring-sidebar-menu-sub-item>
+                    <a href="#" class="block px-2 py-1.5 text-sm">Overview</a>
+                  </sanring-sidebar-menu-sub-item>
+                  <sanring-sidebar-menu-sub-item>
+                    <a href="#" class="block px-2 py-1.5 text-sm">Reports</a>
+                  </sanring-sidebar-menu-sub-item>
+                </sanring-sidebar-menu-sub>
               }
-            </button>
-            @if (sidebarOpen()) {
-              <div sanringCollapsibleContent class="ml-4 grid gap-1 border-l py-1 pl-3">
-                <a href="#" class="px-2 py-1.5 text-sm">Overview</a>
-                <a href="#" class="px-2 py-1.5 text-sm">Reports</a>
-              </div>
-            }
-          </sanring-collapsible>
-        </sanring-sidebar-menu-item>
+            </sanring-collapsible>
+          </sanring-sidebar-menu-item>
 
-        <sanring-sidebar-menu-item>
-          <sanring-collapsible>
-            <button type="button" sanringSidebarMenuButton sanringCollapsibleTrigger>
-              <svg lucideUsers class="size-4 shrink-0"></svg>
+          <sanring-sidebar-menu-item>
+            <sanring-collapsible>
+              <button type="button" sanringSidebarMenuButton sanringCollapsibleTrigger>
+                <svg lucideUsers class="size-4 shrink-0"></svg>
+                @if (sidebarOpen()) {
+                  <span class="truncate">Customers</span>
+                  <svg lucideChevronRight class="ml-auto size-4 shrink-0"></svg>
+                }
+              </button>
               @if (sidebarOpen()) {
-                <span class="truncate">Customers</span>
-                <svg lucideChevronRight class="ml-auto size-4 shrink-0"></svg>
+                <sanring-sidebar-menu-sub sanringCollapsibleContent>
+                  <sanring-sidebar-menu-sub-item>
+                    <a href="#" class="block px-2 py-1.5 text-sm">Accounts</a>
+                  </sanring-sidebar-menu-sub-item>
+                  <sanring-sidebar-menu-sub-item>
+                    <a href="#" class="block px-2 py-1.5 text-sm">Segments</a>
+                  </sanring-sidebar-menu-sub-item>
+                </sanring-sidebar-menu-sub>
               }
-            </button>
-            @if (sidebarOpen()) {
-              <div sanringCollapsibleContent class="ml-4 grid gap-1 border-l py-1 pl-3">
-                <a href="#" class="px-2 py-1.5 text-sm">Accounts</a>
-                <a href="#" class="px-2 py-1.5 text-sm">Segments</a>
-              </div>
-            }
-          </sanring-collapsible>
-        </sanring-sidebar-menu-item>
+            </sanring-collapsible>
+          </sanring-sidebar-menu-item>
 
-        <sanring-sidebar-menu-item>
-          <sanring-collapsible>
-            <button type="button" sanringSidebarMenuButton sanringCollapsibleTrigger>
-              <svg lucideBell class="size-4 shrink-0"></svg>
+          <sanring-sidebar-menu-item>
+            <sanring-collapsible>
+              <button type="button" sanringSidebarMenuButton sanringCollapsibleTrigger>
+                <svg lucideBell class="size-4 shrink-0"></svg>
+                @if (sidebarOpen()) {
+                  <span class="truncate">Notifications</span>
+                  <svg lucideChevronRight class="ml-auto size-4 shrink-0"></svg>
+                }
+              </button>
               @if (sidebarOpen()) {
-                <span class="truncate">Notifications</span>
-                <svg lucideChevronRight class="ml-auto size-4 shrink-0"></svg>
+                <sanring-sidebar-menu-sub sanringCollapsibleContent>
+                  <sanring-sidebar-menu-sub-item>
+                    <a href="#" class="block px-2 py-1.5 text-sm">Inbox</a>
+                  </sanring-sidebar-menu-sub-item>
+                  <sanring-sidebar-menu-sub-item>
+                    <a href="#" class="block px-2 py-1.5 text-sm">Rules</a>
+                  </sanring-sidebar-menu-sub-item>
+                </sanring-sidebar-menu-sub>
               }
-            </button>
-            @if (sidebarOpen()) {
-              <div sanringCollapsibleContent class="ml-4 grid gap-1 border-l py-1 pl-3">
-                <a href="#" class="px-2 py-1.5 text-sm">Inbox</a>
-                <a href="#" class="px-2 py-1.5 text-sm">Rules</a>
-              </div>
-            }
-          </sanring-collapsible>
-        </sanring-sidebar-menu-item>
-      </sanring-sidebar-menu>
+            </sanring-collapsible>
+          </sanring-sidebar-menu-item>
+        </sanring-sidebar-menu>
+      </sanring-sidebar-group-content>
     </sanring-sidebar-group>
   </sanring-sidebar-content>
 
@@ -205,9 +219,10 @@ export const sidebarPageExamples = {
       }
     </button>
   </sanring-sidebar-footer>
+  <button sanringSidebarRail aria-label="Toggle sidebar"></button>
 </sanring-sidebar>
 
-<main class="flex-1 p-6">
+<main sanringSidebarInset class="p-6">
   <button
     type="button"
     aria-controls="workspace-sidebar"
@@ -234,20 +249,26 @@ export class ExampleComponent {}`,
   <sanring-sidebar-content>
     <sanring-sidebar-group>
       <sanring-sidebar-group-label>Navigation</sanring-sidebar-group-label>
-      <sanring-sidebar-menu>
-        <sanring-sidebar-menu-item>
-          <a sanringSidebarMenuButton active href="#">Dashboard</a>
-        </sanring-sidebar-menu-item>
-        <sanring-sidebar-menu-item>
-          <a sanringSidebarMenuButton href="#">Settings</a>
-        </sanring-sidebar-menu-item>
-      </sanring-sidebar-menu>
+      <sanring-sidebar-group-content>
+        <sanring-sidebar-menu>
+          <sanring-sidebar-menu-item>
+            <a sanringSidebarMenuButton active href="#">Dashboard</a>
+            <sanring-sidebar-menu-badge>12</sanring-sidebar-menu-badge>
+          </sanring-sidebar-menu-item>
+          <sanring-sidebar-menu-item>
+            <a sanringSidebarMenuButton href="#">Settings</a>
+            <button type="button" sanringSidebarMenuAction aria-label="More actions">...</button>
+          </sanring-sidebar-menu-item>
+        </sanring-sidebar-menu>
+      </sanring-sidebar-group-content>
     </sanring-sidebar-group>
   </sanring-sidebar-content>
+
+  <button sanringSidebarRail aria-label="Toggle sidebar"></button>
 </sanring-sidebar>`,
   usageIndividualImports: `import { Component } from '@angular/core';
 import { CollapsibleComponent, CollapsibleContentDirective, CollapsibleTriggerDirective } from './components/ui/collapsible';
-import { SidebarComponent, SidebarContentComponent, SidebarFooterComponent, SidebarGroupComponent, SidebarGroupLabelComponent, SidebarHeaderComponent, SidebarMenuButtonDirective, SidebarMenuComponent, SidebarMenuItemComponent, SidebarTriggerDirective } from './components/ui/sidebar';
+import { SidebarComponent, SidebarContentComponent, SidebarFooterComponent, SidebarGroupComponent, SidebarGroupContentComponent, SidebarGroupLabelComponent, SidebarHeaderComponent, SidebarInsetDirective, SidebarMenuActionDirective, SidebarMenuBadgeComponent, SidebarMenuButtonDirective, SidebarMenuComponent, SidebarMenuItemComponent, SidebarMenuSubComponent, SidebarMenuSubItemComponent, SidebarRailDirective, SidebarTriggerDirective } from './components/ui/sidebar';
 
 @Component({
   imports: [
@@ -259,24 +280,39 @@ import { SidebarComponent, SidebarContentComponent, SidebarFooterComponent, Side
     SidebarContentComponent,
     SidebarFooterComponent,
     SidebarGroupComponent,
+    SidebarGroupContentComponent,
     SidebarGroupLabelComponent,
     SidebarMenuComponent,
     SidebarMenuItemComponent,
     SidebarMenuButtonDirective,
+    SidebarMenuActionDirective,
+    SidebarMenuBadgeComponent,
+    SidebarMenuSubComponent,
+    SidebarMenuSubItemComponent,
+    SidebarRailDirective,
+    SidebarInsetDirective,
     SidebarTriggerDirective,
   ],
 })
 export class ExampleComponent {}`,
-  composition: `sanring-sidebar
-├── sanring-sidebar-header
-│   └── [sanringSidebarTrigger]
-├── sanring-sidebar-content
-│   └── sanring-sidebar-group
-│       ├── sanring-sidebar-group-label
-│       └── sanring-sidebar-menu
-│           └── sanring-sidebar-menu-item
-│               └── [sanringSidebarMenuButton]
-└── sanring-sidebar-footer`,
+  composition: `app-shell
+├── sanring-sidebar
+│   ├── sanring-sidebar-header
+│   ├── sanring-sidebar-content
+│   │   └── sanring-sidebar-group
+│   │       ├── sanring-sidebar-group-label
+│   │       ├── sanring-sidebar-group-content
+│   │       └── sanring-sidebar-menu
+│   │           └── sanring-sidebar-menu-item
+│   │               ├── [sanringSidebarMenuButton]
+│   │               ├── [sanringSidebarMenuAction]
+│   │               ├── sanring-sidebar-menu-badge
+│   │               └── sanring-sidebar-menu-sub
+│   │                   └── sanring-sidebar-menu-sub-item
+│   ├── sanring-sidebar-footer
+│   └── [sanringSidebarRail]
+├── [sanringSidebarInset]
+└── [sanringSidebarTrigger]`,
   iconMode: `<sanring-sidebar collapsible="icon">
   <sanring-sidebar-header>
     <button type="button" sanringSidebarTrigger aria-label="Toggle sidebar">SR</button>

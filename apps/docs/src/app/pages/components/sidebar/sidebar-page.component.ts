@@ -96,111 +96,124 @@ import { sidebarPage, sidebarPageExamples } from './sidebar.docs';
                         i18n.t('sidebar.demo.platform')
                       }}</sanring-sidebar-group-label>
                     }
-                    <sanring-sidebar-menu>
-                      <sanring-sidebar-menu-item>
-                        <sanring-collapsible [open]="true">
-                          <button
-                            type="button"
-                            sanringSidebarMenuButton
-                            active
-                            sanringCollapsibleTrigger
-                          >
-                            <svg lucideLayoutDashboard class="size-4 shrink-0"></svg>
-                            @if (basicSidebarOpen()) {
-                              <span class="truncate">{{ i18n.t('sidebar.demo.dashboard') }}</span>
-                              <svg lucideChevronRight class="ml-auto size-4 shrink-0"></svg>
-                            }
-                          </button>
-                          @if (basicSidebarOpen()) {
-                            <div
-                              sanringCollapsibleContent
-                              class="ml-4 grid gap-1 border-l border-[var(--sanring-border)] py-1 pl-3"
+                    <sanring-sidebar-group-content>
+                      <sanring-sidebar-menu>
+                        <sanring-sidebar-menu-item>
+                          <sanring-collapsible [open]="true">
+                            <button
+                              type="button"
+                              sanringSidebarMenuButton
+                              active
+                              sanringCollapsibleTrigger
                             >
-                              <a
-                                href="#"
-                                class="px-2 py-1.5 text-sm"
-                                (click)="$event.preventDefault()"
-                              >
-                                {{ i18n.t('sidebar.demo.overview') }}
-                              </a>
-                              <a
-                                href="#"
-                                class="px-2 py-1.5 text-sm"
-                                (click)="$event.preventDefault()"
-                              >
-                                {{ i18n.t('sidebar.demo.reports') }}
-                              </a>
-                            </div>
-                          }
-                        </sanring-collapsible>
-                      </sanring-sidebar-menu-item>
-                      <sanring-sidebar-menu-item>
-                        <sanring-collapsible>
-                          <button type="button" sanringSidebarMenuButton sanringCollapsibleTrigger>
-                            <svg lucideUsers class="size-4 shrink-0"></svg>
+                              <svg lucideLayoutDashboard class="size-4 shrink-0"></svg>
+                              @if (basicSidebarOpen()) {
+                                <span class="truncate">{{ i18n.t('sidebar.demo.dashboard') }}</span>
+                                <svg lucideChevronRight class="ml-auto size-4 shrink-0"></svg>
+                              }
+                            </button>
                             @if (basicSidebarOpen()) {
-                              <span class="truncate">{{ i18n.t('sidebar.demo.customers') }}</span>
-                              <svg lucideChevronRight class="ml-auto size-4 shrink-0"></svg>
+                              <sanring-sidebar-menu-sub sanringCollapsibleContent>
+                                <sanring-sidebar-menu-sub-item>
+                                  <a
+                                    href="#"
+                                    class="block rounded-[var(--sanring-radius-xs)] px-2 py-1.5 text-sm hover:bg-[var(--sanring-surface-strong)]"
+                                    (click)="$event.preventDefault()"
+                                  >
+                                    {{ i18n.t('sidebar.demo.overview') }}
+                                  </a>
+                                </sanring-sidebar-menu-sub-item>
+                                <sanring-sidebar-menu-sub-item>
+                                  <a
+                                    href="#"
+                                    class="block rounded-[var(--sanring-radius-xs)] px-2 py-1.5 text-sm hover:bg-[var(--sanring-surface-strong)]"
+                                    (click)="$event.preventDefault()"
+                                  >
+                                    {{ i18n.t('sidebar.demo.reports') }}
+                                  </a>
+                                </sanring-sidebar-menu-sub-item>
+                              </sanring-sidebar-menu-sub>
                             }
-                          </button>
-                          @if (basicSidebarOpen()) {
-                            <div
-                              sanringCollapsibleContent
-                              class="ml-4 grid gap-1 border-l border-[var(--sanring-border)] py-1 pl-3"
+                          </sanring-collapsible>
+                        </sanring-sidebar-menu-item>
+                        <sanring-sidebar-menu-item>
+                          <sanring-collapsible>
+                            <button
+                              type="button"
+                              sanringSidebarMenuButton
+                              sanringCollapsibleTrigger
                             >
-                              <a
-                                href="#"
-                                class="px-2 py-1.5 text-sm"
-                                (click)="$event.preventDefault()"
-                              >
-                                {{ i18n.t('sidebar.demo.accounts') }}
-                              </a>
-                              <a
-                                href="#"
-                                class="px-2 py-1.5 text-sm"
-                                (click)="$event.preventDefault()"
-                              >
-                                {{ i18n.t('sidebar.demo.segments') }}
-                              </a>
-                            </div>
-                          }
-                        </sanring-collapsible>
-                      </sanring-sidebar-menu-item>
-                      <sanring-sidebar-menu-item>
-                        <sanring-collapsible>
-                          <button type="button" sanringSidebarMenuButton sanringCollapsibleTrigger>
-                            <svg lucideBell class="size-4 shrink-0"></svg>
+                              <svg lucideUsers class="size-4 shrink-0"></svg>
+                              @if (basicSidebarOpen()) {
+                                <span class="truncate">{{ i18n.t('sidebar.demo.customers') }}</span>
+                                <svg lucideChevronRight class="ml-auto size-4 shrink-0"></svg>
+                              }
+                            </button>
                             @if (basicSidebarOpen()) {
-                              <span class="truncate">{{
-                                i18n.t('sidebar.demo.notifications')
-                              }}</span>
-                              <svg lucideChevronRight class="ml-auto size-4 shrink-0"></svg>
+                              <sanring-sidebar-menu-sub sanringCollapsibleContent>
+                                <sanring-sidebar-menu-sub-item>
+                                  <a
+                                    href="#"
+                                    class="block rounded-[var(--sanring-radius-xs)] px-2 py-1.5 text-sm hover:bg-[var(--sanring-surface-strong)]"
+                                    (click)="$event.preventDefault()"
+                                  >
+                                    {{ i18n.t('sidebar.demo.accounts') }}
+                                  </a>
+                                </sanring-sidebar-menu-sub-item>
+                                <sanring-sidebar-menu-sub-item>
+                                  <a
+                                    href="#"
+                                    class="block rounded-[var(--sanring-radius-xs)] px-2 py-1.5 text-sm hover:bg-[var(--sanring-surface-strong)]"
+                                    (click)="$event.preventDefault()"
+                                  >
+                                    {{ i18n.t('sidebar.demo.segments') }}
+                                  </a>
+                                </sanring-sidebar-menu-sub-item>
+                              </sanring-sidebar-menu-sub>
                             }
-                          </button>
-                          @if (basicSidebarOpen()) {
-                            <div
-                              sanringCollapsibleContent
-                              class="ml-4 grid gap-1 border-l border-[var(--sanring-border)] py-1 pl-3"
+                          </sanring-collapsible>
+                        </sanring-sidebar-menu-item>
+                        <sanring-sidebar-menu-item>
+                          <sanring-collapsible>
+                            <button
+                              type="button"
+                              sanringSidebarMenuButton
+                              sanringCollapsibleTrigger
                             >
-                              <a
-                                href="#"
-                                class="px-2 py-1.5 text-sm"
-                                (click)="$event.preventDefault()"
-                              >
-                                {{ i18n.t('sidebar.demo.inbox') }}
-                              </a>
-                              <a
-                                href="#"
-                                class="px-2 py-1.5 text-sm"
-                                (click)="$event.preventDefault()"
-                              >
-                                {{ i18n.t('sidebar.demo.rules') }}
-                              </a>
-                            </div>
-                          }
-                        </sanring-collapsible>
-                      </sanring-sidebar-menu-item>
-                    </sanring-sidebar-menu>
+                              <svg lucideBell class="size-4 shrink-0"></svg>
+                              @if (basicSidebarOpen()) {
+                                <span class="truncate">{{
+                                  i18n.t('sidebar.demo.notifications')
+                                }}</span>
+                                <svg lucideChevronRight class="ml-auto size-4 shrink-0"></svg>
+                              }
+                            </button>
+                            @if (basicSidebarOpen()) {
+                              <sanring-sidebar-menu-sub sanringCollapsibleContent>
+                                <sanring-sidebar-menu-sub-item>
+                                  <a
+                                    href="#"
+                                    class="block rounded-[var(--sanring-radius-xs)] px-2 py-1.5 text-sm hover:bg-[var(--sanring-surface-strong)]"
+                                    (click)="$event.preventDefault()"
+                                  >
+                                    {{ i18n.t('sidebar.demo.inbox') }}
+                                  </a>
+                                </sanring-sidebar-menu-sub-item>
+                                <sanring-sidebar-menu-sub-item>
+                                  <a
+                                    href="#"
+                                    class="block rounded-[var(--sanring-radius-xs)] px-2 py-1.5 text-sm hover:bg-[var(--sanring-surface-strong)]"
+                                    (click)="$event.preventDefault()"
+                                  >
+                                    {{ i18n.t('sidebar.demo.rules') }}
+                                  </a>
+                                </sanring-sidebar-menu-sub-item>
+                              </sanring-sidebar-menu-sub>
+                            }
+                          </sanring-collapsible>
+                        </sanring-sidebar-menu-item>
+                      </sanring-sidebar-menu>
+                    </sanring-sidebar-group-content>
                   </sanring-sidebar-group>
                 </sanring-sidebar-content>
                 <sanring-sidebar-footer>
@@ -211,8 +224,9 @@ import { sidebarPage, sidebarPageExamples } from './sidebar.docs';
                     }
                   </button>
                 </sanring-sidebar-footer>
+                <button sanringSidebarRail [ariaLabel]="i18n.t('sidebar.demo.toggle')"></button>
               </sanring-sidebar>
-              <main class="min-w-0 flex-1 bg-[var(--docs-surface)] p-6">
+              <main sanringSidebarInset class="bg-[var(--docs-surface)] p-6">
                 <button
                   type="button"
                   class="mb-6 flex size-9 items-center justify-center rounded-[var(--sanring-radius)] hover:bg-[var(--sanring-surface-strong)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--sanring-border-strong)]"
