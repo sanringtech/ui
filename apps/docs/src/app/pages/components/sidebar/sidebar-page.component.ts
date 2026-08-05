@@ -25,7 +25,6 @@ import {
   LucideUsers,
 } from '@lucide/angular';
 import {
-  ButtonDirective,
   SANRING_COLLAPSIBLE_IMPORTS,
   SANRING_DROPDOWN_MENU_IMPORTS,
   SANRING_SIDEBAR_IMPORTS,
@@ -48,7 +47,6 @@ import { sidebarPage, sidebarPageExamples } from './sidebar.docs';
 @Component({
   selector: 'app-sidebar-page',
   imports: [
-    ButtonDirective,
     ComponentPageApiTableComponent,
     ComponentPageCodeBlock,
     ComponentPageCodePreviewer,
@@ -86,7 +84,7 @@ import { sidebarPage, sidebarPageExamples } from './sidebar.docs';
     SANRING_SIDEBAR_IMPORTS,
   ],
   template: `
-    <app-component-page [sections]="page.sections">
+    <app-component-page [sections]="page.sections" [wide]="true">
       <app-component-page-header
         [componentId]="page.componentId"
         [title]="i18n.t(page.titleKey)"
@@ -94,11 +92,11 @@ import { sidebarPage, sidebarPageExamples } from './sidebar.docs';
       />
 
       <app-component-page-section [section]="section('basic')">
-        <app-component-page-code-previewer [code]="examples.basic" language="angular-html">
+        <app-component-page-code-previewer [code]="examples.basic" language="angular-html" [wide]="true">
           <div previewer class="flex w-full justify-center">
             <sanring-sidebar-provider collapsible="icon" #sidebarProvider>
             <div
-              class="flex h-[620px] w-full max-w-[860px] overflow-hidden rounded-[var(--sanring-radius)] border border-[var(--docs-border)] bg-[var(--sanring-background)]"
+              class="flex h-[620px] w-full max-w-[928px] overflow-hidden rounded-[var(--sanring-radius)] border border-[var(--docs-border)] bg-[var(--sanring-background)]" style="--sanring-sidebar-width: 13rem"
             >
               @let isOpen = sidebarProvider.isOpen();
               <sanring-sidebar
@@ -564,12 +562,12 @@ import { sidebarPage, sidebarPageExamples } from './sidebar.docs';
       <app-component-page-section [section]="section('example')">
         <div class="grid gap-2">
           <app-component-page-section [section]="section('example-icon')">
-            <app-component-page-code-previewer [code]="examples.iconMode" language="angular-html">
+            <app-component-page-code-previewer [code]="examples.iconMode" language="angular-html" [wide]="true">
               <div previewer class="flex w-full justify-center">
                 <sanring-sidebar-provider collapsible="icon" #iconProvider>
                   @let iconIsOpen = iconProvider.isOpen();
                   <div
-                    class="flex h-[320px] w-full max-w-[680px] overflow-hidden rounded-[var(--sanring-radius)] border border-[var(--docs-border)]"
+                    class="flex h-[480px] w-full max-w-[928px] overflow-hidden rounded-[var(--sanring-radius)] border border-[var(--docs-border)] bg-[var(--sanring-background)]" style="--sanring-sidebar-width: 13rem"
                   >
                     <sanring-sidebar class="shrink-0">
                       <sanring-sidebar-header>
@@ -612,7 +610,22 @@ import { sidebarPage, sidebarPageExamples } from './sidebar.docs';
                         [ariaLabel]="i18n.t('sidebar.demo.toggle')"
                       ></button>
                     </sanring-sidebar>
-                    <main class="min-w-0 flex-1 bg-[var(--docs-surface)] p-6"></main>
+                    <main class="min-w-0 flex-1 bg-[var(--docs-surface)] p-6">
+                      <div class="grid gap-4">
+                        <div class="h-5 w-44 rounded bg-[var(--docs-border)]"></div>
+                        <div class="grid grid-cols-2 gap-3">
+                          <div
+                            class="h-24 rounded border border-[var(--docs-border)] bg-[var(--docs-bg)]"
+                          ></div>
+                          <div
+                            class="h-24 rounded border border-[var(--docs-border)] bg-[var(--docs-bg)]"
+                          ></div>
+                        </div>
+                        <div
+                          class="h-28 rounded border border-[var(--docs-border)] bg-[var(--docs-bg)]"
+                        ></div>
+                      </div>
+                    </main>
                   </div>
                 </sanring-sidebar-provider>
               </div>
@@ -623,21 +636,12 @@ import { sidebarPage, sidebarPageExamples } from './sidebar.docs';
             <app-component-page-code-previewer
               [code]="examples.offcanvasMode"
               language="angular-html"
+              [wide]="true"
             >
-              <div previewer class="grid w-full justify-items-center gap-3">
+              <div previewer class="flex w-full justify-center">
                 <sanring-sidebar-provider collapsible="offcanvas">
-                  <button
-                    type="button"
-                    sanringSidebarTrigger
-                    sanringBtn
-                    variant="outline"
-                    size="sm"
-                  >
-                    <svg lucideMenu class="size-4"></svg>
-                    {{ i18n.t('sidebar.demo.toggle') }}
-                  </button>
                   <div
-                    class="flex h-[320px] w-full max-w-[680px] overflow-hidden rounded-[var(--sanring-radius)] border border-[var(--docs-border)]"
+                    class="flex h-[480px] w-full max-w-[928px] overflow-hidden rounded-[var(--sanring-radius)] border border-[var(--docs-border)] bg-[var(--sanring-background)]" style="--sanring-sidebar-width: 13rem"
                   >
                     <sanring-sidebar class="shrink-0">
                       <sanring-sidebar-header>
@@ -665,7 +669,30 @@ import { sidebarPage, sidebarPageExamples } from './sidebar.docs';
                         </sanring-sidebar-menu>
                       </sanring-sidebar-content>
                     </sanring-sidebar>
-                    <main class="min-w-0 flex-1 bg-[var(--docs-surface)] p-6"></main>
+                    <main class="min-w-0 flex-1 bg-[var(--docs-surface)] p-6">
+                      <button
+                        type="button"
+                        sanringSidebarTrigger
+                        class="mb-6 flex size-9 items-center justify-center rounded-[var(--sanring-radius)] hover:bg-[var(--sanring-surface-strong)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--sanring-border-strong)]"
+                        [attr.aria-label]="i18n.t('sidebar.demo.toggle')"
+                      >
+                        <svg lucidePanelsTopLeft class="size-5"></svg>
+                      </button>
+                      <div class="grid gap-4">
+                        <div class="h-5 w-44 rounded bg-[var(--docs-border)]"></div>
+                        <div class="grid grid-cols-2 gap-3">
+                          <div
+                            class="h-24 rounded border border-[var(--docs-border)] bg-[var(--docs-bg)]"
+                          ></div>
+                          <div
+                            class="h-24 rounded border border-[var(--docs-border)] bg-[var(--docs-bg)]"
+                          ></div>
+                        </div>
+                        <div
+                          class="h-28 rounded border border-[var(--docs-border)] bg-[var(--docs-bg)]"
+                        ></div>
+                      </div>
+                    </main>
                   </div>
                 </sanring-sidebar-provider>
               </div>
@@ -673,10 +700,10 @@ import { sidebarPage, sidebarPageExamples } from './sidebar.docs';
           </app-component-page-section>
 
           <app-component-page-section [section]="section('example-none')">
-            <app-component-page-code-previewer [code]="examples.noneMode" language="angular-html">
+            <app-component-page-code-previewer [code]="examples.noneMode" language="angular-html" [wide]="true">
               <div previewer class="flex w-full justify-center">
                 <div
-                  class="flex h-[320px] w-full max-w-[680px] overflow-hidden rounded-[var(--sanring-radius)] border border-[var(--docs-border)]"
+                  class="flex h-[480px] w-full max-w-[928px] overflow-hidden rounded-[var(--sanring-radius)] border border-[var(--docs-border)] bg-[var(--sanring-background)]" style="--sanring-sidebar-width: 13rem"
                 >
                   <sanring-sidebar collapsible="none" class="shrink-0">
                     <sanring-sidebar-content>
@@ -707,7 +734,22 @@ import { sidebarPage, sidebarPageExamples } from './sidebar.docs';
                       </sanring-sidebar-menu>
                     </sanring-sidebar-content>
                   </sanring-sidebar>
-                  <main class="min-w-0 flex-1 bg-[var(--docs-surface)] p-6"></main>
+                  <main class="min-w-0 flex-1 bg-[var(--docs-surface)] p-6">
+                    <div class="grid gap-4">
+                      <div class="h-5 w-44 rounded bg-[var(--docs-border)]"></div>
+                      <div class="grid grid-cols-2 gap-3">
+                        <div
+                          class="h-24 rounded border border-[var(--docs-border)] bg-[var(--docs-bg)]"
+                        ></div>
+                        <div
+                          class="h-24 rounded border border-[var(--docs-border)] bg-[var(--docs-bg)]"
+                        ></div>
+                      </div>
+                      <div
+                        class="h-28 rounded border border-[var(--docs-border)] bg-[var(--docs-bg)]"
+                      ></div>
+                    </div>
+                  </main>
                 </div>
               </div>
             </app-component-page-code-previewer>

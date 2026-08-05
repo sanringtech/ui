@@ -13,7 +13,10 @@ import {
     <div
       class="mt-9 overflow-hidden rounded-[var(--sanring-radius-lg)] border border-[var(--docs-border)] bg-[var(--docs-panel)] shadow-2xl"
     >
-      <div class="grid min-h-[390px] place-items-center p-11 max-[720px]:min-h-80 max-[720px]:p-6">
+      <div
+        class="grid place-items-center max-[720px]:min-h-80"
+        [class]="wide() ? 'min-h-[390px] p-4 max-[720px]:p-3' : 'min-h-[390px] p-11 max-[720px]:p-6'"
+      >
         <ng-content select="[previewer]" />
       </div>
 
@@ -30,6 +33,7 @@ import {
 export class ComponentPageCodePreviewer {
   readonly code = input('');
   readonly language = input<ComponentPageCodeLanguage>('angular-html');
+  readonly wide = input(false);
 
   @Output() codeCopy = new EventEmitter<ComponentPageCodeCopyEvent>();
 }

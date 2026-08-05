@@ -52,7 +52,7 @@ export class SidebarComponent implements SidebarContext {
       'flex h-full min-w-0 flex-col overflow-hidden border-r border-[var(--sanring-border)] bg-[var(--sanring-background)]',
       'relative',
       'transition-[width,border-color] duration-200 ease-out',
-      this.isOpen() && 'w-64',
+      this.isOpen() && 'w-[var(--sanring-sidebar-width,16rem)]',
       !this.isOpen() && this.collapsible() === 'icon' && 'w-14',
       !this.isOpen() && this.collapsible() === 'offcanvas' && 'w-0 border-r-0',
       this.class(),

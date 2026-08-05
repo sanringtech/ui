@@ -5,7 +5,7 @@ import { RouterOutlet } from '@angular/router';
   selector: 'app-component-docs-layout',
   imports: [RouterOutlet],
   template: `
-    <section class="mx-auto min-w-0 max-w-[832px]">
+    <section class="min-w-0">
       <div class="min-w-0">
         <router-outlet />
       </div>

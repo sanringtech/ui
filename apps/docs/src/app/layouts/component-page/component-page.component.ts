@@ -1,4 +1,4 @@
-import { Component, effect, inject, Input, OnChanges, OnDestroy } from '@angular/core';
+import { Component, effect, inject, Input, OnChanges, OnDestroy, input } from '@angular/core';
 import { ComponentPageSectionDefinition } from '../../docs-schema/component-page.types';
 import { I18nService } from '../../i18n/i18n.service';
 import { DocsTocItem, DocsTocService } from '../../shell/toc/docs-toc.service';
@@ -7,13 +7,17 @@ import { DocsTocItem, DocsTocService } from '../../shell/toc/docs-toc.service';
   selector: 'app-component-page',
   standalone: true,
   template: `
-    <article class="mx-auto max-w-[832px] text-[var(--docs-fg)]">
+    <article
+      class="mx-auto text-[var(--docs-fg)]"
+      [class]="wide() ? 'max-w-[960px]' : 'max-w-[832px]'"
+    >
       <ng-content />
     </article>
   `,
 })
 export class ComponentPageComponent implements OnChanges, OnDestroy {
   @Input() sections: readonly ComponentPageSectionDefinition[] = [];
+  readonly wide = input(false);
 
   private readonly i18n = inject(I18nService);
   private readonly toc = inject(DocsTocService);
