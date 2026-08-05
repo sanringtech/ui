@@ -57,6 +57,21 @@ export const componentChangelog: readonly ComponentChangelogEntry[] = [
         componentIds: ['navigation-menu'],
         text: 'Added `sanring-navigation-menu-sub` submenu flyouts, positioned with CDK Overlay (viewport collision fallback) and opened on hover-intent, click, or keyboard.',
       },
+      {
+        type: 'fixed',
+        componentIds: ['sidebar'],
+        text: '`SidebarProviderComponent` now renders with `display: contents` instead of the browser default `display: inline`, fixing the sidebar/main-content width ratio when it wraps a flex or grid layout.',
+      },
+      {
+        type: 'fixed',
+        componentIds: ['dialog'],
+        text: '`DialogFooterComponent` buttons now have a gap on mobile, where they stack vertically and previously had none.',
+      },
+      {
+        type: 'fixed',
+        componentIds: ['otp-input'],
+        text: '`otp-input` slots no longer get compressed or overflow their container on narrow viewports.',
+      },
     ],
   },
   {
