@@ -36,6 +36,11 @@
       "name": "collection-state",
       "description": "Empty/visible-item helpers shared by combobox and command",
       "file": "shared/collection-state.ts"
+    },
+    {
+      "name": "menu-navigation",
+      "description": "DOM focus navigation helper shared by menu-like overlay components",
+      "file": "shared/menu-navigation.ts"
     }
   ],
   "components": [
@@ -846,6 +851,33 @@
         "otp-input/otp-input.context.ts",
         "otp-input/otp-input.types.ts",
         "otp-input/index.ts"
+      ]
+    },
+    {
+      "name": "navigation-menu",
+      "description": "A collection of links for navigating websites, with triggers that open content panels.",
+      "sharedDeps": ["utils", "component-styles", "menu-navigation"],
+      "componentDeps": ["link"],
+      "peerDependencies": {
+        "@angular/cdk": "^22.0.0"
+      },
+      "files": [
+        "navigation-menu/navigation-menu.component.ts",
+        "navigation-menu/navigation-menu-list.component.ts",
+        "navigation-menu/navigation-menu-item.component.ts",
+        "navigation-menu/navigation-menu-link.directive.ts",
+        "navigation-menu/navigation-menu-trigger.directive.ts",
+        "navigation-menu/navigation-menu-content.component.ts",
+        "navigation-menu/navigation-menu-viewport.component.ts",
+        "navigation-menu/navigation-menu-indicator.component.ts",
+        "navigation-menu/navigation-menu-sub.component.ts",
+        "navigation-menu/navigation-menu-sub-trigger.component.ts",
+        "navigation-menu/navigation-menu-sub-content.component.ts",
+        "navigation-menu/navigation-menu-label.component.ts",
+        "navigation-menu/navigation-menu-description.directive.ts",
+        "navigation-menu/navigation-menu-separator.component.ts",
+        "navigation-menu/navigation-menu.type.ts",
+        "navigation-menu/index.ts"
       ]
     }
   ]
