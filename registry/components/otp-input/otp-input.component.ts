@@ -21,8 +21,8 @@ import {
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR, NgControl, Validators } from '@angular/forms';
 import { Observable, Subject } from 'rxjs';
-import { cn, uniqueId } from '../shared/utils';
-import { FIELD_SIZE_CLASS } from '../shared/component-styles';
+import { cn, uniqueId } from '../../utils';
+import { FIELD_SIZE_CLASS } from '../component-styles';
 import { FieldType, SANRING_FIELD_CONTROL, SanringFieldControl } from '../field/field.type';
 import { OTP_INPUT_ROOT, OtpInputRootContext } from './otp-input.context';
 import { OtpInputSeparatorComponent } from './otp-input-separator.component';
@@ -209,7 +209,7 @@ export class OtpInputComponent implements ControlValueAccessor, OnInit, OtpInput
 
   protected readonly hostClass = computed(() =>
     cn(
-      'relative inline-flex',
+      'relative inline-flex max-w-full overflow-x-auto',
       this.orientation() === 'vertical' ? 'flex-col' : 'flex-row items-center',
       this.isDisabled() && 'cursor-not-allowed opacity-50',
       this.class(),
@@ -335,7 +335,7 @@ export class OtpInputComponent implements ControlValueAccessor, OnInit, OtpInput
     const isLast = slot.index === this.slotCount() - 1;
 
     return cn(
-      'relative inline-flex cursor-text select-none items-center justify-center border border-[var(--sanring-border-strong)]',
+      'relative inline-flex shrink-0 cursor-text select-none items-center justify-center border border-[var(--sanring-border-strong)]',
       'bg-[var(--sanring-surface)] text-[var(--sanring-foreground)]',
       FIELD_SIZE_CLASS,
       OTP_INPUT_SIZE_CLASSES[this.size()] ?? OTP_INPUT_SIZE_CLASSES.md,
