@@ -32,4 +32,12 @@ export const sliderTranslations = {
   'slider.api.ariaLabelledBy.description': '用來命名 slider 的可見 label 元素 id。',
   'slider.api.ariaDescribedBy.description': '描述 slider 的輔助文字元素 id。',
   'slider.api.ariaValueText.description': '當數字本身不夠清楚時使用的人類可讀數值文字。',
+  'slider.accessibility.description': "role='slider'，aria-valuemin、aria-valuemax、aria-valuenow、aria-valuetext、aria-orientation='horizontal'。使用 ariaLabel 或 ariaLabelledBy input 為滑桿加上標籤。搭配 sanring-field 可自動完成 aria-describedby 的串接。",
+  'slider.keyboard.description': '豐富的鍵盤導覽，可精確調整數值。',
+  'slider.keyboard.arrowLeftRight': '減少或增加一個步進值。',
+  'slider.keyboard.arrowUpDown': '效果同左 / 右方向鍵。',
+  'slider.keyboard.pageUpDown': '減少或增加總範圍的 10%。',
+  'slider.keyboard.home': '跳至最小值。',
+  'slider.keyboard.end': '跳至最大值。',
+  'slider.stateModel.description': '實作 ControlValueAccessor。使用 [(ngModel)] 或 formControl。值型別：number。數值會被夾在 [min, max] 之間並對齊最近的步進值。',
 } as const;

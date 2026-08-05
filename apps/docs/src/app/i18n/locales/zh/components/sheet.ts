@@ -30,5 +30,11 @@ export const sheetTranslations = {
   'sheet.demo.confirmDeleteDescription': '此操作無法復原。',
   'sheet.demo.delete': '刪除',
   'sheet.api.class.description': '合併到面板或 host 元素的額外 class。',
-
+  'sheet.accessibility.description':
+    "面板有 role='dialog' 與 aria-modal='true'。sanringSheetTitle 和 sanringSheetDescription 會自動綁定面板的 aria-labelledby 和 aria-describedby。Sheet 開啟期間，背景其他元素會被加上 aria-hidden='true'，防止螢幕閱讀器導覽到面板外的內容。",
+  'sheet.keyboard.description': 'Sheet 開啟期間，焦點被鎖定在面板內。',
+  'sheet.keyboard.tabShiftTab': '在 sheet 面板內移動焦點（焦點被鎖定在面板內）。',
+  'sheet.keyboard.escape': '關閉 sheet。',
+  'sheet.stateModel.description':
+    "以 trigger 驅動，模式與 Dialog 相同。將 [sanringSheetTrigger] 綁到 ng-template。在 template 內用 [sanringSheetClose]='result' 帶結果值關閉。side input（'left'、'right'、'top'、'bottom'）控制 sheet 從哪一側滑入。不是 CVA 表單控制項。",
 } as const;

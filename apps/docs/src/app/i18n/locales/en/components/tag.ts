@@ -22,4 +22,11 @@ export const tagTranslations = {
   'tag.api.closable.description': 'Shows a compact remove button and supports attribute shorthand.',
   'tag.api.removeAriaLabel.description': 'Accessible label for the remove button.',
   'tag.api.remove.description': 'Emits when the remove button is clicked.',
+  'tag.accessibility.description':
+    "Built on sanring-badge. When closable is true, the remove button has an accessible label from the removeAriaLabel input. Provide a meaningful label like 'Remove JavaScript' rather than a generic 'Remove' when surrounding text does not unambiguously identify the tag.",
+  'tag.keyboard.description': 'Remove button keyboard behavior when closable is true.',
+  'tag.keyboard.tab': 'Move focus to the remove button.',
+  'tag.keyboard.enterOrSpace': 'Activate the remove button and emit the remove output.',
+  'tag.stateModel.description':
+    'Stateless — the parent component handles the remove output to filter the tag list. No internal selection or value state.',
 } as const;

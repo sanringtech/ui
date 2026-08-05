@@ -38,5 +38,9 @@ export const fileUploadTranslations = {
   'fileUpload.demo.fieldError': 'A file is required.',
   'fileUpload.examples.progress.description':
     'sanring-file-item takes an optional [progress] input — pass it a 0-100 number from your own upload logic and it replaces the file size with a progress bar. Set it back to null when the upload finishes.',
-
+  'fileUpload.accessibility.description': 'aria-invalid, aria-required, and aria-describedby are wired to the surrounding sanring-field. The native <input type="file"> inside the dropzone handles its own accessible label via the visible button text or a linked <label>.',
+  'fileUpload.keyboard.description': 'Focus and trigger follow native file-input behavior.',
+  'fileUpload.keyboard.tab': 'Focus the upload trigger or dropzone.',
+  'fileUpload.keyboard.enterOrSpace': 'Open the OS file picker.',
+  'fileUpload.stateModel.description': 'Implements ControlValueAccessor. Use [(ngModel)] or formControl, or use the two-way-bindable [(files)] model input directly. Value type: File[] | null. File validation (size, count, type) runs client-side; rejected files are emitted via the rejectedFiles output.',
 } as const;

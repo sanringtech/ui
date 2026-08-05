@@ -49,5 +49,9 @@ export const checkboxTranslations = {
   'checkbox.demo.fieldError': 'You must accept the terms to continue.',
   'checkbox.examples.field.description':
     'Wrap sanring-checkbox in sanring-field and bind a reactive form control — the error message shows automatically once the control is invalid and touched.',
-
+  'checkbox.accessibility.description': "role='checkbox' on the inner button, aria-checked (true / false / mixed for indeterminate), aria-disabled, aria-required. When nested in sanring-field, aria-labelledby and aria-describedby are wired automatically.",
+  'checkbox.keyboard.description': 'Standard checkbox keyboard behavior.',
+  'checkbox.keyboard.space': 'Toggle the checked state.',
+  'checkbox.keyboard.tabShiftTab': 'Navigate to and from the checkbox.',
+  'checkbox.stateModel.description': 'Implements ControlValueAccessor. Use [(ngModel)] or formControl on sanring-checkbox. Value type: boolean | "indeterminate". The checkedChange output and [(checked)] binding are available for simple two-way binding without Angular Forms.',
 } as const;

@@ -40,5 +40,13 @@ export const selectTranslations = {
     'Projects a custom selected indicator in place of the default check icon.',
   'select.api.class.description':
     'Additional classes merged with the corresponding select primitive.',
-
+  'select.accessibility.description':
+    "The trigger button has role='combobox', aria-haspopup='listbox', aria-expanded, and aria-controls pointing to the listbox id. Each option has role='option', aria-selected, and aria-disabled. When inside <sanring-field>, aria-required, aria-invalid, and aria-describedby (hint/error ids) are forwarded automatically.",
+  'select.keyboard.description': 'Keyboard shortcuts work on the trigger and within the open list.',
+  'select.keyboard.openTrigger': 'Open the dropdown list (when the trigger button is focused).',
+  'select.keyboard.navigateList': 'Move focus between options, skipping disabled items (wraps).',
+  'select.keyboard.selectItem': 'Select the focused option and close the list.',
+  'select.keyboard.escape': 'Close the list without changing the selection.',
+  'select.stateModel.description':
+    "CVA (ControlValueAccessor). Use [(ngModel)], [formControl], or [formControlName] for Angular Forms integration. The value getter reflects the current selection (read-only — write through forms). Place <sanring-select> inside <sanring-field> to wire label, hint, and error display automatically.",
 } as const;

@@ -45,4 +45,9 @@ export const timelineTranslations = {
   'timeline.api.separatorClass.description':
     'Additional classes merged with each separator wrapper.',
   'timeline.api.contentClass.description': 'Additional classes merged with each content container.',
+  'timeline.accessibility.description':
+    'Timeline is a visual layout primitive with no built-in ARIA role. When timeline items represent an ordered sequence, wrap the content in a native <ol> or <ul> in your template so screen readers understand the list structure.',
+  'timeline.keyboard.description': 'Not focusable unless interactive children are present.',
+  'timeline.stateModel.description':
+    'Stateless layout component — no value, selection, or event state.',
 } as const;

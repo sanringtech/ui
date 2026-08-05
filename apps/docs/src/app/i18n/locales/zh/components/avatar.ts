@@ -23,4 +23,7 @@ export const avatarTranslations = {
   'avatar.api.placement.description': '將徽章放在視覺起點或終點，並尊重 RTL 方向。',
   'avatar.api.overlap.description': '頭像群組的堆疊重疊量，單位為 rem。',
   'avatar.api.count.description': '頭像群組數量項目顯示的數字。',
+  'avatar.accessibility.description': "宿主具有 role='img'。為非裝飾性的頭像提供 ariaLabel 或 ariaLabelledBy。若頭像純屬裝飾性用途（例如緊鄰已出現在文字中的使用者名稱），請在 <sanring-avatar> 上加 aria-hidden='true' 以避免重複播報。",
+  'avatar.keyboard.description': '預設不可聚焦，沒有鍵盤互動。',
+  'avatar.stateModel.description': '無狀態。src 載入圖片；失敗時顯示 fallback 插槽；縮寫字母作為最後備援。沒有內部選取或值狀態。',
 } as const;

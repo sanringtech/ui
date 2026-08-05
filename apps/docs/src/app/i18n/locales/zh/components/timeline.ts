@@ -37,4 +37,8 @@ export const timelineTranslations = {
   'timeline.api.itemClass.description': '與每個 timeline item 合併的額外 class。',
   'timeline.api.separatorClass.description': '與每個 separator wrapper 合併的額外 class。',
   'timeline.api.contentClass.description': '與每個 content container 合併的額外 class。',
+  'timeline.accessibility.description':
+    'Timeline 是視覺版面 primitive，沒有內建 ARIA 角色。當時間軸項目代表有序序列時，請在模板中用原生 <ol> 或 <ul> 包裹內容，讓螢幕閱讀器理解清單結構。',
+  'timeline.keyboard.description': '除非內部有互動子元素，否則不可聚焦。',
+  'timeline.stateModel.description': '無狀態版面元件——沒有值、選取或事件狀態。',
 } as const;

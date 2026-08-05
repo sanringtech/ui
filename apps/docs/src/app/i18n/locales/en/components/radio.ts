@@ -44,5 +44,10 @@ export const radioTranslations = {
   'radio.api.item.ariaLabelledBy': 'ID of an external element that labels this item.',
   'radio.api.item.ariaDescribedBy':
     'ID of an element that provides an extended description for this item.',
-
+  'radio.accessibility.description': "role='radiogroup' on sanring-radio-group, role='radio' on each sanring-radio. aria-checked, aria-disabled, and aria-required are synced automatically. When nested in sanring-field, aria-labelledby and aria-describedby are wired to the group.",
+  'radio.keyboard.description': 'Roving tabindex keeps only one item in the tab sequence at a time.',
+  'radio.keyboard.tab': 'Move focus into the group. Focus lands on the checked item, or the first enabled item if none is checked.',
+  'radio.keyboard.arrowUpDown': 'Navigate between radio items and immediately select the focused item.',
+  'radio.keyboard.space': 'Select the currently focused radio item.',
+  'radio.stateModel.description': 'sanring-radio-group implements ControlValueAccessor. Use [(ngModel)] or formControl on the group element. Value type: string | null. The valueChange output and [(value)] are available for forms-free binding.',
 } as const;

@@ -1,5 +1,6 @@
 import {
   ComponentPageApiRow,
+  ComponentPageKeyboardRow,
   ComponentPageDefinition,
 } from '../../../docs-schema/component-page.types';
 
@@ -44,6 +45,24 @@ export const treePage = {
       descriptionKey: 'tree.api.description',
       level: 2,
     },
+    {
+      id: 'accessibility',
+      titleKey: 'toc.accessibility',
+      descriptionKey: 'tree.accessibility.description',
+      level: 2,
+    },
+    {
+      id: 'keyboard',
+      titleKey: 'toc.keyboard',
+      descriptionKey: 'tree.keyboard.description',
+      level: 2,
+    },
+    {
+      id: 'stateModel',
+      titleKey: 'toc.stateModel',
+      descriptionKey: 'tree.stateModel.description',
+      level: 2,
+    },
   ],
   apiRows: [
     {
@@ -83,6 +102,14 @@ export const treePage = {
       descriptionKey: 'tree.api.class.description',
     },
   ] satisfies readonly ComponentPageApiRow[],
+  keyboardRows: [
+    { keys: '↓', descriptionKey: 'tree.keyboard.arrowDown' },
+    { keys: '↑', descriptionKey: 'tree.keyboard.arrowUp' },
+    { keys: '→', descriptionKey: 'tree.keyboard.arrowRight' },
+    { keys: '←', descriptionKey: 'tree.keyboard.arrowLeft' },
+    { keys: 'Enter', descriptionKey: 'tree.keyboard.enter' },
+    { keys: 'Tab', descriptionKey: 'tree.keyboard.tab' },
+  ] satisfies readonly ComponentPageKeyboardRow[],
 } as const satisfies ComponentPageDefinition;
 
 export const treePageExamples = {

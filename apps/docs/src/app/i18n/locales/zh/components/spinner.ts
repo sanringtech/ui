@@ -25,5 +25,8 @@ export const spinnerTranslations = {
   'spinner.api.class.description':
     '合併到 host 元素的額外 class，使用 Tailwind text-* 工具改變顏色。',
   'spinner.api.ariaLabel.description': "螢幕閱讀器播報的無障礙標籤，預設 'Loading'。",
-
+  'spinner.accessibility.description':
+    "宿主具有 role='status'（polite live region）。aria-label 預設為 'Loading'——當畫面上同時出現多個 spinner 時，請覆寫為更具體的訊息（例如「正在儲存」）。",
+  'spinner.keyboard.description': '不可聚焦，沒有鍵盤互動。',
+  'spinner.stateModel.description': '無狀態——僅有 variant、size 與 speed input。',
 } as const;

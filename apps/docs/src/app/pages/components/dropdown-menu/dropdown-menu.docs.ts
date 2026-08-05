@@ -1,6 +1,7 @@
 import {
   ComponentPageApiRow,
   ComponentPageDefinition,
+  ComponentPageKeyboardRow,
 } from '../../../docs-schema/component-page.types';
 
 export const dropdownMenuPage = {
@@ -57,6 +58,24 @@ export const dropdownMenuPage = {
       id: 'api',
       titleKey: 'toc.apiReference',
       descriptionKey: 'dropdownMenu.api.description',
+      level: 2,
+    },
+    {
+      id: 'accessibility',
+      titleKey: 'toc.accessibility',
+      descriptionKey: 'dropdownMenu.accessibility.description',
+      level: 2,
+    },
+    {
+      id: 'keyboard',
+      titleKey: 'toc.keyboard',
+      descriptionKey: 'dropdownMenu.keyboard.description',
+      level: 2,
+    },
+    {
+      id: 'stateModel',
+      titleKey: 'toc.stateModel',
+      descriptionKey: 'dropdownMenu.stateModel.description',
       level: 2,
     },
   ],
@@ -116,6 +135,13 @@ export const dropdownMenuPage = {
       descriptionKey: 'dropdownMenu.api.class.description',
     },
   ] satisfies readonly ComponentPageApiRow[],
+  keyboardRows: [
+    { keys: 'Enter / Space', descriptionKey: 'dropdownMenu.keyboard.openTrigger' },
+    { keys: '↑ / ↓', descriptionKey: 'dropdownMenu.keyboard.navigateItems' },
+    { keys: '→ (Arrow Right)', descriptionKey: 'dropdownMenu.keyboard.openSubmenu' },
+    { keys: '← (Arrow Left)', descriptionKey: 'dropdownMenu.keyboard.closeSubmenu' },
+    { keys: 'Escape', descriptionKey: 'dropdownMenu.keyboard.escape' },
+  ] satisfies readonly ComponentPageKeyboardRow[],
 } as const satisfies ComponentPageDefinition;
 
 export const dropdownMenuPageExamples = {

@@ -1,5 +1,6 @@
 import {
   ComponentPageApiRow,
+  ComponentPageKeyboardRow,
   ComponentPageDefinition,
 } from '../../../docs-schema/component-page.types';
 
@@ -65,6 +66,24 @@ export const cardPage = {
       descriptionKey: 'card.api.description',
       level: 2,
     },
+    {
+      id: 'accessibility',
+      titleKey: 'toc.accessibility',
+      descriptionKey: 'card.accessibility.description',
+      level: 2,
+    },
+    {
+      id: 'keyboard',
+      titleKey: 'toc.keyboard',
+      descriptionKey: 'card.keyboard.description',
+      level: 2,
+    },
+    {
+      id: 'stateModel',
+      titleKey: 'toc.stateModel',
+      descriptionKey: 'card.stateModel.description',
+      level: 2,
+    },
   ],
   apiRows: [
     {
@@ -74,6 +93,7 @@ export const cardPage = {
       descriptionKey: 'card.api.class.description',
     },
   ] satisfies readonly ComponentPageApiRow[],
+  keyboardRows: [] satisfies readonly ComponentPageKeyboardRow[],
 } as const satisfies ComponentPageDefinition;
 
 export const cardPageExamples = {

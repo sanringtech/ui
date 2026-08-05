@@ -1,5 +1,6 @@
 import {
   ComponentPageApiRow,
+  ComponentPageKeyboardRow,
   ComponentPageDefinition,
 } from '../../../docs-schema/component-page.types';
 
@@ -65,7 +66,30 @@ export const radioPage = {
       descriptionKey: 'radio.api.item.description',
       level: 2,
     },
+    {
+      id: 'accessibility',
+      titleKey: 'toc.accessibility',
+      descriptionKey: 'radio.accessibility.description',
+      level: 2,
+    },
+    {
+      id: 'keyboard',
+      titleKey: 'toc.keyboard',
+      descriptionKey: 'radio.keyboard.description',
+      level: 2,
+    },
+    {
+      id: 'stateModel',
+      titleKey: 'toc.stateModel',
+      descriptionKey: 'radio.stateModel.description',
+      level: 2,
+    },
   ],
+  keyboardRows: [
+    { keys: 'Tab', descriptionKey: 'radio.keyboard.tab' },
+    { keys: '↑ / ↓', descriptionKey: 'radio.keyboard.arrowUpDown' },
+    { keys: 'Space', descriptionKey: 'radio.keyboard.space' },
+  ] satisfies readonly ComponentPageKeyboardRow[],
 } as const satisfies ComponentPageDefinition;
 
 export const radioGroupApiRows = [

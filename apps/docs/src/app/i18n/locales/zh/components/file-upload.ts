@@ -35,5 +35,9 @@ export const fileUploadTranslations = {
   'fileUpload.demo.fieldError': '此欄位為必填。',
   'fileUpload.examples.progress.description':
     'sanring-file-item 有個可選的 [progress] input——從你自己的上傳邏輯傳一個 0-100 的數字進去，就會用進度條取代檔案大小顯示；上傳完成後把它設回 null 即可。',
-
+  'fileUpload.accessibility.description': 'aria-invalid、aria-required 與 aria-describedby 會串接到外層的 sanring-field。dropzone 內的原生 <input type="file"> 透過可見的按鈕文字或關聯的 <label> 處理自身的可存取標籤。',
+  'fileUpload.keyboard.description': '焦點與觸發皆遵循原生檔案輸入行為。',
+  'fileUpload.keyboard.tab': '聚焦至上傳觸發按鈕或拖放區。',
+  'fileUpload.keyboard.enterOrSpace': '開啟作業系統的檔案選擇器。',
+  'fileUpload.stateModel.description': '實作 ControlValueAccessor。使用 [(ngModel)] 或 formControl，或直接使用可雙向綁定的 [(files)] model input。值型別：File[] | null。檔案驗證（大小、數量、類型）在客戶端執行；被拒絕的檔案透過 rejectedFiles 事件輸出。',
 } as const;

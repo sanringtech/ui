@@ -1,6 +1,7 @@
 import {
   ComponentPageApiRow,
   ComponentPageDefinition,
+  ComponentPageKeyboardRow,
 } from '../../../docs-schema/component-page.types';
 
 export const comboboxPage = {
@@ -54,6 +55,24 @@ export const comboboxPage = {
       id: 'api',
       titleKey: 'toc.apiReference',
       descriptionKey: 'combobox.api.description',
+      level: 2,
+    },
+    {
+      id: 'accessibility',
+      titleKey: 'toc.accessibility',
+      descriptionKey: 'combobox.accessibility.description',
+      level: 2,
+    },
+    {
+      id: 'keyboard',
+      titleKey: 'toc.keyboard',
+      descriptionKey: 'combobox.keyboard.description',
+      level: 2,
+    },
+    {
+      id: 'stateModel',
+      titleKey: 'toc.stateModel',
+      descriptionKey: 'combobox.stateModel.description',
       level: 2,
     },
   ],
@@ -119,6 +138,12 @@ export const comboboxPage = {
       descriptionKey: 'combobox.api.class.description',
     },
   ] satisfies readonly ComponentPageApiRow[],
+  keyboardRows: [
+    { keys: 'Type', descriptionKey: 'combobox.keyboard.type' },
+    { keys: '↑ / ↓', descriptionKey: 'combobox.keyboard.navigateList' },
+    { keys: 'Enter', descriptionKey: 'combobox.keyboard.selectItem' },
+    { keys: 'Escape', descriptionKey: 'combobox.keyboard.escape' },
+  ] satisfies readonly ComponentPageKeyboardRow[],
 } as const satisfies ComponentPageDefinition;
 
 export const comboboxPageExamples = {

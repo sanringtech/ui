@@ -1,6 +1,7 @@
 import {
   ComponentPageApiRow,
   ComponentPageDefinition,
+  ComponentPageKeyboardRow,
 } from '../../../docs-schema/component-page.types';
 
 export const contextMenuPage = {
@@ -60,6 +61,24 @@ export const contextMenuPage = {
       descriptionKey: 'contextMenu.api.description',
       level: 2,
     },
+    {
+      id: 'accessibility',
+      titleKey: 'toc.accessibility',
+      descriptionKey: 'contextMenu.accessibility.description',
+      level: 2,
+    },
+    {
+      id: 'keyboard',
+      titleKey: 'toc.keyboard',
+      descriptionKey: 'contextMenu.keyboard.description',
+      level: 2,
+    },
+    {
+      id: 'stateModel',
+      titleKey: 'toc.stateModel',
+      descriptionKey: 'contextMenu.stateModel.description',
+      level: 2,
+    },
   ],
   apiRows: [
     {
@@ -105,6 +124,11 @@ export const contextMenuPage = {
       descriptionKey: 'contextMenu.api.class.description',
     },
   ] satisfies readonly ComponentPageApiRow[],
+  keyboardRows: [
+    { keys: '↑ / ↓', descriptionKey: 'contextMenu.keyboard.navigateItems' },
+    { keys: 'Enter', descriptionKey: 'contextMenu.keyboard.enter' },
+    { keys: 'Escape', descriptionKey: 'contextMenu.keyboard.escape' },
+  ] satisfies readonly ComponentPageKeyboardRow[],
 } as const satisfies ComponentPageDefinition;
 
 export const contextMenuPageExamples = {

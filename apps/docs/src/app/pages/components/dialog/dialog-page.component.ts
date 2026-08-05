@@ -5,6 +5,7 @@ import { getComponentPageSection } from '../../../docs-schema/component-page.uti
 import { I18nService } from '../../../i18n/i18n.service';
 import {
   ComponentPageApiTableComponent,
+  ComponentPageKeyboardTableComponent,
   ComponentPageCodeBlock,
   ComponentPageCodePreviewer,
   ComponentPageComponent,
@@ -19,6 +20,7 @@ import { dialogPage, dialogPageExamples } from './dialog.docs';
   selector: 'app-dialog-page',
   imports: [
     ComponentPageApiTableComponent,
+    ComponentPageKeyboardTableComponent,
     ButtonDirective,
     SANRING_DIALOG_IMPORTS,
     ComponentPageCodeBlock,
@@ -158,6 +160,14 @@ import { dialogPage, dialogPageExamples } from './dialog.docs';
       <app-component-page-section [section]="section('api')">
         <app-component-page-api-table [rows]="page.apiRows!" />
       </app-component-page-section>
+
+      <app-component-page-section [section]="section('accessibility')" />
+
+      <app-component-page-section [section]="section('keyboard')">
+        <app-component-page-keyboard-table [rows]="page.keyboardRows!" />
+      </app-component-page-section>
+
+      <app-component-page-section [section]="section('stateModel')" />
 
       <ng-template #basicDialog>
         <sanring-dialog-content>

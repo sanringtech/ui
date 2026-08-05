@@ -1,6 +1,7 @@
 import {
   ComponentPageApiRow,
   ComponentPageDefinition,
+  ComponentPageKeyboardRow,
 } from '../../../docs-schema/component-page.types';
 
 export const selectPage = {
@@ -63,6 +64,24 @@ export const selectPage = {
       id: 'api',
       titleKey: 'toc.apiReference',
       descriptionKey: 'select.api.description',
+      level: 2,
+    },
+    {
+      id: 'accessibility',
+      titleKey: 'toc.accessibility',
+      descriptionKey: 'select.accessibility.description',
+      level: 2,
+    },
+    {
+      id: 'keyboard',
+      titleKey: 'toc.keyboard',
+      descriptionKey: 'select.keyboard.description',
+      level: 2,
+    },
+    {
+      id: 'stateModel',
+      titleKey: 'toc.stateModel',
+      descriptionKey: 'select.stateModel.description',
       level: 2,
     },
   ],
@@ -146,6 +165,12 @@ export const selectPage = {
       descriptionKey: 'select.api.class.description',
     },
   ] satisfies readonly ComponentPageApiRow[],
+  keyboardRows: [
+    { keys: 'Enter / Space / ↑ / ↓', descriptionKey: 'select.keyboard.openTrigger' },
+    { keys: '↑ / ↓', descriptionKey: 'select.keyboard.navigateList' },
+    { keys: 'Enter / Space', descriptionKey: 'select.keyboard.selectItem' },
+    { keys: 'Escape', descriptionKey: 'select.keyboard.escape' },
+  ] satisfies readonly ComponentPageKeyboardRow[],
 } as const satisfies ComponentPageDefinition;
 
 export const selectPageExamples = {

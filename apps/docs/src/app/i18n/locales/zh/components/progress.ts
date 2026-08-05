@@ -33,5 +33,9 @@ export const progressTranslations = {
   'progress.api.ariaLabel.description': '進度條的無障礙標籤，建議在沒有可見標籤時提供。',
   'progress.api.ariaValueText.description':
     '取代原始百分比朗讀的可讀文字，例如「已完成 5 步驟中的 3 步」。',
-
+  'progress.accessibility.description':
+    "具有 role='progressbar'、aria-valuenow、aria-valuemin（0）、aria-valuemax（max input，預設 100）。提供 ariaLabel 或指向可見標籤的 aria-labelledby，以說明正在測量的內容。使用 ariaValueText 提供人類可讀的格式，例如「已完成 3 / 5 步驟」。",
+  'progress.keyboard.description': '不可聚焦，沒有鍵盤互動。',
+  'progress.stateModel.description':
+    '透過 value input 控制（0 至 max）。省略 value 或傳入 null 可切換為不確定狀態（啟用 shimmer 時顯示掃光動畫）。',
 } as const;

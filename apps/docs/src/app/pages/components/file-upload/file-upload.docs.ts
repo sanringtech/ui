@@ -1,5 +1,6 @@
 import {
   ComponentPageApiRow,
+  ComponentPageKeyboardRow,
   ComponentPageDefinition,
 } from '../../../docs-schema/component-page.types';
 
@@ -69,6 +70,24 @@ export const fileUploadPage = {
       descriptionKey: 'fileUpload.api.description',
       level: 2,
     },
+    {
+      id: 'accessibility',
+      titleKey: 'toc.accessibility',
+      descriptionKey: 'fileUpload.accessibility.description',
+      level: 2,
+    },
+    {
+      id: 'keyboard',
+      titleKey: 'toc.keyboard',
+      descriptionKey: 'fileUpload.keyboard.description',
+      level: 2,
+    },
+    {
+      id: 'stateModel',
+      titleKey: 'toc.stateModel',
+      descriptionKey: 'fileUpload.stateModel.description',
+      level: 2,
+    },
   ],
   apiRows: [
     {
@@ -120,6 +139,10 @@ export const fileUploadPage = {
       descriptionKey: 'fileUpload.api.progress.description',
     },
   ] satisfies readonly ComponentPageApiRow[],
+  keyboardRows: [
+    { keys: 'Tab', descriptionKey: 'fileUpload.keyboard.tab' },
+    { keys: 'Enter / Space', descriptionKey: 'fileUpload.keyboard.enterOrSpace' },
+  ] satisfies readonly ComponentPageKeyboardRow[],
 } as const satisfies ComponentPageDefinition;
 
 export const fileUploadPageExamples = {

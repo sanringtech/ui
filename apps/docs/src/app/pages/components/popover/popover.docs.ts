@@ -1,6 +1,7 @@
 import {
   ComponentPageApiRow,
   ComponentPageDefinition,
+  ComponentPageKeyboardRow,
 } from '../../../docs-schema/component-page.types';
 
 export const popoverPage = {
@@ -42,6 +43,24 @@ export const popoverPage = {
       descriptionKey: 'popover.api.description',
       level: 2,
     },
+    {
+      id: 'accessibility',
+      titleKey: 'toc.accessibility',
+      descriptionKey: 'popover.accessibility.description',
+      level: 2,
+    },
+    {
+      id: 'keyboard',
+      titleKey: 'toc.keyboard',
+      descriptionKey: 'popover.keyboard.description',
+      level: 2,
+    },
+    {
+      id: 'stateModel',
+      titleKey: 'toc.stateModel',
+      descriptionKey: 'popover.stateModel.description',
+      level: 2,
+    },
   ],
   apiRows: [
     {
@@ -63,6 +82,11 @@ export const popoverPage = {
       descriptionKey: 'popover.api.class.description',
     },
   ] satisfies readonly ComponentPageApiRow[],
+  keyboardRows: [
+    { keys: 'Escape', descriptionKey: 'popover.keyboard.escape' },
+    { keys: 'Tab', descriptionKey: 'popover.keyboard.tab' },
+    { keys: 'Shift + Tab', descriptionKey: 'popover.keyboard.shiftTab' },
+  ] satisfies readonly ComponentPageKeyboardRow[],
 } as const satisfies ComponentPageDefinition;
 
 export const popoverPageExamples = {

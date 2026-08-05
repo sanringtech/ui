@@ -26,4 +26,13 @@ export const dialogTranslations = {
   'dialog.api.closeResult.description':
     'Optional result value emitted when sanringDialogClose closes the dialog.',
   'dialog.api.mediaClass.description': 'Additional classes merged with the dialog media container.',
+  'dialog.accessibility.description':
+    "The CDK Dialog container receives role='dialog' and aria-modal='true'. When sanringDialogTitle or sanringDialogDescription are present, their ids are automatically wired to aria-labelledby and aria-describedby on the container. Angular CDK's FocusTrap keeps Tab and Shift+Tab cycling within the open dialog.",
+  'dialog.keyboard.description': 'Focus is trapped inside the dialog while it is open.',
+  'dialog.keyboard.tab': 'Move focus to the next focusable element within the dialog.',
+  'dialog.keyboard.shiftTab': 'Move focus to the previous focusable element within the dialog.',
+  'dialog.keyboard.escape':
+    'Close the dialog. Blocked when disableClose is set in the trigger config.',
+  'dialog.stateModel.description':
+    "Trigger-based. Bind [sanringDialogTrigger] to an ng-template reference to open the dialog. Pass [sanringDialogConfig] to configure CDK options (e.g. { disableClose: true }). Inside the template, bind [sanringDialogClose]='result' to close with an optional typed result. Dialog is not a form control — there is no CVA integration.",
 } as const;

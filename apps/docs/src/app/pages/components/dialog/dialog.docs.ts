@@ -1,6 +1,7 @@
 import {
   ComponentPageApiRow,
   ComponentPageDefinition,
+  ComponentPageKeyboardRow,
 } from '../../../docs-schema/component-page.types';
 
 export const dialogPage = {
@@ -75,6 +76,24 @@ export const dialogPage = {
       descriptionKey: 'dialog.api.description',
       level: 2,
     },
+    {
+      id: 'accessibility',
+      titleKey: 'toc.accessibility',
+      descriptionKey: 'dialog.accessibility.description',
+      level: 2,
+    },
+    {
+      id: 'keyboard',
+      titleKey: 'toc.keyboard',
+      descriptionKey: 'dialog.keyboard.description',
+      level: 2,
+    },
+    {
+      id: 'stateModel',
+      titleKey: 'toc.stateModel',
+      descriptionKey: 'dialog.stateModel.description',
+      level: 2,
+    },
   ],
   apiRows: [
     {
@@ -108,6 +127,11 @@ export const dialogPage = {
       descriptionKey: 'dialog.api.mediaClass.description',
     },
   ] satisfies readonly ComponentPageApiRow[],
+  keyboardRows: [
+    { keys: 'Tab', descriptionKey: 'dialog.keyboard.tab' },
+    { keys: 'Shift + Tab', descriptionKey: 'dialog.keyboard.shiftTab' },
+    { keys: 'Escape', descriptionKey: 'dialog.keyboard.escape' },
+  ] satisfies readonly ComponentPageKeyboardRow[],
 } as const satisfies ComponentPageDefinition;
 
 export const dialogPageExamples = {

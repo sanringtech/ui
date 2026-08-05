@@ -1,5 +1,6 @@
 import {
   ComponentPageApiRow,
+  ComponentPageKeyboardRow,
   ComponentPageDefinition,
 } from '../../../docs-schema/component-page.types';
 
@@ -62,6 +63,24 @@ export const datePickerPage = {
       id: 'api',
       titleKey: 'toc.apiReference',
       descriptionKey: 'datePicker.api.description',
+      level: 2,
+    },
+    {
+      id: 'accessibility',
+      titleKey: 'toc.accessibility',
+      descriptionKey: 'datePicker.accessibility.description',
+      level: 2,
+    },
+    {
+      id: 'keyboard',
+      titleKey: 'toc.keyboard',
+      descriptionKey: 'datePicker.keyboard.description',
+      level: 2,
+    },
+    {
+      id: 'stateModel',
+      titleKey: 'toc.stateModel',
+      descriptionKey: 'datePicker.stateModel.description',
       level: 2,
     },
   ],
@@ -211,6 +230,13 @@ export const datePickerPage = {
       descriptionKey: 'datePicker.api.focus.description',
     },
   ] satisfies readonly ComponentPageApiRow[],
+  keyboardRows: [
+    { keys: '↑ / ↓ / ← / →', descriptionKey: 'datePicker.keyboard.arrowKeys' },
+    { keys: 'Page Up / Page Down', descriptionKey: 'datePicker.keyboard.pageUpDown' },
+    { keys: 'Home / End', descriptionKey: 'datePicker.keyboard.homeEnd' },
+    { keys: 'Enter', descriptionKey: 'datePicker.keyboard.enter' },
+    { keys: 'Escape', descriptionKey: 'datePicker.keyboard.escape' },
+  ] satisfies readonly ComponentPageKeyboardRow[],
 } as const satisfies ComponentPageDefinition;
 
 export const datePickerPageExamples = {

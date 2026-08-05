@@ -21,4 +21,7 @@ export const badgeTranslations = {
   'badge.api.class.description': '與基礎徽章樣式合併的額外 class。',
   'badge.api.variant.description':
     '控制視覺強度，可使用 default、secondary、destructive、outline 或 ghost。',
+  'badge.accessibility.description': '渲染為行內 <span>，不加任何 ARIA。若徽章傳達的資訊未出現在周圍文字中（例如孤立的通知數量或狀態標籤），請直接在元素上加 aria-label。',
+  'badge.keyboard.description': '不可聚焦，沒有鍵盤互動。',
+  'badge.stateModel.description': '無狀態——僅有 variant 與 class input。沒有值或事件狀態。',
 } as const;

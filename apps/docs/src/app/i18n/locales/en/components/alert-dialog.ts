@@ -33,4 +33,12 @@ export const alertDialogTranslations = {
     'Optional result value passed to `DialogRef.close()` when clicked. Defaults to `true`.',
   'alertDialog.api.cancel.description':
     'Optional result value passed to `DialogRef.close()` when clicked. Defaults to `false`.',
+  'alertDialog.accessibility.description':
+    "The dialog container receives role='alertdialog' and aria-modal='true' (enforced by AlertDialogService — callers cannot override these). Backdrop click and Escape are both disabled, requiring users to explicitly choose a confirm or cancel button.",
+  'alertDialog.keyboard.description': 'Focus is trapped inside the alert dialog while it is open.',
+  'alertDialog.keyboard.tab': 'Move focus to the next focusable element within the dialog.',
+  'alertDialog.keyboard.shiftTab': 'Move focus to the previous focusable element within the dialog.',
+  'alertDialog.keyboard.escape': 'Has no effect — backdrop dismiss and Escape are disabled by default to prevent accidental dismissal.',
+  'alertDialog.stateModel.description':
+    "Service-based. Call AlertDialogService.open(template, config) to open an alert dialog programmatically, or use [sanringAlertDialogTrigger] for template-driven use. The service always forces role='alertdialog' and disableClose:true — callers cannot opt out. Not a form control.",
 } as const;

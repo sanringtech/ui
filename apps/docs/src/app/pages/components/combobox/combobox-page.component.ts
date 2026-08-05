@@ -11,6 +11,7 @@ import { getComponentPageSection } from '../../../docs-schema/component-page.uti
 import { I18nService } from '../../../i18n/i18n.service';
 import {
   ComponentPageApiTableComponent,
+  ComponentPageKeyboardTableComponent,
   ComponentPageCodeBlock,
   ComponentPageCodePreviewer,
   ComponentPageComponent,
@@ -32,6 +33,7 @@ import { comboboxPage, comboboxPageExamples } from './combobox.docs';
     LucideChevronDown,
     SanringFieldComponent,
     ComponentPageApiTableComponent,
+    ComponentPageKeyboardTableComponent,
     ComponentPageCodeBlock,
     ComponentPageCodePreviewer,
     ComponentPageComponent,
@@ -290,6 +292,14 @@ import { comboboxPage, comboboxPageExamples } from './combobox.docs';
       <app-component-page-section [section]="section('api')">
         <app-component-page-api-table [rows]="page.apiRows!" />
       </app-component-page-section>
+
+      <app-component-page-section [section]="section('accessibility')" />
+
+      <app-component-page-section [section]="section('keyboard')">
+        <app-component-page-keyboard-table [rows]="page.keyboardRows!" />
+      </app-component-page-section>
+
+      <app-component-page-section [section]="section('stateModel')" />
     </app-component-page>
   `,
 })

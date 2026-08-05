@@ -22,4 +22,7 @@ export const fieldTranslations = {
     "Additional classes merged with the description's base styles.",
   'field.api.errorMessageClass.description':
     "Additional classes merged with the error message's base styles.",
+  'field.accessibility.description': 'Wraps a label, control, error text, and helper text with automatic ARIA wiring. CVA controls that inject FieldContext receive aria-labelledby and aria-describedby IDs automatically, without extra attributes in the template.',
+  'field.keyboard.description': 'Layout container — no keyboard interaction of its own.',
+  'field.stateModel.description': 'Not a ControlValueAccessor. Provides FieldContext so nested CVA controls (input, checkbox, radio-group, switch, slider, otp-input, file-upload, date-picker, calendar) can auto-wire aria IDs and validation state. No value or selection state.',
 } as const;

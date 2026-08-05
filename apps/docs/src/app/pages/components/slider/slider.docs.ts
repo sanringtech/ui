@@ -1,5 +1,6 @@
 import {
   ComponentPageApiRow,
+  ComponentPageKeyboardRow,
   ComponentPageDefinition,
 } from '../../../docs-schema/component-page.types';
 
@@ -46,6 +47,24 @@ export const sliderPage = {
       id: 'api',
       titleKey: 'toc.apiReference',
       descriptionKey: 'slider.api.description',
+      level: 2,
+    },
+    {
+      id: 'accessibility',
+      titleKey: 'toc.accessibility',
+      descriptionKey: 'slider.accessibility.description',
+      level: 2,
+    },
+    {
+      id: 'keyboard',
+      titleKey: 'toc.keyboard',
+      descriptionKey: 'slider.keyboard.description',
+      level: 2,
+    },
+    {
+      id: 'stateModel',
+      titleKey: 'toc.stateModel',
+      descriptionKey: 'slider.stateModel.description',
       level: 2,
     },
   ],
@@ -129,6 +148,13 @@ export const sliderPage = {
       descriptionKey: 'slider.api.ariaValueText.description',
     },
   ] satisfies readonly ComponentPageApiRow[],
+  keyboardRows: [
+    { keys: '← / →', descriptionKey: 'slider.keyboard.arrowLeftRight' },
+    { keys: '↑ / ↓', descriptionKey: 'slider.keyboard.arrowUpDown' },
+    { keys: 'Page Up / Page Down', descriptionKey: 'slider.keyboard.pageUpDown' },
+    { keys: 'Home', descriptionKey: 'slider.keyboard.home' },
+    { keys: 'End', descriptionKey: 'slider.keyboard.end' },
+  ] satisfies readonly ComponentPageKeyboardRow[],
 } as const satisfies ComponentPageDefinition;
 
 export const sliderPageExamples = {

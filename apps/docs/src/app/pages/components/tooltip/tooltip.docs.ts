@@ -1,6 +1,7 @@
 import {
   ComponentPageApiRow,
   ComponentPageDefinition,
+  ComponentPageKeyboardRow,
 } from '../../../docs-schema/component-page.types';
 
 export const tooltipPage = {
@@ -60,6 +61,24 @@ export const tooltipPage = {
       descriptionKey: 'tooltip.api.description',
       level: 2,
     },
+    {
+      id: 'accessibility',
+      titleKey: 'toc.accessibility',
+      descriptionKey: 'tooltip.accessibility.description',
+      level: 2,
+    },
+    {
+      id: 'keyboard',
+      titleKey: 'toc.keyboard',
+      descriptionKey: 'tooltip.keyboard.description',
+      level: 2,
+    },
+    {
+      id: 'stateModel',
+      titleKey: 'toc.stateModel',
+      descriptionKey: 'tooltip.stateModel.description',
+      level: 2,
+    },
   ],
   apiRows: [
     {
@@ -87,6 +106,11 @@ export const tooltipPage = {
       descriptionKey: 'tooltip.api.class.description',
     },
   ] satisfies readonly ComponentPageApiRow[],
+  keyboardRows: [
+    { keys: 'Tab (focus trigger)', descriptionKey: 'tooltip.keyboard.focus' },
+    { keys: 'Tab away (blur)', descriptionKey: 'tooltip.keyboard.blur' },
+    { keys: 'Escape', descriptionKey: 'tooltip.keyboard.escape' },
+  ] satisfies readonly ComponentPageKeyboardRow[],
 } as const satisfies ComponentPageDefinition;
 
 export const tooltipPageExamples = {

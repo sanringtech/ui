@@ -79,4 +79,11 @@ export const calendarTranslations = {
   'calendar.api.focus.description': 'Moves focus to the calendar host element.',
   'calendar.api.selectedRangeChange.description':
     'Emits when the selected range changes in range mode.',
+  'calendar.accessibility.description': "role='grid' on each month grid, aria-label on the grid from the month/year header, role='gridcell' on each day cell. The host element receives aria-required, aria-invalid, and aria-describedby, auto-wired when nested in sanring-field.",
+  'calendar.keyboard.description': 'Day cell navigation is handled by @sanring/date-picker-core.',
+  'calendar.keyboard.arrowKeys': 'Move focus between day cells, crossing month boundaries seamlessly when monthsToDisplay > 1.',
+  'calendar.keyboard.pageUpDown': 'Previous / next month.',
+  'calendar.keyboard.homeEnd': 'First / last day of the visible month.',
+  'calendar.keyboard.enter': 'Select or toggle the focused day.',
+  'calendar.stateModel.description': 'Implements ControlValueAccessor. Use [(ngModel)] or formControl. Value type: Date | null (single mode) or { start: Date; end: Date } | null (range mode). The abortRangeDraft() and clear() methods are available for programmatic control.',
 } as const;

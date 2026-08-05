@@ -33,4 +33,11 @@ export const tabsTranslations = {
   'tabs.api.value.description': '用來配對 trigger 與 content panel 的必要值。',
   'tabs.api.disabled.description': '避免 trigger 被選取，並從鍵盤導覽中略過。',
   'tabs.api.valueChange.description': '選取的 tab value 變更時觸發。',
+  'tabs.accessibility.description': "透過 @angular/aria/tabs 實作 WAI-ARIA Tabs 模式。sanring-tabs-list 具有 role='tablist'，每個觸發器具有 role='tab'，每個內容面板具有 role='tabpanel'，透過 aria-controls 與 aria-labelledby 互相關聯。aria-selected 反映目前作用中的分頁。",
+  'tabs.keyboard.description': '在觸發器清單中以方向鍵導覽；Tab 鍵移入作用中的面板。',
+  'tabs.keyboard.arrowLeftRight': '在分頁觸發器之間導覽（水平方向）。',
+  'tabs.keyboard.arrowUpDown': '在分頁觸發器之間導覽（垂直方向）。',
+  'tabs.keyboard.tab': '將焦點從作用中的觸發器移入作用中的面板內容。',
+  'tabs.keyboard.homeEnd': '將焦點跳至第一個 / 最後一個啟用的分頁觸發器。',
+  'tabs.stateModel.description': "透過 <sanring-tabs> 上的 value / valueChange 控制。selectionMode='follow'（預設）會在方向鍵聚焦時立即啟用分頁；selectionMode='explicit' 則需要按 Enter 或 Space，適合切換分頁會觸發網路請求的情境。注意：orientation 需分別設定在 sanring-tabs 與 sanring-tabs-list 上，兩者不會自動同步。",
 } as const;

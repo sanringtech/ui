@@ -26,5 +26,14 @@ export const dropdownMenuTranslations = {
   'dropdownMenu.api.variant.description':
     '控制 item 語氣；移除資料或高風險操作可使用 destructive。',
   'dropdownMenu.api.class.description': '與對應 dropdown menu primitive 樣式合併的額外 class。',
-
+  'dropdownMenu.accessibility.description':
+    "基於 @angular/aria/menu 構建。面板有 role='menu'，每個 item 依情況有 role='menuitem'、role='menuitemcheckbox' 或 role='menuitemradio'。trigger 按鈕的 aria-haspopup='menu' 與 aria-expanded 由底層 MenuTrigger 指令管理。",
+  'dropdownMenu.keyboard.description': '鍵盤導覽遵循 WAI-ARIA menu 模式。',
+  'dropdownMenu.keyboard.openTrigger': '開啟選單（在 trigger 上）或啟動聚焦的項目。',
+  'dropdownMenu.keyboard.navigateItems': '在選單項目間導覽（wrap 可設定）。',
+  'dropdownMenu.keyboard.escape': '關閉選單或子選單，焦點返回 trigger。',
+  'dropdownMenu.keyboard.openSubmenu': '開啟聚焦的子選單。',
+  'dropdownMenu.keyboard.closeSubmenu': '關閉目前的子選單。',
+  'dropdownMenu.stateModel.description':
+    "無狀態。DropdownMenuItemDirective 啟動時送出 (itemSelected)。DropdownMenuCheckboxItemComponent 和 DropdownMenuRadioGroupComponent 透過 checked input 和 checkedChange output 自行管理選取狀態。開啟/關閉狀態由 @angular/aria/menu 內部管理。",
 } as const;

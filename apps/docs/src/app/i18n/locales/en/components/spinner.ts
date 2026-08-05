@@ -27,5 +27,8 @@ export const spinnerTranslations = {
     'Additional classes merged onto the host element. Use Tailwind text-* utilities to change colour.',
   'spinner.api.ariaLabel.description':
     "Accessible label announced by screen readers. Defaults to 'Loading'.",
-
+  'spinner.accessibility.description':
+    "role='status' on the host (polite live region). aria-label defaults to 'Loading' — override with a specific message (e.g., 'Saving changes') when multiple spinners appear simultaneously.",
+  'spinner.keyboard.description': 'Not focusable. No keyboard interaction.',
+  'spinner.stateModel.description': 'Stateless — variant, size, and speed inputs only.',
 } as const;

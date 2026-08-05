@@ -69,5 +69,12 @@ export const datePickerTranslations = {
   'datePicker.api.abortRangeDraft.description': '捨棄進行中的區間選取草稿，不提交它。',
   'datePicker.api.removeDate.description': '從選取集合中移除單一日期（僅限多選模式）。',
   'datePicker.api.focus.description': '將焦點移到 date-picker host 元素。',
-
+  'datePicker.accessibility.description': "日曆面板具有 role='grid'，網格的 aria-label 來自月份/年份標題，每個儲存格具有 role='gridcell'。宿主元素會接收 aria-required、aria-invalid 與 aria-describedby，並自動串接到外層的 sanring-field。",
+  'datePicker.keyboard.description': '日曆網格的鍵盤導覽由 @sanring/date-picker-core 處理。',
+  'datePicker.keyboard.arrowKeys': '在日曆網格中移動焦點。',
+  'datePicker.keyboard.pageUpDown': '上一頁 / 下一頁（依 granularity 切換月份、季度或年份）。',
+  'datePicker.keyboard.homeEnd': '跳至目前檢視中的第一個 / 最後一個儲存格。',
+  'datePicker.keyboard.enter': '選取目前有焦點的儲存格。',
+  'datePicker.keyboard.escape': '關閉日期選擇器彈出視窗且不提交選取。',
+  'datePicker.stateModel.description': '實作 ControlValueAccessor。使用 [(ngModel)] 或 formControl。值型別：DatePickerValue（依 mode 可為單一日期、範圍對組或日期陣列）。mode 與 granularity 可在執行期動態更改。',
 } as const;

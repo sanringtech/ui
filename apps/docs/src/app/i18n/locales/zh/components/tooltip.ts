@@ -30,4 +30,12 @@ export const tooltipTranslations = {
   'tooltip.api.side.description': 'tooltip 優先顯示的位置，空間不足時會使用 fallback 位置。',
   'tooltip.api.sideOffset.description': 'trigger 與浮動內容之間的距離。',
   'tooltip.api.class.description': '與 root 或 content 樣式合併的額外 class。',
+  'tooltip.accessibility.description':
+    "tooltip 面板有 role='tooltip'。開啟時，trigger 元素的 aria-describedby 會指向 tooltip 的 id，讓螢幕閱讀器在報讀 trigger 可及性名稱的同時也讀出 tooltip 文字。",
+  'tooltip.keyboard.description': 'Tooltip 跟隨 hover 和鍵盤焦點的生命週期顯示與隱藏。',
+  'tooltip.keyboard.focus': '顯示 tooltip（在設定的延遲後）。',
+  'tooltip.keyboard.blur': '隱藏 tooltip。',
+  'tooltip.keyboard.escape': '在 trigger 聚焦時立即隱藏 tooltip。',
+  'tooltip.stateModel.description':
+    "自動管理。TooltipComponent 根據 trigger 上的 hover 和 focus 事件在內部管理開啟/關閉狀態。使用 delayDuration input 設定顯示延遲（毫秒）。無手動開啟/關閉 API，tooltip 跟隨自然的 hover/focus 生命週期。",
 } as const;

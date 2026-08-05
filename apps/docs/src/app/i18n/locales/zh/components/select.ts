@@ -33,5 +33,13 @@ export const selectTranslations = {
   'select.api.placeholder.description': '未選取任何值時，sanring-select-value 顯示的提示文字。',
   'select.api.customIndicator.description': '投影自訂選取圖案，以取代預設 check icon。',
   'select.api.class.description': '合併到對應 select primitive 的額外 class。',
-
+  'select.accessibility.description':
+    "trigger 按鈕有 role='combobox'、aria-haspopup='listbox'、aria-expanded 及指向 listbox id 的 aria-controls。每個選項有 role='option'、aria-selected、aria-disabled。在 <sanring-field> 內使用時，aria-required、aria-invalid 與 aria-describedby（hint/error id）會自動轉發。",
+  'select.keyboard.description': '鍵盤快捷鍵同時適用於 trigger 與開啟的選單清單。',
+  'select.keyboard.openTrigger': '開啟下拉清單（當 trigger 按鈕被聚焦時）。',
+  'select.keyboard.navigateList': '在選項間移動焦點，跳過停用項目（循環）。',
+  'select.keyboard.selectItem': '選取聚焦選項並關閉清單。',
+  'select.keyboard.escape': '關閉清單而不變更選取值。',
+  'select.stateModel.description':
+    "CVA（ControlValueAccessor）。使用 [(ngModel)]、[formControl] 或 [formControlName] 整合 Angular Forms。value getter 反映目前選取值（唯讀，寫入必須透過表單）。將 <sanring-select> 放入 <sanring-field> 可自動綁定標籤、提示與錯誤顯示。",
 } as const;

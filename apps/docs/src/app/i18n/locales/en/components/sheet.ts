@@ -33,5 +33,11 @@ export const sheetTranslations = {
   'sheet.demo.confirmDeleteDescription': 'This action cannot be undone.',
   'sheet.demo.delete': 'Delete',
   'sheet.api.class.description': 'Additional classes merged onto the panel or host element.',
-
+  'sheet.accessibility.description':
+    "The panel has role='dialog' and aria-modal='true'. sanringSheetTitle and sanringSheetDescription provide aria-labelledby and aria-describedby on the panel automatically. Background sibling elements get aria-hidden='true' while the sheet is open, preventing screen reader navigation outside the panel.",
+  'sheet.keyboard.description': 'Focus is trapped inside the sheet panel while it is open.',
+  'sheet.keyboard.tabShiftTab': 'Move focus within the sheet panel (focus is trapped inside).',
+  'sheet.keyboard.escape': 'Close the sheet.',
+  'sheet.stateModel.description':
+    "Trigger-based, same pattern as Dialog. Bind [sanringSheetTrigger] to an ng-template. Use [sanringSheetClose]='result' inside the template to close with an optional typed result. The side input ('left', 'right', 'top', 'bottom') controls which edge the sheet slides in from. Not a CVA form control.",
 } as const;

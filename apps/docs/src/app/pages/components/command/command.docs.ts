@@ -1,6 +1,7 @@
 import {
   ComponentPageApiRow,
   ComponentPageDefinition,
+  ComponentPageKeyboardRow,
 } from '../../../docs-schema/component-page.types';
 
 export const commandPage = {
@@ -45,6 +46,24 @@ export const commandPage = {
       id: 'api',
       titleKey: 'toc.apiReference',
       descriptionKey: 'command.api.description',
+      level: 2,
+    },
+    {
+      id: 'accessibility',
+      titleKey: 'toc.accessibility',
+      descriptionKey: 'command.accessibility.description',
+      level: 2,
+    },
+    {
+      id: 'keyboard',
+      titleKey: 'toc.keyboard',
+      descriptionKey: 'command.keyboard.description',
+      level: 2,
+    },
+    {
+      id: 'stateModel',
+      titleKey: 'toc.stateModel',
+      descriptionKey: 'command.stateModel.description',
       level: 2,
     },
   ],
@@ -98,6 +117,11 @@ export const commandPage = {
       descriptionKey: 'command.api.shortcutHint.description',
     },
   ] satisfies readonly ComponentPageApiRow[],
+  keyboardRows: [
+    { keys: 'Type', descriptionKey: 'command.keyboard.type' },
+    { keys: '↑ / ↓', descriptionKey: 'command.keyboard.navigateList' },
+    { keys: 'Enter', descriptionKey: 'command.keyboard.enter' },
+  ] satisfies readonly ComponentPageKeyboardRow[],
 } as const satisfies ComponentPageDefinition;
 
 export const commandPageExamples = {

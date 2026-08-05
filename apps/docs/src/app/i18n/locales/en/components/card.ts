@@ -17,4 +17,7 @@ export const cardTranslations = {
     'Card does not own business structure. Override classes, place any media or form controls inside, and combine it with other primitives.',
   'card.api.description': 'Inputs supported by the Card family primitives.',
   'card.api.class.description': 'Additional classes merged with each Card primitive.',
+  'card.accessibility.description': 'Card is a layout container with no built-in ARIA role. Use semantic HTML inside — headings (h2–h4 via sanringCardTitle), paragraphs, lists. Add role="article" on the root manually for standalone content cards that need an independent landmark.',
+  'card.keyboard.description': 'Not focusable unless interactive children (buttons, links) are present.',
+  'card.stateModel.description': 'Stateless layout container. No value, selection, or event state of its own.',
 } as const;

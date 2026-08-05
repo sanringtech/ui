@@ -1,5 +1,6 @@
 import {
   ComponentPageApiRow,
+  ComponentPageKeyboardRow,
   ComponentPageDefinition,
 } from '../../../docs-schema/component-page.types';
 
@@ -40,6 +41,24 @@ export const spinnerPage = {
       descriptionKey: 'spinner.api.description',
       level: 2,
     },
+    {
+      id: 'accessibility',
+      titleKey: 'toc.accessibility',
+      descriptionKey: 'spinner.accessibility.description',
+      level: 2,
+    },
+    {
+      id: 'keyboard',
+      titleKey: 'toc.keyboard',
+      descriptionKey: 'spinner.keyboard.description',
+      level: 2,
+    },
+    {
+      id: 'stateModel',
+      titleKey: 'toc.stateModel',
+      descriptionKey: 'spinner.stateModel.description',
+      level: 2,
+    },
   ],
   apiRows: [
     {
@@ -73,6 +92,7 @@ export const spinnerPage = {
       descriptionKey: 'spinner.api.ariaLabel.description',
     },
   ] satisfies readonly ComponentPageApiRow[],
+  keyboardRows: [] satisfies readonly ComponentPageKeyboardRow[],
 } as const satisfies ComponentPageDefinition;
 
 export const spinnerPageExamples = {

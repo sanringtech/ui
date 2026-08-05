@@ -37,4 +37,11 @@ export const tabsTranslations = {
   'tabs.api.disabled.description':
     'Prevents a trigger from being selected or focused by keyboard navigation.',
   'tabs.api.valueChange.description': 'Emits when the selected tab value changes.',
+  'tabs.accessibility.description': "WAI-ARIA Tabs pattern via @angular/aria/tabs. role='tablist' on sanring-tabs-list, role='tab' on each trigger, role='tabpanel' on each content panel, linked with aria-controls and aria-labelledby. aria-selected reflects the active tab.",
+  'tabs.keyboard.description': 'Arrow navigation within the trigger list; Tab moves into the active panel.',
+  'tabs.keyboard.arrowLeftRight': 'Navigate between tab triggers (horizontal orientation).',
+  'tabs.keyboard.arrowUpDown': 'Navigate between tab triggers (vertical orientation).',
+  'tabs.keyboard.tab': 'Move focus from the active trigger into the active panel content.',
+  'tabs.keyboard.homeEnd': 'Jump focus to the first / last enabled tab trigger.',
+  'tabs.stateModel.description': "Controlled via value / valueChange on <sanring-tabs>. selectionMode='follow' (default) activates a tab on arrow-key focus; selectionMode='explicit' requires Enter or Space — useful when switching tabs triggers a network request. Note: set orientation on both sanring-tabs and sanring-tabs-list since they are not auto-synced.",
 } as const;

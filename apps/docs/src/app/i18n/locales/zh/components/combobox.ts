@@ -45,5 +45,13 @@ export const comboboxTranslations = {
   'combobox.api.trigger.description':
     '從自訂觸發元素（例如樣式像 Select 的按鈕）開啟 combobox 的指令。',
   'combobox.api.class.description': '合併到對應 combobox primitive 的額外 class。',
-
+  'combobox.accessibility.description':
+    "input 元素有 role='combobox'、aria-expanded、指向 list id 的 aria-controls，以及 aria-autocomplete='list'。清單容器有 role='listbox'，每個可見選項有 role='option'。在 <sanring-field> 內使用時，aria-required、aria-invalid 與 aria-describedby 會自動轉發。",
+  'combobox.keyboard.description': '在 input 輸入文字以篩選；用方向鍵在符合選項間導覽。',
+  'combobox.keyboard.type': '篩選選項清單為符合的項目。',
+  'combobox.keyboard.navigateList': '在符合選項間移動焦點，跳過停用項目。',
+  'combobox.keyboard.selectItem': '選取聚焦選項並關閉清單。',
+  'combobox.keyboard.escape': '關閉選項清單而不變更選取值。',
+  'combobox.stateModel.description':
+    "CVA（ControlValueAccessor）。使用 [(ngModel)] 或 [formControl] 整合 Angular Forms。在 <sanring-combobox-input> 輸入的文字驅動篩選，父元件負責控制實際渲染的選項。多選時使用 <sanring-combobox-chips> 將已選值顯示為可移除的 chip。",
 } as const;

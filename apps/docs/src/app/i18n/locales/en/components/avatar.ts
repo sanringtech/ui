@@ -27,4 +27,7 @@ export const avatarTranslations = {
     'Places the badge at the visual start or end edge, respecting RTL direction.',
   'avatar.api.overlap.description': 'Stack overlap amount in rem for avatar groups.',
   'avatar.api.count.description': 'Number displayed by the avatar group count item.',
+  'avatar.accessibility.description': "role='img' on the host. Provide ariaLabel or ariaLabelledBy to name a non-decorative avatar. For purely decorative use — such as next to a user name already present in text — add aria-hidden='true' on <sanring-avatar> to suppress redundant announcements.",
+  'avatar.keyboard.description': 'Not focusable by default. No keyboard interaction.',
+  'avatar.stateModel.description': 'Stateless. src loads the image; on failure the fallback slot renders; initials are a last resort. No internal selection or value state.',
 } as const;

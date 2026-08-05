@@ -28,5 +28,9 @@ export const carouselTranslations = {
     '套用在按鈕上的 directive，用來滑到上一張，位於開頭時會自動 disabled。',
   'carousel.api.next.description':
     '套用在按鈕上的 directive，用來滑到下一張，位於結尾時會自動 disabled。',
-
+  'carousel.accessibility.description': "宿主具有 role='region' 與 aria-roledescription='carousel'。提供 ariaLabel input 為 carousel 區域命名——螢幕閱讀器識別此元件時需要此屬性。導覽按鈕（sanring-carousel-previous / sanring-carousel-next）各自需要帶有說明文字的 aria-label 屬性。",
+  'carousel.keyboard.description': '當 carousel 根元素有焦點時，可用方向鍵切換投影片。',
+  'carousel.keyboard.arrowLeftRight': '上一張 / 下一張投影片（水平方向）。',
+  'carousel.keyboard.arrowUpDown': '上一張 / 下一張投影片（垂直方向）。',
+  'carousel.stateModel.description': '投影片位置由 Embla 引擎內部管理。透過 opts input 傳入 Embla 選項（loop、align 等）。非 CVA。',
 } as const;

@@ -20,4 +20,11 @@ export const tagTranslations = {
   'tag.api.closable.description': '顯示精簡移除按鈕，並支援 attribute shorthand。',
   'tag.api.removeAriaLabel.description': '移除按鈕的無障礙標籤。',
   'tag.api.remove.description': '點擊移除按鈕時觸發。',
+  'tag.accessibility.description':
+    "建立在 sanring-badge 之上。當 closable 為 true 時，移除按鈕透過 removeAriaLabel input 獲得可存取標籤。當周圍文字無法明確識別標籤時，請提供有意義的標籤（例如「移除 JavaScript」），而非通用的「移除」。",
+  'tag.keyboard.description': 'closable 為 true 時的移除按鈕鍵盤行為。',
+  'tag.keyboard.tab': '將焦點移至移除按鈕。',
+  'tag.keyboard.enterOrSpace': '觸發移除按鈕並發出 remove 事件。',
+  'tag.stateModel.description':
+    '無狀態——由父元件處理 remove 事件以過濾標籤清單。沒有內部選取或值狀態。',
 } as const;

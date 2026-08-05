@@ -39,5 +39,12 @@ export const resizableTranslations = {
   'resizable.api.withHandle.description': '在 handle 中顯示可見的拖曳握把。',
   'resizable.api.keyboardStep.description':
     '使用方向鍵調整時的百分比步進；Home 與 End 會跳到 panel 邊界。',
-
+  'resizable.accessibility.description': "每個 ResizableHandleComponent 具有 role='separator'、aria-orientation（水平或垂直）、aria-valuenow（相鄰面板目前大小的百分比）以及對應面板 minSize 與 maxSize 限制的 aria-valuemin 與 aria-valuemax。",
+  'resizable.keyboard.description': '可用鍵盤進行步進與跳躍式調整大小。',
+  'resizable.keyboard.arrowLeft': '縮小前一個面板（水平，支援 RTL）。',
+  'resizable.keyboard.arrowRight': '擴大前一個面板（水平，支援 RTL）。',
+  'resizable.keyboard.arrowUp': '縮小前一個面板（垂直）。',
+  'resizable.keyboard.arrowDown': '擴大前一個面板（垂直）。',
+  'resizable.keyboard.homeEnd': '將把手跳至面板最小 / 最大尺寸。',
+  'resizable.stateModel.description': '面板大小為響應式 signal。在 sanring-resizable-group 上使用 [(sizes)] 進行雙向綁定以儲存與還原版面。keyboardStep 控制每次按鍵的百分比步進量。非 CVA。',
 } as const;

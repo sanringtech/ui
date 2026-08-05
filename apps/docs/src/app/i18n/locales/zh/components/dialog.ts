@@ -25,4 +25,12 @@ export const dialogTranslations = {
     'sanringDialogTrigger 開啟 template 時傳入的 CDK DialogConfig。',
   'dialog.api.closeResult.description': 'sanringDialogClose 關閉 dialog 時送出的選填結果值。',
   'dialog.api.mediaClass.description': '與 dialog media 容器合併的額外 class。',
+  'dialog.accessibility.description':
+    "CDK Dialog 容器會自動加上 role='dialog' 與 aria-modal='true'。若有 sanringDialogTitle 或 sanringDialogDescription，其 id 會自動綁到容器的 aria-labelledby 和 aria-describedby。Angular CDK 的 FocusTrap 會在 dialog 開啟期間將 Tab 焦點限制在面板內。",
+  'dialog.keyboard.description': 'Dialog 開啟期間，焦點被鎖定在面板內。',
+  'dialog.keyboard.tab': '移動焦點到 dialog 內的下一個可聚焦元素。',
+  'dialog.keyboard.shiftTab': '移動焦點到 dialog 內的上一個可聚焦元素。',
+  'dialog.keyboard.escape': '關閉 dialog。若 trigger config 設有 disableClose 則會被阻止。',
+  'dialog.stateModel.description':
+    "以 trigger 驅動。將 [sanringDialogTrigger] 綁到 ng-template reference 即可開啟 dialog。透過 [sanringDialogConfig] 傳入 CDK 設定（如 { disableClose: true }）。在 template 內用 [sanringDialogClose]='result' 可帶型別的結果值關閉。Dialog 不是表單控制項，不支援 CVA。",
 } as const;

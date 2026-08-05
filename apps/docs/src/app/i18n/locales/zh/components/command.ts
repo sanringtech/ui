@@ -27,5 +27,12 @@ export const commandTranslations = {
   'command.api.valueChange.description': '任何項目被選取時，從根元件 `sanring-command` 送出。',
   'command.api.shortcutHint.description':
     '`sanring-command-dialog` 上的唯讀 signal，依平台顯示對應的快捷鍵文字（Mac 上是 ⌘K，其他平台是 Ctrl K）。',
-
+  'command.accessibility.description':
+    "清單容器有 role='listbox'，每個可見選項有 role='option'。被篩選掉的項目會從 DOM 移除，並從鍵盤導覽中排除。請為搜尋 input 提供可及性標籤（aria-label 或連結的 <label> 元素）。",
+  'command.keyboard.description': '輸入文字以篩選，用方向鍵導覽，Enter 執行。',
+  'command.keyboard.type': '依輸入字串篩選命令清單。',
+  'command.keyboard.navigateList': '在可見項目間移動焦點。',
+  'command.keyboard.enter': '執行聚焦的命令項目。',
+  'command.stateModel.description':
+    "無狀態。每個 <sanring-command-item> 被啟動時送出 (commandSelected)。元件本身沒有內部選取狀態，如需追蹤請在外部管理。搜尋 input 驅動 DOM 內篩選，不符合的項目從可見清單和鍵盤導覽中移除。",
 } as const;

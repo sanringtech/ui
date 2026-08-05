@@ -1,5 +1,6 @@
 import {
   ComponentPageApiRow,
+  ComponentPageKeyboardRow,
   ComponentPageDefinition,
 } from '../../../docs-schema/component-page.types';
 
@@ -85,6 +86,24 @@ export const switchPage = {
       descriptionKey: 'switch.api.description',
       level: 2,
     },
+    {
+      id: 'accessibility',
+      titleKey: 'toc.accessibility',
+      descriptionKey: 'switch.accessibility.description',
+      level: 2,
+    },
+    {
+      id: 'keyboard',
+      titleKey: 'toc.keyboard',
+      descriptionKey: 'switch.keyboard.description',
+      level: 2,
+    },
+    {
+      id: 'stateModel',
+      titleKey: 'toc.stateModel',
+      descriptionKey: 'switch.stateModel.description',
+      level: 2,
+    },
   ],
   apiRows: [
     {
@@ -142,6 +161,10 @@ export const switchPage = {
       descriptionKey: 'switch.api.size.description',
     },
   ] satisfies readonly ComponentPageApiRow[],
+  keyboardRows: [
+    { keys: 'Space / Enter', descriptionKey: 'switch.keyboard.spaceOrEnter' },
+    { keys: 'Tab / Shift + Tab', descriptionKey: 'switch.keyboard.tabShiftTab' },
+  ] satisfies readonly ComponentPageKeyboardRow[],
 } as const satisfies ComponentPageDefinition;
 
 export const switchPageExamples = {

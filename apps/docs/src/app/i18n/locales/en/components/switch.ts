@@ -41,4 +41,9 @@ export const switchTranslations = {
     'Accessible label for standalone switches not associated with a visible <label> element.',
   'switch.api.ariaLabelledBy.description': 'ID of an external element that labels this switch.',
   'switch.api.size.description': 'Controls switch density: sm, md, or lg.',
+  'switch.accessibility.description': "role='switch' on the internal button. aria-checked reflects the boolean state. Use the ariaLabel and ariaLabelledBy inputs on <sanring-switch> — not an aria-label attribute on the tag — to ensure the accessible name reaches the button. Works with sanring-field for field-level label wiring.",
+  'switch.keyboard.description': 'Standard toggle keyboard behavior.',
+  'switch.keyboard.spaceOrEnter': 'Toggle the switch on or off.',
+  'switch.keyboard.tabShiftTab': 'Navigate to and from the switch.',
+  'switch.stateModel.description': 'Implements ControlValueAccessor. Use [(ngModel)] or formControl. Value type: boolean. Also supports [(checked)] for simple two-way binding without Angular Forms.',
 } as const;

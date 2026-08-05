@@ -34,4 +34,12 @@ export const tooltipTranslations = {
     'Preferred side for the tooltip before fallback positions are used.',
   'tooltip.api.sideOffset.description': 'Distance between the trigger and floating content.',
   'tooltip.api.class.description': 'Additional classes merged with root or content styles.',
+  'tooltip.accessibility.description':
+    "The tooltip panel has role='tooltip'. When open, the trigger element gets aria-describedby pointing to the tooltip's id, so screen readers announce the tooltip text along with the trigger's accessible name.",
+  'tooltip.keyboard.description': 'The tooltip follows hover and keyboard focus lifecycle.',
+  'tooltip.keyboard.focus': 'Show the tooltip (after the configured delay).',
+  'tooltip.keyboard.blur': 'Hide the tooltip.',
+  'tooltip.keyboard.escape': 'Immediately hide the tooltip while the trigger is focused.',
+  'tooltip.stateModel.description':
+    "Automatic. TooltipComponent manages open/closed state internally based on hover and focus events on the trigger. Use the delayDuration input to control the show delay in milliseconds. There is no manual open/close API — the tooltip follows the natural hover/focus lifecycle.",
 } as const;

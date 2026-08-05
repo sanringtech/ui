@@ -1,5 +1,6 @@
 import {
   ComponentPageApiRow,
+  ComponentPageKeyboardRow,
   ComponentPageDefinition,
 } from '../../../docs-schema/component-page.types';
 
@@ -74,6 +75,24 @@ export const calendarPage = {
       id: 'api',
       titleKey: 'toc.apiReference',
       descriptionKey: 'calendar.api.description',
+      level: 2,
+    },
+    {
+      id: 'accessibility',
+      titleKey: 'toc.accessibility',
+      descriptionKey: 'calendar.accessibility.description',
+      level: 2,
+    },
+    {
+      id: 'keyboard',
+      titleKey: 'toc.keyboard',
+      descriptionKey: 'calendar.keyboard.description',
+      level: 2,
+    },
+    {
+      id: 'stateModel',
+      titleKey: 'toc.stateModel',
+      descriptionKey: 'calendar.stateModel.description',
       level: 2,
     },
   ],
@@ -205,6 +224,12 @@ export const calendarPage = {
       descriptionKey: 'calendar.api.focus.description',
     },
   ] satisfies readonly ComponentPageApiRow[],
+  keyboardRows: [
+    { keys: '↑ / ↓ / ← / →', descriptionKey: 'calendar.keyboard.arrowKeys' },
+    { keys: 'Page Up / Page Down', descriptionKey: 'calendar.keyboard.pageUpDown' },
+    { keys: 'Home / End', descriptionKey: 'calendar.keyboard.homeEnd' },
+    { keys: 'Enter', descriptionKey: 'calendar.keyboard.enter' },
+  ] satisfies readonly ComponentPageKeyboardRow[],
 } as const satisfies ComponentPageDefinition;
 
 export const calendarPageExamples = {

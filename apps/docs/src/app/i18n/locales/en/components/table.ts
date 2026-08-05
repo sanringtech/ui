@@ -32,5 +32,8 @@ export const tableTranslations = {
     'Interactive header cell that toggles asc, desc, and none states for a column.',
   'table.api.noDataRow.description':
     'Template rendered by CDK table when the data source is empty.',
-
+  'table.accessibility.description': 'Built on semantic HTML (<table>, <thead>, <tbody>, <th>, <td>). Screen readers use the native table role and column headers automatically. Angular CDK CdkTable adds scope attributes to column headers. No additional ARIA is needed for a basic data table.',
+  'table.keyboard.description': 'The table itself has no built-in keyboard interaction beyond standard browser table traversal.',
+  'table.keyboard.tab': 'Navigate between interactive elements (buttons, links, checkboxes) inside table cells.',
+  'table.stateModel.description': 'Stateless — data is driven by Angular template iteration and a CdkTableDataSourceInput (array or DataSource). Sorting, pagination, and row selection state are managed in the host component.',
 } as const;

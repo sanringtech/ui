@@ -1,5 +1,6 @@
 import {
   ComponentPageApiRow,
+  ComponentPageKeyboardRow,
   ComponentPageDefinition,
 } from '../../../docs-schema/component-page.types';
 
@@ -72,6 +73,24 @@ export const checkboxPage = {
       id: 'api',
       titleKey: 'toc.apiReference',
       descriptionKey: 'checkbox.api.description',
+      level: 2,
+    },
+    {
+      id: 'accessibility',
+      titleKey: 'toc.accessibility',
+      descriptionKey: 'checkbox.accessibility.description',
+      level: 2,
+    },
+    {
+      id: 'keyboard',
+      titleKey: 'toc.keyboard',
+      descriptionKey: 'checkbox.keyboard.description',
+      level: 2,
+    },
+    {
+      id: 'stateModel',
+      titleKey: 'toc.stateModel',
+      descriptionKey: 'checkbox.stateModel.description',
       level: 2,
     },
   ],
@@ -155,6 +174,10 @@ export const checkboxPage = {
       descriptionKey: 'checkbox.api.size.description',
     },
   ] satisfies readonly ComponentPageApiRow[],
+  keyboardRows: [
+    { keys: 'Space', descriptionKey: 'checkbox.keyboard.space' },
+    { keys: 'Tab / Shift + Tab', descriptionKey: 'checkbox.keyboard.tabShiftTab' },
+  ] satisfies readonly ComponentPageKeyboardRow[],
 } as const satisfies ComponentPageDefinition;
 
 export const checkboxPageExamples = {

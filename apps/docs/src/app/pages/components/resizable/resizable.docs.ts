@@ -1,5 +1,6 @@
 import {
   ComponentPageApiRow,
+  ComponentPageKeyboardRow,
   ComponentPageDefinition,
 } from '../../../docs-schema/component-page.types';
 
@@ -53,6 +54,24 @@ export const resizablePage = {
       id: 'api',
       titleKey: 'toc.apiReference',
       descriptionKey: 'resizable.api.description',
+      level: 2,
+    },
+    {
+      id: 'accessibility',
+      titleKey: 'toc.accessibility',
+      descriptionKey: 'resizable.accessibility.description',
+      level: 2,
+    },
+    {
+      id: 'keyboard',
+      titleKey: 'toc.keyboard',
+      descriptionKey: 'resizable.keyboard.description',
+      level: 2,
+    },
+    {
+      id: 'stateModel',
+      titleKey: 'toc.stateModel',
+      descriptionKey: 'resizable.stateModel.description',
       level: 2,
     },
   ],
@@ -118,6 +137,13 @@ export const resizablePage = {
       descriptionKey: 'resizable.api.keyboardStep.description',
     },
   ] satisfies readonly ComponentPageApiRow[],
+  keyboardRows: [
+    { keys: '←', descriptionKey: 'resizable.keyboard.arrowLeft' },
+    { keys: '→', descriptionKey: 'resizable.keyboard.arrowRight' },
+    { keys: '↑', descriptionKey: 'resizable.keyboard.arrowUp' },
+    { keys: '↓', descriptionKey: 'resizable.keyboard.arrowDown' },
+    { keys: 'Home / End', descriptionKey: 'resizable.keyboard.homeEnd' },
+  ] satisfies readonly ComponentPageKeyboardRow[],
 } as const satisfies ComponentPageDefinition;
 
 export const resizablePageExamples = {

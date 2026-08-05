@@ -57,4 +57,11 @@ export const otpInputTranslations = {
   'otpInput.api.complete.description': '每個 slot 都有值時觸發。',
   'otpInput.api.pasted.description': '貼上事件處理後，送出正規化後的貼上資訊。',
   'otpInput.api.slotKeydown.description': '送出單一 slot 的鍵盤 metadata，供進階自訂 slot 行為使用。',
+  'otpInput.accessibility.description': "宿主具有 role='group'，aria-label / aria-labelledby、aria-describedby、aria-invalid、aria-required 與 aria-disabled 會自動同步。每個插槽是原生的 <input type='text' inputmode='numeric'>。一個隱藏的原生 input 會保持同步，讓密碼管理器與自動填入可以提議一次性驗證碼。",
+  'otpInput.keyboard.description': '每個插槽都是原生 text input，插槽之間具有導覽連結。',
+  'otpInput.keyboard.type': '輸入字元以填入目前插槽並自動跳至下一個。',
+  'otpInput.keyboard.arrowLeftRight': '移動焦點至相鄰插槽。',
+  'otpInput.keyboard.backspace': '清除目前插槽並將焦點移至前一個插槽。',
+  'otpInput.keyboard.delete': '清除目前插槽且不移動焦點。',
+  'otpInput.stateModel.description': '實作 ControlValueAccessor。使用 [(ngModel)] 或 formControl。值型別：string。complete 事件會在所有插槽都有字元時觸發，方便自動送出驗證表單。',
 } as const;

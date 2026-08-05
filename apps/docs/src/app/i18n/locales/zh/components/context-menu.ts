@@ -22,5 +22,12 @@ export const contextMenuTranslations = {
   'contextMenu.api.radioValue.description':
     'radio group 目前選中的值，支援 [(value)] 雙向綁定。',
   'contextMenu.api.class.description': '與對應 context menu primitive 樣式合併的額外 class。',
-
+  'contextMenu.accessibility.description':
+    "面板有 role='menu'，item 依情況有 role='menuitem'、role='menuitemcheckbox' 或 role='menuitemradio'。trigger 區域（[sanringContextMenuTrigger]）不提供 ARIA 狀態，建議搭配可見的操作提示或鍵盤快捷鍵說明以提升可及性。",
+  'contextMenu.keyboard.description': '右鍵選單也可以透過鍵盤 trigger 開啟。',
+  'contextMenu.keyboard.navigateItems': '在選單項目間移動焦點，跳過停用項目（循環）。',
+  'contextMenu.keyboard.enter': '啟動聚焦的選單項目。',
+  'contextMenu.keyboard.escape': '關閉右鍵選單。',
+  'contextMenu.stateModel.description':
+    "無狀態。item 啟動時送出事件。trigger 上下文由 [sanringContextMenuTrigger] 指令設定，可套用在任何 host 元素上。開啟/關閉由右鍵點擊事件驅動，或透過 ContextMenuComponent 的 open(x, y) 方法程式化觸發。",
 } as const;

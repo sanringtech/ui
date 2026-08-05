@@ -1,5 +1,6 @@
 import {
   ComponentPageApiRow,
+  ComponentPageKeyboardRow,
   ComponentPageDefinition,
 } from '../../../docs-schema/component-page.types';
 
@@ -59,6 +60,24 @@ export const tagPage = {
       descriptionKey: 'tag.api.description',
       level: 2,
     },
+    {
+      id: 'accessibility',
+      titleKey: 'toc.accessibility',
+      descriptionKey: 'tag.accessibility.description',
+      level: 2,
+    },
+    {
+      id: 'keyboard',
+      titleKey: 'toc.keyboard',
+      descriptionKey: 'tag.keyboard.description',
+      level: 2,
+    },
+    {
+      id: 'stateModel',
+      titleKey: 'toc.stateModel',
+      descriptionKey: 'tag.stateModel.description',
+      level: 2,
+    },
   ],
   apiRows: [
     {
@@ -92,6 +111,10 @@ export const tagPage = {
       descriptionKey: 'tag.api.remove.description',
     },
   ] satisfies readonly ComponentPageApiRow[],
+  keyboardRows: [
+    { keys: 'Tab', descriptionKey: 'tag.keyboard.tab' },
+    { keys: 'Enter / Space', descriptionKey: 'tag.keyboard.enterOrSpace' },
+  ] satisfies readonly ComponentPageKeyboardRow[],
 } as const satisfies ComponentPageDefinition;
 
 export const tagPageExamples = {

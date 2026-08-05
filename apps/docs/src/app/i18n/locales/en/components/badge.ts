@@ -23,4 +23,7 @@ export const badgeTranslations = {
   'badge.api.class.description': 'Additional classes merged with the base badge styles.',
   'badge.api.variant.description':
     'Controls visual emphasis: default, secondary, destructive, outline, or ghost.',
+  'badge.accessibility.description': 'Rendered as an inline <span> with no added ARIA. If the badge conveys meaning not present in surrounding text — such as an isolated notification count or status — add aria-label directly on the element.',
+  'badge.keyboard.description': 'Not focusable. No keyboard interaction.',
+  'badge.stateModel.description': 'Stateless — variant and class inputs only. No value or event state.',
 } as const;

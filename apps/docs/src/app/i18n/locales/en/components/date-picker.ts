@@ -91,5 +91,12 @@ export const datePickerTranslations = {
   'datePicker.api.removeDate.description':
     'Removes a single date from the selection (multi mode only).',
   'datePicker.api.focus.description': 'Moves focus to the date-picker host element.',
-
+  'datePicker.accessibility.description': "role='grid' on the calendar panel, aria-label on the grid from the month/year header, role='gridcell' on each cell. The host element receives aria-required, aria-invalid, and aria-describedby, which auto-wire to the surrounding sanring-field.",
+  'datePicker.keyboard.description': 'Calendar grid navigation is handled by @sanring/date-picker-core.',
+  'datePicker.keyboard.arrowKeys': 'Navigate between cells in the calendar grid.',
+  'datePicker.keyboard.pageUpDown': 'Previous / next page (month, quarter, or year depending on granularity).',
+  'datePicker.keyboard.homeEnd': 'Jump to the first / last cell in the current view.',
+  'datePicker.keyboard.enter': 'Select the focused cell.',
+  'datePicker.keyboard.escape': 'Close the date-picker popover without committing a selection.',
+  'datePicker.stateModel.description': 'Implements ControlValueAccessor. Use [(ngModel)] or formControl. Value type: DatePickerValue (single date, a range pair, or an array of dates depending on mode). mode and granularity can be changed at runtime.',
 } as const;

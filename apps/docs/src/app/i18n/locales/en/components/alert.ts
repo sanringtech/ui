@@ -17,4 +17,7 @@ export const alertTranslations = {
   'alert.api.class.description': 'Additional classes merged with the base alert styles.',
   'alert.api.variant.description':
     'Controls the visual tone. Available variants are default and destructive.',
+  'alert.accessibility.description': "role='alert' on the host, which carries an implicit aria-live='assertive'. Screen readers announce the content immediately when the element is inserted into the DOM. For non-urgent messages, wrap or replace with role='status' (aria-live='polite').",
+  'alert.keyboard.description': 'Not focusable unless interactive children (e.g., a dismiss button) are present.',
+  'alert.stateModel.description': 'Stateless — insert or remove <sanring-alert> with @if to trigger or clear the live-region announcement. Content is driven by ng-content.',
 } as const;

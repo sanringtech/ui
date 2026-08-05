@@ -10,6 +10,7 @@ import {
   ComponentPageComponent,
   ComponentPageHeaderComponent,
   ComponentPageInstallationComponent,
+  ComponentPageKeyboardTableComponent,
   ComponentPageUsageImportsComponent,
   ComponentPageSectionComponent,
 } from '../../../layouts/component-page';
@@ -78,6 +79,7 @@ const JA_LOCALE: CalendarLocale = {
     ComponentPageComponent,
     ComponentPageHeaderComponent,
     ComponentPageInstallationComponent,
+    ComponentPageKeyboardTableComponent,
     ComponentPageUsageImportsComponent,
     ComponentPageSectionComponent,
     SANRING_TABS_IMPORTS,
@@ -468,6 +470,14 @@ const JA_LOCALE: CalendarLocale = {
       <app-component-page-section [section]="section('api')">
         <app-component-page-api-table [rows]="page.apiRows!" />
       </app-component-page-section>
+
+      <app-component-page-section [section]="section('accessibility')" />
+
+      <app-component-page-section [section]="section('keyboard')">
+        <app-component-page-keyboard-table [rows]="page.keyboardRows!" />
+      </app-component-page-section>
+
+      <app-component-page-section [section]="section('stateModel')" />
     </app-component-page>
   `,
 })

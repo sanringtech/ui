@@ -38,4 +38,11 @@ export const accordionTranslations = {
   'accordion.api.opened.description': 'accordion item 展開時觸發。',
   'accordion.api.closed.description': 'accordion item 關閉時觸發。',
   'accordion.api.expandedChange.description': 'expanded 狀態變更時觸發。',
+  'accordion.accessibility.description': "透過 @angular/aria/accordion 實作 WAI-ARIA Accordion 模式。每個觸發器具有 role='button'、aria-expanded，以及連結至其內容面板的 aria-controls。內容面板有對應的 id 與指向觸發器的 aria-labelledby。",
+  'accordion.keyboard.description': '可用鍵盤在所有觸發器之間完整導覽。',
+  'accordion.keyboard.enterSpace': '切換目前有焦點的手風琴項目的展開/收合狀態。',
+  'accordion.keyboard.arrowDown': '將焦點移至下一個觸發器。',
+  'accordion.keyboard.arrowUp': '將焦點移至上一個觸發器。',
+  'accordion.keyboard.homeEnd': '將焦點移至第一個 / 最後一個觸發器。',
+  'accordion.stateModel.description': '非 CVA。每個 sanring-accordion-item 透過 expanded / expandedChange 追蹤自身的展開狀態。在群組上啟用 multi 可讓多個項目同時展開。openAll() 與 closeAll() 方法可用於程式化控制。',
 } as const;

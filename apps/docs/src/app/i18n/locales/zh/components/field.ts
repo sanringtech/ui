@@ -18,4 +18,7 @@ export const fieldTranslations = {
   'field.api.labelClass.description': '會跟 label 的基礎樣式合併的額外 class。',
   'field.api.descriptionClass.description': '會跟 description 的基礎樣式合併的額外 class。',
   'field.api.errorMessageClass.description': '會跟 error message 的基礎樣式合併的額外 class。',
+  'field.accessibility.description': '將 label、control、error text 與 helper text 包覆在一起，並自動完成 ARIA 連結。注入 FieldContext 的 CVA 控制元件會自動取得 aria-labelledby 與 aria-describedby ID，不需要在模板中額外加屬性。',
+  'field.keyboard.description': '版面容器，本身沒有鍵盤互動。',
+  'field.stateModel.description': '非 ControlValueAccessor。提供 FieldContext，讓巢狀 CVA 控制元件（input、checkbox、radio-group、switch、slider、otp-input、file-upload、date-picker、calendar）能自動串接 aria ID 與驗證狀態。本身沒有值或選取狀態。',
 } as const;

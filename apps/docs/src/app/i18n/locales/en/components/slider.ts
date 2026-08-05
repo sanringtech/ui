@@ -36,4 +36,12 @@ export const sliderTranslations = {
   'slider.api.ariaDescribedBy.description': 'Id of helper text that describes the slider.',
   'slider.api.ariaValueText.description':
     'Human-readable value text when the number alone is not enough.',
+  'slider.accessibility.description': "role='slider', aria-valuemin, aria-valuemax, aria-valuenow, aria-valuetext, aria-orientation='horizontal'. Use ariaLabel or ariaLabelledBy inputs to label the slider. Works with sanring-field for automatic aria-describedby wiring.",
+  'slider.keyboard.description': 'Rich keyboard navigation for precise value adjustment.',
+  'slider.keyboard.arrowLeftRight': 'Decrease or increase value by one step.',
+  'slider.keyboard.arrowUpDown': 'Same as Left / Right.',
+  'slider.keyboard.pageUpDown': 'Decrease or increase value by 10% of the total range.',
+  'slider.keyboard.home': 'Jump to the minimum value.',
+  'slider.keyboard.end': 'Jump to the maximum value.',
+  'slider.stateModel.description': 'Implements ControlValueAccessor. Use [(ngModel)] or formControl. Value type: number. Values are clamped to [min, max] and snapped to the nearest step.',
 } as const;

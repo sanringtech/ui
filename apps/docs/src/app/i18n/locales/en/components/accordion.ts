@@ -44,4 +44,11 @@ export const accordionTranslations = {
   'accordion.api.opened.description': 'Emits when an accordion item opens.',
   'accordion.api.closed.description': 'Emits when an accordion item closes.',
   'accordion.api.expandedChange.description': 'Emits when the expanded state changes.',
+  'accordion.accessibility.description': "WAI-ARIA Accordion pattern via @angular/aria/accordion. Each trigger receives role='button', aria-expanded, and aria-controls linking to its content panel. The content panel has a matching id and aria-labelledby pointing back to its trigger.",
+  'accordion.keyboard.description': 'Full keyboard navigation across all triggers.',
+  'accordion.keyboard.enterSpace': 'Toggle the focused accordion item open or closed.',
+  'accordion.keyboard.arrowDown': 'Move focus to the next accordion trigger.',
+  'accordion.keyboard.arrowUp': 'Move focus to the previous accordion trigger.',
+  'accordion.keyboard.homeEnd': 'Move focus to the first / last accordion trigger.',
+  'accordion.stateModel.description': 'Not CVA. Each sanring-accordion-item tracks its own expanded state via expanded / expandedChange. Enable multi on the group to allow multiple open items simultaneously. The openAll() and closeAll() methods on the group provide programmatic control.',
 } as const;

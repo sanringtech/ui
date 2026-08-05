@@ -50,5 +50,13 @@ export const comboboxTranslations = {
     'Directive for opening the combobox from a custom trigger element, e.g. a button styled like a Select.',
   'combobox.api.class.description':
     'Additional classes merged with the corresponding combobox primitive.',
-
+  'combobox.accessibility.description':
+    "The input element has role='combobox', aria-expanded, aria-controls pointing to the list id, and aria-autocomplete='list'. The list container has role='listbox' and each visible item has role='option'. When inside <sanring-field>, aria-required, aria-invalid, and aria-describedby are forwarded automatically.",
+  'combobox.keyboard.description': 'Type in the input to filter; navigate the matching options with arrow keys.',
+  'combobox.keyboard.type': 'Filter the option list to matching entries.',
+  'combobox.keyboard.navigateList': 'Move focus between matching options, skipping disabled items.',
+  'combobox.keyboard.selectItem': 'Select the focused option and close the list.',
+  'combobox.keyboard.escape': 'Close the option list without changing the selection.',
+  'combobox.stateModel.description':
+    "CVA (ControlValueAccessor). Use [(ngModel)] or [formControl] for Angular Forms. The text typed in <sanring-combobox-input> drives filtering — the parent component controls which items are rendered. For multi-select, use <sanring-combobox-chips> to display selected values as removable chips.",
 } as const;

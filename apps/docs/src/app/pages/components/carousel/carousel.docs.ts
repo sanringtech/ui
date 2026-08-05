@@ -1,5 +1,6 @@
 import {
   ComponentPageApiRow,
+  ComponentPageKeyboardRow,
   ComponentPageDefinition,
 } from '../../../docs-schema/component-page.types';
 
@@ -53,6 +54,24 @@ export const carouselPage = {
       descriptionKey: 'carousel.api.description',
       level: 2,
     },
+    {
+      id: 'accessibility',
+      titleKey: 'toc.accessibility',
+      descriptionKey: 'carousel.accessibility.description',
+      level: 2,
+    },
+    {
+      id: 'keyboard',
+      titleKey: 'toc.keyboard',
+      descriptionKey: 'carousel.keyboard.description',
+      level: 2,
+    },
+    {
+      id: 'stateModel',
+      titleKey: 'toc.stateModel',
+      descriptionKey: 'carousel.stateModel.description',
+      level: 2,
+    },
   ],
   apiRows: [
     {
@@ -92,6 +111,10 @@ export const carouselPage = {
       descriptionKey: 'carousel.api.next.description',
     },
   ] satisfies readonly ComponentPageApiRow[],
+  keyboardRows: [
+    { keys: '← / →', descriptionKey: 'carousel.keyboard.arrowLeftRight' },
+    { keys: '↑ / ↓', descriptionKey: 'carousel.keyboard.arrowUpDown' },
+  ] satisfies readonly ComponentPageKeyboardRow[],
 } as const satisfies ComponentPageDefinition;
 
 export const carouselPageExamples = {

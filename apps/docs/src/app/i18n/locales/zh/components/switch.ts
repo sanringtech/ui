@@ -36,4 +36,9 @@ export const switchTranslations = {
   'switch.api.ariaLabel.description': '獨立使用（無可見 label 元素關聯）時的無障礙標籤。',
   'switch.api.ariaLabelledBy.description': '標示此 switch 的外部元素 ID。',
   'switch.api.size.description': '控制 switch 密度，可使用 sm、md 或 lg。',
+  'switch.accessibility.description': "內部按鈕具有 role='switch'，aria-checked 反映布林狀態。請使用 <sanring-switch> 上的 ariaLabel 與 ariaLabelledBy input，而非在標籤上直接加 aria-label 屬性，以確保可存取名稱能傳達到內部按鈕。搭配 sanring-field 可自動完成欄位層級的標籤串接。",
+  'switch.keyboard.description': '標準切換控制鍵盤行為。',
+  'switch.keyboard.spaceOrEnter': '開啟或關閉此開關。',
+  'switch.keyboard.tabShiftTab': '移入或移出此開關。',
+  'switch.stateModel.description': '實作 ControlValueAccessor。使用 [(ngModel)] 或 formControl。值型別：boolean。也可使用 [(checked)] 進行不依賴 Angular Forms 的雙向綁定。',
 } as const;

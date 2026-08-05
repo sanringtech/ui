@@ -9,4 +9,8 @@ export const textareaTranslations = {
   'textarea.demo.resize': '可調整大小',
   'textarea.api.description': 'sanringTextarea directive 支援的 Inputs。',
   'textarea.api.class.description': '與基礎多行文字樣式合併的額外 class。',
+  'textarea.accessibility.description': '透明的樣式 directive，完整保留原生 <textarea> 的語意。直接在 textarea 上使用標準 HTML 屬性 aria-label、aria-labelledby、aria-describedby。搭配 sanring-field 可自動完成標籤關聯與驗證串接。',
+  'textarea.keyboard.description': '焦點與所有互動皆遵循瀏覽器原生行為。',
+  'textarea.keyboard.tab': '聚焦至文字區（除非 Tab 鍵被設定為插入定位字元）。',
+  'textarea.stateModel.description': '非 ControlValueAccessor。直接在原生 <textarea> 元素上使用 [(ngModel)] 或 [formControl] 綁定值。此 directive 僅套用視覺樣式，不持有內部值狀態。',
 } as const;

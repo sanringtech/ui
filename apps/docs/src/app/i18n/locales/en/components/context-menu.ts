@@ -30,5 +30,12 @@ export const contextMenuTranslations = {
     "The radio group's currently selected value. Supports two-way binding with [(value)].",
   'contextMenu.api.class.description':
     'Additional classes merged with the corresponding context menu primitive.',
-
+  'contextMenu.accessibility.description':
+    "The panel has role='menu'. Items receive role='menuitem', role='menuitemcheckbox', or role='menuitemradio'. The trigger zone ([sanringContextMenuTrigger]) does not expose ARIA state — consider pairing it with a visible affordance or keyboard shortcut hint for accessibility.",
+  'contextMenu.keyboard.description': 'The context menu can also be opened from a keyboard trigger.',
+  'contextMenu.keyboard.navigateItems': 'Move focus between menu items, skipping disabled items (wraps).',
+  'contextMenu.keyboard.enter': 'Activate the focused menu item.',
+  'contextMenu.keyboard.escape': 'Close the context menu.',
+  'contextMenu.stateModel.description':
+    "Stateless. Items emit events on activation. The trigger context is set by the [sanringContextMenuTrigger] directive on any host element. Open/close is driven by right-click events or programmatically via the open(x, y) method on the ContextMenuComponent.",
 } as const;

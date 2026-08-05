@@ -17,10 +17,16 @@ export interface ComponentPageApiRow {
   descriptionKey: TranslationKey;
 }
 
+export interface ComponentPageKeyboardRow {
+  keys: string;
+  descriptionKey: TranslationKey;
+}
+
 export interface ComponentPageDefinition {
   componentId: DocsComponentId;
   titleKey: TranslationKey;
   descriptionKey: TranslationKey;
   sections: readonly ComponentPageSectionDefinition[];
   apiRows?: readonly ComponentPageApiRow[];
+  keyboardRows?: readonly ComponentPageKeyboardRow[];
 }

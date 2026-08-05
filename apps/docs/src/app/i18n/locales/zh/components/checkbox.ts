@@ -40,5 +40,9 @@ export const checkboxTranslations = {
   'checkbox.demo.fieldError': '必須接受條款才能繼續。',
   'checkbox.examples.field.description':
     '把 sanring-checkbox 包在 sanring-field 裡並綁定 reactive form control——控制項變成 invalid 且 touched 之後，錯誤訊息會自動顯示。',
-
+  'checkbox.accessibility.description': "內部按鈕具有 role='checkbox'，aria-checked（true / false / mixed 對應 indeterminate），aria-disabled，aria-required。巢狀在 sanring-field 內時會自動串接 aria-labelledby 與 aria-describedby。",
+  'checkbox.keyboard.description': '標準核取方塊鍵盤行為。',
+  'checkbox.keyboard.space': '切換勾選狀態。',
+  'checkbox.keyboard.tabShiftTab': '移入或移出此核取方塊。',
+  'checkbox.stateModel.description': '實作 ControlValueAccessor。在 sanring-checkbox 上使用 [(ngModel)] 或 formControl。值型別：boolean | "indeterminate"。也可使用 checkedChange 事件或 [(checked)] 進行不依賴 Angular Forms 的雙向綁定。',
 } as const;

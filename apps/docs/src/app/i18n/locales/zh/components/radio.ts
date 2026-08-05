@@ -38,5 +38,10 @@ export const radioTranslations = {
   'radio.api.item.ariaLabel': '無可見 label 元素時的無障礙標籤。',
   'radio.api.item.ariaLabelledBy': '標示此選項的外部元素 ID。',
   'radio.api.item.ariaDescribedBy': '提供此選項延伸說明的元素 ID。',
-
+  'radio.accessibility.description': "sanring-radio-group 具有 role='radiogroup'，每個 sanring-radio 具有 role='radio'。aria-checked、aria-disabled、aria-required 會自動同步。巢狀在 sanring-field 內時，aria-labelledby 與 aria-describedby 會自動串接到群組上。",
+  'radio.keyboard.description': '使用 roving tabindex，任何時間只有一個項目在 Tab 序列中。',
+  'radio.keyboard.tab': '將焦點移入群組。焦點落在已選取的項目上；若無已選取項目，則落在第一個啟用項目上。',
+  'radio.keyboard.arrowUpDown': '在選項之間移動焦點並立即選取目前焦點所在的項目。',
+  'radio.keyboard.space': '選取目前有焦點的選項。',
+  'radio.stateModel.description': 'sanring-radio-group 實作 ControlValueAccessor。在群組元素上使用 [(ngModel)] 或 formControl。值型別：string | null。也可使用 valueChange 事件或 [(value)] 進行不依賴 Angular Forms 的雙向綁定。',
 } as const;

@@ -15,4 +15,9 @@ export const inputTranslations = {
     'Pair Input with Label for accessible forms, or combine it with Card and Alert in larger workflows.',
   'input.api.description': 'Inputs supported by the sanringInput directive.',
   'input.api.class.description': 'Additional classes merged with the base input styles.',
+  'input.accessibility.description': 'A transparent styling directive that preserves native <input> semantics. Works with standard HTML attributes — aria-label, aria-labelledby, aria-describedby — applied directly to the input. Pair with sanring-field for automatic for/id label association.',
+  'input.keyboard.description': 'Focus and all interactions follow native browser behavior.',
+  'input.keyboard.tab': 'Focus the input.',
+  'input.keyboard.type': 'Type to enter or edit text.',
+  'input.stateModel.description': 'Not a ControlValueAccessor. Bind value with [(ngModel)] or [formControl] directly on the native <input> element. The directive only applies visual styling — no internal value state.',
 } as const;

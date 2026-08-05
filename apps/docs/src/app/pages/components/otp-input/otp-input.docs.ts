@@ -1,5 +1,6 @@
 import {
   ComponentPageApiRow,
+  ComponentPageKeyboardRow,
   ComponentPageDefinition,
 } from '../../../docs-schema/component-page.types';
 
@@ -55,6 +56,24 @@ export const otpInputPage = {
       id: 'api',
       titleKey: 'toc.apiReference',
       descriptionKey: 'otpInput.api.description',
+      level: 2,
+    },
+    {
+      id: 'accessibility',
+      titleKey: 'toc.accessibility',
+      descriptionKey: 'otpInput.accessibility.description',
+      level: 2,
+    },
+    {
+      id: 'keyboard',
+      titleKey: 'toc.keyboard',
+      descriptionKey: 'otpInput.keyboard.description',
+      level: 2,
+    },
+    {
+      id: 'stateModel',
+      titleKey: 'toc.stateModel',
+      descriptionKey: 'otpInput.stateModel.description',
       level: 2,
     },
   ],
@@ -198,6 +217,12 @@ export const otpInputPage = {
       descriptionKey: 'otpInput.api.slotKeydown.description',
     },
   ] satisfies readonly ComponentPageApiRow[],
+  keyboardRows: [
+    { keys: 'Type', descriptionKey: 'otpInput.keyboard.type' },
+    { keys: '← / →', descriptionKey: 'otpInput.keyboard.arrowLeftRight' },
+    { keys: 'Backspace', descriptionKey: 'otpInput.keyboard.backspace' },
+    { keys: 'Delete', descriptionKey: 'otpInput.keyboard.delete' },
+  ] satisfies readonly ComponentPageKeyboardRow[],
 } as const satisfies ComponentPageDefinition;
 
 export const otpInputPageExamples = {

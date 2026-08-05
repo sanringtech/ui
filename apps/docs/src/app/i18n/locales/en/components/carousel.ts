@@ -31,5 +31,9 @@ export const carouselTranslations = {
     'Directive for a button that scrolls to the previous slide and disables itself at the start.',
   'carousel.api.next.description':
     'Directive for a button that scrolls to the next slide and disables itself at the end.',
-
+  'carousel.accessibility.description': "role='region' and aria-roledescription='carousel' on the host. Provide an ariaLabel input to name the carousel region — required for screen readers to identify it. Navigation buttons (sanring-carousel-previous / sanring-carousel-next) each need a descriptive aria-label attribute.",
+  'carousel.keyboard.description': 'Arrow-key slide navigation when the carousel root is focused.',
+  'carousel.keyboard.arrowLeftRight': 'Previous / next slide (horizontal orientation).',
+  'carousel.keyboard.arrowUpDown': 'Previous / next slide (vertical orientation).',
+  'carousel.stateModel.description': 'Slide position is managed by the Embla engine internally. Pass Embla options via the opts input (loop, align, etc.). No CVA.',
 } as const;

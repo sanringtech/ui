@@ -1,5 +1,6 @@
 import {
   ComponentPageApiRow,
+  ComponentPageKeyboardRow,
   ComponentPageDefinition,
 } from '../../../docs-schema/component-page.types';
 
@@ -70,6 +71,24 @@ export const accordionPage = {
       descriptionKey: 'accordion.api.description',
       level: 2,
     },
+    {
+      id: 'accessibility',
+      titleKey: 'toc.accessibility',
+      descriptionKey: 'accordion.accessibility.description',
+      level: 2,
+    },
+    {
+      id: 'keyboard',
+      titleKey: 'toc.keyboard',
+      descriptionKey: 'accordion.keyboard.description',
+      level: 2,
+    },
+    {
+      id: 'stateModel',
+      titleKey: 'toc.stateModel',
+      descriptionKey: 'accordion.stateModel.description',
+      level: 2,
+    },
   ],
   apiRows: [
     {
@@ -127,6 +146,12 @@ export const accordionPage = {
       descriptionKey: 'accordion.api.expandedChange.description',
     },
   ] satisfies readonly ComponentPageApiRow[],
+  keyboardRows: [
+    { keys: 'Enter / Space', descriptionKey: 'accordion.keyboard.enterSpace' },
+    { keys: '↓', descriptionKey: 'accordion.keyboard.arrowDown' },
+    { keys: '↑', descriptionKey: 'accordion.keyboard.arrowUp' },
+    { keys: 'Home / End', descriptionKey: 'accordion.keyboard.homeEnd' },
+  ] satisfies readonly ComponentPageKeyboardRow[],
 } as const satisfies ComponentPageDefinition;
 
 export const accordionPageExamples = {

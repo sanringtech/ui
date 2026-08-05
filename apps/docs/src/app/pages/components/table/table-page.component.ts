@@ -32,6 +32,7 @@ import {
   ComponentPageComponent,
   ComponentPageHeaderComponent,
   ComponentPageInstallationComponent,
+  ComponentPageKeyboardTableComponent,
   ComponentPageSectionComponent,
   ComponentPageUsageImportsComponent,
 } from '../../../layouts/component-page';
@@ -61,6 +62,7 @@ interface InvoiceRow {
     ComponentPageComponent,
     ComponentPageHeaderComponent,
     ComponentPageInstallationComponent,
+    ComponentPageKeyboardTableComponent,
     ComponentPageSectionComponent,
     ComponentPageUsageImportsComponent,
     PaginatorComponent,
@@ -573,6 +575,14 @@ interface InvoiceRow {
       <app-component-page-section [section]="section('api')">
         <app-component-page-api-table [rows]="page.apiRows!" />
       </app-component-page-section>
+
+      <app-component-page-section [section]="section('accessibility')" />
+
+      <app-component-page-section [section]="section('keyboard')">
+        <app-component-page-keyboard-table [rows]="page.keyboardRows!" />
+      </app-component-page-section>
+
+      <app-component-page-section [section]="section('stateModel')" />
     </app-component-page>
   `,
 })

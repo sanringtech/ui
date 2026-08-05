@@ -1,6 +1,7 @@
 import {
   ComponentPageApiRow,
   ComponentPageDefinition,
+  ComponentPageKeyboardRow,
 } from '../../../docs-schema/component-page.types';
 
 export const sheetPage = {
@@ -38,6 +39,9 @@ export const sheetPage = {
       ],
     },
     { id: 'api', titleKey: 'toc.apiReference', descriptionKey: 'sheet.api.description', level: 2 },
+    { id: 'accessibility', titleKey: 'toc.accessibility', descriptionKey: 'sheet.accessibility.description', level: 2 },
+    { id: 'keyboard', titleKey: 'toc.keyboard', descriptionKey: 'sheet.keyboard.description', level: 2 },
+    { id: 'stateModel', titleKey: 'toc.stateModel', descriptionKey: 'sheet.stateModel.description', level: 2 },
   ],
   apiRows: [
     {
@@ -59,6 +63,10 @@ export const sheetPage = {
       descriptionKey: 'sheet.api.class.description',
     },
   ] satisfies readonly ComponentPageApiRow[],
+  keyboardRows: [
+    { keys: 'Tab / Shift + Tab', descriptionKey: 'sheet.keyboard.tabShiftTab' },
+    { keys: 'Escape', descriptionKey: 'sheet.keyboard.escape' },
+  ] satisfies readonly ComponentPageKeyboardRow[],
 } as const satisfies ComponentPageDefinition;
 
 export const sheetPageExamples = {

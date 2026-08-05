@@ -13,4 +13,7 @@ export const alertTranslations = {
   'alert.api.description': 'sanring-alert component 支援的 Inputs。',
   'alert.api.class.description': '與基礎提示樣式合併的額外 class。',
   'alert.api.variant.description': '控制視覺語氣，目前支援 default 與 destructive。',
+  'alert.accessibility.description': "宿主具有 role='alert'，隱含 aria-live='assertive'。元素插入 DOM 時，螢幕閱讀器會立即播報內容。對於非緊急訊息，可改用 role='status'（aria-live='polite'）。",
+  'alert.keyboard.description': '除非內部有互動子元素（例如關閉按鈕），否則不可聚焦。',
+  'alert.stateModel.description': '無狀態——使用 @if 插入或移除 <sanring-alert> 以觸發或清除 live region 播報。內容由 ng-content 驅動。',
 } as const;

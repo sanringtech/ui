@@ -1,6 +1,7 @@
 import {
   ComponentPageApiRow,
   ComponentPageDefinition,
+  ComponentPageKeyboardRow,
 } from '../../../docs-schema/component-page.types';
 
 export const alertDialogPage = {
@@ -55,6 +56,24 @@ export const alertDialogPage = {
       descriptionKey: 'alertDialog.api.description',
       level: 2,
     },
+    {
+      id: 'accessibility',
+      titleKey: 'toc.accessibility',
+      descriptionKey: 'alertDialog.accessibility.description',
+      level: 2,
+    },
+    {
+      id: 'keyboard',
+      titleKey: 'toc.keyboard',
+      descriptionKey: 'alertDialog.keyboard.description',
+      level: 2,
+    },
+    {
+      id: 'stateModel',
+      titleKey: 'toc.stateModel',
+      descriptionKey: 'alertDialog.stateModel.description',
+      level: 2,
+    },
   ],
   apiRows: [
     {
@@ -94,6 +113,11 @@ export const alertDialogPage = {
       descriptionKey: 'alertDialog.api.cancel.description',
     },
   ] satisfies readonly ComponentPageApiRow[],
+  keyboardRows: [
+    { keys: 'Tab', descriptionKey: 'alertDialog.keyboard.tab' },
+    { keys: 'Shift + Tab', descriptionKey: 'alertDialog.keyboard.shiftTab' },
+    { keys: 'Escape', descriptionKey: 'alertDialog.keyboard.escape' },
+  ] satisfies readonly ComponentPageKeyboardRow[],
 } as const satisfies ComponentPageDefinition;
 
 export const alertDialogPageExamples = {

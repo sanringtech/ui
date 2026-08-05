@@ -30,5 +30,8 @@ export const tableTranslations = {
   'table.api.sortHeader.description':
     '互動式 header cell，可在 asc、desc、none 三種排序狀態間切換。',
   'table.api.noDataRow.description': '當 CDK table 的 data source 為空時渲染的 template。',
-
+  'table.accessibility.description': '建立在語意化 HTML（<table>、<thead>、<tbody>、<th>、<td>）上。螢幕閱讀器可自動使用原生 table 角色與欄位標題。Angular CDK CdkTable 會為欄位標題加上 scope 屬性。基本資料表格不需要額外的 ARIA。',
+  'table.keyboard.description': '表格本身除標準瀏覽器表格導覽外，沒有內建鍵盤互動。',
+  'table.keyboard.tab': '在表格儲存格內的互動元素（按鈕、連結、核取方塊）之間導覽。',
+  'table.stateModel.description': '無狀態——資料由 Angular 模板迭代與 CdkTableDataSourceInput（陣列或 DataSource）驅動。排序、分頁與列選取狀態由宿主元件管理。',
 } as const;

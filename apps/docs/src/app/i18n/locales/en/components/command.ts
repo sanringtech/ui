@@ -31,5 +31,12 @@ export const commandTranslations = {
     'Emits from the root `sanring-command` whenever any item is selected.',
   'command.api.shortcutHint.description':
     'Read-only signal on `sanring-command-dialog` with the platform-appropriate shortcut label (⌘K on Mac, Ctrl K elsewhere).',
-
+  'command.accessibility.description':
+    "The list container has role='listbox' and each visible item has role='option'. Filtered-out items are removed from the DOM and excluded from keyboard navigation. Provide an accessible label for the search input via aria-label or a linked <label> element.",
+  'command.keyboard.description': 'Type to filter; navigate with arrow keys and activate with Enter.',
+  'command.keyboard.type': 'Filter the command list to items matching the typed query.',
+  'command.keyboard.navigateList': 'Move focus between visible items.',
+  'command.keyboard.enter': 'Execute the focused command item.',
+  'command.stateModel.description':
+    "Stateless. Each <sanring-command-item> emits (commandSelected) when activated. There is no internal selection state — manage selection externally if needed. The search input drives in-DOM filtering; non-matching items are removed from the visible list and keyboard traversal.",
 } as const;

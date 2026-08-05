@@ -32,5 +32,14 @@ export const dropdownMenuTranslations = {
     'Controls item tone. Use destructive for actions that remove data or have serious consequences.',
   'dropdownMenu.api.class.description':
     'Additional classes merged with the corresponding dropdown menu primitive.',
-
+  'dropdownMenu.accessibility.description':
+    "Built on @angular/aria/menu. The panel has role='menu'; each item has role='menuitem', role='menuitemcheckbox', or role='menuitemradio' as appropriate. The trigger button has aria-haspopup='menu' and aria-expanded managed by the underlying MenuTrigger directive.",
+  'dropdownMenu.keyboard.description': 'Keyboard navigation follows the WAI-ARIA menu pattern.',
+  'dropdownMenu.keyboard.openTrigger': 'Open the menu (from trigger) or activate the focused item.',
+  'dropdownMenu.keyboard.navigateItems': 'Navigate between menu items (wrap is configurable).',
+  'dropdownMenu.keyboard.escape': 'Close the menu or active submenu and return focus to the trigger.',
+  'dropdownMenu.keyboard.openSubmenu': 'Open the focused submenu.',
+  'dropdownMenu.keyboard.closeSubmenu': 'Close the active submenu.',
+  'dropdownMenu.stateModel.description':
+    "Stateless. DropdownMenuItemDirective emits (itemSelected) on activation. DropdownMenuCheckboxItemComponent and DropdownMenuRadioGroupComponent manage their own checked/selected state via the checked input and checkedChange output. Open/closed state is managed internally by @angular/aria/menu.",
 } as const;

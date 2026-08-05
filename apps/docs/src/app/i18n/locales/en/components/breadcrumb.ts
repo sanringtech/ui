@@ -20,5 +20,9 @@ export const breadcrumbTranslations = {
   'breadcrumb.api.routerLink.description':
     'Angular RouterLink value passed to the inner anchor element.',
   'breadcrumb.api.class.description': 'Additional classes merged onto the host element.',
-
+  'breadcrumb.accessibility.description': "role='navigation' and aria-label='breadcrumb' on the host element. Mark the current page with aria-current='page' on the <sanring-breadcrumb-page> element so screen readers announce the user's current location.",
+  'breadcrumb.keyboard.description': 'Standard anchor keyboard behavior.',
+  'breadcrumb.keyboard.tab': 'Navigate forward through breadcrumb links.',
+  'breadcrumb.keyboard.shiftTab': 'Navigate backward through breadcrumb links.',
+  'breadcrumb.stateModel.description': 'Stateless — items are rendered via template projection. No internal selection state.',
 } as const;

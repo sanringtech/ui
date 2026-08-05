@@ -63,4 +63,11 @@ export const calendarTranslations = {
   'calendar.api.clear.description': '清空目前選取（範圍模式會連同進行中的草稿一併清除）。',
   'calendar.api.abortRangeDraft.description': '中止進行中的範圍草稿，不影響已提交的範圍。',
   'calendar.api.focus.description': '將焦點移到 calendar host 元素。',
+  'calendar.accessibility.description': "每個月份網格具有 role='grid'，網格的 aria-label 來自月份/年份標題，每個日期儲存格具有 role='gridcell'。宿主元素會接收 aria-required、aria-invalid 與 aria-describedby，巢狀在 sanring-field 內時會自動串接。",
+  'calendar.keyboard.description': '日期儲存格的鍵盤導覽由 @sanring/date-picker-core 處理。',
+  'calendar.keyboard.arrowKeys': '在日期儲存格之間移動焦點；monthsToDisplay > 1 時可跨月無縫切換。',
+  'calendar.keyboard.pageUpDown': '上個月 / 下個月。',
+  'calendar.keyboard.homeEnd': '目前可見月份的第一天 / 最後一天。',
+  'calendar.keyboard.enter': '選取或切換目前有焦點的日期。',
+  'calendar.stateModel.description': '實作 ControlValueAccessor。使用 [(ngModel)] 或 formControl。值型別：Date | null（單選模式）或 { start: Date; end: Date } | null（範圍模式）。abortRangeDraft() 與 clear() 方法可用於程式化控制。',
 } as const;

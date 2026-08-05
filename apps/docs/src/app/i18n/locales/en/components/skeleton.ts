@@ -18,4 +18,9 @@ export const skeletonTranslations = {
     'Compose multiple skeleton blocks to mirror the structure of the loading content.',
   'skeleton.api.description': 'Inputs supported by the sanringSkeleton directive.',
   'skeleton.api.class.description': 'Additional classes merged with the base skeleton styles.',
+  'skeleton.accessibility.description':
+    "Skeleton elements carry no semantic meaning and are invisible to screen readers. On the loading container, add aria-busy='true' and aria-live='polite' so screen readers announce when real content is ready.",
+  'skeleton.keyboard.description': 'Not focusable. No keyboard interaction.',
+  'skeleton.stateModel.description':
+    'Stateless visual placeholder. Render with @if(!loaded) and swap to real content when data arrives. No internal loading or progress state.',
 } as const;

@@ -29,4 +29,12 @@ export const alertDialogTranslations = {
     '點擊時傳給 `DialogRef.close()` 的選用結果值，預設為 `true`。',
   'alertDialog.api.cancel.description':
     '點擊時傳給 `DialogRef.close()` 的選用結果值，預設為 `false`。',
+  'alertDialog.accessibility.description':
+    "dialog 容器會強制加上 role='alertdialog' 與 aria-modal='true'（由 AlertDialogService 鎖定，呼叫端無法覆寫）。背景點擊與 Escape 均停用，使用者必須明確點選確認或取消按鈕才能關閉。",
+  'alertDialog.keyboard.description': 'Alert dialog 開啟期間，焦點被鎖定在面板內。',
+  'alertDialog.keyboard.tab': '移動焦點到 dialog 內的下一個可聚焦元素。',
+  'alertDialog.keyboard.shiftTab': '移動焦點到 dialog 內的上一個可聚焦元素。',
+  'alertDialog.keyboard.escape': '無效果——預設已停用背景點擊和 Escape 關閉，防止使用者意外取消。',
+  'alertDialog.stateModel.description':
+    "以 Service 驅動。以 AlertDialogService.open(template, config) 程式化開啟，或用 [sanringAlertDialogTrigger] 進行 template-driven 使用。Service 永遠強制設定 role='alertdialog' 與 disableClose:true，無法被呼叫端覆寫。不是表單控制項。",
 } as const;

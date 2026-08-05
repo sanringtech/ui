@@ -45,5 +45,12 @@ export const resizableTranslations = {
   'resizable.api.withHandle.description': 'Renders the visible grip inside the handle.',
   'resizable.api.keyboardStep.description':
     'Percentage step used when resizing with arrow keys. Home and End jump to the panel boundary.',
-
+  'resizable.accessibility.description': "Each ResizableHandleComponent receives role='separator', aria-orientation (horizontal or vertical), aria-valuenow (the adjacent panel's current size in percent), aria-valuemin, and aria-valuemax matching the panel's minSize and maxSize constraints.",
+  'resizable.keyboard.description': 'Keyboard resizing with step and jump controls.',
+  'resizable.keyboard.arrowLeft': 'Shrink the preceding panel (horizontal, RTL-aware).',
+  'resizable.keyboard.arrowRight': 'Grow the preceding panel (horizontal, RTL-aware).',
+  'resizable.keyboard.arrowUp': 'Shrink the preceding panel (vertical).',
+  'resizable.keyboard.arrowDown': 'Grow the preceding panel (vertical).',
+  'resizable.keyboard.homeEnd': 'Jump the handle to the panel minimum / maximum size.',
+  'resizable.stateModel.description': 'Panel sizes are reactive signals. Use [(sizes)] on sanring-resizable-group for two-way binding to persist and restore layouts. keyboardStep controls the per-keystroke percentage. No CVA.',
 } as const;

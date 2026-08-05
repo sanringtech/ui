@@ -20,6 +20,7 @@ import {
   ComponentPageComponent,
   ComponentPageHeaderComponent,
   ComponentPageInstallationComponent,
+  ComponentPageKeyboardTableComponent,
   ComponentPageUsageImportsComponent,
   ComponentPageSectionComponent,
 } from '../../../layouts/component-page';
@@ -45,6 +46,7 @@ import { fileUploadPage, fileUploadPageExamples } from './file-upload.docs';
     ComponentPageComponent,
     ComponentPageHeaderComponent,
     ComponentPageInstallationComponent,
+    ComponentPageKeyboardTableComponent,
     ComponentPageUsageImportsComponent,
     ComponentPageSectionComponent,
   ],
