@@ -16,6 +16,9 @@ import type { SidebarCollapsible, SidebarState } from './sidebar.type';
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `<ng-content></ng-content>`,
   providers: [{ provide: SIDEBAR_CONTEXT, useExisting: SidebarProviderComponent }],
+  host: {
+    class: 'contents',
+  },
 })
 export class SidebarProviderComponent implements SidebarContext {
   readonly sidebarId: Signal<string> = signal(generateSidebarId());
