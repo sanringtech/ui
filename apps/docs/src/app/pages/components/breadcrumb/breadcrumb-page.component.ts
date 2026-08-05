@@ -9,7 +9,6 @@ import {
   ComponentPageComponent,
   ComponentPageHeaderComponent,
   ComponentPageInstallationComponent,
-  ComponentPageKeyboardTableComponent,
   ComponentPageUsageImportsComponent,
   ComponentPageSectionComponent,
 } from '../../../layouts/component-page';
@@ -24,7 +23,6 @@ import { breadcrumbPage, breadcrumbPageExamples } from './breadcrumb.docs';
     ComponentPageComponent,
     ComponentPageHeaderComponent,
     ComponentPageInstallationComponent,
-    ComponentPageKeyboardTableComponent,
     ComponentPageUsageImportsComponent,
     ComponentPageSectionComponent,
     SANRING_BREADCRUMB_IMPORTS,
@@ -192,9 +190,6 @@ import { breadcrumbPage, breadcrumbPageExamples } from './breadcrumb.docs';
 
       <app-component-page-section [section]="section('accessibility')" />
 
-      <app-component-page-section [section]="section('keyboard')">
-        <app-component-page-keyboard-table [rows]="page.keyboardRows!" />
-      </app-component-page-section>
 
       <app-component-page-section [section]="section('stateModel')" />
     </app-component-page>

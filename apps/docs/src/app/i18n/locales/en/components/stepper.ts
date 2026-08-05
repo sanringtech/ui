@@ -51,4 +51,12 @@ export const stepperTranslations = {
     'Marks a step as completed and uses the completed indicator.',
   'stepper.api.stepCustomState.description':
     'Overrides the visual state rendered by the Sanring step header.',
+  'stepper.keyboard.description':
+    'Stepper header navigation follows Angular CDK stepper keyboard behavior.',
+  'stepper.keyboard.arrowLeftRight':
+    'Moves focus between horizontal step headers.',
+  'stepper.keyboard.arrowUpDown':
+    'Moves focus between vertical step headers.',
+  'stepper.keyboard.homeEnd': 'Moves focus to the first or last step header.',
+  'stepper.keyboard.enterSpace': 'Selects the focused step when navigation is allowed.',
 } as const;

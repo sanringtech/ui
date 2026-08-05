@@ -1,6 +1,5 @@
 import {
   ComponentPageApiRow,
-  ComponentPageKeyboardRow,
   ComponentPageDefinition,
 } from '../../../docs-schema/component-page.types';
 
@@ -56,12 +55,6 @@ export const breadcrumbPage = {
       level: 2,
     },
     {
-      id: 'keyboard',
-      titleKey: 'toc.keyboard',
-      descriptionKey: 'breadcrumb.keyboard.description',
-      level: 2,
-    },
-    {
       id: 'stateModel',
       titleKey: 'toc.stateModel',
       descriptionKey: 'breadcrumb.stateModel.description',
@@ -88,10 +81,6 @@ export const breadcrumbPage = {
       descriptionKey: 'breadcrumb.api.class.description',
     },
   ] satisfies readonly ComponentPageApiRow[],
-  keyboardRows: [
-    { keys: 'Tab', descriptionKey: 'breadcrumb.keyboard.tab' },
-    { keys: 'Shift + Tab', descriptionKey: 'breadcrumb.keyboard.shiftTab' },
-  ] satisfies readonly ComponentPageKeyboardRow[],
 } as const satisfies ComponentPageDefinition;
 
 export const breadcrumbPageExamples = {

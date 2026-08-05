@@ -29,5 +29,8 @@ export const paginationTranslations = {
     '套用到頁碼按鈕或連結的 directive，包含 active 與 disabled 狀態。',
   'pagination.api.nav.description':
     '套用到上一頁、下一頁、第一頁或最後一頁控制，同時保留 button/link 語意。',
-
+  'pagination.keyboard.description':
+    'Pagination 的每個頁碼與導覽控制都保留一般 button 或 link 語意。',
+  'pagination.keyboard.tabShiftTab': '在可用的頁碼與導覽控制之間移動焦點。',
+  'pagination.keyboard.enterSpace': '啟用目前聚焦的按鈕或連結，要求切換到該頁。',
 } as const;

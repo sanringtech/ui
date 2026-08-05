@@ -1,5 +1,6 @@
 import {
   ComponentPageApiRow,
+  ComponentPageKeyboardRow,
   ComponentPageDefinition,
 } from '../../../docs-schema/component-page.types';
 
@@ -60,6 +61,12 @@ export const collapsiblePage = {
       descriptionKey: 'collapsible.api.description',
       level: 2,
     },
+    {
+      id: 'keyboard',
+      titleKey: 'toc.keyboard',
+      descriptionKey: 'collapsible.keyboard.description',
+      level: 2,
+    },
   ],
   apiRows: [
     {
@@ -93,6 +100,10 @@ export const collapsiblePage = {
       descriptionKey: 'collapsible.api.openChange.description',
     },
   ] satisfies readonly ComponentPageApiRow[],
+  keyboardRows: [
+    { keys: 'Enter / Space', descriptionKey: 'collapsible.keyboard.enterSpace' },
+    { keys: 'Tab / Shift + Tab', descriptionKey: 'collapsible.keyboard.tabShiftTab' },
+  ] satisfies readonly ComponentPageKeyboardRow[],
 } as const satisfies ComponentPageDefinition;
 
 export const collapsiblePageExamples = {

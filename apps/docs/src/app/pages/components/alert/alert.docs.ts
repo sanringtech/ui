@@ -1,6 +1,5 @@
 import {
   ComponentPageApiRow,
-  ComponentPageKeyboardRow,
   ComponentPageDefinition,
 } from '../../../docs-schema/component-page.types';
 
@@ -62,12 +61,6 @@ export const alertPage = {
       level: 2,
     },
     {
-      id: 'keyboard',
-      titleKey: 'toc.keyboard',
-      descriptionKey: 'alert.keyboard.description',
-      level: 2,
-    },
-    {
       id: 'stateModel',
       titleKey: 'toc.stateModel',
       descriptionKey: 'alert.stateModel.description',
@@ -88,7 +81,6 @@ export const alertPage = {
       descriptionKey: 'alert.api.variant.description',
     },
   ] satisfies readonly ComponentPageApiRow[],
-  keyboardRows: [] satisfies readonly ComponentPageKeyboardRow[],
 } as const satisfies ComponentPageDefinition;
 
 export const alertPageExamples = {

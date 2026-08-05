@@ -1,6 +1,5 @@
 import {
   ComponentPageApiRow,
-  ComponentPageKeyboardRow,
   ComponentPageDefinition,
 } from '../../../docs-schema/component-page.types';
 
@@ -72,12 +71,6 @@ export const skeletonPage = {
       level: 2,
     },
     {
-      id: 'keyboard',
-      titleKey: 'toc.keyboard',
-      descriptionKey: 'skeleton.keyboard.description',
-      level: 2,
-    },
-    {
       id: 'stateModel',
       titleKey: 'toc.stateModel',
       descriptionKey: 'skeleton.stateModel.description',
@@ -92,7 +85,6 @@ export const skeletonPage = {
       descriptionKey: 'skeleton.api.class.description',
     },
   ] satisfies readonly ComponentPageApiRow[],
-  keyboardRows: [] satisfies readonly ComponentPageKeyboardRow[],
 } as const satisfies ComponentPageDefinition;
 
 export const skeletonPageExamples = {

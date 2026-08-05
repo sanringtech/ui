@@ -1,5 +1,6 @@
 import {
   ComponentPageApiRow,
+  ComponentPageKeyboardRow,
   ComponentPageDefinition,
 } from '../../../docs-schema/component-page.types';
 
@@ -43,6 +44,12 @@ export const togglePage = {
       descriptionKey: 'toggle.api.description',
       level: 2,
     },
+    {
+      id: 'keyboard',
+      titleKey: 'toc.keyboard',
+      descriptionKey: 'toggle.keyboard.description',
+      level: 2,
+    },
   ],
   apiRows: [
     {
@@ -76,6 +83,10 @@ export const togglePage = {
       descriptionKey: 'toggle.api.disabled.description',
     },
   ] satisfies readonly ComponentPageApiRow[],
+  keyboardRows: [
+    { keys: 'Enter / Space', descriptionKey: 'toggle.keyboard.enterSpace' },
+    { keys: 'Tab / Shift + Tab', descriptionKey: 'toggle.keyboard.tabShiftTab' },
+  ] satisfies readonly ComponentPageKeyboardRow[],
 } as const satisfies ComponentPageDefinition;
 
 export const togglePageExamples = {

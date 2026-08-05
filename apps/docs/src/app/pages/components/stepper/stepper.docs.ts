@@ -1,5 +1,6 @@
 import {
   ComponentPageApiRow,
+  ComponentPageKeyboardRow,
   ComponentPageDefinition,
 } from '../../../docs-schema/component-page.types';
 
@@ -40,6 +41,12 @@ export const stepperPage = {
       id: 'api',
       titleKey: 'toc.apiReference',
       descriptionKey: 'stepper.api.description',
+      level: 2,
+    },
+    {
+      id: 'keyboard',
+      titleKey: 'toc.keyboard',
+      descriptionKey: 'stepper.keyboard.description',
       level: 2,
     },
   ],
@@ -105,6 +112,12 @@ export const stepperPage = {
       descriptionKey: 'stepper.api.stepCustomState.description',
     },
   ] satisfies readonly ComponentPageApiRow[],
+  keyboardRows: [
+    { keys: '← / →', descriptionKey: 'stepper.keyboard.arrowLeftRight' },
+    { keys: '↑ / ↓', descriptionKey: 'stepper.keyboard.arrowUpDown' },
+    { keys: 'Home / End', descriptionKey: 'stepper.keyboard.homeEnd' },
+    { keys: 'Enter / Space', descriptionKey: 'stepper.keyboard.enterSpace' },
+  ] satisfies readonly ComponentPageKeyboardRow[],
 } as const satisfies ComponentPageDefinition;
 
 export const stepperPageExamples = {

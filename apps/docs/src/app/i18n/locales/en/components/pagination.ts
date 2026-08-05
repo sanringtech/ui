@@ -34,5 +34,8 @@ export const paginationTranslations = {
     'Styles page number buttons or links, including active and disabled states.',
   'pagination.api.nav.description':
     'Styles previous, next, first, or last controls while preserving button/link semantics.',
-
+  'pagination.keyboard.description':
+    'Pagination uses regular button or link semantics for each page and navigation control.',
+  'pagination.keyboard.tabShiftTab': 'Moves focus through enabled page and navigation controls.',
+  'pagination.keyboard.enterSpace': 'Activates the focused button or link and requests that page.',
 } as const;

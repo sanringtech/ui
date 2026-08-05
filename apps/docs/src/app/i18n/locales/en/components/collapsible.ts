@@ -37,5 +37,8 @@ export const collapsibleTranslations = {
     'Toggles the open state unless the collapsible is disabled.',
   'collapsible.api.openChange.description':
     'Emits whenever the open state changes through the model binding.',
-
+  'collapsible.keyboard.description':
+    'Keyboard behavior comes from the interactive trigger element.',
+  'collapsible.keyboard.enterSpace': 'Activates the trigger and toggles the content region.',
+  'collapsible.keyboard.tabShiftTab': 'Moves focus to and from the trigger in document order.',
 } as const;

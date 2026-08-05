@@ -1,5 +1,6 @@
 import {
   ComponentPageApiRow,
+  ComponentPageKeyboardRow,
   ComponentPageDefinition,
 } from '../../../docs-schema/component-page.types';
 
@@ -40,6 +41,12 @@ export const paginationPage = {
       id: 'api',
       titleKey: 'toc.apiReference',
       descriptionKey: 'pagination.api.description',
+      level: 2,
+    },
+    {
+      id: 'keyboard',
+      titleKey: 'toc.keyboard',
+      descriptionKey: 'pagination.keyboard.description',
       level: 2,
     },
   ],
@@ -117,6 +124,10 @@ export const paginationPage = {
       descriptionKey: 'pagination.api.nav.description',
     },
   ] satisfies readonly ComponentPageApiRow[],
+  keyboardRows: [
+    { keys: 'Tab / Shift + Tab', descriptionKey: 'pagination.keyboard.tabShiftTab' },
+    { keys: 'Enter / Space', descriptionKey: 'pagination.keyboard.enterSpace' },
+  ] satisfies readonly ComponentPageKeyboardRow[],
 } as const satisfies ComponentPageDefinition;
 
 export const paginationPageExamples = {

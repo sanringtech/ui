@@ -1,5 +1,6 @@
 import {
   ComponentPageApiRow,
+  ComponentPageKeyboardRow,
   ComponentPageDefinition,
 } from '../../../docs-schema/component-page.types';
 
@@ -47,6 +48,12 @@ export const hoverCardPage = {
       descriptionKey: 'hoverCard.api.description',
       level: 2,
     },
+    {
+      id: 'keyboard',
+      titleKey: 'toc.keyboard',
+      descriptionKey: 'hoverCard.keyboard.description',
+      level: 2,
+    },
   ],
   apiRows: [
     {
@@ -80,6 +87,11 @@ export const hoverCardPage = {
       descriptionKey: 'hoverCard.api.class.description',
     },
   ] satisfies readonly ComponentPageApiRow[],
+  keyboardRows: [
+    { keys: 'Tab', descriptionKey: 'hoverCard.keyboard.focus' },
+    { keys: 'Tab away / Shift + Tab away', descriptionKey: 'hoverCard.keyboard.blur' },
+    { keys: 'Escape', descriptionKey: 'hoverCard.keyboard.escape' },
+  ] satisfies readonly ComponentPageKeyboardRow[],
 } as const satisfies ComponentPageDefinition;
 
 export const hoverCardPageExamples = {

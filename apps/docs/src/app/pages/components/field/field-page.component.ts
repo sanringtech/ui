@@ -16,7 +16,6 @@ import {
   ComponentPageComponent,
   ComponentPageHeaderComponent,
   ComponentPageInstallationComponent,
-  ComponentPageKeyboardTableComponent,
   ComponentPageUsageImportsComponent,
   ComponentPageSectionComponent,
 } from '../../../layouts/component-page';
@@ -37,7 +36,6 @@ import { fieldPage, fieldPageExamples } from './field.docs';
     ComponentPageComponent,
     ComponentPageHeaderComponent,
     ComponentPageInstallationComponent,
-    ComponentPageKeyboardTableComponent,
     ComponentPageUsageImportsComponent,
     ComponentPageSectionComponent,
   ],
@@ -137,9 +135,6 @@ import { fieldPage, fieldPageExamples } from './field.docs';
 
       <app-component-page-section [section]="section('accessibility')" />
 
-      <app-component-page-section [section]="section('keyboard')">
-        <app-component-page-keyboard-table [rows]="page.keyboardRows!" />
-      </app-component-page-section>
 
       <app-component-page-section [section]="section('stateModel')" />
     </app-component-page>

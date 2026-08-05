@@ -17,5 +17,8 @@ export const toggleTranslations = {
   'toggle.api.size.description': "按鈕尺寸：'sm'、'md'（預設）或 'lg'。",
   'toggle.api.pressed.description': '是否處於啟用狀態，支援 [(pressed)] 雙向綁定。',
   'toggle.api.disabled.description': '停用 toggle，阻止任何互動。',
-
+  'toggle.keyboard.description':
+    'Toggle 保留原生 button 的焦點與啟用語意，同時更新 aria-pressed。',
+  'toggle.keyboard.enterSpace': '啟用按鈕，並切換 pressed 狀態。',
+  'toggle.keyboard.tabShiftTab': '依文件順序移入或移出 toggle 焦點。',
 } as const;

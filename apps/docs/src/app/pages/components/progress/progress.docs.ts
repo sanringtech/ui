@@ -1,6 +1,5 @@
 import {
   ComponentPageApiRow,
-  ComponentPageKeyboardRow,
   ComponentPageDefinition,
 } from '../../../docs-schema/component-page.types';
 
@@ -47,12 +46,6 @@ export const progressPage = {
       id: 'accessibility',
       titleKey: 'toc.accessibility',
       descriptionKey: 'progress.accessibility.description',
-      level: 2,
-    },
-    {
-      id: 'keyboard',
-      titleKey: 'toc.keyboard',
-      descriptionKey: 'progress.keyboard.description',
       level: 2,
     },
     {
@@ -112,7 +105,6 @@ export const progressPage = {
       descriptionKey: 'progress.api.class.description',
     },
   ] satisfies readonly ComponentPageApiRow[],
-  keyboardRows: [] satisfies readonly ComponentPageKeyboardRow[],
 } as const satisfies ComponentPageDefinition;
 
 export const progressPageExamples = {

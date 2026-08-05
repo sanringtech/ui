@@ -1,6 +1,5 @@
 import {
   ComponentPageApiRow,
-  ComponentPageKeyboardRow,
   ComponentPageDefinition,
 } from '../../../docs-schema/component-page.types';
 
@@ -57,12 +56,6 @@ export const timelinePage = {
       level: 2,
     },
     {
-      id: 'keyboard',
-      titleKey: 'toc.keyboard',
-      descriptionKey: 'timeline.keyboard.description',
-      level: 2,
-    },
-    {
       id: 'stateModel',
       titleKey: 'toc.stateModel',
       descriptionKey: 'timeline.stateModel.description',
@@ -101,7 +94,6 @@ export const timelinePage = {
       descriptionKey: 'timeline.api.contentClass.description',
     },
   ] satisfies readonly ComponentPageApiRow[],
-  keyboardRows: [] satisfies readonly ComponentPageKeyboardRow[],
 } as const satisfies ComponentPageDefinition;
 
 export const timelinePageExamples = {

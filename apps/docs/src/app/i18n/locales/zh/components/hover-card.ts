@@ -24,5 +24,8 @@ export const hoverCardTranslations = {
     '浮動面板偏好的顯示方向；CDK overlay 可能為了保持可見而翻轉位置。',
   'hoverCard.api.sideOffset.description': 'trigger 與浮動面板之間的距離，單位為 px。',
   'hoverCard.api.class.description': '合併到浮動 content panel 的額外 class。',
-
+  'hoverCard.keyboard.description': 'Hover Card 會由 pointer hover 與 trigger 的鍵盤 focus 開啟。',
+  'hoverCard.keyboard.focus': '聚焦 trigger，並在 openDelay 後開啟浮動面板。',
+  'hoverCard.keyboard.blur': '焦點離開後，在 closeDelay 後關閉面板。',
+  'hoverCard.keyboard.escape': '焦點位於 trigger 或 content 內時關閉面板。',
 } as const;

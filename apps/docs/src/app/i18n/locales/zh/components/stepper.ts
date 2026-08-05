@@ -46,4 +46,9 @@ export const stepperTranslations = {
   'stepper.api.stepOptional.description': '標記為選填步驟，並渲染 optional 輔助文字。',
   'stepper.api.stepCompleted.description': '標記為已完成步驟，並使用完成狀態 indicator。',
   'stepper.api.stepCustomState.description': '覆寫 Sanring step header 顯示的視覺狀態。',
+  'stepper.keyboard.description': 'Stepper header 導覽遵循 Angular CDK stepper 鍵盤行為。',
+  'stepper.keyboard.arrowLeftRight': '在水平 step header 之間移動焦點。',
+  'stepper.keyboard.arrowUpDown': '在垂直 step header 之間移動焦點。',
+  'stepper.keyboard.homeEnd': '將焦點移到第一個或最後一個 step header。',
+  'stepper.keyboard.enterSpace': '在允許導覽時選取目前聚焦的步驟。',
 } as const;

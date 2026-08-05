@@ -1,5 +1,6 @@
 import {
   ComponentPageApiRow,
+  ComponentPageKeyboardRow,
   ComponentPageDefinition,
 } from '../../../docs-schema/component-page.types';
 
@@ -79,6 +80,12 @@ export const transferPage = {
       id: 'api',
       titleKey: 'toc.apiReference',
       descriptionKey: 'transfer.api.description',
+      level: 2,
+    },
+    {
+      id: 'keyboard',
+      titleKey: 'toc.keyboard',
+      descriptionKey: 'transfer.keyboard.description',
       level: 2,
     },
   ],
@@ -198,6 +205,12 @@ export const transferPage = {
       descriptionKey: 'transfer.api.selectAllMethods.description',
     },
   ] satisfies readonly ComponentPageApiRow[],
+  keyboardRows: [
+    { keys: 'Tab / Shift + Tab', descriptionKey: 'transfer.keyboard.tabShiftTab' },
+    { keys: 'Space', descriptionKey: 'transfer.keyboard.space' },
+    { keys: 'Enter / Space', descriptionKey: 'transfer.keyboard.enterSpace' },
+    { keys: 'Type', descriptionKey: 'transfer.keyboard.type' },
+  ] satisfies readonly ComponentPageKeyboardRow[],
 } as const satisfies ComponentPageDefinition;
 
 export const transferPageExamples = {
