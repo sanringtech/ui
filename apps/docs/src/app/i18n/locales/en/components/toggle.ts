@@ -20,8 +20,12 @@ export const toggleTranslations = {
   'toggle.api.pressed.description':
     'Whether the toggle is active. Supports [(pressed)] two-way binding.',
   'toggle.api.disabled.description': 'Disables the toggle and prevents interaction.',
+  'toggle.accessibility.description':
+    'Uses a native button and syncs aria-pressed. Icon-only toggles need an aria-label so assistive technology can identify the setting being toggled.',
   'toggle.keyboard.description':
     'Toggle keeps native button focus and activation semantics while updating aria-pressed.',
   'toggle.keyboard.enterSpace': 'Activates the button and toggles the pressed state.',
   'toggle.keyboard.tabShiftTab': 'Moves focus to and from the toggle in document order.',
+  'toggle.stateModel.description':
+    'pressed is directive model state and supports [(pressed)]. disabled blocks state changes; variant, size, and class only affect styling.',
 } as const;

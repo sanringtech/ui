@@ -12,4 +12,8 @@ export const labelTranslations = {
     '將 Label 放在 Input 附近的 grid 或 field wrapper 中；peer-disabled 樣式會回應停用控制項。',
   'label.api.description': 'sanringLabel directive 支援的 Inputs。',
   'label.api.class.description': '與基礎標籤文字樣式合併的額外 class。',
+  'label.accessibility.description':
+    '保留原生 label 語意。請使用 for/id 連接控制項，或把控制項放在 label 內，讓點擊與輔助科技名稱都能正確運作。',
+  'label.stateModel.description':
+    '無內部狀態。sanringLabel 只提供樣式；disabled 與 validation 狀態由關聯控制項或外層 Field 管理。',
 } as const;

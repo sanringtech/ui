@@ -24,4 +24,8 @@ export const buttonTranslations = {
   'button.api.variant.description':
     '控制視覺強度，可使用 default、secondary、outline、ghost、destructive 或 link。',
   'button.api.size.description': '控制按鈕密度，可使用 sm、md、icon、toolbar 或 toolbarIcon。',
+  'button.accessibility.description':
+    '套用在原生 button 或 anchor 上並保留原生語意。純圖示按鈕必須提供 aria-label 或可被讀出的文字。',
+  'button.stateModel.description':
+    '無內部狀態。variant、size 與 class 只影響樣式；disabled、type、href 與 click 行為由宿主元素或 Angular 綁定管理。',
 } as const;

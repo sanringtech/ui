@@ -64,6 +64,18 @@ export const scrollAreaPage = {
       descriptionKey: 'scrollArea.api.description',
       level: 2,
     },
+    {
+      id: 'accessibility',
+      titleKey: 'toc.accessibility',
+      descriptionKey: 'scrollArea.accessibility.description',
+      level: 2,
+    },
+    {
+      id: 'stateModel',
+      titleKey: 'toc.stateModel',
+      descriptionKey: 'scrollArea.stateModel.description',
+      level: 2,
+    },
   ],
   apiRows: [
     {

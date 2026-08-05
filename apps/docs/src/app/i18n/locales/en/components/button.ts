@@ -26,4 +26,8 @@ export const buttonTranslations = {
   'button.api.variant.description':
     'Controls visual emphasis: default, secondary, outline, ghost, destructive, or link.',
   'button.api.size.description': 'Controls button density: sm, md, icon, toolbar, or toolbarIcon.',
+  'button.accessibility.description':
+    'Applied to native button or anchor elements, preserving their native semantics. Icon-only buttons must provide an aria-label or readable text.',
+  'button.stateModel.description':
+    'Stateless. variant, size, and class affect styling only; disabled, type, href, and click behavior are owned by the host element or Angular bindings.',
 } as const;

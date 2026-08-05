@@ -28,9 +28,13 @@ export const hoverCardTranslations = {
   'hoverCard.api.sideOffset.description':
     'Distance in pixels between the trigger and floating panel.',
   'hoverCard.api.class.description': 'Additional classes merged onto the floating content panel.',
+  'hoverCard.accessibility.description':
+    'The trigger keeps native focus behavior, the panel can open from keyboard focus, and Escape closes it. Hover Card is best for supplemental context, not required click targets.',
   'hoverCard.keyboard.description':
     'Hover Card opens from pointer hover and keyboard focus on the trigger.',
   'hoverCard.keyboard.focus': 'Focuses the trigger and opens the floating panel after openDelay.',
   'hoverCard.keyboard.blur': 'Moves focus away and closes the panel after closeDelay.',
   'hoverCard.keyboard.escape': 'Closes the panel when focus is inside the trigger or content.',
+  'hoverCard.stateModel.description':
+    'Open state is managed internally by the root and responds to openDelay, closeDelay, hover, focus, and Escape. Not a ControlValueAccessor.',
 } as const;

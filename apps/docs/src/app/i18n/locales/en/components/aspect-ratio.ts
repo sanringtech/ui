@@ -17,4 +17,8 @@ export const aspectRatioTranslations = {
     'Aspect ratio value applied to the host element. Accepts CSS ratio strings such as 16 / 9 or numbers such as 1.777.',
   'aspectRatio.api.class.description':
     'Additional classes merged with the base relative w-full container styles.',
+  'aspectRatio.accessibility.description':
+    'Adds no ARIA of its own and preserves the semantics of the projected content. Images, iframes, and video still need alt text, titles, or captions based on the content.',
+  'aspectRatio.stateModel.description':
+    'Stateless. sanringAspectRatio only applies ratio styles to the host element; it does not store loading, selection, or interaction state.',
 } as const;

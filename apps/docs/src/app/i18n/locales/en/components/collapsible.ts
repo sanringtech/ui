@@ -37,8 +37,12 @@ export const collapsibleTranslations = {
     'Toggles the open state unless the collapsible is disabled.',
   'collapsible.api.openChange.description':
     'Emits whenever the open state changes through the model binding.',
+  'collapsible.accessibility.description':
+    'The trigger syncs aria-expanded and aria-controls, while the content region receives the matching id so assistive technology can understand the disclosure relationship.',
   'collapsible.keyboard.description':
     'Keyboard behavior comes from the interactive trigger element.',
   'collapsible.keyboard.enterSpace': 'Activates the trigger and toggles the content region.',
   'collapsible.keyboard.tabShiftTab': 'Moves focus to and from the trigger in document order.',
+  'collapsible.stateModel.description':
+    'open is model state on the root and supports [(open)] plus openChange. disabled blocks interaction without clearing the current expanded state.',
 } as const;

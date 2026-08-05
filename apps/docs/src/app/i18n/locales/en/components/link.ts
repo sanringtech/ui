@@ -24,4 +24,8 @@ export const linkTranslations = {
     'Sets the native anchor target. When target is _blank, rel is filled automatically if omitted.',
   'link.api.rel.description':
     'Sets the native anchor rel attribute. Provide this when you need to override the safe default.',
+  'link.accessibility.description':
+    'Preserves native anchor semantics and browser navigation behavior. Link text should describe the destination; when opening a new tab, indicate that in text or aria-label.',
+  'link.stateModel.description':
+    'Stateless. href, routerLink, target, rel, and active styling are managed by the native anchor or Angular Router.',
 } as const;

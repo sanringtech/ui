@@ -15,4 +15,8 @@ export const aspectRatioTranslations = {
   'aspectRatio.api.ratio.description':
     '套用到宿主元素的寬高比。可使用 16 / 9 這類 CSS ratio 字串，或 1.777 這類數字。',
   'aspectRatio.api.class.description': '額外合併到基礎 relative w-full 容器樣式上的 class。',
+  'aspectRatio.accessibility.description':
+    '不加入額外 ARIA，保留內容本身的語意。圖片、iframe 或影片仍需依內容提供 alt、title 或 caption。',
+  'aspectRatio.stateModel.description':
+    '無內部狀態。sanringAspectRatio 只把比例樣式套用到宿主元素，不保存載入、選取或互動狀態。',
 } as const;

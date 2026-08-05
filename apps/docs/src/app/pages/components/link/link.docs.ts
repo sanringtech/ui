@@ -59,6 +59,18 @@ export const linkPage = {
       descriptionKey: 'link.api.description',
       level: 2,
     },
+    {
+      id: 'accessibility',
+      titleKey: 'toc.accessibility',
+      descriptionKey: 'link.accessibility.description',
+      level: 2,
+    },
+    {
+      id: 'stateModel',
+      titleKey: 'toc.stateModel',
+      descriptionKey: 'link.stateModel.description',
+      level: 2,
+    },
   ],
   apiRows: [
     {

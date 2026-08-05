@@ -18,4 +18,8 @@ export const dividerTranslations = {
   'divider.api.description': 'Inputs supported by the sanring-divider component.',
   'divider.api.vertical.description': 'Switches the separator from horizontal to vertical.',
   'divider.api.inset.description': 'Offsets the horizontal divider: none, start, end, or both.',
+  'divider.accessibility.description':
+    'Rendered with separator semantics. If the divider is purely decorative, add aria-hidden="true" at the usage site.',
+  'divider.stateModel.description':
+    'Stateless. vertical and inset only control orientation and offset; no value or interaction state is stored.',
 } as const;

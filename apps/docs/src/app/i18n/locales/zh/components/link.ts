@@ -22,4 +22,8 @@ export const linkTranslations = {
   'link.api.target.description':
     '設定原生 anchor target。當 target 為 _blank 且沒有提供 rel 時，會自動補上安全屬性。',
   'link.api.rel.description': '設定原生 anchor rel。需要覆蓋安全預設時可自行提供。',
+  'link.accessibility.description':
+    '保留原生 anchor 語意與瀏覽器導覽行為。連結文字應描述目的地；另開分頁時建議在文案或 aria-label 中提示。',
+  'link.stateModel.description':
+    '無內部狀態。href、routerLink、target、rel 與 active 樣式都由原生 anchor 或 Angular Router 管理。',
 } as const;

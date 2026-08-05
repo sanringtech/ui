@@ -45,9 +45,21 @@ export const togglePage = {
       level: 2,
     },
     {
+      id: 'accessibility',
+      titleKey: 'toc.accessibility',
+      descriptionKey: 'toggle.accessibility.description',
+      level: 2,
+    },
+    {
       id: 'keyboard',
       titleKey: 'toc.keyboard',
       descriptionKey: 'toggle.keyboard.description',
+      level: 2,
+    },
+    {
+      id: 'stateModel',
+      titleKey: 'toc.stateModel',
+      descriptionKey: 'toggle.stateModel.description',
       level: 2,
     },
   ],

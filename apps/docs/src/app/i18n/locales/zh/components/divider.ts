@@ -17,4 +17,8 @@ export const dividerTranslations = {
   'divider.api.description': 'sanring-divider component 支援的 Inputs。',
   'divider.api.vertical.description': '將分隔線從水平切換為垂直。',
   'divider.api.inset.description': '調整水平分隔線縮排，可使用 none、start、end 或 both。',
+  'divider.accessibility.description':
+    '使用 separator 語意呈現分隔線。若只是視覺裝飾，可在具體使用處加上 aria-hidden="true"。',
+  'divider.stateModel.description':
+    '無內部狀態。vertical 與 inset 只控制呈現方向與縮排，不保存任何值或互動狀態。',
 } as const;

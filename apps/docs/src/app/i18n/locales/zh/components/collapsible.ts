@@ -29,7 +29,11 @@ export const collapsibleTranslations = {
   'collapsible.api.disabled.description': '停用 trigger 互動，並保留目前 open 狀態。',
   'collapsible.api.toggle.description': '在未停用時切換 open 狀態。',
   'collapsible.api.openChange.description': '透過 model binding 變更 open 狀態時觸發。',
+  'collapsible.accessibility.description':
+    'Trigger 會同步 aria-expanded 與 aria-controls，內容區域使用對應 id 讓輔助科技能辨識展開關係。',
   'collapsible.keyboard.description': '鍵盤行為來自可互動的 trigger 元素。',
   'collapsible.keyboard.enterSpace': '啟用 trigger，並切換內容區域展開狀態。',
   'collapsible.keyboard.tabShiftTab': '依文件順序移入或移出 trigger 焦點。',
+  'collapsible.stateModel.description':
+    'open 是 root 的 model 狀態，支援 [(open)] 與 openChange。disabled 只阻止互動，不會清除目前展開狀態。',
 } as const;

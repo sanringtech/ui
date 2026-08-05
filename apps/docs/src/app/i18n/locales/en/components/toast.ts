@@ -53,5 +53,9 @@ export const toastTranslations = {
     'Auto-dismiss duration in milliseconds. Use 0 for persistent toasts.',
   'toast.api.closable.description': 'Controls whether the dismiss button is rendered.',
   'toast.api.action.description': 'Optional action button rendered inside the toast.',
+  'toast.accessibility.description':
+    'ToastService announces notifications through LiveAnnouncer; errors use assertive announcements while other variants are more polite. Closable toasts render a focusable dismiss button.',
+  'toast.stateModel.description':
+    'Toast state is owned by ToastService, including id, variant, duration, leaving, paused, and action. sanring-toaster renders the currently visible notifications for its position and stacking settings.',
 
 } as const;

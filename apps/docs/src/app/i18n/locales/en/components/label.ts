@@ -13,4 +13,8 @@ export const labelTranslations = {
     'Place Label near Input in a grid or field wrapper; peer-disabled styles respond to disabled controls.',
   'label.api.description': 'Inputs supported by the sanringLabel directive.',
   'label.api.class.description': 'Additional classes merged with the base label styles.',
+  'label.accessibility.description':
+    'Preserves native label semantics. Connect controls with for/id or nest the control inside the label so clicks and accessible names work correctly.',
+  'label.stateModel.description':
+    'Stateless. sanringLabel only provides styling; disabled and validation state belong to the associated control or surrounding Field.',
 } as const;

@@ -49,9 +49,21 @@ export const hoverCardPage = {
       level: 2,
     },
     {
+      id: 'accessibility',
+      titleKey: 'toc.accessibility',
+      descriptionKey: 'hoverCard.accessibility.description',
+      level: 2,
+    },
+    {
       id: 'keyboard',
       titleKey: 'toc.keyboard',
       descriptionKey: 'hoverCard.keyboard.description',
+      level: 2,
+    },
+    {
+      id: 'stateModel',
+      titleKey: 'toc.stateModel',
+      descriptionKey: 'hoverCard.stateModel.description',
       level: 2,
     },
   ],

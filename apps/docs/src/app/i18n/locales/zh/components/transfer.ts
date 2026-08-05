@@ -59,10 +59,14 @@ export const transferTranslations = {
     "全選 checkbox 的狀態：全部勾選時為 true、部分勾選時為 'indeterminate'、無勾選時為 false。",
   'transfer.api.selectAllMethods.description':
     '勾選 / 取消勾選 / 切換面板內所有非 disabled 項目。interactive() 為 false 時 selectAll / deselectAll 為 no-op。',
+  'transfer.accessibility.description':
+    '由 checkbox、button 與可選搜尋 input 組成，保留各自原生語意。面板標題應描述可選與已選清單，移動按鈕需提供 aria-label。',
   'transfer.keyboard.description':
     'Transfer 由 checkbox、操作按鈕、搜尋輸入與選用 pagination 控制組成。',
   'transfer.keyboard.tabShiftTab': '在面板項目、操作按鈕、搜尋欄與分頁控制間移動焦點。',
   'transfer.keyboard.space': '切換目前聚焦的項目或全選 checkbox。',
   'transfer.keyboard.enterSpace': '啟用目前聚焦的移動操作或分頁控制。',
   'transfer.keyboard.type': '焦點在搜尋輸入中時，過濾目前面板項目。',
+  'transfer.stateModel.description':
+    'selectedKeys 是跨面板的主要狀態，支援 [(selectedKeys)]。每個 panel 另有暫存勾選、query 與 page 狀態；moveToTarget/moveToSource 會把暫存勾選提交到 selectedKeys。',
 } as const;

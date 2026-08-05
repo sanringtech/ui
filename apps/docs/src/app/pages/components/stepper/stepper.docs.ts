@@ -44,9 +44,21 @@ export const stepperPage = {
       level: 2,
     },
     {
+      id: 'accessibility',
+      titleKey: 'toc.accessibility',
+      descriptionKey: 'stepper.accessibility.description',
+      level: 2,
+    },
+    {
       id: 'keyboard',
       titleKey: 'toc.keyboard',
       descriptionKey: 'stepper.keyboard.description',
+      level: 2,
+    },
+    {
+      id: 'stateModel',
+      titleKey: 'toc.stateModel',
+      descriptionKey: 'stepper.stateModel.description',
       level: 2,
     },
   ],

@@ -17,8 +17,12 @@ export const toggleTranslations = {
   'toggle.api.size.description': "按鈕尺寸：'sm'、'md'（預設）或 'lg'。",
   'toggle.api.pressed.description': '是否處於啟用狀態，支援 [(pressed)] 雙向綁定。',
   'toggle.api.disabled.description': '停用 toggle，阻止任何互動。',
+  'toggle.accessibility.description':
+    '使用原生 button 並同步 aria-pressed。純圖示 toggle 需要 aria-label，讓輔助科技能辨識切換的是哪個設定。',
   'toggle.keyboard.description':
     'Toggle 保留原生 button 的焦點與啟用語意，同時更新 aria-pressed。',
   'toggle.keyboard.enterSpace': '啟用按鈕，並切換 pressed 狀態。',
   'toggle.keyboard.tabShiftTab': '依文件順序移入或移出 toggle 焦點。',
+  'toggle.stateModel.description':
+    'pressed 是 directive 的 model 狀態，支援 [(pressed)]。disabled 阻止狀態切換；variant、size 與 class 僅控制樣式。',
 } as const;

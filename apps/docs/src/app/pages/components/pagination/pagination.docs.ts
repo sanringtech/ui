@@ -44,9 +44,21 @@ export const paginationPage = {
       level: 2,
     },
     {
+      id: 'accessibility',
+      titleKey: 'toc.accessibility',
+      descriptionKey: 'pagination.accessibility.description',
+      level: 2,
+    },
+    {
       id: 'keyboard',
       titleKey: 'toc.keyboard',
       descriptionKey: 'pagination.keyboard.description',
+      level: 2,
+    },
+    {
+      id: 'stateModel',
+      titleKey: 'toc.stateModel',
+      descriptionKey: 'pagination.stateModel.description',
       level: 2,
     },
   ],

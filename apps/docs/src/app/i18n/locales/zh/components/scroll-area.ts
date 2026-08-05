@@ -23,4 +23,8 @@ export const scrollAreaTranslations = {
   'scrollArea.api.hideScrollbar.description': '為 true 時隱藏滾動軸，但保留滾動功能。',
   'scrollArea.api.scrollbarThumb.description': '控制滾動軸拇指顏色的 CSS 自訂屬性。',
   'scrollArea.api.scrollbarTrack.description': '控制滾動軸軌道背景的 CSS 自訂屬性。',
+  'scrollArea.accessibility.description':
+    '保留內容本身的語意。固定高度區域若包含大量內容，建議依情境加上 aria-label、aria-labelledby 或可見標題。',
+  'scrollArea.stateModel.description':
+    '不保存捲動位置。sanringInfiniteScroll 只在到達門檻時 emit loadMore；載入狀態、分頁游標與資料集合由宿主元件管理。',
 } as const;

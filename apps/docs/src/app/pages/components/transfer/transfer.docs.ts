@@ -83,9 +83,21 @@ export const transferPage = {
       level: 2,
     },
     {
+      id: 'accessibility',
+      titleKey: 'toc.accessibility',
+      descriptionKey: 'transfer.accessibility.description',
+      level: 2,
+    },
+    {
       id: 'keyboard',
       titleKey: 'toc.keyboard',
       descriptionKey: 'transfer.keyboard.description',
+      level: 2,
+    },
+    {
+      id: 'stateModel',
+      titleKey: 'toc.stateModel',
+      descriptionKey: 'transfer.stateModel.description',
       level: 2,
     },
   ],

@@ -49,6 +49,18 @@ export const labelPage = {
       descriptionKey: 'label.api.description',
       level: 2,
     },
+    {
+      id: 'accessibility',
+      titleKey: 'toc.accessibility',
+      descriptionKey: 'label.accessibility.description',
+      level: 2,
+    },
+    {
+      id: 'stateModel',
+      titleKey: 'toc.stateModel',
+      descriptionKey: 'label.stateModel.description',
+      level: 2,
+    },
   ],
   apiRows: [
     {

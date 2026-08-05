@@ -64,10 +64,14 @@ export const transferTranslations = {
     "The checkbox state for a select-all control: true when every selectable item is checked, 'indeterminate' when some are, false when none are.",
   'transfer.api.selectAllMethods.description':
     'Select all / deselect all / toggle all non-disabled items in the panel. selectAll and deselectAll are no-ops when interactive() is false.',
+  'transfer.accessibility.description':
+    'Composed from checkboxes, buttons, and optional search inputs, preserving their native semantics. Panel headings should describe available and selected lists, and transfer buttons need aria-labels.',
   'transfer.keyboard.description':
     'Transfer is composed from checkboxes, action buttons, search inputs, and optional pagination controls.',
   'transfer.keyboard.tabShiftTab': 'Moves focus through panel items, actions, search fields, and pagination controls.',
   'transfer.keyboard.space': 'Toggles the focused item or select-all checkbox.',
   'transfer.keyboard.enterSpace': 'Activates the focused transfer action or pagination control.',
   'transfer.keyboard.type': 'Filters the active panel when focus is inside a search input.',
+  'transfer.stateModel.description':
+    'selectedKeys is the primary cross-panel state and supports [(selectedKeys)]. Each panel also keeps temporary checked keys, query, and page state; moveToTarget/moveToSource commits checked keys into selectedKeys.',
 } as const;

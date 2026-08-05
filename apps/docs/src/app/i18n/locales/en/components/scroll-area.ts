@@ -31,4 +31,8 @@ export const scrollAreaTranslations = {
     'CSS custom property that controls the scrollbar thumb color.',
   'scrollArea.api.scrollbarTrack.description':
     'CSS custom property that controls the scrollbar track background.',
+  'scrollArea.accessibility.description':
+    'Preserves the semantics of the content inside. For bounded regions with lots of content, add aria-label, aria-labelledby, or a visible heading based on context.',
+  'scrollArea.stateModel.description':
+    'Does not persist scroll position. sanringInfiniteScroll only emits loadMore at the threshold; loading state, cursors, and data collections are owned by the host component.',
 } as const;

@@ -161,6 +161,36 @@
 
 ---
 
+## P13 — CLI 指令間有重複邏輯,可收斂共用
+
+- [ ] 抽出 `requireAngularProject(cwd)` 共用檢查,取代 `add`/`update`/`remove`/`diff`/`list.ts` 各自重複的 `angular.json` 守衛區塊
+- [ ] `DEFAULT_PATH = 'src/app/components/ui'` 目前在 9 個檔案各自宣告一次,改成從 `utils.ts` 統一 export
+- [ ] 抽出 `resolveComponentBasePath(cwd, optionsPath, config)`,取代 7 個檔案裡重複的 `resolve(cwd, options.path ?? config?.componentPath ?? DEFAULT_PATH)`
+- [ ] 抽出共用的 `confirmPrompt(message, { yes, requireTty })`,取代 `add.ts` 的 `confirmOverwrite`、`update.ts` 的 `confirmFile`、`remove.ts` 的 `confirmRemoval` 三份幾乎相同的 readline y/N 邏輯(注意 `add.ts` 版本在非 TTY 時多一段錯誤訊息分支,抽的時候要保留)
+
+**現況**:2026-08-06 程式碼審查發現,`packages/cli/src` 的 9 個 command 檔案(`add`/`init`/`update`/`remove`/`diff`/`doctor`/`info`/`search`/`list.ts`)彼此有多處幾乎逐字重複的邏輯,目前都沒有收斂進 `utils.ts`。
+
+**風險**:低,是行為不變的重構,但散落的邏輯會讓未來改動(例如 P9 的 namespace 支援要動到每個 command)成本變高——先收斂能讓那類改動的 diff 小很多。
+
+**成本**:低。四項都可以各自獨立成一個小 PR,合計約半天工作量。
+
+---
+
+## P14 — UI lib 效能與重複邏輯優化
+
+- [ ] 約 4 成元件(實測 162 個 `@Component` 檔案中有 69 個)未明確設定 `ChangeDetectionStrategy.OnPush`,包含 `select`、`switch`、`combobox`、`command`、`tabs`、`tree`、`tooltip`、`dropdown-menu` 等已經是 signals-based 寫法的元件,等於沒拿到 OnPush 的效能紅利
+- [ ] 9 個表單元件(`checkbox`/`switch`/`radio-group`/`slider`/`otp-input`/`date-picker`/`calendar`/`file-upload`/`combobox`)各自重複一份幾乎逐字相同的 `XxxFieldControlAdapter` + CVA state-bridge 邏輯(約 500–600 行複製貼上),`shared/` 目錄目前沒有對應抽象
+- [ ] `navigation-menu-sub-content`/`context-menu-sub-content`/`context-menu-content` 三個元件各自手刻幾乎相同的 CDK Overlay 生命週期邏輯(建立/attach/detach `OverlayRef`、`outsidePointerEvents`/`keydownEvents` 訂閱、destroy 清理),約 50–60 行重複 3 次
+- [ ] `resizable/resizable.utils.ts:75` 的 `Array.from(groupElement.children) as HTMLElement[]` 是沒有 runtime guard 的型別斷言(`children` 是 `HTMLCollection`,假設全部是 `HTMLElement`,一般成立但沒檢查)
+
+**現況**:2026-08-06 code review(人工抽查 12–15 個代表性元件 + `shared/` 全目錄,並用 grep 驗證 OnPush 覆蓋率數字)發現的落差。已確認乾淨、不用動的部分:`components/` 裡沒有 `any`、沒有殘留的舊式 `@Input()`/`@Output()` decorator(全部是 signal-based)、`cn()`/`uniqueId()` 已統一在 `utils.ts`、所有 `.subscribe()` 都有正確清理(`takeUntilDestroyed` 或隨 `overlayRef.dispose()` complete)、`package.json` 依賴合理無大材小用。
+
+**建議順序**:OnPush 清理(機械式、效能有感、風險最低)→ overlay 生命週期抽共用 class(可仿照既有的 `shared/collection-controller.ts` 共用模式)→ CVA adapter 大重構(範圍最大,建議等有新表單元件加入或有明確 bug/效能動機時再做,不建議純粹為了 DRY 就大動表單核心邏輯)。
+
+**成本**:OnPush 清理與 `resizable` 型別斷言低;overlay controller 抽取中;CVA adapter 重構高(牽涉 9 個檔案的表單核心邏輯,改完要重新驗證每個元件的 Angular Forms 整合沒有壞掉)。
+
+---
+
 ## 查證後確認「不算差距」的項目(備查,避免重複討論)
 
 - **PR 沒有測試/型別檢查關卡**:原 P0 已完成,目前不再放主 todo。已新增 PR 觸發的 CI workflow,跑 `pnpm test`、`tsc --noEmit`、`pnpm lint`。

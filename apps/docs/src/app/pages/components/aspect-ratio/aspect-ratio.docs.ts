@@ -54,6 +54,18 @@ export const aspectRatioPage = {
       descriptionKey: 'aspectRatio.api.description',
       level: 2,
     },
+    {
+      id: 'accessibility',
+      titleKey: 'toc.accessibility',
+      descriptionKey: 'aspectRatio.accessibility.description',
+      level: 2,
+    },
+    {
+      id: 'stateModel',
+      titleKey: 'toc.stateModel',
+      descriptionKey: 'aspectRatio.stateModel.description',
+      level: 2,
+    },
   ],
   apiRows: [
     {

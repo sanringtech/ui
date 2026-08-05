@@ -54,6 +54,18 @@ export const dividerPage = {
       descriptionKey: 'divider.api.description',
       level: 2,
     },
+    {
+      id: 'accessibility',
+      titleKey: 'toc.accessibility',
+      descriptionKey: 'divider.accessibility.description',
+      level: 2,
+    },
+    {
+      id: 'stateModel',
+      titleKey: 'toc.stateModel',
+      descriptionKey: 'divider.stateModel.description',
+      level: 2,
+    },
   ],
   apiRows: [
     {

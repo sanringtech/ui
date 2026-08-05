@@ -34,8 +34,12 @@ export const paginationTranslations = {
     'Styles page number buttons or links, including active and disabled states.',
   'pagination.api.nav.description':
     'Styles previous, next, first, or last controls while preserving button/link semantics.',
+  'pagination.accessibility.description':
+    'The root uses navigation semantics and accepts ariaLabel. Page numbers and previous/next controls preserve button or link semantics, and the active page reflects current-page state.',
   'pagination.keyboard.description':
     'Pagination uses regular button or link semantics for each page and navigation control.',
   'pagination.keyboard.tabShiftTab': 'Moves focus through enabled page and navigation controls.',
   'pagination.keyboard.enterSpace': 'Activates the focused button or link and requests that page.',
+  'pagination.stateModel.description':
+    'Paginator derives its page range from pageIndex, pageSize, and length, then emits pageChange for navigation intent. Data slicing and persistence stay in the host component.',
 } as const;

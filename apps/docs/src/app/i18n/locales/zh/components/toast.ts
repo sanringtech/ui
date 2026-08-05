@@ -47,5 +47,9 @@ export const toastTranslations = {
   'toast.api.duration.description': '自動關閉的毫秒數。設為 0 表示持續顯示。',
   'toast.api.closable.description': '控制是否渲染關閉按鈕。',
   'toast.api.action.description': '顯示在 toast 內的選用動作按鈕。',
+  'toast.accessibility.description':
+    'ToastService 會透過 LiveAnnouncer 播報通知；錯誤使用 assertive，其餘通知使用較溫和的公告。可關閉 toast 需提供可聚焦的關閉按鈕。',
+  'toast.stateModel.description':
+    'Toast 狀態由 ToastService 管理，包含 id、variant、duration、leaving、paused 與 action。sanring-toaster 只負責依位置與堆疊設定渲染目前可見通知。',
 
 } as const;

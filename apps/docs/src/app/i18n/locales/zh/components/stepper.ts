@@ -46,9 +46,13 @@ export const stepperTranslations = {
   'stepper.api.stepOptional.description': '標記為選填步驟，並渲染 optional 輔助文字。',
   'stepper.api.stepCompleted.description': '標記為已完成步驟，並使用完成狀態 indicator。',
   'stepper.api.stepCustomState.description': '覆寫 Sanring step header 顯示的視覺狀態。',
+  'stepper.accessibility.description':
+    '基於 Angular CDK Stepper，header 具備可聚焦的步驟導覽語意，selected、completed、optional 與 disabled 狀態會反映在 header 上。',
   'stepper.keyboard.description': 'Stepper header 導覽遵循 Angular CDK stepper 鍵盤行為。',
   'stepper.keyboard.arrowLeftRight': '在水平 step header 之間移動焦點。',
   'stepper.keyboard.arrowUpDown': '在垂直 step header 之間移動焦點。',
   'stepper.keyboard.homeEnd': '將焦點移到第一個或最後一個 step header。',
   'stepper.keyboard.enterSpace': '在允許導覽時選取目前聚焦的步驟。',
+  'stepper.stateModel.description':
+    'selectedIndex 是主要狀態，支援 selectedIndexChange。linear、completed、optional 與 customState 會影響可導覽性與 header 呈現；表單資料由各 step 內容自行管理。',
 } as const;
