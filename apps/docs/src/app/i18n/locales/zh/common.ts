@@ -63,6 +63,7 @@ export const commonTranslations = {
   'component.otpInput': 'OTP 輸入框',
   'component.label': '標籤文字',
   'component.link': '連結',
+  'component.navigationMenu': '導覽選單',
   'component.pagination': '分頁器',
   'component.resizable': '可調整分割區',
   'component.select': '選取選單',

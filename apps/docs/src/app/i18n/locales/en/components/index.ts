@@ -24,6 +24,7 @@ import { hoverCardTranslations } from './hover-card';
 import { inputTranslations } from './input';
 import { labelTranslations } from './label';
 import { linkTranslations } from './link';
+import { navigationMenuTranslations } from './navigation-menu';
 import { otpInputTranslations } from './otp-input';
 import { paginationTranslations } from './pagination';
 import { popoverTranslations } from './popover';
@@ -77,6 +78,7 @@ export const componentTranslations = {
   ...inputTranslations,
   ...labelTranslations,
   ...linkTranslations,
+  ...navigationMenuTranslations,
   ...otpInputTranslations,
   ...paginationTranslations,
   ...popoverTranslations,

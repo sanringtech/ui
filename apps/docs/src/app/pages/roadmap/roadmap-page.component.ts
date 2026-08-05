@@ -242,6 +242,7 @@ export class RoadmapPageComponent {
     { name: 'Input', description: '' },
     { name: 'Label', description: '' },
     { name: 'Link', description: '' },
+    { name: 'Navigation Menu', description: '', tone: 'updated' },
     { name: 'OTP Input', description: '', tone: 'updated' },
     { name: 'Pagination', description: '' },
     { name: 'Popover', description: '' },
@@ -286,11 +287,6 @@ export class RoadmapPageComponent {
   ];
 
   protected readonly tier3: RoadmapItem[] = [
-    {
-      name: 'Navigation Menu',
-      description:
-        'Mega menu for marketing-site top navigation. High effort, low reuse of existing pieces.',
-    },
     {
       name: 'Virtual Scroller',
       description:

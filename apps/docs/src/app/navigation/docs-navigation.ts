@@ -50,6 +50,7 @@ export type DocsComponentId =
   | 'otp-input'
   | 'label'
   | 'link'
+  | 'navigation-menu'
   | 'pagination'
   | 'popover'
   | 'progress'
@@ -280,6 +281,13 @@ export const docsComponentItems: DocsComponentNavItem[] = [
     labelKey: 'component.link',
     descriptionKey: 'link.description',
     path: '/components/link',
+    active: true,
+  },
+  {
+    id: 'navigation-menu',
+    labelKey: 'component.navigationMenu',
+    descriptionKey: 'navigationMenu.description',
+    path: '/components/navigation-menu',
     active: true,
   },
   {

@@ -248,6 +248,13 @@ export const routes: Routes = [
                   ),
               },
               {
+                path: 'navigation-menu',
+                loadComponent: () =>
+                  import('./pages/components/navigation-menu/navigation-menu-page.component').then(
+                    (m) => m.NavigationMenuPageComponent,
+                  ),
+              },
+              {
                 path: 'pagination',
                 loadComponent: () =>
                   import('./pages/components/pagination/pagination-page.component').then(

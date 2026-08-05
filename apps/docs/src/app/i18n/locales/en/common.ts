@@ -63,6 +63,7 @@ export const commonTranslations = {
   'component.otpInput': 'OTP Input',
   'component.label': 'Label',
   'component.link': 'Link',
+  'component.navigationMenu': 'Navigation Menu',
   'component.pagination': 'Pagination',
   'component.resizable': 'Resizable',
   'component.select': 'Select',

@@ -34,6 +34,17 @@ export interface ComponentChangelogEntry {
  */
 export const componentChangelog: readonly ComponentChangelogEntry[] = [
   {
+    date: '2026-08-06',
+    changes: [
+      {
+        type: 'added',
+        notable: true,
+        componentIds: ['navigation-menu'],
+        text: 'New `navigation-menu` component: horizontal or vertical top-level navigation with trigger-opened content panels, an optional shared `sanring-navigation-menu-viewport` + indicator, and link/label/description/separator primitives.',
+      },
+    ],
+  },
+  {
     date: '2026-08-05',
     changes: [
       {
