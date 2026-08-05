@@ -21,6 +21,6 @@ export class SidebarFooterComponent {
   );
 
   protected readonly hostClass = computed(() =>
-    cn('flex flex-col gap-2 px-2 py-2', this.isIconRail() && 'items-center', this.class()),
+    cn('flex flex-col gap-2 px-2 py-3', this.isIconRail() && 'items-center', this.class()),
   );
 }

@@ -22,7 +22,7 @@ export class SidebarHeaderComponent {
 
   protected readonly hostClass = computed(() =>
     cn(
-      'flex min-h-14 items-center gap-2 px-3 py-2',
+      'flex min-h-16 items-center gap-2 px-3 py-3',
       this.isIconRail() && 'justify-center px-2',
       this.class(),
     ),
