@@ -28,14 +28,14 @@ Each component should eventually have a conclusion for these fields:
    `calendar`, `file-upload`, `otp-input`, `textarea`.
 3. Display/layout components:
    `accordion`, `tabs`, `table`, `carousel`, `resizable`, `avatar`,
-   `breadcrumb`, `card`, `alert`, `badge`, `progress`, `skeleton`, `spinner`,
+   `breadcrumb`, `card`, `alert`, `badge`, `progress`, `sidebar`, `skeleton`, `spinner`,
    `tag`, `timeline`, `tree`, plus other low-risk display primitives.
 
 ## Current Snapshot
 
-- Registry components: 50
-- Surface alignment: all 50 components currently exist in `registry`, `packages/ui`, docs pages, and `public-api.ts`.
-- Components without package specs: 0 (P4 minimum-spec baseline complete for all 50 formal components)
+- Registry components: 51
+- Surface alignment: all 51 components currently exist in `registry`, `packages/ui`, docs pages, and `public-api.ts`.
+- Components without package specs: 1 (`sidebar`; newly added after the P4 minimum-spec baseline)
 - Manual a11y / keyboard / API / SSR review: **Batch 1 (10 high-interaction components) reviewed, all 3 P0s fixed** (`select` keyboard nav, `command` spec suite, `context-menu` keyboard nav + spec suite). **Batch 2 (11 form/control components) reviewed, all 3 findings fixed** (`switch` gained a `checkedChange` output and a real `ariaLabel`/`ariaLabelledBy` input — the latter also fixed an identical bug in the live demo page, not just the docs code sample; `checkbox`/`radio-group` now bind `aria-required` to `fieldRequired` so `Validators.required`-only forms are announced correctly). **Batch 3 (16 display/layout components) reviewed, findings fixed** — `avatar`'s `MutationObserver` and `carousel`'s `EmblaCarousel()`/`ResizeObserver` are now both deferred to `afterNextRender` (SSR-safe); `resizable`'s handle now exposes `aria-valuenow`/`min`/`max`; `progress` now forwards `ariaValueText` to the underlying directive. The `table` pagination finding (docs referencing a nonexistent `<sanring-paginator>`) turned out to be stale by the time it was investigated — `PaginatorComponent` was added independently while this batch was in progress and its real API matches the docs exactly, so no fix was needed there. `tabs`' `selectionMode`/`orientation` documentation is still outstanding.
 
 ## Matrix
@@ -77,6 +77,7 @@ Each component should eventually have a conclusion for these fields:
 | scroll-area | display-layout | Low | OK | 1 | TBD | TBD | TBD | TBD | Partial | Review after high-risk batch |
 | select | high-interaction | High | OK | 2 | OK (roving tabindex, verified by spec) | OK (fixed — `FocusKeyManager` now drives ArrowUp/Down + initial focus on open, with disabled-item skip/wrap; see Batch 1 Findings) | Inconsistent (no `disabled` input(); `value` is a getter, not a model) | OK | Partial | `value` getter distinction documented; consider adding typeahead/Home-End for parity with combobox/command |
 | sheet | high-interaction | High | OK | 1 | Gap (`aria-labelledby`/`describedby` stay bound even when no title/description is projected) | OK (Escape + `cdkTrapFocus`) but no way to disable Escape-close | Inconsistent (only sibling with a 2-way `isOpen` model; `sanringSheetClose` can't carry a result) | Gap (2 of 3 constructor effects touch `window`/`document` unguarded; only the focus effect uses `afterNextRender`) | Partial (fixed — removed nonexistent `showClose` API/example) | Guard the scroll-lock effect with `afterNextRender`; decide whether to add a real close-button API later |
+| sidebar | display-layout | Low | OK | 0 | Partial (persistent layout primitive; no focus trap/background hiding by design, but no spec coverage yet) | Native (menu buttons are anchors/buttons; trigger click behavior only, no custom roving focus) | Initial (new API: `open`, `collapsible`, `id`, menu button `active`/`disabled`) | OK | OK | Add minimum spec for render/class merging, `collapsible` modes, trigger toggle, and menu button active/disabled behavior |
 | skeleton | display-layout | Low | OK | 1 | OK (`aria-hidden="true"`, verified by spec) | N/A | OK | OK | Partial | `class` input documented default `''` vs actual `undefined` |
 | slider | form-control | Medium | OK | 2 | OK (`role="slider"` + full valuemin/max/now/text, `aria-orientation` hard-coded horizontal — no vertical mode exists so this is currently accurate) | OK (Arrow×4/Home/End/PageUp/PageDown all implemented + pointer drag) | OK | OK | Partial | API table gap fixed; still needs broader accessibility/state notes |
 | spinner | display-layout | Low | OK | 1 | OK (`role="status"` + `aria-label` bound to the `ariaLabel` input, default `'Loading'`, verified by spec) | N/A | OK | OK | OK (most complete/accurate table in the whole batch) | None critical — only `loader`/`loader-circle` icon variants untested (spec only exercises `pinwheel`) |

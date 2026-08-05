@@ -30,7 +30,7 @@ Components are copied directly into your source code — you own them and can mo
 
 ## Available Components
 
-accordion · alert · alert-dialog · aspect-ratio · avatar · badge · breadcrumb · button · calendar · card · carousel · checkbox · collapsible · combobox · command · context-menu · date-picker · dialog · divider · dropdown-menu · field · file-upload · hover-card · input · label · link · otp-input · pagination · popover · progress · radio · resizable · scroll-area · select · sheet · skeleton · slider · spinner · stepper · switch · table · tabs · tag · textarea · timeline · toast · toggle · tooltip · transfer · tree
+accordion · alert · alert-dialog · aspect-ratio · avatar · badge · breadcrumb · button · calendar · card · carousel · checkbox · collapsible · combobox · command · context-menu · date-picker · dialog · divider · dropdown-menu · field · file-upload · hover-card · input · label · link · otp-input · pagination · popover · progress · radio · resizable · scroll-area · select · sheet · sidebar · skeleton · slider · spinner · stepper · switch · table · tabs · tag · textarea · timeline · toast · toggle · tooltip · transfer · tree
 
 ---
 
@@ -60,14 +60,14 @@ sanring-ui/
 
 ## Tech Stack
 
-| | |
-|---|---|
-| Framework | [Angular 22](https://angular.dev) |
-| Styling | [Tailwind CSS v4](https://tailwindcss.com) |
-| Accessibility | [@angular/aria](https://angular.dev/guide/aria) + [@angular/cdk](https://material.angular.io/cdk) |
-| Icons | [@lucide/angular](https://lucide.dev) |
-| Package Manager | [pnpm](https://pnpm.io) |
-| Versioning | [Changesets](https://github.com/changesets/changesets) |
+|                 |                                                                                                   |
+| --------------- | ------------------------------------------------------------------------------------------------- |
+| Framework       | [Angular 22](https://angular.dev)                                                                 |
+| Styling         | [Tailwind CSS v4](https://tailwindcss.com)                                                        |
+| Accessibility   | [@angular/aria](https://angular.dev/guide/aria) + [@angular/cdk](https://material.angular.io/cdk) |
+| Icons           | [@lucide/angular](https://lucide.dev)                                                             |
+| Package Manager | [pnpm](https://pnpm.io)                                                                           |
+| Versioning      | [Changesets](https://github.com/changesets/changesets)                                            |
 
 ---
 

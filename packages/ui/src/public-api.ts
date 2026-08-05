@@ -39,6 +39,7 @@ export * from './lib/components/resizable';
 export * from './lib/components/scroll-area';
 export * from './lib/components/select';
 export * from './lib/components/sheet';
+export * from './lib/components/sidebar';
 export * from './lib/components/skeleton';
 export * from './lib/components/slider';
 export * from './lib/components/spinner';

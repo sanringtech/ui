@@ -33,6 +33,7 @@ import { resizableTranslations } from './resizable';
 import { scrollAreaTranslations } from './scroll-area';
 import { selectTranslations } from './select';
 import { sheetTranslations } from './sheet';
+import { sidebarTranslations } from './sidebar';
 import { skeletonTranslations } from './skeleton';
 import { sliderTranslations } from './slider';
 import { spinnerTranslations } from './spinner';
@@ -85,6 +86,7 @@ export const componentTranslations = {
   ...scrollAreaTranslations,
   ...selectTranslations,
   ...sheetTranslations,
+  ...sidebarTranslations,
   ...skeletonTranslations,
   ...sliderTranslations,
   ...spinnerTranslations,

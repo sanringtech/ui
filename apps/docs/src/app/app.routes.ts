@@ -7,7 +7,8 @@ export const routes: Routes = [
     children: [
       {
         path: '',
-        loadComponent: () => import('./pages/home/home-page.component').then((m) => m.HomePageComponent),
+        loadComponent: () =>
+          import('./pages/home/home-page.component').then((m) => m.HomePageComponent),
       },
       {
         path: '',
@@ -24,9 +25,7 @@ export const routes: Routes = [
           {
             path: 'theming',
             loadComponent: () =>
-              import('./pages/theming/theming-page.component').then(
-                (m) => m.ThemingPageComponent,
-              ),
+              import('./pages/theming/theming-page.component').then((m) => m.ThemingPageComponent),
           },
           {
             path: 'cli',
@@ -43,9 +42,7 @@ export const routes: Routes = [
           {
             path: 'roadmap',
             loadComponent: () =>
-              import('./pages/roadmap/roadmap-page.component').then(
-                (m) => m.RoadmapPageComponent,
-              ),
+              import('./pages/roadmap/roadmap-page.component').then((m) => m.RoadmapPageComponent),
           },
           {
             path: 'components',
@@ -304,6 +301,13 @@ export const routes: Routes = [
                 loadComponent: () =>
                   import('./pages/components/sheet/sheet-page.component').then(
                     (m) => m.SheetPageComponent,
+                  ),
+              },
+              {
+                path: 'sidebar',
+                loadComponent: () =>
+                  import('./pages/components/sidebar/sidebar-page.component').then(
+                    (m) => m.SidebarPageComponent,
                   ),
               },
               {

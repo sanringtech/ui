@@ -58,6 +58,7 @@ export type DocsComponentId =
   | 'scroll-area'
   | 'select'
   | 'sheet'
+  | 'sidebar'
   | 'skeleton'
   | 'slider'
   | 'spinner'
@@ -335,6 +336,13 @@ export const docsComponentItems: DocsComponentNavItem[] = [
     labelKey: 'component.sheet',
     descriptionKey: 'sheet.description',
     path: '/components/sheet',
+    active: true,
+  },
+  {
+    id: 'sidebar',
+    labelKey: 'component.sidebar',
+    descriptionKey: 'sidebar.description',
+    path: '/components/sidebar',
     active: true,
   },
   {
