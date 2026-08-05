@@ -85,17 +85,17 @@
 
 ---
 
-## P6 — package-only 使用者的 theme token 入口
+## P6 — package-only 使用者的 theme token 入口(已評估,暫不執行)
 
-- [ ] 讓不透過 CLI/registry、只安裝 `@sanring/ui` package 的使用者也能清楚取得預設 theme CSS
+- [x] 評估是否要讓 package-only(不透過 CLI)使用者取得 theme CSS
 
-**現況**:`registry/shared/theme.css` 已經提供完整 `--sanring-*` CSS custom properties,`registry/registry.json` 也已把 `theme` 宣告為 shared dependency;`sanring init` 會產生 `src/sanring-theme.css`,docs theming page 也有說明。但如果使用者只從 npm 安裝 `@sanring/ui`,目前不夠直覺地知道 `bg-[var(--sanring-border)]`、`text-[var(--sanring-foreground)]` 等 token 要從哪裡設定。
+**原始現況(2026-08 前)**:`registry/shared/theme.css` 已經提供完整 `--sanring-*` CSS custom properties,`registry/registry.json` 也已把 `theme` 宣告為 shared dependency;`sanring init` 會產生 `src/sanring-theme.css`,docs theming page 也有說明。但如果使用者只從 npm 安裝 `@sanring/ui`,目前不夠直覺地知道 `bg-[var(--sanring-border)]`、`text-[var(--sanring-foreground)]` 等 token 要從哪裡設定。
 
-**建議方向**:讓 package 也提供穩定 CSS 入口,例如 `@import '@sanring/ui/theme.css';`,並在 README / installation / theming docs 明確說明兩種路徑：CLI 使用者跑 `sanring init`;package-only 使用者 import package 內建 theme CSS 或自行定義同名 `--sanring-*` token。
+**查證後發現前提不成立**:`@sanring/ui` 目前**沒有被發布到 npm**,而且是刻意設計成這樣——`packages/ui/package.json` 是 `private: true`、`.changeset/config.json` 把 `@sanring/ui` 明確排除在版本管理外、`release.yml` 只在 `packages/cli/**`/`registry/**` 變動時觸發,`release` script 也只 build/publish `@sanring/cli`。唯一真實存在的發布管道是 CLI 把 `registry/` 的原始碼複製進使用者專案(shadcn 那套模式),「只從 npm 安裝 @sanring/ui」這個使用情境目前不存在,原始「現況」段的假設不成立。
 
-**風險**:元件本身可用,但樣式 token 沒載入時會出現顏色/邊框/背景失效,使用者會誤以為元件壞掉。這會直接影響 package 採用體驗,尤其是沒有走 Sanring CLI 的使用者。
+**結論**:不執行,維持 CLI-only 發布模式。要讓這個情境成立,前提是先決定要不要把 `@sanring/ui` 也發布成傳統 npm 依賴套件——那是一個獨立、更大的策略決定(牽涉 semver 版本紀律、使用者失去「程式碼歸你、可以隨便改」的 CLI 模式優勢、兩條發布管道共存的複雜度),不是「補一個 CSS export」這麼小的事。若之後真的要發 npm 套件,「要不要發 npm 套件」本身應該先開一個新的 P 項目評估,這條再接在後面做。
 
-**成本**:中低。需要確認 package build 是否能輸出 CSS asset、`package.json` exports 是否能暴露 `./theme.css`,以及 docs/README 是否同步補上安裝方式。
+**技術備查(留給未來參考)**:實測過 ng-packagr 的 `assets` 設定會拒絕讀取 project root 以外的檔案(不能直接指到 `../../registry/shared/theme.css`),且它會自己產生/覆寫 `package.json` 的 `exports` 欄位(預設只有 `.` 跟 `./package.json`)。這條路技術上可行,但要嘛把 theme.css 複製一份進 `packages/ui/` 自己顧跟 `registry/shared/theme.css` 同步,要嘛接受兩份 source of truth。
 
 ---
 
