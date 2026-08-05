@@ -1,12 +1,9 @@
 import { Command } from 'commander';
-import { resolve } from 'node:path';
 import ora from 'ora';
 import pc from 'picocolors';
 import { fetchRegistry } from '../registry.js';
-import { isAngularProject, readConfig } from '../utils.js';
+import { readConfig, requireAngularProject, resolveComponentBasePath } from '../utils.js';
 import { listInstalledComponentNames } from './diff.js';
-
-const DEFAULT_PATH = 'src/app/components/ui';
 
 export const listCommand = new Command('list')
   .alias('ls')
@@ -22,13 +19,9 @@ export const listCommand = new Command('list')
     let { components } = registry;
 
     if (options.installed) {
-      if (!isAngularProject(process.cwd())) {
-        console.error(pc.red('✖ No angular.json found.'));
-        console.error(pc.dim('  Run from the root of an Angular project.'));
-        process.exit(1);
-      }
+      requireAngularProject(process.cwd());
       const config = readConfig(process.cwd());
-      const componentBasePath = resolve(process.cwd(), options.path ?? config?.componentPath ?? DEFAULT_PATH);
+      const componentBasePath = resolveComponentBasePath(process.cwd(), options.path, config);
       const installedNames = new Set(listInstalledComponentNames(componentBasePath, registry));
       components = components.filter((c) => installedNames.has(c.name));
     }

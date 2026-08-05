@@ -1,7 +1,6 @@
 import { Command } from 'commander';
 import { existsSync, rmSync } from 'node:fs';
-import { join, resolve } from 'node:path';
-import { createInterface } from 'node:readline/promises';
+import { join } from 'node:path';
 import pc from 'picocolors';
 import {
   createRegistryIndex,
@@ -9,10 +8,15 @@ import {
   type Registry,
   type RegistryIndex,
 } from '../registry.js';
-import { isAngularProject, readConfig, writeConfig } from '../utils.js';
+import {
+  confirmPrompt,
+  DEFAULT_COMPONENT_PATH,
+  readConfig,
+  requireAngularProject,
+  resolveComponentBasePath,
+  writeConfig,
+} from '../utils.js';
 import { listInstalledComponentNames } from './diff.js';
-
-const DEFAULT_PATH = 'src/app/components/ui';
 
 export interface RemovalPlan {
   toRemove: string[];
@@ -69,21 +73,15 @@ export function planRemoval(
   return { toRemove, notInstalled, blockedBy, possiblyUnusedShared };
 }
 
-async function confirmRemoval(names: string[], yes: boolean): Promise<boolean> {
-  if (yes) return true;
-  if (!process.stdin.isTTY) {
-    console.error(pc.red('\n✖ Refusing to remove files without confirmation.'));
-    console.error(
-      pc.dim(`  Re-run with ${pc.white('--yes')} to confirm in non-interactive environments.\n`),
-    );
-    return false;
-  }
-  const rl = createInterface({ input: process.stdin, output: process.stdout });
-  const answer = await rl.question(
-    pc.dim(`\n  Delete ${names.join(', ')}? This cannot be undone.`) + ' [y/N]: ',
-  );
-  rl.close();
-  return answer.trim().toLowerCase() === 'y' || answer.trim().toLowerCase() === 'yes';
+function confirmRemoval(names: string[], yes: boolean): Promise<boolean> {
+  return confirmPrompt({
+    yes,
+    question: pc.dim(`\n  Delete ${names.join(', ')}? This cannot be undone.`) + ' [y/N]: ',
+    nonTtyRefusal: {
+      title: 'Refusing to remove files without confirmation.',
+      hint: `Re-run with ${pc.white('--yes')} to confirm in non-interactive environments.`,
+    },
+  });
 }
 
 export const removeCommand = new Command('remove')
@@ -102,14 +100,10 @@ export const removeCommand = new Command('remove')
       const cwd = process.cwd();
       const registrySource = options.registry;
 
-      if (!isAngularProject(cwd)) {
-        console.error(pc.red('✖ No angular.json found.'));
-        console.error(pc.dim('  Run from the root of an Angular project.'));
-        process.exit(1);
-      }
+      requireAngularProject(cwd);
 
       const config = readConfig(cwd);
-      const componentBasePath = resolve(cwd, options.path ?? config?.componentPath ?? DEFAULT_PATH);
+      const componentBasePath = resolveComponentBasePath(cwd, options.path, config);
 
       const registry = await fetchRegistry(registrySource);
       const registryIndex = createRegistryIndex(registry);
@@ -180,7 +174,10 @@ export const removeCommand = new Command('remove')
       }
 
       if (prunedHashes) {
-        writeConfig(cwd, { componentPath: config?.componentPath ?? DEFAULT_PATH, installedHashes });
+        writeConfig(cwd, {
+          componentPath: config?.componentPath ?? DEFAULT_COMPONENT_PATH,
+          installedHashes,
+        });
       }
 
       if (plan.possiblyUnusedShared.length > 0) {

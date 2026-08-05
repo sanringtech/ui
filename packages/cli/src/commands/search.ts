@@ -1,12 +1,9 @@
 import { Command } from 'commander';
-import { resolve } from 'node:path';
 import ora from 'ora';
 import pc from 'picocolors';
 import { fetchRegistry } from '../registry.js';
-import { isAngularProject, readConfig } from '../utils.js';
+import { isAngularProject, readConfig, resolveComponentBasePath } from '../utils.js';
 import { listInstalledComponentNames } from './diff.js';
-
-const DEFAULT_PATH = 'src/app/components/ui';
 
 function highlight(text: string, query: string): string {
   const idx = text.toLowerCase().indexOf(query);
@@ -47,10 +44,7 @@ export const searchCommand = new Command('search')
     let installedNames: Set<string> | null = null;
     if (isAngularProject(process.cwd())) {
       const config = readConfig(process.cwd());
-      const componentBasePath = resolve(
-        process.cwd(),
-        options.path ?? config?.componentPath ?? DEFAULT_PATH,
-      );
+      const componentBasePath = resolveComponentBasePath(process.cwd(), options.path, config);
       installedNames = new Set(listInstalledComponentNames(componentBasePath, registry));
     }
 

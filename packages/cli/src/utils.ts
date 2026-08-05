@@ -1,8 +1,11 @@
 import { createHash } from 'node:crypto';
 import { existsSync, readFileSync, writeFileSync } from 'node:fs';
-import { join } from 'node:path';
+import { join, resolve } from 'node:path';
+import { createInterface } from 'node:readline/promises';
+import pc from 'picocolors';
 
 export const CONFIG_FILE = 'sanring.config.json';
+export const DEFAULT_COMPONENT_PATH = 'src/app/components/ui';
 
 export interface SanringConfig {
   componentPath: string;
@@ -104,6 +107,69 @@ export function satisfiesMinimumPackageSpec(installedSpec: string, requiredSpec:
 
 export function isAngularProject(cwd: string): boolean {
   return existsSync(join(cwd, 'angular.json'));
+}
+
+// Hard guard used by commands that need an Angular project to do anything
+// useful (add/update/remove/diff/list --installed/init) — prints the same
+// error shape and exits. `hint` overrides the default second line for
+// commands that want to point at a specific next step (e.g. `sanring init`).
+export function requireAngularProject(
+  cwd: string,
+  hint = 'Run from the root of an Angular project.',
+): void {
+  if (isAngularProject(cwd)) return;
+  console.error(pc.red('✖ No angular.json found.'));
+  console.error(pc.dim(`  ${hint}`));
+  process.exit(1);
+}
+
+// Resolves the component install path the same way every command does:
+// explicit --path flag > sanring.config.json > the library default.
+export function resolveComponentPath(
+  optionsPath: string | undefined,
+  config: SanringConfig | null,
+): string {
+  return optionsPath ?? config?.componentPath ?? DEFAULT_COMPONENT_PATH;
+}
+
+export function resolveComponentBasePath(
+  cwd: string,
+  optionsPath: string | undefined,
+  config: SanringConfig | null,
+): string {
+  return resolve(cwd, resolveComponentPath(optionsPath, config));
+}
+
+export interface ConfirmPromptOptions {
+  yes: boolean;
+  question: string;
+  // Printed instead of silently refusing when stdin isn't a TTY (so scripted/
+  // CI invocations get a next step instead of a silent no-op). Omit for
+  // prompts where silently declining is the right non-interactive default.
+  nonTtyRefusal?: { title: string; hint: string };
+}
+
+// Shared y/N confirmation prompt — `add`, `update`, and `remove` each used to
+// hand-roll this (create readline interface, ask, parse y/yes) with slightly
+// different non-TTY handling; this keeps that behavior configurable per call
+// site instead of triplicated.
+export async function confirmPrompt(options: ConfirmPromptOptions): Promise<boolean> {
+  if (options.yes) return true;
+
+  if (!process.stdin.isTTY) {
+    if (options.nonTtyRefusal) {
+      console.error(pc.red(`\n✖ ${options.nonTtyRefusal.title}`));
+      console.error(pc.dim(`  ${options.nonTtyRefusal.hint}\n`));
+    }
+    return false;
+  }
+
+  const rl = createInterface({ input: process.stdin, output: process.stdout });
+  const answer = await rl.question(options.question);
+  rl.close();
+
+  const normalized = answer.trim().toLowerCase();
+  return normalized === 'y' || normalized === 'yes';
 }
 
 export async function mapConcurrent<T, R>(

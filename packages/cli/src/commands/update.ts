@@ -1,22 +1,22 @@
 import { Command } from 'commander';
 import { existsSync, readFileSync } from 'node:fs';
 import { join, resolve } from 'node:path';
-import { createInterface } from 'node:readline/promises';
 import pc from 'picocolors';
 import { createRegistryIndex, fetchFile, fetchRegistry } from '../registry.js';
 import {
+  confirmPrompt,
   hashContent,
-  isAngularProject,
   isUntouchedSinceInstall,
   fetchTextTargetsConcurrent,
   readConfig,
+  requireAngularProject,
+  resolveComponentPath,
   writeConfig,
 } from '../utils.js';
 import { writeFile } from './add.js';
 import { printFileDiff, resolveDiffTargets } from './diff.js';
 import { THEME_FILE_PATH } from './init.js';
 
-const DEFAULT_PATH = 'src/app/components/ui';
 const FILE_FETCH_CONCURRENCY = 6;
 
 interface PendingFile {
@@ -56,13 +56,8 @@ export function classifyUpdate(
   return { kind: 'conflict', label, dest, local, remote };
 }
 
-async function confirmFile(label: string, yes: boolean): Promise<boolean> {
-  if (yes) return true;
-  if (!process.stdin.isTTY) return false;
-  const rl = createInterface({ input: process.stdin, output: process.stdout });
-  const answer = await rl.question(pc.dim(`  Apply this change to ${label}?`) + ' [y/N]: ');
-  rl.close();
-  return answer.trim().toLowerCase() === 'y' || answer.trim().toLowerCase() === 'yes';
+function confirmFile(label: string, yes: boolean): Promise<boolean> {
+  return confirmPrompt({ yes, question: pc.dim(`  Apply this change to ${label}?`) + ' [y/N]: ' });
 }
 
 export const updateCommand = new Command('update')
@@ -87,14 +82,10 @@ export const updateCommand = new Command('update')
       const cwd = process.cwd();
       const registrySource = options.registry;
 
-      if (!isAngularProject(cwd)) {
-        console.error(pc.red('✖ No angular.json found.'));
-        console.error(pc.dim('  Run from the root of an Angular project.'));
-        process.exit(1);
-      }
+      requireAngularProject(cwd);
 
       const config = readConfig(cwd);
-      const resolvedComponentPath = options.path ?? config?.componentPath ?? DEFAULT_PATH;
+      const resolvedComponentPath = resolveComponentPath(options.path, config);
       const componentBasePath = resolve(cwd, resolvedComponentPath);
       const sharedDestDir = config?.sharedPath
         ? resolve(cwd, config.sharedPath)

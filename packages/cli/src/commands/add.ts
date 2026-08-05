@@ -2,7 +2,6 @@ import { Command } from 'commander';
 import { spawnSync } from 'node:child_process';
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { dirname, join, resolve } from 'node:path';
-import { createInterface } from 'node:readline/promises';
 import ora from 'ora';
 import pc from 'picocolors';
 import {
@@ -18,11 +17,13 @@ import {
   createRegistryIndex,
 } from '../registry.js';
 import {
+  confirmPrompt,
   getInstalledPackageSpecs,
   hashContent,
-  isAngularProject,
   fetchTextTargetsConcurrent,
   readConfig,
+  requireAngularProject,
+  resolveComponentPath,
   satisfiesMinimumPackageSpec,
   writeConfig,
 } from '../utils.js';
@@ -111,24 +112,16 @@ async function confirmOverwrite(candidates: OverwriteCandidate[], yes: boolean):
 
   if (yes) {
     console.log(pc.dim('\n  Proceeding because --yes was provided.\n'));
-    return true;
   }
 
-  if (!process.stdin.isTTY) {
-    console.error(pc.red('\n✖ Refusing to overwrite files without confirmation.'));
-    console.error(
-      pc.dim(
-        `  Re-run with ${pc.white('--dry-run')} to preview, or ${pc.white('--force --yes')} to confirm in non-interactive environments.\n`,
-      ),
-    );
-    return false;
-  }
-
-  const rl = createInterface({ input: process.stdin, output: process.stdout });
-  const answer = await rl.question(pc.dim('\n  Continue and overwrite these files?') + ' [y/N]: ');
-  rl.close();
-
-  return answer.trim().toLowerCase() === 'y' || answer.trim().toLowerCase() === 'yes';
+  return confirmPrompt({
+    yes,
+    question: pc.dim('\n  Continue and overwrite these files?') + ' [y/N]: ',
+    nonTtyRefusal: {
+      title: 'Refusing to overwrite files without confirmation.',
+      hint: `Re-run with ${pc.white('--dry-run')} to preview, or ${pc.white('--force --yes')} to confirm in non-interactive environments.`,
+    },
+  });
 }
 
 // Resolves the requested component names plus their transitive `componentDeps`
@@ -170,7 +163,6 @@ export function resolveInstallSet(
   return { toInstall, autoAdded, missing };
 }
 
-const DEFAULT_PATH = 'src/app/components/ui';
 const FILE_FETCH_CONCURRENCY = 6;
 
 interface SharedJob {
@@ -216,17 +208,14 @@ export const addCommand = new Command('add')
       const registrySource = options.registry;
 
       // Angular project guard
-      if (!isAngularProject(cwd)) {
-        console.error(pc.red('✖ No angular.json found.'));
-        console.error(
-          pc.dim('  Run from the root of an Angular project, or run `sanring init` first.'),
-        );
-        process.exit(1);
-      }
+      requireAngularProject(
+        cwd,
+        'Run from the root of an Angular project, or run `sanring init` first.',
+      );
 
       // Resolve component path: CLI option > sanring.config.json > default
       const config = readConfig(cwd);
-      const resolvedComponentPath = options.path ?? config?.componentPath ?? DEFAULT_PATH;
+      const resolvedComponentPath = resolveComponentPath(options.path, config);
       const componentBasePath = resolve(cwd, resolvedComponentPath);
       const resolvedSharedPath = options.sharedPath ?? config?.sharedPath;
       const installedHashes = { ...config?.installedHashes };

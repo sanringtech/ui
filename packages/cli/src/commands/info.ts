@@ -1,15 +1,14 @@
 import { Command } from 'commander';
 import { existsSync, readdirSync, readFileSync } from 'node:fs';
-import { dirname, join, resolve } from 'node:path';
+import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import ora from 'ora';
 import pc from 'picocolors';
 import { collectPeerDeps, resolveInstallSet } from './add.js';
 import { createRegistryIndex, fetchRegistry } from '../registry.js';
-import { isAngularProject, readConfig } from '../utils.js';
+import { isAngularProject, readConfig, resolveComponentBasePath } from '../utils.js';
 import { THEME_FILE_PATH } from './init.js';
 
-const DEFAULT_PATH = 'src/app/components/ui';
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
 function getCliVersion(): string {
@@ -60,10 +59,7 @@ export const infoCommand = new Command('info')
       if (!componentName) {
         const isAngular = isAngularProject(cwd);
         const config = readConfig(cwd);
-        const componentBasePath = resolve(
-          cwd,
-          options.path ?? config?.componentPath ?? DEFAULT_PATH,
-        );
+        const componentBasePath = resolveComponentBasePath(cwd, options.path, config);
         const themePresent = existsSync(join(cwd, THEME_FILE_PATH));
         const installed = scanInstalledComponents(componentBasePath);
         const angularVersion = getAngularVersion(cwd);
@@ -145,7 +141,7 @@ export const infoCommand = new Command('info')
 
       const component = toInstall.find((c) => c.name === componentName)!;
       const config = readConfig(cwd);
-      const componentBasePath = resolve(cwd, options.path ?? config?.componentPath ?? DEFAULT_PATH);
+      const componentBasePath = resolveComponentBasePath(cwd, options.path, config);
       const alreadyInstalled =
         isAngularProject(cwd) && existsSync(join(componentBasePath, component.name));
       const peerDeps = collectPeerDeps(toInstall, registryIndex);

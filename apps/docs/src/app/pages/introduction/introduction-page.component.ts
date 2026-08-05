@@ -1,4 +1,7 @@
 import { Component, effect, inject } from '@angular/core';
+import { RouterLink } from '@angular/router';
+import { LucideArrowRight } from '@lucide/angular';
+import { ButtonDirective } from '@sanring/ui';
 import { ComponentPageSectionDefinition } from '../../docs-schema/component-page.types';
 import { I18nService } from '../../i18n/i18n.service';
 import { SeoService } from '../../seo/seo.service';
@@ -7,18 +10,34 @@ import {
   ComponentPageComponent,
   ComponentPageSectionComponent,
 } from '../../layouts/component-page';
-import { docsComponentItems } from '../../navigation/docs-navigation';
 import { TranslationKey } from '../../i18n/translations';
 
-interface IntroStatusCard {
-  value: string;
+interface IntroFeatureCard {
   titleKey: TranslationKey;
   descriptionKey: TranslationKey;
 }
 
+interface IntroRequirement {
+  label: string;
+  value: string;
+}
+
+interface IntroNextLink {
+  titleKey: TranslationKey;
+  descriptionKey: TranslationKey;
+  path: string;
+}
+
 @Component({
   selector: 'app-introduction-page',
-  imports: [ComponentPageCodeBlock, ComponentPageComponent, ComponentPageSectionComponent],
+  imports: [
+    RouterLink,
+    ButtonDirective,
+    LucideArrowRight,
+    ComponentPageCodeBlock,
+    ComponentPageComponent,
+    ComponentPageSectionComponent,
+  ],
   template: `
     <app-component-page [sections]="sections">
       <header class="border-b border-[var(--docs-border)] pb-10">
@@ -30,24 +49,38 @@ interface IntroStatusCard {
         <p class="mb-0 mt-4 max-w-[620px] text-base leading-[1.7] text-[var(--docs-muted)]">
           {{ i18n.t('intro.page.description') }}
         </p>
+        <div class="mt-6 flex flex-wrap gap-3">
+          <a sanringBtn routerLink="/cli">
+            {{ i18n.t('intro.actions.start') }}
+            <svg lucideArrowRight class="size-4"></svg>
+          </a>
+          <a sanringBtn routerLink="/components/button" variant="outline">
+            {{ i18n.t('intro.actions.example') }}
+          </a>
+        </div>
       </header>
 
       <app-component-page-section [section]="sections[0]">
         <p class="mt-0 text-base leading-[1.7] text-[var(--docs-muted)]">
           {{ i18n.t('intro.whatIs.body') }}
         </p>
+        <div
+          class="mt-5 rounded-[var(--sanring-radius)] border border-[var(--docs-border)] bg-[var(--docs-elevated)] p-4 text-sm leading-6 text-[var(--docs-muted)]"
+        >
+          <span class="font-semibold text-[var(--docs-fg)]">
+            {{ i18n.t('intro.whatIs.noteTitle') }}
+          </span>
+          {{ i18n.t('intro.whatIs.noteBody') }}
+        </div>
       </app-component-page-section>
 
       <app-component-page-section [section]="sections[1]">
         <div class="grid gap-3 sm:grid-cols-3">
-          @for (item of statusCards; track item.titleKey) {
+          @for (item of featureCards; track item.titleKey) {
             <div
-              class="rounded-[var(--sanring-radius)] border border-[var(--docs-border)] bg-[var(--docs-panel)] p-4 shadow-sm"
+              class="rounded-[var(--sanring-radius)] border border-[var(--docs-border)] bg-[var(--docs-panel)] p-4"
             >
-              <div class="text-2xl font-semibold leading-none text-[var(--docs-fg)]">
-                {{ item.value }}
-              </div>
-              <h3 class="mb-0 mt-3 text-sm font-semibold text-[var(--docs-fg)]">
+              <h3 class="m-0 text-sm font-semibold text-[var(--docs-fg)]">
                 {{ i18n.t(item.titleKey) }}
               </h3>
               <p class="mb-0 mt-2 text-sm leading-6 text-[var(--docs-muted)]">
@@ -56,61 +89,79 @@ interface IntroStatusCard {
             </div>
           }
         </div>
-        <div class="mt-5 flex flex-wrap gap-2">
-          <a
-            class="rounded-[var(--sanring-radius)] border border-[var(--docs-border)] px-3 py-1.5 text-sm font-medium text-[var(--docs-fg)] no-underline transition-colors hover:bg-[var(--docs-active)]"
-            href="/components"
-          >
-            {{ i18n.t('nav.components') }}
-          </a>
-          <a
-            class="rounded-[var(--sanring-radius)] border border-[var(--docs-border)] px-3 py-1.5 text-sm font-medium text-[var(--docs-fg)] no-underline transition-colors hover:bg-[var(--docs-active)]"
-            href="/roadmap"
-          >
-            {{ i18n.t('sidebar.roadmap') }}
-          </a>
-          <a
-            class="rounded-[var(--sanring-radius)] border border-[var(--docs-border)] px-3 py-1.5 text-sm font-medium text-[var(--docs-fg)] no-underline transition-colors hover:bg-[var(--docs-active)]"
-            href="/changelog"
-          >
-            {{ i18n.t('sidebar.changelog') }}
-          </a>
-        </div>
       </app-component-page-section>
 
       <app-component-page-section [section]="sections[2]">
-        <ul class="mt-0 space-y-2 text-sm text-[var(--docs-muted)] list-none p-0">
-          <li><span class="font-medium text-[var(--docs-fg)]">Angular</span> &mdash; 22+</li>
-          <li><span class="font-medium text-[var(--docs-fg)]">Tailwind CSS</span> &mdash; v4</li>
-          <li><span class="font-medium text-[var(--docs-fg)]">Node.js</span> &mdash; 18+</li>
-        </ul>
-      </app-component-page-section>
-
-      <app-component-page-section [section]="sections[3]">
-        <p class="mt-0 text-sm text-[var(--docs-muted)]">{{ i18n.t('intro.installation.body') }}</p>
+        <p class="mt-0 text-sm leading-6 text-[var(--docs-muted)]">
+          {{ i18n.t('intro.quickStart.body') }}
+        </p>
         <div
           class="mt-4 overflow-hidden rounded-[var(--sanring-radius)] border border-[var(--docs-border)]"
         >
           <app-component-page-code-block [code]="cliWorkflow" language="bash" />
         </div>
-        <p class="mt-6 text-sm text-[var(--docs-muted)]">
-          {{ i18n.t('intro.installation.tailwind') }}
+        <p class="mt-6 text-sm leading-6 text-[var(--docs-muted)]">
+          {{ i18n.t('intro.quickStart.tailwind') }}
         </p>
         <div
           class="mt-4 overflow-hidden rounded-[var(--sanring-radius)] border border-[var(--docs-border)]"
         >
           <app-component-page-code-block [code]="tailwindSource" language="css" />
         </div>
+        <p class="mt-6 text-sm leading-6 text-[var(--docs-muted)]">
+          {{ i18n.t('intro.quickStart.import') }}
+        </p>
+        <div class="mt-4 grid gap-4">
+          <div
+            class="rounded-[var(--sanring-radius)] border border-[var(--docs-border)] bg-[var(--docs-elevated)] px-4 py-3 text-sm leading-6 text-[var(--docs-muted)]"
+          >
+            <span class="font-semibold text-[var(--docs-fg)]">
+              {{ i18n.t('intro.quickStart.expectedTitle') }}
+            </span>
+            {{ i18n.t('intro.quickStart.expectedBody') }}
+          </div>
+          <div
+            class="min-w-0 overflow-hidden rounded-[var(--sanring-radius)] border border-[var(--docs-border)]"
+          >
+            <app-component-page-code-block [code]="firstComponent" language="angular-ts" />
+          </div>
+        </div>
+      </app-component-page-section>
+
+      <app-component-page-section [section]="sections[3]">
+        <dl class="m-0 grid gap-3 sm:grid-cols-2">
+          @for (item of requirements; track item.label) {
+            <div
+              class="rounded-[var(--sanring-radius)] border border-[var(--docs-border)] bg-[var(--docs-panel)] p-4"
+            >
+              <dt class="text-sm font-semibold text-[var(--docs-fg)]">{{ item.label }}</dt>
+              <dd class="m-0 mt-2 font-mono text-sm leading-6 text-[var(--docs-muted)]">
+                {{ item.value }}
+              </dd>
+            </div>
+          }
+        </dl>
       </app-component-page-section>
 
       <app-component-page-section [section]="sections[4]">
-        <p class="mt-0 text-sm text-[var(--docs-muted)]">
-          {{ i18n.t('intro.firstComponent.body') }}
-        </p>
-        <div
-          class="mt-4 overflow-hidden rounded-[var(--sanring-radius)] border border-[var(--docs-border)]"
-        >
-          <app-component-page-code-block [code]="firstComponent" language="angular-ts" />
+        <div class="grid gap-3">
+          @for (item of nextLinks; track item.path) {
+            <a
+              class="group grid gap-1 rounded-[var(--sanring-radius)] border border-[var(--docs-border)] bg-[var(--docs-panel)] p-4 text-[var(--docs-fg)] no-underline transition-colors hover:border-[color-mix(in_srgb,var(--docs-accent)_45%,var(--docs-border))] hover:bg-[var(--docs-active)]"
+              [routerLink]="item.path"
+            >
+              <span class="flex items-center justify-between gap-3 text-sm font-semibold">
+                {{ i18n.t(item.titleKey) }}
+                <svg
+                  lucideArrowRight
+                  class="size-4 shrink-0 text-[var(--docs-muted)] transition-transform group-hover:translate-x-0.5"
+                ></svg>
+              </span>
+              <span class="text-sm leading-6 text-[var(--docs-muted)]">
+                {{ i18n.t(item.descriptionKey) }}
+              </span>
+            </a>
+          }
         </div>
       </app-component-page-section>
     </app-component-page>
@@ -119,7 +170,6 @@ interface IntroStatusCard {
 export class IntroductionPageComponent {
   protected readonly i18n = inject(I18nService);
   private readonly seo = inject(SeoService);
-  private readonly componentCount = docsComponentItems.length;
 
   constructor() {
     effect(() => {
@@ -132,27 +182,49 @@ export class IntroductionPageComponent {
 
   protected readonly sections: readonly ComponentPageSectionDefinition[] = [
     { id: 'what-is', titleKey: 'intro.whatIs.title' },
-    { id: 'current-coverage', titleKey: 'intro.coverage.title' },
+    { id: 'why-source-first', titleKey: 'intro.sourceFirst.title' },
+    { id: 'quick-start', titleKey: 'intro.quickStart.title' },
     { id: 'requirements', titleKey: 'intro.requirements.title' },
-    { id: 'installation', titleKey: 'intro.installation.title' },
-    { id: 'first-component', titleKey: 'intro.firstComponent.title' },
+    { id: 'next', titleKey: 'intro.next.title' },
   ];
 
-  protected readonly statusCards: IntroStatusCard[] = [
+  protected readonly featureCards: IntroFeatureCard[] = [
     {
-      value: String(this.componentCount),
-      titleKey: 'intro.coverage.components.title',
-      descriptionKey: 'intro.coverage.components.description',
+      titleKey: 'intro.sourceFirst.own.title',
+      descriptionKey: 'intro.sourceFirst.own.description',
     },
     {
-      value: '4',
-      titleKey: 'intro.coverage.groups.title',
-      descriptionKey: 'intro.coverage.groups.description',
+      titleKey: 'intro.sourceFirst.compose.title',
+      descriptionKey: 'intro.sourceFirst.compose.description',
     },
     {
-      value: '1',
-      titleKey: 'intro.coverage.next.title',
-      descriptionKey: 'intro.coverage.next.description',
+      titleKey: 'intro.sourceFirst.inspect.title',
+      descriptionKey: 'intro.sourceFirst.inspect.description',
+    },
+  ];
+
+  protected readonly requirements: IntroRequirement[] = [
+    { label: 'Angular', value: '22.x' },
+    { label: 'Tailwind CSS', value: 'v4' },
+    { label: 'Node.js', value: '^22.22.3 || ^24.15.0 || ^26.0.0' },
+    { label: 'TypeScript', value: '>=6.0.0 <6.1.0' },
+  ];
+
+  protected readonly nextLinks: IntroNextLink[] = [
+    {
+      titleKey: 'intro.next.components.title',
+      descriptionKey: 'intro.next.components.description',
+      path: '/components',
+    },
+    {
+      titleKey: 'intro.next.cli.title',
+      descriptionKey: 'intro.next.cli.description',
+      path: '/cli',
+    },
+    {
+      titleKey: 'intro.next.theming.title',
+      descriptionKey: 'intro.next.theming.description',
+      path: '/theming',
     },
   ];
 
@@ -167,13 +239,13 @@ npx @sanring/cli@latest add button`;
 import { ButtonDirective } from './components/ui/button';
 
 @Component({
-  selector: 'app-root',
+  selector: 'app-save-bar',
   imports: [ButtonDirective],
   template: \`
     <button sanringBtn type="button">
-      Continue
+      Save changes
     </button>
   \`,
 })
-export class AppComponent {}`;
+export class SaveBarComponent {}`;
 }

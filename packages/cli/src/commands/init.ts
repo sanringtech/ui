@@ -12,15 +12,15 @@ import {
 } from '../registry.js';
 import {
   CONFIG_FILE,
+  DEFAULT_COMPONENT_PATH,
   getInstalledPackages,
   hashContent,
-  isAngularProject,
+  requireAngularProject,
   readConfig,
   writeConfig,
 } from '../utils.js';
 import { writeFile } from './add.js';
 
-const DEFAULT_COMPONENT_PATH = 'src/app/components/ui';
 export const THEME_FILE_PATH = 'src/sanring-theme.css';
 const DEFAULT_GLOBAL_STYLESHEET_PATH = 'src/styles.css';
 const BASE_DEPS: Record<string, string> = {
@@ -89,11 +89,7 @@ export const initCommand = new Command('init')
     console.log(pc.cyan(`\nSanring UI — init\n`));
 
     // 1. Verify Angular project
-    if (!isAngularProject(cwd)) {
-      console.error(pc.red('✖ No angular.json found.'));
-      console.error(pc.dim('  Run this command from the root of an Angular project.'));
-      process.exit(1);
-    }
+    requireAngularProject(cwd, 'Run this command from the root of an Angular project.');
     console.log(pc.green('✔') + pc.dim(' Angular project detected'));
 
     // 2. Warn if already initialised

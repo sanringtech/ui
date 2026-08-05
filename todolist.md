@@ -163,12 +163,14 @@
 
 ## P13 — CLI 指令間有重複邏輯,可收斂共用
 
-- [ ] 抽出 `requireAngularProject(cwd)` 共用檢查,取代 `add`/`update`/`remove`/`diff`/`list.ts` 各自重複的 `angular.json` 守衛區塊
-- [ ] `DEFAULT_PATH = 'src/app/components/ui'` 目前在 9 個檔案各自宣告一次,改成從 `utils.ts` 統一 export
-- [ ] 抽出 `resolveComponentBasePath(cwd, optionsPath, config)`,取代 7 個檔案裡重複的 `resolve(cwd, options.path ?? config?.componentPath ?? DEFAULT_PATH)`
-- [ ] 抽出共用的 `confirmPrompt(message, { yes, requireTty })`,取代 `add.ts` 的 `confirmOverwrite`、`update.ts` 的 `confirmFile`、`remove.ts` 的 `confirmRemoval` 三份幾乎相同的 readline y/N 邏輯(注意 `add.ts` 版本在非 TTY 時多一段錯誤訊息分支,抽的時候要保留)
+- [x] 抽出 `requireAngularProject(cwd, hint?)` 共用檢查,取代 `add`/`init`/`update`/`remove`/`diff`/`list.ts` 各自重複的 `angular.json` 守衛區塊
+- [x] `DEFAULT_PATH`/`DEFAULT_COMPONENT_PATH` 原本在 9 個檔案各自宣告,統一成 `utils.ts` 的 `DEFAULT_COMPONENT_PATH` export
+- [x] 抽出 `resolveComponentPath(optionsPath, config)` / `resolveComponentBasePath(cwd, optionsPath, config)`,取代散落各檔案的 `options.path ?? config?.componentPath ?? DEFAULT_PATH` 解析邏輯
+- [x] 抽出共用的 `confirmPrompt({ yes, question, nonTtyRefusal? })`,取代 `add.ts` 的 `confirmOverwrite`、`update.ts` 的 `confirmFile`、`remove.ts` 的 `confirmRemoval` 三份幾乎相同的 readline y/N 邏輯
 
-**現況**:2026-08-06 程式碼審查發現,`packages/cli/src` 的 9 個 command 檔案(`add`/`init`/`update`/`remove`/`diff`/`doctor`/`info`/`search`/`list.ts`)彼此有多處幾乎逐字重複的邏輯,目前都沒有收斂進 `utils.ts`。
+**已完成**:四項都已抽進 `packages/cli/src/utils.ts`,`add`/`init`/`update`/`remove`/`diff`/`doctor`/`info`/`search`/`list.ts` 全部改用共用函式。`confirmPrompt` 用 `nonTtyRefusal` 參數保留了 `add.ts`/`remove.ts` 在非 TTY 時印出的額外錯誤訊息、`update.ts` 保持原本的靜默 skip 行為。`resolveComponentPath`/`resolveComponentBasePath` 拆成兩個函式,因為 `add.ts`/`update.ts` 除了要算 base path,還需要保留未解析的相對路徑寫回 `sanring.config.json`。改完 `tsc --noEmit`、`eslint`、`vitest`(87 tests)全過,另外手動建置後跑過 `add --force`(重複安裝觸發 overwrite 確認)、`remove`、`update`(本地已修改檔案觸發 conflict skip)、`init`、`list --installed` 在非 Angular 專案/非 TTY 情境下的訊息,逐字比對跟重構前一致。
+
+**現況(重構前)**:2026-08-06 程式碼審查發現,`packages/cli/src` 的 9 個 command 檔案(`add`/`init`/`update`/`remove`/`diff`/`doctor`/`info`/`search`/`list.ts`)彼此有多處幾乎逐字重複的邏輯,當時都沒有收斂進 `utils.ts`。
 
 **風險**:低,是行為不變的重構,但散落的邏輯會讓未來改動(例如 P9 的 namespace 支援要動到每個 command)成本變高——先收斂能讓那類改動的 diff 小很多。
 

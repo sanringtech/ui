@@ -13,13 +13,13 @@ import {
 } from '../registry.js';
 import {
   fetchTextTargetsConcurrent,
-  isAngularProject,
   isUntouchedSinceInstall,
   readConfig,
+  requireAngularProject,
+  resolveComponentBasePath,
 } from '../utils.js';
 import { THEME_FILE_PATH } from './init.js';
 
-const DEFAULT_PATH = 'src/app/components/ui';
 const FILE_FETCH_CONCURRENCY = 6;
 
 // Sanring UI has no version concept — components are copied source, not npm
@@ -127,14 +127,10 @@ export const diffCommand = new Command('diff')
       const cwd = process.cwd();
       const registrySource = options.registry;
 
-      if (!isAngularProject(cwd)) {
-        console.error(pc.red('✖ No angular.json found.'));
-        console.error(pc.dim('  Run from the root of an Angular project.'));
-        process.exit(1);
-      }
+      requireAngularProject(cwd);
 
       const config = readConfig(cwd);
-      const componentBasePath = resolve(cwd, options.path ?? config?.componentPath ?? DEFAULT_PATH);
+      const componentBasePath = resolveComponentBasePath(cwd, options.path, config);
       const sharedDestDir = config?.sharedPath
         ? resolve(cwd, config.sharedPath)
         : join(componentBasePath, 'shared');

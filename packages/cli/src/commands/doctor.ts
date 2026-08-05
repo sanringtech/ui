@@ -1,12 +1,11 @@
 import { Command } from 'commander';
 import { existsSync, readFileSync } from 'node:fs';
-import { join, resolve } from 'node:path';
+import { join } from 'node:path';
 import pc from 'picocolors';
 import { fetchRegistry } from '../registry.js';
-import { hashContent, isAngularProject, readConfig } from '../utils.js';
+import { hashContent, isAngularProject, readConfig, resolveComponentBasePath } from '../utils.js';
 import { THEME_FILE_PATH } from './init.js';
 
-const DEFAULT_PATH = 'src/app/components/ui';
 const MIN_NODE_MAJOR = 18;
 
 export const doctorCommand = new Command('doctor')
@@ -60,7 +59,7 @@ export const doctorCommand = new Command('doctor')
     }
 
     // ── Installed files ───────────────────────────────────────────────────────
-    const componentBasePath = resolve(cwd, options.path ?? config?.componentPath ?? DEFAULT_PATH);
+    const componentBasePath = resolveComponentBasePath(cwd, options.path, config);
     const installedHashes = config?.installedHashes ?? {};
     const hashEntries = Object.entries(installedHashes);
 
