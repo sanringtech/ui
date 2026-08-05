@@ -1,27 +1,25 @@
-import { Directive, ElementRef, OnDestroy, effect, inject } from '@angular/core';
-import { ConnectionPositionPair, Overlay, OverlayRef } from '@angular/cdk/overlay';
+import {
+  Directive,
+  ElementRef,
+  OnDestroy,
+  computed,
+  effect,
+  inject,
+  input,
+  numberAttribute,
+} from '@angular/core';
+import {
+  ConnectionPositionPair,
+  FlexibleConnectedPositionStrategy,
+  Overlay,
+  OverlayRef,
+} from '@angular/cdk/overlay';
 import { DomPortal } from '@angular/cdk/portal';
 import { FocusMonitor } from '@angular/cdk/a11y';
 import { MenuTrigger as ngMenuTrigger } from '@angular/aria/menu';
+import type { DropdownMenuAlign, DropdownMenuSide } from './dropdown-menu.type';
 
 const DROPDOWN_MENU_GAP = 4;
-
-const DROPDOWN_MENU_POSITIONS: ConnectionPositionPair[] = [
-  {
-    originX: 'start',
-    originY: 'bottom',
-    overlayX: 'start',
-    overlayY: 'top',
-    offsetY: DROPDOWN_MENU_GAP,
-  },
-  {
-    originX: 'start',
-    originY: 'top',
-    overlayX: 'start',
-    overlayY: 'bottom',
-    offsetY: -DROPDOWN_MENU_GAP,
-  },
-];
 
 /*
   @angular/aria/menu 只管 ARIA 語意/鍵盤/focus，完全不處理定位，而且它預期 Menu
@@ -48,6 +46,19 @@ export class DropdownMenuTriggerDirective implements OnDestroy {
   private readonly ngTrigger = inject(ngMenuTrigger, { self: true });
 
   private overlayRef: OverlayRef | null = null;
+  private positionStrategy: FlexibleConnectedPositionStrategy | null = null;
+
+  readonly align = input<DropdownMenuAlign>('start');
+  readonly side = input<DropdownMenuSide>('bottom');
+  readonly sideOffset = input(DROPDOWN_MENU_GAP, { transform: numberAttribute });
+  readonly alignOffset = input(0, { transform: numberAttribute });
+
+  private readonly positions = computed<ConnectionPositionPair[]>(() => {
+    const side = this.side();
+    const fallbackSides = this.fallbackSides(side);
+
+    return fallbackSides.map((fallbackSide) => this.createPosition(fallbackSide));
+  });
 
   constructor() {
     this.focusMonitor.monitor(this.elementRef);
@@ -66,19 +77,27 @@ export class DropdownMenuTriggerDirective implements OnDestroy {
         queueMicrotask(() => this.overlayRef?.updatePosition());
       }
     });
+
+    effect(() => {
+      const positions = this.positions();
+      this.positionStrategy?.withPositions(positions);
+      if (this.ngTrigger.expanded()) {
+        queueMicrotask(() => this.overlayRef?.updatePosition());
+      }
+    });
   }
 
   private attachOverlay(contentElement: HTMLElement): void {
-    const positionStrategy = this.overlay
+    this.positionStrategy = this.overlay
       .position()
       .flexibleConnectedTo(this.elementRef)
-      .withPositions(DROPDOWN_MENU_POSITIONS)
+      .withPositions(this.positions())
       .withFlexibleDimensions(false)
       .withPush(true)
       .withViewportMargin(8);
 
     this.overlayRef = this.overlay.create({
-      positionStrategy,
+      positionStrategy: this.positionStrategy,
       scrollStrategy: this.overlay.scrollStrategies.reposition(),
     });
 
@@ -98,5 +117,40 @@ export class DropdownMenuTriggerDirective implements OnDestroy {
   ngOnDestroy(): void {
     this.focusMonitor.stopMonitoring(this.elementRef);
     this.overlayRef?.dispose();
+  }
+
+  private fallbackSides(side: DropdownMenuSide): DropdownMenuSide[] {
+    if (side === 'top') return ['top', 'bottom', 'right', 'left'];
+    if (side === 'right') return ['right', 'left', 'bottom', 'top'];
+    if (side === 'left') return ['left', 'right', 'bottom', 'top'];
+    return ['bottom', 'top', 'right', 'left'];
+  }
+
+  private createPosition(side: DropdownMenuSide): ConnectionPositionPair {
+    const align = this.align();
+    const sideOffset = this.sideOffset();
+    const alignOffset = this.alignOffset();
+
+    if (side === 'top' || side === 'bottom') {
+      return {
+        originX: align,
+        originY: side,
+        overlayX: align,
+        overlayY: side === 'bottom' ? 'top' : 'bottom',
+        offsetX: alignOffset,
+        offsetY: side === 'bottom' ? sideOffset : -sideOffset,
+      };
+    }
+
+    const verticalAlign = align === 'start' ? 'top' : align === 'end' ? 'bottom' : 'center';
+
+    return {
+      originX: side === 'right' ? 'end' : 'start',
+      originY: verticalAlign,
+      overlayX: side === 'right' ? 'start' : 'end',
+      overlayY: verticalAlign,
+      offsetX: side === 'right' ? sideOffset : -sideOffset,
+      offsetY: alignOffset,
+    };
   }
 }
