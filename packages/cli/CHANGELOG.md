@@ -1,5 +1,21 @@
 # @sanring/cli
 
+## 0.19.0
+
+### Minor Changes
+
+- 2778bcb: New `navigation-menu` component: horizontal or vertical top-level navigation with trigger-opened content panels and `link`/`label`/`description`/`separator` primitives. Clicking outside an open panel closes it — this is always-on behavior, not an opt-in prop.
+
+  Also ships `sanring-navigation-menu-viewport`, a shared panel — one fixed size, centered under the trigger group — for bars where you want a single consistent panel instead of a differently sized one per trigger, and `sanring-navigation-menu-sub` submenu flyouts positioned with CDK Overlay (viewport collision fallback, hover-intent, keyboard navigation).
+
+### Patch Changes
+
+- 2778bcb: `sidebar`: `SidebarProviderComponent` had no `host` styling, so the browser rendered it `display: inline` by default. Inside a flex/grid layout that broke the width it was supposed to pass through to its child, throwing off the sidebar/main-content ratio in any app shell wrapping the provider. Fixed with `display: contents`.
+
+  `dialog`: `DialogFooterComponent` only applied `space-x-2` at the `sm:` breakpoint, so stacked buttons on mobile (`flex-col-reverse`) had no gap between them. Added `gap-2` (cancelled back out to `sm:gap-0` where `space-x-2` takes over).
+
+  `otp-input`: slots could get compressed or overflow their container on narrow viewports. Host now caps at `max-w-full overflow-x-auto`; each slot is `shrink-0` so it keeps its configured size instead of being squeezed.
+
 ## 0.17.2
 
 ### Patch Changes
