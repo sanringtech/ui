@@ -30,7 +30,7 @@ Components are copied directly into your source code — you own them and can mo
 
 ## Available Components
 
-accordion · alert · alert-dialog · aspect-ratio · avatar · badge · breadcrumb · button · calendar · card · carousel · checkbox · collapsible · combobox · command · context-menu · date-picker · dialog · divider · dropdown-menu · field · file-upload · hover-card · input · label · link · otp-input · pagination · popover · progress · radio · resizable · scroll-area · select · sheet · sidebar · skeleton · slider · spinner · stepper · switch · table · tabs · tag · textarea · timeline · toast · toggle · tooltip · transfer · tree
+accordion · alert · alert-dialog · aspect-ratio · avatar · badge · breadcrumb · button · calendar · card · carousel · checkbox · collapsible · combobox · command · context-menu · date-picker · dialog · divider · dropdown-menu · field · file-upload · hover-card · input · label · link · navigation-menu · otp-input · pagination · popover · progress · radio · resizable · scroll-area · select · sheet · sidebar · skeleton · slider · spinner · stepper · switch · table · tabs · tag · textarea · timeline · toast · toggle · tooltip · transfer · tree
 
 ---
 
