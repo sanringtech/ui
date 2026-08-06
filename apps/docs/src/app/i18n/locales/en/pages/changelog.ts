@@ -1,10 +1,9 @@
 export const changelogTranslations = {
   'changelog.page.description':
-    'A concise timeline of notable Sanring UI updates, focused on what changes for people adopting the library.',
-  'changelog.component.title': 'Highlights',
+    '@sanring/cli release history — new components, CLI commands, and notable fixes across all versions.',
+  'changelog.component.title': 'Release History',
   'changelog.component.body':
-    'Each entry summarizes user-facing additions, improvements, and fixes. Lower-level implementation details stay in the package changelog and repository history.',
-  'changelog.component.otherFixes': 'More highlights',
-  'changelog.component.changeCount': 'notes',
-
+    'Each entry maps to one @sanring/cli npm release. Notable additions are shown by default; minor fixes and internal changes collapse into "More".',
+  'changelog.component.otherFixes': 'More',
+  'changelog.component.changeCount': 'changes',
 } as const;

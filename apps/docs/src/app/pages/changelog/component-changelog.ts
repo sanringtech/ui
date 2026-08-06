@@ -7,78 +7,71 @@ export interface ComponentChange {
   text: string;
   /** Component(s) this change touches. Drives the "Updated" section on the components page. */
   componentIds?: DocsComponentId[];
-  /** Headline-worthy change (new component, breaking change). Renders with emphasis; omit for routine changes. */
+  /** Headline-worthy change (new component, breaking change). Shown by default; non-notable entries collapse. */
   notable?: boolean;
 }
 
-export interface ComponentChangelogEntry {
+export interface CliVersionEntry {
+  /** Semver string, e.g. "0.19.0" */
+  version: string;
   date: string;
   changes: ComponentChange[];
 }
 
+function isPatch(version: string): boolean {
+  return version.split('.')[2] !== '0';
+}
+
 /**
- * @sanring/ui is excluded from Changesets (components are copied as source, not
- * published as a versioned package), so this list is maintained by hand.
+ * @sanring/cli release history, newest first.
  *
  * Conventions:
- * - Add a new entry at the top whenever a notable component change ships.
- * - Tag `componentIds` on every change that touches a specific component — the
- *   components page's "Updated" section is derived from the newest entry's tags.
- * - Keep each change to one sentence, one fact. Split multi-feature bullets rather
- *   than comma-joining them.
- * - Set `notable: true` only for new components or breaking changes; routine
- *   `fixed` changes are collapsed into a single summary line automatically.
- * - The public Version Notes page filters this list down to user-facing entries
- *   (`notable` changes and component-tagged changes). More technical CLI or
- *   maintenance details can stay here for downstream consumers without becoming
- *   the main public page content.
- * - Wrap identifiers (selectors, inputs, CSS variables, attributes) in
- *   backticks — the Version Notes page renders backtick-delimited text as
- *   inline code instead of plain prose.
+ * - Each entry maps to one npm release of @sanring/cli.
+ * - `notable: true` marks new components or significant new CLI commands.
+ * - `componentIds` tags any change affecting a specific component —
+ *   used to drive the "Updated" badge on the components list.
+ * - Keep each change to one sentence. Wrap identifiers in backticks.
  */
-export const componentChangelog: readonly ComponentChangelogEntry[] = [
+export const cliVersionChangelog: readonly CliVersionEntry[] = [
   {
+    version: '0.19.0',
     date: '2026-08-06',
     changes: [
       {
         type: 'added',
         notable: true,
         componentIds: ['navigation-menu'],
-        text: 'New `navigation-menu` component: horizontal or vertical top-level navigation with trigger-opened content panels and link/label/description/separator primitives.',
+        text: 'New `navigation-menu` component: horizontal or vertical top-level navigation with trigger-opened content panels and `link` / `label` / `description` / `separator` primitives.',
       },
       {
         type: 'added',
         componentIds: ['navigation-menu'],
-        text: 'Clicking outside an open `navigation-menu` panel closes it — this is always-on behavior, not an opt-in prop.',
+        text: '`sanring-navigation-menu-viewport` — one shared fixed-size panel centered under the trigger group, for bars that want a consistent panel instead of a differently sized one per trigger.',
       },
       {
         type: 'added',
         componentIds: ['navigation-menu'],
-        text: 'Added `sanring-navigation-menu-viewport` — one shared, fixed-size panel centered under the trigger group, instead of a differently sized panel per trigger.',
-      },
-      {
-        type: 'added',
-        componentIds: ['navigation-menu'],
-        text: 'Added `sanring-navigation-menu-sub` submenu flyouts, positioned with CDK Overlay (viewport collision fallback) and opened on hover-intent, click, or keyboard.',
+        text: '`sanring-navigation-menu-sub` submenu flyouts positioned with CDK Overlay (viewport collision fallback, hover-intent, click, and keyboard navigation).',
       },
       {
         type: 'fixed',
         componentIds: ['sidebar'],
-        text: '`SidebarProviderComponent` now renders with `display: contents` instead of the browser default `display: inline`, fixing the sidebar/main-content width ratio when it wraps a flex or grid layout.',
+        text: '`SidebarProviderComponent` rendered `display: inline` by default inside flex/grid layouts, breaking the sidebar/main-content width ratio. Fixed with `display: contents`.',
       },
       {
         type: 'fixed',
         componentIds: ['dialog'],
-        text: '`DialogFooterComponent` buttons now have a gap on mobile, where they stack vertically and previously had none.',
+        text: '`DialogFooterComponent` buttons had no gap on mobile where they stack vertically. Added `gap-2` (cancelled at `sm:` where `space-x-2` takes over).',
       },
       {
         type: 'fixed',
         componentIds: ['otp-input'],
-        text: '`otp-input` slots no longer get compressed or overflow their container on narrow viewports.',
+        text: '`otp-input` slots could be compressed or overflow on narrow viewports. Host now caps at `max-w-full overflow-x-auto`; each slot is `shrink-0`.',
       },
     ],
   },
   {
+    version: '0.18.0',
     date: '2026-08-05',
     changes: [
       {
@@ -90,6 +83,33 @@ export const componentChangelog: readonly ComponentChangelogEntry[] = [
     ],
   },
   {
+    version: '0.17.2',
+    date: '2026-08-05',
+    changes: [
+      {
+        type: 'changed',
+        text: '`sanring add` now also prompts to update a peer dependency when the installed version spec differs from the registry minimum, keeping copied components aligned with registry metadata.',
+      },
+    ],
+  },
+  {
+    version: '0.17.1',
+    date: '2026-07-28',
+    changes: [
+      {
+        type: 'changed',
+        componentIds: ['calendar', 'date-picker'],
+        text: '`calendar` and `date-picker` peer dependency renamed from `@sanring/date-picker` to `@sanring/date-picker-core` — the upstream project reassigned the original package name to an unrelated composed widget.',
+      },
+      {
+        type: 'fixed',
+        componentIds: ['otp-input'],
+        text: '`otp-input` no longer inserts a digit twice on mobile — the browser can ignore `keydown` `preventDefault()` on virtual keyboards, so both the manual update and the browser\'s own `input` event were firing.',
+      },
+    ],
+  },
+  {
+    version: '0.17.0',
     date: '2026-07-28',
     changes: [
       {
@@ -106,21 +126,24 @@ export const componentChangelog: readonly ComponentChangelogEntry[] = [
       {
         type: 'fixed',
         componentIds: ['transfer'],
-        text: 'Clicking a list item now toggles its selection correctly.',
-      },
-      {
-        type: 'changed',
-        componentIds: ['calendar', 'date-picker'],
-        text: '`calendar` and `date-picker`\'s headless engine peer dependency is now `@sanring/date-picker-core` (was `@sanring/date-picker`, which the upstream project reassigned to a different, composed-widget package).',
-      },
-      {
-        type: 'fixed',
-        componentIds: ['otp-input'],
-        text: '`otp-input` no longer inserts a typed digit twice on mobile, where the browser can ignore `keydown`\'s `preventDefault()` on virtual keyboards.',
+        text: 'Clicking a `transfer` list item now toggles its selection correctly.',
       },
     ],
   },
   {
+    version: '0.16.0',
+    date: '2026-07-27',
+    changes: [
+      {
+        type: 'changed',
+        notable: true,
+        componentIds: ['transfer'],
+        text: '`transfer` restyled to use design system tokens and gained `mode="one-way"` (read-only target), per-panel search via `setQuery()`, and per-panel pagination via `pageSize` / `nextPage()` / `previousPage()`.',
+      },
+    ],
+  },
+  {
+    version: '0.15.0',
     date: '2026-07-27',
     changes: [
       {
@@ -129,109 +152,125 @@ export const componentChangelog: readonly ComponentChangelogEntry[] = [
         componentIds: ['transfer'],
         text: 'New `transfer` component: a dual-list shuttle for moving items between two panes (e.g. assigning permissions), composed from the existing `checkbox` component.',
       },
-      {
-        type: 'changed',
-        componentIds: ['transfer'],
-        text: '`transfer` restyled to use the design system\'s border/surface/radius tokens, and gained `mode="one-way"`, per-panel search (`setQuery`), and per-panel pagination (`pageSize`).',
-      },
     ],
   },
   {
+    version: '0.14.0',
     date: '2026-07-26',
     changes: [
       {
         type: 'added',
         notable: true,
         componentIds: ['context-menu'],
-        text: 'New `context-menu` component: a right-click menu positioned at the pointer via `@angular/cdk/overlay`, with checkbox items, radio groups, and nested submenus.',
-      },
-      {
-        type: 'added',
-        notable: true,
-        componentIds: ['switch'],
-        text: '`switch` accepts projected icons on its thumb via `[sanringSwitchIconChecked]` / `[sanringSwitchIconUnchecked]` named slots, which toggle automatically with the checked state.',
-      },
-      {
-        type: 'changed',
-        componentIds: ['calendar'],
-        text: 'The month/year jump popover selects now show a chevron-down indicator and use consistent padding/spacing.',
+        text: 'New `context-menu` component: a right-click menu positioned at the pointer via `@angular/cdk/overlay`, with checkbox items, radio groups, and nested submenus that open on hover with viewport-aware flipping.',
       },
     ],
   },
   {
-    date: '2026-07-21',
+    version: '0.13.1',
+    date: '2026-07-26',
+    changes: [
+      {
+        type: 'changed',
+        componentIds: ['calendar'],
+        text: '`calendar` month/year jump popover selects now show a chevron-down indicator and use consistent padding and spacing.',
+      },
+    ],
+  },
+  {
+    version: '0.13.0',
+    date: '2026-07-26',
+    changes: [
+      {
+        type: 'added',
+        notable: true,
+        componentIds: ['switch'],
+        text: '`switch` thumb now accepts projected icons via `[sanringSwitchIconChecked]` and `[sanringSwitchIconUnchecked]` slots — they toggle automatically with the checked state (e.g. a sun/moon icon). Fully backward compatible.',
+      },
+    ],
+  },
+  {
+    version: '0.12.0',
+    date: '2026-07-22',
     changes: [
       {
         type: 'added',
         notable: true,
         componentIds: ['calendar'],
-        text: '`orientation` input (`\'horizontal\' | \'vertical\'`) controls how multiple months (`monthsToDisplay > 1`) are laid out.',
+        text: '`calendar` gains an `orientation` input (`\'horizontal\' | \'vertical\'`) controlling how multiple months (`monthsToDisplay > 1`) are laid out.',
       },
       {
         type: 'fixed',
         componentIds: ['calendar'],
-        text: 'The month/year jump popover always showed the first option (e.g. January / the earliest year) instead of the month/year actually being viewed — the `<select>`\'s `[value]` binding raced against its `@for`-rendered `<option>`s. Fixed by binding `[selected]` on each `<option>` directly.',
+        text: 'Calendar month/year jump selects always showed the first option on open due to a `[value]` binding race against `@for`-rendered `<option>`s. Fixed by binding `[selected]` on each `<option>` directly.',
       },
       {
         type: 'fixed',
         componentIds: ['calendar'],
-        text: 'The month/year jump `<select>`s were left-aligned with dead space in the popover; they now share the row evenly with centered text.',
+        text: 'Calendar jump selects were left-aligned with dead space; they now share the row evenly with centered text.',
       },
       {
         type: 'fixed',
         componentIds: ['tabs'],
-        text: 'Triggers are now `cursor-pointer` instead of the default cursor.',
+        text: '`tabs` triggers are now `cursor-pointer` instead of the browser default.',
       },
     ],
   },
   {
+    version: '0.11.0',
     date: '2026-07-20',
     changes: [
       {
         type: 'added',
         notable: true,
         componentIds: ['calendar'],
-        text: 'Calendar header label is now clickable, opening a popover with month/year jump `<select>` controls (±100/50 years from today) instead of only stepping one month at a time.',
+        text: '`calendar` header label is now clickable, opening a popover with month/year `<select>` jump controls (±100/50 years from today), instead of only stepping one month at a time.',
       },
       {
         type: 'fixed',
         componentIds: ['popover'],
-        text: '`triggerOrigin` is now a signal instead of a plain property, fixing overlay positioning for triggers nested inside an `OnPush` child component (e.g. Calendar\'s clickable header label).',
+        text: '`popover` `triggerOrigin` changed from a plain property to a signal, fixing overlay positioning for triggers inside an `OnPush` child component (e.g. calendar\'s header label button).',
       },
       {
         type: 'fixed',
         componentIds: ['tree'],
-        text: 'Implemented the no-op `makeFocusable()` the CDK `TreeKeyManager` requires, fixing keyboard navigation (roving tab stop was never set).',
+        text: '`tree` keyboard navigation now works — `TreeNodeComponent` implements the `makeFocusable()` no-op that CDK `TreeKeyManager` requires to set the initial roving tab stop.',
       },
       {
         type: 'fixed',
-        text: '`@sanring/cli` v0.11.0 — `add`/`init` no longer run peer-dependency installs through `spawnSync(..., { shell: true })` on a joined command string; a custom `--registry` supplying a crafted package name/version could reach the shell. Both now build `{ bin, args }` directly with `shell: false`.',
-      },
-      {
-        type: 'fixed',
-        text: '`add --shared-path` is now persisted to `sanring.config.json` — previously only the initial install respected it, so `diff`/`update`/`remove` drifted for projects using a custom shared path.',
+        text: '`add` and `init` no longer accept shell metacharacters in peer-dependency arguments — commands now pass `{ bin, args }` directly with `shell: false` instead of interpolating into a command string.',
       },
       {
         type: 'changed',
-        text: '`fetchRegistry` validates the parsed JSON shape (local bundle, `--registry <path>`, and remote fetch) and reports which field is malformed instead of failing later inside an unrelated command.',
+        text: '`add --shared-path` is now persisted to `sanring.config.json`, so `diff` / `update` / `remove` use the same custom path instead of always assuming the default.',
       },
       {
         type: 'changed',
-        text: '`add`/`diff`/`update`/`info`/`remove` look up registry entries through an indexed map instead of repeated array scans, and file fetches in `add`/`diff`/`update` run with bounded concurrency instead of one at a time.',
+        text: '`fetchRegistry` now validates the parsed JSON shape and reports which field is malformed, instead of failing later inside an unrelated command.',
+      },
+      {
+        type: 'changed',
+        text: 'Registry lookups use an indexed map instead of repeated `Array.find` scans; file fetches in `add` / `diff` / `update` run with bounded concurrency instead of one at a time.',
+      },
+    ],
+  },
+  {
+    version: '0.10.0',
+    date: '2026-07-20',
+    changes: [
+      {
+        type: 'added',
+        notable: true,
+        text: 'New `sanring doctor` command: checks Node.js version, Angular project detection, `sanring.config.json`, theme file, per-file hash integrity, and registry reachability. Exits 1 on hard errors for CI use. Accepts `--offline` to skip the network check.',
       },
       {
         type: 'added',
         notable: true,
-        text: '`@sanring/cli` v0.10.0 — new `sanring search <query>` command: fuzzy search components by name or description, name matches ranked first, shows an install badge for already-installed components.',
+        text: 'New `sanring search <query>` command: fuzzy-searches component names and descriptions (name matches ranked first), highlights the matched substring, and shows a ✔ badge next to already-installed components.',
       },
       {
         type: 'added',
-        notable: true,
-        text: '`sanring doctor` — environment diagnostic command that checks Node.js version, Angular project detection, `sanring.config.json`, theme file, per-file hash integrity (untouched / customized / orphaned), and registry reachability. Exits 1 on hard errors for CI use. Accepts `--offline` to skip the network check.',
-      },
-      {
-        type: 'added',
-        text: '`sanring info` (no argument) now shows project context without a network call: CLI version, Angular detection, config summary, theme status, and full list of installed components. Accepts `--json` for CI/agent use.',
+        text: '`sanring info` (no argument) now shows project context: CLI version, Angular detection, config summary, theme status, and full list of installed components. Accepts `--json` for CI and agent use.',
       },
       {
         type: 'added',
@@ -239,293 +278,224 @@ export const componentChangelog: readonly ComponentChangelogEntry[] = [
       },
       {
         type: 'added',
-        text: '`sanring update --trust` promotes files with no recorded hash baseline to silent auto-update — lets pre-v0.9.0 installs catch up without false conflict prompts.',
-      },
-      {
-        type: 'fixed',
-        text: '`sanring update` silently skipped files added to a component\'s registry entry after the user\'s last install. Those files now appear as "new in registry" and are installed automatically.',
+        text: '`sanring update --trust` promotes files with no recorded hash baseline to silent auto-update, letting pre-v0.9.0 installs catch up without false conflict prompts.',
       },
       {
         type: 'added',
-        text: '`sanring list --installed` / `-i` filters the list to only components already installed in the current project.',
+        text: '`sanring list --installed` / `-i` filters the output to only components already installed in the current project.',
       },
       {
         type: 'added',
         text: '`sanring add --diff` previews the line-by-line diff against local files before installing. `sanring add --view` prints the raw registry content without writing anything.',
       },
+      {
+        type: 'fixed',
+        text: '`sanring update` silently skipped files that were added to a component\'s registry entry after the user\'s last install. Those files now appear as "new in registry" and are installed automatically.',
+      },
     ],
   },
   {
+    version: '0.9.2',
     date: '2026-07-19',
     changes: [
       {
         type: 'changed',
-        notable: true,
-        componentIds: ['calendar'],
-        text: 'Calendar is out of maintenance — back in production navigation with no restrictions.',
-      },
-      {
-        type: 'added',
-        componentIds: ['calendar', 'date-picker'],
-        text: 'Calendar and Date Picker now implement `ControlValueAccessor` and can be wrapped in `sanring-field` for label, validation, and error message integration.',
-      },
-      {
-        type: 'added',
-        notable: true,
-        componentIds: ['date-picker'],
-        text: 'New Date Picker component — `sanring-date-picker` wraps `GranularityPickerEngine` for Month/Quarter/Year selection, in single, range, or multi mode.',
-      },
-      {
-        type: 'changed',
-        componentIds: ['date-picker'],
-        text: 'Date Picker is out of development — dropped the "still in development" notice and the `wip` nav badge.',
-      },
-      {
-        type: 'changed',
-        text: 'Refreshed the `@sanring/cli` README (shown on the npm package page): `diff`/`update` docs now describe the safe-to-update vs needs-review split instead of the old "prints every diff" behavior, and added a summary of current standout features up top.',
+        text: 'Refreshed the `@sanring/cli` README on npm: `diff` / `update` docs now describe the safe-to-update vs needs-review split, and added a standout-features summary.',
       },
     ],
   },
   {
+    version: '0.9.1',
+    date: '2026-07-19',
+    changes: [
+      {
+        type: 'changed',
+        text: '`sanring diff` now labels each file as "safe to update" (registry moved on, you never touched it) or "needs review" (you customized it), reusing the same baseline-hash comparison as `update`.',
+      },
+    ],
+  },
+  {
+    version: '0.9.0',
     date: '2026-07-18',
     changes: [
       {
-        type: 'fixed',
+        type: 'changed',
         notable: true,
-        componentIds: [
-          'carousel',
-          'combobox',
-          'command',
-          'dropdown-menu',
-          'hover-card',
-          'pagination',
-          'resizable',
-          'select',
-          'table',
-          'tree',
-        ],
-        text: '`npx @sanring/cli add <name>` now works for these 10 components — they had docs pages but no registry entry, so the command failed for all of them.',
-      },
-      {
-        type: 'fixed',
-        componentIds: ['scroll-area'],
-        text: '`npx @sanring/cli add scroll-area` now works — the registry had it registered as `scrollArea`, so only that exact (undocumented) name was accepted.',
+        text: '`sanring update` now tells apart files you never touched since installing from ones you customized: untouched files apply silently; only truly diverged files show a diff and prompt for confirmation.',
       },
       {
         type: 'added',
+        text: '`sanring add` and `sanring init` now record a per-file content hash in `sanring.config.json` to make the smart-update comparison possible.',
+      },
+    ],
+  },
+  {
+    version: '0.8.0',
+    date: '2026-07-18',
+    changes: [
+      {
+        type: 'added',
         notable: true,
-        text: 'New CLI commands: `sanring info <component>` (preview what add would install without writing anything), `sanring remove <components...>` (uninstall, refuses to break a component that still depends on it), and `sanring update` (apply registry changes to installed files one at a time, interactively).',
+        text: 'Three new commands: `sanring info <component>` (preview files and peer deps without installing), `sanring remove <components...>` (uninstall, refuses to break dependents), and `sanring update` (apply registry changes interactively, one file at a time).',
+      },
+    ],
+  },
+  {
+    version: '0.7.1',
+    date: '2026-07-18',
+    changes: [
+      {
+        type: 'changed',
+        text: '`sanring --help` now prints a "Quick start" block with the `init` / `add` command sequence and a note that no `npm install` is needed, instead of leaving first-time users to find that in the README.',
+      },
+    ],
+  },
+  {
+    version: '0.7.0',
+    date: '2026-07-18',
+    changes: [
+      {
+        type: 'added',
+        notable: true,
+        componentIds: ['carousel', 'combobox', 'command', 'dropdown-menu', 'hover-card', 'pagination', 'resizable', 'select', 'table', 'tree'],
+        text: 'Added 10 components missing from the CLI registry: `carousel`, `combobox`, `command`, `dropdown-menu`, `hover-card`, `pagination`, `resizable`, `select`, `table`, and `tree`. `npx @sanring/cli add <name>` now works for all of them.',
       },
       {
         type: 'fixed',
         text: '`sanring --version` reported a hardcoded `0.0.1` regardless of the actual published version.',
       },
       {
-        type: 'changed',
-        text: '`sanring update` now tells apart files you never touched since installing from ones you customized — untouched files apply silently, only real customizations still show a diff and ask for confirmation. `add`/`init` record a content hash per file to make this possible.',
+        type: 'fixed',
+        componentIds: ['scroll-area'],
+        text: '`sanring add scroll-area` now works — the registry had it registered as `scrollArea`, so only that exact (undocumented) camelCase name was accepted.',
       },
     ],
   },
   {
-    date: '2026-07-14',
+    version: '0.6.1',
+    date: '2026-07-10',
     changes: [
       {
-        type: 'added',
-        notable: true,
-        componentIds: ['calendar'],
-        text: 'New Calendar component page — single-date selection, disabled rules, range draft handling, multi-month display, sizing, locale configuration, and API guidance.',
+        type: 'fixed',
+        componentIds: ['input'],
+        text: '`sanring add field` and `sanring add input` produced broken installs. `field` was missing four of its five source files; `input` shipped a stale pre-Field version with no `SanringFieldControl` implementation, and the registry didn\'t declare `field` as a dependency. Both are now fully repaired.',
       },
     ],
   },
   {
-    date: '2026-07-11',
-    changes: [
-      {
-        type: 'added',
-        notable: true,
-        componentIds: ['file-upload'],
-        text: 'New File Upload component page — drag-and-drop selection, trigger-only usage, validation, progress display, and Field integration examples.',
-      },
-    ],
-  },
-  {
+    version: '0.6.0',
     date: '2026-07-10',
     changes: [
       {
         type: 'added',
         notable: true,
-        componentIds: ['combobox'],
-        text: 'New Combobox component page — autocomplete input examples with single select, multiple chips, groups, keyboard navigation, and API guidance.',
+        text: '`sanring init` now writes `src/sanring-theme.css` — the full set of `--sanring-*` design tokens every component reads. Previously components had no visible styling after a fresh install.',
       },
       {
         type: 'added',
         notable: true,
-        componentIds: ['carousel'],
-        text: 'New Carousel component page — Embla-backed horizontal and vertical slide examples with API guidance.',
-      },
-      {
-        type: 'added',
-        notable: true,
-        componentIds: ['hover-card'],
-        text: 'New Hover Card component page — hover and focus overlay examples with delay, placement, and API guidance.',
-      },
-      {
-        type: 'added',
-        notable: true,
-        componentIds: ['command'],
-        text: 'New Command component page — searchable command list with groups, shortcuts, and an optional ⌘K / Ctrl K dialog wrapper.',
-      },
-      {
-        type: 'added',
-        notable: true,
-        componentIds: ['tree'],
-        text: 'New Tree component page — expandable hierarchy examples with controlled expanded and selected state.',
-      },
-      {
-        type: 'fixed',
-        componentIds: ['sheet'],
-        text: '`sanring-sheet-content` now portals through `Overlay`/`TemplatePortal` instead of an in-place `position: fixed` panel, restores focus to the trigger on close, and hides background content from assistive tech while open.',
+        text: 'New `sanring diff [components...]` command: compares installed files against the current registry line by line, showing what\'s been customized locally versus what changed upstream.',
       },
     ],
   },
   {
-    date: '2026-07-07',
+    version: '0.5.1',
+    date: '2026-07-10',
     changes: [
       {
-        type: 'added',
-        notable: true,
-        componentIds: ['input'],
-        text: 'New Field composition — `SanringFieldComponent`, `FieldLabelDirective`, `ErrorMessageComponent`, and `DescriptionDirective` auto-wire `for`, `id`, and `aria-describedby` to any control implementing `SanringFieldControl`.',
-      },
-      {
-        type: 'added',
-        notable: true,
-        componentIds: ['input'],
-        text: '`<sanring-field floating>` — floating label layout with an automatic background-matched border notch; no CDK or width measurement required.',
-      },
-      {
-        type: 'added',
-        componentIds: ['input'],
-        text: '`InputDirective` now implements the full `SanringFieldControl` contract: `disabled`, `required` (native attribute or `Validators.required`), `aria-invalid`, `aria-required`, and `aria-describedby`.',
+        type: 'fixed',
+        text: 'Synced `registry/shared/utils.ts` with `@sanring/ui`, adding the `uniqueId()` helper. Components with `sharedDeps: ["utils"]` were missing this function.',
       },
     ],
   },
   {
+    version: '0.5.0',
     date: '2026-07-06',
     changes: [
       {
         type: 'added',
         notable: true,
-        componentIds: ['alert-dialog'],
-        text: 'New Alert Dialog primitives — a Dialog variant that cannot be dismissed by backdrop click or Escape, with `sanringAlertDialogAction`/`sanringAlertDialogCancel` directives for confirm/cancel flows.',
+        componentIds: ['alert-dialog', 'slider', 'stepper', 'timeline'],
+        text: 'New components: `alert-dialog` (a Dialog variant requiring an explicit user choice), `slider` (pointer, keyboard, ARIA, and Angular Forms), `stepper` (CDK Stepper with template labels and custom icons), and `timeline` (vertical and horizontal orientation).',
+      },
+      {
+        type: 'changed',
+        componentIds: ['dialog'],
+        text: '`dialog` gains `DialogMedia` for an icon badge above the title, per-trigger config via `sanringDialogConfig`, and `[sanringDialogClose]="result"` to pass a result value on close.',
       },
     ],
   },
   {
+    version: '0.4.0',
+    date: '2026-07-06',
+    changes: [
+      {
+        type: 'added',
+        notable: true,
+        componentIds: ['aspect-ratio', 'textarea'],
+        text: 'New `aspect-ratio` directive for responsive media boxes, and new `textarea` directive split from `sanringInput` for native multiline form fields.',
+      },
+    ],
+  },
+  {
+    version: '0.3.0',
     date: '2026-07-05',
     changes: [
       {
         type: 'added',
         notable: true,
-        componentIds: ['timeline'],
-        text: 'New Timeline primitives for chronological event lists with vertical and horizontal orientation support.',
-      },
-      {
-        type: 'added',
-        notable: true,
-        componentIds: ['stepper'],
-        text: 'New Stepper primitives backed by Angular CDK Stepper, with template labels, custom icons, and solid or dashed connectors.',
-      },
-      {
-        type: 'added',
-        notable: true,
-        componentIds: ['slider'],
-        text: 'New Slider component with pointer, keyboard, ARIA slider semantics, and Angular forms support.',
-      },
-      {
-        type: 'added',
-        notable: true,
-        componentIds: ['aspect-ratio'],
-        text: 'New Aspect Ratio directive for responsive media boxes with CSS `aspect-ratio` support.',
-      },
-      {
-        type: 'added',
-        notable: true,
-        componentIds: ['textarea'],
-        text: 'New Textarea directive split from `sanringInput` for native multiline form fields.',
-      },
-      {
-        type: 'added',
-        notable: true,
-        componentIds: ['table'],
-        text: 'New Table primitives — `sanringTable`, column/cell defs, `sanringRow`, `sanringCaption`, and `sanringNoDataRow` — a headless composition layer over `@angular/cdk/table`.',
-      },
-      {
-        type: 'added',
-        notable: true,
-        componentIds: ['pagination'],
-        text: 'New Pagination primitives plus a batteries-included `sanring-paginator` and `sanring-page-size-select`.',
-      },
-      {
-        type: 'added',
-        notable: true,
-        componentIds: ['table'],
-        text: '`sanringSort` / `sanringSortHeader` — a sort coordinator decoupled from any data source.',
-      },
-      {
-        type: 'added',
-        componentIds: ['table'],
-        text: 'Table column `ratio` and `width` inputs for sizing, plus `sticky`/`stickyEnd` support.',
-      },
-      {
-        type: 'fixed',
-        componentIds: ['avatar'],
-        text: '`Avatar`/`AvatarFallback` referenced an undefined `--sanring-muted-foreground` variable; now uses `--sanring-muted`.',
-      },
-      {
-        type: 'fixed',
-        componentIds: ['table'],
-        text: 'Table no longer sets `role="grid"` on a non-interactive table — it overclaimed ARIA grid semantics; removed so CdkTable\'s own `role="table"`/`role="cell"` defaults apply.',
+        text: '`sanring add` now accepts multiple component names at once and automatically installs each component\'s `componentDeps` (e.g. `sanring add tag` also adds `badge`). Shared files and peer dependencies are deduped across the whole batch.',
       },
     ],
   },
   {
-    date: '2026-07-02',
+    version: '0.2.1',
+    date: '2026-07-03',
+    changes: [
+      {
+        type: 'fixed',
+        text: '`pnpm build` now runs a `sync-registry` step that mirrors root `registry/` into the package and fails if any referenced file is missing, preventing a stale registry from shipping silently.',
+      },
+      {
+        type: 'fixed',
+        text: 'Remote fallback registry URL was pointing at a tag format (`v<version>`) and path (`packages/cli/registry`) that never existed. Fixed to the correct Changesets tag (`@sanring/cli@<version>`) and root `registry/` path.',
+      },
+      {
+        type: 'added',
+        text: 'Unit tests for package-manager detection, config read/write, and registry source-resolution priority.',
+      },
+    ],
+  },
+  {
+    version: '0.2.0',
+    date: '2026-07-03',
     changes: [
       {
         type: 'added',
-        componentIds: ['select'],
-        text: 'Select primitives: groups, separators, item-aligned positioning, and `matchTriggerWidth` overlay sizing.',
+        notable: true,
+        text: '`sanring add --dry-run`: previews which files would be created or overwritten without writing to disk or installing dependencies.',
       },
+    ],
+  },
+  {
+    version: '0.1.0',
+    date: '2026-06-29',
+    changes: [
       {
         type: 'added',
-        text: 'CLI documentation page, and a `--dry-run` flag for previewing file changes before writing.',
-      },
-      {
-        type: 'fixed',
-        componentIds: ['select'],
-        text: '`sanring-select-content` overlay width went stale after the first open; now synced by the CDK connected overlay on every attach.',
-      },
-      {
-        type: 'fixed',
-        componentIds: ['select'],
-        text: '`sanring-select-separator` was invisible (missing block display on an empty host element).',
-      },
-      {
-        type: 'changed',
-        text: 'Unified border-radius across docs pages onto the shared `--sanring-radius-*` design tokens.',
+        notable: true,
+        text: 'Initial release: `sanring init` scaffolds the config, `sanring add <component>` copies source files and installs peer dependencies, with spinner UX and auto-detection of npm / pnpm / yarn / bun.',
       },
     ],
   },
 ];
 
 /**
- * Component ids touched by the newest changelog entry — feeds the "Updated"
- * section on the components page so it stays in sync with the version notes by
- * construction instead of a hand-maintained list.
+ * Component ids touched by the newest version entry — feeds the "Updated"
+ * badge on the components list so it stays in sync with the version history.
  */
 export function getRecentlyUpdatedComponentIds(): DocsComponentId[] {
-  const latest = componentChangelog[0];
+  const latest = cliVersionChangelog[0];
   if (!latest) return [];
   const ids = new Set<DocsComponentId>();
   for (const change of latest.changes) {
@@ -539,7 +509,7 @@ export function isRecentlyUpdatedComponentId(id: DocsComponentId): boolean {
 }
 
 export function getRecentlyAddedComponentIds(): DocsComponentId[] {
-  const latest = componentChangelog[0];
+  const latest = cliVersionChangelog[0];
   if (!latest) return [];
   const ids = new Set<DocsComponentId>();
   for (const change of latest.changes) {
@@ -548,3 +518,5 @@ export function getRecentlyAddedComponentIds(): DocsComponentId[] {
   }
   return [...ids];
 }
+
+export { isPatch };
