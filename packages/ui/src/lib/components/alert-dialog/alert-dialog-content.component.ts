@@ -1,4 +1,4 @@
-import { Component, booleanAttribute, input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, booleanAttribute, input } from '@angular/core';
 import { LucideX } from '@lucide/angular';
 import { DialogContentComponent } from '../dialog/dialog-content.component';
 
@@ -8,6 +8,7 @@ import { DialogContentComponent } from '../dialog/dialog-content.component';
  * breaks if content is passed through a nested <ng-content> wrapper instead.
  */
 @Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'sanring-alert-dialog-content',
   standalone: true,
   imports: [LucideX],

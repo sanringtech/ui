@@ -1,4 +1,5 @@
 import {
+  ChangeDetectionStrategy,
   Component,
   DestroyRef,
   Injector,
@@ -20,6 +21,7 @@ import { FieldType, SANRING_FIELD_CONTROL, SanringFieldControl } from '../field/
 import { FileRejection, FileUploadErrorCode } from './file-upload.type';
 
 @Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'sanring-file-upload',
   standalone: true,
   exportAs: 'sanringFileUpload',

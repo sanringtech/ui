@@ -1,6 +1,7 @@
 import { DialogRef } from '@angular/cdk/dialog';
 import { Platform } from '@angular/cdk/platform';
 import {
+  ChangeDetectionStrategy,
   Component,
   DestroyRef,
   TemplateRef,
@@ -26,6 +27,7 @@ function detectIsMac(platform: Platform): boolean {
 }
 
 @Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'sanring-command-dialog',
   standalone: true,
   host: {

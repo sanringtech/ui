@@ -64,7 +64,7 @@ import { SeoService } from '../../seo/seo.service';
               class="rounded-l-none px-2"
               sanringDropdownMenuTrigger
               [menu]="copyPageMenu.menu"
-              [alignOffset]="-128"
+              align="end"
               [attr.aria-label]="i18n.t('actions.copyPageOptions')"
             >
               @if (copyPageMenu.menu.visible()) {

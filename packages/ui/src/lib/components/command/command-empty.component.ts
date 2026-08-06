@@ -1,10 +1,11 @@
-import { Component, computed, inject, input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject, input } from '@angular/core';
 import { cn } from '../../utils';
 import { COLLECTION_EMPTY_CLASS } from '../component-styles';
 import { isCollectionEmpty } from '../shared/collection-state';
 import { CommandComponent } from './command.component';
 
 @Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'sanring-command-empty',
   standalone: true,
   template: `<ng-content></ng-content>`,

@@ -1,7 +1,8 @@
-import { Component, OnDestroy, input, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnDestroy, input, signal } from '@angular/core';
 import { CdkOverlayOrigin } from '@angular/cdk/overlay';
 
 @Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'sanring-hover-card',
   standalone: true,
   template: `<ng-content></ng-content>`,

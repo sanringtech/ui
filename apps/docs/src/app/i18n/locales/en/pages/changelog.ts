@@ -1,10 +1,10 @@
 export const changelogTranslations = {
   'changelog.page.description':
-    'A curated record of component changes, additions, and fixes across Sanring UI.',
-  'changelog.component.title': 'Components',
+    'A concise timeline of notable Sanring UI updates, focused on what changes for people adopting the library.',
+  'changelog.component.title': 'Highlights',
   'changelog.component.body':
-    '@sanring/ui components are copied into your project as source, so this record focuses on user-facing component updates.',
-  'changelog.component.otherFixes': 'Other changes',
-  'changelog.component.changeCount': 'changes',
+    'Each entry summarizes user-facing additions, improvements, and fixes. Lower-level implementation details stay in the package changelog and repository history.',
+  'changelog.component.otherFixes': 'More highlights',
+  'changelog.component.changeCount': 'notes',
 
 } as const;

@@ -1,9 +1,10 @@
-import { Component, HostListener, computed, inject, input, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, HostListener, computed, inject, input, signal } from '@angular/core';
 import { FileItemComponent } from './file-item.component';
 import { FileUploadComponent } from './file-upload.component';
 import { cn } from '../../utils';
 
 @Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'sanring-file-dropzone',
   standalone: true,
   imports: [FileItemComponent],

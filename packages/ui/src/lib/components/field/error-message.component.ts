@@ -1,8 +1,9 @@
-import { Component, computed, effect, inject, input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, effect, inject, input } from '@angular/core';
 import { cn, uniqueId } from '../../utils';
 import { SanringFieldComponent } from './field.component';
 
 @Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'sanring-error-message', // 正名為 error-message
   standalone: true,
   host: {

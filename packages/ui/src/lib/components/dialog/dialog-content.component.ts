@@ -1,4 +1,5 @@
 import {
+  ChangeDetectionStrategy,
   AfterContentInit,
   booleanAttribute,
   Component,
@@ -19,6 +20,7 @@ import { DialogTitleDirective } from './dialog-title.directive';
 import { DIALOG_SURFACE_CLASS, OVERLAY_ABSOLUTE_CLOSE_BUTTON_CLASS } from './dialog.styles';
 
 @Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'sanring-dialog-content',
   standalone: true,
   imports: [LucideX],

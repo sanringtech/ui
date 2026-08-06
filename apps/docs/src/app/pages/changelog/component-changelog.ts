@@ -28,9 +28,13 @@ export interface ComponentChangelogEntry {
  *   than comma-joining them.
  * - Set `notable: true` only for new components or breaking changes; routine
  *   `fixed` changes are collapsed into a single summary line automatically.
+ * - The public Version Notes page filters this list down to user-facing entries
+ *   (`notable` changes and component-tagged changes). More technical CLI or
+ *   maintenance details can stay here for downstream consumers without becoming
+ *   the main public page content.
  * - Wrap identifiers (selectors, inputs, CSS variables, attributes) in
- *   backticks — the changelog page renders backtick-delimited text as inline
- *   code instead of plain prose.
+ *   backticks — the Version Notes page renders backtick-delimited text as
+ *   inline code instead of plain prose.
  */
 export const componentChangelog: readonly ComponentChangelogEntry[] = [
   {
@@ -517,7 +521,7 @@ export const componentChangelog: readonly ComponentChangelogEntry[] = [
 
 /**
  * Component ids touched by the newest changelog entry — feeds the "Updated"
- * section on the components page so it stays in sync with the changelog by
+ * section on the components page so it stays in sync with the version notes by
  * construction instead of a hand-maintained list.
  */
 export function getRecentlyUpdatedComponentIds(): DocsComponentId[] {

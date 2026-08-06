@@ -16,6 +16,7 @@ export const docsComponentStatusDotClass: Record<DocsComponentStatus, string> = 
 export interface DocsSidebarItem {
   labelKey: TranslationKey;
   path?: string;
+  exact?: boolean;
   active?: boolean;
   badge?: boolean;
   disabled?: boolean;
@@ -89,7 +90,7 @@ export const docsSectionItems: DocsSidebarItem[] = [
   { labelKey: 'sidebar.theming', path: '/theming', active: true },
   { labelKey: 'sidebar.cli', path: '/cli', active: true },
   { labelKey: 'nav.components', path: '/components', active: true },
-  { labelKey: 'sidebar.changelog', path: '/changelog', active: true },
+  { labelKey: 'sidebar.changelog', path: '/version-notes', active: true },
   { labelKey: 'sidebar.roadmap', path: '/roadmap', active: true },
 ];
 

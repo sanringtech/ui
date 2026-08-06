@@ -1,7 +1,8 @@
-import { Component, booleanAttribute, computed, input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, booleanAttribute, computed, input } from '@angular/core';
 import { cn } from '../shared/utils';
 
 @Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'sanring-navigation-menu-separator',
   standalone: true,
   template: ``,

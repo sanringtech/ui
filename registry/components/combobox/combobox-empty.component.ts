@@ -1,10 +1,11 @@
-import { Component, computed, inject, input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject, input } from '@angular/core';
 import { cn } from '../shared/utils';
 import { COLLECTION_EMPTY_CLASS } from '../shared/component-styles';
 import { isCollectionEmpty } from '../shared/collection-state';
 import { ComboboxComponent } from './combobox.component';
 
 @Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'sanring-combobox-empty',
   standalone: true,
   template: `<ng-content></ng-content>`,

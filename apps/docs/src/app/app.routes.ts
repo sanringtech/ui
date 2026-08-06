@@ -34,6 +34,11 @@ export const routes: Routes = [
           },
           {
             path: 'changelog',
+            redirectTo: 'version-notes',
+            pathMatch: 'full',
+          },
+          {
+            path: 'version-notes',
             loadComponent: () =>
               import('./pages/changelog/changelog-page.component').then(
                 (m) => m.ChangelogPageComponent,

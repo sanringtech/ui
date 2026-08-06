@@ -1,4 +1,4 @@
-import { Component, computed, input, InputSignal, signal, OnDestroy } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, input, InputSignal, signal, OnDestroy } from '@angular/core';
 import { EmblaCarouselType, EmblaOptionsType } from 'embla-carousel';
 import { cn } from '../shared/utils';
 import { CarouselOrientation } from './carousel.type';
@@ -18,6 +18,7 @@ export const CAROUSEL_ITEM_SPACING_CLASS: Record<
 };
 
 @Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'sanring-carousel',
   standalone: true,
   host: {

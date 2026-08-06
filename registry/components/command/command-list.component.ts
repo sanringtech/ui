@@ -1,9 +1,10 @@
-import { Component, computed, inject, input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject, input } from '@angular/core';
 import { cn } from '../shared/utils';
 import { COLLECTION_LIST_CLASS } from '../shared/component-styles';
 import { CommandComponent } from './command.component';
 
 @Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'sanring-command-list',
   standalone: true,
   template: `<ng-content></ng-content>`,

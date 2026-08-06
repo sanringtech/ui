@@ -34,7 +34,7 @@ export const commonTranslations = {
   'sidebar.mcpServer': 'MCP Server',
   'sidebar.registry': 'Registry',
   'sidebar.forms': 'Forms',
-  'sidebar.changelog': 'Changelog',
+  'sidebar.changelog': 'Version Notes',
   'sidebar.roadmap': 'Roadmap',
   'component.accordion': 'Accordion',
   'component.alert': 'Alert',

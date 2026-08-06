@@ -1,4 +1,5 @@
 import {
+  ChangeDetectionStrategy,
   Component,
   Injector,
   booleanAttribute,
@@ -17,6 +18,7 @@ import { CollectionController } from '../shared/collection-controller';
 import { CommandItemComponent } from './command-item.component';
 
 @Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'sanring-command',
   standalone: true,
   template: `<ng-content></ng-content>`,

@@ -1,8 +1,9 @@
-import { Component, computed, inject, input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject, input } from '@angular/core';
 import { cn } from '../shared/utils';
 import { OTP_INPUT_ROOT } from './otp-input.context';
 
 @Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'sanring-otp-input-separator',
   standalone: true,
   host: {

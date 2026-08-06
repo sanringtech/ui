@@ -1,4 +1,4 @@
-import { Component, computed, effect, inject, input, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, effect, inject, input, signal } from '@angular/core';
 import { LucideFileText, LucideX } from '@lucide/angular';
 import { cn } from '../../utils';
 import { ProgressComponent } from '../progress/progress.component';
@@ -12,6 +12,7 @@ const ERROR_HINTS: Record<FileUploadErrorCode, string> = {
 };
 
 @Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'sanring-file-item',
   standalone: true,
   imports: [LucideFileText, LucideX, ProgressComponent],

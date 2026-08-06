@@ -1,4 +1,4 @@
-import { Component, computed, input, output } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, input, output } from '@angular/core';
 import {
   LucideChevronLeft,
   LucideChevronRight,
@@ -15,6 +15,7 @@ import { PaginationNavDirective } from './pagination-nav.directive';
 type PageToken = number | 'ellipsis-start' | 'ellipsis-end';
 
 @Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'sanring-paginator',
   standalone: true,
   imports: [

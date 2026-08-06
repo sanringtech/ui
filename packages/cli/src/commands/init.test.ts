@@ -203,10 +203,12 @@ describe('initCommand — monorepo detection', () => {
     });
 
     let exitCode: number | undefined;
-    const exitSpy = vi.spyOn(process, 'exit').mockImplementation((code?: number) => {
-      exitCode = code as number;
-      throw new Error('process.exit');
-    });
+    const exitSpy = vi.spyOn(process, 'exit').mockImplementation(
+      ((code?: number) => {
+        exitCode = code as number;
+        throw new Error('process.exit');
+      }) as typeof process.exit,
+    );
 
     await expect(
       initCommand.parseAsync(['--yes', '--registry', registryDir], { from: 'user' }),

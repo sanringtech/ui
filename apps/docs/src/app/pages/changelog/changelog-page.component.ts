@@ -10,6 +10,7 @@ import { I18nService } from '../../i18n/i18n.service';
 import { SeoService } from '../../seo/seo.service';
 import { ComponentPageComponent, ComponentPageSectionComponent } from '../../layouts/component-page';
 import { ComponentChangeType, componentChangelog } from './component-changelog';
+import type { ComponentChange } from './component-changelog';
 
 const COMPONENT_TYPE_CLASS: Record<ComponentChangeType, string> = {
   added: 'bg-[var(--docs-success-bg)] text-[var(--docs-success-fg)]',
@@ -45,6 +46,10 @@ function renderInlineCode(text: string): string {
         : escapeHtml(segment),
     )
     .join('');
+}
+
+function isVersionOverviewChange(change: ComponentChange): boolean {
+  return change.notable === true || (change.componentIds?.length ?? 0) > 0;
 }
 
 @Component({
@@ -182,16 +187,19 @@ export class ChangelogPageComponent {
     { id: 'components', titleKey: 'changelog.component.title' },
   ];
 
-  protected readonly groupedComponentChangelog = componentChangelog.map((entry) => {
-    const visible = entry.changes.slice(0, 5);
+  protected readonly groupedComponentChangelog = componentChangelog
+    .map((entry) => {
+      const changes = entry.changes.filter(isVersionOverviewChange);
+      const visible = changes.slice(0, 5);
 
-    return {
-      date: entry.date,
-      changes: entry.changes,
-      visible,
-      collapsed: entry.changes.slice(visible.length),
-    };
-  });
+      return {
+        date: entry.date,
+        changes,
+        visible,
+        collapsed: changes.slice(visible.length),
+      };
+    })
+    .filter((entry) => entry.changes.length > 0);
   protected readonly chipClass = CHIP_CLASS;
   protected readonly rowClass = ROW_CLASS;
   protected readonly notableRowClass = NOTABLE_ROW_CLASS;

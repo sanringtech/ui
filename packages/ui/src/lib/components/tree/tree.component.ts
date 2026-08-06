@@ -1,6 +1,7 @@
 import { TreeKeyManager } from '@angular/cdk/a11y';
 import { toObservable } from '@angular/core/rxjs-interop';
 import {
+  ChangeDetectionStrategy,
   Component,
   Injector,
   computed,
@@ -15,6 +16,7 @@ import { cn } from '../../utils';
 import { TreeNodeComponent } from './tree-node.component';
 
 @Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'sanring-tree',
   standalone: true,
   template: `<ng-content></ng-content>`,

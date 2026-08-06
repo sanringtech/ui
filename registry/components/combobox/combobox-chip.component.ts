@@ -1,9 +1,10 @@
-import { Component, computed, inject, input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject, input } from '@angular/core';
 import { LucideX } from '@lucide/angular';
 import { ComboboxComponent } from './combobox.component';
 import { cn } from '../shared/utils';
 
 @Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'sanring-combobox-chip',
   standalone: true,
   imports: [LucideX],

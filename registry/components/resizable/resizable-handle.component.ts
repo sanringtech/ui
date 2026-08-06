@@ -1,9 +1,10 @@
-import { Component, ElementRef, booleanAttribute, computed, inject, input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, ElementRef, booleanAttribute, computed, inject, input } from '@angular/core';
 import { LucideGripHorizontal, LucideGripVertical } from '@lucide/angular';
 import { cn } from '../shared/utils';
 import { ResizableGroupComponent } from './resizable-group.component';
 
 @Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'sanring-resizable-handle',
   standalone: true,
   imports: [LucideGripHorizontal, LucideGripVertical],

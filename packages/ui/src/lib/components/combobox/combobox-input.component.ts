@@ -1,4 +1,4 @@
-import { Component, booleanAttribute, computed, ElementRef, inject, input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, booleanAttribute, computed, ElementRef, inject, input } from '@angular/core';
 import { LucideX } from '@lucide/angular';
 import { ComboboxComponent } from './combobox.component';
 import { ComboboxChipInputComponent } from './combobox-chip-input.component';
@@ -6,6 +6,7 @@ import { cn } from '../../utils';
 import { FIELD_SIZE_CLASS } from '../component-styles';
 
 @Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'sanring-combobox-input',
   standalone: true,
   imports: [LucideX],

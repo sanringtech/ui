@@ -5,6 +5,7 @@ import {
   OverlayModule,
 } from '@angular/cdk/overlay';
 import {
+  ChangeDetectionStrategy,
   Component,
   DestroyRef,
   computed,
@@ -21,6 +22,7 @@ import { HoverCardComponent } from './hover-card.component';
 import { HoverCardSide } from './hover-card.type';
 
 @Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'sanring-hover-card-content',
   standalone: true,
   imports: [OverlayModule],

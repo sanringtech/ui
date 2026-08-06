@@ -1,5 +1,6 @@
 import { CdkOverlayOrigin } from '@angular/cdk/overlay';
 import {
+  ChangeDetectionStrategy,
   Component,
   DestroyRef,
   ElementRef,
@@ -18,6 +19,7 @@ import { FieldType, SanringFieldControl, SANRING_FIELD_CONTROL } from '../field/
 import { SelectValue } from './select.type';
 
 @Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'sanring-select',
   standalone: true,
   template: `<ng-content></ng-content>`,

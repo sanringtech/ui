@@ -1,4 +1,5 @@
 import {
+  ChangeDetectionStrategy,
   Component,
   DestroyRef,
   ElementRef,
@@ -25,6 +26,7 @@ import { ComboboxItemComponent } from './combobox-item.component';
 type ComboboxValue = string | string[] | null;
 
 @Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'sanring-combobox',
   standalone: true,
   exportAs: 'sanringCombobox',

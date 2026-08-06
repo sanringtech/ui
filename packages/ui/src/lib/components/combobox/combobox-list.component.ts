@@ -1,9 +1,10 @@
-import { Component, computed, inject, input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject, input } from '@angular/core';
 import { cn } from '../../utils';
 import { COLLECTION_LIST_CLASS } from '../component-styles';
 import { ComboboxComponent } from './combobox.component';
 
 @Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'sanring-combobox-list',
   standalone: true,
   template: `<ng-content></ng-content>`,

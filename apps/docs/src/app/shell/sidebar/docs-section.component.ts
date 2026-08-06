@@ -26,6 +26,7 @@ import { I18nService } from '../../i18n/i18n.service';
             class="my-1 flex min-h-10 w-full items-center rounded-[var(--sanring-radius)] border border-transparent px-3 text-sm font-medium text-[var(--docs-fg)] no-underline transition-colors duration-200 ease-in-out hover:border-[var(--docs-border)] hover:bg-[var(--docs-elevated)]"
             [routerLink]="item.path"
             [routerLinkActive]="item.active ? 'border-[var(--docs-border)] bg-[var(--docs-active)]' : ''"
+            [routerLinkActiveOptions]="{ exact: item.exact ?? false }"
           >
             <span class="min-w-0 flex-1 truncate">{{ i18n.t(item.labelKey) }}</span>
             @if (item.badge) {

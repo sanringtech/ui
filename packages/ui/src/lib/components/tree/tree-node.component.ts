@@ -1,9 +1,10 @@
 import { TreeKeyManagerItem } from '@angular/cdk/a11y';
-import { Component, ElementRef, computed, contentChildren, inject, input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, ElementRef, computed, contentChildren, inject, input } from '@angular/core';
 import { cn } from '../../utils';
 import { TreeComponent } from './tree.component';
 
 @Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'sanring-tree-node',
   standalone: true,
   exportAs: 'sanringTreeNode',

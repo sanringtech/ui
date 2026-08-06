@@ -1,9 +1,9 @@
 export const changelogTranslations = {
-  'changelog.page.description': '集中記錄 Sanring UI 元件的新增、調整與修正。',
-  'changelog.component.title': '元件',
+  'changelog.page.description': '以時間軸整理 Sanring UI 的重要版本進展，聚焦採用者需要知道的新增、改善與修正。',
+  'changelog.component.title': '版本重點',
   'changelog.component.body':
-    '@sanring/ui 元件會以原始碼形式複製進你的專案，因此這份紀錄聚焦在使用者會感知到的元件更新。',
-  'changelog.component.otherFixes': '其他變更',
-  'changelog.component.changeCount': '筆變更',
+    '這裡只呈現使用者會感知到的版本重點；較細的實作、維護與內部調整保留在 package changelog 或 repository history。',
+  'changelog.component.otherFixes': '更多重點',
+  'changelog.component.changeCount': '則',
 
 } as const;

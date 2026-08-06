@@ -1,8 +1,9 @@
 import { TabContent as NgTabContent, TabPanel as NgTabPanel } from '@angular/aria/tabs';
-import { Component, computed, inject, input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject, input } from '@angular/core';
 import { cn } from '../shared/utils';
 
 @Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'sanring-tabs-content',
   standalone: true,
   imports: [NgTabContent], // NgTabPanel 僅用於 hostDirectives，不需加入 imports

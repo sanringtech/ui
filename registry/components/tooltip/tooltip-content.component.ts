@@ -1,4 +1,4 @@
-import { Component, computed, effect, inject, input, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, effect, inject, input, signal } from '@angular/core';
 import {
   ConnectedOverlayPositionChange,
   ConnectionPositionPair,
@@ -10,6 +10,7 @@ import { TooltipComponent } from './tooltip.component';
 import { TooltipSide } from './tooltip.type';
 
 @Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'sanring-tooltip-content',
   standalone: true,
   imports: [OverlayModule],

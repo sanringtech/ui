@@ -1,9 +1,10 @@
-import { Component, booleanAttribute, computed, input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, booleanAttribute, computed, input } from '@angular/core';
 import { CdkScrollable } from '@angular/cdk/scrolling';
 import { cn } from '../../utils';
 import { ScrollAreaOrientation } from './scroll-area.type';
 
 @Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'sanring-scroll-area',
   standalone: true,
   hostDirectives: [CdkScrollable],

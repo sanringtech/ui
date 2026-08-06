@@ -1,11 +1,12 @@
 import { TreeKeyManager } from '@angular/cdk/a11y';
 import { toObservable } from '@angular/core/rxjs-interop';
-import { Component, Injector, computed, contentChildren, inject, input, model, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Injector, computed, contentChildren, inject, input, model, signal } from '@angular/core';
 import { map } from 'rxjs';
 import { cn } from '../shared/utils';
 import { TreeNodeComponent } from './tree-node.component';
 
 @Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'sanring-tree',
   standalone: true,
   template: `<ng-content></ng-content>`,

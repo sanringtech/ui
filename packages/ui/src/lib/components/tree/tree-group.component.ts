@@ -1,8 +1,9 @@
-import { Component, computed, inject, input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject, input } from '@angular/core';
 import { TreeNodeComponent } from './tree-node.component';
 import { cn } from '../../utils';
 
 @Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'sanring-tree-group',
   standalone: true,
   template: `

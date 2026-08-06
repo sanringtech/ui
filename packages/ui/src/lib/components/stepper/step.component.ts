@@ -1,9 +1,10 @@
 import { CdkStep } from '@angular/cdk/stepper';
-import { Component, contentChild, forwardRef, input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, contentChild, forwardRef, input } from '@angular/core';
 import { StepIconDirective } from './step-icon.directive';
 import { StepState } from './stepper.type';
 
 @Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'sanring-step',
   standalone: true,
   providers: [{ provide: CdkStep, useExisting: forwardRef(() => StepComponent) }],

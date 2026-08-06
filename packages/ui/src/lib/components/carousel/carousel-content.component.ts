@@ -1,4 +1,5 @@
 import {
+  ChangeDetectionStrategy,
   Component,
   ElementRef,
   OnDestroy,
@@ -14,6 +15,7 @@ import { cn } from '../../utils';
 import { CAROUSEL_ITEM_SPACING_CLASS, CarouselComponent } from './carousel.component';
 
 @Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'sanring-carousel-content',
   standalone: true,
   host: {

@@ -1,8 +1,9 @@
 import { TabContent as NgTabContent, TabPanel as NgTabPanel } from '@angular/aria/tabs';
-import { Component, computed, input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, input } from '@angular/core';
 import { cn } from '../../utils';
 
 @Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'sanring-tabs-content',
   standalone: true,
   imports: [NgTabContent, NgTabPanel],

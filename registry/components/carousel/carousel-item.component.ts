@@ -1,8 +1,9 @@
-import { Component, computed, inject, input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject, input } from '@angular/core';
 import { cn } from '../shared/utils';
 import { CAROUSEL_ITEM_SPACING_CLASS, CarouselComponent } from './carousel.component';
 
 @Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'sanring-carousel-item',
   standalone: true,
   host: {

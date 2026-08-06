@@ -72,7 +72,9 @@ export function getPanelIndexBeforeHandle(
   groupElement: HTMLElement,
   handleElement: HTMLElement,
 ): number {
-  const children = Array.from(groupElement.children) as HTMLElement[];
+  const children = Array.from(groupElement.children).filter(
+    (el): el is HTMLElement => el instanceof HTMLElement,
+  );
   const handleIndex = children.indexOf(handleElement);
   if (handleIndex < 0) return -1;
 

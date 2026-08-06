@@ -1,4 +1,5 @@
 import {
+  ChangeDetectionStrategy,
   afterNextRender,
   booleanAttribute,
   Component,
@@ -29,6 +30,7 @@ function findAmbientBackground(el: HTMLElement): string | null {
 }
 
 @Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'sanring-field',
   standalone: true,
   host: {

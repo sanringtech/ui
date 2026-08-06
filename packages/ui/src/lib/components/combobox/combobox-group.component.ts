@@ -1,8 +1,9 @@
-import { Component, computed, input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, input } from '@angular/core';
 import { cn, uniqueId } from '../../utils';
 import { COLLECTION_GROUP_CLASS, COLLECTION_GROUP_HEADING_CLASS } from '../component-styles';
 
 @Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'sanring-combobox-group',
   standalone: true,
   template: `

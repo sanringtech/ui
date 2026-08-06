@@ -1,9 +1,10 @@
-import { Component, computed, input, linkedSignal, output } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, input, linkedSignal, output } from '@angular/core';
 import { Tabs as NgTabs } from '@angular/aria/tabs';
 import { cn } from '../../utils';
 import { TabsOrientation, TabsVariant } from './tabs.type';
 
 @Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'sanring-tabs',
   standalone: true,
   template: `<ng-content></ng-content>`,

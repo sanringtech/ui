@@ -197,7 +197,7 @@ export class FeatureListComponent {
 
   protected readonly query = signal('');
   protected readonly mobileNavigationItems = [
-    { labelKey: 'nav.home' as const, path: '/', active: true },
+    { labelKey: 'nav.home' as const, path: '/', exact: true, active: true },
     ...docsSectionItems,
   ];
   protected readonly mobileComponentItems = visibleDocsComponentItems.map((item) => ({

@@ -1,9 +1,10 @@
-import { Component, computed, inject, input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject, input } from '@angular/core';
 import { Menu as ngMenu } from '@angular/aria/menu';
 import { cn } from '../shared/utils';
 import { OVERLAY_SURFACE_CLASS } from '../shared/component-styles';
 
 @Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'sanring-dropdown-menu-content',
   standalone: true,
   exportAs: 'sanringDropdownMenuContent',

@@ -1,8 +1,9 @@
-import { Component, computed, ElementRef, inject, input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, ElementRef, inject, input } from '@angular/core';
 import { ComboboxComponent } from './combobox.component';
 import { cn } from '../../utils';
 
 @Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'sanring-combobox-chip-input',
   standalone: true,
   template: `<ng-content></ng-content>`,

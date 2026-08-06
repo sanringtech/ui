@@ -1,4 +1,5 @@
 import {
+  ChangeDetectionStrategy,
   Component,
   DestroyRef,
   ElementRef,
@@ -30,6 +31,7 @@ import {
 } from './resizable.utils';
 
 @Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'sanring-resizable-group',
   standalone: true,
   template: `<ng-content></ng-content>`,

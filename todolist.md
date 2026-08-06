@@ -111,9 +111,11 @@
 
 ## P8 — 沒有 MCP server 整合
 
-- [ ] 評估幫 `@sanring/cli` 加上 MCP server 支援,讓 Claude Code / Cursor 等 AI agent 能直接查詢、安裝元件
+- [ ] 實作 `@sanring/cli` MCP server 支援,讓 Claude Code / Cursor 等 AI agent 能直接查詢、安裝元件
 
-**現況**:`packages/cli/src` 裡沒有任何 MCP 相關程式碼。
+> **Branch**: 程式碼草稿已完成，暫存於 `feat/mcp-server` branch，待主要功能穩定後合回 main。
+> 已設計四個 tool：`list_components`、`search_components`、`get_component_info`、`add_component`。
+> 採 lower-level `Server` API（NodeNext ESM 相容、不額外依賴 zod），stdio transport。
 
 **對比**:shadcn 這一兩年加了 MCP 整合,AI coding agent 可以透過 MCP protocol 直接跟 registry 互動,不用手動下 shell 指令。跟目前透過 Claude Code 使用這個專案的情境直接相關。
 
@@ -135,9 +137,9 @@
 
 **已完成**:在 `utils.ts` 新增三個函式：`detectMonorepoRoot()`(偵測單一目錄是否為 monorepo root,辨識 pnpm-workspace.yaml / lerna.json / turbo.json / nx.json(無 angular.json 時) / package.json workspaces)、`findMonorepoAncestor()`(從 startDir 往上走直到找到 monorepo root 或碰到 filesystem root)、`findAngularProjectsInWorkspace()`(在 workspace root 下搜尋最多 2 層深的 angular.json,跳過 node_modules/.git/dist 等目錄)。`init.ts` 移除 `requireAngularProject()` 硬停,改成:若 cwd 無 angular.json → 往上找 monorepo root → 搜尋 workspace 內的 Angular 專案 → 找到一個自動選取、找到多個列出讓使用者互動選取(--yes 模式直接 fail 並印出 cd 指令)。所有後續操作改用 `projectRoot`(可能不同於 cwd)。補 5 個 init monorepo 整合測試,目前 92 tests 全過。
 
-**現況**:`init.ts` 沒有 `monorepo`/`workspace`/`nx.json`/`pnpm-workspace` 相關的偵測邏輯,目前假設單一 Angular 專案。
+**現況**:`sanring init` 已不再假設 cwd 必須就是單一 Angular 專案 root。從 workspace root 或 workspace 子目錄執行時,會先辨識 monorepo root,再把設定檔、theme CSS、dependency install、global stylesheet import 寫到實際 Angular project root。已覆蓋單一 project 自動選取、多 project + `--yes` fail、workspace 內無 Angular project、非 Angular/非 monorepo 目錄、以及兩層深 Angular project 等情境。
 
-**對比**:shadcn 的 `init` 會自動判斷 Next.js/Vite/Remix、偵測 monorepo 結構分別處理。
+**限制**:目前只搜尋 workspace root 往下最多 2 層深的 `angular.json`,這符合常見 `apps/web`、`packages/admin`、`apps/feature/web` 結構,但不涵蓋更深或非標準 layout。`nx.json` 只有在同目錄沒有 `angular.json` 時才視為 monorepo 訊號,避免把單一 Nx Angular 專案誤判成 workspace root。
 
 ---
 
@@ -151,15 +153,9 @@
 
 ## P12 — Masked Input 是否需要獨立套件(比照 date-picker-core)
 
-- [ ] 評估 Masked Input(roadmap tier2 規劃中)的遮罩引擎是否要比照 `@sanring/date-picker-core` 拆成獨立套件
+- [x] 評估 Masked Input(roadmap tier2 規劃中)的遮罩引擎是否要比照 `@sanring/date-picker-core` 拆成獨立套件
 
-**現況**:查證 `@sanring/date-picker-core`(headless Angular calendar engine,純邏輯零 DOM/CSS,有自己的獨立 repo)發現它會被拆分的關鍵理由是「同一套引擎被 `calendar` 跟 `date-picker` 兩個元件共用」,而不只是「邏輯複雜、值得獨立測試」。Masked Input 目前規劃只疊加在單一 `Input` directive 上,還沒有第二個消費者。
-
-**建議方向**:先不拆獨立套件。把遮罩演算法(字串 + cursor 位置 + mask config → 格式化後字串 + 新 cursor 位置)寫成 `packages/ui` 內一個零 Angular 依賴的純函式模組,可以獨立單元測試,但不用背獨立 repo/版本協調的重量。等真的出現第二個消費者(例如某個 table 欄位編輯器也要用同一套遮罩)再拆成獨立套件。
-
-**風險**:太早拆套件會增加版本協調與跨 repo 維護成本,卻沒有實際的重用收益;太晚拆則要在多個消費者之間做痛苦的遷移。
-
-**成本**:低(目前只是紀錄架構決策,Masked Input 本身還沒開工實作)。
+**封存**:評估完成,無後續 action。結論:Masked Input 目前規劃只疊加在單一 `Input` directive 上,沒有第二個消費者;拆分的關鍵理由(同一引擎被多個元件共用)尚不成立。待 Masked Input 正式實作後出現第二個消費者,再重新評估是否拆成獨立套件。實作時遮罩演算法應寫成 `packages/ui` 內零 Angular 依賴的純函式模組,可獨立單元測試,不用背獨立 repo/版本協調的重量。
 
 ---
 
@@ -182,16 +178,18 @@
 
 ## P14 — UI lib 效能與重複邏輯優化
 
-- [ ] 約 4 成元件(實測 162 個 `@Component` 檔案中有 69 個)未明確設定 `ChangeDetectionStrategy.OnPush`,包含 `select`、`switch`、`combobox`、`command`、`tabs`、`tree`、`tooltip`、`dropdown-menu` 等已經是 signals-based 寫法的元件,等於沒拿到 OnPush 的效能紅利
+- [x] 約 4 成元件(實測 162 個 `@Component` 檔案中有 69 個)未明確設定 `ChangeDetectionStrategy.OnPush`,包含 `select`、`switch`、`combobox`、`command`、`tabs`、`tree`、`tooltip`、`dropdown-menu` 等已經是 signals-based 寫法的元件,等於沒拿到 OnPush 的效能紅利
 - [ ] 9 個表單元件(`checkbox`/`switch`/`radio-group`/`slider`/`otp-input`/`date-picker`/`calendar`/`file-upload`/`combobox`)各自重複一份幾乎逐字相同的 `XxxFieldControlAdapter` + CVA state-bridge 邏輯(約 500–600 行複製貼上),`shared/` 目錄目前沒有對應抽象
-- [ ] `navigation-menu-sub-content`/`context-menu-sub-content`/`context-menu-content` 三個元件各自手刻幾乎相同的 CDK Overlay 生命週期邏輯(建立/attach/detach `OverlayRef`、`outsidePointerEvents`/`keydownEvents` 訂閱、destroy 清理),約 50–60 行重複 3 次
-- [ ] `resizable/resizable.utils.ts:75` 的 `Array.from(groupElement.children) as HTMLElement[]` 是沒有 runtime guard 的型別斷言(`children` 是 `HTMLCollection`,假設全部是 `HTMLElement`,一般成立但沒檢查)
+- [x] `navigation-menu-sub-content`/`context-menu-sub-content`/`context-menu-content` 三個元件各自手刻幾乎相同的 CDK Overlay 生命週期邏輯(建立/attach/detach `OverlayRef`、`outsidePointerEvents`/`keydownEvents` 訂閱、destroy 清理),約 50–60 行重複 3 次
+- [x] `resizable/resizable.utils.ts:75` 的 `Array.from(groupElement.children) as HTMLElement[]` 是沒有 runtime guard 的型別斷言(`children` 是 `HTMLCollection`,假設全部是 `HTMLElement`,一般成立但沒檢查)
 
 **現況**:2026-08-06 code review(人工抽查 12–15 個代表性元件 + `shared/` 全目錄,並用 grep 驗證 OnPush 覆蓋率數字)發現的落差。已確認乾淨、不用動的部分:`components/` 裡沒有 `any`、沒有殘留的舊式 `@Input()`/`@Output()` decorator(全部是 signal-based)、`cn()`/`uniqueId()` 已統一在 `utils.ts`、所有 `.subscribe()` 都有正確清理(`takeUntilDestroyed` 或隨 `overlayRef.dispose()` complete)、`package.json` 依賴合理無大材小用。
 
-**建議順序**:OnPush 清理(機械式、效能有感、風險最低)→ overlay 生命週期抽共用 class(可仿照既有的 `shared/collection-controller.ts` 共用模式)→ CVA adapter 大重構(範圍最大,建議等有新表單元件加入或有明確 bug/效能動機時再做,不建議純粹為了 DRY 就大動表單核心邏輯)。
+**已完成**:OnPush 清理:全部 162 個 `@Component` 現在都設了 `ChangeDetectionStrategy.OnPush`(packages/ui + registry 雙向同步),同時修正 registry `context-menu-content`/`context-menu-sub-content` 之前缺漏的方向鍵導覽(`ArrowDown`/`ArrowUp` → `focusAdjacentMenuItem`)與 `menu-navigation` sharedDep。Overlay 生命週期抽共用 class:新增 `packages/ui/src/lib/components/shared/menu-overlay-controller.ts`(`MenuOverlayController`)與對應的 `registry/shared/menu-overlay-controller.ts`。三個 content 元件(`context-menu-content`、`context-menu-sub-content`、`navigation-menu-sub-content`)各自從 ~50 行手刻邏輯改為直接用 `MenuOverlayController`,兩種 origin 型別(`{x,y}` 座標 vs `ElementRef`)均支援;registry.json 新增 `menu-overlay-controller` shared 條目並更新 context-menu/navigation-menu 的 `sharedDeps`。`resizable.utils.ts` 型別斷言改成 `.filter((el): el is HTMLElement => el instanceof HTMLElement)`,移除 unsafe cast。
 
-**成本**:OnPush 清理與 `resizable` 型別斷言低;overlay controller 抽取中;CVA adapter 重構高(牽涉 9 個檔案的表單核心邏輯,改完要重新驗證每個元件的 Angular Forms 整合沒有壞掉)。
+**剩餘**:CVA adapter 大重構(範圍最大,建議等有新表單元件加入或有明確 bug/效能動機時再做,不建議純粹為了 DRY 就大動表單核心邏輯)。
+
+**成本**:CVA adapter 重構高(牽涉 9 個檔案的表單核心邏輯,改完要重新驗證每個元件的 Angular Forms 整合沒有壞掉)。
 
 ---
 

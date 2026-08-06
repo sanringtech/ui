@@ -1,0 +1,8 @@
+{
+  "components": {
+    "accordion": {
+      "description": "A vertically stacked set of interactive headings that each reveal a section of content.",
+      "title": "Accordion"
+    }
+  }
+}

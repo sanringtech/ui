@@ -1,12 +1,13 @@
 import { NgTemplateOutlet } from '@angular/common';
 import { CdkStepHeader, CdkStepper } from '@angular/cdk/stepper';
-import { Component, QueryList, ViewChildren, computed, forwardRef, input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, QueryList, ViewChildren, computed, forwardRef, input } from '@angular/core';
 import { cn } from '../shared/utils';
 import { StepComponent } from './step.component';
 import { StepHeaderComponent } from './step-header.component';
 import { StepState, StepperLineStyle } from './stepper.type';
 
 @Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'sanring-stepper',
   standalone: true,
   imports: [NgTemplateOutlet, StepHeaderComponent],

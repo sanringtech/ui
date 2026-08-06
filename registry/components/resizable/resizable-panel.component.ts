@@ -1,7 +1,8 @@
-import { Component, booleanAttribute, computed, input, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, booleanAttribute, computed, input, signal } from '@angular/core';
 import { cn } from '../shared/utils';
 
 @Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'sanring-resizable-panel',
   standalone: true,
   template: `<ng-content></ng-content>`,

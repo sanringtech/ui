@@ -3,7 +3,7 @@ export const homeTranslations = {
   'home.title': 'Sanring UI',
   'home.description':
     '一套為 Angular 應用打造的元件 primitives、文件站與 registry 工作流。你可以直接組合低耦合元件、覆寫樣式，並透過 CLI 把需要的片段帶進產品。',
-  'home.release.label': '版本紀錄',
+  'home.release.label': '版本概述',
   'home.actions.browseComponents': '瀏覽元件',
   'home.actions.viewExample': '查看範例',
   'home.visual.eyebrow': 'Registry pipeline',

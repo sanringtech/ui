@@ -1,7 +1,8 @@
-import { Component, computed, inject, input, numberAttribute } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject, input, numberAttribute } from '@angular/core';
 import { OTP_INPUT_ROOT } from './otp-input.context';
 
 @Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'sanring-otp-input-slot',
   standalone: true,
   styles: [

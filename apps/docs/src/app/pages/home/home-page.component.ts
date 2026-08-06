@@ -70,7 +70,7 @@ interface HomeVisualMetric {
             </span>
             <a
               class="inline-flex h-9 min-w-0 items-center gap-2 rounded-[var(--sanring-radius)] border border-[color-mix(in_srgb,var(--docs-accent)_30%,var(--docs-border))] bg-[color-mix(in_srgb,var(--docs-accent)_10%,var(--docs-elevated))] px-3 text-sm font-semibold text-[var(--docs-accent-strong)] no-underline transition-colors hover:border-[color-mix(in_srgb,var(--docs-accent)_55%,var(--docs-border))] hover:bg-[color-mix(in_srgb,var(--docs-accent)_16%,var(--docs-elevated))] max-[520px]:h-8 max-[520px]:text-xs"
-              routerLink="/changelog"
+              routerLink="/version-notes"
             >
               <svg class="size-4" lucideRocket></svg>
               <span class="min-w-0 truncate">{{ i18n.t('home.release.label') }}</span>

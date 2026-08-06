@@ -1,10 +1,5 @@
-import {
-  ConnectionPositionPair,
-  FlexibleConnectedPositionStrategy,
-  Overlay,
-  OverlayRef,
-} from '@angular/cdk/overlay';
-import { DomPortal } from '@angular/cdk/portal';
+import { ConnectionPositionPair } from '@angular/cdk/overlay';
+import { Overlay } from '@angular/cdk/overlay';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -17,6 +12,8 @@ import {
 } from '@angular/core';
 import { cn } from '../shared/utils';
 import { OVERLAY_SURFACE_CLASS } from '../shared/component-styles';
+import { focusAdjacentMenuItem } from '../shared/menu-navigation';
+import { MenuOverlayController } from '../shared/menu-overlay-controller';
 import { ContextMenuComponent } from './context-menu.component';
 import { ContextMenuSubComponent } from './context-menu-sub.component';
 
@@ -46,9 +43,12 @@ const SUB_CONTENT_POSITIONS: ConnectionPositionPair[] = [
 export class ContextMenuSubContentComponent {
   protected readonly sub = inject(ContextMenuSubComponent);
   private readonly rootMenu = inject(ContextMenuComponent, { optional: true });
-  private readonly overlay = inject(Overlay);
   private readonly elementRef = inject(ElementRef<HTMLElement>);
-  private readonly destroyRef = inject(DestroyRef);
+  private readonly overlayCtrl = new MenuOverlayController(
+    inject(Overlay),
+    this.elementRef,
+    inject(DestroyRef),
+  );
 
   readonly class = input<string | undefined>();
 
@@ -61,58 +61,35 @@ export class ContextMenuSubContentComponent {
     ),
   );
 
-  private overlayRef: OverlayRef | null = null;
-  private positionStrategy: FlexibleConnectedPositionStrategy | null = null;
-  private portal: DomPortal<HTMLElement> | null = null;
-
   constructor() {
     effect(() => {
       const isOpen = this.sub.isOpen() && (this.rootMenu?.isOpen() ?? true);
       const triggerRef = this.sub.triggerRef();
 
       if (!isOpen || !triggerRef) {
-        this.overlayRef?.detach();
+        this.overlayCtrl.detach();
         return;
       }
 
-      if (!this.overlayRef) {
-        this.createOverlay(triggerRef);
-        return;
-      }
+      this.overlayCtrl.open(triggerRef, {
+        positions: SUB_CONTENT_POSITIONS,
+        scrollStrategy: 'close',
+        onOutsideClick: () => this.sub.close(),
+        onKeydown: (event) => {
+          if (event.key === 'Escape' || event.key === 'ArrowLeft') {
+            event.stopPropagation();
+            this.sub.close();
+            this.sub.triggerRef()?.nativeElement.focus();
+            return;
+          }
 
-      this.overlayRef.updatePosition();
-      if (!this.overlayRef.hasAttached()) {
-        this.overlayRef.attach(this.portal!);
-      }
-    });
-
-    this.destroyRef.onDestroy(() => this.overlayRef?.dispose());
-  }
-
-  private createOverlay(triggerRef: ElementRef<HTMLElement>): void {
-    this.positionStrategy = this.overlay
-      .position()
-      .flexibleConnectedTo(triggerRef)
-      .withPositions(SUB_CONTENT_POSITIONS)
-      .withPush(true)
-      .withViewportMargin(8);
-
-    this.overlayRef = this.overlay.create({
-      positionStrategy: this.positionStrategy,
-      scrollStrategy: this.overlay.scrollStrategies.close(),
-    });
-
-    this.portal = new DomPortal(this.elementRef);
-    this.overlayRef.attach(this.portal);
-
-    this.overlayRef.outsidePointerEvents().subscribe(() => this.sub.close());
-
-    this.overlayRef.keydownEvents().subscribe((event) => {
-      if (event.key === 'Escape' || event.key === 'ArrowLeft') {
-        event.stopPropagation();
-        this.sub.close();
-        this.sub.triggerRef()?.nativeElement.focus();
-      }
+          if (event.key === 'ArrowDown' || event.key === 'ArrowUp') {
+            event.preventDefault();
+            event.stopPropagation();
+            focusAdjacentMenuItem(this.elementRef.nativeElement, event.key === 'ArrowDown' ? 1 : -1);
+          }
+        },
+      });
     });
   }
 }

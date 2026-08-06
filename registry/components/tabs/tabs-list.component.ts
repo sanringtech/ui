@@ -1,9 +1,10 @@
-import { AfterContentInit, Component, computed, effect, inject, input, untracked } from '@angular/core';
+import { ChangeDetectionStrategy, AfterContentInit, Component, computed, effect, inject, input, untracked } from '@angular/core';
 import { TabList as NgTabList } from '@angular/aria/tabs';
 import { cn } from '../shared/utils';
 import { TabsComponent } from './tabs.component';
 
 @Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'sanring-tabs-list',
   standalone: true,
   template: `<ng-content></ng-content>`,

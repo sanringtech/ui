@@ -1,10 +1,11 @@
 import { Tab as NgTab } from '@angular/aria/tabs';
-import { Component, computed, inject, input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject, input } from '@angular/core';
 import { cn } from '../../utils';
 import { NAV_ITEM_TEXT_CLASS } from './tabs.styles';
 import { TabsComponent } from './tabs.component';
 
 @Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'sanring-tabs-trigger',
   standalone: true,
   template: `

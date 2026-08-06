@@ -1,5 +1,6 @@
 import { Highlightable, _IdGenerator } from '@angular/cdk/a11y';
 import {
+  ChangeDetectionStrategy,
   Component,
   ElementRef,
   booleanAttribute,
@@ -19,6 +20,7 @@ import { isCollectionItemVisible } from '../shared/collection-state';
 import { CommandComponent } from './command.component';
 
 @Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'sanring-command-item',
   standalone: true,
   template: `<ng-content></ng-content>`,

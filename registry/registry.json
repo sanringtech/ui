@@ -41,6 +41,14 @@
       "name": "menu-navigation",
       "description": "DOM focus navigation helper shared by menu-like overlay components",
       "file": "shared/menu-navigation.ts"
+    },
+    {
+      "name": "menu-overlay-controller",
+      "description": "CDK Overlay lifecycle controller shared by context-menu-content, context-menu-sub-content, and navigation-menu-sub-content",
+      "file": "shared/menu-overlay-controller.ts",
+      "peerDependencies": {
+        "@angular/cdk": "^22.0.0"
+      }
     }
   ],
   "components": [
@@ -796,7 +804,7 @@
     {
       "name": "context-menu",
       "description": "A menu triggered by right-clicking a target area, positioned at the pointer.",
-      "sharedDeps": ["utils", "component-styles"],
+      "sharedDeps": ["utils", "component-styles", "menu-navigation", "menu-overlay-controller"],
       "peerDependencies": {
         "@angular/cdk": "^22.0.0",
         "@lucide/angular": "^1.18.0"
@@ -856,7 +864,7 @@
     {
       "name": "navigation-menu",
       "description": "A collection of links for navigating websites, with triggers that open content panels.",
-      "sharedDeps": ["utils", "component-styles", "menu-navigation"],
+      "sharedDeps": ["utils", "component-styles", "menu-navigation", "menu-overlay-controller"],
       "componentDeps": ["link"],
       "peerDependencies": {
         "@angular/cdk": "^22.0.0"

@@ -1,4 +1,5 @@
 import {
+  ChangeDetectionStrategy,
   booleanAttribute,
   Component,
   DestroyRef,
@@ -28,6 +29,7 @@ import {
 import { SwitchSize } from './switch.type';
 
 @Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'sanring-switch',
   standalone: true,
   // host 設 inline-flex，讓內部 <button> 變成 flex item（被 blockify），

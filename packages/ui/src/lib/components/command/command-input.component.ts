@@ -1,9 +1,10 @@
 import { LucideSearch } from '@lucide/angular';
-import { Component, computed, inject, input, output } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject, input, output } from '@angular/core';
 import { cn } from '../../utils';
 import { CommandComponent } from './command.component';
 
 @Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'sanring-command-input',
   standalone: true,
   imports: [LucideSearch],
