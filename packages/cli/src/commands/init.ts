@@ -13,13 +13,24 @@ import {
 import {
   CONFIG_FILE,
   DEFAULT_COMPONENT_PATH,
+  MonorepoType,
+  findAngularProjectsInWorkspace,
+  findMonorepoAncestor,
   getInstalledPackages,
   hashContent,
-  requireAngularProject,
+  isAngularProject,
   readConfig,
   writeConfig,
 } from '../utils.js';
 import { writeFile } from './add.js';
+
+const MONOREPO_TYPE_LABEL: Record<MonorepoType, string> = {
+  pnpm: 'pnpm workspace',
+  nx: 'Nx workspace',
+  lerna: 'Lerna monorepo',
+  turbo: 'Turborepo',
+  'npm-workspaces': 'npm/yarn workspace',
+};
 
 export const THEME_FILE_PATH = 'src/sanring-theme.css';
 const DEFAULT_GLOBAL_STYLESHEET_PATH = 'src/styles.css';
@@ -88,12 +99,70 @@ export const initCommand = new Command('init')
 
     console.log(pc.cyan(`\nSanring UI — init\n`));
 
-    // 1. Verify Angular project
-    requireAngularProject(cwd, 'Run this command from the root of an Angular project.');
+    // 1. Resolve the Angular project root (may differ from cwd in a monorepo).
+    let projectRoot = cwd;
+
+    if (!isAngularProject(cwd)) {
+      const monorepoInfo = findMonorepoAncestor(cwd);
+
+      if (!monorepoInfo) {
+        console.error(pc.red('✖ No angular.json found.'));
+        console.error(pc.dim('  Run this command from the root of an Angular project.'));
+        process.exit(1);
+      }
+
+      const label = MONOREPO_TYPE_LABEL[monorepoInfo.type];
+      console.log(pc.dim(`  ${label} detected: ${monorepoInfo.root}`));
+
+      const projects = findAngularProjectsInWorkspace(monorepoInfo.root);
+
+      if (projects.length === 0) {
+        console.error(pc.red('✖ No Angular projects found in this workspace.'));
+        console.error(pc.dim('  Run sanring init from within an Angular project directory.'));
+        process.exit(1);
+      }
+
+      if (projects.length === 1) {
+        projectRoot = projects[0];
+        console.log(
+          pc.green('✔') +
+            ` Angular project: ${pc.bold(relative(monorepoInfo.root, projectRoot))}`,
+        );
+      } else if (options.yes) {
+        // --yes without a unique target is ambiguous; list options and exit.
+        console.error(pc.red('✖ Multiple Angular projects found.'));
+        console.error(pc.dim('  Run sanring init from one of these directories:'));
+        for (const p of projects) {
+          console.error(pc.dim(`    cd ${relative(cwd, p)} && sanring init`));
+        }
+        process.exit(1);
+      } else {
+        console.log(pc.dim('\n  Multiple Angular projects found:'));
+        projects.forEach((p, i) =>
+          console.log(pc.dim(`    ${i + 1}) ${relative(monorepoInfo.root, p)}`)),
+        );
+
+        const rl = createInterface({ input: process.stdin, output: process.stdout });
+        const answer = await rl.question(pc.dim('\n  Select project [1]: '));
+        rl.close();
+
+        const idx = answer.trim() ? parseInt(answer.trim(), 10) - 1 : 0;
+        if (isNaN(idx) || idx < 0 || idx >= projects.length) {
+          console.error(pc.red('✖ Invalid selection.'));
+          process.exit(1);
+        }
+        projectRoot = projects[idx];
+        console.log(
+          pc.green('✔') +
+            ` Angular project: ${pc.bold(relative(monorepoInfo.root, projectRoot))}`,
+        );
+      }
+    }
+
     console.log(pc.green('✔') + pc.dim(' Angular project detected'));
 
     // 2. Warn if already initialised
-    const existing = readConfig(cwd);
+    const existing = readConfig(projectRoot);
     if (existing) {
       console.log(
         pc.yellow('⚠') +
@@ -123,7 +192,7 @@ export const initCommand = new Command('init')
       sharedPath: existing?.sharedPath,
       installedHashes: existing?.installedHashes,
     };
-    writeConfig(cwd, nextConfig);
+    writeConfig(projectRoot, nextConfig);
     console.log(
       pc.green('\n✔') + ` ${CONFIG_FILE} written` + pc.dim(` (componentPath: ${componentPath})`),
     );
@@ -134,12 +203,12 @@ export const initCommand = new Command('init')
 
     // 5. Write the design-token stylesheet every component reads (--sanring-*).
     // Skipped if it already exists (protects any brand-color edits) unless --force.
-    const themeDest = join(cwd, THEME_FILE_PATH);
+    const themeDest = join(projectRoot, THEME_FILE_PATH);
     try {
       const themeContent = await fetchFile('shared/theme.css', options.registry);
       const themeResult = writeFile(themeDest, themeContent, options.force);
       if (themeResult === 'written') {
-        writeConfig(cwd, {
+        writeConfig(projectRoot, {
           componentPath,
           sharedPath: existing?.sharedPath,
           installedHashes: {
@@ -160,13 +229,13 @@ export const initCommand = new Command('init')
     }
 
     // 6. Install base deps if missing
-    const installed = getInstalledPackages(cwd);
+    const installed = getInstalledPackages(projectRoot);
     const missing = Object.entries(BASE_DEPS).filter(([pkg]) => !installed.has(pkg));
 
     if (missing.length === 0) {
       console.log(pc.green('✔') + pc.dim(' Base dependencies already installed'));
     } else {
-      const pm = detectPackageManager(cwd);
+      const pm = detectPackageManager(projectRoot);
       const pkgs = missing.map(([pkg, ver]) => `${pkg}@${ver}`);
       const cmd = installCommand(pm, pkgs);
       console.log(pc.dim(`\n  Installing base dependencies: ${pc.cyan(cmd)}\n`));
@@ -179,9 +248,9 @@ export const initCommand = new Command('init')
       }
     }
 
-    const globalStylesheet = findGlobalStylesheet(cwd) ?? DEFAULT_GLOBAL_STYLESHEET_PATH;
+    const globalStylesheet = findGlobalStylesheet(projectRoot) ?? DEFAULT_GLOBAL_STYLESHEET_PATH;
     const themeImport = importPathForStylesheet(globalStylesheet);
-    const importResult = ensureThemeImport(cwd, globalStylesheet, themeImport);
+    const importResult = ensureThemeImport(projectRoot, globalStylesheet, themeImport);
 
     if (importResult === 'added') {
       console.log(pc.green('✔') + ` ${globalStylesheet} now imports ${THEME_FILE_PATH}`);

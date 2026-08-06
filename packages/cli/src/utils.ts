@@ -1,6 +1,7 @@
 import { createHash } from 'node:crypto';
-import { existsSync, readFileSync, writeFileSync } from 'node:fs';
-import { join, resolve } from 'node:path';
+import { existsSync, readFileSync, readdirSync, writeFileSync } from 'node:fs';
+import type { Dirent } from 'node:fs';
+import { dirname, join, resolve } from 'node:path';
 import { createInterface } from 'node:readline/promises';
 import pc from 'picocolors';
 
@@ -107,6 +108,87 @@ export function satisfiesMinimumPackageSpec(installedSpec: string, requiredSpec:
 
 export function isAngularProject(cwd: string): boolean {
   return existsSync(join(cwd, 'angular.json'));
+}
+
+// ─── Monorepo detection ──────────────────────────────────────────────────────
+
+export type MonorepoType = 'pnpm' | 'nx' | 'lerna' | 'turbo' | 'npm-workspaces';
+
+export interface MonorepoInfo {
+  type: MonorepoType;
+  root: string;
+}
+
+// Checks a single directory for monorepo signals. Does NOT walk up.
+// nx.json is only treated as a monorepo signal when angular.json is absent,
+// because a single-project Nx setup has both at the same root.
+export function detectMonorepoRoot(dir: string): MonorepoInfo | null {
+  if (existsSync(join(dir, 'pnpm-workspace.yaml'))) return { type: 'pnpm', root: dir };
+  if (existsSync(join(dir, 'lerna.json'))) return { type: 'lerna', root: dir };
+  if (existsSync(join(dir, 'turbo.json'))) return { type: 'turbo', root: dir };
+  if (existsSync(join(dir, 'nx.json')) && !existsSync(join(dir, 'angular.json'))) {
+    return { type: 'nx', root: dir };
+  }
+  try {
+    const pkg = JSON.parse(readFileSync(join(dir, 'package.json'), 'utf-8')) as {
+      workspaces?: unknown;
+    };
+    const ws = pkg.workspaces;
+    if (Array.isArray(ws) || (ws && typeof ws === 'object' && Array.isArray((ws as Record<string, unknown>).packages))) {
+      return { type: 'npm-workspaces', root: dir };
+    }
+  } catch {
+    // Not a workspace package.json
+  }
+  return null;
+}
+
+// Walks up from startDir until it finds a monorepo root or hits the filesystem
+// root. Returns null when the caller is not inside any known workspace.
+export function findMonorepoAncestor(startDir: string): MonorepoInfo | null {
+  let dir = startDir;
+  for (;;) {
+    const info = detectMonorepoRoot(dir);
+    if (info) return info;
+    const parent = dirname(dir);
+    if (parent === dir) return null; // filesystem root
+    dir = parent;
+  }
+}
+
+const WORKSPACE_SKIP = new Set([
+  'node_modules', '.git', 'dist', 'out', 'build', '.nx', '.angular', '.cache',
+]);
+
+// Searches workspaceRoot (up to 2 directory levels deep) for subdirectories
+// that contain an angular.json. Stops recursing into a found Angular project.
+export function findAngularProjectsInWorkspace(workspaceRoot: string): string[] {
+  const found: string[] = [];
+
+  function search(dir: string, depth: number): void {
+    if (depth > 2) return;
+    let entries: Dirent[];
+    try {
+      entries = readdirSync(dir, { withFileTypes: true });
+    } catch {
+      return;
+    }
+    for (const entry of entries) {
+      if (!entry.isDirectory() || WORKSPACE_SKIP.has(entry.name) || entry.name.startsWith('.')) {
+        continue;
+      }
+      const child = join(dir, entry.name);
+      if (existsSync(join(child, 'angular.json'))) {
+        found.push(child);
+        // Don't recurse further inside an Angular project
+      } else {
+        search(child, depth + 1);
+      }
+    }
+  }
+
+  search(workspaceRoot, 0);
+  return found;
 }
 
 // Hard guard used by commands that need an Angular project to do anything

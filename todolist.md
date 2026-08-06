@@ -131,7 +131,9 @@
 
 ## P10 — `sanring init` 沒有 monorepo/workspace 偵測
 
-- [ ] 評估 `init` 指令加上 monorepo 結構偵測與對應處理邏輯
+- [x] 評估 `init` 指令加上 monorepo 結構偵測與對應處理邏輯
+
+**已完成**:在 `utils.ts` 新增三個函式：`detectMonorepoRoot()`(偵測單一目錄是否為 monorepo root,辨識 pnpm-workspace.yaml / lerna.json / turbo.json / nx.json(無 angular.json 時) / package.json workspaces)、`findMonorepoAncestor()`(從 startDir 往上走直到找到 monorepo root 或碰到 filesystem root)、`findAngularProjectsInWorkspace()`(在 workspace root 下搜尋最多 2 層深的 angular.json,跳過 node_modules/.git/dist 等目錄)。`init.ts` 移除 `requireAngularProject()` 硬停,改成:若 cwd 無 angular.json → 往上找 monorepo root → 搜尋 workspace 內的 Angular 專案 → 找到一個自動選取、找到多個列出讓使用者互動選取(--yes 模式直接 fail 並印出 cd 指令)。所有後續操作改用 `projectRoot`(可能不同於 cwd)。補 5 個 init monorepo 整合測試,目前 92 tests 全過。
 
 **現況**:`init.ts` 沒有 `monorepo`/`workspace`/`nx.json`/`pnpm-workspace` 相關的偵測邏輯,目前假設單一 Angular 專案。
 
