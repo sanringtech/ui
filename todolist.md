@@ -193,118 +193,113 @@
 
 ---
 
-## P15 — 沒有版本兼容性追蹤與遷移機制
+## P15 — 版本兼容追蹤與 `sanring migrate` 指令
 
-- [ ] 在 registry.json 各元件條目加入 `migrations` 陣列與 `since` 版本欄位
-- [ ] `sanring.config.json` 每個已安裝元件記錄 `installedCliVersion`（安裝當時的 CLI 版本）
-- [ ] `sanring add` / `sanring update` 同步寫入 `installedCliVersion`
-- [ ] `sanring update` 擴充：主動 diff 並更新已變動的 shared utilities（目前只 diff component 本身，shared 靜默跳過）
-- [ ] 新增 `sanring migrate` 指令：偵測版本落差、輸出逐步遷移步驟
-- [ ] `component-changelog.ts` 加入 `breaking: true` 旗標，version notes 頁面醒目標示破壞性變更
+- [x] `SanringConfig` 加入 `installedVersions?: Record<string, string>`,記錄每個元件最後一次安裝/更新時的 CLI 版本
+- [x] `sanring add` 與 `sanring update` 在成功寫入後同步更新 `installedVersions`
+- [x] `registry.json` 的 `RegistryComponent` 加入 `since?: string` 與 `migrations?: RegistryMigration[]`,供 registry 作者標記 breaking changes
+- [x] 新增 `semverLte(a, b)` 工具函式與 `getCliVersion()`(runtime 讀取 package.json)
+- [x] 實作 `sanring migrate [components...] [--check]` 指令:對比 installedVersion 與 registry migrations 的 fromVersion,印出需要手動處理的步驟;`--check` 在有 migration 時 exit 1(CI gate 用)
+- [x] `ComponentChange` 加入 `breaking?: boolean`;docs changelog 模板對標記 breaking 的 change 顯示紅色 BREAKING badge
 
-**問題背景**：copy-as-source 模型在開發期沒有強制的版本紀律，使用者執行 `sanring update` 時只能看到 diff 內容，但不知道哪些改動會讓 Angular template 編譯失敗（input 改名、output 改名、必填新 shared utility），也不知道下一步要改哪裡。目前 `sanring update` 也不檢查 shared utilities 是否需要同步更新，使用者可能裝了新版元件卻跑著舊版 `utils.ts` / `menu-overlay-controller.ts`。
+**現況(修復前)**:整個開發過程中沒有顧及版本向後相容問題。使用者從舊版 CLI 安裝元件後,若 registry 有 breaking change,`sanring update` 只會同步檔案、不會提示需要手動修改模板或呼叫方式。
 
-**目標**：讓「從舊版升到新版」變成一個有導引的流程，而非靠使用者自行對照 diff 猜測影響範圍。
+**設計**:`sanring.config.json` 的 `installedVersions` 以元件名稱為 key、CLI 版本為 value。`registry.json` 每個元件可以有多個 `RegistryMigration`,每筆包含 `fromVersion`(安裝在這個版本以前的使用者需要執行這份遷移)、`breaking: boolean`、`steps: string[]`。`sanring migrate` 過濾出 `semverLte(installedVersion, migration.fromVersion)` 的遷移項目,依序印出步驟;缺少 `installedVersions` 的舊 config 降級為 `"0.0.0"`。
 
----
-
-### 實作設計
-
-#### 1. registry.json — 新增 `since` 與 `migrations`
-
-```jsonc
-{
-  "name": "switch",
-  "since": "0.1.0",          // 此元件從哪個 CLI 版本開始存在
-  "migrations": [
-    {
-      "fromVersion": "0.12.0",  // 使用者安裝版本 < fromVersion 就需要此遷移
-      "breaking": true,
-      "steps": [
-        "Rename input `[foo]` to `[bar]` in all templates using `sanring-switch`.",
-        "Run `sanring update switch` to apply the new source files."
-      ]
-    }
-  ]
-}
-```
-
-`migrations` 陣列每筆對應一段版本區間的破壞性變更，`fromVersion` 是「這個遷移開始適用的分水嶺版本」（語義：安裝版本 ≤ fromVersion 的使用者需要跑此遷移步驟）。
-
-#### 2. sanring.config.json — 每個元件記錄安裝版本
-
-```jsonc
-{
-  "componentPath": "src/app/components",
-  "components": {
-    "switch": {
-      "installedCliVersion": "0.9.0",   // 新增欄位
-      "files": {
-        "switch.component.ts": "sha256..."
-      }
-    }
-  }
-}
-```
-
-舊版安裝的元件沒有此欄位，視為 `"0.0.0"`（安全側：會匹配所有已知遷移）。
-
-#### 3. sanring add / sanring update — 補寫版本
-
-`add` 安裝完成後在 config 補寫當前 CLI 版本；`update` 在使用者接受更新後把 `installedCliVersion` 更新到最新 CLI 版本。
-
-#### 4. sanring update shared utilities 擴充
-
-目前 `update` 只 diff `sanring.config.json` 裡記錄的 component files，不碰 shared utilities（`componentPath/shared/`）。
-
-擴充邏輯：
-1. 對比每個已安裝元件的 `sharedDeps`（從 registry 讀取）與實際存在的 shared 檔案。
-2. 若 shared 檔案 hash 與目前 registry 版本不符，列為「shared 有更新」並進入與 component files 相同的 diff + 確認流程。
-3. 一次 `update` 同時處理 component files 與 shared utilities，避免「新元件跑舊 utils」的問題。
-
-#### 5. sanring migrate 指令
-
-```
-sanring migrate [components...]   # 不指定則掃全部已安裝元件
-sanring migrate --check           # 只偵測，不輸出操作步驟（適合 CI）
-```
-
-流程：
-1. 讀取 `sanring.config.json`，取出每個元件的 `installedCliVersion`（缺失視為 `"0.0.0"`）。
-2. 從 registry 讀取各元件的 `migrations` 陣列。
-3. 過濾出「`installedCliVersion` ≤ `fromVersion` 的遷移步驟」。
-4. 分元件輸出：版本落差、`breaking` 旗標、逐步 steps（含 template 改法說明）。
-5. 最後提示使用者執行 `sanring update` 套用新版原始碼。
-
-輸出範例：
-```
-sanring migrate
-
-  switch  (installed: 0.9.0 → current: 0.19.0)
-  ⚠ Breaking change (since 0.13.0)
-    1. Rename input [foo] to [bar] in all templates using <sanring-switch>.
-    2. Run `sanring update switch` to apply the new source files.
-
-  button  ✓ up to date
-
-Run `sanring update` to apply source file changes.
-```
-
-#### 6. component-changelog.ts — breaking 旗標
-
-現有 `ComponentChange` 加入 `breaking?: boolean`，讓 version notes 頁面可以在 `added` / `changed` / `fixed` 之外額外標出「破壞性」badge（紅色），不影響現有 notable 折疊邏輯。
+**成本**:中。型別定義低成本;`add`/`update` 寫入版本低成本;`migrate` 指令本身中等成本(需要處理缺 installedVersions 的降級邏輯、`--check` 模式、registry not found 等邊界情況)。
 
 ---
 
-**風險**：
-- `installedCliVersion` 需要靠 `sanring add`/`update` 主動維護，已安裝但還沒 update 過的元件欄位會缺失。缺失時保守處理（視為 `0.0.0`），會顯示多餘的遷移步驟，但不會漏掉真正需要的遷移。
-- `migrations` 資料需要手動維護（跟 registry.json 一起）。未來改動元件 API 時要記得補這個欄位，否則 migrate 就沒有資訊可輸出。建議在 CI registry-sync-check 加驗證：有 `breaking: true` 的 changelog 條目必須對應 registry 有對應的 migration 條目。
+## P16 — Docs 站沒有暗色模式切換
 
-**成本**：高。分四個子階段可各自獨立交付：
-1. registry.json schema 擴充 + sanring.config.json 版本寫入（`add`/`update` 各一個小改動）
-2. `sanring update` shared utilities 擴充
-3. `sanring migrate` 指令主體
-4. component-changelog.ts `breaking` 旗標 + version notes 頁面對應顯示
+- [ ] 在 docs header 加入 light / dark / system 三段切換,並讓全站 CSS variables 隨之切換
+
+**現況**:`packages/ui` 的元件本身已經用 `--sanring-*` CSS custom properties,支援 dark mode;但 docs 站本身沒有提供切換按鈕,使用者只能依賴系統設定。
+
+**影響**:開發者打開元件庫 docs 第一件事通常是切 dark mode 看元件效果,沒有切換按鈕會讓人對「這個 lib 有沒有認真維護 dark mode」產生懷疑,屬於第一印象層面的信任訊號。
+
+**成本**:低。docs 站已有 CSS variables 骨架,只需要在 `<html>` 加 class/data-attribute、用一個 signal 做狀態、寫入 `localStorage` 持久化,約半天。
+
+---
+
+## P17 — Component 頁面沒有顯示該元件自己的 changelog
+
+- [ ] 每個 component 頁面底部加一個「Recent changes」區塊,從 `componentChangelog` 過濾出 `componentIds` 包含該元件的最新 N 筆
+
+**現況**:`component-changelog.ts` 裡每筆 change 都有 `componentIds?: DocsComponentId[]`,這份資料已經在用(驅動 sidebar 的「Updated」badge),但 component 頁面本身完全沒有顯示。
+
+**影響**:使用者升版時想知道「這個元件到底改了什麼」,現在要去全局 changelog 自己找;shadcn 每個元件頁頂部有 "Updated X days ago" 連結。
+
+**成本**:低。資料已有,只需要在 `component-page-header` 或頁面底部加一個 section,從現有 changelog 陣列過濾、渲染即可。
+
+---
+
+## P18 — `sanring list --outdated`：安裝元件的更新狀態概覽
+
+- [ ] 新增 `sanring list --outdated`(或獨立指令 `sanring outdated`),快速顯示哪些已安裝元件的本地檔案和 registry 目前版本不同
+
+**現況**:`diff` 指令可以逐檔比較,`update` 會實際套用,`migrate` 處理 breaking changes。但沒有一個指令能像 `npm outdated` 那樣一眼看出「我裝了哪些元件、哪些有更新、哪些是乾淨的」。
+
+**差異**:`diff` 太詳細(每個檔案都展開);`update --dry-run` 要拿到結果需要執行整個 update 流程;這裡要的是一個 **5 秒 status overview**,只輸出元件名稱 + 狀態(up-to-date / outdated / has-conflicts)。
+
+**成本**:中低。可以在 `list.ts` 加一個 `--outdated` flag,或另開 `outdated.ts`。核心邏輯可重用 `update.ts` 的 classify 邏輯,只差最後不寫檔案改為彙整輸出。
+
+---
+
+## P19 — Blocks：可直接安裝的頁面級組合模板
+
+- [ ] 設計 `blocks/` registry 類別,讓 `sanring add block/dashboard-shell` 可以一次安裝完整頁面片段(login page、settings page、data table page、dashboard layout 等)
+
+**現況**:目前 registry 只有 `components/` 和 `shared/`,沒有 blocks 概念。使用者必須自己把元件組裝成頁面。
+
+**影響**:這是目前與 shadcn 最大的採用體驗差距。開發者的採用決策通常不是「這個 Button 好不好」,而是「我能不能 30 分鐘內搭出一個看起來像樣的登入頁」。Blocks 直接回答這個問題。shadcn blocks 是近兩年對採用率貢獻最大的功能之一。
+
+**實作方向**:
+- `registry/blocks/` 目錄,每個 block 是一個 Angular component(可含多個 child component)
+- `registry.json` 加入 `blocks` 陣列(類似 `components`),每筆有 `name`、`description`、`componentDeps`、`files`
+- CLI 的 `add` 指令識別 `block/` prefix,路由到 blocks registry
+- 初始 blocks 建議:`auth/login`、`auth/register`、`layout/dashboard-shell`、`layout/settings-page`
+
+**成本**:高。單個 block 的設計/實作本身不難,但要做出夠多、夠有代表性的 blocks 讓功能有意義,需要持續投入。建議先做 2–3 個 blocks 驗證 CLI 流程,再逐步擴充。
+
+---
+
+## P20 — Theme Presets：具名主題預設 + 互動式主題產生器
+
+- [ ] 提供數個可直接套用的具名主題(如 Default、Slate、Warm、High-Contrast),讓 `sanring init --theme slate` 能直接寫入對應的 CSS variables
+- [ ] Docs theming page 加入互動式調色預覽,讓使用者即時看到改變 accent/background/radius 的效果並複製 CSS
+
+**現況**:docs 有 theming page 說明 CSS variables,`sanring init` 會寫入一份 `sanring-theme.css`,但只有一套預設值,使用者要自訂必須手動改 token。
+
+**影響**:使用者不想從頭調 20 個 token。「我要暖色系/我要深藍色/我要更大的圓角」這類需求,具名 preset 能立刻滿足。shadcn 的 theme builder 是 docs 站停留時間最長的頁面之一。
+
+**成本**:中。Preset CSS 本身低成本;互動式 preview 中等成本(需要在 docs 裡動態套用 CSS variables 並即時反映到 demo 元件)。
+
+---
+
+## P21 — `ng add @sanring/cli` Schematics 支援
+
+- [ ] 實作 Angular Schematics,讓 `ng add @sanring/cli` 等同於跑完 `sanring init` 的全部步驟
+
+**現況**:安裝入口是 `npx @sanring/cli@latest init`,這對於習慣 Angular CLI 的使用者並不直覺。Angular 生態系預期 UI 工具都支援 `ng add`(Angular Material、PrimeNG、Spartan UI 都有)。
+
+**影響**:在 Angular 社群中,`ng add` 是「這是 Angular-native 工具」的一種認証訊號。缺少時,Angular 開發者會覺得這個工具「是給 React 的人做的、硬套在 Angular 上」。
+
+**實作方向**:在 `packages/cli/` 加入 `schematics/` 目錄,`package.json` 加上 `"ng-add": { "save": "devDependencies" }` + `"schematics": "./schematics/collection.json"`;schematic 的主體就是 spawn `sanring init` 或重用其邏輯。
+
+**成本**:中低。Angular Schematics 本身有固定樣板,核心邏輯直接重用 `init.ts`。主要成本是熟悉 Schematics API 和測試工具鏈。
+
+---
+
+## P22 — Docs component 頁面加入 StackBlitz 快捷連結
+
+- [ ] 每個 component 頁面的 code previewer 旁加一個「Open in StackBlitz」按鈕,讓使用者不用本地安裝就能試用
+
+**現況**:Docs 的 code previewer 是靜態展示,使用者若想動手試要先本地建好 Angular 專案並跑完 `sanring init` + `sanring add`。
+
+**差異**:這裡的目標是「一鍵開啟含有該元件的最小 Angular 專案」,而非在 docs 頁面內嵌入可編輯 editor(已確認 shadcn 自己的 docs 也不這樣做,兩邊打平)。StackBlitz 支援從 URL params 或 POST 預填專案內容,可以把 component 程式碼預先注入。
+
+**成本**:中。StackBlitz SDK 有 `sdk.openProject()` API,需要為每個元件準備一份最小化的 Angular 專案 template + 注入對應的元件程式碼。可以先做成通用 template,再逐元件補範例程式碼。
 
 ---
 
