@@ -193,6 +193,121 @@
 
 ---
 
+## P15 — 沒有版本兼容性追蹤與遷移機制
+
+- [ ] 在 registry.json 各元件條目加入 `migrations` 陣列與 `since` 版本欄位
+- [ ] `sanring.config.json` 每個已安裝元件記錄 `installedCliVersion`（安裝當時的 CLI 版本）
+- [ ] `sanring add` / `sanring update` 同步寫入 `installedCliVersion`
+- [ ] `sanring update` 擴充：主動 diff 並更新已變動的 shared utilities（目前只 diff component 本身，shared 靜默跳過）
+- [ ] 新增 `sanring migrate` 指令：偵測版本落差、輸出逐步遷移步驟
+- [ ] `component-changelog.ts` 加入 `breaking: true` 旗標，version notes 頁面醒目標示破壞性變更
+
+**問題背景**：copy-as-source 模型在開發期沒有強制的版本紀律，使用者執行 `sanring update` 時只能看到 diff 內容，但不知道哪些改動會讓 Angular template 編譯失敗（input 改名、output 改名、必填新 shared utility），也不知道下一步要改哪裡。目前 `sanring update` 也不檢查 shared utilities 是否需要同步更新，使用者可能裝了新版元件卻跑著舊版 `utils.ts` / `menu-overlay-controller.ts`。
+
+**目標**：讓「從舊版升到新版」變成一個有導引的流程，而非靠使用者自行對照 diff 猜測影響範圍。
+
+---
+
+### 實作設計
+
+#### 1. registry.json — 新增 `since` 與 `migrations`
+
+```jsonc
+{
+  "name": "switch",
+  "since": "0.1.0",          // 此元件從哪個 CLI 版本開始存在
+  "migrations": [
+    {
+      "fromVersion": "0.12.0",  // 使用者安裝版本 < fromVersion 就需要此遷移
+      "breaking": true,
+      "steps": [
+        "Rename input `[foo]` to `[bar]` in all templates using `sanring-switch`.",
+        "Run `sanring update switch` to apply the new source files."
+      ]
+    }
+  ]
+}
+```
+
+`migrations` 陣列每筆對應一段版本區間的破壞性變更，`fromVersion` 是「這個遷移開始適用的分水嶺版本」（語義：安裝版本 ≤ fromVersion 的使用者需要跑此遷移步驟）。
+
+#### 2. sanring.config.json — 每個元件記錄安裝版本
+
+```jsonc
+{
+  "componentPath": "src/app/components",
+  "components": {
+    "switch": {
+      "installedCliVersion": "0.9.0",   // 新增欄位
+      "files": {
+        "switch.component.ts": "sha256..."
+      }
+    }
+  }
+}
+```
+
+舊版安裝的元件沒有此欄位，視為 `"0.0.0"`（安全側：會匹配所有已知遷移）。
+
+#### 3. sanring add / sanring update — 補寫版本
+
+`add` 安裝完成後在 config 補寫當前 CLI 版本；`update` 在使用者接受更新後把 `installedCliVersion` 更新到最新 CLI 版本。
+
+#### 4. sanring update shared utilities 擴充
+
+目前 `update` 只 diff `sanring.config.json` 裡記錄的 component files，不碰 shared utilities（`componentPath/shared/`）。
+
+擴充邏輯：
+1. 對比每個已安裝元件的 `sharedDeps`（從 registry 讀取）與實際存在的 shared 檔案。
+2. 若 shared 檔案 hash 與目前 registry 版本不符，列為「shared 有更新」並進入與 component files 相同的 diff + 確認流程。
+3. 一次 `update` 同時處理 component files 與 shared utilities，避免「新元件跑舊 utils」的問題。
+
+#### 5. sanring migrate 指令
+
+```
+sanring migrate [components...]   # 不指定則掃全部已安裝元件
+sanring migrate --check           # 只偵測，不輸出操作步驟（適合 CI）
+```
+
+流程：
+1. 讀取 `sanring.config.json`，取出每個元件的 `installedCliVersion`（缺失視為 `"0.0.0"`）。
+2. 從 registry 讀取各元件的 `migrations` 陣列。
+3. 過濾出「`installedCliVersion` ≤ `fromVersion` 的遷移步驟」。
+4. 分元件輸出：版本落差、`breaking` 旗標、逐步 steps（含 template 改法說明）。
+5. 最後提示使用者執行 `sanring update` 套用新版原始碼。
+
+輸出範例：
+```
+sanring migrate
+
+  switch  (installed: 0.9.0 → current: 0.19.0)
+  ⚠ Breaking change (since 0.13.0)
+    1. Rename input [foo] to [bar] in all templates using <sanring-switch>.
+    2. Run `sanring update switch` to apply the new source files.
+
+  button  ✓ up to date
+
+Run `sanring update` to apply source file changes.
+```
+
+#### 6. component-changelog.ts — breaking 旗標
+
+現有 `ComponentChange` 加入 `breaking?: boolean`，讓 version notes 頁面可以在 `added` / `changed` / `fixed` 之外額外標出「破壞性」badge（紅色），不影響現有 notable 折疊邏輯。
+
+---
+
+**風險**：
+- `installedCliVersion` 需要靠 `sanring add`/`update` 主動維護，已安裝但還沒 update 過的元件欄位會缺失。缺失時保守處理（視為 `0.0.0`），會顯示多餘的遷移步驟，但不會漏掉真正需要的遷移。
+- `migrations` 資料需要手動維護（跟 registry.json 一起）。未來改動元件 API 時要記得補這個欄位，否則 migrate 就沒有資訊可輸出。建議在 CI registry-sync-check 加驗證：有 `breaking: true` 的 changelog 條目必須對應 registry 有對應的 migration 條目。
+
+**成本**：高。分四個子階段可各自獨立交付：
+1. registry.json schema 擴充 + sanring.config.json 版本寫入（`add`/`update` 各一個小改動）
+2. `sanring update` shared utilities 擴充
+3. `sanring migrate` 指令主體
+4. component-changelog.ts `breaking` 旗標 + version notes 頁面對應顯示
+
+---
+
 ## 查證後確認「不算差距」的項目(備查,避免重複討論)
 
 - **PR 沒有測試/型別檢查關卡**:原 P0 已完成,目前不再放主 todo。已新增 PR 觸發的 CI workflow,跑 `pnpm test`、`tsc --noEmit`、`pnpm lint`。
