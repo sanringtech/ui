@@ -94,13 +94,25 @@ export interface RegistryShared {
   peerDependencies?: Record<string, string>;
 }
 
+export interface RegistryMigration {
+  /** Users with installedVersion <= fromVersion need this migration. */
+  fromVersion: string;
+  breaking: boolean;
+  /** Human-readable steps describing what to change in templates/code. */
+  steps: string[];
+}
+
 export interface RegistryComponent {
   name: string;
   description: string;
+  /** CLI version that first introduced this component. */
+  since?: string;
   sharedDeps?: string[];
   componentDeps?: string[];
   peerDependencies?: Record<string, string>;
   files: string[];
+  /** Breaking-change migration guides, ordered oldest-first. */
+  migrations?: RegistryMigration[];
 }
 
 export interface Registry {

@@ -9,6 +9,8 @@ export interface ComponentChange {
   componentIds?: DocsComponentId[];
   /** Headline-worthy change (new component, breaking change). Shown by default; non-notable entries collapse. */
   notable?: boolean;
+  /** Marks a breaking change — renders a red BREAKING badge in the changelog and is referenced by `sanring migrate`. */
+  breaking?: boolean;
 }
 
 export interface CliVersionEntry {

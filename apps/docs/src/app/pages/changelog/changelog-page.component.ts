@@ -137,6 +137,11 @@ function renderInlineCode(text: string): string {
                           <span [class]="chipClass + ' ' + componentTypeClass[change.type]">{{
                             change.type
                           }}</span>
+                          @if (change.breaking) {
+                            <span
+                              [class]="chipClass + ' bg-[var(--docs-danger-bg,#fee2e2)] text-[var(--docs-danger-fg,#b91c1c)]'"
+                            >BREAKING</span>
+                          }
                           <span
                             class="min-w-0 flex-1"
                             [innerHTML]="renderText(change.text)"
@@ -179,6 +184,11 @@ function renderInlineCode(text: string): string {
                                 <span [class]="chipClass + ' ' + componentTypeClass[change.type]">{{
                                   change.type
                                 }}</span>
+                                @if (change.breaking) {
+                                  <span
+                                    [class]="chipClass + ' bg-[var(--docs-danger-bg,#fee2e2)] text-[var(--docs-danger-fg,#b91c1c)]'"
+                                  >BREAKING</span>
+                                }
                                 <span
                                   class="min-w-0 flex-1"
                                   [innerHTML]="renderText(change.text)"

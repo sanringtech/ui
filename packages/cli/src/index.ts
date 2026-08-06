@@ -12,6 +12,7 @@ import { initCommand } from './commands/init.js';
 import { listCommand } from './commands/list.js';
 import { removeCommand } from './commands/remove.js';
 import { searchCommand } from './commands/search.js';
+import { migrateCommand } from './commands/migrate.js';
 import { updateCommand } from './commands/update.js';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
@@ -46,5 +47,6 @@ program.addCommand(removeCommand);
 program.addCommand(diffCommand);
 program.addCommand(updateCommand);
 program.addCommand(doctorCommand);
+program.addCommand(migrateCommand);
 
 program.parse();
