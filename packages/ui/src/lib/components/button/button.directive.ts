@@ -9,6 +9,7 @@ import type { ButtonSize, ButtonVariant } from './button.types';
   standalone: true,
   host: {
     '[class]': 'buttonClass()',
+    '[attr.role]': 'isAnchor && !hasHref ? "button" : null',
     '[attr.aria-disabled]': "disabled() ? 'true' : null",
     '[attr.disabled]': 'disabled() && !isAnchor ? true : null',
     '[attr.tabindex]': 'disabled() && isAnchor ? -1 : null',
@@ -23,6 +24,7 @@ export class ButtonDirective {
   readonly disabled = input(false, { transform: booleanAttribute });
 
   protected readonly isAnchor = this.elementRef.nativeElement.tagName.toLowerCase() === 'a';
+  protected readonly hasHref = this.elementRef.nativeElement.hasAttribute('href');
 
   protected readonly buttonClass = computed(() => {
     const variants: Record<ButtonVariant, string> = {

@@ -14,6 +14,18 @@ import { ButtonDirective } from './button.directive';
 })
 class ButtonTestHost {}
 
+@Component({
+  imports: [ButtonDirective],
+  template: `<a sanringBtn>Action</a>`,
+})
+class AnchorNoHrefHost {}
+
+@Component({
+  imports: [ButtonDirective],
+  template: `<a sanringBtn href="/docs">Docs</a>`,
+})
+class AnchorWithHrefHost {}
+
 describe('ButtonDirective', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -64,5 +76,23 @@ describe('ButtonDirective', () => {
     fixture.detectChanges();
 
     await expectNoA11yViolations(fixture.nativeElement);
+  });
+
+  it('sets role="button" on an anchor without href', async () => {
+    await TestBed.configureTestingModule({ imports: [AnchorNoHrefHost] }).compileComponents();
+    const fixture = TestBed.createComponent(AnchorNoHrefHost);
+    fixture.detectChanges();
+
+    const anchor = fixture.nativeElement.querySelector('a') as HTMLAnchorElement;
+    expect(anchor.getAttribute('role')).toBe('button');
+  });
+
+  it('does not set role on an anchor with href', async () => {
+    await TestBed.configureTestingModule({ imports: [AnchorWithHrefHost] }).compileComponents();
+    const fixture = TestBed.createComponent(AnchorWithHrefHost);
+    fixture.detectChanges();
+
+    const anchor = fixture.nativeElement.querySelector('a') as HTMLAnchorElement;
+    expect(anchor.getAttribute('role')).toBeNull();
   });
 });
