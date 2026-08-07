@@ -5,6 +5,7 @@ import pc from 'picocolors';
 import { createRegistryIndex, fetchFile, fetchRegistry } from '../registry.js';
 import {
   confirmPrompt,
+  getCliVersion,
   hashContent,
   isUntouchedSinceInstall,
   fetchTextTargetsConcurrent,
@@ -111,6 +112,7 @@ export const updateCommand = new Command('update')
       // Gather every file that differs, same set diff.ts would compare, and
       // sort each into "safe to apply silently" vs. "needs a human to look".
       const installedHashes = { ...config?.installedHashes };
+      const installedVersions = { ...config?.installedVersions };
       const auto: AutoFile[] = [];
       const added: AutoFile[] = [];
       const pending: PendingFile[] = [];
@@ -305,10 +307,17 @@ export const updateCommand = new Command('update')
         return;
       }
 
+      if (applied > 0) {
+        const cliVersion = getCliVersion();
+        for (const component of components) {
+          installedVersions[component.name] = cliVersion;
+        }
+      }
       writeConfig(cwd, {
         componentPath: resolvedComponentPath,
         sharedPath: config?.sharedPath,
         installedHashes,
+        installedVersions,
       });
 
       const parts: string[] = [];

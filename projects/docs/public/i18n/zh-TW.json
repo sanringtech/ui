@@ -1,8 +1,0 @@
-{
-  "components": {
-    "accordion": {
-      "description": "一組垂直堆疊的互動標題，每個標題都可以展開對應的內容區塊。",
-      "title": "手風琴"
-    }
-  }
-}

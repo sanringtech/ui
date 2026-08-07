@@ -1,9 +1,9 @@
 export const changelogTranslations = {
-  'changelog.page.description': '以時間軸整理 Sanring UI 的重要版本進展，聚焦採用者需要知道的新增、改善與修正。',
-  'changelog.component.title': '版本重點',
+  'changelog.page.description':
+    '@sanring/cli 版本歷程 — 每個 npm 版本的新元件、CLI 指令與重要修正。',
+  'changelog.component.title': '版本歷程',
   'changelog.component.body':
-    '這裡只呈現使用者會感知到的版本重點；較細的實作、維護與內部調整保留在 package changelog 或 repository history。',
-  'changelog.component.otherFixes': '更多重點',
-  'changelog.component.changeCount': '則',
-
+    '每個條目對應一次 @sanring/cli npm 發布。重要新增預設展開；次要修正與內部調整折疊在「更多」中。',
+  'changelog.component.otherFixes': '更多',
+  'changelog.component.changeCount': '項',
 } as const;

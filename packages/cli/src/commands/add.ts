@@ -18,6 +18,7 @@ import {
 } from '../registry.js';
 import {
   confirmPrompt,
+  getCliVersion,
   getInstalledPackageSpecs,
   hashContent,
   fetchTextTargetsConcurrent,
@@ -219,6 +220,7 @@ export const addCommand = new Command('add')
       const componentBasePath = resolve(cwd, resolvedComponentPath);
       const resolvedSharedPath = options.sharedPath ?? config?.sharedPath;
       const installedHashes = { ...config?.installedHashes };
+      const installedVersions = { ...config?.installedVersions };
 
       // Fetch registry
       const registrySpinner = ora('Loading registry...').start();
@@ -488,10 +490,15 @@ export const addCommand = new Command('add')
       }
 
       if (!options.dryRun && written > 0) {
+        const cliVersion = getCliVersion();
+        for (const component of toInstall) {
+          installedVersions[component.name] = cliVersion;
+        }
         writeConfig(cwd, {
           componentPath: resolvedComponentPath,
           sharedPath: resolvedSharedPath,
           installedHashes,
+          installedVersions,
         });
       }
 

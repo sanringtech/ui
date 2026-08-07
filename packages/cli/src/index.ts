@@ -13,6 +13,7 @@ import { listCommand } from './commands/list.js';
 import { mcpCommand } from './commands/mcp.js';
 import { removeCommand } from './commands/remove.js';
 import { searchCommand } from './commands/search.js';
+import { migrateCommand } from './commands/migrate.js';
 import { updateCommand } from './commands/update.js';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
@@ -48,5 +49,6 @@ program.addCommand(diffCommand);
 program.addCommand(updateCommand);
 program.addCommand(doctorCommand);
 program.addCommand(mcpCommand);
+program.addCommand(migrateCommand);
 
 program.parse();

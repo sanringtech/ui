@@ -17,7 +17,9 @@ pnpm-debug.log
 packages/*/pnpm-lock.yaml
 
 # IDEs and editors
-.claude/
+.claude/**
+!.claude/commands/
+!.claude/commands/**
 .idea/
 .project
 .classpath

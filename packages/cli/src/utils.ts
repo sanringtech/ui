@@ -2,6 +2,7 @@ import { createHash } from 'node:crypto';
 import { existsSync, readFileSync, readdirSync, writeFileSync } from 'node:fs';
 import type { Dirent } from 'node:fs';
 import { dirname, join, resolve } from 'node:path';
+import { fileURLToPath } from 'node:url';
 import { createInterface } from 'node:readline/promises';
 import pc from 'picocolors';
 
@@ -17,6 +18,33 @@ export interface SanringConfig {
   // Lets `update` tell "untouched since install" apart from "user edited it"
   // without needing to keep a full copy of the original file around.
   installedHashes?: Record<string, string>;
+  // CLI version at the time each component was last installed or updated,
+  // keyed by component name. Used by `sanring migrate` to detect version gaps
+  // and surface breaking-change migration steps. Missing = treat as "0.0.0".
+  installedVersions?: Record<string, string>;
+}
+
+/** CLI version from package.json; returns "0.0.0" on any read failure. */
+export function getCliVersion(): string {
+  try {
+    const __dirname = dirname(fileURLToPath(import.meta.url));
+    const pkg = JSON.parse(readFileSync(join(__dirname, '../package.json'), 'utf-8')) as {
+      version: string;
+    };
+    return pkg.version;
+  } catch {
+    return '0.0.0';
+  }
+}
+
+/** Semver comparison: returns true if a <= b (major.minor.patch, no pre-release). */
+export function semverLte(a: string, b: string): boolean {
+  const parse = (v: string) => v.split('.').map((n) => parseInt(n, 10) || 0) as [number, number, number];
+  const [aMaj, aMin, aPat] = parse(a);
+  const [bMaj, bMin, bPat] = parse(b);
+  if (aMaj !== bMaj) return aMaj < bMaj;
+  if (aMin !== bMin) return aMin < bMin;
+  return aPat <= bPat;
 }
 
 export function hashContent(content: string): string {
