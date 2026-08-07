@@ -4,12 +4,17 @@ import {
   CallToolRequestSchema,
   ListToolsRequestSchema,
 } from '@modelcontextprotocol/sdk/types.js';
-import { spawnSync } from 'node:child_process';
-import { readFileSync } from 'node:fs';
+import { spawn } from 'node:child_process';
+import { existsSync, readFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { Command } from 'commander';
-import { createRegistryIndex, fetchRegistry, type RegistryComponent } from '../registry.js';
+import {
+  createRegistryIndex,
+  fetchRegistry,
+  type Registry,
+  type RegistryComponent,
+} from '../registry.js';
 import { resolveInstallSet, collectPeerDeps } from './add.js';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
@@ -28,13 +33,9 @@ function getCliVersion(): string {
 
 function formatComponentDetail(
   component: RegistryComponent,
-  allComponents: RegistryComponent[],
+  registry: Registry,
 ): string {
-  const registryIndex = createRegistryIndex({
-    name: '',
-    shared: [],
-    components: allComponents,
-  });
+  const registryIndex = createRegistryIndex(registry);
   const { toInstall, autoAdded } = resolveInstallSet([component.name], registryIndex);
   const peerDeps = collectPeerDeps(toInstall, registryIndex);
 
@@ -61,7 +62,63 @@ function formatComponentDetail(
   return lines.join('\n');
 }
 
-async function startMcpServer(registryUrl?: string): Promise<void> {
+export interface AddComponentToolInput {
+  name: string;
+  cwd: string;
+}
+
+export interface AddComponentToolResult {
+  ok: boolean;
+  output: string;
+  exitCode?: number | null;
+  errorMessage?: string;
+}
+
+export interface CreateMcpServerOptions {
+  registryUrl?: string;
+  addComponent?: (
+    input: AddComponentToolInput,
+  ) => AddComponentToolResult | Promise<AddComponentToolResult>;
+}
+
+function runAddComponentWithCli({ name: componentName, cwd }: AddComponentToolInput): Promise<AddComponentToolResult> {
+  return new Promise((resolve) => {
+    const cliBin = join(__dirname, 'index.js');
+    const chunks: string[] = [];
+
+    const child = spawn(process.execPath, [cliBin, 'add', componentName, '--yes'], {
+      cwd,
+      timeout: 60_000,
+    });
+
+    child.stdout.on('data', (d: Buffer) => chunks.push(d.toString()));
+    child.stderr.on('data', (d: Buffer) => chunks.push(d.toString()));
+
+    child.on('error', (err) => {
+      resolve({ ok: false, output: chunks.join('').trim(), errorMessage: err.message });
+    });
+
+    child.on('close', (code) => {
+      const output = chunks.join('').trim();
+      if (code !== 0) {
+        resolve({ ok: false, output, exitCode: code });
+      } else {
+        resolve({ ok: true, output });
+      }
+    });
+  });
+}
+
+export function createMcpServer(options: CreateMcpServerOptions = {}): Server {
+  const registryUrl = options.registryUrl;
+  const addComponent = options.addComponent ?? runAddComponentWithCli;
+
+  let cachedRegistry: Registry | null = null;
+  const getRegistry = async (): Promise<Registry> => {
+    if (!cachedRegistry) cachedRegistry = await fetchRegistry(registryUrl);
+    return cachedRegistry;
+  };
+
   const server = new Server(
     { name: 'sanring', version: getCliVersion() },
     { capabilities: { tools: {} } },
@@ -126,7 +183,7 @@ async function startMcpServer(registryUrl?: string): Promise<void> {
 
     switch (name) {
       case 'list_components': {
-        const registry = await fetchRegistry(registryUrl);
+        const registry = await getRegistry();
         const lines = registry.components
           .map((c) => `  ${c.name.padEnd(24)} ${c.description}`)
           .join('\n');
@@ -142,7 +199,7 @@ async function startMcpServer(registryUrl?: string): Promise<void> {
 
       case 'search_components': {
         const { query } = args as { query: string };
-        const registry = await fetchRegistry(registryUrl);
+        const registry = await getRegistry();
         const q = query.toLowerCase();
         const nameMatches = registry.components.filter((c) => c.name.toLowerCase().includes(q));
         const descMatches = registry.components.filter(
@@ -177,7 +234,7 @@ async function startMcpServer(registryUrl?: string): Promise<void> {
 
       case 'get_component_info': {
         const { name: componentName } = args as { name: string };
-        const registry = await fetchRegistry(registryUrl);
+        const registry = await getRegistry();
         const component = registry.components.find((c) => c.name === componentName);
 
         if (!component) {
@@ -196,7 +253,7 @@ async function startMcpServer(registryUrl?: string): Promise<void> {
           content: [
             {
               type: 'text' as const,
-              text: formatComponentDetail(component, registry.components),
+              text: formatComponentDetail(component, registry),
             },
           ],
         };
@@ -204,38 +261,42 @@ async function startMcpServer(registryUrl?: string): Promise<void> {
 
       case 'add_component': {
         const { name: componentName, cwd } = args as { name: string; cwd: string };
-        const cliBin = join(__dirname, 'index.js');
 
-        const result = spawnSync(process.execPath, [cliBin, 'add', componentName, '--yes'], {
-          cwd,
-          encoding: 'utf-8',
-          timeout: 60_000,
-        });
-
-        if (result.error) {
+        if (!existsSync(join(cwd, 'angular.json'))) {
           return {
             isError: true,
             content: [
               {
                 type: 'text' as const,
-                text: `Failed to run sanring add: ${result.error.message}`,
+                text: `"${cwd}" does not appear to be an Angular project root (angular.json not found).`,
               },
             ],
           };
         }
 
-        const output = [result.stdout, result.stderr]
-          .filter(Boolean)
-          .join('\n')
-          .trim();
+        const result = await addComponent({ name: componentName, cwd });
 
-        if (result.status !== 0) {
+        if (result.errorMessage) {
           return {
             isError: true,
             content: [
               {
                 type: 'text' as const,
-                text: `sanring add "${componentName}" failed (exit ${result.status ?? 'unknown'}):\n\n${output}`,
+                text: `Failed to run sanring add: ${result.errorMessage}`,
+              },
+            ],
+          };
+        }
+
+        if (!result.ok) {
+          return {
+            isError: true,
+            content: [
+              {
+                type: 'text' as const,
+                text:
+                  `sanring add "${componentName}" failed ` +
+                  `(exit ${result.exitCode ?? 'unknown'}):\n\n${result.output}`,
               },
             ],
           };
@@ -245,7 +306,7 @@ async function startMcpServer(registryUrl?: string): Promise<void> {
           content: [
             {
               type: 'text' as const,
-              text: `Successfully added "${componentName}" to the project.\n\n${output}`,
+              text: `Successfully added "${componentName}" to the project.\n\n${result.output}`,
             },
           ],
         };
@@ -259,6 +320,11 @@ async function startMcpServer(registryUrl?: string): Promise<void> {
     }
   });
 
+  return server;
+}
+
+async function startMcpServer(registryUrl?: string): Promise<void> {
+  const server = createMcpServer({ registryUrl });
   const transport = new StdioServerTransport();
   await server.connect(transport);
 }
