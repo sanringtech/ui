@@ -1,14 +1,12 @@
----
-name: insert-component
-description: Sanring UI lib 元件審查。當新元件開發完成、準備加入 registry 之前執行：檢查 Angular 結構正確性（OnPush、CDK 使用方式、瀏覽器 API 安全性）、a11y 合規（ARIA roles、鍵盤導覽、focus 管理）、props/API 設計（signal inputs、ariaLabel 族群、id 綁定），以及是否有 spec 檔案——沒有的話自動補寫最低 baseline spec。
-argument-hint: "元件名稱，例如 switch 或 packages/ui/src/lib/components/switch"
-user-invocable: true
-allowed-tools: "Read Write Edit Bash Glob Grep"
+# insert-component — Sanring 元件審查
+
+新元件開發完成、準備加入 registry 之前執行。檢查 Angular 結構正確性、a11y 合規、props/API 設計，以及是否有 spec 檔案——沒有的話自動補寫最低 baseline spec。
+
+**用法**：`/insert-component button` 或 `/insert-component packages/ui/src/lib/components/switch`
+
 ---
 
-# insert-component — Sanring 元件審查 Skill
-
-被呼叫時，依序執行以下六個 Phase。每個 Phase 完成後先輸出結果再繼續下一個。
+依序執行以下六個 Phase。每個 Phase 完成後先輸出結果再繼續下一個。
 
 ---
 
@@ -29,7 +27,7 @@ allowed-tools: "Read Write Edit Bash Glob Grep"
 
 ### 1-A 基礎設定
 - [ ] 所有 `@Component` 都設定了 `changeDetection: ChangeDetectionStrategy.OnPush`
-- [ ] 所有 `@Component` 都設定了 `standalone: true`（或 `standalone` 欄位存在）
+- [ ] 所有 `@Component` 都設定了 `standalone: true`
 - [ ] 沒有使用 `@Input()` / `@Output()` decorator（應改用 signal-based `input()` / `output()`）
 - [ ] 沒有裸露的 `any` 型別（`as any`、`: any`）
 
@@ -129,7 +127,6 @@ allowed-tools: "Read Write Edit Bash Glob Grep"
 Spec 必須覆蓋：
 
 ```typescript
-// 樣板結構（根據實際元件調整）
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { Component } from '@angular/core';
 import { By } from '@angular/platform-browser';
@@ -151,7 +148,7 @@ describe('<ComponentName>', () => {
   // 5. Keyboard（若互動元件）
   it('responds to Enter/Space/Escape/Arrow keys', ...);
 
-  // 6. Component-specific core behavior（根據 Phase 1–3 判斷補充）
+  // 6. Component-specific core behavior
 });
 ```
 
@@ -165,7 +162,7 @@ pnpm --filter @sanring/ui exec vitest run --reporter=verbose <spec-file-path>
 
 ## Phase 6 — 審查摘要
 
-輸出一份結構化摘要：
+輸出結構化摘要：
 
 ```
 ## insert-component 審查結果：<component-name>
@@ -188,14 +185,10 @@ pnpm --filter @sanring/ui exec vitest run --reporter=verbose <spec-file-path>
 ```
 
 結論判定：
-- **❌ 需修正**：任何 Phase 1 的 ❌ 或 Phase 2 2-A/2-C 的 ❌ → 結構或 a11y 核心缺失，阻斷加入 registry
-- **⚠ 建議修正後加入**：Phase 2 2-B/2-D/2-E 或 Phase 3 有 ❌ → 功能正確但 API 或 a11y 細節未完整
+- **❌ 需修正**：任何 Phase 1 的 ❌ 或 Phase 2 2-A/2-C 的 ❌ → 結構或 a11y 核心缺失
+- **⚠ 建議修正後加入**：Phase 2 2-B/2-D/2-E 或 Phase 3 有 ❌ → 功能正確但細節未完整
 - **✅ 可加入**：全部通過或只有 ⚠（不適用）
 
 ---
 
-## 注意事項
-
-- **不修改元件源碼**：Phase 1–4 只讀取，Phase 5 只補 spec。若發現需要修正的問題，列在 Phase 6 摘要讓使用者決定是否修改。
-- **spec 只補不改**：若 spec 已存在，Phase 5 不會覆蓋它，只列出缺少的 test case 建議。
-- **registry 路徑同步**：审查的是 `packages/ui/` 下的源碼，但 registry 的 `.ts` 檔案是對應的複製版，兩者應一致（registry-sync-check.mjs 有自動驗證）。
+**注意**：Phase 1–4 只讀取不修改元件源碼。Phase 5 只補 spec，不覆蓋已存在的 spec 檔案。

@@ -18,8 +18,8 @@ packages/*/pnpm-lock.yaml
 
 # IDEs and editors
 .claude/**
-!.claude/skills/
-!.claude/skills/**
+!.claude/commands/
+!.claude/commands/**
 .idea/
 .project
 .classpath
