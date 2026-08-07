@@ -305,8 +305,67 @@ const INLINE_CODE_CLASS =
         </ul>
       </app-component-page-section>
 
-      <!-- 11. Requirements -->
+      <!-- 11. mcp -->
       <app-component-page-section [section]="sections[10]">
+        <p class="mt-0 text-base leading-[1.7] text-[var(--docs-muted)]">
+          {{ i18n.t('cli.mcp.body') }}
+        </p>
+        <div
+          class="mt-6 overflow-hidden rounded-[var(--sanring-radius)] border border-[var(--docs-border)]"
+        >
+          <app-component-page-code-block [code]="commands.mcp" language="bash" />
+        </div>
+        <ul class="mt-4 list-none space-y-2 p-0 text-sm text-[var(--docs-muted)]">
+          <li>
+            <code [class]="inlineCodeClass">--registry &lt;source&gt;</code>
+            &mdash; custom registry (URL or local path)
+          </li>
+        </ul>
+        <p class="mb-2 mt-6 text-sm font-medium text-[var(--docs-fg)]">
+          {{ i18n.t('cli.mcp.tools.title') }}
+        </p>
+        <ul class="mt-0 list-none space-y-2 p-0 text-sm text-[var(--docs-muted)]">
+          <li>
+            <code [class]="inlineCodeClass">list_components</code>
+            &mdash; list every available component with its description
+          </li>
+          <li>
+            <code [class]="inlineCodeClass">search_components</code>
+            &mdash; search components by name or description
+          </li>
+          <li>
+            <code [class]="inlineCodeClass">get_component_info</code>
+            &mdash; show files, auto-installed component dependencies, shared utilities, and peer
+            dependencies
+          </li>
+          <li>
+            <code [class]="inlineCodeClass">plan_component_install</code>
+            &mdash; preview files, component deps, and peer packages that would be installed,
+            without modifying the project
+          </li>
+          <li>
+            <code [class]="inlineCodeClass">add_component</code>
+            &mdash; run <code [class]="inlineCodeClass">sanring add --yes</code> in the target
+            Angular project (call
+            <code [class]="inlineCodeClass">plan_component_install</code>
+            first to preview)
+          </li>
+        </ul>
+        <p class="mb-2 mt-6 text-sm font-medium text-[var(--docs-fg)]">
+          {{ i18n.t('cli.mcp.setup.title') }}
+        </p>
+        <p class="mt-0 text-sm leading-[1.7] text-[var(--docs-muted)]">
+          {{ i18n.t('cli.mcp.setup.body') }}
+        </p>
+        <div
+          class="mt-4 overflow-hidden rounded-[var(--sanring-radius)] border border-[var(--docs-border)]"
+        >
+          <app-component-page-code-block [code]="commands.mcpConfig" language="json" />
+        </div>
+      </app-component-page-section>
+
+      <!-- 12. Requirements -->
+      <app-component-page-section [section]="sections[11]">
         <p class="mt-0 text-base leading-[1.7] text-[var(--docs-muted)]">
           {{ i18n.t('cli.requirements.body') }}
         </p>
@@ -351,6 +410,7 @@ export class CliPageComponent {
     { id: 'list', titleKey: 'cli.list.title' },
     { id: 'search', titleKey: 'cli.search.title' },
     { id: 'doctor', titleKey: 'cli.doctor.title' },
+    { id: 'mcp', titleKey: 'cli.mcp.title' },
     { id: 'requirements', titleKey: 'cli.requirements.title' },
   ];
 
@@ -417,5 +477,14 @@ npx @sanring/cli@latest search "date"`,
 
 # skip registry network check
 npx @sanring/cli@latest doctor --offline`,
+    mcp: `npx @sanring/cli@latest mcp`,
+    mcpConfig: `{
+  "mcpServers": {
+    "sanring": {
+      "command": "npx",
+      "args": ["@sanring/cli@latest", "mcp"]
+    }
+  }
+}`,
   };
 }

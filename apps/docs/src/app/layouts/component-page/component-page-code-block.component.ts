@@ -16,7 +16,8 @@ export type ComponentPageCodeLanguage =
   | 'typescript'
   | 'html'
   | 'css'
-  | 'bash';
+  | 'bash'
+  | 'json';
 
 interface CodeToken {
   text: string;
@@ -174,6 +175,7 @@ export class ComponentPageCodeBlock {
       html,
       css,
       bash,
+      json,
       vitesseDark,
     ] = await Promise.all([
       import('shiki/core'),
@@ -184,6 +186,7 @@ export class ComponentPageCodeBlock {
       import('shiki/langs/html.mjs'),
       import('shiki/langs/css.mjs'),
       import('shiki/langs/bash.mjs'),
+      import('shiki/langs/json.mjs'),
       import('shiki/themes/vitesse-dark.mjs'),
     ]);
 
@@ -196,6 +199,7 @@ export class ComponentPageCodeBlock {
         html.default,
         css.default,
         bash.default,
+        json.default,
       ],
       engine: createJavaScriptRegexEngine(),
     });

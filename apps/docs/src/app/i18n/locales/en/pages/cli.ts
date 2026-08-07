@@ -3,7 +3,7 @@ export const cliTranslations = {
     'A command-line tool for scaffolding Sanring UI components directly into your project — copy the source, wire up dependencies, and stay in control of the code.',
   'cli.overview.title': 'Overview',
   'cli.overview.body':
-    'The @sanring/cli package exposes nine commands — init, add, remove, info, diff, update, list, search, and doctor — that read from the same component registry used by this documentation site. Run it with npx so you always get the latest version.',
+    'The @sanring/cli package exposes ten commands — init, add, remove, info, diff, update, list, search, doctor, and mcp — that read from the same component registry used by this documentation site. Run it with npx so you always get the latest version.',
   'cli.init.title': 'init',
   'cli.init.body':
     "Run once per project. Verifies you're in an Angular project, writes a sanring.config.json with your chosen component path, generates src/sanring-theme.css (the --sanring-* design tokens every component reads — skipped by default if it already exists, to protect your customizations), and installs the base peer dependencies (clsx, tailwind-merge).",
@@ -31,6 +31,13 @@ export const cliTranslations = {
   'cli.doctor.title': 'doctor',
   'cli.doctor.body':
     'Checks your environment and project config for common issues: Node.js version, Angular project detection, sanring.config.json validity, theme file presence, per-file hash integrity (untouched / customized / orphaned), and registry reachability. Use --offline to skip the network check. Exits 1 when hard errors are found, making it suitable as a CI readiness gate.',
+  'cli.mcp.title': 'mcp',
+  'cli.mcp.body':
+    'Starts an MCP server over stdio so AI coding agents — Claude Code, Cursor, Windsurf — can query and install components directly, without shelling out. Exposes five tools: list_components, search_components, get_component_info, plan_component_install (dry-run preview, does not modify the project), and add_component.',
+  'cli.mcp.tools.title': 'Tools',
+  'cli.mcp.setup.title': 'Claude Code setup',
+  'cli.mcp.setup.body':
+    'Add this to your project or global MCP config (e.g. .claude/mcp.json) and restart the agent.',
   'cli.requirements.title': 'Requirements',
   'cli.requirements.body':
     'Run the CLI from the root of an Angular project. Before starting, make sure your project matches these versions and stylesheet requirements.',
