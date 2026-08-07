@@ -113,7 +113,7 @@
 
 - [x] 實作 `@sanring/cli` MCP server 支援,讓 Claude Code / Cursor 等 AI agent 能直接查詢、安裝元件
 
-**已完成（暫存於 `feat/mcp-server` branch，待主要功能穩定後合回 main）**：新增 `packages/cli/src/commands/mcp.ts`，加入 `@modelcontextprotocol/sdk@1.30.0` 依賴，以 lower-level `Server` API（NodeNext ESM 相容、不額外依賴 zod）實作四個 tool：`list_components`（列出全部 52 個元件）、`search_components`（名稱優先 fuzzy 搜尋）、`get_component_info`（含 files、自動安裝的 componentDeps、peerDeps）、`add_component`（`cwd` 參數指定 Angular project root，子程序執行 `sanring add --yes`）。`sanring mcp` command 透過 stdio transport 啟動，`serverInfo.version` 正確讀取 CLI 版本。手動驗證 initialize + tools/list + list_components + search_components 全部正常回傳。
+**已完成**：新增 `packages/cli/src/commands/mcp.ts`，加入 `@modelcontextprotocol/sdk@1.30.0` 依賴，以 lower-level `Server` API（NodeNext ESM 相容、不額外依賴 zod）實作四個 tool：`list_components`（列出全部 52 個元件）、`search_components`（名稱優先搜尋）、`get_component_info`（含 files、自動安裝的 componentDeps、shared utilities、peerDeps）、`add_component`（`cwd` 參數指定 Angular project root，子程序執行 `sanring add --yes`）。`sanring mcp` command 透過 stdio transport 啟動，`serverInfo.version` 正確讀取 CLI 版本。已補 `packages/cli/src/commands/mcp.test.ts`，用 MCP SDK `Client` + `InMemoryTransport` 覆蓋 tools/list、search、detail、add tool boundary；README 也補上 Claude Code / local development 設定方式。
 
 **使用方式**（待合回 main 後生效）：在 `.claude/mcp.json` 或 Claude Code 設定中加入：
 ```json
