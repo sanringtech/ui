@@ -4,6 +4,7 @@ import type { Registry } from '../registry.js';
 
 export interface RegistryFixtureContent {
   utils?: string;
+  utilsPeerDependencies?: Record<string, string>;
   theme?: string;
   widget?: string;
   /** Second file added to the widget component — simulates a registry adding a new file post-install. */
@@ -21,7 +22,12 @@ export function writeRegistryFixture(dir: string, content: RegistryFixtureConten
   const shared: Registry['shared'] = [];
   if (content.utils !== undefined) {
     writeFileSync(join(dir, 'shared', 'utils.ts'), content.utils, 'utf-8');
-    shared.push({ name: 'utils', description: 'fixture utils', file: 'shared/utils.ts' });
+    shared.push({
+      name: 'utils',
+      description: 'fixture utils',
+      file: 'shared/utils.ts',
+      peerDependencies: content.utilsPeerDependencies,
+    });
   }
   if (content.theme !== undefined) {
     writeFileSync(join(dir, 'shared', 'theme.css'), content.theme, 'utf-8');

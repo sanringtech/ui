@@ -162,6 +162,54 @@ npx @sanring/cli@latest list
 
 ---
 
+### `mcp`
+
+Start the Sanring UI MCP server over stdio so AI coding agents can inspect the
+registry and install components without shelling out manually.
+
+```bash
+npx @sanring/cli@latest mcp
+```
+
+The server exposes five tools:
+
+| Tool | Description |
+|---|---|
+| `list_components` | List every available component with its description |
+| `search_components` | Search components by name or description |
+| `get_component_info` | Show files, auto-installed component dependencies, shared utilities, and peer dependencies |
+| `plan_component_install` | Preview files, component deps, and peer packages that would be installed — without modifying the project |
+| `add_component` | Run `sanring add --yes` in the target Angular project (call `plan_component_install` first to preview) |
+
+Claude Code example:
+
+```json
+{
+  "mcpServers": {
+    "sanring": {
+      "command": "npx",
+      "args": ["@sanring/cli@latest", "mcp"]
+    }
+  }
+}
+```
+
+For local development before publishing, build the CLI first and point the
+agent at the compiled entry:
+
+```json
+{
+  "mcpServers": {
+    "sanring": {
+      "command": "node",
+      "args": ["/absolute/path/to/sanring-workspace/packages/cli/dist/index.js", "mcp"]
+    }
+  }
+}
+```
+
+---
+
 ## Requirements
 
 - Node.js >= 18

@@ -4,6 +4,10 @@
     "angular-cli": {
       "command": "npx",
       "args": ["-y", "@angular/cli", "mcp"]
+    },
+    "sanring": {
+      "command": "node",
+      "args": ["${workspaceFolder}/packages/cli/dist/index.js", "mcp"]
     }
   }
 }

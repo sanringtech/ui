@@ -10,6 +10,7 @@ import { doctorCommand } from './commands/doctor.js';
 import { infoCommand } from './commands/info.js';
 import { initCommand } from './commands/init.js';
 import { listCommand } from './commands/list.js';
+import { mcpCommand } from './commands/mcp.js';
 import { removeCommand } from './commands/remove.js';
 import { searchCommand } from './commands/search.js';
 import { migrateCommand } from './commands/migrate.js';
@@ -47,6 +48,7 @@ program.addCommand(removeCommand);
 program.addCommand(diffCommand);
 program.addCommand(updateCommand);
 program.addCommand(doctorCommand);
+program.addCommand(mcpCommand);
 program.addCommand(migrateCommand);
 
 program.parse();
