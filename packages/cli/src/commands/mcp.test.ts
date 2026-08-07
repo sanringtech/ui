@@ -78,6 +78,7 @@ describe('mcp server', () => {
       'list_components',
       'search_components',
       'get_component_info',
+      'plan_component_install',
       'add_component',
     ]);
   });
@@ -99,6 +100,22 @@ describe('mcp server', () => {
     expect(textContent(detailResult)).toContain('widget/index.ts');
     expect(textContent(detailResult)).toContain('Shared utilities: utils');
     expect(textContent(detailResult)).toContain('clsx@^2.0.0');
+  });
+
+  it('plan_component_install returns files and peer deps without modifying project', async () => {
+    const testClient = await connect();
+
+    const result = await testClient.callTool({
+      name: 'plan_component_install',
+      arguments: { name: 'widget' },
+    });
+
+    const text = textContent(result);
+    expect(text).toContain('Plan for: sanring add widget');
+    expect(text).toContain('widget/index.ts');
+    expect(text).toContain('clsx@^2.0.0');
+    expect(text).toContain('Run add_component to apply.');
+    expect((result as { isError?: boolean }).isError).toBeUndefined();
   });
 
   it('returns isError for missing or empty string arguments', async () => {

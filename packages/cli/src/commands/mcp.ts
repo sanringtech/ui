@@ -178,9 +178,24 @@ export function createMcpServer(options: CreateMcpServerOptions = {}): Server {
         },
       },
       {
+        name: 'plan_component_install',
+        description:
+          'Preview what would happen if you added a Sanring UI component: which files would be written, which component dependencies would be auto-installed, and which peer packages would need to be installed. Does not modify the project.',
+        inputSchema: {
+          type: 'object' as const,
+          properties: {
+            name: {
+              type: 'string',
+              description: "Component name to preview (e.g. 'button', 'dialog')",
+            },
+          },
+          required: ['name'],
+        },
+      },
+      {
         name: 'add_component',
         description:
-          'Add a Sanring UI component to an Angular project. Copies component source files into the project, installs peer dependencies, and handles component dependencies automatically.',
+          'Add a Sanring UI component to an Angular project. Copies component source files into the project, installs peer dependencies, and handles component dependencies automatically. Call plan_component_install first to preview what will change.',
         inputSchema: {
           type: 'object' as const,
           properties: {
@@ -280,6 +295,46 @@ export function createMcpServer(options: CreateMcpServerOptions = {}): Server {
             },
           ],
         };
+      }
+
+      case 'plan_component_install': {
+        const validated = requireStrings(args, ['name']);
+        if ('isError' in validated) return validated;
+        const { name: componentName } = validated.values;
+        const registry = await getRegistry();
+        const component = registry.components.find((c) => c.name === componentName);
+
+        if (!component) {
+          const available = registry.components.map((c) => c.name).join(', ');
+          return {
+            isError: true,
+            content: [{ type: 'text' as const, text: `Component "${componentName}" not found.\n\nAvailable: ${available}` }],
+          };
+        }
+
+        const registryIndex = createRegistryIndex(registry);
+        const { toInstall, autoAdded } = resolveInstallSet([componentName], registryIndex);
+        const peerDeps = collectPeerDeps(toInstall, registryIndex);
+
+        const allFiles = toInstall.flatMap((c) => c.files);
+        const lines: string[] = [
+          `Plan for: sanring add ${componentName}`,
+          '',
+          `Files to write (${allFiles.length}):`,
+          ...allFiles.map((f) => `  ${f}`),
+        ];
+        if (autoAdded.length > 0) {
+          lines.push('', `Component dependencies (auto-installed): ${autoAdded.join(', ')}`);
+        }
+        if (Object.keys(peerDeps).length > 0) {
+          lines.push('', 'Peer packages to install:');
+          for (const [pkg, ver] of Object.entries(peerDeps)) {
+            lines.push(`  ${pkg}@${ver}`);
+          }
+        }
+        lines.push('', 'Run add_component to apply.');
+
+        return { content: [{ type: 'text' as const, text: lines.join('\n') }] };
       }
 
       case 'add_component': {
