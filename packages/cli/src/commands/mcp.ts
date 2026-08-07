@@ -62,6 +62,25 @@ function formatComponentDetail(
   return lines.join('\n');
 }
 
+type McpErrorContent = { isError: true; content: [{ type: 'text'; text: string }] };
+
+function requireStrings<T extends string>(
+  args: unknown,
+  fields: T[],
+): { values: Record<T, string> } | McpErrorContent {
+  const obj = (args ?? {}) as Record<string, unknown>;
+  for (const field of fields) {
+    const val = obj[field];
+    if (typeof val !== 'string' || val.trim() === '') {
+      return {
+        isError: true,
+        content: [{ type: 'text' as const, text: `Missing or invalid argument: "${field}" must be a non-empty string.` }],
+      };
+    }
+  }
+  return { values: Object.fromEntries(fields.map((f) => [f, (obj[f] as string).trim()])) as Record<T, string> };
+}
+
 export interface AddComponentToolInput {
   name: string;
   cwd: string;
@@ -198,7 +217,9 @@ export function createMcpServer(options: CreateMcpServerOptions = {}): Server {
       }
 
       case 'search_components': {
-        const { query } = args as { query: string };
+        const validated = requireStrings(args, ['query']);
+        if ('isError' in validated) return validated;
+        const { query } = validated.values;
         const registry = await getRegistry();
         const q = query.toLowerCase();
         const nameMatches = registry.components.filter((c) => c.name.toLowerCase().includes(q));
@@ -233,7 +254,9 @@ export function createMcpServer(options: CreateMcpServerOptions = {}): Server {
       }
 
       case 'get_component_info': {
-        const { name: componentName } = args as { name: string };
+        const validated = requireStrings(args, ['name']);
+        if ('isError' in validated) return validated;
+        const { name: componentName } = validated.values;
         const registry = await getRegistry();
         const component = registry.components.find((c) => c.name === componentName);
 
@@ -260,7 +283,9 @@ export function createMcpServer(options: CreateMcpServerOptions = {}): Server {
       }
 
       case 'add_component': {
-        const { name: componentName, cwd } = args as { name: string; cwd: string };
+        const validated = requireStrings(args, ['name', 'cwd']);
+        if ('isError' in validated) return validated;
+        const { name: componentName, cwd } = validated.values;
 
         if (!existsSync(join(cwd, 'angular.json'))) {
           return {
