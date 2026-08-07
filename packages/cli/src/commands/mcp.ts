@@ -272,6 +272,7 @@ export function createMcpServer(options: CreateMcpServerOptions = {}): Server {
         if (!component) {
           const available = registry.components.map((c) => c.name).join(', ');
           return {
+            isError: true,
             content: [
               {
                 type: 'text' as const,

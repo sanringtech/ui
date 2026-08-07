@@ -118,6 +118,24 @@ describe('mcp server', () => {
     expect((result as { isError?: boolean }).isError).toBeUndefined();
   });
 
+  it('returns isError when a component name is not found', async () => {
+    const testClient = await connect();
+
+    const detailResult = await testClient.callTool({
+      name: 'get_component_info',
+      arguments: { name: 'does-not-exist' },
+    });
+    const planResult = await testClient.callTool({
+      name: 'plan_component_install',
+      arguments: { name: 'does-not-exist' },
+    });
+
+    for (const result of [detailResult, planResult]) {
+      expect((result as { isError?: boolean }).isError).toBe(true);
+      expect(textContent(result)).toContain('not found');
+    }
+  });
+
   it('returns isError for missing or empty string arguments', async () => {
     const testClient = await connect();
 
