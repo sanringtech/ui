@@ -100,37 +100,31 @@ export interface CreateMcpServerOptions {
   ) => AddComponentToolResult | Promise<AddComponentToolResult>;
 }
 
-function runAddComponentWithCli({ name: componentName, cwd }: AddComponentToolInput): Promise<AddComponentToolResult> {
-  return new Promise((resolve) => {
-    const cliBin = join(__dirname, 'index.js');
-    const chunks: string[] = [];
-
-    const child = spawn(process.execPath, [cliBin, 'add', componentName, '--yes'], {
-      cwd,
-      timeout: 60_000,
-    });
-
-    child.stdout.on('data', (d: Buffer) => chunks.push(d.toString()));
-    child.stderr.on('data', (d: Buffer) => chunks.push(d.toString()));
-
-    child.on('error', (err) => {
-      resolve({ ok: false, output: chunks.join('').trim(), errorMessage: err.message });
-    });
-
-    child.on('close', (code) => {
-      const output = chunks.join('').trim();
-      if (code !== 0) {
-        resolve({ ok: false, output, exitCode: code });
-      } else {
-        resolve({ ok: true, output });
-      }
-    });
-  });
-}
-
 export function createMcpServer(options: CreateMcpServerOptions = {}): Server {
   const registryUrl = options.registryUrl;
-  const addComponent = options.addComponent ?? runAddComponentWithCli;
+
+  const addComponent = options.addComponent ?? (({ name: componentName, cwd }: AddComponentToolInput): Promise<AddComponentToolResult> => {
+    return new Promise((resolve) => {
+      const cliBin = join(__dirname, '../index.js');
+      const cliArgs = [cliBin, 'add', componentName, '--yes'];
+      if (registryUrl) cliArgs.push('--registry', registryUrl);
+
+      const chunks: string[] = [];
+      const child = spawn(process.execPath, cliArgs, { cwd, timeout: 60_000 });
+
+      child.stdout.on('data', (d: Buffer) => chunks.push(d.toString()));
+      child.stderr.on('data', (d: Buffer) => chunks.push(d.toString()));
+
+      child.on('error', (err) => {
+        resolve({ ok: false, output: chunks.join('').trim(), errorMessage: err.message });
+      });
+
+      child.on('close', (code) => {
+        const output = chunks.join('').trim();
+        resolve(code !== 0 ? { ok: false, output, exitCode: code } : { ok: true, output });
+      });
+    });
+  });
 
   let cachedRegistry: Registry | null = null;
   const getRegistry = async (): Promise<Registry> => {
