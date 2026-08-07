@@ -33,6 +33,11 @@ export const routes: Routes = [
               import('./pages/cli/cli-page.component').then((m) => m.CliPageComponent),
           },
           {
+            path: 'mcp',
+            loadComponent: () =>
+              import('./pages/mcp/mcp-page.component').then((m) => m.McpPageComponent),
+          },
+          {
             path: 'changelog',
             redirectTo: 'version-notes',
             pathMatch: 'full',

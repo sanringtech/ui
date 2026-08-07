@@ -89,6 +89,7 @@ export const docsSectionItems: DocsSidebarItem[] = [
   { labelKey: 'sidebar.introduction', path: '/introduction', active: true },
   { labelKey: 'sidebar.theming', path: '/theming', active: true },
   { labelKey: 'sidebar.cli', path: '/cli', active: true },
+  { labelKey: 'sidebar.mcpServer', path: '/mcp', active: true },
   { labelKey: 'nav.components', path: '/components', active: true },
   { labelKey: 'sidebar.changelog', path: '/version-notes', active: true },
   { labelKey: 'sidebar.roadmap', path: '/roadmap', active: true },

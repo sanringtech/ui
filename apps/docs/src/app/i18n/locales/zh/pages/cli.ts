@@ -3,7 +3,7 @@ export const cliTranslations = {
     '一個命令列工具，能直接把 Sanring UI 元件的原始碼複製進你的專案——順便處理依賴安裝，程式碼完全歸你掌控。',
   'cli.overview.title': '概覽',
   'cli.overview.body':
-    '@sanring/cli 套件提供十個指令——init、add、remove、info、diff、update、list、search、doctor、mcp，讀取跟這個文件站相同的元件 registry。建議用 npx 執行，隨時拿到最新版本。',
+    '@sanring/cli 套件提供九個指令——init、add、remove、info、diff、update、list、search、doctor，讀取跟這個文件站相同的元件 registry。建議用 npx 執行，隨時拿到最新版本。',
   'cli.init.title': 'init',
   'cli.init.body':
     '每個專案只需執行一次。會確認目前是否在 Angular 專案中，寫入 sanring.config.json 記錄你選擇的元件路徑，產生 src/sanring-theme.css（所有元件都會讀取的 --sanring-* 設計 token，已存在則預設跳過以保護你的客製化），並安裝基礎的 peer dependencies（clsx、tailwind-merge）。',
@@ -31,13 +31,6 @@ export const cliTranslations = {
   'cli.doctor.title': 'doctor',
   'cli.doctor.body':
     '檢查你的環境與專案設定是否有常見問題：Node.js 版本、Angular 專案偵測、sanring.config.json 是否存在、theme 檔案是否存在、每個檔案的雜湊完整性（未修改 / 已客製化 / 孤立雜湊），以及 registry 連線能力。加上 --offline 可跳過網路檢查。有嚴重錯誤時以 exit 1 結束，可作為 CI 就緒檢查閘門。',
-  'cli.mcp.title': 'mcp',
-  'cli.mcp.body':
-    '以 stdio transport 啟動 MCP server，讓 Claude Code、Cursor、Windsurf 等 AI coding agent 能直接查詢、安裝元件，不用手動下 shell 指令。曝露五個 tool：list_components、search_components、get_component_info、plan_component_install（dry-run 預覽，不會動到專案）、add_component。',
-  'cli.mcp.tools.title': '可用的 Tool',
-  'cli.mcp.setup.title': 'Claude Code 設定',
-  'cli.mcp.setup.body':
-    '把以下內容加進專案或全域的 MCP 設定檔（例如 .claude/mcp.json），再重啟 agent 即可。',
   'cli.requirements.title': '需求',
   'cli.requirements.body':
     'CLI 需要在 Angular 專案根目錄執行。使用前請確認專案已符合以下版本與樣式設定。',
