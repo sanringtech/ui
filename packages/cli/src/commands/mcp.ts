@@ -11,6 +11,7 @@ import { fileURLToPath } from 'node:url';
 import { Command } from 'commander';
 import {
   createRegistryIndex,
+  createRegistryGroups,
   fetchRegistry,
   type Registry,
   type RegistryComponent,
@@ -61,6 +62,36 @@ function formatComponentDetail(
   }
 
   return lines.join('\n');
+}
+
+function formatGroupedComponents(registry: Registry, components: RegistryComponent[]): string {
+  const byName = new Map(components.map((component) => [component.name, component]));
+  const printed = new Set<string>();
+  const sections: string[] = [];
+
+  for (const group of createRegistryGroups(registry)) {
+    const groupComponents = group.components
+      .map((name) => byName.get(name))
+      .filter((component): component is RegistryComponent => Boolean(component));
+
+    if (groupComponents.length === 0) continue;
+
+    sections.push(
+      `${group.title}:`,
+      ...groupComponents.map((c) => `  ${c.name.padEnd(24)} ${c.description}`),
+    );
+    for (const component of groupComponents) printed.add(component.name);
+  }
+
+  const ungrouped = components.filter((component) => !printed.has(component.name));
+  if (ungrouped.length > 0) {
+    sections.push(
+      'Other:',
+      ...ungrouped.map((c) => `  ${c.name.padEnd(24)} ${c.description}`),
+    );
+  }
+
+  return sections.join('\n\n');
 }
 
 type McpErrorContent = { isError: true; content: [{ type: 'text'; text: string }] };
@@ -218,14 +249,12 @@ export function createMcpServer(options: CreateMcpServerOptions = {}): Server {
     switch (name) {
       case 'list_components': {
         const registry = await getRegistry();
-        const lines = registry.components
-          .map((c) => `  ${c.name.padEnd(24)} ${c.description}`)
-          .join('\n');
+        const lines = formatGroupedComponents(registry, registry.components);
         return {
           content: [
             {
               type: 'text' as const,
-              text: `Sanring UI — ${registry.components.length} components available:\n\n${lines}`,
+              text: `Sanring UI — ${registry.components.length} installable items available:\n\n${lines}`,
             },
           ],
         };

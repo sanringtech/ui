@@ -96,14 +96,42 @@ describe('validateRegistry', () => {
     });
   });
 
+  it('accepts component groups for structured registries', () => {
+    expect(
+      validateRegistry({
+        name: 'test',
+        groups: [
+          {
+            id: 'primitives',
+            title: 'Primitives',
+            description: 'Foundational building blocks',
+            components: ['button'],
+          },
+        ],
+        shared: [],
+        components: [{ name: 'button', description: 'Button', files: ['button/index.ts'] }],
+      }).groups,
+    ).toEqual([
+      {
+        id: 'primitives',
+        title: 'Primitives',
+        description: 'Foundational building blocks',
+        components: ['button'],
+      },
+    ]);
+  });
+
   it('reports invalid registry fields with paths', () => {
     expect(() =>
       validateRegistry({
         name: 'test',
         shared: [{ name: 'utils', description: 'Utils' }],
         components: [{ name: 'button', description: 'Button', files: 'button/index.ts' }],
+        groups: [{ id: 'primitives', title: 'Primitives', components: 'button' }],
       }),
-    ).toThrow('shared[0].file must be a string; components[0].files must be an array of strings');
+    ).toThrow(
+      'groups[0].components must be an array of strings; shared[0].file must be a string; components[0].files must be an array of strings',
+    );
   });
 });
 

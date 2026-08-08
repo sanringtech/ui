@@ -115,8 +115,16 @@ export interface RegistryComponent {
   migrations?: RegistryMigration[];
 }
 
+export interface RegistryGroup {
+  id: string;
+  title: string;
+  description?: string;
+  components: string[];
+}
+
 export interface Registry {
   name: string;
+  groups?: RegistryGroup[];
   shared: RegistryShared[];
   components: RegistryComponent[];
 }
@@ -126,6 +134,7 @@ export interface RegistryIndex {
   componentsByName: Map<string, RegistryComponent>;
   sharedByName: Map<string, RegistryShared>;
   componentNames: string[];
+  groups: RegistryGroup[];
 }
 
 export function createRegistryIndex(registry: Registry): RegistryIndex {
@@ -134,7 +143,19 @@ export function createRegistryIndex(registry: Registry): RegistryIndex {
     componentsByName: new Map(registry.components.map((component) => [component.name, component])),
     sharedByName: new Map(registry.shared.map((shared) => [shared.name, shared])),
     componentNames: registry.components.map((component) => component.name),
+    groups: createRegistryGroups(registry),
   };
+}
+
+export function createRegistryGroups(registry: Registry): RegistryGroup[] {
+  if (registry.groups?.length) return registry.groups;
+  return [
+    {
+      id: 'components',
+      title: 'Components',
+      components: registry.components.map((component) => component.name),
+    },
+  ];
 }
 
 function isRecord(value: unknown): value is Record<string, unknown> {
@@ -182,6 +203,28 @@ export function validateRegistry(value: unknown): Registry {
   if (!Array.isArray(value.shared)) errors.push('shared must be an array');
   if (!Array.isArray(value.components)) errors.push('components must be an array');
 
+  if (value.groups !== undefined) {
+    if (!Array.isArray(value.groups)) {
+      errors.push('groups must be an array');
+    } else {
+      value.groups.forEach((item, index) => {
+        const path = `groups[${index}]`;
+        if (!isRecord(item)) {
+          errors.push(`${path} must be an object`);
+          return;
+        }
+        if (typeof item.id !== 'string') errors.push(`${path}.id must be a string`);
+        if (typeof item.title !== 'string') errors.push(`${path}.title must be a string`);
+        if (item.description !== undefined && typeof item.description !== 'string') {
+          errors.push(`${path}.description must be a string`);
+        }
+        if (!isStringArray(item.components)) {
+          errors.push(`${path}.components must be an array of strings`);
+        }
+      });
+    }
+  }
+
   if (Array.isArray(value.shared)) {
     value.shared.forEach((item, index) => {
       const path = `shared[${index}]`;
@@ -220,11 +263,13 @@ export function validateRegistry(value: unknown): Registry {
     throw new Error(errors.join('; '));
   }
 
-  return {
+  const registry: Registry = {
     name: value.name as string,
     shared: value.shared as RegistryShared[],
     components: value.components as RegistryComponent[],
   };
+  if (value.groups !== undefined) registry.groups = value.groups as RegistryGroup[];
+  return registry;
 }
 
 // ---------------------------------------------------------------------------

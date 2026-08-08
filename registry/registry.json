@@ -2,6 +2,81 @@
   "$schema": "./registry.schema.json",
   "name": "sanring-ui",
   "homepage": "https://sanring.dev",
+  "groups": [
+    {
+      "id": "primitives",
+      "title": "Primitives",
+      "description": "Small, foundational building blocks and styling helpers.",
+      "components": [
+        "aspect-ratio",
+        "button",
+        "divider",
+        "input",
+        "label",
+        "link",
+        "progress",
+        "skeleton",
+        "spinner",
+        "textarea",
+        "toggle"
+      ]
+    },
+    {
+      "id": "components",
+      "title": "Components",
+      "description": "General-purpose UI controls and display components.",
+      "components": [
+        "accordion",
+        "alert",
+        "avatar",
+        "badge",
+        "card",
+        "checkbox",
+        "collapsible",
+        "field",
+        "radio",
+        "scroll-area",
+        "slider",
+        "switch",
+        "tabs",
+        "tag",
+        "tooltip"
+      ]
+    },
+    {
+      "id": "patterns",
+      "title": "Patterns",
+      "description": "Composed interaction patterns for navigation, overlays, data, and workflows.",
+      "components": [
+        "alert-dialog",
+        "breadcrumb",
+        "calendar",
+        "carousel",
+        "combobox",
+        "command",
+        "context-menu",
+        "date-picker",
+        "dialog",
+        "dropdown-menu",
+        "file-upload",
+        "hover-card",
+        "navigation-menu",
+        "otp-input",
+        "pagination",
+        "popover",
+        "resizable",
+        "select",
+        "sheet",
+        "sidebar",
+        "stepper",
+        "table",
+        "timeline",
+        "toast",
+        "transfer",
+        "tree"
+      ]
+    }
+  ],
   "shared": [
     {
       "name": "utils",
