@@ -1,5 +1,16 @@
 # Contributing
 
+## 專案文件的分工
+
+| 文件 | 讀者 | 內容 |
+|---|---|---|
+| [`todolist.md`](todolist.md) | 開發者 | 尚未完成的待辦事項,含現況/風險/成本評估 |
+| [`DEVLOG.md`](DEVLOG.md) | 開發者 | 待辦項目做完後的實作紀錄:怎麼做的、為什麼、怎麼驗證的 |
+| [`ROADMAP.md`](ROADMAP.md) | 使用者 | 對外的方向性摘要,不含內部實作細節 |
+| [`packages/cli/CHANGELOG.md`](packages/cli/CHANGELOG.md) | 使用者 | Changesets 自動產生的逐版本異動紀錄 |
+
+項目在 `todolist.md` 做完後,把過程細節搬到 `DEVLOG.md`,不要留在 `todolist.md` 裡累積——待辦清單只放**還沒做**的事。
+
 ## 環境需求
 
 - Node.js >= 20.19（建議 22 LTS）
