@@ -1,6 +1,6 @@
 import { Client } from '@modelcontextprotocol/sdk/client/index.js';
 import { InMemoryTransport } from '@modelcontextprotocol/sdk/inMemory.js';
-import { existsSync, mkdtempSync, rmSync, writeFileSync } from 'node:fs';
+import { existsSync, mkdirSync, mkdtempSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
@@ -118,6 +118,38 @@ describe('mcp server', () => {
     expect((result as { isError?: boolean }).isError).toBeUndefined();
   });
 
+  it('plan_component_install marks existing files as skipped when cwd is given', async () => {
+    const testClient = await connect();
+
+    // widget/index.ts already exists in the project -> should be reported as "exists"
+    const existingDir = join(projectDir, 'src/app/components/ui/widget');
+    mkdirSync(existingDir, { recursive: true });
+    writeFileSync(join(existingDir, 'index.ts'), '// already here\n', 'utf-8');
+
+    const result = await testClient.callTool({
+      name: 'plan_component_install',
+      arguments: { name: 'widget', cwd: projectDir },
+    });
+
+    const text = textContent(result);
+    expect(text).toContain('1 new, 1 already exist');
+    expect(text).toContain('widget/index.ts (exists, would be skipped)');
+    expect(text).toContain('shared/utils.ts (new)');
+    expect((result as { isError?: boolean }).isError).toBeUndefined();
+  });
+
+  it('plan_component_install rejects a relative cwd', async () => {
+    const testClient = await connect();
+
+    const result = await testClient.callTool({
+      name: 'plan_component_install',
+      arguments: { name: 'widget', cwd: 'relative/path' },
+    });
+
+    expect((result as { isError?: boolean }).isError).toBe(true);
+    expect(textContent(result)).toContain('must be an absolute path');
+  });
+
   it('returns isError when a component name is not found', async () => {
     const testClient = await connect();
 
@@ -148,6 +180,18 @@ describe('mcp server', () => {
       expect((result as { isError?: boolean }).isError).toBe(true);
       expect(textContent(result)).toContain('must be a non-empty string');
     }
+  });
+
+  it('returns isError when add_component cwd is not an absolute path', async () => {
+    const testClient = await connect();
+
+    const result = await testClient.callTool({
+      name: 'add_component',
+      arguments: { name: 'widget', cwd: 'relative/path' },
+    });
+
+    expect((result as { isError?: boolean }).isError).toBe(true);
+    expect(textContent(result)).toContain('must be an absolute path');
   });
 
   it('runs add_component through the MCP tool boundary', async () => {

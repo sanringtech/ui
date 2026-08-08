@@ -6,7 +6,7 @@ import {
 } from '@modelcontextprotocol/sdk/types.js';
 import { spawn } from 'node:child_process';
 import { existsSync, readFileSync } from 'node:fs';
-import { dirname, join } from 'node:path';
+import { dirname, isAbsolute, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { Command } from 'commander';
 import {
@@ -15,6 +15,7 @@ import {
   type Registry,
   type RegistryComponent,
 } from '../registry.js';
+import { readConfig, resolveComponentBasePath } from '../utils.js';
 import { resolveInstallSet, collectPeerDeps } from './add.js';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
@@ -174,13 +175,18 @@ export function createMcpServer(options: CreateMcpServerOptions = {}): Server {
       {
         name: 'plan_component_install',
         description:
-          'Preview what would happen if you added a Sanring UI component: which files would be written, which component dependencies would be auto-installed, and which peer packages would need to be installed. Does not modify the project.',
+          'Preview what would happen if you added a Sanring UI component: which files would be written, which component dependencies would be auto-installed, and which peer packages would need to be installed. Does not modify the project. Pass "cwd" to check against the actual project — files that already exist there are marked and would be skipped (not overwritten) by add_component.',
         inputSchema: {
           type: 'object' as const,
           properties: {
             name: {
               type: 'string',
               description: "Component name to preview (e.g. 'button', 'dialog')",
+            },
+            cwd: {
+              type: 'string',
+              description:
+                'Optional. Absolute path to the Angular project root (the directory containing angular.json). When given, each file is checked against the project so the preview matches what add_component would actually do.',
             },
           },
           required: ['name'],
@@ -189,7 +195,7 @@ export function createMcpServer(options: CreateMcpServerOptions = {}): Server {
       {
         name: 'add_component',
         description:
-          'Add a Sanring UI component to an Angular project. Copies component source files into the project, installs peer dependencies, and handles component dependencies automatically. Call plan_component_install first to preview what will change.',
+          'Add a Sanring UI component to an Angular project: writes the component source files, installs its peer dependencies via the project package manager, and pulls in any component dependencies automatically. Existing files are left untouched and skipped, never overwritten — this tool cannot force-overwrite. Call plan_component_install first (with the same "cwd") to preview exactly which files would be written vs. skipped.',
         inputSchema: {
           type: 'object' as const,
           properties: {
@@ -296,6 +302,25 @@ export function createMcpServer(options: CreateMcpServerOptions = {}): Server {
         const validated = requireStrings(args, ['name']);
         if ('isError' in validated) return validated;
         const { name: componentName } = validated.values;
+
+        const rawCwd = (args as Record<string, unknown> | undefined)?.['cwd'];
+        let cwd: string | undefined;
+        if (rawCwd !== undefined) {
+          if (typeof rawCwd !== 'string' || rawCwd.trim() === '') {
+            return {
+              isError: true,
+              content: [{ type: 'text' as const, text: 'Missing or invalid argument: "cwd" must be a non-empty string.' }],
+            };
+          }
+          if (!isAbsolute(rawCwd)) {
+            return {
+              isError: true,
+              content: [{ type: 'text' as const, text: `"cwd" must be an absolute path, got "${rawCwd}".` }],
+            };
+          }
+          cwd = rawCwd;
+        }
+
         const registry = await getRegistry();
         const component = registry.components.find((c) => c.name === componentName);
 
@@ -311,13 +336,51 @@ export function createMcpServer(options: CreateMcpServerOptions = {}): Server {
         const { toInstall, autoAdded } = resolveInstallSet([componentName], registryIndex);
         const peerDeps = collectPeerDeps(toInstall, registryIndex);
 
-        const allFiles = toInstall.flatMap((c) => c.files);
-        const lines: string[] = [
-          `Plan for: sanring add ${componentName}`,
-          '',
-          `Files to write (${allFiles.length}):`,
-          ...allFiles.map((f) => `  ${f}`),
-        ];
+        const lines: string[] = [`Plan for: sanring add ${componentName}`, ''];
+
+        if (cwd) {
+          const config = readConfig(cwd);
+          const componentBasePath = resolveComponentBasePath(cwd, undefined, config);
+          const sharedDestDir = config?.sharedPath
+            ? resolve(cwd, config.sharedPath)
+            : join(componentBasePath, 'shared');
+
+          const sharedNames = new Set(toInstall.flatMap((c) => c.sharedDeps ?? []));
+          const fileLines: string[] = [];
+          let newCount = 0;
+          let skipCount = 0;
+
+          for (const depName of sharedNames) {
+            const shared = registryIndex.sharedByName.get(depName);
+            if (!shared) continue;
+            const fileName = shared.file.split('/').pop()!;
+            const exists = existsSync(join(sharedDestDir, fileName));
+            fileLines.push(`  ${exists ? '~' : '+'} shared/${fileName}${exists ? ' (exists, would be skipped)' : ' (new)'}`);
+            if (exists) skipCount++;
+            else newCount++;
+          }
+
+          for (const c of toInstall) {
+            const destDir = join(componentBasePath, c.name);
+            for (const file of c.files) {
+              const fileName = file.split('/').pop()!;
+              const exists = existsSync(join(destDir, fileName));
+              fileLines.push(`  ${exists ? '~' : '+'} ${c.name}/${fileName}${exists ? ' (exists, would be skipped)' : ' (new)'}`);
+              if (exists) skipCount++;
+              else newCount++;
+            }
+          }
+
+          lines.push(
+            `Files (${newCount} new, ${skipCount} already exist and would be skipped):`,
+            ...fileLines,
+          );
+        } else {
+          const allFiles = toInstall.flatMap((c) => c.files);
+          lines.push(`Files to write (${allFiles.length}):`, ...allFiles.map((f) => `  ${f}`));
+          lines.push('', 'Pass "cwd" to check which of these already exist in your project.');
+        }
+
         if (autoAdded.length > 0) {
           lines.push('', `Component dependencies (auto-installed): ${autoAdded.join(', ')}`);
         }
@@ -336,6 +399,18 @@ export function createMcpServer(options: CreateMcpServerOptions = {}): Server {
         const validated = requireStrings(args, ['name', 'cwd']);
         if ('isError' in validated) return validated;
         const { name: componentName, cwd } = validated.values;
+
+        if (!isAbsolute(cwd)) {
+          return {
+            isError: true,
+            content: [
+              {
+                type: 'text' as const,
+                text: `"cwd" must be an absolute path, got "${cwd}".`,
+              },
+            ],
+          };
+        }
 
         if (!existsSync(join(cwd, 'angular.json'))) {
           return {
