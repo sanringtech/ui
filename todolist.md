@@ -29,7 +29,7 @@
 
 **成本**:中。多數是局部修正,但要小心不要為了過 lint 破壞 accessibility 或既有 API。
 
----
+**回歸(2026-08-08)**:`sidebar` component(`39463f5 feat(ui/docs): 新增 sidebar component`)上車後沒同步套用既有的 lint 慣例,悄悄讓 `pnpm lint` 又紅了 6 個錯誤——`sidebar.component.ts`(`packages/ui` + `registry` 兩處)未用到的 `Signal` import、`_collapsible` alias 成 `collapsible` 沒補 disable comment;docs `sidebar-page.component.ts` 兩處 `sanringSidebarRail` 空 `<button>` 觸發 `elements-content`(host aria-label binding 的已知 false positive,跟 `sanringLabel` 那個一樣)。已在 `e7ba079 fix(ui): clear 6 pre-existing lint errors on sidebar component` 補齊,`pnpm lint` 目前重新綠燈。**提醒**:P2 標記完成不代表一勞永逸,新元件上車時要記得比照既有慣例補 disable comment,不要指望事後才被發現。
 
 ## P3 — 建立 component audit matrix 並逐一盤點 lib
 
