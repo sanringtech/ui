@@ -222,7 +222,7 @@
 
 ## P16 — Docs 站沒有暗色模式切換
 
-- [ ] 在 docs header 加入 light / dark / system 三段切換,並讓全站 CSS variables 隨之切換
+- [x] 在 docs header 加入 light / dark / system 三段切換,並讓全站 CSS variables 隨之切換
 
 **現況**:`packages/ui` 的元件本身已經用 `--sanring-*` CSS custom properties,支援 dark mode;但 docs 站本身沒有提供切換按鈕,使用者只能依賴系統設定。
 

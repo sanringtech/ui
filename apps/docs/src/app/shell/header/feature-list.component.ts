@@ -1,6 +1,6 @@
 import { Component, computed, inject, signal } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
-import { LucideMenu, LucideMoon, LucideSearch, LucideSun } from '@lucide/angular';
+import { LucideMenu, LucideMonitor, LucideMoon, LucideSearch, LucideSun } from '@lucide/angular';
 import { CommandDialogComponent, SANRING_COMMAND_IMPORTS, SANRING_SHEET_IMPORTS } from '@sanring/ui';
 import { I18nService } from '../../i18n/i18n.service';
 import {
@@ -12,6 +12,7 @@ import { isRecentlyUpdatedComponentId } from '../../pages/changelog/component-ch
 import { DocsComponentsListComponent } from '../sidebar/docs-components-list.component';
 import { DocsSectionComponent } from '../sidebar/docs-section.component';
 import { DocsNavStateService } from '../docs-nav-state.service';
+import { DocsThemePreference, DocsThemeService } from '../docs-theme.service';
 import { fuzzyMatch } from './fuzzy-match';
 import { HeaderActionButtonComponent } from './header-action-button.component';
 
@@ -38,6 +39,7 @@ const MAX_SEARCH_RESULTS = 8;
     LucideSearch,
     LucideSun,
     LucideMoon,
+    LucideMonitor,
     SANRING_COMMAND_IMPORTS,
     SANRING_SHEET_IMPORTS,
   ],
@@ -172,16 +174,42 @@ const MAX_SEARCH_RESULTS = 8;
           </svg>
         </app-header-action-button>
 
-        <app-header-action-button
-          [ariaLabel]="i18n.t('actions.toggleTheme')"
-          (clicked)="toggleTheme()"
+        <div
+          class="inline-flex h-10 items-center rounded-[var(--sanring-radius)] border border-[var(--docs-border)] bg-[var(--docs-elevated)] p-1"
+          role="group"
+          [attr.aria-label]="i18n.t('actions.selectTheme')"
         >
-          @if (isDark()) {
-            <svg class="size-4" lucideMoon></svg>
-          } @else {
+          <button
+            type="button"
+            [class]="themeButtonClass('light')"
+            [attr.aria-label]="i18n.t('actions.themeLight')"
+            [attr.title]="i18n.t('actions.themeLight')"
+            [attr.aria-pressed]="theme.preference() === 'light'"
+            (click)="theme.setPreference('light')"
+          >
             <svg class="size-4" lucideSun></svg>
-          }
-        </app-header-action-button>
+          </button>
+          <button
+            type="button"
+            [class]="themeButtonClass('dark')"
+            [attr.aria-label]="i18n.t('actions.themeDark')"
+            [attr.title]="i18n.t('actions.themeDark')"
+            [attr.aria-pressed]="theme.preference() === 'dark'"
+            (click)="theme.setPreference('dark')"
+          >
+            <svg class="size-4" lucideMoon></svg>
+          </button>
+          <button
+            type="button"
+            [class]="themeButtonClass('system')"
+            [attr.aria-label]="i18n.t('actions.themeSystem')"
+            [attr.title]="i18n.t('actions.themeSystem')"
+            [attr.aria-pressed]="theme.preference() === 'system'"
+            (click)="theme.setPreference('system')"
+          >
+            <svg class="size-4" lucideMonitor></svg>
+          </button>
+        </div>
       </div>
     </div>
   `,
@@ -191,7 +219,7 @@ export class FeatureListComponent {
 
   protected readonly i18n = inject(I18nService);
   protected readonly navState = inject(DocsNavStateService);
-  protected readonly isDark = signal(true);
+  protected readonly theme = inject(DocsThemeService);
 
   private readonly router = inject(Router);
 
@@ -254,11 +282,11 @@ export class FeatureListComponent {
     this.query.set('');
   }
 
-  protected toggleTheme() {
-    this.isDark.update((value) => {
-      document.documentElement.dataset['theme'] = value ? 'light' : 'dark';
-      return !value;
-    });
+  protected themeButtonClass(preference: DocsThemePreference): string {
+    const base =
+      'grid size-8 place-items-center rounded-[var(--sanring-radius-sm)] text-[var(--docs-muted)] transition-colors hover:bg-[var(--docs-surface)] hover:text-[var(--docs-fg)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--docs-border-strong)]';
+    if (this.theme.preference() !== preference) return base;
+    return `${base} bg-[var(--docs-panel)] text-[var(--docs-fg)] shadow-sm`;
   }
 
   protected gotoGithub() {
