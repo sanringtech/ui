@@ -17,7 +17,6 @@ export class DocsThemeService {
   private readonly preferenceState = signal<DocsThemePreference>('system');
   private readonly systemThemeState = signal<DocsResolvedTheme>('dark');
   private hasAppliedTheme = false;
-  private transitionTimeout: ReturnType<Window['setTimeout']> | undefined;
 
   readonly preference = this.preferenceState.asReadonly();
   readonly systemTheme = this.systemThemeState.asReadonly();
@@ -42,19 +41,34 @@ export class DocsThemeService {
     effect(() => {
       const preference = this.preference();
       const resolved = preference === 'system' ? this.systemTheme() : preference;
-      const root = this.document.documentElement;
 
-      if (this.hasAppliedTheme) this.startThemeTransition(root, win);
-      root.dataset['theme'] = resolved;
-      root.dataset['themePreference'] = preference;
-      root.style.colorScheme = resolved;
-      this.writeStoredPreference(win, preference);
+      const applyTheme = () => {
+        const root = this.document.documentElement;
+        root.dataset['theme'] = resolved;
+        root.dataset['themePreference'] = preference;
+        root.style.colorScheme = resolved;
+        this.writeStoredPreference(win, preference);
+      };
+
+      if (this.hasAppliedTheme && this.canAnimateThemeChange(win)) {
+        this.document.startViewTransition(applyTheme);
+      } else {
+        applyTheme();
+      }
       this.hasAppliedTheme = true;
     });
   }
 
   setPreference(preference: DocsThemePreference): void {
     this.preferenceState.set(preference);
+  }
+
+  private canAnimateThemeChange(win: Window | null): boolean {
+    return (
+      !!win &&
+      typeof this.document.startViewTransition === 'function' &&
+      !win.matchMedia('(prefers-reduced-motion: reduce)').matches
+    );
   }
 
   private readStoredPreference(win: Window): string | null {
@@ -71,21 +85,5 @@ export class DocsThemeService {
     } catch {
       // Theme still applies for the current session when storage is unavailable.
     }
-  }
-
-  private startThemeTransition(root: HTMLElement, win: Window | null): void {
-    if (!win || win.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-
-    if (this.transitionTimeout !== undefined) win.clearTimeout(this.transitionTimeout);
-    root.classList.add('theme-transitioning');
-    // Force a synchronous style flush so the transitioning class is committed
-    // *before* the theme attribute changes below. Without this, both DOM
-    // mutations land in the same recalc and the browser has no "before" value
-    // to interpolate from, so colors jump instead of animating.
-    void root.offsetHeight;
-    this.transitionTimeout = win.setTimeout(() => {
-      root.classList.remove('theme-transitioning');
-      this.transitionTimeout = undefined;
-    }, 260);
   }
 }
