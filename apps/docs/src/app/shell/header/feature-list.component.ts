@@ -175,10 +175,15 @@ const MAX_SEARCH_RESULTS = 8;
         </app-header-action-button>
 
         <div
-          class="inline-flex h-10 items-center rounded-[var(--sanring-radius)] border border-[var(--docs-border)] bg-[var(--docs-elevated)] p-1"
+          class="relative inline-grid h-10 grid-cols-3 items-center gap-1.5 overflow-hidden rounded-[var(--sanring-radius)] border border-[var(--docs-border)] bg-[var(--docs-elevated)] p-1"
           role="group"
           [attr.aria-label]="i18n.t('actions.selectTheme')"
         >
+          <span
+            class="pointer-events-none absolute left-1 top-1 size-8 rounded-[var(--sanring-radius-sm)] bg-[var(--docs-panel)] shadow-sm ring-1 ring-[color-mix(in_srgb,var(--docs-border)_72%,transparent)] transition-transform duration-200 ease-out motion-reduce:transition-none"
+            [style.transform]="themeIndicatorTransform()"
+            aria-hidden="true"
+          ></span>
           <button
             type="button"
             [class]="themeButtonClass('light')"
@@ -284,9 +289,14 @@ export class FeatureListComponent {
 
   protected themeButtonClass(preference: DocsThemePreference): string {
     const base =
-      'grid size-8 place-items-center rounded-[var(--sanring-radius-sm)] text-[var(--docs-muted)] transition-colors hover:bg-[var(--docs-surface)] hover:text-[var(--docs-fg)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--docs-border-strong)]';
+      'relative z-10 grid size-8 place-items-center rounded-[var(--sanring-radius-sm)] text-[var(--docs-muted)] transition-colors duration-150 hover:text-[var(--docs-fg)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--docs-border-strong)]';
     if (this.theme.preference() !== preference) return base;
-    return `${base} bg-[var(--docs-panel)] text-[var(--docs-fg)] shadow-sm`;
+    return `${base} text-[var(--docs-fg)]`;
+  }
+
+  protected themeIndicatorTransform(): string {
+    const index: Record<DocsThemePreference, number> = { light: 0, dark: 1, system: 2 };
+    return `translateX(calc(${index[this.theme.preference()]} * (2rem + 0.375rem)))`;
   }
 
   protected gotoGithub() {

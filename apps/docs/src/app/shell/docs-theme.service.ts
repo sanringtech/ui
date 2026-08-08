@@ -16,6 +16,8 @@ export class DocsThemeService {
   private readonly destroyRef = inject(DestroyRef);
   private readonly preferenceState = signal<DocsThemePreference>('system');
   private readonly systemThemeState = signal<DocsResolvedTheme>('dark');
+  private hasAppliedTheme = false;
+  private transitionTimeout: ReturnType<Window['setTimeout']> | undefined;
 
   readonly preference = this.preferenceState.asReadonly();
   readonly systemTheme = this.systemThemeState.asReadonly();
@@ -42,10 +44,12 @@ export class DocsThemeService {
       const resolved = preference === 'system' ? this.systemTheme() : preference;
       const root = this.document.documentElement;
 
+      if (this.hasAppliedTheme) this.startThemeTransition(root, win);
       root.dataset['theme'] = resolved;
       root.dataset['themePreference'] = preference;
       root.style.colorScheme = resolved;
       this.writeStoredPreference(win, preference);
+      this.hasAppliedTheme = true;
     });
   }
 
@@ -67,5 +71,16 @@ export class DocsThemeService {
     } catch {
       // Theme still applies for the current session when storage is unavailable.
     }
+  }
+
+  private startThemeTransition(root: HTMLElement, win: Window | null): void {
+    if (!win || win.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+    if (this.transitionTimeout !== undefined) win.clearTimeout(this.transitionTimeout);
+    root.classList.add('theme-transitioning');
+    this.transitionTimeout = win.setTimeout(() => {
+      root.classList.remove('theme-transitioning');
+      this.transitionTimeout = undefined;
+    }, 260);
   }
 }

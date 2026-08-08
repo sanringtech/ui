@@ -421,6 +421,32 @@
     -webkit-font-smoothing: antialiased;
   }
 
+  @media (prefers-reduced-motion: no-preference) {
+    html.theme-transitioning,
+    html.theme-transitioning body,
+    html.theme-transitioning header,
+    html.theme-transitioning aside,
+    html.theme-transitioning main,
+    html.theme-transitioning section,
+    html.theme-transitioning article,
+    html.theme-transitioning nav,
+    html.theme-transitioning div,
+    html.theme-transitioning button,
+    html.theme-transitioning a,
+    html.theme-transitioning input,
+    html.theme-transitioning textarea,
+    html.theme-transitioning code,
+    html.theme-transitioning pre,
+    html.theme-transitioning table,
+    html.theme-transitioning th,
+    html.theme-transitioning td,
+    html.theme-transitioning svg {
+      transition-property: background-color, border-color, color, fill, stroke, box-shadow;
+      transition-duration: 180ms;
+      transition-timing-function: ease-out;
+    }
+  }
+
   *,
   *::before,
   *::after {
