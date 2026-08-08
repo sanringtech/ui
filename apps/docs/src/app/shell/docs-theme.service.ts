@@ -78,6 +78,11 @@ export class DocsThemeService {
 
     if (this.transitionTimeout !== undefined) win.clearTimeout(this.transitionTimeout);
     root.classList.add('theme-transitioning');
+    // Force a synchronous style flush so the transitioning class is committed
+    // *before* the theme attribute changes below. Without this, both DOM
+    // mutations land in the same recalc and the browser has no "before" value
+    // to interpolate from, so colors jump instead of animating.
+    void root.offsetHeight;
     this.transitionTimeout = win.setTimeout(() => {
       root.classList.remove('theme-transitioning');
       this.transitionTimeout = undefined;

@@ -445,6 +445,18 @@
       transition-duration: 180ms;
       transition-timing-function: ease-out;
     }
+
+    html.theme-transitioning .docs-sidebar-scroll {
+      transition-property: background-color, border-color;
+      transition-duration: 180ms;
+      transition-timing-function: ease-out;
+    }
+
+    html.theme-transitioning .docs-sidebar-scroll *,
+    html.theme-transitioning .docs-sidebar-scroll *::before,
+    html.theme-transitioning .docs-sidebar-scroll *::after {
+      transition-property: none !important;
+    }
   }
 
   *,
