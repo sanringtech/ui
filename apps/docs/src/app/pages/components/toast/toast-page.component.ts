@@ -67,7 +67,7 @@ export class ToastPositionDemoComponent {
     <!-- 全域 toaster 供 basic / variant / action 範例使用（注入 root ToastService） -->
     <sanring-toaster position="bottom-right" [maxToasts]="3" />
 
-    <app-component-page [sections]="page.sections">
+    <app-component-page [sections]="page.sections" [componentId]="page.componentId">
       <app-component-page-header
         [componentId]="page.componentId"
         [title]="i18n.t(page.titleKey)"

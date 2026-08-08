@@ -84,7 +84,7 @@ import { sidebarPage, sidebarPageExamples } from './sidebar.docs';
     SANRING_SIDEBAR_IMPORTS,
   ],
   template: `
-    <app-component-page [sections]="page.sections" [wide]="true">
+    <app-component-page [sections]="page.sections" [componentId]="page.componentId" [wide]="true">
       <app-component-page-header
         [componentId]="page.componentId"
         [title]="i18n.t(page.titleKey)"

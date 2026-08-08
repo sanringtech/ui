@@ -85,7 +85,7 @@ const JA_LOCALE: CalendarLocale = {
     SANRING_TABS_IMPORTS,
   ],
   template: `
-    <app-component-page [sections]="page.sections">
+    <app-component-page [sections]="page.sections" [componentId]="page.componentId">
       <app-component-page-header
         [componentId]="page.componentId"
         [title]="i18n.t(page.titleKey)"

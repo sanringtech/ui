@@ -90,6 +90,9 @@ export const commonTranslations = {
   'components.updatedDescription': '每次更新後，近期新增或調整的元件會顯示在這裡。',
   'components.updatedEmpty': '目前沒有已更新元件。',
   'components.allTitle': '所有元件',
+  'component.recentChanges.title': '近期變更',
+  'component.recentChanges.description': '這個元件最近的 registry 與文件更新。',
+  'component.recentChanges.viewAll': '查看完整 changelog',
   'components.disabledNotice.title': '為什麼有些元件是灰色的？',
   'components.disabledNotice.description':
     '它們還在開發中——文件頁面已經存在，但內容還沒準備好，所以清單裡先不開放點擊。可以到',

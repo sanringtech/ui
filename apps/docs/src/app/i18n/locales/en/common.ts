@@ -92,6 +92,9 @@ export const commonTranslations = {
     'Recently added or changed components will appear here after each update.',
   'components.updatedEmpty': 'No updated components yet.',
   'components.allTitle': 'All components',
+  'component.recentChanges.title': 'Recent changes',
+  'component.recentChanges.description': 'Latest registry and documentation updates for this component.',
+  'component.recentChanges.viewAll': 'View changelog',
   'components.disabledNotice.title': 'Why are some components greyed out?',
   'components.disabledNotice.description':
     "They're still in development — their docs page exists but isn't ready to use yet, so it isn't linked from this list. Track progress on the",

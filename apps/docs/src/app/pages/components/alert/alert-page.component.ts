@@ -33,7 +33,7 @@ import { alertPage, alertPageExamples } from './alert.docs';
     LucideLightbulb,
   ],
   template: `
-    <app-component-page [sections]="page.sections">
+    <app-component-page [sections]="page.sections" [componentId]="page.componentId">
       <app-component-page-header
         [componentId]="page.componentId"
         [title]="i18n.t(page.titleKey)"
