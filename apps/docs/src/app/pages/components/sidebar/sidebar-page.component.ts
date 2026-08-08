@@ -498,6 +498,9 @@ import { sidebarPage, sidebarPageExamples } from './sidebar.docs';
                     </sanring-dropdown-menu-content>
                   </sanring-dropdown-menu>
                 </sanring-sidebar-footer>
+                <!-- sanringSidebarRail 會在執行期把 ariaLabel 動態綁到 host 的 aria-label，
+                     eslint 的靜態分析看不到這層 host binding，屬於已知的 false positive -->
+                <!-- eslint-disable-next-line @angular-eslint/template/elements-content -->
                 <button sanringSidebarRail [ariaLabel]="i18n.t('sidebar.demo.toggle')"></button>
               </sanring-sidebar>
               <main sanringSidebarInset class="bg-[var(--docs-surface)] p-6">
@@ -605,6 +608,9 @@ import { sidebarPage, sidebarPageExamples } from './sidebar.docs';
                           </sanring-sidebar-menu-item>
                         </sanring-sidebar-menu>
                       </sanring-sidebar-content>
+                      <!-- sanringSidebarRail 會在執行期把 ariaLabel 動態綁到 host 的 aria-label，
+                           eslint 的靜態分析看不到這層 host binding，屬於已知的 false positive -->
+                      <!-- eslint-disable-next-line @angular-eslint/template/elements-content -->
                       <button
                         sanringSidebarRail
                         [ariaLabel]="i18n.t('sidebar.demo.toggle')"

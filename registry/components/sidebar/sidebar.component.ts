@@ -2,7 +2,6 @@ import {
   ChangeDetectionStrategy,
   Component,
   ElementRef,
-  Signal,
   computed,
   inject,
   input,
@@ -34,6 +33,9 @@ export class SidebarComponent implements SidebarContext {
   readonly class = input<string | undefined>();
   readonly open = model(true);
 
+  // 底層 input 改名 _collapsible 避免跟下面的 computed `collapsible`（合併 parent provider
+  // 後的有效值）撞名，再用 alias 讓範本上還是寫 `collapsible`。
+  // eslint-disable-next-line @angular-eslint/no-input-rename
   readonly _collapsible = input<SidebarCollapsible>('offcanvas', { alias: 'collapsible' });
 
   // SidebarContext implementation — effective values accounting for parent provider
