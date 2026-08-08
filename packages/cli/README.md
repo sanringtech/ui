@@ -8,6 +8,7 @@ CLI for adding [Sanring UI](https://ui.sanring.dev) components to your Angular p
 - **`sanring add`** pulls in whatever a component depends on automatically (other components, peer packages, shared utilities).
 - **`sanring diff`/`sanring update`** know the difference between "the registry moved on and you never touched this file" and "you customized it" — untouched files update silently, real customizations always show a diff and ask first.
 - **`sanring info`** lets you preview exactly what a component would install before running `add`.
+- **`ng add @sanring/cli`** works too — it's the same `init` flow, just reachable through the Angular CLI's own add mechanism.
 
 ## Links
 
@@ -23,6 +24,12 @@ No installation required. Run with `npx`:
 ```bash
 npx @sanring/cli@latest init
 npx @sanring/cli@latest add accordion
+```
+
+Angular CLI users can also bootstrap with `ng add`, which installs `@sanring/cli` as a dev dependency and runs `init` for you:
+
+```bash
+ng add @sanring/cli
 ```
 
 ---
@@ -51,6 +58,12 @@ Options:
 | `-y, --yes` | Accept all defaults | `false` |
 | `-f, --force` | Overwrite an existing theme file with the defaults | `false` |
 | `--registry <source>` | Custom registry (URL or local path) | — |
+
+`ng add @sanring/cli` runs this same command under the hood, with matching options (`--path`, `--skip-confirmation` for `-y`, `--force`, `--registry`):
+
+```bash
+ng add @sanring/cli --path src/app/ui --skip-confirmation
+```
 
 ---
 

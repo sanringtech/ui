@@ -8,13 +8,17 @@
     "sanring": "./dist/index.js"
   },
   "main": "./dist/index.js",
+  "schematics": "./dist/schematics/collection.json",
+  "ng-add": {
+    "save": "devDependencies"
+  },
   "files": [
     "dist",
     "registry"
   ],
   "scripts": {
     "sync-registry": "node scripts/sync-registry.mjs",
-    "build": "npm run sync-registry && tsc",
+    "build": "npm run sync-registry && tsc && tsc -p tsconfig.schematics.json && node scripts/copy-schematics-assets.mjs",
     "dev": "tsc --watch",
     "test": "vitest run"
   },
@@ -26,6 +30,7 @@
     "picocolors": "^1.1.0"
   },
   "devDependencies": {
+    "@angular-devkit/schematics": "^22.0.0",
     "@types/diff": "^6.0.0",
     "@types/node": "^26.0.1",
     "typescript": "~6.0.2",

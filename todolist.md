@@ -289,15 +289,13 @@
 
 ## P21 — `ng add @sanring/cli` Schematics 支援
 
-- [ ] 實作 Angular Schematics,讓 `ng add @sanring/cli` 等同於跑完 `sanring init` 的全部步驟
+- [x] 實作 Angular Schematics,讓 `ng add @sanring/cli` 等同於跑完 `sanring init` 的全部步驟
 
-**現況**:安裝入口是 `npx @sanring/cli@latest init`,這對於習慣 Angular CLI 的使用者並不直覺。Angular 生態系預期 UI 工具都支援 `ng add`(Angular Material、PrimeNG、Spartan UI 都有)。
+**已完成**:新增 `packages/cli/schematics/`(`collection.json` 註冊單一 `ng-add` schematic、`ng-add/index.ts`、`ng-add/schema.json`)。`ng-add` 的 Rule 不重新實作 `init.ts` 的互動流程,而是照原本規劃「spawn `sanring init`」——用 `node:child_process` 的 `spawnSync` 呼叫已編譯好的 `dist/index.js init`,把 schema 選項(`path`/`skipConfirmation`/`force`/`registry`)轉成對應 CLI flags,`stdio: 'inherit'` 讓原本的互動式 prompt 照常運作。取捨:因為是直接寫檔案而非透過 schematics 的 `Tree` 抽象,`ng add --dry-run` 不會預覽它的檔案異動,已在程式碼註解與 README 標明。
 
-**影響**:在 Angular 社群中,`ng add` 是「這是 Angular-native 工具」的一種認証訊號。缺少時,Angular 開發者會覺得這個工具「是給 React 的人做的、硬套在 Angular 上」。
+`packages/cli/src` 是 `"type": "module"`(NodeNext),但 Angular schematics engine 用 CommonJS `require()` 載入 collection,所以 schematics 需要獨立編譯管線:新增 `tsconfig.schematics.json`(`module: CommonJS`)把 `schematics/**/*.ts` 編譯到 `dist/schematics/`,並在該目錄放一份 `package.json`(`{"type": "commonjs"}`)蓋掉外層的 `"type": "module"`;非 `.ts` 資產(`collection.json`、`schema.json`、這份 `package.json`)由新增的 `scripts/copy-schematics-assets.mjs` 複製過去。`package.json` 的 `build` script 串接這兩段編譯 + assets copy;新增 `"schematics": "./dist/schematics/collection.json"` 與 `"ng-add": { "save": "devDependencies" }` 欄位。`ng-add/index.ts` 對 `@angular-devkit/schematics` 只用 `import type`(`Rule`/`SchematicContext`/`Tree`),編譯後完全不留 runtime `require`,所以只需要 devDependency,不用背 runtime 依賴或煩惱跟使用者專案的 Angular 版本對齊。
 
-**實作方向**:在 `packages/cli/` 加入 `schematics/` 目錄,`package.json` 加上 `"ng-add": { "save": "devDependencies" }` + `"schematics": "./schematics/collection.json"`;schematic 的主體就是 spawn `sanring init` 或重用其邏輯。
-
-**成本**:中低。Angular Schematics 本身有固定樣板,核心邏輯直接重用 `init.ts`。主要成本是熟悉 Schematics API 和測試工具鏈。
+測試:`schematics/ng-add/index.test.ts` 直接匯入原始 `.ts`(vitest 的 vite-node 對 ESM 原始檔仍提供 `__dirname`,不需要先 build 就能測),mock `node:child_process` 驗證 options → CLI flags 的轉換、失敗時的 exit code 處理、以及 context logger 有被呼叫;`schematics/collection.test.ts` 驗證 `collection.json` 的 factory/schema 路徑實際存在,防止路徑打字錯誤。CI `typecheck` job 補上獨立一步 `tsc -p tsconfig.schematics.json --noEmit`(schematics 用的是另一份 tsconfig,不會被既有的 `tsc --noEmit` 覆蓋到)。README 補上 `ng add @sanring/cli` 用法與跟 `init` flags 的對應表。
 
 ---
 

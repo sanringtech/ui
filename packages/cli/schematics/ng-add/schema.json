@@ -1,0 +1,28 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "$id": "SanringNgAdd",
+  "title": "Sanring UI ng-add schema",
+  "type": "object",
+  "properties": {
+    "path": {
+      "type": "string",
+      "description": "Component destination path, relative to the Angular project root."
+    },
+    "skipConfirmation": {
+      "type": "boolean",
+      "description": "Accept all defaults without prompting (same as `sanring init --yes`).",
+      "default": false,
+      "alias": "y"
+    },
+    "force": {
+      "type": "boolean",
+      "description": "Overwrite an existing theme file with the defaults.",
+      "default": false
+    },
+    "registry": {
+      "type": "string",
+      "description": "Custom registry (URL or local path)."
+    }
+  },
+  "additionalProperties": false
+}

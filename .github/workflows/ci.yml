@@ -110,3 +110,8 @@ jobs:
       # @sanring/cli 是純 Node/TS，沒有 Angular 模板那層，可以直接用 tsc --noEmit。
       - name: Type check @sanring/cli
         run: pnpm --filter @sanring/cli exec tsc --noEmit
+
+      # schematics/ 用獨立 tsconfig（CommonJS 輸出，main tsconfig 是 NodeNext），
+      # 不會被上面那個指令覆蓋到，要另外查。
+      - name: Type check @sanring/cli schematics
+        run: pnpm --filter @sanring/cli exec tsc -p tsconfig.schematics.json --noEmit
