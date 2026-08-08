@@ -74,15 +74,3 @@
 **差異**:這裡的目標是「一鍵開啟含有該元件的最小 Angular 專案」,而非在 docs 頁面內嵌入可編輯 editor(已確認 shadcn 自己的 docs 也不這樣做,兩邊打平)。StackBlitz 支援從 URL params 或 POST 預填專案內容,可以把 component 程式碼預先注入。
 
 **成本**:中。StackBlitz SDK 有 `sdk.openProject()` API,需要為每個元件準備一份最小化的 Angular 專案 template + 注入對應的元件程式碼。可以先做成通用 template,再逐元件補範例程式碼。
-
----
-
-## P23 — CI 的 `check-component-audit-sync.mjs` 對已刪除的 `COMPONENT_AUDIT.md` 失敗
-
-- [ ] 移除 `packages/cli/scripts/check-component-audit-sync.mjs`(連同 `.github/workflows/ci.yml` lint job 裡呼叫它的那一步),或恢復一份極簡的 `COMPONENT_AUDIT.md` 讓腳本繼續有意義
-
-**現況**:`COMPONENT_AUDIT.md` 已在 `35114a3 chore: remove orphan projects/ dir and completed audit docs` 移除(P3 盤點任務已完成,矩陣文件沒有繼續維護的價值),但驗證腳本沒有跟著移除。目前跑 `node packages/cli/scripts/check-component-audit-sync.mjs` 會直接 `ENOENT` crash,`ci.yml` 的 `lint` job 有呼叫這支腳本,理論上現在 main 分支的 CI 應該是紅的。
-
-**風險**:低,但 CI 常紅會讓人習慣性忽略失敗訊息,真正的新問題也會被淹沒——跟 P2 講的「lint 不能長期紅燈」是同一個道理。
-
-**成本**:低。單純刪除死掉的腳本跟 CI 步驟即可,除非想恢復盤點文件的持續維護。

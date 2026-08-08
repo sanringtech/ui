@@ -242,6 +242,16 @@
 
 ---
 
+## P23 — CI 的 `check-component-audit-sync.mjs` 對已刪除的 `COMPONENT_AUDIT.md` 失敗
+
+- [x] 移除 `packages/cli/scripts/check-component-audit-sync.mjs`,連同 `.github/workflows/ci.yml` lint job 裡呼叫它的那一步
+
+**現況**:`COMPONENT_AUDIT.md` 已在 `35114a3 chore: remove orphan projects/ dir and completed audit docs` 移除(P3 盤點任務已完成,矩陣文件沒有繼續維護的價值),但驗證腳本沒有跟著移除。跑 `node packages/cli/scripts/check-component-audit-sync.mjs` 會直接對著不存在的 `COMPONENT_AUDIT.md` `ENOENT` crash,`ci.yml` 的 `lint` job 有呼叫這支腳本,main 分支 CI 因此常紅。
+
+**已完成**:選擇刪除腳本+CI 步驟,而不是恢復 `COMPONENT_AUDIT.md`——恢復矩陣文件等於承諾要繼續手動維護它,跟當初刪除它的理由(盤點任務已完成、文件沒有持續維護的價值)直接矛盾。確認過沒有其他地方引用這支腳本(`CONTRIBUTING.md`/`README.md` 都沒提到)才刪。`pnpm lint` 重新驗證過綠燈。
+
+---
+
 ## 查證後確認「不算差距」的項目(備查,避免重複討論)
 
 - **PR 沒有測試/型別檢查關卡**:原 P0 已完成,不再放主 todo。已新增 PR 觸發的 CI workflow,跑 `pnpm test`、`tsc --noEmit`、`pnpm lint`。
