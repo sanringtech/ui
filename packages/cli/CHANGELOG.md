@@ -1,5 +1,12 @@
 # @sanring/cli
 
+## 0.21.0
+
+### Minor Changes
+
+- f857618: `ng add @sanring/cli` now works as an alternative to `npx @sanring/cli@latest init` — it installs the CLI as a dev dependency and runs the same init flow (component path prompt, theme stylesheet, base dependency install). Options match `init`: `--path`, `--skip-confirmation`, `--force`, `--registry`.
+- 839df54: `sanring init` now accepts `--theme <preset>` to start from a named color preset instead of hand-editing tokens afterwards: `default` (unchanged), `slate` (muted blue-gray accent), `warm` (amber accent, larger radius), and `high-contrast` (near-black/white surfaces, square corners). The preset is appended after the base `theme.css`, so `src/sanring-theme.css` stays a single plain CSS file you can keep editing by hand.
+
 ## 0.20.0
 
 ### Minor Changes
