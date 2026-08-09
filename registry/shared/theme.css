@@ -137,17 +137,17 @@
 }
 
 :root[data-theme='light'] {
-  --sanring-background: var(--sanring-neutral-10);
+  --sanring-background: #f6f8f8;
   --sanring-foreground: var(--sanring-neutral-90);
   --sanring-muted: var(--sanring-neutral-70);
-  --sanring-border: var(--sanring-neutral-30);
-  --sanring-border-strong: var(--sanring-neutral-50);
-  --sanring-surface: #f8fbfb;
-  --sanring-surface-strong: var(--sanring-primary-10);
-  --sanring-elevated: var(--sanring-primary-10);
+  --sanring-border: #d9e1e2;
+  --sanring-border-strong: #aebdc0;
+  --sanring-surface: #ffffff;
+  --sanring-surface-strong: #eef4f5;
+  --sanring-elevated: #ffffff;
   --sanring-control: var(--sanring-neutral-90);
   --sanring-control-foreground: #ffffff;
-  --sanring-active: var(--sanring-primary-20);
+  --sanring-active: #d8eef1;
 
   --sanring-progress-shimmer: rgba(255, 255, 255, 0.45);
 }

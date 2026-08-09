@@ -333,6 +333,9 @@
     --docs-surface-strong: var(--sanring-neutral-80);
     --docs-elevated: #2b3334;
     --docs-code: #161d1e;
+    --docs-code-header: #1d2526;
+    --docs-code-fg: #d7e2e4;
+    --docs-code-muted: #8da0a4;
     --docs-fg: var(--sanring-neutral-10);
     --docs-muted: var(--sanring-neutral-40);
     --docs-border: #354042;
@@ -386,17 +389,20 @@
   }
 
   :root[data-theme='light'] {
-    --docs-bg: var(--sanring-neutral-10);
+    --docs-bg: #f6f8f8;
     --docs-panel: #ffffff;
-    --docs-surface: #f8fbfb;
-    --docs-surface-strong: var(--sanring-primary-10);
-    --docs-elevated: var(--sanring-primary-10);
-    --docs-code: #f3f7f8;
+    --docs-surface: #ffffff;
+    --docs-surface-strong: #eef4f5;
+    --docs-elevated: #ffffff;
+    --docs-code: #f9fbfb;
+    --docs-code-header: #f2f6f6;
+    --docs-code-fg: #253436;
+    --docs-code-muted: #647477;
     --docs-fg: var(--sanring-neutral-90);
     --docs-muted: var(--sanring-neutral-70);
-    --docs-border: var(--sanring-neutral-30);
-    --docs-border-strong: var(--sanring-neutral-50);
-    --docs-active: var(--sanring-primary-20);
+    --docs-border: #d9e1e2;
+    --docs-border-strong: #aebdc0;
+    --docs-active: #d8eef1;
     --docs-control: var(--sanring-neutral-90);
     --docs-control-fg: #ffffff;
     --docs-accent: var(--sanring-primary-50);

@@ -252,9 +252,10 @@
 
 ---
 
-## P20 — Theme Presets:具名主題預設(部分完成)
+## P20 — Theme Presets:具名主題預設與互動式產生器
 
 - [x] 提供數個可直接套用的具名主題(`default`/`slate`/`warm`/`high-contrast`),讓 `sanring init --theme <name>` 能直接寫入對應的 CSS variables
+- [x] Docs theming page 加入互動式調色預覽,讓使用者即時看到改變 accent/background/surface/border/radius 的效果並複製 CSS
 
 **已完成**:`registry/shared/theme-presets/{slate,warm,high-contrast}.css` 三個 override-only partial,加上 `init.ts` 的 `--theme <preset>` flag。設計上刻意不讓每個 preset 各自複製一份完整的 90 行 token 檔——`slate`/`warm` 只覆寫 `--sanring-primary-10`~`90` 這條色階,靠 base `theme.css` 既有的 `--sanring-active: var(--sanring-primary-80)` 這類語意層 var() 參照自動把新色系帶過去,不用逐一重寫;`high-contrast` 因為改的是語意層本身(background/foreground/border 推向純黑白、圓角收斂),額外覆寫了 `:root[data-theme='light']` 區塊,並在檔案開頭註解說明為什麼跟另外兩個 preset 的作法不同(CSS attribute selector 的 specificity 比純 `:root` 高,兩個 preset 都必須各自帶自己的 light 區塊才能贏過 base 的 light 區塊)。
 
@@ -266,7 +267,11 @@
 
 **docs**:theming page 加了一個「Named presets」段落(`--theme` 指令範例 + 4 個 preset 的一行說明表格),中英文 i18n key 都補了。這是純粹展示已出貨的 CLI flag,不是互動式調色預覽——沒有瀏覽器可以實際跑 docs dev server 驗證渲染,只用 `tsc --noEmit`/`pnpm lint` 驗證過型別和 i18n key 沒漏。
 
-**尚未完成**:互動式主題產生器(docs 即時調色 + 複製 CSS)還在 [TODOLIST.md](TODOLIST.md) P20。
+**互動式產生器**:在 `apps/docs/src/app/pages/theming/theming-page.component.ts` 新增 Theme generator section,放在「自訂品牌」之前。它提供 light/dark 預覽模式、accent/background/surface/foreground/border 色票、radius slider、即時 preview surface,並產生目前模式對應的 CSS selector(`:root` 或 `:root[data-theme='light']`)。複製行為沿用 docs 既有 `ToastService` 成功/失敗提示,中英文文案同步補在 theming locale 檔。
+
+**互動式產生器驗證**:`pnpm exec ng build docs` 通過。此 build 需要 Google Fonts 網路存取來 inline 字型,已用網路權限完成驗證。
+
+---
 
 ---
 

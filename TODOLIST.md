@@ -53,18 +53,6 @@
 
 ---
 
-## P20 — Theme Presets:互動式主題產生器
-
-- [ ] Docs theming page 加入互動式調色預覽,讓使用者即時看到改變 accent/background/radius 的效果並複製 CSS
-
-**現況**:具名 preset(`default`/`slate`/`warm`/`high-contrast`)+ `sanring init --theme <name>` 已完成(見 [DEVLOG.md](DEVLOG.md) 的 P20 段落),僅剩這項。
-
-**影響**:使用者不想從頭調 20 個 token。shadcn 的 theme builder 是 docs 站停留時間最長的頁面之一,這項補的是「即時預覽 + 複製」的互動體驗,靜態 preset 只解決「挑一個起點」。
-
-**成本**:中。需要在 docs 裡動態套用 CSS variables 並即時反映到 demo 元件。
-
----
-
 ## P22 — Docs component 頁面加入 StackBlitz 快捷連結
 
 - [ ] 每個 component 頁面的 code previewer 旁加一個「Open in StackBlitz」按鈕,讓使用者不用本地安裝就能試用

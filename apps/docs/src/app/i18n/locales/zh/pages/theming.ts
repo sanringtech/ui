@@ -12,6 +12,18 @@ export const themingTranslations = {
   'theming.brand.title': '自訂品牌',
   'theming.brand.body':
     '在 :root 中覆寫任何 --sanring-* token，元件立即反映新值，不需更改任何設定檔。',
+  'theming.playground.title': '主題產生器',
+  'theming.playground.body':
+    '用常見介面狀態即時預覽 token 組合，調好後複製 CSS 覆寫到你的全域樣式。',
+  'theming.playground.radius': '圓角',
+  'theming.playground.copy': '複製 CSS',
+  'theming.playground.previewTitle': '介面預覽',
+  'theming.playground.previewDescription':
+    '同一組 token 會同步影響 surface、文字、邊框與互動狀態。',
+  'theming.playground.cardTitle': '工作區設定',
+  'theming.playground.cardBody':
+    '確認主要操作、次要按鈕、輔助文字與程式碼區塊在目前主題下仍然清楚可讀。',
+  'theming.playground.formNote': '輸入框、進度列與狀態提示會沿用同一組語意 token。',
   'theming.darkMode.title': '暗色 / 亮色模式',
   'theming.darkMode.body':
     "預設為暗色——基礎 :root 區塊定義所有暗色值。亮色模式是 :root[data-theme='light'] 上的淺層覆寫，只需在 <html> 上設定屬性即可切換。",
@@ -22,5 +34,4 @@ export const themingTranslations = {
     '執行 sanring init 時加上 --theme，就能從一組具名預設出發，不用逐一手動改 token。預設值會接在基礎 token 後面，只需覆寫有變動的部分，其餘沿用預設值。',
   'theming.presets.note':
     '預設只是一個起點，不是綁定——產生出來的檔案就是專案裡一份普通的 CSS 檔，之後仍然可以手動繼續調整。',
-
 } as const;
