@@ -44,6 +44,7 @@
 **影響**:這是目前與 shadcn 最大的採用體驗差距。開發者的採用決策通常不是「這個 Button 好不好」,而是「我能不能 30 分鐘內搭出一個看起來像樣的登入頁」。Blocks 直接回答這個問題。shadcn blocks 是近兩年對採用率貢獻最大的功能之一。
 
 **實作方向**:
+
 - `registry/blocks/` 目錄,每個 block 是一個 Angular component(可含多個 child component)
 - `registry.json` 加入 `blocks` 陣列(類似 `components`),每筆有 `name`、`description`、`componentDeps`、`files`
 - CLI 的 `add` 指令識別 `block/` prefix,路由到 blocks registry

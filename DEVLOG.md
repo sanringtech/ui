@@ -4,12 +4,12 @@
 
 這不是使用者看的版本紀錄,那是 [`packages/cli/CHANGELOG.md`](packages/cli/CHANGELOG.md)(changesets 自動產生,逐版本、面向消費者)。對外的方向性摘要見 [ROADMAP.md](ROADMAP.md)。三者的關係:
 
-| 文件 | 讀者 | 回答的問題 | 更新頻率 |
-|---|---|---|---|
-| `TODOLIST.md` | 開發者自己 | 接下來要做什麼、為什麼、值不值得 | 每完成一項就變動 |
-| `DEVLOG.md`(這份) | 開發者自己 | 這件事當初怎麼做的、驗證過什麼 | 每完成一項就追加 |
-| `ROADMAP.md` | 使用者/貢獻者 | 專案接下來的方向 | 偶爾,方向改變時 |
-| `packages/cli/CHANGELOG.md` | 使用者 | 這個版本對我有什麼影響 | 每次 release |
+| 文件                        | 讀者          | 回答的問題                       | 更新頻率         |
+| --------------------------- | ------------- | -------------------------------- | ---------------- |
+| `TODOLIST.md`               | 開發者自己    | 接下來要做什麼、為什麼、值不值得 | 每完成一項就變動 |
+| `DEVLOG.md`(這份)           | 開發者自己    | 這件事當初怎麼做的、驗證過什麼   | 每完成一項就追加 |
+| `ROADMAP.md`                | 使用者/貢獻者 | 專案接下來的方向                 | 偶爾,方向改變時  |
+| `packages/cli/CHANGELOG.md` | 使用者        | 這個版本對我有什麼影響           | 每次 release     |
 
 條目依 `TODOLIST.md` 的 P 編號分組——編號代表歷史待辦清單裡的順序,不代表完成的時間序;新條目直接接在檔案最後面。
 
@@ -121,6 +121,7 @@
 **已完成**:新增 `packages/cli/src/commands/mcp.ts`,加入 `@modelcontextprotocol/sdk@1.30.0` 依賴,以 lower-level `Server` API(NodeNext ESM 相容、不額外依賴 zod)實作五個 tool:`list_components`(列出全部元件)、`search_components`(名稱優先搜尋)、`get_component_info`(含 files、自動安裝的 componentDeps、shared utilities、peerDeps)、`plan_component_install`(dry-run 預覽會寫入哪些檔案/componentDeps/peerDeps,不動專案)、`add_component`(`cwd` 參數指定 Angular project root,子程序執行 `sanring add --yes`)。所有 tool handler 都有 runtime input validation(`requireStrings`),找不到元件時統一回傳 `isError: true`。`sanring mcp` command 透過 stdio transport 啟動,`serverInfo.version` 正確讀取 CLI 版本。已補 `packages/cli/src/commands/mcp.test.ts`(`Client` + `InMemoryTransport`,覆蓋 tools/list、search、detail、plan、not-found isError、add tool boundary)與 `packages/cli/src/commands/mcp.e2e.test.ts`(`StdioClientTransport` 真實 spawn 編譯後的 CLI,驗證 cliBin 路徑解析與 `--registry` 傳遞);README 也補上 Claude Code / local development 設定方式與五個 tool 的說明表格。get_component_info 找不到元件時原本沒回傳 `isError: true`,跟 `plan_component_install` 同樣情境不一致,依賴 `isError` 判斷失敗的 AI agent 會誤判為成功呼叫,後續已補上並加測試保護。
 
 **使用方式**:在 `.claude/mcp.json` 或 Claude Code 設定中加入:
+
 ```json
 {
   "mcpServers": {
@@ -270,8 +271,6 @@
 **互動式產生器**:在 `apps/docs/src/app/pages/theming/theming-page.component.ts` 新增 Theme generator section,放在「自訂品牌」之前。它提供 light/dark 預覽模式、accent/background/surface/foreground/border 色票、radius slider、即時 preview surface,並產生目前模式對應的 CSS selector(`:root` 或 `:root[data-theme='light']`)。複製行為沿用 docs 既有 `ToastService` 成功/失敗提示,中英文文案同步補在 theming locale 檔。
 
 **互動式產生器驗證**:`pnpm exec ng build docs` 通過。此 build 需要 Google Fonts 網路存取來 inline 字型,已用網路權限完成驗證。
-
----
 
 ---
 
