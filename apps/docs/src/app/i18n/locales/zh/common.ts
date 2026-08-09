@@ -14,6 +14,7 @@ export const commonTranslations = {
   'actions.copyFailed': '複製失敗',
   'actions.copyPage': '複製頁面',
   'actions.copyPageOptions': '複製頁面選項',
+  'actions.openStackBlitz': '在 StackBlitz 開啟',
   'actions.viewAsMarkdown': '以 Markdown 檢視',
   'actions.openFailed': '開啟失敗',
   'actions.clearSearch': '清除搜尋',

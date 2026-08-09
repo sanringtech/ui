@@ -49,10 +49,10 @@ const codeTheme = 'vitesse-dark';
   standalone: true,
   template: `
     <div class="relative bg-[var(--docs-code)]">
-      <div class="flex justify-end border-b border-[var(--docs-border)] px-3 py-2 sm:absolute sm:right-3 sm:top-3 sm:z-10 sm:border-0 sm:p-0">
+      <div class="flex justify-end border-b border-[var(--docs-border)] bg-[var(--docs-code-header)] px-3 py-2 sm:absolute sm:right-3 sm:top-3 sm:z-10 sm:border-0 sm:bg-transparent sm:p-0">
         <button
           type="button"
-          class="grid size-8 cursor-pointer place-items-center rounded-[var(--sanring-radius-sm)] border border-[var(--docs-border)] bg-[var(--docs-elevated)] text-[var(--docs-muted)] transition-colors hover:text-[var(--docs-fg)]"
+          class="grid size-8 cursor-pointer place-items-center rounded-[var(--sanring-radius-sm)] border border-[var(--docs-border)] bg-[var(--docs-elevated)] text-[var(--docs-code-muted)] transition-colors hover:text-[var(--docs-code-fg)]"
           [attr.aria-label]="i18n.t('actions.copyCode')"
           (click)="copyCode()"
         >
@@ -61,12 +61,12 @@ const codeTheme = 'vitesse-dark';
       </div>
 
       <div
-        class="overflow-auto px-4 py-5 font-mono text-[13px] leading-6 text-[#d4d4d4] sm:px-6 sm:py-7 sm:pr-16 sm:text-[15px] sm:leading-7"
+        class="overflow-auto px-4 py-5 font-mono text-[13px] leading-6 text-[var(--docs-code-fg)] sm:px-6 sm:py-7 sm:pr-16 sm:text-[15px] sm:leading-7"
       >
         <code class="block min-w-max">
           @for (line of highlightedLines(); track line.number) {
             <span class="grid grid-cols-[2.25rem_minmax(0,1fr)] sm:grid-cols-[3rem_minmax(0,1fr)]">
-              <span class="select-none pr-3 text-right text-[var(--docs-muted)] sm:pr-5">
+              <span class="select-none pr-3 text-right text-[var(--docs-code-muted)] sm:pr-5">
                 {{ line.number }}
               </span>
               <span class="min-w-0 whitespace-pre">

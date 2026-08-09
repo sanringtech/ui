@@ -45,10 +45,10 @@ type PackageManager = 'pnpm' | 'npm' | 'yarn' | 'bun';
           class="w-full overflow-hidden rounded-[var(--sanring-radius-lg)] border border-[var(--docs-border)] bg-[var(--docs-code)]"
         >
           <div
-            class="flex min-w-0 flex-wrap items-center gap-2 border-b border-[var(--docs-border)] px-3 py-2"
+            class="flex min-w-0 flex-wrap items-center gap-2 border-b border-[var(--docs-border)] bg-[var(--docs-code-header)] px-3 py-2"
           >
             <span
-              class="grid size-6 shrink-0 place-items-center rounded-[var(--sanring-radius-sm)] border border-[var(--docs-border)] bg-[var(--docs-bg)] font-mono text-xs text-[var(--docs-fg)]"
+              class="grid size-6 shrink-0 place-items-center rounded-[var(--sanring-radius-sm)] border border-[var(--docs-border)] bg-[var(--docs-panel)] font-mono text-xs text-[var(--docs-code-fg)]"
             >
               &gt;_
             </span>
@@ -67,7 +67,7 @@ type PackageManager = 'pnpm' | 'npm' | 'yarn' | 'bun';
 
             <button
               type="button"
-              class="ml-auto grid size-8 shrink-0 place-items-center rounded-[var(--sanring-radius-sm)] text-[var(--docs-muted)] transition-colors hover:bg-[var(--docs-elevated)] hover:text-[var(--docs-fg)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--docs-border-strong)]"
+              class="ml-auto grid size-8 shrink-0 place-items-center rounded-[var(--sanring-radius-sm)] text-[var(--docs-code-muted)] transition-colors hover:bg-[var(--docs-panel)] hover:text-[var(--docs-code-fg)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--docs-border-strong)]"
               [attr.aria-label]="i18n.t('actions.copyCode')"
               (click)="copyCurrentCode()"
             >
@@ -76,7 +76,7 @@ type PackageManager = 'pnpm' | 'npm' | 'yarn' | 'bun';
           </div>
 
           <pre
-            class="m-0 overflow-x-auto px-4 py-4 font-mono text-[13px] leading-6 text-[#cbd5e1] sm:text-sm sm:leading-7"
+            class="m-0 overflow-x-auto px-4 py-4 font-mono text-[13px] leading-6 text-[var(--docs-code-fg)] sm:text-sm sm:leading-7"
           ><code>{{ command() }}</code></pre>
         </div>
       </sanring-tabs-content>
@@ -86,12 +86,12 @@ type PackageManager = 'pnpm' | 'npm' | 'yarn' | 'bun';
           class="w-full overflow-hidden rounded-[var(--sanring-radius-lg)] border border-[var(--docs-border)] bg-[var(--docs-code)]"
         >
           <div
-            class="flex min-w-0 items-center gap-2 border-b border-[var(--docs-border)] px-3 py-2"
+            class="flex min-w-0 items-center gap-2 border-b border-[var(--docs-border)] bg-[var(--docs-code-header)] px-3 py-2"
           >
-            <span class="flex-1 text-sm font-medium text-[var(--docs-fg)]">Import</span>
+            <span class="flex-1 text-sm font-medium text-[var(--docs-code-fg)]">Import</span>
             <button
               type="button"
-              class="grid size-8 shrink-0 place-items-center rounded-[var(--sanring-radius-sm)] text-[var(--docs-muted)] transition-colors hover:bg-[var(--docs-elevated)] hover:text-[var(--docs-fg)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--docs-border-strong)]"
+              class="grid size-8 shrink-0 place-items-center rounded-[var(--sanring-radius-sm)] text-[var(--docs-code-muted)] transition-colors hover:bg-[var(--docs-panel)] hover:text-[var(--docs-code-fg)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--docs-border-strong)]"
               [attr.aria-label]="i18n.t('actions.copyCode')"
               (click)="copyCurrentCode()"
             >
@@ -100,7 +100,7 @@ type PackageManager = 'pnpm' | 'npm' | 'yarn' | 'bun';
           </div>
 
           <pre
-            class="m-0 overflow-x-auto px-4 py-4 font-mono text-[13px] leading-6 text-[#cbd5e1] sm:text-sm sm:leading-7"
+            class="m-0 overflow-x-auto px-4 py-4 font-mono text-[13px] leading-6 text-[var(--docs-code-fg)] sm:text-sm sm:leading-7"
           ><code>{{ manualSnippet() }}</code></pre>
         </div>
       </sanring-tabs-content>
@@ -138,8 +138,8 @@ export class ComponentPageInstallationComponent {
     return [
       'rounded-[var(--sanring-radius-sm)] px-2 py-1 font-mono text-sm transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--docs-border-strong)]',
       this.selectedPackageManager() === manager
-        ? 'bg-[var(--docs-bg)] text-[var(--docs-fg)] shadow-sm'
-        : 'text-[var(--docs-muted)] hover:text-[var(--docs-fg)]',
+        ? 'bg-[var(--docs-panel)] text-[var(--docs-code-fg)] shadow-sm ring-1 ring-[var(--docs-border)]'
+        : 'text-[var(--docs-code-muted)] hover:text-[var(--docs-code-fg)]',
     ].join(' ');
   }
 

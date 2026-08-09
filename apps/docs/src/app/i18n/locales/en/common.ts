@@ -14,6 +14,7 @@ export const commonTranslations = {
   'actions.copyFailed': 'Copy failed',
   'actions.copyPage': 'Copy Page',
   'actions.copyPageOptions': 'Copy page options',
+  'actions.openStackBlitz': 'Open in StackBlitz',
   'actions.viewAsMarkdown': 'View as Markdown',
   'actions.openFailed': 'Open failed',
   'actions.clearSearch': 'Clear search',
@@ -93,7 +94,8 @@ export const commonTranslations = {
   'components.updatedEmpty': 'No updated components yet.',
   'components.allTitle': 'All components',
   'component.recentChanges.title': 'Recent changes',
-  'component.recentChanges.description': 'Latest registry and documentation updates for this component.',
+  'component.recentChanges.description':
+    'Latest registry and documentation updates for this component.',
   'component.recentChanges.viewAll': 'View changelog',
   'components.disabledNotice.title': 'Why are some components greyed out?',
   'components.disabledNotice.description':

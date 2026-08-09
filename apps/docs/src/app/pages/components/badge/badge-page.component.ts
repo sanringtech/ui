@@ -39,7 +39,13 @@ import { badgePage, badgePageExamples } from './badge.docs';
       />
 
       <app-component-page-section [section]="section('basic')">
-        <app-component-page-code-previewer [code]="examples.basic" language="angular-html">
+        <app-component-page-code-previewer
+          [code]="examples.basic"
+          [stackBlitzImports]="examples.usageImport"
+          language="angular-html"
+          stackBlitzComponentName="badge"
+          stackBlitzTitle="Sanring UI Badge"
+        >
           <div previewer class="flex flex-wrap items-center justify-center gap-3">
             <span sanringBadge>{{ i18n.t('badge.demo.default') }}</span>
           </div>
@@ -124,7 +130,6 @@ import { badgePage, badgePageExamples } from './badge.docs';
       </app-component-page-section>
 
       <app-component-page-section [section]="section('accessibility')" />
-
 
       <app-component-page-section [section]="section('stateModel')" />
     </app-component-page>

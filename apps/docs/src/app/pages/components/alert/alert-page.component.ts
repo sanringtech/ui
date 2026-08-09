@@ -41,7 +41,13 @@ import { alertPage, alertPageExamples } from './alert.docs';
       />
 
       <app-component-page-section [section]="section('basic')">
-        <app-component-page-code-previewer [code]="examples.basic" language="angular-html">
+        <app-component-page-code-previewer
+          [code]="examples.basic"
+          [stackBlitzImports]="alertStackBlitzImports"
+          language="angular-html"
+          stackBlitzComponentName="alert"
+          stackBlitzTitle="Sanring UI Alert"
+        >
           <div previewer class="w-full">
             <sanring-alert>
               <svg lucideInfo class="size-4"></svg>
@@ -142,7 +148,6 @@ import { alertPage, alertPageExamples } from './alert.docs';
 
       <app-component-page-section [section]="section('accessibility')" />
 
-
       <app-component-page-section [section]="section('stateModel')" />
     </app-component-page>
   `,
@@ -151,6 +156,7 @@ export class AlertPageComponent {
   protected readonly page = alertPage;
   protected readonly examples = alertPageExamples;
   protected readonly i18n = inject(I18nService);
+  protected readonly alertStackBlitzImports = `import { SANRING_ALERT_IMPORTS } from './components/ui/alert';`;
 
   protected section(id: string) {
     return getComponentPageSection(this.page, id);

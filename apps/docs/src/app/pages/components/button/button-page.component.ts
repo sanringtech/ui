@@ -40,7 +40,14 @@ import { buttonPage, buttonPageExamples } from './button.docs';
       />
 
       <app-component-page-section [section]="section('basic')">
-        <app-component-page-code-previewer [code]="examples.basic" language="angular-html">
+        <app-component-page-code-previewer
+          [code]="examples.basic"
+          [stackBlitzCode]="stackBlitzBasicCode"
+          [stackBlitzComponentBody]="stackBlitzComponentBody"
+          language="angular-html"
+          stackBlitzComponentName="button"
+          stackBlitzTitle="Sanring UI Button"
+        >
           <div previewer class="grid gap-8">
             <div class="flex flex-wrap items-center justify-center gap-3">
               <button sanringBtn type="button" variant="outline">
@@ -222,6 +229,34 @@ export class ButtonPageComponent {
   protected readonly page = buttonPage;
   protected readonly examples = buttonPageExamples;
   protected readonly i18n = inject(I18nService);
+  protected readonly stackBlitzBasicCode = `import { ButtonDirective } from './components/ui/button';
+
+<div class="grid gap-4 text-center">
+  <button sanringBtn type="button" variant="outline" (click)="increment()">
+    {{ clicks === 0 ? 'Outline' : 'Clicked ' + clicks + ' times' }}
+  </button>
+
+  <button
+    sanringBtn
+    type="button"
+    [variant]="settingsVariant"
+    size="icon"
+    aria-label="Toggle settings variant"
+    (click)="toggleSettingsVariant()"
+  >
+    <svg class="size-4" lucideSettings></svg>
+  </button>
+</div>`;
+  protected readonly stackBlitzComponentBody = `clicks = 0;
+settingsVariant: 'outline' | 'secondary' = 'outline';
+
+increment() {
+  this.clicks += 1;
+}
+
+toggleSettingsVariant() {
+  this.settingsVariant = this.settingsVariant === 'outline' ? 'secondary' : 'outline';
+}`;
 
   protected section(id: string) {
     return getComponentPageSection(this.page, id);
