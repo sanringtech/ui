@@ -2,6 +2,7 @@ import { Component, TemplateRef, ViewChild, inject } from '@angular/core';
 import { OverlayContainer } from '@angular/cdk/overlay';
 import { TestBed } from '@angular/core/testing';
 
+import { expectNoA11yViolations } from '../../../testing/axe-a11y';
 import { AlertDialogActionDirective } from './alert-dialog-action.directive';
 import { AlertDialogCancelDirective } from './alert-dialog-cancel.directive';
 import { AlertDialogContentComponent } from './alert-dialog-content.component';
@@ -206,5 +207,20 @@ describe('AlertDialog', () => {
     fixture.detectChanges();
 
     expect(result).toBe(false);
+  });
+
+  it('has no axe-detectable a11y violations, trigger and open alert dialog content together', async () => {
+    const fixture = TestBed.createComponent(AlertDialogTestHost);
+    document.body.appendChild(fixture.nativeElement);
+    fixture.detectChanges();
+
+    try {
+      fixture.componentInstance.alertDialogService.open(fixture.componentInstance.alertDialog);
+      fixture.detectChanges();
+
+      await expectNoA11yViolations(document.body);
+    } finally {
+      fixture.nativeElement.remove();
+    }
   });
 });

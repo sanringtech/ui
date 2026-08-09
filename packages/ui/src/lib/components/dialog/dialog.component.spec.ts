@@ -2,6 +2,7 @@ import { Component, TemplateRef, ViewChild, inject } from '@angular/core';
 import { OverlayContainer } from '@angular/cdk/overlay';
 import { TestBed } from '@angular/core/testing';
 
+import { expectNoA11yViolations } from '../../../testing/axe-a11y';
 import { DialogCloseDirective } from './dialog-close.directive';
 import { DialogContentComponent } from './dialog-content.component';
 import { DialogDescriptionDirective } from './dialog-description.directive';
@@ -128,5 +129,23 @@ describe('DialogComponent', () => {
     fixture.detectChanges();
 
     expect(result).toBeUndefined();
+  });
+
+  it('has no axe-detectable a11y violations, trigger and open dialog content together', async () => {
+    const fixture = TestBed.createComponent(DialogTestHost);
+    document.body.appendChild(fixture.nativeElement);
+    fixture.detectChanges();
+
+    try {
+      fixture.nativeElement.querySelector('button').click();
+      fixture.detectChanges();
+
+      // CDK Overlay portals dialog content out to the overlay container, a
+      // sibling of the fixture under document.body — checking document.body
+      // (not fixture.nativeElement) covers both the trigger and the open dialog.
+      await expectNoA11yViolations(document.body);
+    } finally {
+      fixture.nativeElement.remove();
+    }
   });
 });

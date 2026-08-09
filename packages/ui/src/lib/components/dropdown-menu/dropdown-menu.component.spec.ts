@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { OverlayContainer } from '@angular/cdk/overlay';
 import { TestBed } from '@angular/core/testing';
 
+import { expectNoA11yViolations } from '../../../testing/axe-a11y';
 import { DropdownMenuComponent } from './dropdown-menu.component';
 import { DropdownMenuContentComponent } from './dropdown-menu-content.component';
 import { DropdownMenuItemDirective } from './dropdown-menu-item.directive';
@@ -108,5 +109,25 @@ describe('DropdownMenuComponent', () => {
     fixture.detectChanges();
 
     expect(trigger.getAttribute('aria-expanded')).toBe('false');
+  });
+
+  it('has no axe-detectable a11y violations, trigger and open menu together', async () => {
+    const fixture = await setup();
+    document.body.appendChild(fixture.nativeElement);
+
+    try {
+      const trigger = fixture.nativeElement.querySelector('[sanringDropdownMenuTrigger]') as HTMLElement;
+      trigger.click();
+      fixture.detectChanges();
+      await fixture.whenStable();
+      fixture.detectChanges();
+
+      // "region" is a whole-page landmark check — meaningless below page
+      // granularity, and this bare test fixture has no <main> regardless of
+      // the menu's own markup (see select.component.spec.ts for the same call).
+      await expectNoA11yViolations(document.body, { rules: { region: { enabled: false } } });
+    } finally {
+      fixture.nativeElement.remove();
+    }
   });
 });

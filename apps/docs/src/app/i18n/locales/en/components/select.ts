@@ -40,6 +40,10 @@ export const selectTranslations = {
     'Projects a custom selected indicator in place of the default check icon.',
   'select.api.class.description':
     'Additional classes merged with the corresponding select primitive.',
+  'select.api.triggerAriaLabel.description':
+    "Accessible name for the trigger. The trigger has role=\"combobox\", so — unlike a plain button — its visible text/placeholder does not count as a name; set this or triggerAriaLabelledBy.",
+  'select.api.triggerAriaLabelledBy.description':
+    'References the id of an element (e.g. an external <label>) that labels the trigger, as an alternative to ariaLabel.',
   'select.accessibility.description':
     "The trigger button has role='combobox', aria-haspopup='listbox', aria-expanded, and aria-controls pointing to the listbox id. Each option has role='option', aria-selected, and aria-disabled. When inside <sanring-field>, aria-required, aria-invalid, and aria-describedby (hint/error ids) are forwarded automatically.",
   'select.keyboard.description': 'Keyboard shortcuts work on the trigger and within the open list.',

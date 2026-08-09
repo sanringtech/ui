@@ -12,7 +12,8 @@
     "@sanring/date-picker-core": "^0.5.0"
   },
   "devDependencies": {
-    "@sanring/date-picker-core": "^0.5.0"
+    "@sanring/date-picker-core": "^0.5.0",
+    "axe-core": "^4.13.0"
   },
   "dependencies": {
     "clsx": "^2.1.1",

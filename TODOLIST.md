@@ -18,7 +18,8 @@
 
 ## P11 — 品質關卡類(優先度較低,長期補強)
 
-- [ ] 自動化 a11y 測試(如 axe-core),目前 UI library 完全沒有無障礙迴歸的自動把關,只能靠人工肉眼抓
+- [ ] axe-core a11y 測試擴大到剩餘 ~37 個 component(目前只覆蓋 13 個,見 [DEVLOG.md](DEVLOG.md) 的 P11 段落)——`packages/ui/src/testing/axe-a11y.ts` 這支 helper 跟 pattern 已經穩定,剩下是照抄套用到每個 component 的機械性工作
+- [ ] Docs 站補 light/dark theme accessibility smoke test,至少覆蓋 component 頁面的標題、說明文字、tabs、installation/code block、copy buttons 與 focus ring,確認文字對比、可讀性與鍵盤操作都通過
 - [ ] 視覺回歸測試(如 Chromatic / Playwright screenshot),CSS 改動有沒有意外破壞其他元件外觀,現在沒有自動偵測
 - [ ] CLI 補真正的 e2e 測試(拉一個全新 Angular 專案、真的跑 `sanring add`、真的 `ng build`)——現有的 `add.test.ts`/`doctor.test.ts` 等是對假的檔案系統 mock 驗證邏輯,不是「CLI 真的能在使用者機器上跑起來」的保證
 

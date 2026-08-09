@@ -2,6 +2,7 @@ import { OverlayContainer } from '@angular/cdk/overlay';
 import { Component } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
+import { expectNoA11yViolations } from '../../../testing/axe-a11y';
 import { TooltipComponent } from './tooltip.component';
 import { TooltipContentComponent } from './tooltip-content.component';
 import { TooltipTriggerDirective } from './tooltip-trigger.directive';
@@ -53,6 +54,24 @@ describe('TooltipComponent', () => {
     fixture.detectChanges();
 
     expect(trigger.hasAttribute('aria-describedby')).toBe(false);
+  });
+
+  it('has no axe-detectable a11y violations, trigger and open tooltip together', async () => {
+    document.body.appendChild(fixture.nativeElement);
+
+    try {
+      const trigger: HTMLButtonElement = fixture.nativeElement.querySelector('button');
+      trigger.dispatchEvent(new FocusEvent('focus'));
+      await waitForTooltipDelay();
+      fixture.detectChanges();
+
+      // "region" is a whole-page landmark check — meaningless below page
+      // granularity, and this bare test fixture has no <main> regardless of
+      // the tooltip's own markup (see select.component.spec.ts for the same call).
+      await expectNoA11yViolations(document.body, { rules: { region: { enabled: false } } });
+    } finally {
+      fixture.nativeElement.remove();
+    }
   });
 });
 

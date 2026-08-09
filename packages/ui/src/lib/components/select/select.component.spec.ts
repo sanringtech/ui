@@ -3,6 +3,7 @@ import { OverlayContainer } from '@angular/cdk/overlay';
 import { TestBed } from '@angular/core/testing';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 
+import { expectNoA11yViolations } from '../../../testing/axe-a11y';
 import { SelectComponent } from './select.component';
 import { SelectContentComponent } from './select-content.component';
 import { SelectItemComponent } from './select-item.component';
@@ -44,6 +45,29 @@ class SelectTestHost {
   disabledControl = new FormControl({ value: null, disabled: true });
 }
 
+// Separate from SelectTestHost above: axe flagged the trigger button there as
+// having no accessible name — role="combobox" means it's named the way an
+// <input> is (aria-label/aria-labelledby/associated <label>), not from its own
+// visible text the way a plain role="button" is, so the placeholder text
+// alone doesn't count. That was a real, previously-undiscovered gap:
+// SelectTriggerDirective had no ariaLabel/ariaLabelledBy input at all (now
+// fixed alongside this test, in packages/ui + registry). This host shows the
+// trigger used the way that new input is meant to be used.
+@Component({
+  imports: [SelectComponent, SelectContentComponent, SelectItemComponent, SelectTriggerDirective, SelectValueComponent],
+  template: `
+    <sanring-select>
+      <button type="button" sanringSelectTrigger ariaLabel="Fruit">
+        <sanring-select-value placeholder="Pick one" />
+      </button>
+      <sanring-select-content>
+        <sanring-select-item value="apple">Apple</sanring-select-item>
+      </sanring-select-content>
+    </sanring-select>
+  `,
+})
+class SelectA11yHost {}
+
 // CDK's ListKeyManager (which FocusKeyManager/SelectContentComponent's arrow-key handling
 // delegates to) reads event.keyCode, which the KeyboardEvent constructor's init dict can't
 // set (it's a read-only getter) — same workaround already used in stepper.component.spec.ts
@@ -62,7 +86,7 @@ describe('SelectComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [SelectTestHost],
+      imports: [SelectTestHost, SelectA11yHost],
     }).compileComponents();
 
     overlayContainer = TestBed.inject(OverlayContainer);
@@ -216,5 +240,25 @@ describe('SelectComponent', () => {
     fixture.detectChanges();
 
     expect(trigger.getAttribute('aria-expanded')).toBe('false');
+  });
+
+  it('has no axe-detectable a11y violations, trigger and open listbox together', async () => {
+    const fixture = TestBed.createComponent(SelectA11yHost);
+    document.body.appendChild(fixture.nativeElement);
+    fixture.detectChanges();
+
+    try {
+      const trigger = fixture.nativeElement.querySelector('button') as HTMLElement;
+      trigger.click();
+      fixture.detectChanges();
+      await fixture.whenStable();
+
+      // "region" is a whole-page landmark check (is everything under <main>/
+      // <nav>/etc?) — meaningless below page granularity, and this bare test
+      // fixture has no <main> at all regardless of the select's own markup.
+      await expectNoA11yViolations(document.body, { rules: { region: { enabled: false } } });
+    } finally {
+      fixture.nativeElement.remove();
+    }
   });
 });

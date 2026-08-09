@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { OverlayContainer } from '@angular/cdk/overlay';
 
+import { expectNoA11yViolations } from '../../../testing/axe-a11y';
 import { ContextMenuCheckboxItemComponent } from './context-menu-checkbox-item.component';
 import { ContextMenuContentComponent } from './context-menu-content.component';
 import { ContextMenuItemComponent } from './context-menu-item.component';
@@ -251,5 +252,21 @@ describe('ContextMenuComponent', () => {
 
     expect(subTrigger.getAttribute('aria-expanded')).toBe('false');
     expect(document.activeElement).toBe(subTrigger);
+  });
+
+  it('has no axe-detectable a11y violations, trigger zone and open menu together', async () => {
+    const fixture = await createFixture();
+    document.body.appendChild(fixture.nativeElement);
+
+    try {
+      await openMenu(fixture);
+
+      // "region" is a whole-page landmark check — meaningless below page
+      // granularity, and this bare test fixture has no <main> regardless of
+      // the menu's own markup (see select.component.spec.ts for the same call).
+      await expectNoA11yViolations(document.body, { rules: { region: { enabled: false } } });
+    } finally {
+      fixture.nativeElement.remove();
+    }
   });
 });

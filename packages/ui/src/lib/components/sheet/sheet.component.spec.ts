@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { OverlayContainer } from '@angular/cdk/overlay';
 import { TestBed } from '@angular/core/testing';
 
+import { expectNoA11yViolations } from '../../../testing/axe-a11y';
 import { SheetCloseDirective } from './sheet-close.directive';
 import { SheetContentComponent } from './sheet-content.component';
 import { SheetTitleComponent } from './sheet-title.component';
@@ -178,5 +179,21 @@ describe('SheetComponent', () => {
     fixture.detectChanges();
 
     expect(trigger.getAttribute('aria-expanded')).toBe('false');
+  });
+
+  it('has no axe-detectable a11y violations, trigger and open panel together', async () => {
+    const fixture = TestBed.createComponent(SheetTestHost);
+    document.body.appendChild(fixture.nativeElement);
+    fixture.detectChanges();
+
+    try {
+      const trigger = fixture.nativeElement.querySelector('button[sanringSheetTrigger]') as HTMLElement;
+      trigger.click();
+      fixture.detectChanges();
+
+      await expectNoA11yViolations(document.body);
+    } finally {
+      fixture.nativeElement.remove();
+    }
   });
 });

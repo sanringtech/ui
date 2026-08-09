@@ -36,7 +36,8 @@
         "test": {
           "builder": "@angular/build:unit-test",
           "options": {
-            "tsConfig": "packages/ui/tsconfig.spec.json"
+            "tsConfig": "packages/ui/tsconfig.spec.json",
+            "runnerConfig": true
           }
         },
         "lint": {

@@ -33,6 +33,10 @@ export const selectTranslations = {
   'select.api.placeholder.description': '未選取任何值時，sanring-select-value 顯示的提示文字。',
   'select.api.customIndicator.description': '投影自訂選取圖案，以取代預設 check icon。',
   'select.api.class.description': '合併到對應 select primitive 的額外 class。',
+  'select.api.triggerAriaLabel.description':
+    'trigger 的無障礙名稱。trigger 的 role 是 "combobox"，跟一般按鈕不同——顯示的文字/placeholder 不會被視為名稱，需要設定這個或 triggerAriaLabelledBy。',
+  'select.api.triggerAriaLabelledBy.description':
+    '指向某個元素（例如外部 <label>）的 id，作為 trigger 的名稱來源，是 ariaLabel 的替代方案。',
   'select.accessibility.description':
     "trigger 按鈕有 role='combobox'、aria-haspopup='listbox'、aria-expanded 及指向 listbox id 的 aria-controls。每個選項有 role='option'、aria-selected、aria-disabled。在 <sanring-field> 內使用時，aria-required、aria-invalid 與 aria-describedby（hint/error id）會自動轉發。",
   'select.keyboard.description': '鍵盤快捷鍵同時適用於 trigger 與開啟的選單清單。',

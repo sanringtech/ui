@@ -6,6 +6,7 @@ function wait(ms: number): Promise<void> {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
+import { expectNoA11yViolations } from '../../../testing/axe-a11y';
 import { PopoverComponent } from './popover.component';
 import { PopoverContentComponent } from './popover-content.component';
 import { PopoverDescriptionComponent } from './popover-description.component';
@@ -114,5 +115,21 @@ describe('PopoverComponent', () => {
 
     await wait(200);
     fixture.detectChanges();
+  });
+
+  it('has no axe-detectable a11y violations, trigger and open panel together', async () => {
+    const fixture = TestBed.createComponent(PopoverTestHost);
+    document.body.appendChild(fixture.nativeElement);
+    fixture.detectChanges();
+
+    try {
+      const trigger = fixture.nativeElement.querySelector('button') as HTMLElement;
+      trigger.click();
+      fixture.detectChanges();
+
+      await expectNoA11yViolations(document.body);
+    } finally {
+      fixture.nativeElement.remove();
+    }
   });
 });

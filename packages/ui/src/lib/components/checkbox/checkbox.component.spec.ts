@@ -2,6 +2,7 @@ import { Component, signal } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { FormsModule } from '@angular/forms';
 
+import { expectNoA11yViolations } from '../../../testing/axe-a11y';
 import { CheckboxComponent } from './checkbox.component';
 import { CheckedState } from './checkbox.types';
 
@@ -18,6 +19,17 @@ class CheckboxTestHost {
   checked = signal<CheckedState>(false);
   modelValue: CheckedState = false;
 }
+
+// Separate from CheckboxTestHost above: that host renders bare checkboxes with
+// no accessible name on purpose (it only exercises click/state behavior), which
+// axe would correctly flag as a real "button-name" violation — that's a fixture
+// gap, not a component bug. This host shows the component used the way its own
+// `ariaLabel` input is meant to be used.
+@Component({
+  imports: [CheckboxComponent],
+  template: `<sanring-checkbox [checked]="false" ariaLabel="Accept terms" />`,
+})
+class CheckboxA11yHost {}
 
 describe('CheckboxComponent', () => {
   beforeEach(async () => {
@@ -78,5 +90,13 @@ describe('CheckboxComponent', () => {
     await fixture.whenStable();
 
     expect(fixture.componentInstance.modelValue).toBe(true);
+  });
+
+  it('has no axe-detectable a11y violations when given an accessible name', async () => {
+    await TestBed.configureTestingModule({ imports: [CheckboxA11yHost] }).compileComponents();
+    const fixture = TestBed.createComponent(CheckboxA11yHost);
+    fixture.detectChanges();
+
+    await expectNoA11yViolations(fixture.nativeElement);
   });
 });

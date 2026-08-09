@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 
+import { expectNoA11yViolations } from '../../../testing/axe-a11y';
 import { SwitchComponent } from './switch.component';
 
 @Component({
@@ -19,6 +20,17 @@ class SwitchTestHost {
     this.lastChecked = value;
   }
 }
+
+// Separate from SwitchTestHost above: most of those switches are intentionally
+// unlabeled (they only exercise state/click behavior), which axe would
+// correctly flag as real "button-name" violations — a fixture gap, not a
+// component bug. This host shows the component used the way `ariaLabel` is
+// meant to be used.
+@Component({
+  imports: [SwitchComponent],
+  template: `<sanring-switch ariaLabel="Toggle theme" />`,
+})
+class SwitchA11yHost {}
 
 describe('SwitchComponent', () => {
   beforeEach(async () => {
@@ -85,5 +97,13 @@ describe('SwitchComponent', () => {
 
     expect(el.getAttribute('aria-checked')).toBe('false');
     expect(host.lastChecked).toBeNull();
+  });
+
+  it('has no axe-detectable a11y violations when given an accessible name', async () => {
+    await TestBed.configureTestingModule({ imports: [SwitchA11yHost] }).compileComponents();
+    const fixture = TestBed.createComponent(SwitchA11yHost);
+    fixture.detectChanges();
+
+    await expectNoA11yViolations(fixture.nativeElement);
   });
 });

@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
+import { expectNoA11yViolations } from '../../../testing/axe-a11y';
 import { CommandComponent } from './command.component';
 import { CommandEmptyComponent } from './command-empty.component';
 import { CommandGroupComponent } from './command-group.component';
@@ -166,5 +167,10 @@ describe('CommandComponent', () => {
 
     const emptyState = nativeElement(fixture).querySelector('[role="presentation"]') as HTMLElement;
     expect(emptyState.style.display).not.toBe('none');
+  });
+
+  it('has no axe-detectable a11y violations', async () => {
+    const fixture = await createFixture();
+    await expectNoA11yViolations(nativeElement(fixture));
   });
 });

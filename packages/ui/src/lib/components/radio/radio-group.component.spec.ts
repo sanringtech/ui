@@ -1,6 +1,8 @@
 import { Component, signal } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 
+import { expectNoA11yViolations } from '../../../testing/axe-a11y';
+import { LabelDirective } from '../label/label.directive';
 import { RadioGroupComponent } from './radio-group.component';
 import { RadioItemComponent } from './radio-item.component';
 import { RadioValue } from './radio.types';
@@ -22,6 +24,25 @@ import { RadioValue } from './radio.types';
 class RadioGroupTestHost {
   value = signal<RadioValue | null>(null);
 }
+
+// Separate from RadioGroupTestHost above: sanring-radio-item has no
+// <ng-content> in its template, so the "A"/"B"/"C" text projected into it
+// there is silently dropped and never rendered — those items genuinely have
+// no accessible name, which axe correctly flags. The item's name always
+// comes from an external associated <label for>, matching what the docs
+// actually show (apps/docs radio-page.component.ts), not from children.
+@Component({
+  imports: [RadioGroupComponent, RadioItemComponent, LabelDirective],
+  template: `
+    <sanring-radio-group ariaLabel="Density">
+      <sanring-radio-item id="r-a11y-default" value="default" />
+      <label sanringLabel for="r-a11y-default">Default</label>
+      <sanring-radio-item id="r-a11y-compact" value="compact" />
+      <label sanringLabel for="r-a11y-compact">Compact</label>
+    </sanring-radio-group>
+  `,
+})
+class RadioGroupA11yHost {}
 
 describe('RadioGroupComponent', () => {
   beforeEach(async () => {
@@ -92,5 +113,13 @@ describe('RadioGroupComponent', () => {
     fixture.detectChanges();
 
     expect(item.getAttribute('aria-checked')).toBe('false');
+  });
+
+  it('has no axe-detectable a11y violations when items are paired with an external <label for>', async () => {
+    await TestBed.configureTestingModule({ imports: [RadioGroupA11yHost] }).compileComponents();
+    const fixture = TestBed.createComponent(RadioGroupA11yHost);
+    fixture.detectChanges();
+
+    await expectNoA11yViolations(fixture.nativeElement);
   });
 });

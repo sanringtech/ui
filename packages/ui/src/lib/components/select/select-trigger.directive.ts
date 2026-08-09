@@ -20,6 +20,8 @@ import { SelectComponent } from './select.component';
     '[attr.aria-invalid]': 'select.errorState ? "true" : null',
     '[attr.aria-required]': 'select.required ? "true" : null',
     '[attr.aria-describedby]': 'select.describedByAttr',
+    '[attr.aria-label]': 'ariaLabel()',
+    '[attr.aria-labelledby]': 'ariaLabelledBy()',
     '[class]': 'triggerClass()',
     '(click)': 'onClick()',
     '(focus)': 'select.onTriggerFocus()',
@@ -34,6 +36,8 @@ export class SelectTriggerDirective {
   protected readonly select = inject(SelectComponent);
   private readonly origin = inject(CdkOverlayOrigin);
   readonly class = input<string | undefined>();
+  readonly ariaLabel = input<string | undefined>();
+  readonly ariaLabelledBy = input<string | undefined>();
 
   constructor() {
     this.select.triggerOrigin = this.origin;

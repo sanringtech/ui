@@ -164,6 +164,18 @@ export const selectPage = {
       defaultValue: 'undefined',
       descriptionKey: 'select.api.class.description',
     },
+    {
+      property: '[sanringSelectTrigger].ariaLabel',
+      type: 'string',
+      defaultValue: 'undefined',
+      descriptionKey: 'select.api.triggerAriaLabel.description',
+    },
+    {
+      property: '[sanringSelectTrigger].ariaLabelledBy',
+      type: 'string',
+      defaultValue: 'undefined',
+      descriptionKey: 'select.api.triggerAriaLabelledBy.description',
+    },
   ] satisfies readonly ComponentPageApiRow[],
   keyboardRows: [
     { keys: 'Enter / Space / ↑ / ↓', descriptionKey: 'select.keyboard.openTrigger' },

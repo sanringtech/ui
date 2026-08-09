@@ -270,6 +270,30 @@
 
 ---
 
+## P11 — a11y 自動化測試:axe-core 基礎設施 + 13 個高風險元件(部分完成)
+
+- [x] 導入 axe-core,建立可重複使用的測試 helper
+- [x] 套用到 P3 曾抓出真實 bug 的高風險互動元件批次(`dialog`、`alert-dialog`、`popover`、`select`、`combobox`、`command`、`dropdown-menu`、`context-menu`、`tooltip`、`sheet`)以及有歷史 a11y bug 的表單元件(`checkbox`、`switch`、`radio-group`)
+
+**已完成**:新增 `packages/ui/src/testing/axe-a11y.ts`(不掛在 `public-api.ts`,不會進發布的套件),`expectNoA11yViolations(node, options?)` 執行 `axe.run()`,只對 `results.violations` 斷言失敗——`results.incomplete`(這個 jsdom-based test runner 底下幾乎都是 `color-contrast`,因為 jsdom 沒有真正的 layout/canvas engine 能算出渲染後的顏色)刻意不當失敗處理,這是 axe-core 自己「壞掉」跟「需要人工複查」的既有區分,不是這個環境專屬的權宜之計。已用 checkbox 元件實測驗證過失敗路徑真的會擋下已知的 a11y bug(暫時拿掉 `ariaLabel` 觸發 `button-name` violation,確認 assertion 真的會 throw,再改回來)。
+
+`axe-core` 同時放進 `packages/cli`(它真正的消費者)跟 workspace root 的 `package.json` devDependencies——後者不是重複、不能砍掉重練:`@angular/build` 的 test bundler 是用 `root: <workspace root>` 跑 Vitest,當 2 個以上 spec 檔案 import 這支 helper 時,esbuild 會把 `axe-a11y.ts` code-split 成一個共用 chunk,而這個 chunk 的合成解析基準點是 workspace root、不是 `packages/ui`;pnpm 預設不 hoist package-local 依賴,`axe-core` 只能從 `packages/ui/node_modules` 解析,workspace root 解析不到,導致這個共用 chunk 裡的 `import axe from 'axe-core'` 完全解析不出來——但只有 2 個以上這樣的 spec 檔案同一個 Vitest process 一起跑才會炸(單一檔案會被 inline 進自己的 chunk,不會走這條路),這也是為什麼一開始追這個 bug 追得特別辛苦:整個 `ng test` 100% 重現,任何單檔 `--include` 跑法 0% 重現。詳細成因記在 `packages/ui/vitest-base.config.ts` 的註解裡,連同 `optimizeDeps.include: ['axe-core']`(可以省去 Vite dev server 冷啟動時 lazily 發現這個依賴的一輪)。
+
+過程中另外撞到一個沒關係的插曲:並行 session(另一個同時在跑的 Codex session,做 P22 StackBlitz)也在改 workspace root `package.json`,兩邊的 `pnpm add`/手動編輯彼此蓋掉了對方的寫入(read-modify-write race,不是 pnpm 的 bug),`axe-core` 那行被吃掉兩次,靠比對 `pnpm-lock.yaml` 才發現、重新手動補回去並用 `pnpm install` 校正。
+
+**過程中發現的真實 bug(不是 fixture 寫錯,已修好)**:
+
+1. `select`:trigger 按鈕的 `role="combobox"` 代表它是用 `<input>` 那一套規則取得無障礙名稱(aria-label/aria-labelledby/關聯 `<label>`),不是像一般按鈕那樣文字內容就算數——placeholder 文字雖然視覺上看得到,但不算有效名稱來源。`SelectTriggerDirective` 完全沒有 `ariaLabel`/`ariaLabelledBy` input,docs 裡每一個 select 範例也都沒有示範任何替代標籤方式。補上這兩個 input(`packages/ui` + `registry` 兩處),docs API 表補上說明,中英文 i18n 補齊。
+2. `context-menu`:`ContextMenuTriggerDirective` 掛在任意元素(通常是 `<div>`)上,加了 `aria-haspopup`/`aria-expanded`,但這兩個屬性只有在元素的 role 允許時才是合法 ARIA——bare div 的隱含 role 是 generic,不允許。修法是補 `role="button"`(`packages/ui` + `registry` 兩處),保留既有 5 個測試斷言 `aria-expanded` 的行為不變,而不是直接拿掉這兩個屬性(那樣做語意上更接近 Radix 的做法,但會動到既有測試驗證過的行為,選擇成本較低的修法)。
+
+**page-scope 產生的雜訊(不是元件本身的問題,測試裡個別排除)**:overlay 內容用 CDK Overlay portal 到 `document.body` 之後,要檢查 a11y 就得對整個 `document.body` 跑 axe(不能只查 fixture 本身,不然漏掉 portal 出去的內容)。role="dialog"/"alertdialog" 的 overlay(dialog、alert-dialog、popover、sheet)axe 本來就有把它們排除在「region」規則外;但 role="listbox"(select)、role="menu"(dropdown-menu、context-menu)、role="tooltip"(tooltip)沒有這個排除,對著一個沒有 `<main>` 的裸測試 fixture 掃全部 `document.body` 一定會撞到「All page content should be contained by landmarks」——這是整份頁面結構層級的規則,跟被測元件本身的標記寫得好不好無關,這幾個測試個別用 `{ rules: { region: { enabled: false } } }` 排除,並在測試裡註解說明原因。
+
+**尚未完成**:剩餘約 37 個元件還沒套用,helper 跟 pattern 已經穩定(overlay 用 `document.body` + 視需要排除 `region`;純文字/表單元件用 `fixture.nativeElement`),剩下是機械性套用工作,追蹤在 [TODOLIST.md](TODOLIST.md) P11。
+
+**驗證**:`packages/ui` 全部 64 個 spec 檔、229 個測試通過(`ng test @sanring/ui`,重跑兩次確認不是巧合)。`tsc --noEmit`(`packages/ui`/`apps/docs`/`packages/cli` 三個 tsconfig)、`pnpm lint`、`sync-registry.mjs`、`check-registry-sync.mjs` 全過。
+
+---
+
 ## 查證後確認「不算差距」的項目(備查,避免重複討論)
 
 - **PR 沒有測試/型別檢查關卡**:原 P0 已完成,不再放主 todo。已新增 PR 觸發的 CI workflow,跑 `pnpm test`、`tsc --noEmit`、`pnpm lint`。
