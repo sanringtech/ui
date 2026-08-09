@@ -294,6 +294,24 @@
 
 ---
 
+## P22 — Docs component 頁面加入 StackBlitz 快捷連結(部分完成)
+
+- [x] 建立 docs-only StackBlitz project builder,用 `@stackblitz/sdk` 的 `openProject()` 動態產生可試玩的 Angular 專案
+- [x] `ComponentPageCodePreviewer` 補上可選的 StackBlitz 按鈕與設定 input
+- [x] 首批接上 `button`、`badge`、`alert` basic 範例
+
+**已完成**:新增 `apps/docs/src/app/stackblitz/` docs-only helper。原本 MVP 版本是單檔 `sanring-stackblitz.ts`,而且在 StackBlitz 內跑 `sanring init`/`sanring add`,第一次開啟要等 Angular 依賴 + Sanring CLI + registry install 全部完成,體感太慢;已改成更快的 source 注入方案。現在 `scripts/generate-stackblitz-registry.mjs` 會把首批元件需要的 registry source(`theme.css`、shared utils/component-styles、component files)產生成 `registry-source.generated.ts` 字串 manifest,StackBlitz payload 直接包含 `src/app/components/ui/**` 與 `src/sanring-theme.css`,啟動腳本只需要 `ng serve --host 0.0.0.0`。
+
+helper 也拆成多個小檔:`open.ts` 只負責 lazy import `@stackblitz/sdk` 並呼叫 `openProject()`;`project.ts` 組 Project payload;`templates.ts` 放 Angular 專案模板;`example-parser.ts` 抽取範例 imports/template 並推斷 lucide imports;`registry-source.ts` 查找 generated manifest。後續擴 coverage 時主要修改 `scripts/generate-stackblitz-registry.mjs` 的 component 清單,再重跑 `pnpm run generate:stackblitz-registry`。
+
+`ComponentPageCodePreviewer` 新增 `stackBlitzComponentName`、`stackBlitzImports`、`stackBlitzTitle` inputs。只有提供 component name 的 previewer 會顯示「Open in StackBlitz」按鈕;點擊後才 lazy import `@stackblitz/sdk`,避免一般瀏覽 docs 時立刻載入 SDK。helper 會從範例字串抽出 import lines,自動推斷 `lucideXxx` directive 需要的 `@lucide/angular` import,再把剩餘 HTML 放進 standalone `AppComponent` template。
+
+**尚未完成**:其餘 component 頁面還沒全面接上。低依賴元件可以直接提供 `usageImport`;複雜元件需要逐頁補 demo state、Forms import、資料集合、事件 handler 與 peer dependency 驗證。剩餘 coverage 仍追蹤在 [TODOLIST.md](TODOLIST.md) P22。
+
+**驗證**:`pnpm add -w @stackblitz/sdk` 成功更新 root dependency 與 lockfile。`pnpm run generate:stackblitz-registry` 可產生首批 manifest。`pnpm exec ng build docs --configuration development --optimization=false` 通過;production build 目前仍卡在 Google Fonts inline 的外部網路/DNS,不是 StackBlitz helper 或 Angular template/type 錯誤。
+
+---
+
 ## 查證後確認「不算差距」的項目(備查,避免重複討論)
 
 - **PR 沒有測試/型別檢查關卡**:原 P0 已完成,不再放主 todo。已新增 PR 觸發的 CI workflow,跑 `pnpm test`、`tsc --noEmit`、`pnpm lint`。

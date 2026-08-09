@@ -67,10 +67,10 @@
 
 ## P22 — Docs component 頁面加入 StackBlitz 快捷連結
 
-- [ ] 每個 component 頁面的 code previewer 旁加一個「Open in StackBlitz」按鈕,讓使用者不用本地安裝就能試用
+- [ ] 將 StackBlitz 快捷連結從首批低依賴範例(`button`/`badge`/`alert`)擴到其餘 component 頁面的主要 code previewer,讓使用者不用本地安裝就能試用
 
-**現況**:Docs 的 code previewer 是靜態展示,使用者若想動手試要先本地建好 Angular 專案並跑完 `sanring init` + `sanring add`。
+**現況**:共用 StackBlitz SDK helper、previewer 按鈕與 registry source manifest 產生腳本已完成,目前先接上 `button`/`badge`/`alert` 的 basic 範例。其餘元件仍需逐頁補上範例 imports、必要 demo state 與 peer dependency 驗證。
 
 **差異**:這裡的目標是「一鍵開啟含有該元件的最小 Angular 專案」,而非在 docs 頁面內嵌入可編輯 editor(已確認 shadcn 自己的 docs 也不這樣做,兩邊打平)。StackBlitz 支援從 URL params 或 POST 預填專案內容,可以把 component 程式碼預先注入。
 
-**成本**:中。StackBlitz SDK 有 `sdk.openProject()` API,需要為每個元件準備一份最小化的 Angular 專案 template + 注入對應的元件程式碼。可以先做成通用 template,再逐元件補範例程式碼。
+**成本**:中。通用 template 與 source 注入流程已有,剩餘成本主要在逐元件整理 demo 與擴充 `scripts/generate-stackblitz-registry.mjs` 的 component 清單:低依賴 display/control 元件可直接套用;`date-picker`/`calendar`/`table`/`transfer` 等需要額外補資料、狀態與 peer dependency 檢查。
