@@ -36,6 +36,17 @@ function isPatch(version: string): boolean {
  */
 export const cliVersionChangelog: readonly CliVersionEntry[] = [
   {
+    version: '0.20.0',
+    date: '2026-08-09',
+    changes: [
+      {
+        type: 'added',
+        notable: true,
+        text: 'New `sanring mcp` command: starts an MCP server over stdio so AI coding agents (Claude Code, Cursor, Windsurf) can query and install components directly, without shelling out. Exposes five tools — `list_components`, `search_components`, `get_component_info`, `plan_component_install` (dry-run preview), and `add_component`.',
+      },
+    ],
+  },
+  {
     version: '0.19.0',
     date: '2026-08-06',
     changes: [

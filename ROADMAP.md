@@ -7,7 +7,7 @@ This is a snapshot, not a commitment or a timeline. Items move, get reprioritize
 ## Adoption experience
 
 - **Blocks** — installable page-level templates (login page, dashboard shell, settings page) via `sanring add block/dashboard-shell`, so you're not always assembling pages from individual components. This is the biggest adoption-experience gap compared to shadcn today.
-- **Theme presets** — a handful of named starting points (Slate, Warm, High-Contrast, …) plus an interactive theme builder on the docs site, instead of hand-editing CSS variables from scratch.
+- **Interactive theme builder** — a live color/radius preview on the docs site with copy-to-clipboard CSS. (The named starting points this was paired with — Slate, Warm, High-Contrast — already shipped via `sanring init --theme <preset>`.)
 - **Try without installing** — an "Open in StackBlitz" shortcut on each component's docs page.
 
 ## Ecosystem / team use
@@ -22,6 +22,8 @@ This is a snapshot, not a commitment or a timeline. Items move, get reprioritize
 
 ## Recently shipped
 
+- `sanring init --theme <preset>` — named color presets (`slate`, `warm`, `high-contrast`) so you don't have to hand-edit tokens for a different look
+- `sanring mcp` — an MCP server over stdio so AI coding agents (Claude Code, Cursor, Windsurf) can query and install components directly
 - `ng add @sanring/cli` — Angular Schematics support, so you can bootstrap with the Angular CLI's own add mechanism instead of `npx @sanring/cli init`
 - `sanring list --outdated` — a fast status overview of installed components against the registry
 - Per-component "Recent changes" on each docs page
