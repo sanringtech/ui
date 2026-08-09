@@ -6,6 +6,8 @@ export interface RegistryFixtureContent {
   utils?: string;
   utilsPeerDependencies?: Record<string, string>;
   theme?: string;
+  /** Theme preset override partials, keyed by preset name (e.g. 'slate' -> shared/theme-presets/slate.css). */
+  themePresets?: Record<string, string>;
   widget?: string;
   /** Second file added to the widget component — simulates a registry adding a new file post-install. */
   widgetExtra?: string;
@@ -32,6 +34,12 @@ export function writeRegistryFixture(dir: string, content: RegistryFixtureConten
   if (content.theme !== undefined) {
     writeFileSync(join(dir, 'shared', 'theme.css'), content.theme, 'utf-8');
     shared.push({ name: 'theme', description: 'fixture theme', file: 'shared/theme.css' });
+  }
+  if (content.themePresets !== undefined) {
+    mkdirSync(join(dir, 'shared', 'theme-presets'), { recursive: true });
+    for (const [name, css] of Object.entries(content.themePresets)) {
+      writeFileSync(join(dir, 'shared', 'theme-presets', `${name}.css`), css, 'utf-8');
+    }
   }
 
   const components: Registry['components'] = [];

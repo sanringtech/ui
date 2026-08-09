@@ -81,6 +81,46 @@ import {
         </div>
         <p class="mt-4 text-sm text-[var(--docs-muted)]">{{ i18n.t('theming.darkMode.note') }}</p>
       </app-component-page-section>
+
+      <!-- 5. Named presets -->
+      <app-component-page-section [section]="sections[4]">
+        <p class="mt-0 text-base leading-[1.7] text-[var(--docs-muted)]">
+          {{ i18n.t('theming.presets.body') }}
+        </p>
+        <div class="mt-6 overflow-hidden rounded-[var(--sanring-radius)] border border-[var(--docs-border)]">
+          <div class="flex items-center gap-2 border-b border-[var(--docs-border)] bg-[var(--docs-surface)] px-4 py-2.5">
+            <span class="text-xs font-medium text-[var(--docs-muted)]">Terminal</span>
+          </div>
+          <app-component-page-code-block [code]="presetsCommand" language="bash" />
+        </div>
+        <table class="mt-6 w-full border-collapse text-sm">
+          <thead>
+            <tr class="border-b border-[var(--docs-border)] text-left text-[var(--docs-muted)]">
+              <th class="py-2 pr-4 font-medium">Preset</th>
+              <th class="py-2 font-medium">Look</th>
+            </tr>
+          </thead>
+          <tbody class="text-[var(--docs-fg)]">
+            <tr class="border-b border-[var(--docs-border)]">
+              <td class="py-2 pr-4"><code>default</code></td>
+              <td class="py-2 text-[var(--docs-muted)]">Teal accent (no flag needed)</td>
+            </tr>
+            <tr class="border-b border-[var(--docs-border)]">
+              <td class="py-2 pr-4"><code>slate</code></td>
+              <td class="py-2 text-[var(--docs-muted)]">Muted blue-gray accent</td>
+            </tr>
+            <tr class="border-b border-[var(--docs-border)]">
+              <td class="py-2 pr-4"><code>warm</code></td>
+              <td class="py-2 text-[var(--docs-muted)]">Amber accent, larger radius</td>
+            </tr>
+            <tr>
+              <td class="py-2 pr-4"><code>high-contrast</code></td>
+              <td class="py-2 text-[var(--docs-muted)]">Near-black/white surfaces, square corners</td>
+            </tr>
+          </tbody>
+        </table>
+        <p class="mt-4 text-sm text-[var(--docs-muted)]">{{ i18n.t('theming.presets.note') }}</p>
+      </app-component-page-section>
     </app-component-page>
   `,
 })
@@ -102,6 +142,7 @@ export class ThemingPageComponent {
     { id: 'tailwind-v4', titleKey: 'theming.tailwind.title' },
     { id: 'brand-override', titleKey: 'theming.brand.title' },
     { id: 'dark-light-mode', titleKey: 'theming.darkMode.title' },
+    { id: 'named-presets', titleKey: 'theming.presets.title' },
   ];
 
   protected readonly tokensSource = `:root {
@@ -185,4 +226,6 @@ document.documentElement.setAttribute('data-theme', 'light');
 
 // switch to dark (explicit setAttribute is safer if you add a third theme later)
 document.documentElement.setAttribute('data-theme', 'dark');`;
+
+  protected readonly presetsCommand = `npx @sanring/cli@latest init --theme slate`;
 }

@@ -17,5 +17,10 @@ export const themingTranslations = {
     "Dark is the default — the base :root block defines all dark values. Light mode is a shallow override on :root[data-theme='light']. Toggle it by setting the attribute on <html>.",
   'theming.darkMode.note':
     'This differs from shadcn/ui, which adds a .dark class to <body>. The attribute approach lets you scope light/dark to any subtree, not just the whole document.',
+  'theming.presets.title': 'Named presets',
+  'theming.presets.body':
+    'Pass --theme to sanring init to start from a named preset instead of hand-editing every token. The preset is appended after the base tokens, so it only needs to override what changes — everything else falls back to the default.',
+  'theming.presets.note':
+    'Presets are a starting point, not a lock-in — the generated file is a plain CSS file in your project, so you can keep editing it by hand afterwards.',
 
 } as const;

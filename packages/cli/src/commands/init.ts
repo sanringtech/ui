@@ -33,6 +33,17 @@ const MONOREPO_TYPE_LABEL: Record<MonorepoType, string> = {
 };
 
 export const THEME_FILE_PATH = 'src/sanring-theme.css';
+export const THEME_PRESETS = ['default', 'slate', 'warm', 'high-contrast'] as const;
+export type ThemePreset = (typeof THEME_PRESETS)[number];
+
+interface InitOptions {
+  path: string;
+  yes: boolean;
+  force: boolean;
+  theme: string;
+  registry?: string;
+}
+
 const DEFAULT_GLOBAL_STYLESHEET_PATH = 'src/styles.css';
 const BASE_DEPS: Record<string, string> = {
   clsx: '^2.0.0',
@@ -70,6 +81,19 @@ function findGlobalStylesheet(cwd: string): string | null {
   return existsSync(join(cwd, 'src/styles.css')) ? 'src/styles.css' : null;
 }
 
+// Presets are override-only partials (see registry/shared/theme-presets/*.css):
+// they redeclare just the tokens that change and rely on the base file's
+// var() references (e.g. --sanring-active: var(--sanring-primary-80)) to
+// cascade the new values through, so appending after the base file is
+// sufficient — no merge logic needed beyond string concatenation.
+async function resolveThemeContent(theme: ThemePreset, registry?: string): Promise<string> {
+  const base = await fetchFile('shared/theme.css', registry);
+  if (theme === 'default') return base;
+
+  const preset = await fetchFile(`shared/theme-presets/${theme}.css`, registry);
+  return `${base}\n${preset}`;
+}
+
 function importPathForStylesheet(stylesheetPath: string): string {
   const importPath = relative(dirname(stylesheetPath), THEME_FILE_PATH).split(sep).join('/');
   return importPath.startsWith('.') ? importPath : `./${importPath}`;
@@ -93,11 +117,23 @@ export const initCommand = new Command('init')
   .option('-p, --path <path>', 'component destination path', DEFAULT_COMPONENT_PATH)
   .option('-y, --yes', 'accept all defaults without prompting', false)
   .option('-f, --force', 'overwrite an existing theme file', false)
+  .option(
+    '--theme <preset>',
+    `named theme preset (${THEME_PRESETS.join(', ')})`,
+    'default' satisfies ThemePreset,
+  )
   .option('--registry <source>', 'custom registry (URL or local path)')
-  .action(async (options: { path: string; yes: boolean; force: boolean; registry?: string }) => {
+  .action(async (options: InitOptions) => {
     const cwd = process.cwd();
 
     console.log(pc.cyan(`\nSanring UI — init\n`));
+
+    if (!THEME_PRESETS.includes(options.theme as ThemePreset)) {
+      console.error(pc.red(`✖ Unknown theme preset: ${options.theme}`));
+      console.error(pc.dim(`  Available presets: ${THEME_PRESETS.join(', ')}`));
+      process.exit(1);
+    }
+    const theme = options.theme as ThemePreset;
 
     // 1. Resolve the Angular project root (may differ from cwd in a monorepo).
     let projectRoot = cwd;
@@ -205,7 +241,7 @@ export const initCommand = new Command('init')
     // Skipped if it already exists (protects any brand-color edits) unless --force.
     const themeDest = join(projectRoot, THEME_FILE_PATH);
     try {
-      const themeContent = await fetchFile('shared/theme.css', options.registry);
+      const themeContent = await resolveThemeContent(theme, options.registry);
       const themeResult = writeFile(themeDest, themeContent, options.force);
       if (themeResult === 'written') {
         writeConfig(projectRoot, {
@@ -216,7 +252,11 @@ export const initCommand = new Command('init')
             [THEME_FILE_PATH]: hashContent(themeContent),
           },
         });
-        console.log(pc.green('✔') + ` ${THEME_FILE_PATH} written`);
+        console.log(
+          pc.green('✔') +
+            ` ${THEME_FILE_PATH} written` +
+            (theme !== 'default' ? pc.dim(` (theme: ${theme})`) : ''),
+        );
       } else {
         console.log(
           pc.dim(`–  ${THEME_FILE_PATH} already exists, use --force to reset it to defaults`),

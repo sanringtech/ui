@@ -1,0 +1,52 @@
+/*
+ * Sanring UI — High-Contrast preset
+ *
+ * Applied on top of shared/theme.css by `sanring init --theme high-contrast`.
+ * Unlike Slate/Warm (which only swap the primary scale and let the semantic
+ * layer's var() references follow along), this preset overrides the
+ * semantic background/foreground/border/surface tokens directly in both the
+ * dark (:root) and light (:root[data-theme='light']) blocks, since the goal
+ * is pushing those specific tokens to near-pure black/white — not just
+ * recoloring the brand accent. Radius also collapses toward square corners,
+ * a common high-contrast/utilitarian convention.
+ */
+:root {
+  --sanring-radius-xs: 2px;
+  --sanring-radius-sm: 2px;
+  --sanring-radius: 4px;
+  --sanring-radius-lg: 4px;
+
+  --sanring-primary-10: #dbeafe;
+  --sanring-primary-20: #bfdbfe;
+  --sanring-primary-30: #93c5fd;
+  --sanring-primary-40: #60a5fa;
+  --sanring-primary-50: #3b82f6;
+  --sanring-primary-60: #2563eb;
+  --sanring-primary-70: #1d4ed8;
+  --sanring-primary-80: #1e40af;
+  --sanring-primary-90: #1e3a8a;
+
+  --sanring-background: #000000;
+  --sanring-foreground: #ffffff;
+  --sanring-muted: #d4d4d4;
+  --sanring-border: #e5e5e5;
+  --sanring-border-strong: #ffffff;
+  --sanring-surface: #0a0a0a;
+  --sanring-surface-strong: #141414;
+  --sanring-elevated: #141414;
+  --sanring-control: #ffffff;
+  --sanring-control-foreground: #000000;
+}
+
+:root[data-theme='light'] {
+  --sanring-background: #ffffff;
+  --sanring-foreground: #000000;
+  --sanring-muted: #333333;
+  --sanring-border: #000000;
+  --sanring-border-strong: #000000;
+  --sanring-surface: #ffffff;
+  --sanring-surface-strong: #f0f0f0;
+  --sanring-elevated: #f5f5f5;
+  --sanring-control: #000000;
+  --sanring-control-foreground: #ffffff;
+}

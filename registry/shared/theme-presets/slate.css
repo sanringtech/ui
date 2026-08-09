@@ -1,0 +1,21 @@
+/*
+ * Sanring UI — Slate preset
+ *
+ * Applied on top of shared/theme.css by `sanring init --theme slate`
+ * (base file first, this one appended after — later declaration wins).
+ * Only the primary color scale changes; --sanring-active, --sanring-primary,
+ * --sanring-primary-fg, and every other semantic token are var() references
+ * back into this scale in the base file, so they pick up the new hue
+ * automatically without being redeclared here.
+ */
+:root {
+  --sanring-primary-10: #f1f5f9;
+  --sanring-primary-20: #e2e8f0;
+  --sanring-primary-30: #cbd5e1;
+  --sanring-primary-40: #94a3b8;
+  --sanring-primary-50: #64748b;
+  --sanring-primary-60: #475569;
+  --sanring-primary-70: #334155;
+  --sanring-primary-80: #1e293b;
+  --sanring-primary-90: #0f172a;
+}

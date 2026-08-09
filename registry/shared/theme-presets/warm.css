@@ -1,0 +1,24 @@
+/*
+ * Sanring UI — Warm preset
+ *
+ * Applied on top of shared/theme.css by `sanring init --theme warm`.
+ * Swaps the primary scale for an amber hue and opens up the radius scale
+ * a little for a softer, rounder feel — everything else (neutral/coral/sun/
+ * status scales, dark/light semantic mapping) is unchanged.
+ */
+:root {
+  --sanring-primary-10: #fef3c7;
+  --sanring-primary-20: #fde68a;
+  --sanring-primary-30: #fcd34d;
+  --sanring-primary-40: #fbbf24;
+  --sanring-primary-50: #f59e0b;
+  --sanring-primary-60: #d97706;
+  --sanring-primary-70: #b45309;
+  --sanring-primary-80: #92400e;
+  --sanring-primary-90: #78350f;
+
+  --sanring-radius-xs: 4px;
+  --sanring-radius-sm: 8px;
+  --sanring-radius: 10px;
+  --sanring-radius-lg: 16px;
+}

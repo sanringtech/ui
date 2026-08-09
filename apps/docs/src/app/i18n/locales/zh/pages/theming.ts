@@ -17,5 +17,10 @@ export const themingTranslations = {
     "預設為暗色——基礎 :root 區塊定義所有暗色值。亮色模式是 :root[data-theme='light'] 上的淺層覆寫，只需在 <html> 上設定屬性即可切換。",
   'theming.darkMode.note':
     '這與 shadcn/ui 不同——shadcn 在 <body> 加上 .dark class。屬性方式讓你可以將亮暗主題限定在任意子樹，而不只是整份文件。',
+  'theming.presets.title': '具名主題預設',
+  'theming.presets.body':
+    '執行 sanring init 時加上 --theme，就能從一組具名預設出發，不用逐一手動改 token。預設值會接在基礎 token 後面，只需覆寫有變動的部分，其餘沿用預設值。',
+  'theming.presets.note':
+    '預設只是一個起點，不是綁定——產生出來的檔案就是專案裡一份普通的 CSS 檔，之後仍然可以手動繼續調整。',
 
 } as const;

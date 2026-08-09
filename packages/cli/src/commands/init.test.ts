@@ -149,6 +149,77 @@ describe('initCommand (integration)', () => {
   });
 });
 
+describe('initCommand — theme presets', () => {
+  let projectDir: string;
+  let registryDir: string;
+  let originalCwd: string;
+
+  beforeEach(() => {
+    originalCwd = process.cwd();
+    projectDir = mkdtempSync(join(tmpdir(), 'sanring-cli-project-'));
+    registryDir = mkdtempSync(join(tmpdir(), 'sanring-cli-registry-'));
+    writeAngularProject(projectDir);
+    writeRegistryFixture(registryDir, {
+      theme: ':root { --sanring-primary-50: #8bd3dd; }\n',
+      themePresets: { slate: ':root { --sanring-primary-50: #64748b; }\n' },
+    });
+    process.chdir(projectDir);
+    vi.spyOn(console, 'log').mockImplementation(() => {});
+  });
+
+  afterEach(() => {
+    process.chdir(originalCwd);
+    rmSync(projectDir, { recursive: true, force: true });
+    rmSync(registryDir, { recursive: true, force: true });
+    vi.restoreAllMocks();
+    // initCommand is a module-level singleton shared across every test in this
+    // file (and reused across parseAsync calls) — commander only applies an
+    // option's default once, at .option() registration time, so an explicit
+    // --theme value set here would otherwise leak into later tests/describe
+    // blocks that never pass --theme at all.
+    initCommand.setOptionValueWithSource('theme', 'default', 'default');
+  });
+
+  it('defaults to the base theme when --theme is omitted', async () => {
+    await initCommand.parseAsync(['--yes', '--registry', registryDir], { from: 'user' });
+
+    const themeFile = join(projectDir, 'src/sanring-theme.css');
+    expect(readFileSync(themeFile, 'utf-8')).toBe(':root { --sanring-primary-50: #8bd3dd; }\n');
+  });
+
+  it('appends the named preset after the base theme', async () => {
+    await initCommand.parseAsync(
+      ['--yes', '--registry', registryDir, '--theme', 'slate'],
+      { from: 'user' },
+    );
+
+    const themeFile = join(projectDir, 'src/sanring-theme.css');
+    expect(readFileSync(themeFile, 'utf-8')).toBe(
+      ':root { --sanring-primary-50: #8bd3dd; }\n\n:root { --sanring-primary-50: #64748b; }\n',
+    );
+  });
+
+  it('rejects an unknown preset name', async () => {
+    const errors: string[] = [];
+    vi.spyOn(console, 'error').mockImplementation((...args: unknown[]) => {
+      errors.push(args.join(' '));
+    });
+    const exitSpy = vi.spyOn(process, 'exit').mockImplementation(() => {
+      throw new Error('process.exit');
+    });
+
+    await expect(
+      initCommand.parseAsync(
+        ['--yes', '--registry', registryDir, '--theme', 'nonexistent'],
+        { from: 'user' },
+      ),
+    ).rejects.toThrow('process.exit');
+
+    expect(errors.some((e) => e.includes('Unknown theme preset: nonexistent'))).toBe(true);
+    exitSpy.mockRestore();
+  });
+});
+
 describe('initCommand — monorepo detection', () => {
   let workspaceRoot: string;
   let registryDir: string;

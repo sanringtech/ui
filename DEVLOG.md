@@ -1,17 +1,17 @@
 # Development Log
 
-內部工程日誌:記錄 `todolist.md` 每個項目實際怎麼做、為什麼這樣做、怎麼驗證過,以及查證後發現「其實不是缺口」的結論。寫給開發者自己(人類或未來的 Claude session)看——回答的是「當初為什麼這樣做、驗證過什麼」,顆粒度比 git commit message 粗、比 todolist 的現況/風險/成本評估更偏事後敘事。
+內部工程日誌:記錄 `TODOLIST.md` 每個項目實際怎麼做、為什麼這樣做、怎麼驗證過,以及查證後發現「其實不是缺口」的結論。寫給開發者自己(人類或未來的 Claude session)看——回答的是「當初為什麼這樣做、驗證過什麼」,顆粒度比 git commit message 粗、比 todolist 的現況/風險/成本評估更偏事後敘事。
 
 這不是使用者看的版本紀錄,那是 [`packages/cli/CHANGELOG.md`](packages/cli/CHANGELOG.md)(changesets 自動產生,逐版本、面向消費者)。對外的方向性摘要見 [ROADMAP.md](ROADMAP.md)。三者的關係:
 
 | 文件 | 讀者 | 回答的問題 | 更新頻率 |
 |---|---|---|---|
-| `todolist.md` | 開發者自己 | 接下來要做什麼、為什麼、值不值得 | 每完成一項就變動 |
+| `TODOLIST.md` | 開發者自己 | 接下來要做什麼、為什麼、值不值得 | 每完成一項就變動 |
 | `DEVLOG.md`(這份) | 開發者自己 | 這件事當初怎麼做的、驗證過什麼 | 每完成一項就追加 |
 | `ROADMAP.md` | 使用者/貢獻者 | 專案接下來的方向 | 偶爾,方向改變時 |
 | `packages/cli/CHANGELOG.md` | 使用者 | 這個版本對我有什麼影響 | 每次 release |
 
-條目依 `todolist.md` 的 P 編號分組——編號代表歷史待辦清單裡的順序,不代表完成的時間序;新條目直接接在檔案最後面。
+條目依 `TODOLIST.md` 的 P 編號分組——編號代表歷史待辦清單裡的順序,不代表完成的時間序;新條目直接接在檔案最後面。
 
 ---
 
@@ -181,7 +181,7 @@
 
 **已完成**:OnPush 清理:全部 162 個 `@Component` 現在都設了 `ChangeDetectionStrategy.OnPush`(packages/ui + registry 雙向同步),同時修正 registry `context-menu-content`/`context-menu-sub-content` 之前缺漏的方向鍵導覽(`ArrowDown`/`ArrowUp` → `focusAdjacentMenuItem`)與 `menu-navigation` sharedDep。Overlay 生命週期抽共用 class:新增 `packages/ui/src/lib/components/shared/menu-overlay-controller.ts`(`MenuOverlayController`)與對應的 `registry/shared/menu-overlay-controller.ts`。三個 content 元件(`context-menu-content`、`context-menu-sub-content`、`navigation-menu-sub-content`)各自從 ~50 行手刻邏輯改為直接用 `MenuOverlayController`,兩種 origin 型別(`{x,y}` 座標 vs `ElementRef`)均支援;registry.json 新增 `menu-overlay-controller` shared 條目並更新 context-menu/navigation-menu 的 `sharedDeps`。`resizable.utils.ts` 型別斷言改成 `.filter((el): el is HTMLElement => el instanceof HTMLElement)`,移除 unsafe cast。
 
-**尚未完成**:9 個表單元件(`checkbox`/`switch`/`radio-group`/`slider`/`otp-input`/`date-picker`/`calendar`/`file-upload`/`combobox`)各自重複一份幾乎逐字相同的 `XxxFieldControlAdapter` + CVA state-bridge 邏輯(約 500–600 行複製貼上)還沒收斂,追蹤在 `todolist.md` P14。
+**尚未完成**:9 個表單元件(`checkbox`/`switch`/`radio-group`/`slider`/`otp-input`/`date-picker`/`calendar`/`file-upload`/`combobox`)各自重複一份幾乎逐字相同的 `XxxFieldControlAdapter` + CVA state-bridge 邏輯(約 500–600 行複製貼上)還沒收斂,追蹤在 `TODOLIST.md` P14。
 
 ---
 
@@ -249,6 +249,24 @@
 **現況**:`COMPONENT_AUDIT.md` 已在 `35114a3 chore: remove orphan projects/ dir and completed audit docs` 移除(P3 盤點任務已完成,矩陣文件沒有繼續維護的價值),但驗證腳本沒有跟著移除。跑 `node packages/cli/scripts/check-component-audit-sync.mjs` 會直接對著不存在的 `COMPONENT_AUDIT.md` `ENOENT` crash,`ci.yml` 的 `lint` job 有呼叫這支腳本,main 分支 CI 因此常紅。
 
 **已完成**:選擇刪除腳本+CI 步驟,而不是恢復 `COMPONENT_AUDIT.md`——恢復矩陣文件等於承諾要繼續手動維護它,跟當初刪除它的理由(盤點任務已完成、文件沒有持續維護的價值)直接矛盾。確認過沒有其他地方引用這支腳本(`CONTRIBUTING.md`/`README.md` 都沒提到)才刪。`pnpm lint` 重新驗證過綠燈。
+
+---
+
+## P20 — Theme Presets:具名主題預設(部分完成)
+
+- [x] 提供數個可直接套用的具名主題(`default`/`slate`/`warm`/`high-contrast`),讓 `sanring init --theme <name>` 能直接寫入對應的 CSS variables
+
+**已完成**:`registry/shared/theme-presets/{slate,warm,high-contrast}.css` 三個 override-only partial,加上 `init.ts` 的 `--theme <preset>` flag。設計上刻意不讓每個 preset 各自複製一份完整的 90 行 token 檔——`slate`/`warm` 只覆寫 `--sanring-primary-10`~`90` 這條色階,靠 base `theme.css` 既有的 `--sanring-active: var(--sanring-primary-80)` 這類語意層 var() 參照自動把新色系帶過去,不用逐一重寫;`high-contrast` 因為改的是語意層本身(background/foreground/border 推向純黑白、圓角收斂),額外覆寫了 `:root[data-theme='light']` 區塊,並在檔案開頭註解說明為什麼跟另外兩個 preset 的作法不同(CSS attribute selector 的 specificity 比純 `:root` 高,兩個 preset 都必須各自帶自己的 light 區塊才能贏過 base 的 light 區塊)。
+
+`resolveThemeContent()` 的合併方式是單純字串串接(base 內容 + `\n` + preset 內容),寫成同一份 `src/sanring-theme.css`——沒有做「動態合併多個 CSS 檔」這種更複雜的方案,因為 CSS custom property 的 cascade 規則本來就會讓後面出現的同選擇器宣告蓋掉前面的,字串串接已經足夠。preset 名稱驗證(`THEME_PRESETS` 陣列)在指令一開始就做,擋掉打錯字的 `--theme` 值並列出可用選項。
+
+**驗證**:15 個 init.test.ts 案例全過(含新增的 3 個 `--theme` 案例);另外建置後在真實 scratch Angular 專案跑過 `sanring init --theme slate`/`--theme high-contrast`/`--theme bogus`,逐行比對輸出的 `sanring-theme.css` 內容(base + preset 正確串接、`--theme` 訊息正確顯示)、確認無效 preset 名稱會印出可用清單並 exit 1。`check-registry-sync.mjs`/`sync-registry.mjs`/`pnpm lint`/`tsc --noEmit` 全過。
+
+**踩過的坑**:`init.test.ts` 裡的 `initCommand` 是模組層級 singleton,同一個 Command 實例會被整份測試檔案的多個 `it()` 重複 `parseAsync()`——commander 的 option default 只在 `.option()` 註冊當下套用一次,之後每次 parse 若沒有帶該 flag,並不會自動回退成 default,而是沿用上一次 parse 時明確設定的值。一開始新增的「拒絕不明 preset 名稱」測試把 `--theme nonexistent` 設進了 singleton,導致排在後面、完全沒提到 `--theme` 的既有 monorepo 測試也在 theme 驗證那關被擋下來,誤判成一堆不相關測試失敗。修法是在新增的 `describe` 區塊的 `afterEach` 裡呼叫 `initCommand.setOptionValueWithSource('theme', 'default', 'default')` 把 singleton 狀態復原,不影響其他測試檔案。
+
+**docs**:theming page 加了一個「Named presets」段落(`--theme` 指令範例 + 4 個 preset 的一行說明表格),中英文 i18n key 都補了。這是純粹展示已出貨的 CLI flag,不是互動式調色預覽——沒有瀏覽器可以實際跑 docs dev server 驗證渲染,只用 `tsc --noEmit`/`pnpm lint` 驗證過型別和 i18n key 沒漏。
+
+**尚未完成**:互動式主題產生器(docs 即時調色 + 複製 CSS)還在 [TODOLIST.md](TODOLIST.md) P20。
 
 ---
 

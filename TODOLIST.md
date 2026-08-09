@@ -52,16 +52,15 @@
 
 ---
 
-## P20 — Theme Presets:具名主題預設 + 互動式主題產生器
+## P20 — Theme Presets:互動式主題產生器
 
-- [ ] 提供數個可直接套用的具名主題(如 Default、Slate、Warm、High-Contrast),讓 `sanring init --theme slate` 能直接寫入對應的 CSS variables
 - [ ] Docs theming page 加入互動式調色預覽,讓使用者即時看到改變 accent/background/radius 的效果並複製 CSS
 
-**現況**:docs 有 theming page 說明 CSS variables,`sanring init` 會寫入一份 `sanring-theme.css`,但只有一套預設值,使用者要自訂必須手動改 token。
+**現況**:具名 preset(`default`/`slate`/`warm`/`high-contrast`)+ `sanring init --theme <name>` 已完成(見 [DEVLOG.md](DEVLOG.md) 的 P20 段落),僅剩這項。
 
-**影響**:使用者不想從頭調 20 個 token。「我要暖色系/我要深藍色/我要更大的圓角」這類需求,具名 preset 能立刻滿足。shadcn 的 theme builder 是 docs 站停留時間最長的頁面之一。
+**影響**:使用者不想從頭調 20 個 token。shadcn 的 theme builder 是 docs 站停留時間最長的頁面之一,這項補的是「即時預覽 + 複製」的互動體驗,靜態 preset 只解決「挑一個起點」。
 
-**成本**:中。Preset CSS 本身低成本;互動式 preview 中等成本(需要在 docs 裡動態套用 CSS variables 並即時反映到 demo 元件)。
+**成本**:中。需要在 docs 裡動態套用 CSS variables 並即時反映到 demo 元件。
 
 ---
 
