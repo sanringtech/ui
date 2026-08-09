@@ -36,6 +36,21 @@ function isPatch(version: string): boolean {
  */
 export const cliVersionChangelog: readonly CliVersionEntry[] = [
   {
+    version: '0.21.0',
+    date: '2026-08-09',
+    changes: [
+      {
+        type: 'added',
+        notable: true,
+        text: '`ng add @sanring/cli` now works as an alternative to `npx @sanring/cli@latest init` — installs the CLI as a dev dependency and runs the same init flow (component path prompt, theme stylesheet, base dependency install).',
+      },
+      {
+        type: 'added',
+        text: '`sanring init --theme <preset>` starts from a named color preset instead of hand-editing tokens: `slate` (muted blue-gray), `warm` (amber, larger radius), or `high-contrast` (near-black/white, square corners).',
+      },
+    ],
+  },
+  {
     version: '0.20.0',
     date: '2026-08-09',
     changes: [
