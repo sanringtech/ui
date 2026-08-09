@@ -1,6 +1,7 @@
 import { Component, signal } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 
+import { expectNoA11yViolations } from '../../../testing/axe-a11y';
 import { PageEvent } from './pagination.type';
 import { PaginatorComponent } from './paginator.component';
 
@@ -13,7 +14,13 @@ import { PaginatorComponent } from './paginator.component';
       [length]="83"
       (pageChange)="onPageChange($event)"
     />
-    <sanring-paginator [pageIndex]="0" [pageSize]="10" [length]="0" [showFirstLast]="false" />
+    <sanring-paginator
+      [pageIndex]="0"
+      [pageSize]="10"
+      [length]="0"
+      [showFirstLast]="false"
+      ariaLabel="Empty pagination"
+    />
   `,
 })
 class PaginatorTestHost {
@@ -111,5 +118,12 @@ describe('PaginatorComponent', () => {
     fixture.detectChanges();
 
     expect(fixture.componentInstance.lastEvent).toBeNull();
+  });
+
+  it('has no axe-detectable a11y violations', async () => {
+    const fixture = TestBed.createComponent(PaginatorTestHost);
+    fixture.detectChanges();
+
+    await expectNoA11yViolations(fixture.nativeElement);
   });
 });

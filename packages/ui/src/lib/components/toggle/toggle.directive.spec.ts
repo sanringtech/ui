@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 
+import { expectNoA11yViolations } from '../../../testing/axe-a11y';
 import { ToggleDirective } from './toggle.directive';
 
 @Component({
@@ -50,5 +51,12 @@ describe('ToggleDirective', () => {
     fixture.detectChanges();
 
     expect(toggle.getAttribute('aria-pressed')).toBe('false');
+  });
+
+  it('has no axe-detectable a11y violations', async () => {
+    const fixture = TestBed.createComponent(ToggleTestHost);
+    fixture.detectChanges();
+
+    await expectNoA11yViolations(fixture.nativeElement);
   });
 });

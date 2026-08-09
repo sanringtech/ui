@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { describe, expect, it } from 'vitest';
+import { expectNoA11yViolations } from '../../../testing/axe-a11y';
 import { InputDirective } from '../input/input.directive';
 import { SanringFieldComponent } from './field.component';
 import { LabelDirective } from './label.directive';
@@ -38,6 +39,13 @@ describe('SanringFieldComponent projection', () => {
     const html: string = fixture.nativeElement.innerHTML;
     expect(html).toContain('Email');
     expect(html).toContain('sanringinput');
+  });
+
+  it('has no axe-detectable a11y violations', async () => {
+    const fixture = TestBed.createComponent(HostComponent);
+    fixture.detectChanges();
+
+    await expectNoA11yViolations(fixture.nativeElement);
   });
 });
 

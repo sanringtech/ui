@@ -2,6 +2,7 @@ import { OverlayContainer } from '@angular/cdk/overlay';
 import { Component } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
+import { expectNoA11yViolations } from '../../../testing/axe-a11y';
 import { NavigationMenuContentComponent } from './navigation-menu-content.component';
 import { NavigationMenuItemComponent } from './navigation-menu-item.component';
 import { NavigationMenuLinkDirective } from './navigation-menu-link.directive';
@@ -30,9 +31,7 @@ import { NavigationMenuComponent } from './navigation-menu.component';
         <sanring-navigation-menu-item value="docs">
           <button sanringNavigationMenuTrigger>Docs</button>
           <sanring-navigation-menu-content>
-            <a sanringNavigationMenuLink href="/overview" role="menuitem" tabindex="0">
-              Overview
-            </a>
+            <a sanringNavigationMenuLink href="/overview"> Overview </a>
             <sanring-navigation-menu-sub>
               <sanring-navigation-menu-sub-trigger>
                 Components
@@ -130,5 +129,30 @@ describe('NavigationMenuComponent', () => {
 
     expect(subTrigger.getAttribute('aria-expanded')).toBe('false');
     expect(document.activeElement).toBe(subTrigger);
+  });
+
+  it('has no axe-detectable a11y violations with the menu and submenu open', async () => {
+    const fixture = createFixture();
+    document.body.appendChild(fixture.nativeElement);
+
+    try {
+      trigger(fixture).click();
+      fixture.detectChanges();
+
+      const subTrigger = (fixture.nativeElement as HTMLElement).querySelector(
+        'sanring-navigation-menu-sub-trigger',
+      ) as HTMLElement;
+      subTrigger.dispatchEvent(keydown('ArrowRight'));
+      fixture.detectChanges();
+      await fixture.whenStable();
+      fixture.detectChanges();
+
+      // "region" is a whole-page landmark check — meaningless below page
+      // granularity, and this bare test fixture has no <main> regardless of
+      // the menu's own markup (see select.component.spec.ts for the same call).
+      await expectNoA11yViolations(document.body, { rules: { region: { enabled: false } } });
+    } finally {
+      fixture.nativeElement.remove();
+    }
   });
 });

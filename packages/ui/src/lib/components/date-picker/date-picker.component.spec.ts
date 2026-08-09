@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { CALENDAR_QUARTER_STARTS_ON } from '@sanring/date-picker-core';
 
+import { expectNoA11yViolations } from '../../../testing/axe-a11y';
 import { DatePickerComponent } from './date-picker.component';
 
 @Component({
@@ -78,5 +79,12 @@ describe('DatePickerComponent', () => {
     fixture.detectChanges();
 
     expect(fixture.componentInstance.selectedDate).toBeInstanceOf(Date);
+  });
+
+  it('has no axe-detectable a11y violations', async () => {
+    const fixture = TestBed.createComponent(DatePickerTestHost);
+    fixture.detectChanges();
+
+    await expectNoA11yViolations(fixture.nativeElement);
   });
 });

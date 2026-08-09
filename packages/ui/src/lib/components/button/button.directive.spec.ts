@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 
+import { expectNoA11yViolations } from '../../../testing/axe-a11y';
 import { ButtonDirective } from './button.directive';
 
 @Component({
@@ -56,5 +57,12 @@ describe('ButtonDirective', () => {
     const button = fixture.nativeElement.querySelectorAll('button')[0] as HTMLButtonElement;
     expect(button.disabled).toBe(false);
     expect(button.getAttribute('aria-disabled')).toBeNull();
+  });
+
+  it('has no axe-detectable a11y violations', async () => {
+    const fixture = TestBed.createComponent(ButtonTestHost);
+    fixture.detectChanges();
+
+    await expectNoA11yViolations(fixture.nativeElement);
   });
 });

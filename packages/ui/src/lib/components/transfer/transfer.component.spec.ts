@@ -1,6 +1,7 @@
 import { Component, signal } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 
+import { expectNoA11yViolations } from '../../../testing/axe-a11y';
 import { TransferActionDirective } from './transfer-action.directive';
 import { TransferHeaderComponent } from './transfer-header.component';
 import { TransferListComponent } from './transfer-list.component';
@@ -190,5 +191,11 @@ describe('TransferComponent', () => {
     fixture.detectChanges();
 
     expect(host.selectedKeys()).toEqual(['2', '1']);
+  });
+
+  it('has no axe-detectable a11y violations', async () => {
+    const fixture = await createFixture();
+
+    await expectNoA11yViolations(fixture.nativeElement);
   });
 });

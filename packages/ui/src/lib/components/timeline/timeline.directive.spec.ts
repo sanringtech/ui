@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 
+import { expectNoA11yViolations } from '../../../testing/axe-a11y';
 import { TimelineContentDirective } from './timeline-content.directive';
 import { TimelineItemDirective } from './timeline-item.directive';
 import { TimelineSeparatorDirective } from './timeline-separator.directive';
@@ -87,5 +88,12 @@ describe('Timeline primitives', () => {
 
     expect(item.classList).toContain('flex-row');
     expect(item.classList).not.toContain('flex-col');
+  });
+
+  it('has no axe-detectable a11y violations', async () => {
+    const fixture = TestBed.createComponent(TimelineTestHost);
+    fixture.detectChanges();
+
+    await expectNoA11yViolations(fixture.nativeElement);
   });
 });

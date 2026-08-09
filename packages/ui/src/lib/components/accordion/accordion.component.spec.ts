@@ -1,6 +1,7 @@
 import { Component, Type, signal, viewChild } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 
+import { expectNoA11yViolations } from '../../../testing/axe-a11y';
 import { AccordionComponent } from './accordion.component';
 import { AccordionContentComponent } from './accordion-content.component';
 import { AccordionItemComponent } from './accordion-item.component';
@@ -190,6 +191,13 @@ describe('Accordion', () => {
       expect(trigger.getAttribute('aria-controls')).toBe(content.id);
       expect(content.getAttribute('aria-labelledby')).toBe(trigger.id);
       expect(content.getAttribute('role')).toBe('region');
+    });
+
+    it('has no axe-detectable a11y violations', async () => {
+      const { fixture, nativeElement } = render(AccordionBasicTestHost);
+      fixture.detectChanges();
+
+      await expectNoA11yViolations(nativeElement);
     });
   });
 

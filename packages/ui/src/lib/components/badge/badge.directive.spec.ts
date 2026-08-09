@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 
+import { expectNoA11yViolations } from '../../../testing/axe-a11y';
 import { BadgeDirective } from './badge.directive';
 
 @Component({
@@ -38,5 +39,12 @@ describe('BadgeDirective', () => {
 
     expect(link.getAttribute('href')).toBe('/docs');
     expect(link.className).toContain('border-[var(--sanring-border-strong)]');
+  });
+
+  it('has no axe-detectable a11y violations', async () => {
+    const fixture = TestBed.createComponent(BadgeTestHost);
+    fixture.detectChanges();
+
+    await expectNoA11yViolations(fixture.nativeElement);
   });
 });

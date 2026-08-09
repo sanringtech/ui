@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 
+import { expectNoA11yViolations } from '../../../testing/axe-a11y';
 import { ProgressComponent } from './progress.component';
 
 @Component({
@@ -59,5 +60,15 @@ describe('ProgressComponent', () => {
 
     const fill = bars(fixture)[2].querySelector('div') as HTMLElement;
     expect(fill.style.width).toBe('0%');
+  });
+
+  it('has no axe-detectable a11y violations when given an accessible name', async () => {
+    const fixture = TestBed.createComponent(ProgressTestHost);
+    fixture.detectChanges();
+
+    // Scoped to the first (labeled) progress bar — the other two in this
+    // host are intentionally unlabeled, they only exercise clamping math.
+    const bar = bars(fixture)[0];
+    await expectNoA11yViolations(bar);
   });
 });

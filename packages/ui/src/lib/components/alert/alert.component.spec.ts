@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 
+import { expectNoA11yViolations } from '../../../testing/axe-a11y';
 import { AlertDescriptionDirective } from './alert-description.directive';
 import { AlertTitleDirective } from './alert-title.directive';
 import { AlertComponent } from './alert.component';
@@ -46,5 +47,12 @@ describe('AlertComponent', () => {
     expect(alert.className).toContain('border');
     expect(title.className).toContain('custom-title');
     expect(description.className).toContain('custom-description');
+  });
+
+  it('has no axe-detectable a11y violations', async () => {
+    const fixture = TestBed.createComponent(AlertTestHost);
+    fixture.detectChanges();
+
+    await expectNoA11yViolations(fixture.nativeElement);
   });
 });

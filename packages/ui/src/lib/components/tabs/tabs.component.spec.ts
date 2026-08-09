@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 
+import { expectNoA11yViolations } from '../../../testing/axe-a11y';
 import { TabsComponent } from './tabs.component';
 import { TabsContentComponent } from './tabs-content.component';
 import { TabsListComponent } from './tabs-list.component';
@@ -65,5 +66,14 @@ describe('TabsComponent', () => {
     expect(tabs[1].getAttribute('aria-selected')).toBe('true');
     expect(panels[0].hidden).toBe(true);
     expect(panels[1].hidden).toBe(false);
+  });
+
+  it('has no axe-detectable a11y violations', async () => {
+    const fixture = TestBed.createComponent(TabsTestHost);
+    fixture.detectChanges();
+    await fixture.whenStable();
+    fixture.detectChanges();
+
+    await expectNoA11yViolations(fixture.nativeElement);
   });
 });

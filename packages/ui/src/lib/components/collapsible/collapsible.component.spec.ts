@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 
+import { expectNoA11yViolations } from '../../../testing/axe-a11y';
 import { CollapsibleComponent } from './collapsible.component';
 import { CollapsibleContentDirective } from './collapsible-content.directive';
 import { CollapsibleTriggerDirective } from './collapsible-trigger.directive';
@@ -83,5 +84,12 @@ describe('CollapsibleComponent', () => {
     fixture.detectChanges();
 
     expect(trigger.getAttribute('aria-expanded')).toBe('true');
+  });
+
+  it('has no axe-detectable a11y violations', async () => {
+    const fixture = TestBed.createComponent(CollapsibleTestHost);
+    fixture.detectChanges();
+
+    await expectNoA11yViolations(fixture.nativeElement);
   });
 });

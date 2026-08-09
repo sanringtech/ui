@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 
+import { expectNoA11yViolations } from '../../../testing/axe-a11y';
 import { SliderComponent } from './slider.component';
 
 @Component({
@@ -94,5 +95,15 @@ describe('SliderComponent', () => {
     expect(disabledSlider.getAttribute('aria-disabled')).toBe('true');
     expect(disabledSlider.getAttribute('tabindex')).toBe('-1');
     expect(disabledSlider.getAttribute('aria-valuenow')).toBe('4');
+  });
+
+  it('has no axe-detectable a11y violations when given an accessible name', async () => {
+    const fixture = TestBed.createComponent(SliderTestHost);
+    fixture.detectChanges();
+
+    // Scoped to the first (labeled) slider — the second one in this host is
+    // intentionally unlabeled, it only exercises disabled-state behavior.
+    const slider = fixture.nativeElement.querySelector('sanring-slider[role="slider"]');
+    await expectNoA11yViolations(slider);
   });
 });

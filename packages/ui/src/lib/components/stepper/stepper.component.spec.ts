@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
 
+import { expectNoA11yViolations } from '../../../testing/axe-a11y';
 import { StepIconDirective } from './step-icon.directive';
 import { StepLabelDirective } from './step-label.directive';
 import { StepComponent } from './step.component';
@@ -137,6 +138,13 @@ describe('StepperComponent', () => {
 
     expect(headers[1].getAttribute('aria-selected')).toBe('true');
     expect(host.textContent).toContain('Profile content');
+  });
+
+  it('has no axe-detectable a11y violations', async () => {
+    const fixture = TestBed.createComponent(StepperTestHost);
+    fixture.detectChanges();
+
+    await expectNoA11yViolations(fixture.nativeElement);
   });
 });
 

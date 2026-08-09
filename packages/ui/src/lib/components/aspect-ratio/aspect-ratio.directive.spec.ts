@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 
+import { expectNoA11yViolations } from '../../../testing/axe-a11y';
 import { AspectRatioDirective } from './aspect-ratio.directive';
 
 @Component({
@@ -46,5 +47,12 @@ describe('AspectRatioDirective', () => {
     expect(aspectRatio.classList.contains('relative')).toBe(true);
     expect(aspectRatio.classList.contains('w-full')).toBe(true);
     expect(aspectRatio.classList.contains('overflow-hidden')).toBe(true);
+  });
+
+  it('has no axe-detectable a11y violations', async () => {
+    const fixture = TestBed.createComponent(AspectRatioTestHost);
+    fixture.detectChanges();
+
+    await expectNoA11yViolations(fixture.nativeElement);
   });
 });

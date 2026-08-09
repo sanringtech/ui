@@ -2,6 +2,7 @@ import { CdkTableModule } from '@angular/cdk/table';
 import { Component } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 
+import { expectNoA11yViolations } from '../../../testing/axe-a11y';
 import { TableCaptionDirective } from './caption.directive';
 import {
   TableCellDefDirective,
@@ -118,5 +119,12 @@ describe('TableComponent', () => {
 
     expect(fixture.componentInstance.sort).toEqual({ active: 'name', direction: 'asc' });
     expect(sortHeader.getAttribute('aria-sort')).toBe('ascending');
+  });
+
+  it('has no axe-detectable a11y violations', async () => {
+    const fixture = TestBed.createComponent(TableTestHost);
+    fixture.detectChanges();
+
+    await expectNoA11yViolations(fixture.nativeElement);
   });
 });

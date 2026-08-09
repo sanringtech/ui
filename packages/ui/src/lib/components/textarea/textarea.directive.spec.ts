@@ -1,6 +1,9 @@
 import { Component } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 
+import { expectNoA11yViolations } from '../../../testing/axe-a11y';
+import { SanringFieldComponent } from '../field/field.component';
+import { LabelDirective } from '../field/label.directive';
 import { TextareaDirective } from './textarea.directive';
 
 @Component({
@@ -8,6 +11,22 @@ import { TextareaDirective } from './textarea.directive';
   template: `<textarea sanringTextarea class="resize-y" placeholder="Message"></textarea>`,
 })
 class TextareaTestHost {}
+
+// A bare <textarea> has no accessible-name mechanism of its own (same as
+// <input>) — it's always labeled externally. TextareaDirective has no
+// ariaLabel input, so the documented pairing (matching input.directive.spec.ts)
+// is <sanring-field> + <label sanringLabel>.
+@Component({
+  imports: [SanringFieldComponent, LabelDirective, TextareaDirective],
+  template: `
+    <sanring-field>
+      <!-- eslint-disable-next-line @angular-eslint/template/label-has-associated-control -->
+      <label sanringLabel>Message</label>
+      <textarea sanringTextarea placeholder="Write a note"></textarea>
+    </sanring-field>
+  `,
+})
+class TextareaA11yHost {}
 
 describe('TextareaDirective', () => {
   beforeEach(async () => {
@@ -25,5 +44,13 @@ describe('TextareaDirective', () => {
     expect(textarea.classList.contains('min-h-[80px]')).toBe(true);
     expect(textarea.classList.contains('w-full')).toBe(true);
     expect(textarea.classList.contains('resize-y')).toBe(true);
+  });
+
+  it('has no axe-detectable a11y violations when wrapped in sanring-field with a label', async () => {
+    await TestBed.configureTestingModule({ imports: [TextareaA11yHost] }).compileComponents();
+    const fixture = TestBed.createComponent(TextareaA11yHost);
+    fixture.detectChanges();
+
+    await expectNoA11yViolations(fixture.nativeElement);
   });
 });

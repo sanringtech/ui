@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { vi } from 'vitest';
 
+import { expectNoA11yViolations } from '../../../testing/axe-a11y';
 import { CarouselContentComponent } from './carousel-content.component';
 import { CarouselItemComponent } from './carousel-item.component';
 import { CarouselNextDirective } from './carousel-next.directive';
@@ -112,5 +113,11 @@ describe('CarouselComponent', () => {
 
     expect(previous.type).toBe('button');
     expect(next.type).toBe('button');
+  });
+
+  it('has no axe-detectable a11y violations', async () => {
+    const fixture = await setup();
+
+    await expectNoA11yViolations(fixture.nativeElement);
   });
 });

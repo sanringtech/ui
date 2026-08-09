@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 
+import { expectNoA11yViolations } from '../../../testing/axe-a11y';
 import { CardContentComponent } from './card-content.component';
 import { CardDescriptionDirective } from './card-description.directive';
 import { CardFooterComponent } from './card-footer.component';
@@ -63,5 +64,12 @@ describe('CardComponent', () => {
     );
     expect(host.querySelector('sanring-card-content')?.className).toContain('custom-content');
     expect(host.querySelector('sanring-card-footer')?.className).toContain('custom-footer');
+  });
+
+  it('has no axe-detectable a11y violations', async () => {
+    const fixture = TestBed.createComponent(CardTestHost);
+    fixture.detectChanges();
+
+    await expectNoA11yViolations(fixture.nativeElement);
   });
 });

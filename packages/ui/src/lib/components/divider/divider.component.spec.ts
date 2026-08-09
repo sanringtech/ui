@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 
+import { expectNoA11yViolations } from '../../../testing/axe-a11y';
 import { DividerComponent } from './divider.component';
 
 @Component({
@@ -39,5 +40,12 @@ describe('DividerComponent', () => {
     expect(dividers[1].getAttribute('aria-orientation')).toBe('vertical');
     expect(dividers[1].className).toContain('w-px');
     expect(dividers[2].className).toContain('mx-10');
+  });
+
+  it('has no axe-detectable a11y violations', async () => {
+    const fixture = TestBed.createComponent(DividerTestHost);
+    fixture.detectChanges();
+
+    await expectNoA11yViolations(fixture.nativeElement);
   });
 });

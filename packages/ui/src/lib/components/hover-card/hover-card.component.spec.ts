@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { OverlayContainer } from '@angular/cdk/overlay';
 import { TestBed } from '@angular/core/testing';
 
+import { expectNoA11yViolations } from '../../../testing/axe-a11y';
 import { POPOVER_LEAVE_DURATION_MS } from '../component-timing';
 import { HoverCardContentComponent } from './hover-card-content.component';
 import { HoverCardTriggerDirective } from './hover-card-trigger.directive';
@@ -81,5 +82,24 @@ describe('HoverCardComponent', () => {
 
     content = overlayContainer.getContainerElement().querySelector('.custom-hover-card');
     expect(content).toBeNull();
+  });
+
+  it('has no axe-detectable a11y violations, trigger and open card together', async () => {
+    const fixture = await setup();
+    document.body.appendChild(fixture.nativeElement);
+
+    try {
+      const trigger = fixture.nativeElement.querySelector('button') as HTMLElement;
+      trigger.dispatchEvent(new FocusEvent('focus'));
+      await wait(0);
+      fixture.detectChanges();
+
+      // "region" is a whole-page landmark check — meaningless below page
+      // granularity, and this bare test fixture has no <main> regardless of
+      // the hover card's own markup (see select.component.spec.ts for the same call).
+      await expectNoA11yViolations(document.body, { rules: { region: { enabled: false } } });
+    } finally {
+      fixture.nativeElement.remove();
+    }
   });
 });

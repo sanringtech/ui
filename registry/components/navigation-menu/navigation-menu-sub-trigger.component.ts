@@ -17,7 +17,15 @@ import { NavigationMenuSubComponent } from './navigation-menu-sub.component';
   imports: [LucideChevronRight],
   changeDetection: ChangeDetectionStrategy.OnPush,
   host: {
-    role: 'menuitem',
+    // role="button", not "menuitem": unlike sub-content's links (nested
+    // inside its own role="menu"), this trigger sits directly in
+    // navigation-menu-content (role="region") with no role="menu"/"menubar"
+    // ancestor — ARIA requires menuitem to be contained by one. This custom
+    // element has no implicit role of its own (unlike NavigationMenuTriggerDirective,
+    // which is a native <button> and needs no role at all), and aria-expanded/
+    // aria-haspopup aren't valid on the default generic role, so role="button"
+    // is the minimal role that supports both.
+    role: 'button',
     'aria-haspopup': 'menu',
     '[attr.aria-expanded]': 'sub.open() ? "true" : "false"',
     '[attr.aria-disabled]': 'disabled() ? "true" : null',

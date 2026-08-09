@@ -378,7 +378,7 @@ export class ExampleComponent {}`,
     <sanring-navigation-menu-item value="docs">
       <button sanringNavigationMenuTrigger>Docs</button>
       <sanring-navigation-menu-content class="w-64 p-2">
-        <a sanringNavigationMenuLink href="#" role="menuitem" tabindex="0">
+        <a sanringNavigationMenuLink href="#">
           Overview
         </a>
 
@@ -393,7 +393,7 @@ export class ExampleComponent {}`,
           </sanring-navigation-menu-sub-content>
         </sanring-navigation-menu-sub>
 
-        <a sanringNavigationMenuLink href="#" role="menuitem" tabindex="0">
+        <a sanringNavigationMenuLink href="#">
           Theming
         </a>
       </sanring-navigation-menu-content>

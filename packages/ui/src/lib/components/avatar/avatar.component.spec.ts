@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 
+import { expectNoA11yViolations } from '../../../testing/axe-a11y';
 import { AvatarBadgeDirective } from './avatar-badge.directive';
 import { AvatarFallbackComponent } from './avatar-fallback.component';
 import { AvatarGroupCountComponent } from './avatar-group-count.component';
@@ -25,7 +26,7 @@ import { AvatarComponent } from './avatar.component';
     </sanring-avatar>
 
     <sanring-avatar-group ariaLabel="Team" class="custom-group">
-      <sanring-avatar />
+      <sanring-avatar ariaLabel="Grace Hopper" />
       <sanring-avatar-group-count
         [count]="3"
         [clickable]="true"
@@ -77,5 +78,12 @@ describe('AvatarComponent', () => {
     fixture.detectChanges();
 
     expect(fixture.componentInstance.clicks).toBe(1);
+  });
+
+  it('has no axe-detectable a11y violations', async () => {
+    const fixture = TestBed.createComponent(AvatarTestHost);
+    fixture.detectChanges();
+
+    await expectNoA11yViolations(fixture.nativeElement);
   });
 });

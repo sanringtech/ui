@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 
+import { expectNoA11yViolations } from '../../../testing/axe-a11y';
 import { SpinnerComponent } from './spinner.component';
 
 @Component({
@@ -36,5 +37,12 @@ describe('SpinnerComponent', () => {
     expect(spinner.className).toContain('custom-spinner');
     expect(icon.getAttribute('class')).toContain('size-8');
     expect(icon.getAttribute('class')).toContain('animate-[spin_0.5s_linear_infinite]');
+  });
+
+  it('has no axe-detectable a11y violations', async () => {
+    const fixture = TestBed.createComponent(SpinnerTestHost);
+    fixture.detectChanges();
+
+    await expectNoA11yViolations(fixture.nativeElement);
   });
 });

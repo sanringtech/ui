@@ -2,6 +2,7 @@ import { Component, ViewChild } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { FormsModule } from '@angular/forms';
 import { describe, expect, it } from 'vitest';
+import { expectNoA11yViolations } from '../../../testing/axe-a11y';
 import { FileDropzoneComponent } from './file-dropzone.component';
 import { FileTriggerDirective } from './file-trigger.directive';
 import { FileUploadComponent } from './file-upload.component';
@@ -55,5 +56,14 @@ describe('FileTriggerDirective projected through a conditional dropzone slot', (
     fixture.detectChanges();
 
     expect(fixture.nativeElement.querySelector('button[sanringfiletrigger]')).toBeTruthy();
+  });
+
+  it('has no axe-detectable a11y violations', async () => {
+    const fixture = TestBed.createComponent(FileUploadTestHost);
+    fixture.detectChanges();
+    await fixture.whenStable();
+    fixture.detectChanges();
+
+    await expectNoA11yViolations(fixture.nativeElement);
   });
 });

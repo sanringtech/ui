@@ -292,9 +292,31 @@
 
 **page-scope 產生的雜訊(不是元件本身的問題,測試裡個別排除)**:overlay 內容用 CDK Overlay portal 到 `document.body` 之後,要檢查 a11y 就得對整個 `document.body` 跑 axe(不能只查 fixture 本身,不然漏掉 portal 出去的內容)。role="dialog"/"alertdialog" 的 overlay(dialog、alert-dialog、popover、sheet)axe 本來就有把它們排除在「region」規則外;但 role="listbox"(select)、role="menu"(dropdown-menu、context-menu)、role="tooltip"(tooltip)沒有這個排除,對著一個沒有 `<main>` 的裸測試 fixture 掃全部 `document.body` 一定會撞到「All page content should be contained by landmarks」——這是整份頁面結構層級的規則,跟被測元件本身的標記寫得好不好無關,這幾個測試個別用 `{ rules: { region: { enabled: false } } }` 排除,並在測試裡註解說明原因。
 
-**尚未完成**:剩餘約 37 個元件還沒套用,helper 跟 pattern 已經穩定(overlay 用 `document.body` + 視需要排除 `region`;純文字/表單元件用 `fixture.nativeElement`),剩下是機械性套用工作,追蹤在 [TODOLIST.md](TODOLIST.md) P11。
+**尚未完成(當時)**:剩餘約 37 個元件還沒套用,helper 跟 pattern 已經穩定(overlay 用 `document.body` + 視需要排除 `region`;純文字/表單元件用 `fixture.nativeElement`),剩下是機械性套用工作。後續進度見下一條。
 
 **驗證**:`packages/ui` 全部 64 個 spec 檔、229 個測試通過(`ng test @sanring/ui`,重跑兩次確認不是巧合)。`tsc --noEmit`(`packages/ui`/`apps/docs`/`packages/cli` 三個 tsconfig)、`pnpm lint`、`sync-registry.mjs`、`check-registry-sync.mjs` 全過。
+
+---
+
+## P11 — axe-core a11y 測試擴大到剩餘元件(完成)
+
+- [x] 把上一條(P3 高風險批次)之後,剩下所有 component 都套上 `expectNoA11yViolations`
+
+**做法**:延續上一條的既定 pattern 逐一套用——純文字/表單元件用 `fixture.nativeElement`;overlay 內容(hover-card、navigation-menu 子選單)appendChild 到 `document.body` 再對 `document.body` 跑 axe,視情況用 `{ rules: { region: { enabled: false } } }` 排除頁面級 landmark 規則。`sidebar` 原本完全沒有 component-level spec(只有其他 32 個元件目錄各自的原始檔),新建了 `sidebar.component.spec.ts`,組出 provider/header/content/footer/menu/menu-sub/rail/inset 的完整組合再測;`toast` 原本只有 `toast.service.spec.ts`(測 service 邏輯),新建了 `toaster.component.spec.ts` 補 component-level 覆蓋。
+
+**過程中發現的真實 bug(不是 fixture 寫錯,已修好)**:
+
+1. `navigation-menu`:`NavigationMenuSubTriggerComponent` 固定帶 `role="menuitem"`,但這個 role 依 ARIA 規範只能被 `role="menu"`/`"menubar"` 的祖先包住;它實際上直接坐在 `sanring-navigation-menu-content`(`role="region"`)底下,從來不在 menu 裡——docs 的 submenu 範例本身就是照這個(有問題的)結構寫的,不是測試 fixture 自己加出來的假陽性。改成 `role="button"`,呼應頂層 trigger(`NavigationMenuTriggerDirective`)本來就用純 `aria-haspopup`/`aria-expanded` 不掛 menu role 的做法(`packages/ui` + `registry` 兩處)。同時把 docs 兩處 submenu 範例(`navigation-menu.docs.ts`、`navigation-menu-page.component.ts`)內容連結上手動加的、同樣不成立的 `role="menuitem" tabindex="0"` 拿掉。
+2. `collapsible`:`[sanringCollapsibleContent]` 固定帶 `role="region"`,套用在已經有自己語意 role 的宿主元素上時會整個蓋掉——最典型的受害者是 sidebar 的可摺疊子選單(`sanring-sidebar-menu-sub`,本身 `role="list"`),docs 的 sidebar 範例正是這樣組合(`<sanring-sidebar-menu-sub sanringCollapsibleContent>`)。蓋掉之後子選單底下 `role="listitem"` 的項目找不到合法的 `role="list"` 祖先,觸發 `aria-required-parent`。拿掉這個寫死的 role——WAI-ARIA 的 disclosure pattern本來就不要求內容面板有 role,`aria-labelledby` 指回 trigger 就夠(`packages/ui` + `registry` 兩處)。
+3. `date-picker`/`calendar`:host 上的 `aria-required`/`aria-invalid`/`aria-describedby`(給 Angular Forms/`sanring-field` 整合用)掛在裸 `<div>`(預設 `role="generic"`)上,axe-core 的 `aria-allowed-attr` 規則判定不合法——這幾個屬性只有 combobox/gridcell/listbox/radiogroup/spinbutton/textbox/tree 等特定 role 才允許。兩個元件的 host 都補上 `role="radiogroup"`(語意上也貼近「從一組日期格挑一個」)。`calendar` 的月曆格早就用 `role="grid"` + `role="row"` 分組;`date-picker` 原本只有扁平的 `role="gridcell"` 清單、沒有 `role="row"` 包一層,ARIA grid pattern 要求 gridcell 必須在 row 裡,所以同時補了 `gridRows` computed 把 cell 依欄數切成列、樣板用 `role="row"` + `display:contents`(不影響 CSS Grid 版面)包住,對齊 `calendar` 既有的做法(`packages/ui` + `registry` 兩處)。
+
+**query 過程中排除的假陽性(fixture 自己的問題,不是元件 bug)**:
+
+- `avatar`:`sanring-avatar` host 固定帶 `role="img"`,不管有沒有 `ariaLabel` 都會掛上——就跟 `<img>` 沒給 `alt` 一樣,任何時候都需要一個無障礙名稱。原本測試 fixture 裡 `avatar-group` 底下有一個 `<sanring-avatar />` 沒給 `ariaLabel`,補上即可,docs 裡每一個 avatar(包含 group 內)都有給 `ariaLabel`,元件本身沒問題。
+- `pagination`:`sanring-pagination`(`sanring-paginator` 的內層)預設 `role="navigation"` + `aria-label="Pagination"`,測試 fixture 裡放了兩個沒給 `ariaLabel` 的 `sanring-paginator`,兩個 `navigation` landmark 撞名觸發 `landmark-unique`。`sanring-paginator` 早就有 `ariaLabel` input 會往下傳,只是 fixture 沒用——補上第二個實例的 `ariaLabel` 即可。
+- `navigation-menu`:同一份 fixture 裡,頂層 `sanring-navigation-menu-content`(`role="region"`)底下的連結被手動加了 `role="menuitem" tabindex="0"`——`NavigationMenuLinkDirective` 本身從不設這個 role,docs 除了 submenu 範例外也都沒這樣用,是這份 spec fixture 自己多加的,拿掉即可(跟上面第 1 點的 sub-trigger bug 是分開的兩件事,一個是 fixture 誤用、一個是元件預設值真的錯)。
+
+**驗證**:`packages/ui` 全部 67 個 spec 檔、271 個測試通過(`ng test @sanring/ui`)。`tsc --noEmit`(`packages/ui`/`apps/docs` 兩個 tsconfig)、`eslint`(受影響的元件目錄)、`check-registry-sync.mjs` 全過。
 
 ---
 

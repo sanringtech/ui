@@ -71,6 +71,10 @@ const JUMP_YEAR_RANGE_FUTURE = 50;
   ],
   host: {
     tabindex: '0',
+    // role="radiogroup": see the identical comment in date-picker.component.ts —
+    // aria-required/aria-invalid/aria-describedby aren't valid ARIA on a bare
+    // div (role="generic"), only on specific roles including radiogroup.
+    role: 'radiogroup',
     '[id]': 'id()',
     '[class]': 'calendarClass()',
     '[attr.aria-required]': "required() ? 'true' : null",

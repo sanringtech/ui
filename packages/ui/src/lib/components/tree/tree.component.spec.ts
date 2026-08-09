@@ -1,6 +1,7 @@
 import { Component, signal } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 
+import { expectNoA11yViolations } from '../../../testing/axe-a11y';
 import { TreeComponent } from './tree.component';
 import { TreeGroupComponent } from './tree-group.component';
 import { TreeNodeComponent } from './tree-node.component';
@@ -156,5 +157,11 @@ describe('TreeComponent', () => {
 
     expect(host.selectedValue()).toBe('package.json');
     expect(packageJson.getAttribute('aria-selected')).toBe('true');
+  });
+
+  it('has no axe-detectable a11y violations', async () => {
+    const fixture = await createFixture();
+
+    await expectNoA11yViolations(fixture.nativeElement);
   });
 });

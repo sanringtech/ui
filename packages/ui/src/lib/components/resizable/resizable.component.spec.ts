@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 
+import { expectNoA11yViolations } from '../../../testing/axe-a11y';
 import { ResizableGroupComponent } from './resizable-group.component';
 import { ResizableHandleComponent } from './resizable-handle.component';
 import { ResizablePanelComponent } from './resizable-panel.component';
@@ -69,5 +70,11 @@ describe('ResizableComponent', () => {
 
     expect(fixture.componentInstance.sizes).toEqual([50, 50]);
     expect(handle.getAttribute('aria-valuenow')).toBe('50');
+  });
+
+  it('has no axe-detectable a11y violations', async () => {
+    const fixture = await setup();
+
+    await expectNoA11yViolations(fixture.nativeElement);
   });
 });

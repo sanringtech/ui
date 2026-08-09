@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
 import { describe, expect, it, vi } from 'vitest';
+import { expectNoA11yViolations } from '../../../testing/axe-a11y';
 import { ErrorMessageComponent, SanringFieldComponent } from '../field';
 import { OtpInputComponent } from './otp-input.component';
 import { OtpInputSeparatorComponent } from './otp-input-separator.component';
@@ -200,5 +201,12 @@ describe('OtpInputComponent', () => {
     await fixture.whenStable();
 
     expect(touched).toHaveBeenCalledOnce();
+  });
+
+  it('has no axe-detectable a11y violations when given an accessible name', async () => {
+    const fixture = TestBed.createComponent(OtpInputComposedTestHost);
+    fixture.detectChanges();
+
+    await expectNoA11yViolations(fixture.nativeElement);
   });
 });

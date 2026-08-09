@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 
+import { expectNoA11yViolations } from '../../../testing/axe-a11y';
 import { TagComponent } from './tag.component';
 
 @Component({
@@ -27,5 +28,12 @@ describe('TagComponent', () => {
 
     expect(buttons[0].getAttribute('aria-label')).toBe('Remove tag');
     expect(buttons[1].getAttribute('aria-label')).toBe('Remove Angular tag');
+  });
+
+  it('has no axe-detectable a11y violations', async () => {
+    const fixture = TestBed.createComponent(TagTestHost);
+    fixture.detectChanges();
+
+    await expectNoA11yViolations(fixture.nativeElement);
   });
 });

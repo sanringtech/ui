@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { provideRouter } from '@angular/router';
 
+import { expectNoA11yViolations } from '../../../testing/axe-a11y';
 import { BreadcrumbDividerComponent } from './breadcrumb-divider.component';
 import { BreadcrumbEllipsisComponent } from './breadcrumb-ellipsis.component';
 import { BreadcrumbItemComponent } from './breadcrumb-item.component';
@@ -84,5 +85,12 @@ describe('BreadcrumbComponent', () => {
     expect(host.querySelector('sanring-breadcrumb-item')?.className).toContain('custom-item');
     expect(host.querySelector('sanring-breadcrumb-link')?.className).toContain('custom-link');
     expect(host.querySelector('sanring-breadcrumb-page')?.className).toContain('custom-page');
+  });
+
+  it('has no axe-detectable a11y violations', async () => {
+    const fixture = TestBed.createComponent(BreadcrumbTestHost);
+    fixture.detectChanges();
+
+    await expectNoA11yViolations(fixture.nativeElement);
   });
 });

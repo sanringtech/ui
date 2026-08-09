@@ -72,6 +72,14 @@ function quarterIndexOf(date: Date, quarterStartMonth: QuarterStartMonth): numbe
   ],
   host: {
     tabindex: '0',
+    // role="radiogroup": this outer element carries aria-required/aria-invalid/
+    // aria-describedby for Angular Forms/sanring-field integration, but those
+    // are only valid ARIA on specific roles (combobox, gridcell, listbox,
+    // radiogroup, spinbutton, textbox, tree) — a bare div (role="generic")
+    // doesn't support them, which axe-core's aria-allowed-attr rule catches.
+    // radiogroup is the closest fit semantically too: picking exactly one
+    // date from a set of cells.
+    role: 'radiogroup',
     '[id]': 'id()',
     '[class]': 'datePickerClass()',
     '[attr.aria-required]': "required() ? 'true' : null",
@@ -95,17 +103,24 @@ function quarterIndexOf(date: Date, quarterStartMonth: QuarterStartMonth): numbe
       [style.grid-template-columns]="'repeat(' + resolvedGridColumns() + ', minmax(0, 1fr))'"
       [attr.aria-label]="headerLabel()"
     >
-      @for (cell of engine.granularityGrids(); track cell.date.getTime()) {
-        <button
-          type="button"
-          role="gridcell"
-          sanringDatePickerCell
-          [cell]="cell"
-          [size]="size()"
-          [label]="cellLabel(cell)"
-        >
-          {{ cellLabel(cell) }}
-        </button>
+      @for (row of gridRows(); track $index) {
+        <!-- display:contents keeps this row grouping invisible to CSS Grid layout
+             (cells still line up in the parent's grid tracks) while satisfying
+             the ARIA grid pattern's requirement that gridcells sit inside a row. -->
+        <div role="row" class="contents">
+          @for (cell of row; track cell.date.getTime()) {
+            <button
+              type="button"
+              role="gridcell"
+              sanringDatePickerCell
+              [cell]="cell"
+              [size]="size()"
+              [label]="cellLabel(cell)"
+            >
+              {{ cellLabel(cell) }}
+            </button>
+          }
+        </div>
       }
     </div>
   `,
@@ -156,6 +171,18 @@ export class DatePickerComponent implements ControlValueAccessor, OnInit {
   protected readonly resolvedGridColumns = computed(
     () => this.gridColumns() ?? DEFAULT_GRID_COLUMNS[this.granularity()],
   );
+
+  // Chunked into ARIA "row" groups (see template) — engine.granularityGrids()
+  // itself is a flat cell list, since the CSS grid layout doesn't need rows.
+  protected readonly gridRows = computed(() => {
+    const cells = this.engine.granularityGrids();
+    const columns = this.resolvedGridColumns();
+    const rows: GranularityCell[][] = [];
+    for (let i = 0; i < cells.length; i += columns) {
+      rows.push(cells.slice(i, i + columns));
+    }
+    return rows;
+  });
 
   // ==========================================
   // Field 整合：id/disabled/required 會跟上面同名的 @Input 撞名，走下面的 fieldXxx getter，

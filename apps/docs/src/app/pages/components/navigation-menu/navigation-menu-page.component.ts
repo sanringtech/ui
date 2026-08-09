@@ -328,8 +328,6 @@ import { navigationMenuPage, navigationMenuPageExamples } from './navigation-men
                         <a
                           sanringNavigationMenuLink
                           href="#"
-                          role="menuitem"
-                          tabindex="0"
                           (click)="$event.preventDefault()"
                         >
                           Overview
@@ -373,8 +371,6 @@ import { navigationMenuPage, navigationMenuPageExamples } from './navigation-men
                         <a
                           sanringNavigationMenuLink
                           href="#"
-                          role="menuitem"
-                          tabindex="0"
                           (click)="$event.preventDefault()"
                         >
                           Theming

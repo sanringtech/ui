@@ -3,6 +3,7 @@ import { OverlayContainer } from '@angular/cdk/overlay';
 import { TestBed } from '@angular/core/testing';
 import { CalendarLocale } from '@sanring/date-picker-core';
 
+import { expectNoA11yViolations } from '../../../testing/axe-a11y';
 import { CalendarComponent } from './calendar.component';
 
 const testLocale: CalendarLocale = {
@@ -116,5 +117,12 @@ describe('CalendarComponent', () => {
     fixture.detectChanges();
 
     expect(fixture.componentInstance.selectedDate).toBeInstanceOf(Date);
+  });
+
+  it('has no axe-detectable a11y violations', async () => {
+    const fixture = TestBed.createComponent(CalendarTestHost);
+    fixture.detectChanges();
+
+    await expectNoA11yViolations(fixture.nativeElement);
   });
 });
