@@ -5,6 +5,7 @@ import {
   getCliVersion,
   readConfig,
   requireAngularProject,
+  resolveRegistrySource,
   semverLte,
 } from '../utils.js';
 
@@ -37,7 +38,7 @@ export const migrateCommand = new Command('migrate')
         return;
       }
 
-      const registry = await fetchRegistry(options.registry);
+      const registry = await fetchRegistry(resolveRegistrySource(undefined, config, options.registry));
       const registryIndex = createRegistryIndex(registry);
       const currentCliVersion = getCliVersion();
 
