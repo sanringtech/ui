@@ -8,25 +8,31 @@
 
 ## P9 — `sanring build`(讓第三方產出相容 registry.json)
 
-- [ ] `sanring build [--source ./components] [--out ./dist-registry]` 指令:掃描第三方自己的 Angular component 目錄,自動推斷 `files`/`componentDeps`/`peerDependencies`,輸出標準 `Registry` schema
+- [x] 批次 A:目錄掃描 + AST import/export 分類(`registry-scan.ts`)
+- [ ] 批次 B:peerDependency 遞移閉包去重——**設計本身有問題,見下方說明,需要重新設計或整批拿掉,不是單純續做**
+- [ ] 批次 C:`sanring build` 指令本體——程式碼已經寫好(`commands/build.ts`,已註冊進 `index.ts`,`typescript` 已移到 `dependencies`),但驗證用的 golden fixture 測試因為批次 B 的問題目前是 `it.skip`,不能算完成
+- [ ] `--source`/`--out`/`--dry-run`/`--name` 之外,README 還沒補 `sanring build` 的使用說明(等批次 B 定案後一起補)
 
-**現況**:`registries` alias → URL 設定與 `sanring add alias:componentName` 語法已完成(見 [DEVLOG.md](DEVLOG.md) 的 P9 段落),使用者現在可以手動維護自己的 `registry.json` 並透過 alias 安裝。缺的是「自動產生 registry.json」這一步——第三方目前得照 `Registry` schema 手寫,容易漏 `componentDeps`/`peerDependencies`。
+**現況**:`registries` alias → URL 設定與 `sanring add alias:componentName` 語法已完成(見 [DEVLOG.md](DEVLOG.md) 的 P9 段落)。`sanring build` 指令碼骨架跟批次 A 的掃描邏輯都已經做完且有測試覆蓋,但批次 B 的核心演算法被驗證是錯的(見下),導致整個 `sanring build` 目前不能算「可用」。
 
-**待做前提**:[ADR-0001](.claude/adrs/0001-multi-registry-support.md) 已把這個指令標為批次 D、預設暫停。先決條件的 1 天 TypeScript AST 可行性 spike **已完成(2026-08-10,結果記在 ADR-0001 的 Notes 段落)**:結論可行,但要包含跨整批元件算遞移閉包去重這一輪,不能只做逐檔案掃描。
+**批次 B 設計錯誤(2026-08-11 發現)**:[ADR-0001](.claude/adrs/0001-multi-registry-support.md) 的 spike 只抽樣了 8 個元件,從 `calendar` 一個案例就推論出「peerDependency 若已被 componentDeps 上游宣告過,自己不該重複列」的去重規則,並照這個規則實作了 `computeUpstreamPeerCoverage`/`dedupePeerDependencies`。等 P9 batch C 真的用**全部 53 個元件**跑 golden fixture 回歸測試才發現:這個「去重」根本不是普遍慣例——`checkbox`/`input`/`radio`/`select`/`combobox`/`otp-input`/`textarea`/`slider`/`switch`/`file-upload`/`pagination`/`alert-dialog`/`command`(至少 13 個元件)的手寫 `registry.json`,即使 `componentDeps`(`field`/`dialog`)已經宣告過同一個 peer 套件,自己仍然照樣重複列出——這才是多數慣例,`calendar`/`date-picker` 的去重寫法反而是特例。
 
-**執行中**:[Task Charter](.claude/charters/p9-sanring-build.md)(2026-08-10)已開,分批次 A(AST 掃描分類)→ B(peerDependency 遞移閉包去重)→ C(`build` 指令本體 + 輸出)→ D(暫停:`--watch`/互動式功能)。
+**下一步**:重新評估批次 B 該怎麼做,目前傾向整個拿掉遞移去重、改成「掃到什麼 peer 套件就照實列」(重複宣告無害,`sanring add` 的 `collectPeerDeps` 本來就是遞移合併),但這個設計決策需要使用者拍板,不能自己直接改——牽涉修改已經 commit 的批次 B 程式碼與其對應 golden fixture 測試(`commands/build.test.ts` 目前用 `it.skip` 卡住,附完整原因註解)。
 
 ---
 
-## P24 — registry 內容 3 個真實 bug(P9 spike 副產品)
+## P24 — registry 內容真實 bug(P9 spike/golden fixture 副產品)
 
 - [ ] `transfer` 元件 4 個檔案(`transfer-action.directive.ts`/`transfer-item.component.ts`/`transfer-header.component.ts`/`transfer-panel.component.ts`)用 `'../../utils'`/`'../component-styles'`,跟其他元件統一的 `'../shared/utils'`/`'../shared/component-styles'` 不一致——使用者跑 `sanring add transfer` 裝出來的檔案,relative import 實際上會指到專案裡不存在的路徑,**編譯會壞**
-- [ ] `navigation-menu` 元件:`navigation-menu-sub-trigger.component.ts` 有 `import { LucideChevronRight } from '@lucide/angular'`,但 `registry.json` 的 `navigation-menu` 條目沒有把 `@lucide/angular` 列進 `peerDependencies`——沒裝過 lucide-angular 的專案跑 `sanring add navigation-menu` 會建置失敗
-- [ ] `tag`/`calendar`/`date-picker` 三個元件的 `registry.json` 都宣告了 `component-styles` 這個 sharedDep,但三者原始碼都沒有實際 import 它——無害,但會多裝一個沒用到的檔案
+- [ ] `navigation-menu` 元件:`navigation-menu-sub-trigger.component.ts` 有 `import { LucideChevronRight } from '@lucide/angular'`,但 `registry.json` 沒有把 `@lucide/angular` 列進 `peerDependencies`——沒裝過 lucide-angular 的專案跑 `sanring add navigation-menu` 會建置失敗
+- [ ] `accordion` 元件:直接 `import { _IdGenerator } from '@angular/cdk/a11y'`,但 `registry.json` 的 `peerDependencies` 沒有 `@angular/cdk`(只有 `@angular/aria`/`@lucide/angular`)——同樣是裝出來會建置失敗的等級
+- [ ] `collapsible` 元件:直接 import `@angular/cdk/a11y`,但 `registry.json` 完全沒有宣告 `peerDependencies`——同上
+- [ ] `component-styles` 這個 sharedDep 被過度宣告、實際沒用到,目前確認至少 12 個元件受影響:`tag`/`calendar`/`date-picker`(原本 spike 抓到的 3 個)+ `alert`/`alert-dialog`/`badge`/`breadcrumb`/`card`/`link`/`otp-input`/`tabs`/`tooltip`(用全量 golden fixture 掃描新增發現的 9 個)——無害,但每個都會多裝一個沒用到的檔案
+- [ ] **其餘 peerDependencies 落差(`checkbox` 疑似缺 `@angular/cdk`、`select`/`combobox` 疑似缺 `@angular/forms` 等)目前無法準確列出**——因為上面 P9 批次 B 的去重邏輯本身有 bug,現在的掃描結果被那個 bug 污染,同一批元件同時混著「hand-data 真的缺东西」跟「我的去重誤刪」兩種訊號,分不清楚。等批次 B 重新設計/拿掉之後重跑 golden fixture,才能準確列出這部分還有哪些真缺的 peerDependencies。
 
-**現況**:在做 P9 batch D 的 spike(用 TS compiler API 掃 import/export 跟 `registry.json` 比對)時當副產品發現,跟 P9 本身的多 registry 功能無關,是既有元件 registry 資料的既有問題。細節見 [ADR-0001](.claude/adrs/0001-multi-registry-support.md) Notes 段落的 spike 結果。
+**現況**:`transfer`/`navigation-menu`/前 3 個 `component-styles` 案例是 P9 batch D spike(8 元件抽樣)當時發現的;`accordion`/`collapsible`/其餘 9 個 `component-styles` 案例是 batch C 用全部 53 個元件跑 golden fixture 回歸測試(2026-08-11)時新增發現的。跟 P9 本身的多 registry 功能無關,是既有元件 registry 資料的既有問題。細節見 [ADR-0001](.claude/adrs/0001-multi-registry-support.md) Notes 段落。
 
-**成本**:低。前兩個是明確的路徑/宣告修正,改完要重新確認對應元件的 `sanring add` 安裝後能不能編譯過;第三個是刪掉多餘宣告,零風險。
+**成本**:前 4 項低——明確的路徑/宣告修正,改完要重新確認對應元件 `sanring add` 安裝後能不能編譯過;`component-styles` 12 項是刪掉多餘宣告,零風險;最後一項要等 P9 批次 B 定案才能動工。
 
 ---
 
