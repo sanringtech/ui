@@ -16,6 +16,7 @@ import {
   readConfig,
   requireAngularProject,
   resolveComponentBasePath,
+  resolveRegistrySource,
 } from '../utils.js';
 import { listInstalledComponentNames } from './diff.js';
 import { classifyUpdate } from './update.js';
@@ -188,8 +189,10 @@ export const listCommand = new Command('list')
   .option('-p, --path <path>', 'component path relative to cwd (used with --installed)')
   .option('--registry <url>', 'custom registry URL')
   .action(async (options: { installed: boolean; outdated: boolean; path?: string; registry?: string }) => {
+    const config = readConfig(process.cwd());
+    const registrySource = resolveRegistrySource(undefined, config, options.registry);
     const spinner = ora('Loading components...').start();
-    const registry = await fetchRegistry(options.registry);
+    const registry = await fetchRegistry(registrySource);
     const registryIndex = createRegistryIndex(registry);
     spinner.stop();
 
@@ -197,7 +200,6 @@ export const listCommand = new Command('list')
 
     if (options.installed || options.outdated) {
       requireAngularProject(process.cwd());
-      const config = readConfig(process.cwd());
       const componentBasePath = resolveComponentBasePath(process.cwd(), options.path, config);
       const installedNames = new Set(listInstalledComponentNames(componentBasePath, registry));
       components = components.filter((c) => installedNames.has(c.name));
@@ -218,7 +220,7 @@ export const listCommand = new Command('list')
           cwd: process.cwd(),
           componentBasePath,
           sharedDestDir,
-          registrySource: options.registry,
+          registrySource,
           installedHashes: config?.installedHashes,
         });
 
