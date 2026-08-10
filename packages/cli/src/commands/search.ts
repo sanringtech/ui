@@ -2,7 +2,12 @@ import { Command } from 'commander';
 import ora from 'ora';
 import pc from 'picocolors';
 import { fetchRegistry } from '../registry.js';
-import { isAngularProject, readConfig, resolveComponentBasePath } from '../utils.js';
+import {
+  isAngularProject,
+  readConfig,
+  resolveComponentBasePath,
+  resolveRegistrySource,
+} from '../utils.js';
 import { listInstalledComponentNames } from './diff.js';
 
 function highlight(text: string, query: string): string {
@@ -21,8 +26,9 @@ export const searchCommand = new Command('search')
   .option('-p, --path <path>', 'component path relative to cwd (used to show install status)')
   .option('--registry <url>', 'custom registry URL')
   .action(async (query: string, options: { path?: string; registry?: string }) => {
+    const config = readConfig(process.cwd());
     const spinner = ora('Loading components...').start();
-    const registry = await fetchRegistry(options.registry);
+    const registry = await fetchRegistry(resolveRegistrySource(undefined, config, options.registry));
     spinner.stop();
 
     const q = query.toLowerCase();
@@ -43,7 +49,6 @@ export const searchCommand = new Command('search')
     // Check install status when inside an Angular project.
     let installedNames: Set<string> | null = null;
     if (isAngularProject(process.cwd())) {
-      const config = readConfig(process.cwd());
       const componentBasePath = resolveComponentBasePath(process.cwd(), options.path, config);
       installedNames = new Set(listInstalledComponentNames(componentBasePath, registry));
     }
