@@ -3,7 +3,13 @@ import { existsSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import pc from 'picocolors';
 import { fetchRegistry } from '../registry.js';
-import { hashContent, isAngularProject, readConfig, resolveComponentBasePath } from '../utils.js';
+import {
+  hashContent,
+  isAngularProject,
+  readConfig,
+  resolveComponentBasePath,
+  resolveRegistrySource,
+} from '../utils.js';
 import { THEME_FILE_PATH } from './init.js';
 
 const MIN_NODE_MAJOR = 18;
@@ -106,7 +112,7 @@ export const doctorCommand = new Command('doctor')
     if (!options.offline) {
       console.log(pc.bold('\nRegistry'));
       try {
-        await fetchRegistry(options.registry);
+        await fetchRegistry(resolveRegistrySource(undefined, config, options.registry));
         ok('Reachable');
       } catch {
         fail(`Unreachable — check your network or use ${pc.white('--offline')} to skip`);
