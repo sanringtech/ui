@@ -235,9 +235,5 @@ pnpm --filter @sanring/cli test
 
 > 還沒回答的範圍邊界問題，標 `TODO` 或 `unknown`，禁止腦補。
 
-- [ ] **unknown（政策性決策，需使用者拍板）**：`resolvePeerDependencyVersion` 在 cwd `package.json` 的 `dependencies`/`devDependencies`/`peerDependencies` 都找不到對應套件時（例如該套件是透過 monorepo workspace 或間接依賴取得，未顯式宣告），`sanring build` 該怎麼處理？三個選項供拍板：
-  (a) 寫入 `"*"` 當版本萬用字元，並印出警告要求使用者手動修正
-  (b) 直接跳過該 peerDependency（不寫入 `registry.json`），印出警告列出被跳過的套件清單，要求使用者手動補
-  (c) `sanring build` 直接失敗（non-zero exit），列出所有無法解析版本的套件，強制使用者在跑之前先把 peerDependencies 正確宣告在自己的 `package.json`
-  批次 B 的 `resolvePeerDependencyVersion` 函式簽名應回傳 `{ resolved: false, packageName }` 讓批次 C 依此拍板結果實作，不可在批次 B 內部先假設答案。
+- [x] ~~`resolvePeerDependencyVersion` 在 cwd `package.json` 都找不到對應套件時的處理策略~~：**已拍板（2026-08-10）**——選項 (c)。`sanring build` 直接失敗（non-zero exit），列出所有無法解析版本的套件，強制使用者在跑之前先把 peerDependencies 正確宣告在自己的 `package.json`，不寫入任何 registry.json。批次 B 的 `resolvePeerDependencyVersion` 仍回傳 `{ resolved: false, packageName }`（不在批次 B 內部丟例外/呼叫 `process.exit`，維持純函式），由批次 C 的 `build.ts` 收集所有 `resolved: false` 的結果，一次列印完整清單後 `process.exit(1)`、不寫檔。
 - [ ] TODO：`--name` flag 未提供且 cwd `package.json` 也沒有 `name` 欄位（或找不到 `package.json`）時的 fallback 值——目前傾向 `sanring build` 直接報錯要求使用者顯式提供 `--name`（比照批次 C 的驗證失敗即停止寫檔的原則），但未最終拍板，留待批次 C SOP 執行時依上下文決定並在 PR 說明中記錄。
