@@ -14,6 +14,7 @@ import {
   readConfig,
   requireAngularProject,
   resolveComponentBasePath,
+  resolveRegistrySource,
   writeConfig,
 } from '../utils.js';
 import { listInstalledComponentNames } from './diff.js';
@@ -98,11 +99,11 @@ export const removeCommand = new Command('remove')
       options: { path?: string; yes: boolean; force: boolean; registry?: string },
     ) => {
       const cwd = process.cwd();
-      const registrySource = options.registry;
 
       requireAngularProject(cwd);
 
       const config = readConfig(cwd);
+      const registrySource = resolveRegistrySource(undefined, config, options.registry);
       const componentBasePath = resolveComponentBasePath(cwd, options.path, config);
 
       const registry = await fetchRegistry(registrySource);
