@@ -1,5 +1,21 @@
 # @sanring/cli
 
+## 0.21.2
+
+### Patch Changes
+
+- c8c5861: `collapsible`: `[sanringCollapsibleContent]` hardcoded `role="region"` on its host, which silently overrode any semantic role already on that element — most notably `sanring-sidebar-menu-sub` (`role="list"`), the documented pattern for collapsible sidebar submenus. That broke the required list/listitem ARIA relationship for the submenu's items. Removed the hardcoded role: the WAI-ARIA disclosure pattern doesn't require one on the panel (`aria-labelledby` referencing the trigger is sufficient) (`packages/ui` + `registry`).
+
+  Caught by axe-core automated accessibility checks while adding sidebar's first component test suite (`packages/ui/src/testing/axe-a11y.ts`), completing the P11 rollout to all remaining components.
+
+- c8c5861: `date-picker`/`calendar`: the host `aria-required`/`aria-invalid`/`aria-describedby` attributes (used for Angular Forms/`sanring-field` integration) sat on a bare `<div>` (`role="generic"`), which isn't a valid ARIA role for them — axe-core's `aria-allowed-attr` rule only permits those on specific roles (combobox, gridcell, listbox, radiogroup, spinbutton, textbox, tree). Added `role="radiogroup"` to both hosts (also the closest semantic fit: picking exactly one date from a set of cells). `date-picker`'s grid cells were a flat list without `role="row"` grouping, which the ARIA grid pattern requires; added row chunking (mirroring `calendar`, which already had it) via a `display:contents` wrapper that doesn't affect the CSS Grid layout (`packages/ui` + `registry`).
+
+  Caught by axe-core automated accessibility checks while completing the P11 rollout to all remaining components.
+
+- c8c5861: `navigation-menu`: the submenu trigger (`sanring-navigation-menu-sub-trigger`) carried `role="menuitem"`, which ARIA requires to be contained by a `role="menu"`/`"menubar"` ancestor — but it sits directly inside `sanring-navigation-menu-content` (`role="region"`), never a menu. Changed to `role="button"` (`packages/ui` + `registry`), matching how the top-level trigger already uses plain `aria-haspopup`/`aria-expanded` semantics instead of menu roles. Also dropped the same invalid `role="menuitem"` from the docs' submenu example content links, which had the identical bug.
+
+  Caught by axe-core automated accessibility checks in the component test suite (`packages/ui/src/testing/axe-a11y.ts`), continuing the P11 rollout past the initial 13 components.
+
 ## 0.21.1
 
 ### Patch Changes
