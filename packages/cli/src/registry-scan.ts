@@ -202,3 +202,102 @@ export function extractDescription(fileContent: string): string {
 
   return description;
 }
+
+// ---------------------------------------------------------------------------
+// Batch B — peerDependency transitive-closure dedup
+//
+// Only peerDependencies need this. componentDeps don't (`sanring add`'s
+// resolveInstallSet walks the full componentDeps list itself — a cycle
+// there, e.g. select/listbox, is a legitimate, already-tested case, not an
+// error). sharedDeps don't either (every batch A/B mismatch against
+// registry.json's sharedDeps traced back to a pre-existing registry bug —
+// see TODOLIST P24 — never to a transitive relationship).
+// ---------------------------------------------------------------------------
+
+export interface ScannedComponent {
+  name: string;
+  /** Validated componentDep names (batch A's validateReferencedTargets output). */
+  componentDeps: string[];
+  /** Baseline-filtered, not yet canonicalized (batch A's filterBaselinePackages output). */
+  rawPeerDependencyCandidates: string[];
+}
+
+// '@angular/cdk/overlay' -> '@angular/cdk' (scoped: first two segments).
+// 'embla-carousel/foo' -> 'embla-carousel' (unscoped: first segment).
+export function canonicalizePackageName(specifier: string): string {
+  const parts = specifier.split('/');
+  return specifier.startsWith('@') ? parts.slice(0, 2).join('/') : parts[0];
+}
+
+export function buildComponentDepGraph(
+  components: ScannedComponent[],
+): ReadonlyMap<string, readonly string[]> {
+  return new Map(components.map((c) => [c.name, c.componentDeps]));
+}
+
+// From `componentName`, walks every componentDep transitively (cycle-safe —
+// a `seen` set means a cycle is simply not revisited, not an error) and
+// returns the canonicalized peerDependency package names declared by every
+// *other* component reachable that way. `componentName` itself is excluded:
+// this is "what's already covered by my dependencies", not "what I need".
+export function computeUpstreamPeerCoverage(
+  componentName: string,
+  graph: ReadonlyMap<string, readonly string[]>,
+  rawPeerDepsByComponent: ReadonlyMap<string, readonly string[]>,
+): Set<string> {
+  const coverage = new Set<string>();
+  const seen = new Set<string>([componentName]);
+  const queue = [...(graph.get(componentName) ?? [])];
+
+  while (queue.length > 0) {
+    const name = queue.shift()!;
+    if (seen.has(name)) continue;
+    seen.add(name);
+
+    for (const raw of rawPeerDepsByComponent.get(name) ?? []) {
+      coverage.add(canonicalizePackageName(raw));
+    }
+    for (const dep of graph.get(name) ?? []) {
+      if (!seen.has(dep)) queue.push(dep);
+    }
+  }
+
+  return coverage;
+}
+
+// Final peerDependency package list for one component: its own canonicalized
+// candidates, minus whatever's already covered by an upstream componentDep.
+export function dedupePeerDependencies(
+  rawPeerDependencyCandidates: string[],
+  upstreamCoverage: ReadonlySet<string>,
+): string[] {
+  const canonical = new Set(rawPeerDependencyCandidates.map(canonicalizePackageName));
+  return [...canonical].filter((name) => !upstreamCoverage.has(name)).sort();
+}
+
+export interface PackageJsonLike {
+  dependencies?: Record<string, string>;
+  devDependencies?: Record<string, string>;
+  peerDependencies?: Record<string, string>;
+}
+
+export type ResolvedVersion =
+  | { resolved: true; version: string }
+  | { resolved: false; packageName: string };
+
+// Looks up a package's declared version spec from the user's own
+// package.json — dependencies, then devDependencies, then peerDependencies.
+// Never guesses a version when none of those have it; the caller (batch C)
+// is responsible for what happens on `resolved: false` (charter Open
+// Questions: fail the build rather than write an unresolved version).
+export function resolvePeerDependencyVersion(
+  packageName: string,
+  cwdPackageJson: PackageJsonLike | null,
+): ResolvedVersion {
+  const version =
+    cwdPackageJson?.dependencies?.[packageName] ??
+    cwdPackageJson?.devDependencies?.[packageName] ??
+    cwdPackageJson?.peerDependencies?.[packageName];
+
+  return version !== undefined ? { resolved: true, version } : { resolved: false, packageName };
+}
