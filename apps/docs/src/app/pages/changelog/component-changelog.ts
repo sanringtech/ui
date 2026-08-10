@@ -36,6 +36,17 @@ function isPatch(version: string): boolean {
  */
 export const cliVersionChangelog: readonly CliVersionEntry[] = [
   {
+    version: '0.22.0',
+    date: '2026-08-10',
+    changes: [
+      {
+        type: 'added',
+        notable: true,
+        text: '`sanring.config.json` now accepts `registries` (alias → URL map) and `defaultRegistry`, so a project can point at a private/third-party registry without repeating `--registry <url>` on every command. `sanring add` accepts `alias:componentName` to install from a specific non-default registry, e.g. `sanring add myteam:button`. Both fields are opt-in — an existing config keeps working unchanged.',
+      },
+    ],
+  },
+  {
     version: '0.21.0',
     date: '2026-08-09',
     changes: [

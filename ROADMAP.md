@@ -12,7 +12,7 @@ This is a snapshot, not a commitment or a timeline. Items move, get reprioritize
 
 ## Ecosystem / team use
 
-- **Custom & third-party registries** — support for pointing the CLI at a team's own private registry alongside the official one, so multiple teams/products can share an internal component set.
+- **`sanring build`** — auto-generate a third-party registry's `registry.json` (component deps, shared deps, peer dependencies) from a source directory, instead of hand-writing it against the schema.
 
 ## Quality infrastructure (ongoing, lower urgency)
 
@@ -22,6 +22,7 @@ This is a snapshot, not a commitment or a timeline. Items move, get reprioritize
 
 ## Recently shipped
 
+- Custom & third-party registries — point the CLI at a team's own private registry alongside the official one (`registries`/`defaultRegistry` in `sanring.config.json`, `sanring add alias:componentName`), so multiple teams/products can share an internal component set
 - `sanring init --theme <preset>` — named color presets (`slate`, `warm`, `high-contrast`) so you don't have to hand-edit tokens for a different look
 - `sanring mcp` — an MCP server over stdio so AI coding agents (Claude Code, Cursor, Windsurf) can query and install components directly
 - `ng add @sanring/cli` — Angular Schematics support, so you can bootstrap with the Angular CLI's own add mechanism instead of `npx @sanring/cli init`
