@@ -17,6 +17,7 @@ import {
   readConfig,
   requireAngularProject,
   resolveComponentBasePath,
+  resolveRegistrySource,
 } from '../utils.js';
 import { THEME_FILE_PATH } from './init.js';
 
@@ -125,11 +126,11 @@ export const diffCommand = new Command('diff')
       options: { path?: string; registry?: string; exitCode: boolean },
     ) => {
       const cwd = process.cwd();
-      const registrySource = options.registry;
 
       requireAngularProject(cwd);
 
       const config = readConfig(cwd);
+      const registrySource = resolveRegistrySource(undefined, config, options.registry);
       const componentBasePath = resolveComponentBasePath(cwd, options.path, config);
       const sharedDestDir = config?.sharedPath
         ? resolve(cwd, config.sharedPath)
