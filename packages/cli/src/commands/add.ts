@@ -25,6 +25,7 @@ import {
   readConfig,
   requireAngularProject,
   resolveComponentPath,
+  resolveRegistrySource,
   satisfiesMinimumPackageSpec,
   writeConfig,
 } from '../utils.js';
@@ -206,7 +207,6 @@ export const addCommand = new Command('add')
       },
     ) => {
       const cwd = process.cwd();
-      const registrySource = options.registry;
 
       // Angular project guard
       requireAngularProject(
@@ -216,6 +216,7 @@ export const addCommand = new Command('add')
 
       // Resolve component path: CLI option > sanring.config.json > default
       const config = readConfig(cwd);
+      const registrySource = resolveRegistrySource(undefined, config, options.registry);
       const resolvedComponentPath = resolveComponentPath(options.path, config);
       const componentBasePath = resolve(cwd, resolvedComponentPath);
       const resolvedSharedPath = options.sharedPath ?? config?.sharedPath;
