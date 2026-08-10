@@ -1,4 +1,5 @@
-import { readFileSync } from 'node:fs';
+import { mkdirSync, mkdtempSync, readFileSync, rmSync } from 'node:fs';
+import { tmpdir } from 'node:os';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { describe, expect, it } from 'vitest';
@@ -55,6 +56,17 @@ describe('discoverSharedSources', () => {
     const names = found.map((s) => s.name);
     expect(names).not.toContain('theme');
     expect(names.every((n) => !n.includes('.'))).toBe(true);
+  });
+
+  it('returns [] when there is no shared/ directory, instead of throwing', () => {
+    const dir = mkdtempSync(join(tmpdir(), 'sanring-registry-scan-'));
+    const componentsDir = join(dir, 'components');
+    mkdirSync(componentsDir, { recursive: true });
+    try {
+      expect(discoverSharedSources(componentsDir)).toEqual([]);
+    } finally {
+      rmSync(dir, { recursive: true, force: true });
+    }
   });
 });
 

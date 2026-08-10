@@ -4,7 +4,7 @@
 // componentDep/sharedDep/peerDependency shape `registry.json` uses. No CLI
 // wiring, no process.exit, no writes — `commands/build.ts` (batch C) is the
 // only caller and owns all I/O side effects and user-facing output.
-import { readdirSync } from 'node:fs';
+import { existsSync, readdirSync } from 'node:fs';
 import { basename, dirname, join } from 'node:path';
 import ts from 'typescript';
 
@@ -42,9 +42,12 @@ export interface DiscoveredSharedSource {
 // Shared utilities live in a `shared/` directory *alongside* `sourceDir`
 // (mirrors this repo's `registry/components` + `registry/shared` layout),
 // not nested inside it. Only flat `.ts` files are considered — matches what
-// a `../shared/xxx` import specifier can actually reference.
+// a `../shared/xxx` import specifier can actually reference. A third party
+// with no shared code at all is a legitimate registry, not an error, so a
+// missing `shared/` directory returns [] rather than throwing.
 export function discoverSharedSources(sourceDir: string): DiscoveredSharedSource[] {
   const sharedDir = join(dirname(sourceDir), 'shared');
+  if (!existsSync(sharedDir)) return [];
   return readdirSync(sharedDir, { withFileTypes: true })
     .filter((entry) => entry.isFile() && entry.name.endsWith('.ts'))
     .map((entry) => ({ name: basename(entry.name, '.ts'), file: join(sharedDir, entry.name) }));
