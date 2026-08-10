@@ -224,6 +224,7 @@ export const initCommand = new Command('init')
 
     // 4. Write config
     const nextConfig = {
+      ...existing,
       componentPath,
       sharedPath: existing?.sharedPath,
       installedHashes: existing?.installedHashes,
@@ -245,6 +246,7 @@ export const initCommand = new Command('init')
       const themeResult = writeFile(themeDest, themeContent, options.force);
       if (themeResult === 'written') {
         writeConfig(projectRoot, {
+          ...existing,
           componentPath,
           sharedPath: existing?.sharedPath,
           installedHashes: {

@@ -212,6 +212,7 @@ export const updateCommand = new Command('update')
       if (added.length === 0 && auto.length === 0 && pending.length === 0) {
         if (!options.dryRun && backfilled > 0) {
           writeConfig(cwd, {
+            ...config,
             componentPath: resolvedComponentPath,
             sharedPath: config?.sharedPath,
             installedHashes,
@@ -314,6 +315,7 @@ export const updateCommand = new Command('update')
         }
       }
       writeConfig(cwd, {
+        ...config,
         componentPath: resolvedComponentPath,
         sharedPath: config?.sharedPath,
         installedHashes,

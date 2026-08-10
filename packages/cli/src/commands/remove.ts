@@ -176,6 +176,7 @@ export const removeCommand = new Command('remove')
 
       if (prunedHashes) {
         writeConfig(cwd, {
+          ...config,
           componentPath: config?.componentPath ?? DEFAULT_COMPONENT_PATH,
           installedHashes,
         });

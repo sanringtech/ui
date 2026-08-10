@@ -3,7 +3,7 @@ import { mkdtempSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import type { Registry, RegistryComponent } from '../registry.js';
-import { readConfig } from '../utils.js';
+import { readConfig, writeConfig } from '../utils.js';
 import { writeRegistryFixture } from '../__tests__/registry-fixture.js';
 import { addCommand } from './add.js';
 import { planRemoval, removeCommand } from './remove.js';
@@ -98,5 +98,20 @@ describe('removeCommand (integration)', () => {
     const config = readConfig(projectDir);
     expect(config?.installedHashes?.['widget/index.ts']).toBeUndefined();
     expect(config?.installedHashes?.['shared/utils.ts']).toBeDefined();
+  });
+
+  it('preserves registries/defaultRegistry from the existing config on write', async () => {
+    const existing = readConfig(projectDir)!;
+    writeConfig(projectDir, {
+      ...existing,
+      registries: { myteam: 'https://registry.myteam.com' },
+      defaultRegistry: 'myteam',
+    });
+
+    await removeCommand.parseAsync(['widget', '--registry', registryDir, '--yes'], { from: 'user' });
+
+    const config = readConfig(projectDir);
+    expect(config?.registries).toEqual({ myteam: 'https://registry.myteam.com' });
+    expect(config?.defaultRegistry).toBe('myteam');
   });
 });

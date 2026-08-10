@@ -96,6 +96,26 @@ describe('updateCommand (integration)', () => {
   const componentFile = () => join(projectDir, 'src/app/components/ui/widget/index.ts');
   const sharedFile = () => join(projectDir, 'src/app/components/ui/shared/utils.ts');
 
+  it('preserves registries/defaultRegistry from the existing config on write', async () => {
+    const existing = readConfig(projectDir)!;
+    writeConfig(projectDir, {
+      ...existing,
+      registries: { myteam: 'https://registry.myteam.com' },
+      defaultRegistry: 'myteam',
+    });
+
+    writeRegistryFixture(registryDir, {
+      utils: 'export function cn() {}\n',
+      widget: 'export const widget = 2;\n',
+    });
+
+    await updateCommand.parseAsync(['--registry', registryDir, '--yes'], { from: 'user' });
+
+    const config = readConfig(projectDir);
+    expect(config?.registries).toEqual({ myteam: 'https://registry.myteam.com' });
+    expect(config?.defaultRegistry).toBe('myteam');
+  });
+
   it('auto-applies a file the user never touched, and diffs+confirms one they edited', async () => {
     // Registry moves on for both files...
     writeRegistryFixture(registryDir, {

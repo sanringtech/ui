@@ -496,6 +496,7 @@ export const addCommand = new Command('add')
           installedVersions[component.name] = cliVersion;
         }
         writeConfig(cwd, {
+          ...config,
           componentPath: resolvedComponentPath,
           sharedPath: resolvedSharedPath,
           installedHashes,

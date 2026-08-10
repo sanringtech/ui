@@ -74,6 +74,8 @@ describe('initCommand (integration)', () => {
       componentPath: 'src/app/components',
       sharedPath: 'src/app/shared/sanring',
       installedHashes: { 'widget/index.ts': 'previous-hash' },
+      registries: { myteam: 'https://registry.myteam.com' },
+      defaultRegistry: 'myteam',
     });
 
     await initCommand.parseAsync(['--yes', '--registry', registryDir], { from: 'user' });
@@ -85,6 +87,8 @@ describe('initCommand (integration)', () => {
         'widget/index.ts': 'previous-hash',
         'src/sanring-theme.css': hashContent(':root { --sanring-radius: 8px; }\n'),
       },
+      registries: { myteam: 'https://registry.myteam.com' },
+      defaultRegistry: 'myteam',
     });
   });
 

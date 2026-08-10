@@ -3,7 +3,7 @@ import { existsSync, mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync
 import { join } from 'node:path';
 import { tmpdir } from 'node:os';
 import type { Registry, RegistryComponent, RegistryShared } from '../registry.js';
-import { hashContent, readConfig } from '../utils.js';
+import { hashContent, readConfig, writeConfig } from '../utils.js';
 import { writeRegistryFixture } from '../__tests__/registry-fixture.js';
 import {
   addCommand,
@@ -195,6 +195,20 @@ describe('addCommand (integration)', () => {
     expect(config?.installedHashes?.['shared/utils.ts']).toBe(
       hashContent('export function cn() {}\n'),
     );
+  });
+
+  it('preserves registries/defaultRegistry from the existing config on write', async () => {
+    writeConfig(projectDir, {
+      componentPath: 'src/app/components/ui',
+      registries: { myteam: 'https://registry.myteam.com' },
+      defaultRegistry: 'myteam',
+    });
+
+    await addCommand.parseAsync(['widget', '--registry', registryDir], { from: 'user' });
+
+    const config = readConfig(projectDir);
+    expect(config?.registries).toEqual({ myteam: 'https://registry.myteam.com' });
+    expect(config?.defaultRegistry).toBe('myteam');
   });
 
   it('writes shared files to --shared-path and persists that path', async () => {
