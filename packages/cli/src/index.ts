@@ -5,6 +5,7 @@ import { fileURLToPath } from 'node:url';
 import { Command } from 'commander';
 import pc from 'picocolors';
 import { addCommand } from './commands/add.js';
+import { buildCommand } from './commands/build.js';
 import { diffCommand } from './commands/diff.js';
 import { doctorCommand } from './commands/doctor.js';
 import { infoCommand } from './commands/info.js';
@@ -50,5 +51,6 @@ program.addCommand(updateCommand);
 program.addCommand(doctorCommand);
 program.addCommand(mcpCommand);
 program.addCommand(migrateCommand);
+program.addCommand(buildCommand);
 
 program.parse();
