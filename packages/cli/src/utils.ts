@@ -22,6 +22,13 @@ export interface SanringConfig {
   // keyed by component name. Used by `sanring migrate` to detect version gaps
   // and surface breaking-change migration steps. Missing = treat as "0.0.0".
   installedVersions?: Record<string, string>;
+  // Named registry aliases (alias -> URL). Opt-in: absent means the CLI
+  // falls back to its built-in single-registry resolution (local bundle ->
+  // GitHub raw fallback), unchanged from before multi-registry support.
+  registries?: Record<string, string>;
+  // Alias from `registries` used when a component reference has no
+  // `alias:` prefix. Opt-in, no effect unless `registries` is also set.
+  defaultRegistry?: string;
 }
 
 /** CLI version from package.json; returns "0.0.0" on any read failure. */
