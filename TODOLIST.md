@@ -6,13 +6,13 @@
 
 ---
 
-## P9 — 沒有自訂/第三方 registry 支援
+## P9 — `sanring build`(讓第三方產出相容 registry.json)
 
-- [ ] 評估支援 `@namespace/component` 語法 + `sanring build` 指令,讓團隊可以架自己的私有 registry
+- [ ] `sanring build [--source ./components] [--out ./dist-registry]` 指令:掃描第三方自己的 Angular component 目錄,自動推斷 `files`/`componentDeps`/`peerDependencies`,輸出標準 `Registry` schema
 
-**現況**:`registry.ts` 沒有 namespace 概念,`packages/cli/src/commands/` 沒有 `build` 指令。目前 CLI 只認一個寫死的 registry 來源。
+**現況**:`registries` alias → URL 設定與 `sanring add alias:componentName` 語法已完成(見 [DEVLOG.md](DEVLOG.md) 的 P9 段落),使用者現在可以手動維護自己的 `registry.json` 並透過 alias 安裝。缺的是「自動產生 registry.json」這一步——第三方目前得照 `Registry` schema 手寫,容易漏 `componentDeps`/`peerDependencies`。
 
-**對比**:shadcn 支援混用官方 registry + 團隊自己的私有 registry。優先度較低,除非近期有多團隊/多產品線共用元件庫的需求才需要拉高。
+**待做前提**:[ADR-0001](.claude/adrs/0001-multi-registry-support.md) 已把這個指令標為批次 D、預設暫停,先決條件是花 1 天做 TypeScript AST 解析(`ts-morph`/compiler API/babel)可行性 spike,確認能否從 barrel export 可靠推斷 component 間依賴,再另立 `.claude/charters/p9-sanring-build.md`。
 
 ---
 

@@ -320,6 +320,23 @@
 
 ---
 
+## P9 — 自訂/第三方 registry 支援(alias:name 語法,`sanring build` 未做)
+
+- [x] `sanring.config.json` 新增 `registries`(alias → URL map)與 `defaultRegistry` 選用欄位
+- [x] `sanring add alias:componentName` 語法,從指定的第三方/私有 registry 安裝元件
+- [x] `installedVersions` key 格式在元件被 `add`/`update` 觸及時升級為 `alias:componentName`(lazy migration,未觸及的舊 key 保留原樣)
+- [ ] `sanring build` 指令(讓第三方掃自己的 Angular component 目錄產出相容 `registry.json`)——未做,見下方「本次不解決」
+
+**依據**:先寫了 [ADR-0001](.claude/adrs/0001-multi-registry-support.md) 定案設計決策,再依 [Task Charter](.claude/charters/p9-multi-registry.md) 的批次 A/B/C 分批執行(型別與純函式 → 10 個 command 接入 → alias 解析與 key 升級),每批獨立驗證(`tsc --noEmit`/`eslint`/`pnpm test`)後才 commit,批次 D(`sanring build`)charter 本身就標記「預設暫停」,需另立 charter 並先做 TypeScript AST 可行性 spike。
+
+**核心設計**(細節見 ADR):`resolveRegistrySource(alias, config, flagOverride?)` 純函式封裝優先序 `flagOverride > registries[alias] > defaultRegistry > undefined`,12 個 command handler 統一透過它取得 registry 來源,不再各自處理 `options.registry`。一次 `add` 呼叫裡的所有元件必須來自同一個 registry(顯式 alias 或共用的 `defaultRegistry`)——CLI 不在單次呼叫內合併多個 registry 的 component 列表,這是 ADR 明確拒絕的替代方案(Q3)。
+
+**執行中發現且已修的真實 bug(不是 charter 原範圍,但屬必要修正)**:`add.ts`/`remove.ts`/`update.ts`(x2)/`init.ts`(x2)這 6 處 `writeConfig(...)` 呼叫都是手動列欄位而非展開既有 config,已經會漏掉 `sharedPath`/`installedVersions`;新加的 `registries`/`defaultRegistry` 剛好也不在手寫清單裡——代表使用者一設定多重 registry,下一次 `add`/`update`/`remove` 就會把設定靜默清空,直接讓這個功能形同沒做完。發現後先停下用 `AskUserQuestion` 跟使用者確認要不要一併修,得到「現在一併修」的答案後才動手,改成 `{ ...config, ... }` 展開再覆蓋各自要變的欄位,並在 `add.test.ts`/`remove.test.ts`/`update.test.ts`/`init.test.ts` 各補一個回歸測試鎖住這個行為。
+
+**驗證**:每個批次、每個 command 改完都各自跑過 `tsc --noEmit`/`eslint --max-warnings 0`/`pnpm test`,全數維持綠燈,最終 135 個測試通過(從批次開始前的 125 個增加,新增的都是 alias 解析、config 欄位保留、legacy key 遷移的回歸測試)。沒有連上真實網路 registry 做端到端手測——所有整合測試都用 `writeRegistryFixture` 產生的本地假 registry 驗證。
+
+---
+
 ## 查證後確認「不算差距」的項目(備查,避免重複討論)
 
 - **PR 沒有測試/型別檢查關卡**:原 P0 已完成,不再放主 todo。已新增 PR 觸發的 CI workflow,跑 `pnpm test`、`tsc --noEmit`、`pnpm lint`。
