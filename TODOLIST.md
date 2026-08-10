@@ -12,7 +12,9 @@
 
 **現況**:`registries` alias → URL 設定與 `sanring add alias:componentName` 語法已完成(見 [DEVLOG.md](DEVLOG.md) 的 P9 段落),使用者現在可以手動維護自己的 `registry.json` 並透過 alias 安裝。缺的是「自動產生 registry.json」這一步——第三方目前得照 `Registry` schema 手寫,容易漏 `componentDeps`/`peerDependencies`。
 
-**待做前提**:[ADR-0001](.claude/adrs/0001-multi-registry-support.md) 已把這個指令標為批次 D、預設暫停。先決條件的 1 天 TypeScript AST 可行性 spike **已完成(2026-08-10,結果記在 ADR-0001 的 Notes 段落)**:結論可行,但要包含跨整批元件算遞移閉包去重這一輪,不能只做逐檔案掃描。下一步是另立 `.claude/charters/p9-sanring-build.md` 分批實作。
+**待做前提**:[ADR-0001](.claude/adrs/0001-multi-registry-support.md) 已把這個指令標為批次 D、預設暫停。先決條件的 1 天 TypeScript AST 可行性 spike **已完成(2026-08-10,結果記在 ADR-0001 的 Notes 段落)**:結論可行,但要包含跨整批元件算遞移閉包去重這一輪,不能只做逐檔案掃描。
+
+**執行中**:[Task Charter](.claude/charters/p9-sanring-build.md)(2026-08-10)已開,分批次 A(AST 掃描分類)→ B(peerDependency 遞移閉包去重)→ C(`build` 指令本體 + 輸出)→ D(暫停:`--watch`/互動式功能)。
 
 ---
 
