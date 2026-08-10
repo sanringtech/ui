@@ -50,7 +50,10 @@ ng add @sanring/cli
 
 - Both fields are opt-in — an existing config without them behaves exactly as before (official bundle, with GitHub fallback).
 - `defaultRegistry` must name a key in `registries`; every command that talks to a registry resolves it and uses that URL/path unless `--registry` is passed, which always wins.
-- Fetching a specific component from a *non-default* registry by name (`alias:componentName` syntax) is not yet supported — track progress in [ADR-0001](https://github.com/sanringtech/ui/blob/main/.claude/adrs/0001-multi-registry-support.md).
+- `sanring add` accepts `alias:componentName` to fetch a specific component from a non-default registry, e.g. `sanring add myteam:button`. All components in one `add` call must come from the same registry (explicit alias, or the shared `defaultRegistry` fallback) — the CLI doesn't merge component lists across registries in a single invocation.
+- Installed component versions are then tracked as `alias:componentName` in `installedVersions` once an alias is known; components installed before this feature (or with no `registries` configured) keep their original bare-name key until next touched by `add`/`update`.
+
+See [ADR-0001](https://github.com/sanringtech/ui/blob/main/.claude/adrs/0001-multi-registry-support.md) for the full design.
 
 ---
 
