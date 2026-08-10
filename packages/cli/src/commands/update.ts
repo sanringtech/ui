@@ -12,6 +12,7 @@ import {
   readConfig,
   requireAngularProject,
   resolveComponentPath,
+  resolveRegistrySource,
   writeConfig,
 } from '../utils.js';
 import { writeFile } from './add.js';
@@ -81,11 +82,11 @@ export const updateCommand = new Command('update')
       options: { path?: string; yes: boolean; dryRun: boolean; registry?: string; trust: boolean },
     ) => {
       const cwd = process.cwd();
-      const registrySource = options.registry;
 
       requireAngularProject(cwd);
 
       const config = readConfig(cwd);
+      const registrySource = resolveRegistrySource(undefined, config, options.registry);
       const resolvedComponentPath = resolveComponentPath(options.path, config);
       const componentBasePath = resolve(cwd, resolvedComponentPath);
       const sharedDestDir = config?.sharedPath
@@ -310,8 +311,13 @@ export const updateCommand = new Command('update')
 
       if (applied > 0) {
         const cliVersion = getCliVersion();
+        // Lazy migration: a component touched by `update` gets the current
+        // key format. Legacy bare keys are only left alone until next touched.
+        const effectiveAlias = config?.defaultRegistry;
         for (const component of components) {
-          installedVersions[component.name] = cliVersion;
+          if (effectiveAlias) delete installedVersions[component.name];
+          const key = effectiveAlias ? `${effectiveAlias}:${component.name}` : component.name;
+          installedVersions[key] = cliVersion;
         }
       }
       writeConfig(cwd, {

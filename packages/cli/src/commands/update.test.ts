@@ -116,6 +116,43 @@ describe('updateCommand (integration)', () => {
     expect(config?.defaultRegistry).toBe('myteam');
   });
 
+  it('migrates a legacy bare installedVersions key to alias:componentName on touch', async () => {
+    const existing = readConfig(projectDir)!;
+    writeConfig(projectDir, {
+      ...existing,
+      registries: { myteam: registryDir },
+      defaultRegistry: 'myteam',
+      installedVersions: { widget: '0.20.0' },
+    });
+
+    // Force a change so `widget` is actually touched by this update.
+    writeRegistryFixture(registryDir, {
+      utils: 'export function cn() {}\n',
+      widget: 'export const widget = 2;\n',
+    });
+
+    await updateCommand.parseAsync(['--registry', registryDir, '--yes'], { from: 'user' });
+
+    const config = readConfig(projectDir);
+    expect(config?.installedVersions?.['myteam:widget']).toBeDefined();
+    expect(config?.installedVersions?.['widget']).toBeUndefined();
+  });
+
+  it('leaves a legacy bare installedVersions key untouched when no defaultRegistry is set', async () => {
+    const existing = readConfig(projectDir)!;
+    writeConfig(projectDir, { ...existing, installedVersions: { widget: '0.20.0' } });
+
+    writeRegistryFixture(registryDir, {
+      utils: 'export function cn() {}\n',
+      widget: 'export const widget = 2;\n',
+    });
+
+    await updateCommand.parseAsync(['--registry', registryDir, '--yes'], { from: 'user' });
+
+    const config = readConfig(projectDir);
+    expect(config?.installedVersions?.['widget']).toBeDefined();
+  });
+
   it('auto-applies a file the user never touched, and diffs+confirms one they edited', async () => {
     // Registry moves on for both files...
     writeRegistryFixture(registryDir, {
