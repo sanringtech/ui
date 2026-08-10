@@ -31,6 +31,14 @@ import {
 } from '../utils.js';
 import { printFileDiff } from './diff.js';
 
+// Splits the `alias:componentName` syntax from ADR-0001 apart. No colon
+// means "no explicit registry" — the caller falls back to defaultRegistry.
+export function parseComponentRef(ref: string): { alias?: string; name: string } {
+  const idx = ref.indexOf(':');
+  if (idx === -1) return { name: ref };
+  return { alias: ref.slice(0, idx), name: ref.slice(idx + 1) };
+}
+
 export function writeFile(dest: string, content: string, force: boolean): 'written' | 'skipped' {
   if (existsSync(dest) && !force) return 'skipped';
   const dir = dirname(dest);
@@ -214,9 +222,32 @@ export const addCommand = new Command('add')
         'Run from the root of an Angular project, or run `sanring init` first.',
       );
 
+      // Parse `alias:componentName` syntax. All requested components in one
+      // `add` call must share the same explicit alias (if any) — the CLI
+      // fetches a single registry per invocation, it doesn't merge component
+      // lists across registries (ADR-0001).
+      const parsedRefs = componentNames.map(parseComponentRef);
+      const explicitAliases = new Set(
+        parsedRefs.map((ref) => ref.alias).filter((a): a is string => a !== undefined),
+      );
+      if (explicitAliases.size > 1) {
+        console.error(
+          pc.red(`✖ Cannot mix registries in one \`add\`: ${[...explicitAliases].join(', ')}`),
+        );
+        console.error(pc.dim('  Run separate `add` commands for components from different registries.'));
+        process.exit(1);
+        return;
+      }
+      const alias = explicitAliases.size === 1 ? [...explicitAliases][0] : undefined;
+      const strippedNames = parsedRefs.map((ref) => ref.name);
+
       // Resolve component path: CLI option > sanring.config.json > default
       const config = readConfig(cwd);
-      const registrySource = resolveRegistrySource(undefined, config, options.registry);
+      const registrySource = resolveRegistrySource(alias, config, options.registry);
+      // The alias actually used to resolve the registry — kept separate from
+      // `registrySource` because `--registry` can override the fetch target
+      // without changing what the install should be recorded under.
+      const effectiveAlias = alias ?? config?.defaultRegistry;
       const resolvedComponentPath = resolveComponentPath(options.path, config);
       const componentBasePath = resolve(cwd, resolvedComponentPath);
       const resolvedSharedPath = options.sharedPath ?? config?.sharedPath;
@@ -229,7 +260,7 @@ export const addCommand = new Command('add')
       const registryIndex = createRegistryIndex(registry);
       registrySpinner.stop();
 
-      const { toInstall, autoAdded, missing } = resolveInstallSet(componentNames, registryIndex);
+      const { toInstall, autoAdded, missing } = resolveInstallSet(strippedNames, registryIndex);
 
       if (missing.length > 0) {
         const available = registryIndex.componentNames.join(', ');
@@ -493,7 +524,11 @@ export const addCommand = new Command('add')
       if (!options.dryRun && written > 0) {
         const cliVersion = getCliVersion();
         for (const component of toInstall) {
-          installedVersions[component.name] = cliVersion;
+          // Lazy migration: a component touched by `add` gets the current key
+          // format. Legacy bare keys are only left alone until next touched.
+          if (effectiveAlias) delete installedVersions[component.name];
+          const key = effectiveAlias ? `${effectiveAlias}:${component.name}` : component.name;
+          installedVersions[key] = cliVersion;
         }
         writeConfig(cwd, {
           ...config,

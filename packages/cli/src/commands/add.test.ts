@@ -9,6 +9,7 @@ import {
   addCommand,
   collectOverwriteCandidates,
   collectPeerDeps,
+  parseComponentRef,
   resolveInstallSet,
 } from './add.js';
 
@@ -96,6 +97,16 @@ describe('collectPeerDeps', () => {
 
   it('returns an empty object when nothing has peer dependencies', () => {
     expect(collectPeerDeps([component({ name: 'a' })], [])).toEqual({});
+  });
+});
+
+describe('parseComponentRef', () => {
+  it('has no alias when there is no colon', () => {
+    expect(parseComponentRef('button')).toEqual({ name: 'button' });
+  });
+
+  it('splits alias from component name at the first colon', () => {
+    expect(parseComponentRef('myteam:button')).toEqual({ alias: 'myteam', name: 'button' });
   });
 });
 
@@ -209,6 +220,51 @@ describe('addCommand (integration)', () => {
     const config = readConfig(projectDir);
     expect(config?.registries).toEqual({ myteam: 'https://registry.myteam.com' });
     expect(config?.defaultRegistry).toBe('myteam');
+  });
+
+  it('resolves an unprefixed name through defaultRegistry and records the aliased key', async () => {
+    writeConfig(projectDir, {
+      componentPath: 'src/app/components/ui',
+      registries: { myteam: registryDir },
+      defaultRegistry: 'myteam',
+    });
+
+    // `addCommand` is a shared Command instance reused across tests in this
+    // file — commander doesn't clear a flag's value between `parseAsync`
+    // calls, so an earlier test's `--registry` would otherwise leak in and
+    // mask the alias resolution this test means to exercise. Pass an empty
+    // value explicitly to override it (falsy, so `resolveRegistrySource`
+    // treats it the same as "flag not passed").
+    await addCommand.parseAsync(['widget', '--registry', ''], { from: 'user' });
+
+    const config = readConfig(projectDir);
+    expect(config?.installedVersions?.['myteam:widget']).toBeDefined();
+    expect(config?.installedVersions?.['widget']).toBeUndefined();
+  });
+
+  it('resolves an explicit alias:name ref and records the aliased key', async () => {
+    writeConfig(projectDir, { componentPath: 'src/app/components/ui', registries: { myteam: registryDir } });
+
+    await addCommand.parseAsync(['myteam:widget', '--registry', ''], { from: 'user' });
+
+    const componentFile = join(projectDir, 'src/app/components/ui/widget/index.ts');
+    expect(existsSync(componentFile)).toBe(true);
+
+    const config = readConfig(projectDir);
+    expect(config?.installedVersions?.['myteam:widget']).toBeDefined();
+  });
+
+  it('refuses to mix registries in a single add without writing anything', async () => {
+    writeConfig(projectDir, {
+      componentPath: 'src/app/components/ui',
+      registries: { myteam: registryDir, other: registryDir },
+    });
+    const exitSpy = vi.spyOn(process, 'exit').mockImplementation(() => undefined as never);
+
+    await addCommand.parseAsync(['myteam:widget', 'other:widget'], { from: 'user' });
+
+    expect(exitSpy).toHaveBeenCalledWith(1);
+    expect(existsSync(join(projectDir, 'src/app/components/ui/widget/index.ts'))).toBe(false);
   });
 
   it('writes shared files to --shared-path and persists that path', async () => {
