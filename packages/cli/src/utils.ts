@@ -81,6 +81,50 @@ export function writeConfig(cwd: string, config: SanringConfig): void {
   writeFileSync(configPath, JSON.stringify(config, null, 2) + '\n', 'utf-8');
 }
 
+// Resolves which registry URL/path a command should fetch from, given an
+// optional `alias:` prefix parsed from the component reference, the loaded
+// config, and an optional `--registry` flag value. Priority: flagOverride >
+// registries[alias] > registries[defaultRegistry] > undefined. Missing
+// `registries`/`defaultRegistry` degrades silently to undefined so callers
+// fall through to the existing single-registry resolution (local bundle ->
+// GitHub raw fallback) unchanged.
+export function resolveRegistrySource(
+  alias: string | undefined,
+  config: SanringConfig | null,
+  flagOverride?: string,
+): string | undefined {
+  if (flagOverride) return flagOverride;
+  const targetAlias = alias ?? config?.defaultRegistry;
+  if (targetAlias === undefined) return undefined;
+  return config?.registries?.[targetAlias];
+}
+
+// Upgrades legacy `installedVersions` keys (bare component name, from before
+// multi-registry support) to the `alias:componentName` format, prefixing
+// with `defaultRegistry`. Not called automatically on every config read —
+// callers (e.g. `add`/`update` touching a component, or `doctor`) invoke it
+// explicitly, so unrelated keys aren't rewritten just because the config was
+// loaded. When `defaultRegistry` isn't set we can't know which alias a bare
+// key belongs to, so those keys are left untouched rather than guessed.
+export function migrateInstalledVersionsKeys(config: SanringConfig): SanringConfig {
+  const installedVersions = config.installedVersions;
+  if (!installedVersions || !config.defaultRegistry) return config;
+
+  const migrated: Record<string, string> = {};
+  let changed = false;
+  for (const [key, value] of Object.entries(installedVersions)) {
+    if (key.includes(':')) {
+      migrated[key] = value;
+      continue;
+    }
+    migrated[`${config.defaultRegistry}:${key}`] = value;
+    changed = true;
+  }
+
+  if (!changed) return config;
+  return { ...config, installedVersions: migrated };
+}
+
 export function getInstalledPackageSpecs(cwd: string): Map<string, string> {
   const pkgPath = join(cwd, 'package.json');
   if (!existsSync(pkgPath)) return new Map();

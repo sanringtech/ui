@@ -9,7 +9,9 @@ import {
   hashContent,
   isAngularProject,
   mapConcurrent,
+  migrateInstalledVersionsKeys,
   readConfig,
+  resolveRegistrySource,
   satisfiesMinimumPackageSpec,
   writeConfig,
 } from './utils.js';
@@ -48,6 +50,72 @@ describe('readConfig / writeConfig', () => {
   it('returns null when sanring.config.json is malformed', () => {
     writeFileSync(join(dir, 'sanring.config.json'), '{ not valid json');
     expect(readConfig(dir)).toBeNull();
+  });
+});
+
+describe('resolveRegistrySource', () => {
+  const config = {
+    componentPath: 'src/app/ui',
+    registries: { official: 'https://registry.sanring.dev', myteam: 'https://registry.myteam.com' },
+    defaultRegistry: 'official',
+  };
+
+  it('prefers flagOverride over everything else', () => {
+    expect(resolveRegistrySource('myteam', config, './local-path')).toBe('./local-path');
+  });
+
+  it('resolves an explicit alias against registries', () => {
+    expect(resolveRegistrySource('myteam', config)).toBe('https://registry.myteam.com');
+  });
+
+  it('falls back to defaultRegistry when no alias is given', () => {
+    expect(resolveRegistrySource(undefined, config)).toBe('https://registry.sanring.dev');
+  });
+
+  it('returns undefined when the alias is unknown', () => {
+    expect(resolveRegistrySource('unknown', config)).toBeUndefined();
+  });
+
+  it('degrades silently to undefined when config has no registries', () => {
+    expect(resolveRegistrySource(undefined, { componentPath: 'src/app/ui' })).toBeUndefined();
+  });
+
+  it('degrades silently to undefined when config is null', () => {
+    expect(resolveRegistrySource(undefined, null)).toBeUndefined();
+  });
+});
+
+describe('migrateInstalledVersionsKeys', () => {
+  it('prefixes bare keys with defaultRegistry', () => {
+    const config = {
+      componentPath: 'src/app/ui',
+      defaultRegistry: 'official',
+      installedVersions: { button: '1.0.0' },
+    };
+    expect(migrateInstalledVersionsKeys(config).installedVersions).toEqual({
+      'official:button': '1.0.0',
+    });
+  });
+
+  it('leaves already-prefixed keys untouched', () => {
+    const config = {
+      componentPath: 'src/app/ui',
+      defaultRegistry: 'official',
+      installedVersions: { 'myteam:button': '1.0.0' },
+    };
+    expect(migrateInstalledVersionsKeys(config).installedVersions).toEqual({
+      'myteam:button': '1.0.0',
+    });
+  });
+
+  it('leaves bare keys untouched when defaultRegistry is not set', () => {
+    const config = { componentPath: 'src/app/ui', installedVersions: { button: '1.0.0' } };
+    expect(migrateInstalledVersionsKeys(config)).toBe(config);
+  });
+
+  it('is a no-op when installedVersions is missing', () => {
+    const config = { componentPath: 'src/app/ui', defaultRegistry: 'official' };
+    expect(migrateInstalledVersionsKeys(config)).toBe(config);
   });
 });
 
