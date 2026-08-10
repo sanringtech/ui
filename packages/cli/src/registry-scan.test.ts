@@ -147,11 +147,13 @@ describe('filterBaselinePackages', () => {
     expect(result).toEqual(['@angular/cdk/overlay']);
   });
 
-  it('does not exclude by prefix — only exact specifier matches', () => {
+  it('excludes any submodule of a baseline package, not just the bare import', () => {
     const result = filterBaselinePackages([
       { kind: 'peerDependencyCandidate', specifier: '@angular/core/testing' },
+      { kind: 'peerDependencyCandidate', specifier: 'rxjs/operators' },
+      { kind: 'peerDependencyCandidate', specifier: '@angular/cdk/overlay' },
     ]);
-    expect(result).toEqual(['@angular/core/testing']);
+    expect(result).toEqual(['@angular/cdk/overlay']);
   });
 });
 

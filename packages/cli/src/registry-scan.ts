@@ -53,13 +53,22 @@ export function discoverSharedSources(sourceDir: string): DiscoveredSharedSource
     .map((entry) => ({ name: basename(entry.name, '.ts'), file: join(sharedDir, entry.name) }));
 }
 
+// '@angular/cdk/overlay' -> '@angular/cdk' (scoped: first two segments).
+// 'embla-carousel/foo' -> 'embla-carousel' (unscoped: first segment).
+export function canonicalizePackageName(specifier: string): string {
+  const parts = specifier.split('/');
+  return specifier.startsWith('@') ? parts.slice(0, 2).join('/') : parts[0];
+}
+
 // Baseline packages assumed always-present in any Angular project. Imported
 // constantly but never declared as a registry peerDependency — without this
 // exclusion every single component would be misclassified as depending on
-// them. Exact string match only, not canonicalized: verified against the
-// ADR-0001 spike (packages/cli/src/registry-scan spike), zero false
-// positives across 8 sampled components. Expand deliberately, don't widen
-// to a prefix match.
+// them. Compared against the *canonicalized* specifier: an initial version
+// of this matched the raw specifier exactly (verified against an 8-component
+// ADR-0001 spike sample), but the full registry.json golden-fixture test
+// (batch C) found `rxjs/operators` slipping through uncaught — canonicalizing
+// both sides catches every submodule of a baseline package, not just its
+// bare import.
 export const BASELINE_PACKAGES = new Set([
   '@angular/core',
   '@angular/core/rxjs-interop',
@@ -114,7 +123,7 @@ export function filterBaselinePackages(
 ): string[] {
   return candidates
     .map((c) => c.specifier)
-    .filter((specifier) => !BASELINE_PACKAGES.has(specifier));
+    .filter((specifier) => !BASELINE_PACKAGES.has(canonicalizePackageName(specifier)));
 }
 
 export interface ValidatedDeps {
@@ -223,13 +232,6 @@ export interface ScannedComponent {
   componentDeps: string[];
   /** Baseline-filtered, not yet canonicalized (batch A's filterBaselinePackages output). */
   rawPeerDependencyCandidates: string[];
-}
-
-// '@angular/cdk/overlay' -> '@angular/cdk' (scoped: first two segments).
-// 'embla-carousel/foo' -> 'embla-carousel' (unscoped: first segment).
-export function canonicalizePackageName(specifier: string): string {
-  const parts = specifier.split('/');
-  return specifier.startsWith('@') ? parts.slice(0, 2).join('/') : parts[0];
 }
 
 export function buildComponentDepGraph(
