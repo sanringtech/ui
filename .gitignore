@@ -20,6 +20,10 @@ packages/*/pnpm-lock.yaml
 .claude/**
 !.claude/commands/
 !.claude/commands/**
+!.claude/adrs/
+!.claude/adrs/**
+!.claude/charters/
+!.claude/charters/**
 .idea/
 .project
 .classpath
