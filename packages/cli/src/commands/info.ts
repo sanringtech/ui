@@ -6,7 +6,12 @@ import ora from 'ora';
 import pc from 'picocolors';
 import { collectPeerDeps, resolveInstallSet } from './add.js';
 import { createRegistryIndex, fetchRegistry } from '../registry.js';
-import { isAngularProject, readConfig, resolveComponentBasePath } from '../utils.js';
+import {
+  isAngularProject,
+  readConfig,
+  resolveComponentBasePath,
+  resolveRegistrySource,
+} from '../utils.js';
 import { THEME_FILE_PATH } from './init.js';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
@@ -124,8 +129,9 @@ export const infoCommand = new Command('info')
       }
 
       // ── Component info mode ───────────────────────────────────────────────
+      const config = readConfig(cwd);
       const registrySpinner = ora('Loading registry...').start();
-      const registry = await fetchRegistry(options.registry);
+      const registry = await fetchRegistry(resolveRegistrySource(undefined, config, options.registry));
       const registryIndex = createRegistryIndex(registry);
       registrySpinner.stop();
 
@@ -140,7 +146,6 @@ export const infoCommand = new Command('info')
       }
 
       const component = toInstall.find((c) => c.name === componentName)!;
-      const config = readConfig(cwd);
       const componentBasePath = resolveComponentBasePath(cwd, options.path, config);
       const alreadyInstalled =
         isAngularProject(cwd) && existsSync(join(componentBasePath, component.name));
