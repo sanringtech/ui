@@ -16,7 +16,7 @@ import {
   type Registry,
   type RegistryComponent,
 } from '../registry.js';
-import { readConfig, resolveComponentBasePath } from '../utils.js';
+import { readConfig, resolveComponentBasePath, resolveRegistrySource } from '../utils.js';
 import { resolveInstallSet, collectPeerDeps } from './add.js';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
@@ -133,7 +133,10 @@ export interface CreateMcpServerOptions {
 }
 
 export function createMcpServer(options: CreateMcpServerOptions = {}): Server {
-  const registryUrl = options.registryUrl;
+  // No fixed project/cwd exists for a stdio MCP server (each tool call gets
+  // its own `cwd`), so there's no sanring.config.json to resolve an alias
+  // against here — this is purely the flagOverride case of resolveRegistrySource.
+  const registryUrl = resolveRegistrySource(undefined, null, options.registryUrl);
 
   const addComponent = options.addComponent ?? (({ name: componentName, cwd }: AddComponentToolInput): Promise<AddComponentToolResult> => {
     return new Promise((resolve) => {
