@@ -34,6 +34,26 @@ ng add @sanring/cli
 
 ---
 
+## Multiple registries
+
+`sanring.config.json` accepts two optional fields for pointing commands at a registry other than the official one, without repeating `--registry <url>` on every invocation:
+
+```json
+{
+  "componentPath": "src/app/components/ui",
+  "registries": {
+    "myteam": "https://registry.myteam.com"
+  },
+  "defaultRegistry": "myteam"
+}
+```
+
+- Both fields are opt-in — an existing config without them behaves exactly as before (official bundle, with GitHub fallback).
+- `defaultRegistry` must name a key in `registries`; every command that talks to a registry resolves it and uses that URL/path unless `--registry` is passed, which always wins.
+- Fetching a specific component from a *non-default* registry by name (`alias:componentName` syntax) is not yet supported — track progress in [ADR-0001](https://github.com/sanringtech/ui/blob/main/.claude/adrs/0001-multi-registry-support.md).
+
+---
+
 ## Commands
 
 ### `init`
