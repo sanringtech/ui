@@ -141,10 +141,18 @@ componentName         → 從 defaultRegistry 查找
 
 `sanring build` 的靜態分析範圍 spike 尚未進行，`componentDeps` 自動推斷準確率未知。建議在 Implementation Plan 執行前先做 1 天 spike，確認 TypeScript AST 或 `tsc --listFiles` 能否可靠地從 barrel export 推斷 component 間依賴。
 
+**Spike 結果（已完成，2026-08-10）**：用 TypeScript compiler API 掃 8 個既有元件（`button`/`tag`/`calendar`/`select`/`combobox`/`transfer`/`navigation-menu`/`date-picker`，涵蓋簡單/多依賴/深層 barrel/風格不一致等難度）的 import/export module specifier，分類成 `componentDep`（`../xxx`）/`sharedDep`（`../shared/xxx`）/`peerDependency`（裸套件名，排除 `@angular/core`/`rxjs` 等 baseline 套件），跟手寫 `registry.json` 逐欄位比對。**結論：可行**——24 個欄位 15 個完全吻合，其餘 9 個不吻合全部可歸因到 3 個已理解、可解決的原因，沒有「AST 真的看不出來」的案例：
+
+1. **遞移關係需要去重**：例如 `calendar` 直接 import `@angular/cdk`/`@angular/forms`，但這兩個套件已經透過 `componentDeps`（`popover`/`field`）在下游宣告過，手寫版不重複列——純逐檔案掃描抓不到「已被上游覆蓋」，需要多一輪跨整個 source 目錄的遞移閉包計算才能達到跟手寫版一樣精簡（不會是錯的，只是比手寫版囉唆）。這代表批次 D 的實作至少要分兩輪：(a) 逐檔案抽取原始 import 關係、(b) 對整批已知元件算遞移閉包後剪掉能被上游覆蓋的重複宣告。
+2. **baseline 套件排除清單**：`@angular/core`/`@angular/core/rxjs-interop`/`@angular/common`/`rxjs` 這類必然存在的套件，8 個樣本裡零誤判，是穩定可維護的做法。
+3. **手寫 `registry.json` 本身有 3 個既有真實 bug（spike 抓對、資料錯），已記錄在 TODOLIST.md P24，不在本 ADR 處理範圍**：`transfer` 元件 4 個檔案的 relative import 路徑寫錯、`navigation-menu` 漏宣告 `@lucide/angular` peerDependency、`tag`/`calendar`/`date-picker` 宣告了實際沒用到的 `component-styles` sharedDep。
+
+**對批次 D 範圍的影響**：可以基於此 spike 開 `.claude/charters/p9-sanring-build.md`，範圍應包含遞移閉包去重這一輪（見上），不能只做逐檔案掃描；`sanring build` 的演算法選型（原生 TS compiler API vs. `ts-morph`）與去重規則的精確定義，留給該 charter 定案。
+
 ### 相關連結
 
 - PRD: `.claude/prds/p9-multi-registry.md`（TODO，尚未建立）
 - 相關 ADR: （無）
-- POC code: （尚未進行 spike）
+- POC code: 一次性 spike script，未進版控（disposable，見上方 Spike 結果）
 - `fetchRegistry` 實作: `packages/cli/src/registry.ts`
 - `SanringConfig` 定義: `packages/cli/src/utils.ts`

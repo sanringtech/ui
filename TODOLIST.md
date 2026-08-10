@@ -12,7 +12,19 @@
 
 **現況**:`registries` alias → URL 設定與 `sanring add alias:componentName` 語法已完成(見 [DEVLOG.md](DEVLOG.md) 的 P9 段落),使用者現在可以手動維護自己的 `registry.json` 並透過 alias 安裝。缺的是「自動產生 registry.json」這一步——第三方目前得照 `Registry` schema 手寫,容易漏 `componentDeps`/`peerDependencies`。
 
-**待做前提**:[ADR-0001](.claude/adrs/0001-multi-registry-support.md) 已把這個指令標為批次 D、預設暫停,先決條件是花 1 天做 TypeScript AST 解析(`ts-morph`/compiler API/babel)可行性 spike,確認能否從 barrel export 可靠推斷 component 間依賴,再另立 `.claude/charters/p9-sanring-build.md`。
+**待做前提**:[ADR-0001](.claude/adrs/0001-multi-registry-support.md) 已把這個指令標為批次 D、預設暫停。先決條件的 1 天 TypeScript AST 可行性 spike **已完成(2026-08-10,結果記在 ADR-0001 的 Notes 段落)**:結論可行,但要包含跨整批元件算遞移閉包去重這一輪,不能只做逐檔案掃描。下一步是另立 `.claude/charters/p9-sanring-build.md` 分批實作。
+
+---
+
+## P24 — registry 內容 3 個真實 bug(P9 spike 副產品)
+
+- [ ] `transfer` 元件 4 個檔案(`transfer-action.directive.ts`/`transfer-item.component.ts`/`transfer-header.component.ts`/`transfer-panel.component.ts`)用 `'../../utils'`/`'../component-styles'`,跟其他元件統一的 `'../shared/utils'`/`'../shared/component-styles'` 不一致——使用者跑 `sanring add transfer` 裝出來的檔案,relative import 實際上會指到專案裡不存在的路徑,**編譯會壞**
+- [ ] `navigation-menu` 元件:`navigation-menu-sub-trigger.component.ts` 有 `import { LucideChevronRight } from '@lucide/angular'`,但 `registry.json` 的 `navigation-menu` 條目沒有把 `@lucide/angular` 列進 `peerDependencies`——沒裝過 lucide-angular 的專案跑 `sanring add navigation-menu` 會建置失敗
+- [ ] `tag`/`calendar`/`date-picker` 三個元件的 `registry.json` 都宣告了 `component-styles` 這個 sharedDep,但三者原始碼都沒有實際 import 它——無害,但會多裝一個沒用到的檔案
+
+**現況**:在做 P9 batch D 的 spike(用 TS compiler API 掃 import/export 跟 `registry.json` 比對)時當副產品發現,跟 P9 本身的多 registry 功能無關,是既有元件 registry 資料的既有問題。細節見 [ADR-0001](.claude/adrs/0001-multi-registry-support.md) Notes 段落的 spike 結果。
+
+**成本**:低。前兩個是明確的路徑/宣告修正,改完要重新確認對應元件的 `sanring add` 安裝後能不能編譯過;第三個是刪掉多餘宣告,零風險。
 
 ---
 
