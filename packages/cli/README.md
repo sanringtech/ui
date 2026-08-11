@@ -246,6 +246,57 @@ agent at the compiled entry:
 
 ---
 
+### `build`
+
+Generate a `registry.json` and matching file layout from your own Angular component source tree. Intended for teams who want to publish a private registry that `sanring add` can consume — the output format is the same schema the official Sanring UI registry uses.
+
+```bash
+npx @sanring/cli@latest build --source ./components --out ./dist-registry
+```
+
+**Source tree layout expected by `build`:**
+
+```
+your-library/
+├── components/          ← pass this to --source
+│   ├── button/
+│   │   └── button.component.ts
+│   └── card/
+│       └── card.component.ts
+└── shared/              ← sibling of components/, optional
+    └── utils.ts
+```
+
+The scanner reads every `.ts` file in each component subdirectory (excluding `*.spec.ts`, `*.test.ts`, `*.stories.ts`), classifies import/export specifiers, and derives:
+
+- **`componentDeps`** — relative imports that resolve to another component subdirectory (e.g. `../badge`)
+- **`sharedDeps`** — relative imports under `../shared/` (e.g. `../shared/utils`)
+- **`peerDependencies`** — all other bare package imports (e.g. `@angular/cdk/overlay` → `@angular/cdk`), with version specs resolved from your `package.json`
+
+Peer dependency versions are resolved from your own `package.json` (`dependencies` → `devDependencies` → `peerDependencies`). If a package is imported but not listed in any of those, `build` exits with an error before writing any output.
+
+Options:
+
+| Flag | Description | Default |
+|---|---|---|
+| `-s, --source <path>` | Directory containing your component subdirectories | `./components` |
+| `-o, --out <path>` | Output directory for `registry.json` and copied files | `./dist-registry` |
+| `-n, --name <name>` | Registry name (falls back to `package.json` `"name"`) | — |
+| `--dry-run` | Preview what would be written without writing any files | `false` |
+
+Once built, host `dist-registry/` statically and point consumers at it:
+
+```json
+{
+  "registries": {
+    "myteam": "https://registry.myteam.com"
+  },
+  "defaultRegistry": "myteam"
+}
+```
+
+---
+
 ## Requirements
 
 - Node.js >= 18
