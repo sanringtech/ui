@@ -21,8 +21,8 @@ import {
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR, NgControl, Validators } from '@angular/forms';
 import { Observable, Subject } from 'rxjs';
-import { cn, uniqueId } from '../../utils';
-import { FIELD_SIZE_CLASS } from '../component-styles';
+import { cn, uniqueId } from '../shared/utils';
+import { FIELD_SIZE_CLASS } from '../shared/component-styles';
 import { FieldType, SANRING_FIELD_CONTROL, SanringFieldControl } from '../field/field.type';
 import { OTP_INPUT_ROOT, OtpInputRootContext } from './otp-input.context';
 import { OtpInputSeparatorComponent } from './otp-input-separator.component';

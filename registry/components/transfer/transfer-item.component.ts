@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, computed, inject, input } from '@angular/core';
-import { cn } from '../../utils';
+import { cn } from '../shared/utils';
 import { CheckboxComponent } from '../checkbox/checkbox.component';
-import { COLLECTION_ITEM_DISABLED_CLASS } from '../component-styles';
+import { COLLECTION_ITEM_DISABLED_CLASS } from '../shared/component-styles';
 import { TransferPanelComponent } from './transfer-panel.component';
 import { TransferItem } from './transfer.type';
 

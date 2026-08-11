@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, booleanAttribute, computed, inject, input } from '@angular/core';
-import { cn } from '../../utils';
+import { cn } from '../shared/utils';
 import { TransferPanelComponent } from './transfer-panel.component';
 
 @Component({

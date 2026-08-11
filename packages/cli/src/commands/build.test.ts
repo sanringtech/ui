@@ -161,19 +161,11 @@ describe('buildCommand (integration)', () => {
   // Reproduces the charter's batch C verification requirement: run the real
   // scanner over this repo's own registry/components + registry/shared and
   // diff the output against the hand-maintained registry.json.
-  //
-  // SKIPPED (see TODOLIST P24): running this against all 53 real components
-  // (not just the ADR-0001 spike's 8-component sample) disproved batch B's
-  // core premise. `calendar`'s peerDependency transitive dedup — the one
-  // example the spike generalized from — turns out to be the exception, not
-  // the convention: at least 13 other components (checkbox, input, radio,
-  // select, combobox, alert-dialog, command, ...) redundantly re-declare a
-  // peerDependency their own componentDeps already cover, and registry.json
-  // treats that as correct. computeUpstreamPeerCoverage/dedupePeerDependencies
-  // need to be reworked (most likely: dropped) before this test can pass —
-  // tracked in TODOLIST P24, not fixed here without sign-off since it
-  // reverses an ADR-0001/charter-documented design decision.
-  it.skip('golden fixture: matches registry.json exactly, except the 3 known TODOLIST P24 bugs', async () => {
+  // P9 batch B (peerDep transitive dedup) was dropped — see DEVLOG P9 — and
+  // P24 bugs (transfer imports, accordion/collapsible/navigation-menu peerDeps,
+  // component-styles over-declarations) were fixed alongside, so this test
+  // now runs against the corrected registry.json with no known mismatches.
+  it('golden fixture: scanner output matches registry.json', async () => {
     const registryPackageJson = {
       name: 'golden-fixture-registry',
       dependencies: {
@@ -200,20 +192,7 @@ describe('buildCommand (integration)', () => {
     const handWritten = JSON.parse(readFileSync(REGISTRY_JSON_PATH, 'utf-8')) as Registry;
     const handByName = new Map(handWritten.components.map((c) => [c.name, c]));
 
-    const KNOWN_MISMATCHES: Record<string, { componentDeps?: true; sharedDeps?: true; peerDependencies?: true }> = {
-      // TODOLIST P24: 4 files use '../../utils'/'../component-styles' instead
-      // of '../shared/utils'/'../shared/component-styles' — the scan can't
-      // find the (mis-referenced) 'utils' shared dep.
-      transfer: { sharedDeps: true },
-      // TODOLIST P24: navigation-menu-sub-trigger.component.ts imports
-      // @lucide/angular but registry.json never declared it.
-      'navigation-menu': { peerDependencies: true },
-      // TODOLIST P24: registry.json declares an unused component-styles
-      // sharedDep these 3 components never actually import.
-      tag: { sharedDeps: true },
-      calendar: { sharedDeps: true },
-      'date-picker': { sharedDeps: true },
-    };
+    const KNOWN_MISMATCHES: Record<string, { componentDeps?: true; sharedDeps?: true; peerDependencies?: true }> = {};
 
     const unexpectedDiffs: string[] = [];
 
@@ -251,7 +230,5 @@ describe('buildCommand (integration)', () => {
     }
 
     expect(unexpectedDiffs).toEqual([]);
-    // Sanity check the exclusion list itself is still exercised, not dead weight.
-    expect(Object.keys(KNOWN_MISMATCHES).length).toBeGreaterThan(0);
   });
 });

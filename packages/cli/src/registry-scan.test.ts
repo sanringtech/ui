@@ -4,18 +4,15 @@ import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { describe, expect, it } from 'vitest';
 import {
-  buildComponentDepGraph,
+  canonicalizePeerDependencies,
   canonicalizePackageName,
   classifyModuleSpecifier,
   classifyModuleSpecifiers,
-  computeUpstreamPeerCoverage,
-  dedupePeerDependencies,
   discoverComponentSources,
   discoverSharedSources,
   extractDescription,
   filterBaselinePackages,
   resolvePeerDependencyVersion,
-  type ScannedComponent,
   validateReferencedTargets,
 } from './registry-scan.js';
 
@@ -123,7 +120,7 @@ describe('classifyModuleSpecifiers', () => {
     expect(classifications).toContainEqual({ kind: 'internal' });
   });
 
-  it('classifies calendar.component.ts peerDependency candidates (dedup is batch B, not here)', () => {
+  it('classifies calendar.component.ts peerDependency candidates', () => {
     const content = readFileSync(
       join(REGISTRY_COMPONENTS_DIR, 'calendar/calendar.component.ts'),
       'utf-8',
@@ -241,74 +238,20 @@ describe('canonicalizePackageName', () => {
   });
 });
 
-describe('buildComponentDepGraph', () => {
-  it('maps each component name to its componentDeps', () => {
-    const components: ScannedComponent[] = [
-      { name: 'tag', componentDeps: ['badge'], rawPeerDependencyCandidates: [] },
-      { name: 'badge', componentDeps: [], rawPeerDependencyCandidates: [] },
-    ];
-    const graph = buildComponentDepGraph(components);
-    expect(graph.get('tag')).toEqual(['badge']);
-    expect(graph.get('badge')).toEqual([]);
+describe('canonicalizePeerDependencies', () => {
+  it('canonicalizes and deduplicates submodule imports from the same package', () => {
+    expect(canonicalizePeerDependencies(['@angular/cdk/overlay', '@angular/cdk/a11y'])).toEqual(['@angular/cdk']);
   });
-});
 
-describe('computeUpstreamPeerCoverage', () => {
-  it('collects canonicalized peerDeps from every reachable upstream component, excluding self', () => {
-    const graph = new Map([
-      ['calendar', ['button', 'field', 'popover']],
-      ['button', []],
-      ['field', []],
-      ['popover', []],
+  it('returns all packages sorted, including ones also declared by componentDeps', () => {
+    const result = canonicalizePeerDependencies([
+      '@lucide/angular', '@sanring/date-picker-core', '@angular/cdk/a11y', '@angular/forms',
     ]);
-    const rawPeerDeps = new Map([
-      ['calendar', ['@lucide/angular', '@sanring/date-picker-core', '@angular/cdk/a11y', '@angular/forms']],
-      ['button', []],
-      ['field', ['@angular/forms']],
-      ['popover', ['@angular/cdk/overlay', '@angular/cdk/a11y']],
-    ]);
-
-    const coverage = computeUpstreamPeerCoverage('calendar', graph, rawPeerDeps);
-    expect(coverage).toEqual(new Set(['@angular/forms', '@angular/cdk']));
+    expect(result).toEqual(['@angular/cdk', '@angular/forms', '@lucide/angular', '@sanring/date-picker-core']);
   });
 
-  it('is cycle-safe: a componentDep cycle is visited once, not infinitely', () => {
-    const graph = new Map([
-      ['select', ['listbox']],
-      ['listbox', ['select']],
-    ]);
-    const rawPeerDeps = new Map([
-      ['select', []],
-      ['listbox', ['@angular/cdk/overlay']],
-    ]);
-
-    const coverage = computeUpstreamPeerCoverage('select', graph, rawPeerDeps);
-    expect(coverage).toEqual(new Set(['@angular/cdk']));
-  });
-
-  it('returns an empty set for a component with no componentDeps', () => {
-    const graph = new Map([['button', []]]);
-    const rawPeerDeps = new Map([['button', []]]);
-    expect(computeUpstreamPeerCoverage('button', graph, rawPeerDeps)).toEqual(new Set());
-  });
-});
-
-describe('dedupePeerDependencies', () => {
-  it('drops canonical names already covered upstream', () => {
-    const result = dedupePeerDependencies(
-      ['@lucide/angular', '@sanring/date-picker-core', '@angular/cdk/a11y', '@angular/forms'],
-      new Set(['@angular/forms', '@angular/cdk']),
-    );
-    expect(result).toEqual(['@lucide/angular', '@sanring/date-picker-core']);
-  });
-
-  it('deduplicates repeated raw candidates that canonicalize to the same package', () => {
-    const result = dedupePeerDependencies(['@angular/cdk/overlay', '@angular/cdk/a11y'], new Set());
-    expect(result).toEqual(['@angular/cdk']);
-  });
-
-  it('keeps everything when nothing is covered upstream', () => {
-    expect(dedupePeerDependencies(['@lucide/angular'], new Set())).toEqual(['@lucide/angular']);
+  it('returns [] for an empty input', () => {
+    expect(canonicalizePeerDependencies([])).toEqual([]);
   });
 });
 
@@ -345,54 +288,3 @@ describe('resolvePeerDependencyVersion', () => {
   });
 });
 
-// Reproduces the exact case the ADR-0001 spike used to justify batch B's
-// existence: calendar imports @angular/cdk/@angular/forms directly, but
-// registry.json doesn't list them as calendar's peerDeps because popover/
-// field (calendar's componentDeps) already declare them. A scanner that
-// skips this transitive-closure pass would over-declare — not wrong, but
-// not matching the hand-maintained convention either.
-describe('golden fixture: calendar peerDependency dedup (ADR-0001 spike case)', () => {
-  function scanComponent(name: string, knownComponentNames: ReadonlySet<string>): ScannedComponent {
-    const source = discoverComponentSources(REGISTRY_COMPONENTS_DIR).find((c) => c.name === name)!;
-    const componentDepCandidates: string[] = [];
-    const rawPeerDependencyCandidates: string[] = [];
-
-    for (const file of source.files) {
-      const content = readFileSync(file, 'utf-8');
-      for (const classification of classifyModuleSpecifiers(content)) {
-        if (classification.kind === 'componentDep') componentDepCandidates.push(classification.name);
-        if (classification.kind === 'peerDependencyCandidate') {
-          rawPeerDependencyCandidates.push(
-            ...filterBaselinePackages([classification]),
-          );
-        }
-      }
-    }
-
-    const { componentDeps } = validateReferencedTargets(
-      componentDepCandidates,
-      [],
-      knownComponentNames,
-      new Set(),
-    );
-
-    return { name, componentDeps, rawPeerDependencyCandidates };
-  }
-
-  it('calendar peerDependencies match registry.json exactly after dedup', () => {
-    const knownComponentNames = new Set(['calendar', 'button', 'field', 'popover']);
-    const components = ['calendar', 'button', 'field', 'popover'].map((name) =>
-      scanComponent(name, knownComponentNames),
-    );
-    const graph = buildComponentDepGraph(components);
-    const rawPeerDepsByComponent = new Map(
-      components.map((c) => [c.name, c.rawPeerDependencyCandidates]),
-    );
-
-    const calendar = components.find((c) => c.name === 'calendar')!;
-    const coverage = computeUpstreamPeerCoverage('calendar', graph, rawPeerDepsByComponent);
-    const finalPeerDeps = dedupePeerDependencies(calendar.rawPeerDependencyCandidates, coverage);
-
-    expect(finalPeerDeps).toEqual(['@lucide/angular', '@sanring/date-picker-core']);
-  });
-});

@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, computed, inject, input, signal } from '@angular/core';
-import { cn } from '../../utils';
+import { cn } from '../shared/utils';
 import { CheckedState } from '../checkbox/checkbox.types';
 import { TransferComponent } from './transfer.component';
 import { TransferDirection } from './transfer.type';

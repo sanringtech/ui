@@ -9,10 +9,8 @@ import {
   validateRegistry,
 } from '../registry.js';
 import {
-  buildComponentDepGraph,
+  canonicalizePeerDependencies,
   classifyModuleSpecifiers,
-  computeUpstreamPeerCoverage,
-  dedupePeerDependencies,
   discoverComponentSources,
   discoverSharedSources,
   extractDescription,
@@ -21,7 +19,6 @@ import {
   validateReferencedTargets,
   type PackageJsonLike,
   type ResolvedVersion,
-  type ScannedComponent,
 } from '../registry-scan.js';
 
 interface CwdPackageJson extends PackageJsonLike {
@@ -39,10 +36,7 @@ function readCwdPackageJson(cwd: string): CwdPackageJson | null {
 }
 
 // Raw import/export scan for one component: every file's specifiers,
-// classified and baseline-filtered, but not yet validated against known
-// targets or deduped against componentDeps — that happens once every
-// component has been scanned (batch B's transitive dedup needs the whole
-// graph up front).
+// classified and baseline-filtered, not yet validated against known targets.
 interface RawComponentScan {
   name: string;
   files: string[];
@@ -130,10 +124,9 @@ export const buildCommand = new Command('build')
     const rawComponents = discoveredComponents.map((c) => scanRawComponent(c.name, c.dir, c.files));
     const rawShared = discoveredShared.map((s) => scanRawShared(s.name, s.file));
 
-    // Validate componentDeps/sharedDeps against what was actually discovered
-    // before building the dependency graph batch B's dedup needs — an
-    // unvalidated candidate could otherwise poison the transitive closure
-    // with a component that doesn't exist.
+    // Validate componentDeps/sharedDeps against what was actually discovered —
+    // an unvalidated candidate would otherwise silently ship a dangling
+    // reference that breaks sanring add's resolveInstallSet lookups.
     const validated = new Map(
       rawComponents.map((raw) => [
         raw.name,
@@ -159,21 +152,10 @@ export const buildCommand = new Command('build')
       }
     }
 
-    const scannedComponents: ScannedComponent[] = rawComponents.map((raw) => ({
-      name: raw.name,
-      componentDeps: validated.get(raw.name)!.componentDeps,
-      rawPeerDependencyCandidates: raw.rawPeerDependencyCandidates,
-    }));
-    const graph = buildComponentDepGraph(scannedComponents);
-    const rawPeerDepsByComponent = new Map(
-      scannedComponents.map((c) => [c.name, c.rawPeerDependencyCandidates]),
-    );
-
     const unresolved = new Set<string>();
 
     const components: RegistryComponent[] = rawComponents.map((raw) => {
-      const coverage = computeUpstreamPeerCoverage(raw.name, graph, rawPeerDepsByComponent);
-      const finalPeerPackages = dedupePeerDependencies(raw.rawPeerDependencyCandidates, coverage);
+      const finalPeerPackages = canonicalizePeerDependencies(raw.rawPeerDependencyCandidates);
       const peerDependencies = resolveVersions(finalPeerPackages, cwdPackageJson, unresolved);
       const v = validated.get(raw.name)!;
 
@@ -189,10 +171,7 @@ export const buildCommand = new Command('build')
     });
 
     const shared: RegistryShared[] = rawShared.map((raw) => {
-      // Shared entries have no componentDeps of their own, so there's
-      // nothing upstream to dedup against — reuse dedupePeerDependencies
-      // purely for its canonicalize+sort behavior.
-      const finalPeerPackages = dedupePeerDependencies(raw.rawPeerDependencyCandidates, new Set());
+      const finalPeerPackages = canonicalizePeerDependencies(raw.rawPeerDependencyCandidates);
       const peerDependencies = resolveVersions(finalPeerPackages, cwdPackageJson, unresolved);
 
       const entry: RegistryShared = {
