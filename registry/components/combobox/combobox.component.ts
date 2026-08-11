@@ -1,10 +1,6 @@
 import {
   ChangeDetectionStrategy,
   Component,
-  DestroyRef,
-  ElementRef,
-  Injector,
-  OnInit,
   computed,
   contentChildren,
   effect,
@@ -15,11 +11,12 @@ import {
   signal,
   untracked,
 } from '@angular/core';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { ControlValueAccessor, NG_VALUE_ACCESSOR, NgControl, Validators } from '@angular/forms';
-import { Observable, Subject } from 'rxjs';
+import { ElementRef } from '@angular/core';
+import { NG_VALUE_ACCESSOR } from '@angular/forms';
+import { Observable } from 'rxjs';
 import { cn, uniqueId } from '../shared/utils';
-import { FieldType, SanringFieldControl, SANRING_FIELD_CONTROL } from '../field/field.type';
+import { SanringCvaBase } from '../shared/cva-base';
+import { FieldType, SANRING_FIELD_CONTROL, SanringFieldControl } from '../field/field.type';
 import { CollectionController } from '../shared/collection-controller';
 import { ComboboxItemComponent } from './combobox-item.component';
 
@@ -43,6 +40,7 @@ type ComboboxValue = string | string[] | null;
     },
     // value/disabled 已經被同名 @Input (model()/input()) 佔用，跟 checkbox 一樣改用
     // useFactory 產生轉接的 adapter 物件，而不是讓 ComboboxComponent 自己 implements。
+    // inputId (not a signal) is used as the field id, so this uses its own adapter.
     {
       provide: SANRING_FIELD_CONTROL,
       useFactory: (host: ComboboxComponent) => new ComboboxFieldControlAdapter(host),
@@ -50,9 +48,8 @@ type ComboboxValue = string | string[] | null;
     },
   ],
 })
-export class ComboboxComponent implements ControlValueAccessor, OnInit {
+export class ComboboxComponent extends SanringCvaBase<ComboboxValue> {
   private readonly elementRef = inject<ElementRef<HTMLElement>>(ElementRef);
-  private readonly injector = inject(Injector);
 
   readonly inputId = uniqueId('sanring-combobox-input');
   readonly listId = uniqueId('sanring-combobox-list');
@@ -73,7 +70,7 @@ export class ComboboxComponent implements ControlValueAccessor, OnInit {
   readonly searchQuery = signal<string>('');
 
   private readonly items = contentChildren(ComboboxItemComponent, { descendants: true });
-  private readonly collection = new CollectionController(this.items, this.injector);
+  private readonly collection = new CollectionController(this.items, this._injector);
 
   readonly activeItemId = this.collection.activeItemId;
   readonly visibleCount = this.collection.visibleCount;
@@ -87,7 +84,6 @@ export class ComboboxComponent implements ControlValueAccessor, OnInit {
     return this.items().find((item) => item.value() === current)?.getLabel() ?? current;
   });
 
-  private readonly disabledState = signal(false);
   readonly isDisabled = computed(() => this.disabled() || this.disabledState());
 
   protected readonly hostClass = computed(() =>
@@ -98,47 +94,26 @@ export class ComboboxComponent implements ControlValueAccessor, OnInit {
     ),
   );
 
-  // ==========================================
-  // Field 整合：value/disabled 已經被同名 @Input 佔用，走下面的 fieldXxx getter，
-  // 由 ComboboxFieldControlAdapter 轉接成 SanringFieldControl 介面。
-  // ==========================================
-  readonly controlType = FieldType.input;
-  focused = false;
-  ngControl: NgControl | null = null;
-
-  private readonly destroyRef = inject(DestroyRef);
-  private readonly stateChangesSubject = new Subject<void>();
-  readonly stateChanges: Observable<void> = this.stateChangesSubject.asObservable();
-  private readonly stateVersion = signal(0);
-  private readonly fieldDescribedByIds = signal<string[]>([]);
-
-  readonly computedAriaDescribedBy = computed(() => {
-    const ids = [...this.fieldDescribedByIds()].filter((v): v is string => !!v);
-    return ids.length ? ids.join(' ') : undefined;
-  });
-
-  get errorState(): boolean {
-    this.stateVersion();
-    return !!(this.ngControl?.invalid && this.ngControl?.touched);
-  }
+  readonly computedAriaDescribedBy = this.makeComputedAriaDescribedBy();
 
   get fieldValue(): ComboboxValue {
     return this.value();
+  }
+
+  get fieldEmpty(): boolean {
+    return !this.hasValue();
   }
 
   get fieldDisabled(): boolean {
     return this.isDisabled();
   }
 
-  get fieldRequired(): boolean {
-    this.stateVersion();
-    return this.required() || !!this.ngControl?.control?.hasValidator(Validators.required);
+  protected override hasInputRequired(): boolean {
+    return this.required();
   }
 
-  private onChange: (value: ComboboxValue) => void = () => {};
-  private onTouched: () => void = () => {};
-
   constructor() {
+    super();
     effect(() => {
       this.searchQuery();
       const visible = this.collection.focusableItems();
@@ -146,19 +121,6 @@ export class ComboboxComponent implements ControlValueAccessor, OnInit {
         if (visible.length > 0) this.collection.ensureActiveItem();
       });
     });
-
-    this.destroyRef.onDestroy(() => this.stateChangesSubject.complete());
-  }
-
-  ngOnInit(): void {
-    // 跟 checkbox 一樣的原因：constructor 階段 self-inject NgControl 會跟 NgModel 搭配時
-    // 觸發 NG0200 循環依賴（本元件同時透過 NG_VALUE_ACCESSOR 註冊自己），延後到 ngOnInit 才拿。
-    this.ngControl = this.injector.get(NgControl, null, { optional: true, self: true });
-    // 不能只聽 statusChanges——markAsTouched() 不會觸發它，改聽 control.events（Angular
-    // v18+ 公開 API）才能在 markAllAsTouched() 這類外部呼叫時正確更新 errorState。
-    this.ngControl?.control?.events
-      ?.pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe(() => this.emitStateChanges());
   }
 
   toggleOpen(state?: boolean) {
@@ -261,34 +223,14 @@ export class ComboboxComponent implements ControlValueAccessor, OnInit {
     this.elementRef.nativeElement.querySelector<HTMLElement>('input, [role="combobox"]')?.focus(options);
   }
 
-  setDescribedByIds(ids: string[]): void {
-    this.fieldDescribedByIds.set(ids);
-  }
-
   // --- ControlValueAccessor 介面實作 ---
-  writeValue(value: ComboboxValue): void {
+  override writeValue(value: ComboboxValue): void {
     this.value.set(value);
-  }
-
-  registerOnChange(fn: (value: ComboboxValue) => void): void {
-    this.onChange = fn;
-  }
-
-  registerOnTouched(fn: () => void): void {
-    this.onTouched = fn;
-  }
-
-  setDisabledState(isDisabled: boolean): void {
-    this.disabledState.set(isDisabled);
-    this.emitStateChanges();
-  }
-
-  private emitStateChanges(): void {
-    this.stateVersion.update((v) => v + 1);
-    this.stateChangesSubject.next();
   }
 }
 
+// combobox uses inputId (a plain string) as its field id, not an input() signal, so it
+// cannot use SanringFieldControlAdapter and keeps its own slim adapter.
 class ComboboxFieldControlAdapter implements SanringFieldControl<ComboboxValue> {
   readonly controlType = FieldType.input;
 
@@ -303,7 +245,7 @@ class ComboboxFieldControlAdapter implements SanringFieldControl<ComboboxValue> 
   }
 
   get empty(): boolean {
-    return !this.host.hasValue();
+    return this.host.fieldEmpty;
   }
 
   get focused(): boolean {
@@ -322,7 +264,7 @@ class ComboboxFieldControlAdapter implements SanringFieldControl<ComboboxValue> 
     return this.host.fieldRequired;
   }
 
-  get ngControl(): NgControl | null {
+  get ngControl() {
     return this.host.ngControl;
   }
 

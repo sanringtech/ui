@@ -46,11 +46,9 @@
 
 ## P14 — CVA adapter 重複邏輯尚未收斂
 
-- [ ] 9 個表單元件(`checkbox`/`switch`/`radio-group`/`slider`/`otp-input`/`date-picker`/`calendar`/`file-upload`/`combobox`)各自重複一份幾乎逐字相同的 `XxxFieldControlAdapter` + CVA state-bridge 邏輯(約 500–600 行複製貼上),`shared/` 目錄目前沒有對應抽象
+- [x] 9 個表單元件(`checkbox`/`switch`/`radio-group`/`slider`/`otp-input`/`date-picker`/`calendar`/`file-upload`/`combobox`)各自重複一份幾乎逐字相同的 `XxxFieldControlAdapter` + CVA state-bridge 邏輯(約 500–600 行複製貼上),`shared/` 目錄目前沒有對應抽象
 
-**現況**:OnPush 清理、CDK Overlay 生命週期共用、`resizable` 型別斷言三項已修完(見 [DEVLOG.md](DEVLOG.md) 的 P14 段落),僅剩這項。範圍最大,建議等有新表單元件加入或有明確 bug/效能動機時再做,不建議純粹為了 DRY 就大動表單核心邏輯。
-
-**成本**:高。牽涉 9 個檔案的表單核心邏輯,改完要重新驗證每個元件的 Angular Forms 整合沒有壞掉。
+**完成**:建立 `shared/cva-base.ts`，包含 `SanringCvaBase<T>` 抽象基底類別與 `SanringFieldControlAdapter<T>` 泛型轉接器。9 個元件全數改為 `extends SanringCvaBase`，移除各自的 `XxxFieldControlAdapter` 類別。golden fixture test 通過。
 
 ---
 

@@ -124,6 +124,14 @@
       "peerDependencies": {
         "@angular/cdk": "^22.0.0"
       }
+    },
+    {
+      "name": "cva-base",
+      "description": "Abstract base class and generic field-control adapter shared by all Sanring form components (ControlValueAccessor + SanringFieldControl bridge)",
+      "file": "shared/cva-base.ts",
+      "peerDependencies": {
+        "@angular/forms": "^22.0.0"
+      }
     }
   ],
   "components": [
@@ -267,6 +275,7 @@
       "name": "calendar",
       "description": "A date field grid that allows users to select a single date or range.",
       "sharedDeps": [
+        "cva-base",
         "utils"
       ],
       "componentDeps": [
@@ -293,6 +302,7 @@
       "name": "date-picker",
       "description": "A Month/Quarter/Year picker for single, range, or multi selection.",
       "sharedDeps": [
+        "cva-base",
         "utils"
       ],
       "componentDeps": [
@@ -334,8 +344,9 @@
       "name": "checkbox",
       "description": "A control that allows the user to toggle between checked and not checked.",
       "sharedDeps": [
-        "utils",
-        "component-styles"
+        "component-styles",
+        "cva-base",
+        "utils"
       ],
       "componentDeps": [
         "field"
@@ -424,6 +435,7 @@
       "name": "file-upload",
       "description": "Headless file selection primitives with drag-and-drop, trigger composition, validation, and file item rendering.",
       "sharedDeps": [
+        "cva-base",
         "utils"
       ],
       "componentDeps": [
@@ -543,8 +555,9 @@
       "name": "radio",
       "description": "A set of checkable buttons where no more than one can be checked at a time.",
       "sharedDeps": [
-        "utils",
-        "component-styles"
+        "component-styles",
+        "cva-base",
+        "utils"
       ],
       "componentDeps": [
         "field"
@@ -649,8 +662,9 @@
       "name": "slider",
       "description": "A range control for selecting a numeric value.",
       "sharedDeps": [
-        "utils",
-        "component-styles"
+        "component-styles",
+        "cva-base",
+        "utils"
       ],
       "componentDeps": [
         "field"
@@ -720,8 +734,9 @@
       "name": "switch",
       "description": "A control that allows the user to toggle between checked and not checked.",
       "sharedDeps": [
-        "utils",
-        "component-styles"
+        "component-styles",
+        "cva-base",
+        "utils"
       ],
       "componentDeps": [
         "field"
@@ -981,10 +996,11 @@
       "name": "combobox",
       "description": "An autocomplete input with a filterable list of suggestions.",
       "sharedDeps": [
-        "utils",
-        "component-styles",
         "collection-controller",
-        "collection-state"
+        "collection-state",
+        "component-styles",
+        "cva-base",
+        "utils"
       ],
       "componentDeps": [
         "field"
@@ -1122,8 +1138,9 @@
       "name": "otp-input",
       "description": "A one-time password input with individual character slots, keyboard navigation, and paste support.",
       "sharedDeps": [
-        "utils",
-        "component-styles"
+        "component-styles",
+        "cva-base",
+        "utils"
       ],
       "componentDeps": [
         "field"
