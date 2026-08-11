@@ -172,17 +172,22 @@
 
 ---
 
-## P14 — UI lib 效能與重複邏輯優化(部分完成)
+## P14 — UI lib 效能與重複邏輯優化
 
 - [x] 約 4 成元件(實測 162 個 `@Component` 檔案中有 69 個)未明確設定 `ChangeDetectionStrategy.OnPush`,包含 `select`、`switch`、`combobox`、`command`、`tabs`、`tree`、`tooltip`、`dropdown-menu` 等已經是 signals-based 寫法的元件,等於沒拿到 OnPush 的效能紅利
 - [x] `navigation-menu-sub-content`/`context-menu-sub-content`/`context-menu-content` 三個元件各自手刻幾乎相同的 CDK Overlay 生命週期邏輯(建立/attach/detach `OverlayRef`、`outsidePointerEvents`/`keydownEvents` 訂閱、destroy 清理),約 50–60 行重複 3 次
 - [x] `resizable/resizable.utils.ts:75` 的 `Array.from(groupElement.children) as HTMLElement[]` 是沒有 runtime guard 的型別斷言(`children` 是 `HTMLCollection`,假設全部是 `HTMLElement`,一般成立但沒檢查)
+- [x] 9 個表單元件(`checkbox`/`switch`/`radio-group`/`slider`/`otp-input`/`date-picker`/`calendar`/`file-upload`/`combobox`)各自重複一份幾乎逐字相同的 `XxxFieldControlAdapter` + CVA state-bridge 邏輯(約 500–600 行複製貼上)
 
 **現況**:2026-08-06 code review(人工抽查 12–15 個代表性元件 + `shared/` 全目錄,並用 grep 驗證 OnPush 覆蓋率數字)發現的落差。已確認乾淨、不用動的部分:`components/` 裡沒有 `any`、沒有殘留的舊式 `@Input()`/`@Output()` decorator(全部是 signal-based)、`cn()`/`uniqueId()` 已統一在 `utils.ts`、所有 `.subscribe()` 都有正確清理(`takeUntilDestroyed` 或隨 `overlayRef.dispose()` complete)、`package.json` 依賴合理無大材小用。
 
-**已完成**:OnPush 清理:全部 162 個 `@Component` 現在都設了 `ChangeDetectionStrategy.OnPush`(packages/ui + registry 雙向同步),同時修正 registry `context-menu-content`/`context-menu-sub-content` 之前缺漏的方向鍵導覽(`ArrowDown`/`ArrowUp` → `focusAdjacentMenuItem`)與 `menu-navigation` sharedDep。Overlay 生命週期抽共用 class:新增 `packages/ui/src/lib/components/shared/menu-overlay-controller.ts`(`MenuOverlayController`)與對應的 `registry/shared/menu-overlay-controller.ts`。三個 content 元件(`context-menu-content`、`context-menu-sub-content`、`navigation-menu-sub-content`)各自從 ~50 行手刻邏輯改為直接用 `MenuOverlayController`,兩種 origin 型別(`{x,y}` 座標 vs `ElementRef`)均支援;registry.json 新增 `menu-overlay-controller` shared 條目並更新 context-menu/navigation-menu 的 `sharedDeps`。`resizable.utils.ts` 型別斷言改成 `.filter((el): el is HTMLElement => el instanceof HTMLElement)`,移除 unsafe cast。
+**已完成(第一批)**:OnPush 清理:全部 162 個 `@Component` 現在都設了 `ChangeDetectionStrategy.OnPush`(packages/ui + registry 雙向同步),同時修正 registry `context-menu-content`/`context-menu-sub-content` 之前缺漏的方向鍵導覽(`ArrowDown`/`ArrowUp` → `focusAdjacentMenuItem`)與 `menu-navigation` sharedDep。Overlay 生命週期抽共用 class:新增 `packages/ui/src/lib/components/shared/menu-overlay-controller.ts`(`MenuOverlayController`)與對應的 `registry/shared/menu-overlay-controller.ts`。三個 content 元件(`context-menu-content`、`context-menu-sub-content`、`navigation-menu-sub-content`)各自從 ~50 行手刻邏輯改為直接用 `MenuOverlayController`,兩種 origin 型別(`{x,y}` 座標 vs `ElementRef`)均支援;registry.json 新增 `menu-overlay-controller` shared 條目並更新 context-menu/navigation-menu 的 `sharedDeps`。`resizable.utils.ts` 型別斷言改成 `.filter((el): el is HTMLElement => el instanceof HTMLElement)`,移除 unsafe cast。
 
-**尚未完成**:9 個表單元件(`checkbox`/`switch`/`radio-group`/`slider`/`otp-input`/`date-picker`/`calendar`/`file-upload`/`combobox`)各自重複一份幾乎逐字相同的 `XxxFieldControlAdapter` + CVA state-bridge 邏輯(約 500–600 行複製貼上)還沒收斂,追蹤在 `TODOLIST.md` P14。
+**已完成(第二批,2026-08-11)**:CVA adapter 重複邏輯收斂。建立 `registry/shared/cva-base.ts`,包含：
+- `SanringCvaBase<T>`：抽象基底類別，集中所有 CVA 共用狀態(`focused`、`ngControl`、`disabledState`、`stateChanges`、`onChange`/`onTouched`)、生命週期(`ngOnInit` 裡延後 self-inject `NgControl` 避免 NG0200 循環依賴)、`errorState`/`fieldRequired` getter（用 `_stateVersion` signal 把非 signal 的 `ngControl.invalid/touched` 橋接進 signal graph）、`makeComputedAriaDescribedBy(signal?)` 合併外部 `ariaDescribedBy` input 與 `Field` 注入 ID、`onFocus()`/`onBlur()` 標準實作。
+- `SanringFieldControlAdapter<T>`：泛型轉接器，接受 `SanringCvaHost<T>` 介面實作 `SanringFieldControl<T>`,取代 9 個 per-component `XxxFieldControlAdapter` 類別。
+
+9 個元件全數改為 `extends SanringCvaBase<T>`,移除各自的共用 boilerplate（約 1,200 行）。三個設計變異點：(1) 有 `required` input 的 7 個元件覆寫 `protected hasInputRequired()` hook；(2) 沒有 `ariaDescribedBy` input 的 `switch`/`combobox` 呼叫 `makeComputedAriaDescribedBy()` 無參數版；(3) `file-upload` 的 `errorState` 額外計入 `rejectedFiles`，覆寫 base getter（因此 `_stateVersion` 設為 `protected`）；`combobox` 用 `inputId`（plain string）作 field id，保留自己的 slim adapter。`registry.json` 新增 `cva-base` shared 條目，9 個元件的 `sharedDeps` 補入 `cva-base`。golden fixture 53 元件全量 test 通過。
 
 ---
 
@@ -320,12 +325,12 @@
 
 ---
 
-## P9 — 自訂/第三方 registry 支援(alias:name 語法,`sanring build` 未做)
+## P9 — 自訂/第三方 registry 支援(alias:name 語法 + `sanring build`)
 
 - [x] `sanring.config.json` 新增 `registries`(alias → URL map)與 `defaultRegistry` 選用欄位
 - [x] `sanring add alias:componentName` 語法,從指定的第三方/私有 registry 安裝元件
 - [x] `installedVersions` key 格式在元件被 `add`/`update` 觸及時升級為 `alias:componentName`(lazy migration,未觸及的舊 key 保留原樣)
-- [ ] `sanring build` 指令(讓第三方掃自己的 Angular component 目錄產出相容 `registry.json`)——未做,見下方「本次不解決」
+- [x] `sanring build` 指令(讓第三方掃自己的 Angular component 目錄產出相容 `registry.json`)
 
 **依據**:先寫了 [ADR-0001](.claude/adrs/0001-multi-registry-support.md) 定案設計決策,再依 [Task Charter](.claude/charters/p9-multi-registry.md) 的批次 A/B/C 分批執行(型別與純函式 → 10 個 command 接入 → alias 解析與 key 升級),每批獨立驗證(`tsc --noEmit`/`eslint`/`pnpm test`)後才 commit,批次 D(`sanring build`)charter 本身就標記「預設暫停」,需另立 charter 並先做 TypeScript AST 可行性 spike。
 
@@ -334,6 +339,22 @@
 **執行中發現且已修的真實 bug(不是 charter 原範圍,但屬必要修正)**:`add.ts`/`remove.ts`/`update.ts`(x2)/`init.ts`(x2)這 6 處 `writeConfig(...)` 呼叫都是手動列欄位而非展開既有 config,已經會漏掉 `sharedPath`/`installedVersions`;新加的 `registries`/`defaultRegistry` 剛好也不在手寫清單裡——代表使用者一設定多重 registry,下一次 `add`/`update`/`remove` 就會把設定靜默清空,直接讓這個功能形同沒做完。發現後先停下用 `AskUserQuestion` 跟使用者確認要不要一併修,得到「現在一併修」的答案後才動手,改成 `{ ...config, ... }` 展開再覆蓋各自要變的欄位,並在 `add.test.ts`/`remove.test.ts`/`update.test.ts`/`init.test.ts` 各補一個回歸測試鎖住這個行為。
 
 **驗證**:每個批次、每個 command 改完都各自跑過 `tsc --noEmit`/`eslint --max-warnings 0`/`pnpm test`,全數維持綠燈,最終 135 個測試通過(從批次開始前的 125 個增加,新增的都是 alias 解析、config 欄位保留、legacy key 遷移的回歸測試)。沒有連上真實網路 registry 做端到端手測——所有整合測試都用 `writeRegistryFixture` 產生的本地假 registry 驗證。
+
+**`sanring build` 補完(2026-08-11)**:批次 A（目錄掃描 + AST import/export 分類）、批次 C（`sanring build` 指令本體）依序完成。批次 B 的 peerDependency 遞移閉包去重演算法(`computeUpstreamPeerCoverage`/`dedupePeerDependencies`)在 53 元件 golden fixture 驗證發現設計錯誤（跨元件去重會錯誤刪除使用者專案真正需要的 peer），整批移除，改為 `canonicalizePeerDependencies`（只做 `@angular/core/rxjs-interop` → `@angular/core` 等 submodule 規範化 + 同 registry 內去重，不做跨元件去重）。golden fixture 全量比對 53 元件、53 shared + 對應 peerDependencies 三個欄位零差異，`KNOWN_MISMATCHES` 清空、`it.skip` 改為強制啟用。README 補 `sanring build` 使用說明（`--source`/`--out`/`--dry-run`/`--name` 選項、典型工作流程）。
+
+---
+
+## P24 — registry 內容真實 bug(P9 spike/golden fixture 副產品)
+
+P9 golden fixture 掃完 53 元件後發現一批長期存在的 registry 宣告錯誤,集中修正(2026-08-11)：
+
+- `transfer` 4 個檔案 import 路徑錯誤(`../../utils`/`../component-styles` → 正確的 `../shared/utils`/`../shared/component-styles`);`otp-input` 同樣路徑問題
+- `navigation-menu` 遺漏 `@lucide/angular` peerDependency;`accordion`/`collapsible` 遺漏 `@angular/cdk` peerDependency
+- `calendar`/`checkbox`/`date-picker`/`file-upload`/`radio`/`slider`/`switch` 補 `@angular/cdk`(與 `@angular/forms`)peerDependency
+- `date-picker` 遺漏 `field` componentDep;`alert-dialog` 移除錯誤宣告的 `utils` sharedDep(實際無 import)
+- 11 個元件移除過度宣告的 `component-styles` sharedDep(`alert`/`alert-dialog`/`badge`/`breadcrumb`/`calendar`/`card`/`date-picker`/`link`/`tabs`/`tag`/`tooltip`);`transfer` 補上遺漏的 `component-styles` sharedDep
+
+**驗證**:golden fixture 53 元件全量掃描 vs 手寫 `registry.json` 零差異。
 
 ---
 

@@ -6,49 +6,11 @@
 
 ---
 
-## P9 — `sanring build`(讓第三方產出相容 registry.json)
-
-- [x] 批次 A:目錄掃描 + AST import/export 分類(`registry-scan.ts`)
-- [x] 批次 B:peerDependency 遞移閉包去重——**整批拿掉,改成 `canonicalizePeerDependencies`（掃到什麼 peer 就照實列,重複宣告無害）**;`computeUpstreamPeerCoverage`/`dedupePeerDependencies`/`ScannedComponent` 已從程式碼與測試中完整移除
-- [x] 批次 C:`sanring build` 指令本體完成;golden fixture 測試解除 `it.skip`,全部 53 個元件與手寫 `registry.json` 零差異
-- [ ] `--source`/`--out`/`--dry-run`/`--name` 之外,README 還沒補 `sanring build` 的使用說明
-
-**現況(2026-08-11)**:`sanring build` 功能完整可用。批次 B 的遞移去重演算法因 53 元件全量 golden fixture 驗證發現設計錯誤而整批移除,改為 `canonicalizePeerDependencies`(只做 submodule 規範化 + dedup,不做跨元件去重)。golden fixture 現已強制啟用,零 `KNOWN_MISMATCHES`。剩下只有 README 補充。
-
----
-
-## P24 — registry 內容真實 bug(P9 spike/golden fixture 副產品)
-
-**全部已修完(2026-08-11)**。修正清單：
-
-- [x] `transfer` 元件 4 檔案 import 路徑(`../../utils` → `../shared/utils`、`../component-styles` → `../shared/component-styles`)
-- [x] `otp-input` 元件同上路徑修正
-- [x] `navigation-menu`:補 `@lucide/angular` peerDependency
-- [x] `accordion`:補 `@angular/cdk` peerDependency
-- [x] `collapsible`:補 `@angular/cdk` peerDependency
-- [x] `calendar`/`checkbox`/`date-picker`/`file-upload`/`radio`/`slider`/`switch`:補 `@angular/cdk`(與 `@angular/forms`)peerDependency
-- [x] `date-picker`:補 `field` componentDep
-- [x] `alert-dialog`:移除錯誤宣告的 `utils` sharedDep(實際無 import)
-- [x] 11 個元件移除過度宣告的 `component-styles` sharedDep(`alert`/`alert-dialog`/`badge`/`breadcrumb`/`calendar`/`card`/`date-picker`/`link`/`tabs`/`tag`/`tooltip`)
-- [x] `transfer`:補 `component-styles` sharedDep
-
-**驗證**:golden fixture 53 元件全量掃描 vs 手寫 `registry.json` 零差異。
-
----
-
 ## P11 — 品質關卡類(優先度較低,長期補強)
 
 - [ ] Docs 站補 light/dark theme accessibility smoke test,至少覆蓋 component 頁面的標題、說明文字、tabs、installation/code block、copy buttons 與 focus ring,確認文字對比、可讀性與鍵盤操作都通過
 - [ ] 視覺回歸測試(如 Chromatic / Playwright screenshot),CSS 改動有沒有意外破壞其他元件外觀,現在沒有自動偵測
 - [ ] CLI 補真正的 e2e 測試(拉一個全新 Angular 專案、真的跑 `sanring add`、真的 `ng build`)——現有的 `add.test.ts`/`doctor.test.ts` 等是對假的檔案系統 mock 驗證邏輯,不是「CLI 真的能在使用者機器上跑起來」的保證
-
----
-
-## P14 — CVA adapter 重複邏輯尚未收斂
-
-- [x] 9 個表單元件(`checkbox`/`switch`/`radio-group`/`slider`/`otp-input`/`date-picker`/`calendar`/`file-upload`/`combobox`)各自重複一份幾乎逐字相同的 `XxxFieldControlAdapter` + CVA state-bridge 邏輯(約 500–600 行複製貼上),`shared/` 目錄目前沒有對應抽象
-
-**完成**:建立 `shared/cva-base.ts`，包含 `SanringCvaBase<T>` 抽象基底類別與 `SanringFieldControlAdapter<T>` 泛型轉接器。9 個元件全數改為 `extends SanringCvaBase`，移除各自的 `XxxFieldControlAdapter` 類別。golden fixture test 通過。
 
 ---
 
@@ -68,6 +30,28 @@
 - 初始 blocks 建議:`auth/login`、`auth/register`、`layout/dashboard-shell`、`layout/settings-page`
 
 **成本**:高。單個 block 的設計/實作本身不難,但要做出夠多、夠有代表性的 blocks 讓功能有意義,需要持續投入。建議先做 2–3 個 blocks 驗證 CLI 流程,再逐步擴充。
+
+---
+
+## P25 — Registry 生態系擴展（對標 shadcn registry）
+
+目標是把目前「單人自用的 `sanring build`」升級成開放的第三方 registry 生態系，讓任何團隊或套件作者都能發布、搜尋、安裝彼此的元件。
+
+**子項目（依實作順序）**：
+
+- [ ] **Registry Directory**：Docs 站新增第三方 registry 目錄頁，列出社群維護的 registry（類似 shadcn 的 Registry Directory）；初期可由人工審核提交
+- [ ] **GitHub Registries**：CLI 支援直接以 `github:<owner>/<repo>` 格式作為 registry source，省去 host 步驟（背後解析為 `https://raw.githubusercontent.com/<owner>/<repo>/main/registry.json`）
+- [ ] **Namespaces**：解決多 registry 同名元件衝突，定義 namespace 規則（目前 alias 機制已部分解決，需形式化）
+- [ ] **Authentication**：CLI 支援 private registry 的 Bearer token 認證（`sanring.config.json` 加入 `auth` 欄位），讓企業內網或 private GitHub repo 可用
+- [ ] **Dynamic Search API**：registry 可選擇暴露搜尋 endpoint（而非只靠靜態 JSON 全量掃描），`sanring search` 優先呼叫 endpoint
+- [ ] **API Reference 頁面**：補 `registry.json` 完整 schema 文件（目前 docs registry 頁只有範例，缺欄位定義、型別、必要/選用標記）
+- [ ] **Docs 多頁拆分**：registry 頁面從目前的單頁拆成多頁（Introduction、Getting Started、GitHub Registries、Authentication、API Reference 等）
+
+**現況**：目前 registry 頁只有一頁，涵蓋基本的 `sanring build` 工作流程與 `registries` config 設定。CLI 的 multi-registry 支援（alias:name 語法）已完成，但生態系的其餘部分（directory、GitHub source、auth）尚未實作。
+
+**影響**：shadcn 的 registry 生態是目前採用率的核心驅動之一——開發者能找到、安裝、分享社群元件，讓整個 UI library 不只靠官方維護。Angular 生態目前沒有等價物，這是 Sanring 差異化的機會。
+
+**成本**：高。各子項目可獨立交付，建議從 GitHub Registries（低實作成本、高使用者價值）和 API Reference 開始，再推進 Directory 和 Auth。
 
 ---
 

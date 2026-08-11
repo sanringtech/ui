@@ -38,6 +38,13 @@ export const routes: Routes = [
               import('./pages/mcp/mcp-page.component').then((m) => m.McpPageComponent),
           },
           {
+            path: 'registry',
+            loadComponent: () =>
+              import('./pages/registry/registry-page.component').then(
+                (m) => m.RegistryPageComponent,
+              ),
+          },
+          {
             path: 'changelog',
             redirectTo: 'version-notes',
             pathMatch: 'full',
