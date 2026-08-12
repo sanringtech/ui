@@ -8,7 +8,7 @@
 
 ---
 
-依序執行以下六個 Phase。每個 Phase 完成後先輸出結果再繼續下一個。
+依序執行以下七個 Phase。每個 Phase 完成後先輸出結果再繼續下一個。
 
 ---
 
@@ -162,7 +162,44 @@ pnpm ng test "@sanring/ui" --include="**/<name>.spec.ts" --watch=false
 
 ---
 
-## Phase 6 — 審查摘要
+## Phase 6 — Usage Evidence Gate
+
+工程品質（Phase 1–5）回答「元件做得對不對」；這個 Phase 回答「這個元件有沒有被驗證值得投資」。核心原則：**agent 只查證找得到的事實，答不出來的一律留 TODO，不准推測。**
+
+### 6-A Component validation tier
+
+不重新設計分類，直接沿用 Phase 1-C（CDK Overlay）與 Phase 2-C（鍵盤導覽）已經查過的結果來判定：
+
+- **Tier 3 — High-risk interaction**：Phase 1-C 有適用項目（使用了 CDK Overlay）
+- **Tier 2 — Interactive / composite**：無 Overlay，但 Phase 2-C 有 2 項以上適用（例如方向鍵導覽、disabled 跳過）
+- **Tier 1 — Low-interaction primitive**：以上皆無（純顯示型元件）
+
+輸出判定結果與依據（引用 Phase 1-C / 2-C 的具體項目）。
+
+若為 **Tier 1**：標記「Validated by design」，只需在 6-B 留一筆 consumer usage 查證記錄，其餘 6-B/6-C 略過，直接跳到 Phase 7。
+若為 **Tier 2 / 3**：繼續執行完整的 6-B、6-C。
+
+### 6-B Agent-verifiable evidence
+
+只列查證結果（找到 / 沒找到 + 出處），不下產品判斷：
+
+- [ ] **Consumer usage**：在 `apps/docs` 及 `registry/`、`packages/ui` 以外的路徑 grep 此元件的 selector/import，列出檔案與行號；沒找到就寫「未找到 consumer usage」
+- [ ] **Docs demo 情境**：`apps/docs` 對應頁面是孤立的 API/prop 展示，還是嵌在真實任務情境（表單、清單頁等）裡——只描述現況
+- [ ] **近期變動**：`git log --oneline -- <元件路徑>` 最近一筆 commit 的日期與訊息
+- [ ] **相關 issue/PR**：repo 內（CHANGELOG、issue 相關檔案）是否提及此元件
+
+### 6-C Human-required decisions
+
+以下項目 agent 一律不推測。有資料才填，否則原樣輸出 `TODO：待確認`：
+
+- [ ] 目標使用者是誰
+- [ ] 是否已規劃或執行過真實任務測試（例如找 3 人任務測試）
+- [ ] 是否值得繼續投資 / 暫緩
+- [ ] 下一步驗證行動
+
+---
+
+## Phase 7 — 審查摘要
 
 輸出結構化摘要：
 
@@ -182,15 +219,21 @@ pnpm ng test "@sanring/ui" --include="**/<name>.spec.ts" --watch=false
 ### Spec 狀態
 - 已存在 / 自動補寫（X tests，全部通過）
 
+### 有效性狀態（Usage Evidence）
+- Tier：<1 Low-interaction primitive / 2 Interactive-composite / 3 High-risk interaction>
+- Agent-verifiable evidence：<6-B 摘要一行，或 Tier 1 時寫「略過（Validated by design）」>
+- Human-required decisions：<列出還沒填的 TODO 項目數，例如「4 項待你確認」，或 Tier 1 時寫「不適用」>
+
 ### 結論
-元件品質裁決：✅ 可加入 / ⚠ 建議修正後加入 / ❌ 需修正後再審查
+工程裁決：✅ 可加入 / ⚠ 建議修正後加入 / ❌ 需修正後再審查
+有效性狀態：Validated by design（Tier 1）/ In Use（Tier 2-3，6-B 找到 consumer usage，決策待補）/ Draft（Tier 2-3，6-B 未找到 consumer usage，決策待補）
 ```
 
-結論判定：
+工程裁決判定（與有效性狀態互相獨立，不互相覆蓋）：
 - **❌ 需修正**：任何 Phase 1 的 ❌ 或 Phase 2 2-A/2-C 的 ❌ → 結構或 a11y 核心缺失
 - **⚠ 建議修正後加入**：Phase 2 2-B/2-D/2-E 或 Phase 3 有 ❌ → 功能正確但細節未完整
 - **✅ 可加入**：全部通過或只有 ⚠（不適用）
 
 ---
 
-**注意**：Phase 1–4 只讀取不修改元件源碼。Phase 5 只補 spec，不覆蓋已存在的 spec 檔案。
+**注意**：Phase 1–4 只讀取不修改元件源碼。Phase 5 只補 spec，不覆蓋已存在的 spec 檔案。Phase 6 只查證與記錄既有事實，6-C 沒有資料一律輸出 `TODO：待確認`，不推測目標使用者、優先級或投資決策。
