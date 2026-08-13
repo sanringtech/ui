@@ -1,10 +1,11 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-import { mkdirSync, mkdtempSync, rmSync } from 'node:fs';
+import { mkdirSync, mkdtempSync, rmSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { tmpdir } from 'node:os';
 import type { Registry, RegistryComponent } from '../registry.js';
 import { hashContent } from '../utils.js';
-import { listInstalledComponentNames, printFileDiff, resolveDiffTargets } from './diff.js';
+import { writeRegistryFixture } from '../__tests__/registry-fixture.js';
+import { diffCommand, listInstalledComponentNames, printFileDiff, resolveDiffTargets } from './diff.js';
 
 function component(overrides: Partial<RegistryComponent> & { name: string }): RegistryComponent {
   return { description: '', files: [`${overrides.name}/index.ts`], ...overrides };
@@ -111,5 +112,40 @@ describe('printFileDiff', () => {
 
   it('reports conflict when there is no recorded baseline at all', () => {
     expect(printFileDiff('button/index.ts', 'local', 'remote')).toBe('conflict');
+  });
+});
+
+describe('diffCommand (integration)', () => {
+  let projectDir: string;
+  let registryDir: string;
+  let originalCwd: string;
+
+  beforeEach(() => {
+    originalCwd = process.cwd();
+    projectDir = mkdtempSync(join(tmpdir(), 'sanring-cli-diff-project-'));
+    registryDir = mkdtempSync(join(tmpdir(), 'sanring-cli-diff-registry-'));
+    writeFileSync(join(projectDir, 'angular.json'), '{}', 'utf-8');
+    writeRegistryFixture(registryDir, {
+      utils: 'export function cn() {}\n',
+      widget: 'export const widget = 1;\n',
+    });
+    process.chdir(projectDir);
+    vi.spyOn(console, 'log').mockImplementation(() => {});
+    vi.spyOn(console, 'error').mockImplementation(() => {});
+  });
+
+  afterEach(() => {
+    process.chdir(originalCwd);
+    rmSync(projectDir, { recursive: true, force: true });
+    rmSync(registryDir, { recursive: true, force: true });
+    vi.restoreAllMocks();
+  });
+
+  it('exits 1 for unknown requested components even without --exit-code', async () => {
+    const exitSpy = vi.spyOn(process, 'exit').mockImplementation(() => undefined as never);
+
+    await diffCommand.parseAsync(['missing', '--registry', registryDir], { from: 'user' });
+
+    expect(exitSpy).toHaveBeenCalledWith(1);
   });
 });

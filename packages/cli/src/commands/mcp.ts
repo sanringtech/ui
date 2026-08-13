@@ -5,7 +5,7 @@ import {
   ListToolsRequestSchema,
 } from '@modelcontextprotocol/sdk/types.js';
 import { spawn } from 'node:child_process';
-import { existsSync, readFileSync } from 'node:fs';
+import { existsSync } from 'node:fs';
 import { dirname, isAbsolute, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { Command } from 'commander';
@@ -16,22 +16,10 @@ import {
   type Registry,
   type RegistryComponent,
 } from '../registry.js';
-import { readConfig, resolveComponentBasePath, resolveRegistrySource } from '../utils.js';
+import { getCliVersion, readConfig, resolveComponentBasePath, resolveRegistrySource } from '../utils.js';
 import { resolveInstallSet, collectPeerDeps } from './add.js';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
-
-function getCliVersion(): string {
-  try {
-    // __dirname is dist/commands/ at runtime; package.json is two levels up
-    const pkg = JSON.parse(readFileSync(join(__dirname, '../../package.json'), 'utf-8')) as {
-      version: string;
-    };
-    return pkg.version;
-  } catch {
-    return 'unknown';
-  }
-}
 
 function formatComponentDetail(
   component: RegistryComponent,
@@ -515,7 +503,7 @@ export const mcpCommand = new Command('mcp')
   .description(
     'Start the MCP server for AI agent integration (Claude Code, Cursor, Windsurf)',
   )
-  .option('--registry <url>', 'custom registry URL or local path')
+  .option('--registry <source>', 'custom registry (URL or local path)')
   .action(async (options: { registry?: string }) => {
     await startMcpServer(options.registry);
   });

@@ -22,6 +22,7 @@ import {
   getInstalledPackageSpecs,
   hashContent,
   fetchTextTargetsConcurrent,
+  parseComponentRef,
   readConfig,
   requireAngularProject,
   resolveComponentPath,
@@ -31,13 +32,7 @@ import {
 } from '../utils.js';
 import { printFileDiff } from './diff.js';
 
-// Splits the `alias:componentName` syntax from ADR-0001 apart. No colon
-// means "no explicit registry" — the caller falls back to defaultRegistry.
-export function parseComponentRef(ref: string): { alias?: string; name: string } {
-  const idx = ref.indexOf(':');
-  if (idx === -1) return { name: ref };
-  return { alias: ref.slice(0, idx), name: ref.slice(idx + 1) };
-}
+export { parseComponentRef } from '../utils.js';
 
 export function writeFile(dest: string, content: string, force: boolean): 'written' | 'skipped' {
   if (existsSync(dest) && !force) return 'skipped';

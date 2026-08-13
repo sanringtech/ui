@@ -155,7 +155,9 @@ export const removeCommand = new Command('remove')
       }
 
       const installedHashes = { ...config?.installedHashes };
+      const installedVersions = { ...config?.installedVersions };
       let prunedHashes = false;
+      let prunedVersions = false;
 
       for (const name of plan.toRemove) {
         const dir = join(componentBasePath, name);
@@ -172,13 +174,21 @@ export const removeCommand = new Command('remove')
             prunedHashes = true;
           }
         }
+
+        for (const key of Object.keys(installedVersions)) {
+          if (key === name || key.endsWith(`:${name}`)) {
+            delete installedVersions[key];
+            prunedVersions = true;
+          }
+        }
       }
 
-      if (prunedHashes) {
+      if (prunedHashes || prunedVersions) {
         writeConfig(cwd, {
           ...config,
           componentPath: config?.componentPath ?? DEFAULT_COMPONENT_PATH,
           installedHashes,
+          installedVersions,
         });
       }
 

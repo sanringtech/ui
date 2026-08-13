@@ -107,7 +107,15 @@ export const updateCommand = new Command('update')
         );
       }
       if (notInstalled.length > 0) {
-        console.log(pc.dim(`  Not installed, skipping: ${notInstalled.join(', ')}`));
+        console.log(
+          pc.dim(
+            `  Not installed, skipping: ${notInstalled.join(', ')} (run ${pc.white('sanring add')} first)`,
+          ),
+        );
+      }
+      if (missing.length > 0) {
+        process.exit(1);
+        return;
       }
 
       // Gather every file that differs, same set diff.ts would compare, and

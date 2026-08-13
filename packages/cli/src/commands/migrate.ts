@@ -3,11 +3,39 @@ import pc from 'picocolors';
 import { createRegistryIndex, fetchRegistry } from '../registry.js';
 import {
   getCliVersion,
+  parseComponentRef,
   readConfig,
   requireAngularProject,
   resolveRegistrySource,
   semverLte,
 } from '../utils.js';
+
+interface MigrationTarget {
+  key: string;
+  name: string;
+  installedVersion: string;
+}
+
+function migrationTargetFromKey(key: string, installedVersion: string): MigrationTarget {
+  return { key, name: parseComponentRef(key).name, installedVersion };
+}
+
+function findInstalledVersion(
+  installedVersions: Record<string, string>,
+  componentRef: string,
+): string | undefined {
+  const parsed = parseComponentRef(componentRef);
+  const exact = installedVersions[componentRef];
+  if (exact !== undefined) return exact;
+
+  const bare = installedVersions[parsed.name];
+  if (bare !== undefined) return bare;
+
+  const aliasedMatches = Object.entries(installedVersions).filter(
+    ([key]) => parseComponentRef(key).name === parsed.name,
+  );
+  return aliasedMatches.length === 1 ? aliasedMatches[0][1] : undefined;
+}
 
 export const migrateCommand = new Command('migrate')
   .description(
@@ -43,7 +71,8 @@ export const migrateCommand = new Command('migrate')
       const currentCliVersion = getCliVersion();
 
       // Determine which components to check
-      const installedComponentNames = Object.keys(config.installedVersions ?? {});
+      const installedVersions = config.installedVersions ?? {};
+      const installedComponentNames = Object.keys(installedVersions);
 
       // If config has no installedVersions at all, fall back to inferring from
       // installedHashes (keys like "button/button.component.ts" → "button")
@@ -57,24 +86,26 @@ export const migrateCommand = new Command('migrate')
         }
       }
 
-      const targetNames =
+      const targets: MigrationTarget[] =
         componentNames.length > 0
-          ? componentNames
+          ? componentNames.map((name) =>
+              migrationTargetFromKey(name, findInstalledVersion(installedVersions, name) ?? '0.0.0'),
+            )
           : installedComponentNames.length > 0
-          ? installedComponentNames
-          : [...inferredNames];
+            ? installedComponentNames.map((key) => migrationTargetFromKey(key, installedVersions[key]))
+            : [...inferredNames].map((name) => migrationTargetFromKey(name, '0.0.0'));
 
-      if (targetNames.length === 0) {
+      if (targets.length === 0) {
         console.log(pc.dim('No installed components found in sanring.config.json.\n'));
         return;
       }
 
       type MigrationResult =
-        | { kind: 'upToDate'; name: string }
-        | { kind: 'noData'; name: string; installedVersion: string }
-        | { kind: 'notFound'; name: string }
+        | { kind: 'upToDate'; key: string; name: string }
+        | { kind: 'notFound'; key: string; name: string }
         | {
             kind: 'needsMigration';
+            key: string;
             name: string;
             installedVersion: string;
             migrations: Array<{ fromVersion: string; breaking: boolean; steps: string[] }>;
@@ -82,18 +113,15 @@ export const migrateCommand = new Command('migrate')
 
       const results: MigrationResult[] = [];
 
-      for (const name of targetNames) {
-        const component = registryIndex.componentsByName.get(name);
+      for (const target of targets) {
+        const component = registryIndex.componentsByName.get(target.name);
         if (!component) {
-          results.push({ kind: 'notFound', name });
+          results.push({ kind: 'notFound', key: target.key, name: target.name });
           continue;
         }
 
-        const installedVersion =
-          config.installedVersions?.[name] ?? '0.0.0';
-
         if (!component.migrations || component.migrations.length === 0) {
-          results.push({ kind: 'upToDate', name });
+          results.push({ kind: 'upToDate', key: target.key, name: target.name });
           continue;
         }
 
@@ -101,13 +129,19 @@ export const migrateCommand = new Command('migrate')
         // migration's fromVersion — meaning the user hasn't yet received the
         // breaking change introduced after fromVersion.
         const applicable = component.migrations.filter(
-          (m) => semverLte(installedVersion, m.fromVersion),
+          (m) => semverLte(target.installedVersion, m.fromVersion),
         );
 
         if (applicable.length === 0) {
-          results.push({ kind: 'upToDate', name });
+          results.push({ kind: 'upToDate', key: target.key, name: target.name });
         } else {
-          results.push({ kind: 'needsMigration', name, installedVersion, migrations: applicable });
+          results.push({
+            kind: 'needsMigration',
+            key: target.key,
+            name: target.name,
+            installedVersion: target.installedVersion,
+            migrations: applicable,
+          });
         }
       }
 
@@ -132,15 +166,14 @@ export const migrateCommand = new Command('migrate')
 
       for (const result of results) {
         if (result.kind === 'notFound') {
-          console.log(`  ${pc.yellow(`⚠ ${result.name}`)}  ${pc.dim('not found in registry, skipping')}`);
+          console.log(`  ${pc.yellow(`⚠ ${result.key}`)}  ${pc.dim('not found in registry, skipping')}`);
           anyOutput = true;
           continue;
         }
         if (result.kind === 'upToDate') continue;
-        if (result.kind === 'noData') continue;
 
         if (result.kind === 'needsMigration') {
-          const { name, installedVersion, migrations } = result;
+          const { key, name, installedVersion, migrations } = result;
           const breakingCount = migrations.filter((m) => m.breaking).length;
           const breakingTag =
             breakingCount > 0
@@ -148,7 +181,7 @@ export const migrateCommand = new Command('migrate')
               : '';
 
           console.log(
-            `  ${pc.bold(name)}${breakingTag}  ${pc.dim(`installed: v${installedVersion} → current: v${currentCliVersion}`)}`,
+            `  ${pc.bold(key)}${breakingTag}  ${pc.dim(`installed: v${installedVersion} → current: v${currentCliVersion}`)}`,
           );
 
           let stepIndex = 1;

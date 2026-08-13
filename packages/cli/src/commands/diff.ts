@@ -156,6 +156,10 @@ export const diffCommand = new Command('diff')
           ),
         );
       }
+      if (missing.length > 0) {
+        process.exit(1);
+        return;
+      }
 
       // Collect jobs upfront then fetch compare targets with bounded concurrency —
       // avoids sequential waterfall latency (and hammering a remote registry

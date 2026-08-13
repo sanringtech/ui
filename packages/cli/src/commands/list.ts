@@ -187,7 +187,7 @@ export const listCommand = new Command('list')
   .option('-i, --installed', 'show only installed components', false)
   .option('--outdated', 'show installed component update status against the current registry', false)
   .option('-p, --path <path>', 'component path relative to cwd (used with --installed)')
-  .option('--registry <url>', 'custom registry URL')
+  .option('--registry <source>', 'custom registry (URL or local path)')
   .action(async (options: { installed: boolean; outdated: boolean; path?: string; registry?: string }) => {
     const config = readConfig(process.cwd());
     const registrySource = resolveRegistrySource(undefined, config, options.registry);

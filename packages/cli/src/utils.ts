@@ -31,6 +31,15 @@ export interface SanringConfig {
   defaultRegistry?: string;
 }
 
+// Splits the `alias:componentName` syntax used by multi-registry commands.
+// No colon means "no explicit registry" so callers can fall back to
+// defaultRegistry or the built-in registry.
+export function parseComponentRef(ref: string): { alias?: string; name: string } {
+  const idx = ref.indexOf(':');
+  if (idx === -1) return { name: ref };
+  return { alias: ref.slice(0, idx), name: ref.slice(idx + 1) };
+}
+
 /** CLI version from package.json; returns "0.0.0" on any read failure. */
 export function getCliVersion(): string {
   try {

@@ -100,6 +100,25 @@ describe('removeCommand (integration)', () => {
     expect(config?.installedHashes?.['shared/utils.ts']).toBeDefined();
   });
 
+  it('prunes bare and aliased installedVersions entries for the removed component', async () => {
+    const existing = readConfig(projectDir)!;
+    writeConfig(projectDir, {
+      ...existing,
+      installedVersions: {
+        widget: '0.20.0',
+        'myteam:widget': '0.21.0',
+        button: '0.21.0',
+      },
+    });
+
+    await removeCommand.parseAsync(['widget', '--registry', registryDir, '--yes'], { from: 'user' });
+
+    const config = readConfig(projectDir);
+    expect(config?.installedVersions?.widget).toBeUndefined();
+    expect(config?.installedVersions?.['myteam:widget']).toBeUndefined();
+    expect(config?.installedVersions?.button).toBe('0.21.0');
+  });
+
   it('preserves registries/defaultRegistry from the existing config on write', async () => {
     const existing = readConfig(projectDir)!;
     writeConfig(projectDir, {

@@ -257,6 +257,15 @@ describe('updateCommand (integration)', () => {
     expect(logs.some((l) => l.includes('Nothing to update'))).toBe(true);
   });
 
+  it('exits 1 for unknown requested components', async () => {
+    const exitSpy = vi.spyOn(process, 'exit').mockImplementation(() => undefined as never);
+    vi.spyOn(console, 'error').mockImplementation(() => {});
+
+    await updateCommand.parseAsync(['missing', '--registry', registryDir], { from: 'user' });
+
+    expect(exitSpy).toHaveBeenCalledWith(1);
+  });
+
   it('updates shared files from the configured sharedPath', async () => {
     const customProjectDir = mkdtempSync(join(tmpdir(), 'sanring-cli-project-'));
     const customRegistryDir = mkdtempSync(join(tmpdir(), 'sanring-cli-registry-'));

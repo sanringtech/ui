@@ -24,7 +24,7 @@ export const searchCommand = new Command('search')
   .description('Search available components by name or description')
   .argument('<query>', 'search term')
   .option('-p, --path <path>', 'component path relative to cwd (used to show install status)')
-  .option('--registry <url>', 'custom registry URL')
+  .option('--registry <source>', 'custom registry (URL or local path)')
   .action(async (query: string, options: { path?: string; registry?: string }) => {
     const config = readConfig(process.cwd());
     const spinner = ora('Loading components...').start();

@@ -1,31 +1,19 @@
 import { Command } from 'commander';
 import { existsSync, readdirSync, readFileSync } from 'node:fs';
-import { dirname, join } from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { join } from 'node:path';
 import ora from 'ora';
 import pc from 'picocolors';
 import { collectPeerDeps, resolveInstallSet } from './add.js';
 import { createRegistryIndex, fetchRegistry } from '../registry.js';
 import {
+  getCliVersion,
   isAngularProject,
+  parseComponentRef,
   readConfig,
   resolveComponentBasePath,
   resolveRegistrySource,
 } from '../utils.js';
 import { THEME_FILE_PATH } from './init.js';
-
-const __dirname = dirname(fileURLToPath(import.meta.url));
-
-function getCliVersion(): string {
-  try {
-    const pkg = JSON.parse(readFileSync(join(__dirname, '../package.json'), 'utf-8')) as {
-      version: string;
-    };
-    return pkg.version;
-  } catch {
-    return 'unknown';
-  }
-}
 
 function getAngularVersion(cwd: string): string | null {
   try {
@@ -130,12 +118,15 @@ export const infoCommand = new Command('info')
 
       // ── Component info mode ───────────────────────────────────────────────
       const config = readConfig(cwd);
+      const componentRef = parseComponentRef(componentName);
       const registrySpinner = ora('Loading registry...').start();
-      const registry = await fetchRegistry(resolveRegistrySource(undefined, config, options.registry));
+      const registry = await fetchRegistry(
+        resolveRegistrySource(componentRef.alias, config, options.registry),
+      );
       const registryIndex = createRegistryIndex(registry);
       registrySpinner.stop();
 
-      const { toInstall, autoAdded, missing } = resolveInstallSet([componentName], registryIndex);
+      const { toInstall, autoAdded, missing } = resolveInstallSet([componentRef.name], registryIndex);
 
       if (missing.length > 0) {
         const available = registryIndex.componentNames.join(', ');
@@ -145,7 +136,7 @@ export const infoCommand = new Command('info')
         return;
       }
 
-      const component = toInstall.find((c) => c.name === componentName)!;
+      const component = toInstall.find((c) => c.name === componentRef.name)!;
       const componentBasePath = resolveComponentBasePath(cwd, options.path, config);
       const alreadyInstalled =
         isAngularProject(cwd) && existsSync(join(componentBasePath, component.name));
