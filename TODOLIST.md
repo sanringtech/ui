@@ -63,9 +63,9 @@
 - [x] `aspect-ratio` — 零缺陷，spec 4/4 通過
 - [x] `card` — registry 補 design token（rounded-xl → rounded-[var(--sanring-radius-lg)]），spec 3/3 通過
 - [x] `avatar` — registry AvatarImageDirective 補 afterNextRender SSR 防護，spec 3/3 通過
-- [ ] `label`
-- [ ] `link`
-- [ ] `alert`
+- [x] `label` — 零缺陷，spec 2/2 通過
+- [x] `link` — 零缺陷，spec 3/3 通過
+- [x] `alert` — registry 補 design token（rounded-lg + destructive 紅色 → CSS var），spec 3/3 通過
 - [ ] `timeline`
 - [ ] `breadcrumb`
 
