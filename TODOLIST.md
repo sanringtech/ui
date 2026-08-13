@@ -66,8 +66,8 @@
 - [x] `label` — 零缺陷，spec 2/2 通過
 - [x] `link` — 零缺陷，spec 3/3 通過
 - [x] `alert` — registry 補 design token（rounded-lg + destructive 紅色 → CSS var），spec 3/3 通過
-- [ ] `timeline`
-- [ ] `breadcrumb`
+- [x] `timeline` — 零缺陷，spec 5/5 通過
+- [x] `breadcrumb` — 零缺陷，spec 4/4 通過
 
 ### Tier 2 — Interactive / composite（有互動，無 Overlay）
 
