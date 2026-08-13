@@ -14,7 +14,7 @@
 
 - [x] `divider` — class merging + ariaLabel 已補，spec 5/5 通過
 - [x] `skeleton` — registry CSS 對齊設計 token，spec 補 class merging test（3/3 通過）
-- [ ] `spinner`
+- [x] `spinner` — 零缺陷，spec 3/3 通過
 - [ ] `progress`
 - [ ] `badge`
 - [ ] `tag`
