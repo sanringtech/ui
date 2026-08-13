@@ -9,7 +9,7 @@ import { CollapsibleTriggerDirective } from './collapsible-trigger.directive';
 @Component({
   imports: [CollapsibleComponent, CollapsibleContentDirective, CollapsibleTriggerDirective],
   template: `
-    <sanring-collapsible>
+    <sanring-collapsible class="custom-class">
       <button type="button" sanringCollapsibleTrigger>Toggle</button>
       <div sanringCollapsibleContent>Body</div>
     </sanring-collapsible>
@@ -32,6 +32,21 @@ describe('CollapsibleComponent', () => {
     await TestBed.configureTestingModule({
       imports: [CollapsibleTestHost],
     }).compileComponents();
+  });
+
+  it('renders without error', () => {
+    const fixture = TestBed.createComponent(CollapsibleTestHost);
+    fixture.detectChanges();
+
+    expect(fixture.nativeElement).toBeTruthy();
+  });
+
+  it('merges host class with consumer class', () => {
+    const fixture = TestBed.createComponent(CollapsibleTestHost);
+    fixture.detectChanges();
+
+    const root = fixture.nativeElement.querySelectorAll('sanring-collapsible')[0] as HTMLElement;
+    expect(root.classList.contains('custom-class')).toBe(true);
   });
 
   it('opens on trigger click, updating aria-expanded, hidden, and data-state', () => {
