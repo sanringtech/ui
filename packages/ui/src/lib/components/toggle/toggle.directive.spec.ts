@@ -9,6 +9,7 @@ import { ToggleDirective } from './toggle.directive';
   template: `
     <button type="button" sanringToggle>Bold</button>
     <button type="button" sanringToggle [disabled]="true">Italic</button>
+    <button type="button" sanringToggle class="custom-class">Underline</button>
   `,
 })
 class ToggleTestHost {}
@@ -58,5 +59,14 @@ describe('ToggleDirective', () => {
     fixture.detectChanges();
 
     await expectNoA11yViolations(fixture.nativeElement);
+  });
+
+  it('merges host class with consumer class', () => {
+    const fixture = TestBed.createComponent(ToggleTestHost);
+    fixture.detectChanges();
+
+    const toggle = fixture.nativeElement.querySelectorAll('button')[2] as HTMLButtonElement;
+    expect(toggle.classList.contains('custom-class')).toBe(true);
+    expect(toggle.classList.contains('inline-flex')).toBe(true);
   });
 });
