@@ -6,6 +6,73 @@
 
 ---
 
+## P26 — `/audit-component` 全元件稽核佇列（52 個）
+
+依 `/audit-component` skill 的 Tier 判定排序：先 Tier 1（純顯示型），再 Tier 2（互動型），再 Tier 3（有 CDK Overlay / 複雜鍵盤）。每個元件稽核完成後移除該行，缺陷修正記入 DEVLOG.md。
+
+### Tier 1 — Low-interaction primitive（純顯示型，無 Overlay）
+
+- [x] `divider` — class merging + ariaLabel 已補，spec 5/5 通過
+- [ ] `skeleton`
+- [ ] `spinner`
+- [ ] `progress`
+- [ ] `badge`
+- [ ] `tag`
+- [ ] `aspect-ratio`
+- [ ] `card`
+- [ ] `avatar`
+- [ ] `label`
+- [ ] `link`
+- [ ] `alert`
+- [ ] `timeline`
+- [ ] `breadcrumb`
+
+### Tier 2 — Interactive / composite（有互動，無 Overlay）
+
+- [ ] `button`
+- [ ] `toggle`
+- [ ] `input`
+- [ ] `textarea`
+- [ ] `switch`
+- [ ] `checkbox`
+- [ ] `radio`
+- [ ] `slider`
+- [ ] `scroll-area`
+- [ ] `field`
+- [ ] `pagination`
+- [ ] `collapsible`
+- [ ] `accordion`
+- [ ] `tabs`
+- [ ] `stepper`
+- [ ] `otp-input`
+- [ ] `table`
+- [ ] `resizable`
+
+### Tier 3 — High-risk interaction（CDK Overlay / 複雜鍵盤 / Focus trap）
+
+- [ ] `tooltip`
+- [ ] `hover-card`
+- [ ] `popover`
+- [ ] `toast`
+- [ ] `calendar`
+- [ ] `dropdown-menu`
+- [ ] `context-menu`
+- [ ] `select`
+- [ ] `file-upload`
+- [ ] `carousel`
+- [ ] `dialog`
+- [ ] `alert-dialog`
+- [ ] `sheet`
+- [ ] `command`
+- [ ] `date-picker`
+- [ ] `navigation-menu`
+- [ ] `combobox`
+- [ ] `tree`
+- [ ] `transfer`
+- [ ] `sidebar`
+
+---
+
 ## P11 — 品質關卡類(優先度較低,長期補強)
 
 - [ ] Docs 站補 light/dark theme accessibility smoke test,至少覆蓋 component 頁面的標題、說明文字、tabs、installation/code block、copy buttons 與 focus ring,確認文字對比、可讀性與鍵盤操作都通過
