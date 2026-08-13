@@ -60,8 +60,8 @@
 - [x] `progress` — registry 補 `ariaValueText` input + template binding，spec 補 class/barClass merging test（5/5 通過）
 - [x] `badge` — 零缺陷，spec 3/3 通過
 - [x] `tag` — 關閉按鈕補 focus-visible ring（WCAG 2.4.7），spec 補 class merging + remove output test（4/4 通過）
-- [ ] `aspect-ratio`
-- [ ] `card`
+- [x] `aspect-ratio` — 零缺陷，spec 4/4 通過
+- [x] `card` — registry 補 design token（rounded-xl → rounded-[var(--sanring-radius-lg)]），spec 3/3 通過
 - [ ] `avatar`
 - [ ] `label`
 - [ ] `link`

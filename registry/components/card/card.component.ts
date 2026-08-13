@@ -15,7 +15,7 @@ export class CardComponent {
 
   protected readonly cardClass = computed(() =>
     cn(
-      'block rounded-xl border border-[var(--sanring-border)] bg-[var(--sanring-surface)] text-[var(--sanring-foreground)] shadow-sm',
+      'block rounded-[var(--sanring-radius-lg)] border border-[var(--sanring-border)] bg-[var(--sanring-surface)] text-[var(--sanring-foreground)] shadow-sm',
       this.class(),
     ),
   );
