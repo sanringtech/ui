@@ -14,6 +14,7 @@ import type { ProgressShape } from './progress.types';
       [value]="value()"
       [max]="max()"
       [ariaLabel]="ariaLabel()"
+      [ariaValueText]="ariaValueText()"
       #bar="progress"
       [class]="containerClass()"
     >
@@ -43,6 +44,7 @@ export class ProgressComponent {
   readonly shape = input<ProgressShape>('rounded');
   readonly shimmer = input(false, { transform: booleanAttribute });
   readonly ariaLabel = input<string | undefined>();
+  readonly ariaValueText = input<string | undefined>();
 
   private readonly shapeClasses: Record<ProgressShape, string> = {
     rounded: 'h-2 rounded-full',

@@ -19,10 +19,16 @@ import { ProgressComponent } from './progress.component';
 })
 class ProgressTestHost {}
 
+@Component({
+  imports: [ProgressComponent],
+  template: `<sanring-progress [value]="50" class="my-track" barClass="my-bar" ariaLabel="test" />`,
+})
+class ProgressClassHost {}
+
 describe('ProgressComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [ProgressTestHost],
+      imports: [ProgressTestHost, ProgressClassHost],
     }).compileComponents();
   });
 
@@ -60,6 +66,17 @@ describe('ProgressComponent', () => {
 
     const fill = bars(fixture)[2].querySelector('div') as HTMLElement;
     expect(fill.style.width).toBe('0%');
+  });
+
+  it('merges consumer class onto the container and barClass onto the bar', () => {
+    const fixture = TestBed.createComponent(ProgressClassHost);
+    fixture.detectChanges();
+
+    const container = fixture.nativeElement.querySelector('[role="progressbar"]') as HTMLElement;
+    const fill = container.querySelector('div') as HTMLElement;
+
+    expect(container.className).toContain('my-track');
+    expect(fill.className).toContain('my-bar');
   });
 
   it('has no axe-detectable a11y violations when given an accessible name', async () => {
