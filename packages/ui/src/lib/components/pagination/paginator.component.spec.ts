@@ -4,11 +4,15 @@ import { TestBed } from '@angular/core/testing';
 import { expectNoA11yViolations } from '../../../testing/axe-a11y';
 import { PageEvent } from './pagination.type';
 import { PaginatorComponent } from './paginator.component';
+import { PaginationComponent } from './pagination.component';
+import { PaginationItemDirective } from './pagination-item.directive';
+import { PaginationNavDirective } from './pagination-nav.directive';
 
 @Component({
   imports: [PaginatorComponent],
   template: `
     <sanring-paginator
+      class="custom-class"
       [pageIndex]="pageIndex()"
       [pageSize]="10"
       [length]="83"
@@ -33,10 +37,25 @@ class PaginatorTestHost {
   }
 }
 
+// sanringPaginationItem/sanringPaginationNav 也支援用在 <a> 上(URL-based 分頁),
+// 但 PaginatorComponent 自己的 template 只用 <button>,這條路徑完全沒被上面的
+// host 覆蓋到——DisableableNavDirective 對 anchor 的 disabled 處理(tabindex=-1
+// + 攔截 click)是獨立於 native disabled 屬性之外的另一套邏輯,值得單獨驗證。
+@Component({
+  imports: [PaginationComponent, PaginationItemDirective, PaginationNavDirective],
+  template: `
+    <sanring-pagination>
+      <a sanringPaginationNav href="?page=1" [disabled]="true">Previous</a>
+      <a sanringPaginationItem href="?page=2" [active]="true">2</a>
+    </sanring-pagination>
+  `,
+})
+class AnchorPaginationTestHost {}
+
 describe('PaginatorComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [PaginatorTestHost],
+      imports: [PaginatorTestHost, AnchorPaginationTestHost],
     }).compileComponents();
   });
 
@@ -44,6 +63,29 @@ describe('PaginatorComponent', () => {
     const nativeElement = fixture.nativeElement as HTMLElement;
     return nativeElement.querySelectorAll<HTMLElement>('sanring-paginator');
   }
+
+  it('renders without error', () => {
+    const fixture = TestBed.createComponent(PaginatorTestHost);
+    fixture.detectChanges();
+
+    expect(fixture.nativeElement).toBeTruthy();
+  });
+
+  it('merges host class with consumer class', () => {
+    const fixture = TestBed.createComponent(PaginatorTestHost);
+    fixture.detectChanges();
+
+    expect(paginators(fixture)[0].classList.contains('custom-class')).toBe(true);
+  });
+
+  it('exposes a navigation landmark with an accessible name', () => {
+    const fixture = TestBed.createComponent(PaginatorTestHost);
+    fixture.detectChanges();
+
+    const nav = paginators(fixture)[0].querySelector('sanring-pagination');
+    expect(nav?.getAttribute('role')).toBe('navigation');
+    expect(nav?.getAttribute('aria-label')).toBe('Pagination');
+  });
 
   it('shows the current range out of the total length', () => {
     const fixture = TestBed.createComponent(PaginatorTestHost);
@@ -125,5 +167,23 @@ describe('PaginatorComponent', () => {
     fixture.detectChanges();
 
     await expectNoA11yViolations(fixture.nativeElement);
+  });
+
+  it('marks a disabled <a> unfocusable and blocks navigation on click, since native disabled has no effect on anchors', () => {
+    const fixture = TestBed.createComponent(AnchorPaginationTestHost);
+    fixture.detectChanges();
+
+    const nativeElement = fixture.nativeElement as HTMLElement;
+    const disabledNav = nativeElement.querySelector('a[sanringPaginationNav]') as HTMLAnchorElement;
+    const activeItem = nativeElement.querySelector('a[sanringPaginationItem]') as HTMLAnchorElement;
+
+    expect(disabledNav.getAttribute('aria-disabled')).toBe('true');
+    expect(disabledNav.getAttribute('tabindex')).toBe('-1');
+    expect(activeItem.getAttribute('aria-current')).toBe('page');
+
+    const event = new MouseEvent('click', { cancelable: true, bubbles: true });
+    disabledNav.dispatchEvent(event);
+
+    expect(event.defaultPrevented).toBe(true);
   });
 });
