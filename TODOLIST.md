@@ -48,11 +48,12 @@
 
 ---
 
-## P28 — P14 CVA 重構未套用到 `packages/ui`
+## P28 — P14 CVA 重構未套用到 `packages/ui` + spec 從未驗證過 `registry/`
 
-- [ ] `packages/ui` 的 9 個表單元件（`checkbox`/`switch`/`radio-group`/`slider`/`otp-input`/`date-picker`/`calendar`/`file-upload`/`combobox`）補做 P14 第二批重構：改成 `extends SanringCvaBase`，跟 `registry/` 對齊；補一個雙邊 input/output/behavior diff 腳本或手動流程，避免下次「只改一邊」的重構再度靜默漏欄位
+- [ ] **根因優先**：補一個機制讓既有的 `packages/ui` spec（或至少關鍵的 CVA/a11y regression test）也能對 `registry/` 的程式碼執行——不管是 symlink、build step 產生可測試版本、或另開一組跑在 registry 路徑上的 smoke test。目前 golden fixture 只驗證檔案結構跟 `registry.json` 對得上，完全不驗證程式碼行為，這是 `switch`/`checkbox`/`radio` 三次同類 regression 都沒被抓到的根本原因
+- [ ] `packages/ui` 的 9 個表單元件（`checkbox`/`switch`/`radio-group`/`slider`/`otp-input`/`date-picker`/`calendar`/`file-upload`/`combobox`）補做 P14 第二批重構：改成 `extends SanringCvaBase`，跟 `registry/` 對齊
 
-**現況**：P14 第二批重構（`a9cb0fd`）只實際套用在 `registry/shared/cva-base.ts` + `registry/components/*`，`packages/ui` 的對應 9 個元件從未跟進，兩邊架構自此分岔——`packages/ui` 還是舊的手刻 `XxxFieldControlAdapter`。這次分岔在 `/audit-component switch` 稽核時意外揪出 `registry/switch` 漏掉 `ariaLabel`/`checkedChange` 的 regression（見 DEVLOG P14 段落），已修正；但架構分岔本身還在，其餘 8 個元件目前功能一致只是純粹技術債，且沒有機制防止下次重構再度只改一邊。
+**現況**：P14 第二批重構（`a9cb0fd`）只實際套用在 `registry/shared/cva-base.ts` + `registry/components/*`，`packages/ui` 的對應 9 個元件從未跟進，兩邊架構自此分岔——`packages/ui` 還是舊的手刻 `XxxFieldControlAdapter`。這次分岔在 `/audit-component` 稽核 Tier 2 元件時連續三次意外揪出 `registry/` 端的 regression（`switch` 漏 `ariaLabel`/`checkedChange`、`checkbox`/`radio-group` 都漏 `aria-required` 的 `fieldRequired` 偵測），全部已修正；但每一次 `packages/ui` 都早就有對應的 regression test，只是從沒跑在 `registry/` 上面而失效——這才是要優先解決的根因，不然接下來 `slider`/`otp-input`/`file-upload`/`combobox`/`calendar`/`date-picker` 還要一個一個手動 diff 才能抓。
 
 ---
 
@@ -85,7 +86,7 @@
 - [x] `textarea` — 零缺陷，設計與 `input` 一致，spec 補 aria-invalid 狀態 test（4/4 通過）。Tier 1 by design
 - [x] `switch` — **高嚴重度**：P14 的 `SanringCvaBase` 重構（`a9cb0fd`）只套用在 `registry/`，過程中漏掉先前已修好的 `ariaLabel`/`ariaLabelledBy`/`checkedChange`，導致 `sanring add switch` 裝出來的版本 regression 回無障礙缺陷。已補回並比對其餘 8 個同批重構元件（checkbox/radio/slider/otp-input/file-upload/combobox/calendar/date-picker）確認皆無此問題，只有 switch 受影響。spec 補 class merging test（284/284 通過）
 - [x] `checkbox` — 同批 P14 registry 重構 drift：`aria-required` 改綁純 `required()` input，漏掉 `Validators.required` 偵測（`packages/ui` 用 `fieldRequired` 才對），已修正。spec 補 class merging test（285/285 通過）
-- [ ] `radio`
+- [x] `radio` — 第三筆同類 P14 registry drift：`aria-required` 又是漏掉 `fieldRequired`（只看 `required()`），已修正。Tier 2（方向鍵導覽/roving tabindex/disabled 跳過），consumer usage 只有自己 demo 頁，Draft 狀態待評估是否投資。spec 補 class merging test（286/286 通過）
 - [ ] `slider`
 - [ ] `scroll-area`
 - [ ] `field`

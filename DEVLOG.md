@@ -193,6 +193,8 @@
 
 **第二筆(2026-08-13,`/audit-component checkbox` 時發現)**:同一批重構在 `checkbox` 上留下另一個更隱蔽的 drift——`aria-required` 的 template binding 從 `fieldRequired`(同時看 `required` input 與 `Validators.required`)改成直接綁純 `required()` input,漏掉 validator 偵測。影響:`[formControl]` 綁一個帶 `Validators.required` 但沒明講 `[required]` 的 control 時,`sanring add checkbox` 裝出來的版本不會在真正的互動元素上出現 `aria-required="true"`(`sanring-field` 的星號指示器走 adapter 沒受影響,只有元件自己的 native 屬性壞掉)。已修正。**這個 bug 本來會被抓到**——`packages/ui/checkbox.field.spec.ts` 早就有一個專門測「required 只靠 Validators.required 也要出現 aria-required」的 regression test,只是那個 spec 只對 `packages/ui` 跑,從沒驗證過 `registry/` 的程式碼行為,所以完全沒發揮作用。逐一核對其餘元件(`radio`/`slider`/`otp-input`/`file-upload`/`combobox`/`switch`)的 `aria-required` 綁法在兩邊一致;`calendar`/`date-picker` 兩邊都用 `required()` 直接綁,是既有設計不是 drift。
 
+**第三筆(2026-08-13,`/audit-component radio` 時發現)**:`radio-group` 也中招,同一個模式——`registry/components/radio/radio-group.component.ts` 的 `aria-required` 綁 `required() || null`,漏掉 `fieldRequired` 的 `Validators.required` 偵測。已修正。跟前兩筆一樣,`packages/ui/radio-group.field.spec.ts` 早就有對應的 regression test(「required 只靠 `Validators.required`,沒有明講 `[required]`,`aria-required` 也要出現」),一樣因為 spec 只跑 `packages/ui`、從沒驗證過 `registry/` 而完全沒發揮作用。三個元件(`switch`/`checkbox`/`radio`)接連中同一個模式,已經不是單一元件的偶發問題——這批 P14 重構在把 template binding 從 `fieldRequired`/`ariaLabel` 等 getter 手動搬到新架構時,顯然是系統性地弄丟了一部分邏輯,而現有的驗證機制(golden fixture 只驗結構、spec 只跑 packages/ui)兩層都沒接住。**追蹤**:見 TODOLIST P28,除了補齊 `packages/ui` 的 CVA 遷移外,應該優先解決「spec 從沒驗證過 registry 程式碼行為」這個根因,而不是繼續一個一個元件手動 diff 抓。
+
 ---
 
 ## P15 — 版本兼容追蹤與 `sanring migrate` 指令

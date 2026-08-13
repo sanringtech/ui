@@ -19,6 +19,10 @@ import { RadioValue } from './radio.types';
     <sanring-radio-group [disabled]="true">
       <sanring-radio-item value="x">X</sanring-radio-item>
     </sanring-radio-group>
+
+    <sanring-radio-group ariaLabel="Custom" class="custom-class">
+      <sanring-radio-item value="y">Y</sanring-radio-item>
+    </sanring-radio-group>
   `,
 })
 class RadioGroupTestHost {
@@ -113,6 +117,15 @@ describe('RadioGroupComponent', () => {
     fixture.detectChanges();
 
     expect(item.getAttribute('aria-checked')).toBe('false');
+  });
+
+  it('merges host class with consumer class', () => {
+    const fixture = TestBed.createComponent(RadioGroupTestHost);
+    fixture.detectChanges();
+
+    const group = fixture.nativeElement.querySelectorAll('[role="radiogroup"]')[2] as HTMLElement;
+    expect(group.classList.contains('custom-class')).toBe(true);
+    expect(group.classList.contains('grid')).toBe(true);
   });
 
   it('has no axe-detectable a11y violations when items are paired with an external <label for>', async () => {
