@@ -13,6 +13,7 @@ import { ScrollAreaOrientation } from './scroll-area.type';
     '[attr.role]': 'scrollAreaRole()',
     '[attr.aria-label]': 'ariaLabel() || null',
     '[attr.aria-labelledby]': 'ariaLabelledby() || null',
+    '[attr.tabindex]': '0',
     '[class]': 'scrollAreaClass()',
   },
   styles: [
@@ -56,6 +57,7 @@ export class ScrollAreaComponent {
     cn(
       'relative',
       this.orientationClass(),
+      'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--sanring-border-strong)]',
       this.hideScrollbar() && '[&::-webkit-scrollbar]:hidden [scrollbar-width:none]',
       this.class(),
     ),

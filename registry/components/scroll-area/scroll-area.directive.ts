@@ -10,6 +10,7 @@ import { cn } from '../shared/utils';
     '[attr.role]': 'scrollAreaRole()',
     '[attr.aria-label]': 'ariaLabel() || null',
     '[attr.aria-labelledby]': 'ariaLabelledby() || null',
+    '[attr.tabindex]': '0',
     '[class]': 'scrollAreaClass()',
   },
 })
@@ -22,6 +23,7 @@ export class ScrollAreaDirective {
   protected readonly scrollAreaClass = computed(() =>
     cn(
       'relative overflow-auto',
+      'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--sanring-border-strong)]',
       this.hideScrollbar() && '[&::-webkit-scrollbar]:hidden [scrollbar-width:none]',
       this.class(),
     ),
