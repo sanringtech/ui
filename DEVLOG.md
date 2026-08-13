@@ -191,6 +191,8 @@
 
 **回歸(2026-08-13,`/audit-component switch` Tier 2 稽核時發現)**:第二批重構只實際套用在 `registry/`,`packages/ui` 的 9 個元件從未跟進改成 `extends SanringCvaBase`,兩邊架構自此分岔而沒人注意到。更嚴重的是,`registry/components/switch/switch.component.ts` 重寫成 `SanringCvaBase` 版本時,把先前(見上方 P11 `input`/`field` 段落)已經修好並記錄在案的兩個真實 bug ——`ariaLabel`/`ariaLabelledBy` input、`checkedChange` output——整個漏掉了,導致 `sanring add switch` 裝出來的版本重新出現同一個無障礙缺陷。已比照同一批重構的 `checkbox` 補回 input/output 宣告、template binding、`toggle()` 內的 emit。逐一比對其餘 8 個元件(`checkbox`/`radio`/`slider`/`otp-input`/`file-upload`/`combobox`/`calendar`/`date-picker`)的 `packages/ui` vs `registry` input/output 清單,只有 `switch` 受影響,不是系統性問題。**提醒**:往後任何「只改 registry 不改 packages/ui」（或反過來）的重構,完成後都要跑一次雙邊 input/output/behavior diff,不能只靠 golden fixture(那個只驗證檔案結構跟 registry.json 對得上,不驗證兩邊程式碼內容一致)。
 
+**第二筆(2026-08-13,`/audit-component checkbox` 時發現)**:同一批重構在 `checkbox` 上留下另一個更隱蔽的 drift——`aria-required` 的 template binding 從 `fieldRequired`(同時看 `required` input 與 `Validators.required`)改成直接綁純 `required()` input,漏掉 validator 偵測。影響:`[formControl]` 綁一個帶 `Validators.required` 但沒明講 `[required]` 的 control 時,`sanring add checkbox` 裝出來的版本不會在真正的互動元素上出現 `aria-required="true"`(`sanring-field` 的星號指示器走 adapter 沒受影響,只有元件自己的 native 屬性壞掉)。已修正。**這個 bug 本來會被抓到**——`packages/ui/checkbox.field.spec.ts` 早就有一個專門測「required 只靠 Validators.required 也要出現 aria-required」的 regression test,只是那個 spec 只對 `packages/ui` 跑,從沒驗證過 `registry/` 的程式碼行為,所以完全沒發揮作用。逐一核對其餘元件(`radio`/`slider`/`otp-input`/`file-upload`/`combobox`/`switch`)的 `aria-required` 綁法在兩邊一致;`calendar`/`date-picker` 兩邊都用 `required()` 直接綁,是既有設計不是 drift。
+
 ---
 
 ## P15 — 版本兼容追蹤與 `sanring migrate` 指令

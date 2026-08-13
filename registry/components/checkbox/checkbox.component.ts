@@ -51,7 +51,7 @@ import { CheckedState, CheckboxSize } from './checkbox.types';
       [attr.name]="name()"
       [attr.value]="value()"
       [attr.aria-checked]="checkedSignal() === 'indeterminate' ? 'mixed' : checkedSignal()"
-      [attr.aria-required]="required()"
+      [attr.aria-required]="fieldRequired ? 'true' : null"
       [attr.aria-invalid]="errorState ? 'true' : null"
       [attr.aria-label]="ariaLabel()"
       [attr.aria-labelledby]="ariaLabelledBy()"

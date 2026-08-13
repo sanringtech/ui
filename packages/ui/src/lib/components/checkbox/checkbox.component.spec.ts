@@ -13,6 +13,7 @@ import { CheckedState } from './checkbox.types';
     <sanring-checkbox checked="indeterminate" />
     <sanring-checkbox [checked]="false" [disabled]="true" />
     <sanring-checkbox [(ngModel)]="modelValue" />
+    <sanring-checkbox ariaLabel="Custom" class="custom-class" />
   `,
 })
 class CheckboxTestHost {
@@ -90,6 +91,15 @@ describe('CheckboxComponent', () => {
     await fixture.whenStable();
 
     expect(fixture.componentInstance.modelValue).toBe(true);
+  });
+
+  it('merges host class with consumer class', () => {
+    const fixture = TestBed.createComponent(CheckboxTestHost);
+    fixture.detectChanges();
+
+    const checkbox = fixture.nativeElement.querySelectorAll('button[role="checkbox"]')[4] as HTMLElement;
+    expect(checkbox.classList.contains('custom-class')).toBe(true);
+    expect(checkbox.classList.contains('rounded-[var(--sanring-radius-xs)]')).toBe(true);
   });
 
   it('has no axe-detectable a11y violations when given an accessible name', async () => {
