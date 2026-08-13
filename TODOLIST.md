@@ -13,7 +13,7 @@
 ### Tier 1 — Low-interaction primitive（純顯示型，無 Overlay）
 
 - [x] `divider` — class merging + ariaLabel 已補，spec 5/5 通過
-- [ ] `skeleton`
+- [x] `skeleton` — registry CSS 對齊設計 token，spec 補 class merging test（3/3 通過）
 - [ ] `spinner`
 - [ ] `progress`
 - [ ] `badge`
