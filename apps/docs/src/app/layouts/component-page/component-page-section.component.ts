@@ -21,23 +21,31 @@ interface StructuredDescriptionItem {
   template: `
     <section [id]="sectionId" [class]="sectionClass">
       <div class="mb-3.5">
-        @switch (level) {
-          @case (4) {
-            <h4 [class]="headingClass">
-              {{ i18n.t(section.titleKey) }}
-            </h4>
+        <div [class]="headingWrapClass">
+          @if (level === 2) {
+            <span
+              class="mt-1 h-8 w-1.5 rounded-full bg-[linear-gradient(180deg,var(--docs-accent),var(--docs-accent-alt))]"
+              aria-hidden="true"
+            ></span>
           }
-          @case (3) {
-            <h3 [class]="headingClass">
-              {{ i18n.t(section.titleKey) }}
-            </h3>
+          @switch (level) {
+            @case (4) {
+              <h4 [class]="headingClass">
+                {{ i18n.t(section.titleKey) }}
+              </h4>
+            }
+            @case (3) {
+              <h3 [class]="headingClass">
+                {{ i18n.t(section.titleKey) }}
+              </h3>
+            }
+            @default {
+              <h2 [class]="headingClass">
+                {{ i18n.t(section.titleKey) }}
+              </h2>
+            }
           }
-          @default {
-            <h2 [class]="headingClass">
-              {{ i18n.t(section.titleKey) }}
-            </h2>
-          }
-        }
+        </div>
 
         @if (section.descriptionKey) {
           @if (usesStructuredDescription) {
@@ -46,7 +54,7 @@ interface StructuredDescriptionItem {
             >
               @for (item of structuredDescriptionItems; track item.body) {
                 <li
-                  class="grid gap-1 rounded-[var(--sanring-radius-sm)] border border-[var(--docs-border)] bg-[var(--docs-elevated)] px-3 py-2.5"
+                  class="grid gap-1 rounded-[var(--sanring-radius)] border border-[color-mix(in_srgb,var(--docs-border)_82%,transparent)] bg-[color-mix(in_srgb,var(--docs-elevated)_72%,transparent)] px-3 py-2.5 shadow-sm"
                 >
                   <strong
                     class="text-xs font-semibold uppercase tracking-normal text-[var(--docs-fg)]"
@@ -58,7 +66,7 @@ interface StructuredDescriptionItem {
               }
             </ul>
           } @else {
-            <p class="mb-0 mt-3 text-base leading-[1.7] text-[var(--docs-muted)]">
+            <p class="mb-0 mt-3 max-w-[760px] text-base leading-[1.7] text-[var(--docs-muted)]">
               {{ sectionDescription }}
             </p>
           }
@@ -104,12 +112,16 @@ export class ComponentPageSectionComponent {
 
   protected get headingClass() {
     const headingClasses: Record<2 | 3 | 4, string> = {
-      2: 'm-0 text-[28px] tracking-normal',
-      3: 'm-0 text-[22px] tracking-normal',
-      4: 'm-0 text-lg font-semibold tracking-normal',
+      2: 'm-0 text-[28px] font-semibold leading-[1.2] tracking-normal text-[var(--docs-fg)] max-[520px]:text-[24px]',
+      3: 'm-0 text-[22px] font-semibold leading-[1.25] tracking-normal text-[var(--docs-fg)] max-[520px]:text-xl',
+      4: 'm-0 text-lg font-semibold leading-[1.35] tracking-normal text-[var(--docs-fg)]',
     };
 
     return headingClasses[this.level];
+  }
+
+  protected get headingWrapClass() {
+    return this.level === 2 ? 'flex items-start gap-3' : '';
   }
 
   private splitDescription(description: string): string[] {

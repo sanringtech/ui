@@ -50,7 +50,7 @@ function renderInlineCode(text: string): string {
     @if (changes().length > 0) {
       <section
         id="recent-changes"
-        class="mt-16 border-t border-[var(--docs-border)] pt-10"
+        class="mt-16 rounded-[var(--sanring-radius-lg)] border border-[color-mix(in_srgb,var(--docs-border)_82%,transparent)] bg-[color-mix(in_srgb,var(--docs-panel)_72%,transparent)] p-6 shadow-[var(--docs-shadow-soft)] max-[520px]:p-4"
         [attr.aria-labelledby]="'recent-changes-title'"
       >
         <div class="flex flex-wrap items-end justify-between gap-3">
@@ -76,7 +76,7 @@ function renderInlineCode(text: string): string {
         <ol class="mt-6 list-none space-y-3 p-0">
           @for (entry of changes(); track entry.version + '-' + $index) {
             <li
-              class="rounded-[var(--sanring-radius)] border border-[var(--docs-border)] bg-[var(--docs-panel)] p-4"
+              class="rounded-[var(--sanring-radius)] border border-[color-mix(in_srgb,var(--docs-border)_82%,transparent)] bg-[color-mix(in_srgb,var(--docs-elevated)_58%,transparent)] p-4"
             >
               <div class="mb-3 flex flex-wrap items-center gap-2">
                 <span class="font-mono text-sm font-semibold text-[var(--docs-fg)]">
