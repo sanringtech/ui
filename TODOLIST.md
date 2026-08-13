@@ -71,7 +71,7 @@
 
 ### Tier 2 — Interactive / composite（有互動，無 Overlay）
 
-- [ ] `button`
+- [x] `button` — `a[sanringBtn]` 無 `href` 時補 `role="button"`，spec 補 2 個 host component 測試（6/6 通過）
 - [ ] `toggle`
 - [ ] `input`
 - [ ] `textarea`
