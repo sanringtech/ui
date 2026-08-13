@@ -62,7 +62,7 @@
 - [x] `tag` — 關閉按鈕補 focus-visible ring（WCAG 2.4.7），spec 補 class merging + remove output test（4/4 通過）
 - [x] `aspect-ratio` — 零缺陷，spec 4/4 通過
 - [x] `card` — registry 補 design token（rounded-xl → rounded-[var(--sanring-radius-lg)]），spec 3/3 通過
-- [ ] `avatar`
+- [x] `avatar` — registry AvatarImageDirective 補 afterNextRender SSR 防護，spec 3/3 通過
 - [ ] `label`
 - [ ] `link`
 - [ ] `alert`
