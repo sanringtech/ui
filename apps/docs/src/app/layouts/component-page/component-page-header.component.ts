@@ -15,6 +15,7 @@ import {
 } from '../../navigation/docs-navigation';
 import { I18nService } from '../../i18n/i18n.service';
 import { SeoService } from '../../seo/seo.service';
+import { DocsPageHeaderComponent } from './docs-page-header.component';
 
 @Component({
   selector: 'app-component-page-header',
@@ -25,24 +26,19 @@ import { SeoService } from '../../seo/seo.service';
     LucideChevronDown,
     LucideChevronUp,
     LucideCopy,
+    DocsPageHeaderComponent,
     SANRING_DROPDOWN_MENU_IMPORTS,
   ],
+  host: {
+    class: 'block min-w-0',
+  },
   template: `
-    <header
-      class="mb-10 flex items-start justify-between gap-6 border-b border-[var(--docs-border)] pb-7 max-[720px]:block"
+    <app-docs-page-header
+      [title]="title"
+      [description]="description"
+      [eyebrow]="componentEyebrow"
     >
-      <div class="min-w-0">
-        <h1
-          class="m-0 text-[30px] font-semibold leading-tight tracking-normal text-[var(--docs-fg)]"
-        >
-          {{ title }}
-        </h1>
-        <p class="mb-0 mt-2 max-w-[560px] text-base leading-relaxed text-[var(--docs-muted)]">
-          {{ description }}
-        </p>
-      </div>
-
-      <div class="flex shrink-0 items-center gap-2 max-[720px]:mt-6">
+      <div page-actions class="flex shrink-0 items-center gap-2">
         <sanring-dropdown-menu>
           <div class="flex items-center">
             <button
@@ -111,7 +107,7 @@ import { SeoService } from '../../seo/seo.service';
           <svg class="size-4" lucideArrowRight></svg>
         </button>
       </div>
-    </header>
+    </app-docs-page-header>
   `,
 })
 export class ComponentPageHeaderComponent implements OnChanges {
@@ -137,6 +133,10 @@ export class ComponentPageHeaderComponent implements OnChanges {
 
   protected get nextComponent() {
     return this.componentId ? getAdjacentDocsComponent(this.componentId).next : null;
+  }
+
+  protected get componentEyebrow() {
+    return this.componentId ? `components / ${this.componentId}` : '';
   }
 
   protected goToComponent(component: DocsComponentNavItem | null) {

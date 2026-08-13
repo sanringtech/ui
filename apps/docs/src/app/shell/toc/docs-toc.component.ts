@@ -9,10 +9,13 @@ const ACTIVE_OFFSET = SCROLL_OFFSET + 24;
   selector: 'app-docs-toc',
   template: `
     <aside
-      class="sticky top-[76px] h-[calc(100dvh-76px)] overflow-auto bg-[var(--docs-bg)] pb-12 pl-2.5 pr-8 pt-12 max-[1180px]:pr-5 max-[980px]:hidden"
+      class="sticky top-[76px] h-[calc(100dvh-76px)] overflow-auto bg-[color-mix(in_srgb,var(--docs-bg)_60%,transparent)] pb-12 pl-4 pr-8 pt-10 backdrop-blur-xl max-[1180px]:pr-5 max-[980px]:hidden"
     >
-      <nav class="mb-11" [attr.aria-label]="i18n.t('toc.label')">
-        <p class="mb-4 text-sm font-semibold leading-normal text-[var(--docs-muted)]">
+      <nav
+        class="mb-11 rounded-[var(--sanring-radius-lg)] border border-[color-mix(in_srgb,var(--docs-border)_72%,transparent)] bg-[color-mix(in_srgb,var(--docs-panel)_62%,transparent)] p-4 shadow-[var(--docs-shadow-soft)]"
+        [attr.aria-label]="i18n.t('toc.label')"
+      >
+        <p class="mb-4 text-xs font-semibold uppercase tracking-[0.08em] text-[var(--docs-muted)]">
           {{ i18n.t('toc.label') }}
         </p>
         @for (item of items(); track item.id) {
@@ -70,7 +73,7 @@ export class DocsTocComponent {
     };
 
     return [
-      'my-3 block border-l border-transparent py-0.5 text-sm no-underline transition-colors',
+      'my-3 block border-l border-transparent py-0.5 text-sm no-underline transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--docs-focus-ring)]',
       active
         ? 'border-[var(--docs-accent)] text-[var(--docs-fg)]'
         : 'text-[var(--docs-muted)] hover:text-[var(--docs-fg)]',

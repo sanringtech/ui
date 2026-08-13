@@ -8,7 +8,7 @@ import { HeaderComponent } from '../shell/header/header.component';
   imports: [RouterOutlet, HeaderComponent, ToasterComponent],
   providers: [ToastService],
   template: `
-    <div class="min-h-dvh bg-[var(--docs-bg)] text-[var(--docs-fg)]">
+    <div class="min-h-dvh text-[var(--docs-fg)]">
       <app-header />
 
       <main class="min-h-[calc(100dvh-76px)]">

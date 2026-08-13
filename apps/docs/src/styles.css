@@ -346,6 +346,12 @@
     --docs-accent: var(--sanring-primary-50);
     --docs-accent-strong: var(--sanring-primary-30);
     --docs-accent-fg: var(--sanring-neutral-90);
+    --docs-accent-alt: var(--sanring-coral-50);
+    --docs-accent-warm: var(--sanring-sun-50);
+    --docs-bg-grid: color-mix(in srgb, var(--docs-border) 28%, transparent);
+    --docs-focus-ring: color-mix(in srgb, var(--docs-accent) 72%, transparent);
+    --docs-shadow-soft: 0 18px 50px color-mix(in srgb, var(--docs-bg) 64%, transparent);
+    --docs-shadow-strong: 0 28px 90px color-mix(in srgb, var(--docs-bg) 72%, transparent);
 
     --docs-info: var(--sanring-info-50);
     --docs-info-bg: var(--sanring-info-10);
@@ -394,10 +400,10 @@
     --docs-surface: #ffffff;
     --docs-surface-strong: #eef4f5;
     --docs-elevated: #ffffff;
-    --docs-code: #f9fbfb;
-    --docs-code-header: #f2f6f6;
-    --docs-code-fg: #253436;
-    --docs-code-muted: #647477;
+    --docs-code: #101718;
+    --docs-code-header: #172022;
+    --docs-code-fg: #d7e2e4;
+    --docs-code-muted: #8da0a4;
     --docs-fg: var(--sanring-neutral-90);
     --docs-muted: var(--sanring-neutral-70);
     --docs-border: #d9e1e2;
@@ -408,6 +414,12 @@
     --docs-accent: var(--sanring-primary-50);
     --docs-accent-strong: var(--sanring-primary-70);
     --docs-accent-fg: var(--sanring-neutral-90);
+    --docs-accent-alt: var(--sanring-coral-60);
+    --docs-accent-warm: var(--sanring-sun-60);
+    --docs-bg-grid: color-mix(in srgb, var(--docs-border) 42%, transparent);
+    --docs-focus-ring: color-mix(in srgb, var(--docs-accent-strong) 62%, transparent);
+    --docs-shadow-soft: 0 16px 42px color-mix(in srgb, var(--docs-muted) 16%, transparent);
+    --docs-shadow-strong: 0 26px 82px color-mix(in srgb, var(--docs-muted) 20%, transparent);
     /* light theme: bar 是深色，用白色半透明掃光帶製造對比 */
     --sanring-progress-shimmer: rgba(255, 255, 255, 0.45);
   }
@@ -420,11 +432,27 @@
   body {
     min-width: 320px;
     margin: 0;
-    background: var(--docs-bg);
+    background:
+      linear-gradient(180deg, color-mix(in srgb, var(--docs-panel) 42%, transparent) 0, transparent 360px),
+      linear-gradient(90deg, var(--docs-bg-grid) 1px, transparent 1px),
+      linear-gradient(180deg, var(--docs-bg-grid) 1px, transparent 1px),
+      var(--docs-bg);
+    background-attachment: fixed;
+    background-size:
+      auto,
+      56px 56px,
+      56px 56px,
+      auto;
     color: var(--docs-fg);
     font-family: var(--sanring-font-sans);
     text-rendering: optimizeLegibility;
     -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+  }
+
+  ::selection {
+    background: color-mix(in srgb, var(--docs-accent) 38%, transparent);
+    color: var(--docs-fg);
   }
 
   /* Theme switch crossfade — handled by the View Transitions API (see

@@ -8,7 +8,7 @@ import { DocsSectionsListComponent } from './docs-sections-list.component';
   imports: [DocsSectionsListComponent, DocsComponentsListComponent],
   template: `
     <aside
-      class="docs-sidebar-scroll sticky top-[76px] hidden h-[calc(100dvh-76px)] overflow-auto border-r border-[var(--docs-border)] bg-[var(--docs-bg)] py-12 pl-[30px] pr-7 min-[861px]:block"
+      class="docs-sidebar-scroll sticky top-[76px] hidden h-[calc(100dvh-76px)] overflow-auto border-r border-[color-mix(in_srgb,var(--docs-border)_76%,transparent)] bg-[color-mix(in_srgb,var(--docs-bg)_72%,transparent)] py-10 pl-[30px] pr-7 backdrop-blur-xl min-[861px]:block"
     >
       <app-docs-sections-list />
       <app-docs-components-list />

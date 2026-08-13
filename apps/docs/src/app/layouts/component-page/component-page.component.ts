@@ -9,9 +9,12 @@ import { ComponentPageRecentChangesComponent } from './component-page-recent-cha
   selector: 'app-component-page',
   standalone: true,
   imports: [ComponentPageRecentChangesComponent],
+  host: {
+    class: 'block min-w-0',
+  },
   template: `
     <article
-      class="mx-auto text-[var(--docs-fg)]"
+      class="mx-auto w-full min-w-0 text-[var(--docs-fg)]"
       [class]="wide() ? 'max-w-[960px]' : 'max-w-[832px]'"
     >
       <ng-content />

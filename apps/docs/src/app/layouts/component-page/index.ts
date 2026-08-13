@@ -9,3 +9,4 @@ export * from './component-page-recent-changes.component';
 export * from './component-page-section.component';
 export * from './component-page-usage-imports.component';
 export * from './component-page.component';
+export * from './docs-page-header.component';

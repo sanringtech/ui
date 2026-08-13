@@ -50,10 +50,10 @@ const MAX_SEARCH_RESULTS = 8;
     class: 'block min-w-0',
   },
   template: `
-    <div class="flex min-w-0 items-center gap-6 max-[860px]:grid max-[860px]:w-full max-[860px]:grid-cols-[auto_1fr_auto] max-[860px]:gap-3">
+    <div class="flex min-w-0 items-center gap-6 max-[860px]:w-full max-[860px]:flex-wrap max-[860px]:gap-3">
       <sanring-sheet [(isOpen)]="navState.mobileNavOpen">
         <app-header-action-button
-          class="hidden flex-none max-[980px]:block max-[860px]:col-start-1 max-[860px]:row-start-1"
+          class="hidden flex-none max-[980px]:block max-[860px]:order-1"
           [ariaLabel]="i18n.t('sidebar.openMenu')"
           (clicked)="navState.mobileNavOpen.set(true)"
         >
@@ -102,17 +102,17 @@ const MAX_SEARCH_RESULTS = 8;
       </sanring-sheet>
 
       <a
-        class="hidden min-w-0 items-center justify-self-start rounded-[var(--sanring-radius)] border border-[color-mix(in_srgb,var(--docs-accent)_36%,var(--docs-border))] bg-[color-mix(in_srgb,var(--docs-accent)_8%,var(--docs-surface))] px-3 py-2 no-underline transition-colors hover:bg-[color-mix(in_srgb,var(--docs-accent)_14%,var(--docs-elevated))] max-[860px]:inline-flex"
+        class="hidden min-w-0 items-center justify-self-start rounded-[var(--sanring-radius)] border border-[color-mix(in_srgb,var(--docs-accent)_36%,var(--docs-border))] bg-[color-mix(in_srgb,var(--docs-accent)_8%,var(--docs-surface))] px-3 py-2 no-underline transition-colors hover:bg-[color-mix(in_srgb,var(--docs-accent)_14%,var(--docs-elevated))] max-[860px]:order-2 max-[860px]:inline-flex"
         routerLink="/"
         [attr.aria-label]="i18n.t('nav.home')"
       >
         <img class="size-6 shrink-0" src="sanring_ui.svg" alt="" />
       </a>
 
-      <div class="max-[860px]:col-span-3 max-[860px]:row-start-2 max-[860px]:min-w-0">
+      <div class="max-[860px]:order-4 max-[860px]:w-full max-[860px]:min-w-0">
         <button
           type="button"
-          class="flex h-10 w-[330px] items-center gap-2 rounded-[var(--sanring-radius)] border border-[var(--docs-border)] bg-[var(--docs-elevated)] px-3 text-sm text-[var(--docs-muted)] transition-colors hover:border-[var(--docs-border-strong)] max-[980px]:w-[min(46vw,300px)] max-[860px]:w-full"
+          class="flex h-10 w-[330px] items-center gap-2 rounded-[var(--sanring-radius)] border border-[color-mix(in_srgb,var(--docs-border)_86%,transparent)] bg-[color-mix(in_srgb,var(--docs-elevated)_82%,transparent)] px-3 text-sm text-[var(--docs-muted)] shadow-sm transition-colors hover:border-[color-mix(in_srgb,var(--docs-accent)_38%,var(--docs-border-strong))] hover:bg-[var(--docs-elevated)] max-[980px]:w-[min(46vw,300px)] max-[860px]:w-full"
           (click)="commandDialog.open()"
         >
           <svg class="size-4 shrink-0" lucideSearch></svg>
@@ -160,8 +160,8 @@ const MAX_SEARCH_RESULTS = 8;
         </sanring-command-dialog>
       </div>
 
-      <div class="flex flex-none items-center gap-4 max-[860px]:col-start-3 max-[860px]:row-start-1 max-[860px]:justify-self-end max-[860px]:gap-3">
-        <app-header-action-button ariaLabel="GitHub" (clicked)="gotoGithub()">
+      <div class="flex flex-none items-center gap-4 max-[860px]:order-3 max-[860px]:ml-auto max-[860px]:justify-end max-[860px]:gap-3">
+        <app-header-action-button class="max-[520px]:hidden" ariaLabel="GitHub" (clicked)="gotoGithub()">
           <svg
             class="size-5"
             viewBox="0 0 24 24"
@@ -175,7 +175,7 @@ const MAX_SEARCH_RESULTS = 8;
         </app-header-action-button>
 
         <div
-          class="relative inline-grid h-10 grid-cols-3 items-center gap-1.5 overflow-hidden rounded-[var(--sanring-radius)] border border-[var(--docs-border)] bg-[var(--docs-elevated)] p-1"
+          class="relative inline-grid h-10 grid-cols-3 items-center gap-1.5 overflow-hidden rounded-[var(--sanring-radius)] border border-[color-mix(in_srgb,var(--docs-border)_86%,transparent)] bg-[color-mix(in_srgb,var(--docs-elevated)_82%,transparent)] p-1 shadow-sm"
           role="group"
           [attr.aria-label]="i18n.t('actions.selectTheme')"
         >
