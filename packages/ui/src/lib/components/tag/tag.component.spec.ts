@@ -13,10 +13,25 @@ import { TagComponent } from './tag.component';
 })
 class TagTestHost {}
 
+@Component({
+  imports: [TagComponent],
+  template: `<sanring-tag class="my-tag">Label</sanring-tag>`,
+})
+class TagClassHost {}
+
+@Component({
+  imports: [TagComponent],
+  template: `<sanring-tag closable (remove)="onRemove()">Label</sanring-tag>`,
+})
+class TagRemoveHost {
+  removed = false;
+  onRemove() { this.removed = true; }
+}
+
 describe('TagComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [TagTestHost],
+      imports: [TagTestHost, TagClassHost, TagRemoveHost],
     }).compileComponents();
   });
 
@@ -28,6 +43,26 @@ describe('TagComponent', () => {
 
     expect(buttons[0].getAttribute('aria-label')).toBe('Remove tag');
     expect(buttons[1].getAttribute('aria-label')).toBe('Remove Angular tag');
+  });
+
+  it('merges consumer class onto the inner badge span', () => {
+    const fixture = TestBed.createComponent(TagClassHost);
+    fixture.detectChanges();
+
+    const span = fixture.nativeElement.querySelector('span[sanringBadge]') as HTMLElement;
+
+    expect(span.className).toContain('my-tag');
+    expect(span.className).toContain('inline-flex');
+  });
+
+  it('emits remove event when the close button is clicked', () => {
+    const fixture = TestBed.createComponent(TagRemoveHost);
+    fixture.detectChanges();
+
+    const button = fixture.nativeElement.querySelector('button') as HTMLButtonElement;
+    button.click();
+
+    expect(fixture.componentInstance.removed).toBe(true);
   });
 
   it('has no axe-detectable a11y violations', async () => {
