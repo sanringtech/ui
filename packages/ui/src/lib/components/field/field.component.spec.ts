@@ -1,8 +1,11 @@
 import { Component } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
+import { FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
 import { describe, expect, it } from 'vitest';
 import { expectNoA11yViolations } from '../../../testing/axe-a11y';
 import { InputDirective } from '../input/input.directive';
+import { DescriptionDirective } from './description.directive';
+import { ErrorMessageComponent } from './error-message.component';
 import { SanringFieldComponent } from './field.component';
 import { LabelDirective } from './label.directive';
 
@@ -24,6 +27,27 @@ class HostComponent {
 }
 
 describe('SanringFieldComponent projection', () => {
+  it('renders without error', () => {
+    const fixture = TestBed.createComponent(HostComponent);
+    fixture.detectChanges();
+
+    expect(fixture.nativeElement).toBeTruthy();
+  });
+
+  it('merges host class with consumer class', () => {
+    TestBed.overrideComponent(HostComponent, {
+      set: {
+        template: `<sanring-field class="custom-class"><input sanringInput /></sanring-field>`,
+      },
+    });
+    const fixture = TestBed.createComponent(HostComponent);
+    fixture.detectChanges();
+
+    const fieldEl = fixture.nativeElement.querySelector('sanring-field') as HTMLElement;
+    expect(fieldEl.classList.contains('custom-class')).toBe(true);
+    expect(fieldEl.classList.contains('flex')).toBe(true);
+  });
+
   it('projects label and input when not floating', () => {
     const fixture = TestBed.createComponent(HostComponent);
     fixture.detectChanges();
@@ -46,6 +70,42 @@ describe('SanringFieldComponent projection', () => {
     fixture.detectChanges();
 
     await expectNoA11yViolations(fixture.nativeElement);
+  });
+});
+
+@Component({
+  standalone: true,
+  imports: [SanringFieldComponent, InputDirective, DescriptionDirective, ErrorMessageComponent, ReactiveFormsModule],
+  template: `
+    <sanring-field>
+      <input sanringInput [formControl]="control" />
+      <div sanringDescription>Use your work email</div>
+      <sanring-error-message>Email is required</sanring-error-message>
+    </sanring-field>
+  `,
+})
+class DescribedByTestHost {
+  readonly control = new FormControl<string | null>(null, { validators: [Validators.required] });
+}
+
+describe('SanringFieldComponent aria-describedby wiring', () => {
+  it('forwards registered Description/ErrorMessage ids onto the projected control', () => {
+    const fixture = TestBed.createComponent(DescribedByTestHost);
+    fixture.detectChanges();
+
+    const inputEl = fixture.nativeElement.querySelector('input') as HTMLInputElement;
+    const descriptionEl = fixture.nativeElement.querySelector('[sanringDescription]') as HTMLElement;
+
+    // 尚未觸發驗證錯誤：只有 description 的 id 出現在 aria-describedby
+    expect(inputEl.getAttribute('aria-describedby')).toBe(descriptionEl.id);
+
+    fixture.componentInstance.control.markAsTouched();
+    fixture.detectChanges();
+
+    const errorEl = fixture.nativeElement.querySelector('sanring-error-message') as HTMLElement;
+    const describedBy = inputEl.getAttribute('aria-describedby');
+    expect(describedBy).toContain(descriptionEl.id);
+    expect(describedBy).toContain(errorEl.id);
   });
 });
 
