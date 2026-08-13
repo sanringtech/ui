@@ -7,7 +7,6 @@ import {
   contentChildren,
   effect,
   forwardRef,
-  inject,
   input,
   numberAttribute,
   output,
