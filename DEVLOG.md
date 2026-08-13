@@ -189,6 +189,8 @@
 
 9 個元件全數改為 `extends SanringCvaBase<T>`,移除各自的共用 boilerplate（約 1,200 行）。三個設計變異點：(1) 有 `required` input 的 7 個元件覆寫 `protected hasInputRequired()` hook；(2) 沒有 `ariaDescribedBy` input 的 `switch`/`combobox` 呼叫 `makeComputedAriaDescribedBy()` 無參數版；(3) `file-upload` 的 `errorState` 額外計入 `rejectedFiles`，覆寫 base getter（因此 `_stateVersion` 設為 `protected`）；`combobox` 用 `inputId`（plain string）作 field id，保留自己的 slim adapter。`registry.json` 新增 `cva-base` shared 條目，9 個元件的 `sharedDeps` 補入 `cva-base`。golden fixture 53 元件全量 test 通過。
 
+**回歸(2026-08-13,`/audit-component switch` Tier 2 稽核時發現)**:第二批重構只實際套用在 `registry/`,`packages/ui` 的 9 個元件從未跟進改成 `extends SanringCvaBase`,兩邊架構自此分岔而沒人注意到。更嚴重的是,`registry/components/switch/switch.component.ts` 重寫成 `SanringCvaBase` 版本時,把先前(見上方 P11 `input`/`field` 段落)已經修好並記錄在案的兩個真實 bug ——`ariaLabel`/`ariaLabelledBy` input、`checkedChange` output——整個漏掉了,導致 `sanring add switch` 裝出來的版本重新出現同一個無障礙缺陷。已比照同一批重構的 `checkbox` 補回 input/output 宣告、template binding、`toggle()` 內的 emit。逐一比對其餘 8 個元件(`checkbox`/`radio`/`slider`/`otp-input`/`file-upload`/`combobox`/`calendar`/`date-picker`)的 `packages/ui` vs `registry` input/output 清單,只有 `switch` 受影響,不是系統性問題。**提醒**:往後任何「只改 registry 不改 packages/ui」（或反過來）的重構,完成後都要跑一次雙邊 input/output/behavior diff,不能只靠 golden fixture(那個只驗證檔案結構跟 registry.json 對得上,不驗證兩邊程式碼內容一致)。
+
 ---
 
 ## P15 — 版本兼容追蹤與 `sanring migrate` 指令

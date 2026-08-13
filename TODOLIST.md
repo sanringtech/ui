@@ -48,6 +48,14 @@
 
 ---
 
+## P28 — P14 CVA 重構未套用到 `packages/ui`
+
+- [ ] `packages/ui` 的 9 個表單元件（`checkbox`/`switch`/`radio-group`/`slider`/`otp-input`/`date-picker`/`calendar`/`file-upload`/`combobox`）補做 P14 第二批重構：改成 `extends SanringCvaBase`，跟 `registry/` 對齊；補一個雙邊 input/output/behavior diff 腳本或手動流程，避免下次「只改一邊」的重構再度靜默漏欄位
+
+**現況**：P14 第二批重構（`a9cb0fd`）只實際套用在 `registry/shared/cva-base.ts` + `registry/components/*`，`packages/ui` 的對應 9 個元件從未跟進，兩邊架構自此分岔——`packages/ui` 還是舊的手刻 `XxxFieldControlAdapter`。這次分岔在 `/audit-component switch` 稽核時意外揪出 `registry/switch` 漏掉 `ariaLabel`/`checkedChange` 的 regression（見 DEVLOG P14 段落），已修正；但架構分岔本身還在，其餘 8 個元件目前功能一致只是純粹技術債，且沒有機制防止下次重構再度只改一邊。
+
+---
+
 ## P26 — `/audit-component` 全元件稽核佇列（52 個）
 
 依 `/audit-component` skill 的 Tier 判定排序：先 Tier 1（純顯示型），再 Tier 2（互動型），再 Tier 3（有 CDK Overlay / 複雜鍵盤）。每個元件稽核完成後移除該行，缺陷修正記入 DEVLOG.md。
@@ -75,7 +83,7 @@
 - [x] `toggle` — 零缺陷（工程面）；registry 端 `rounded-md` 補齊 `--sanring-radius` design token 漂移，spec 補 class merging test（4/4 通過）。Tier 1 by design（單顆 toggle button，無方向鍵語意）
 - [x] `input` — 零缺陷，`id`/`aria-invalid` 設計符合既有 `sanring-field` 整合模式，spec 補 class merging + aria-invalid 狀態 test（6/6 通過）。Tier 1 by design
 - [x] `textarea` — 零缺陷，設計與 `input` 一致，spec 補 aria-invalid 狀態 test（4/4 通過）。Tier 1 by design
-- [ ] `switch`
+- [x] `switch` — **高嚴重度**：P14 的 `SanringCvaBase` 重構（`a9cb0fd`）只套用在 `registry/`，過程中漏掉先前已修好的 `ariaLabel`/`ariaLabelledBy`/`checkedChange`，導致 `sanring add switch` 裝出來的版本 regression 回無障礙缺陷。已補回並比對其餘 8 個同批重構元件（checkbox/radio/slider/otp-input/file-upload/combobox/calendar/date-picker）確認皆無此問題，只有 switch 受影響。spec 補 class merging test（284/284 通過）
 - [ ] `checkbox`
 - [ ] `radio`
 - [ ] `slider`

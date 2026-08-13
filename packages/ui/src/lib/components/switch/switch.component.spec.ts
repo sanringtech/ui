@@ -11,6 +11,7 @@ import { SwitchComponent } from './switch.component';
     <sanring-switch invalid />
     <sanring-switch ariaLabel="Toggle theme" />
     <sanring-switch disabled />
+    <sanring-switch ariaLabel="Custom" class="custom-class" />
   `,
 })
 class SwitchTestHost {
@@ -97,6 +98,15 @@ describe('SwitchComponent', () => {
 
     expect(el.getAttribute('aria-checked')).toBe('false');
     expect(host.lastChecked).toBeNull();
+  });
+
+  it('merges host class with consumer class', () => {
+    const fixture = TestBed.createComponent(SwitchTestHost);
+    fixture.detectChanges();
+
+    const el = switches(fixture)[4];
+    expect(el.classList.contains('custom-class')).toBe(true);
+    expect(el.classList.contains('inline-flex')).toBe(true);
   });
 
   it('has no axe-detectable a11y violations when given an accessible name', async () => {
