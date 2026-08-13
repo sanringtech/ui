@@ -1,4 +1,5 @@
 import { ChangeDetectionStrategy, Component, booleanAttribute, computed, input } from '@angular/core';
+import { cn } from '../../utils';
 import { DividerInset } from './divider.type';
 
 @Component({
@@ -8,6 +9,7 @@ import { DividerInset } from './divider.type';
   host: {
     role: 'separator',
     '[attr.aria-orientation]': "vertical() ? 'vertical' : 'horizontal'",
+    '[attr.aria-label]': 'ariaLabel()',
     '[class]': 'dividerClass()',
   },
   template: ``,
@@ -15,13 +17,15 @@ import { DividerInset } from './divider.type';
 export class DividerComponent {
   readonly vertical = input(false, { transform: booleanAttribute });
   readonly inset = input<DividerInset>('none');
+  readonly ariaLabel = input<string | undefined>(undefined);
+  readonly class = input<string | undefined>(undefined);
 
   protected readonly dividerClass = computed(() => {
     if (this.vertical()) {
-      return 'inline-block min-h-4 w-px shrink-0 self-stretch bg-[var(--sanring-border)]';
+      return cn('inline-block min-h-4 w-px shrink-0 self-stretch bg-[var(--sanring-border)]', this.class());
     }
 
-    return ['block h-px bg-[var(--sanring-border)]', this.insetClass()].filter(Boolean).join(' ');
+    return cn('block h-px bg-[var(--sanring-border)]', this.insetClass(), this.class());
   });
 
   private readonly insetClass = computed(() => {

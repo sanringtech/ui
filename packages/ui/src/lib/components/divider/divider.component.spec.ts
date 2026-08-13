@@ -14,10 +14,22 @@ import { DividerComponent } from './divider.component';
 })
 class DividerTestHost {}
 
+@Component({
+  imports: [DividerComponent],
+  template: `<sanring-divider class="my-4" />`,
+})
+class DividerClassHost {}
+
+@Component({
+  imports: [DividerComponent],
+  template: `<sanring-divider ariaLabel="section divider" />`,
+})
+class DividerAriaLabelHost {}
+
 describe('DividerComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [DividerTestHost],
+      imports: [DividerTestHost, DividerClassHost, DividerAriaLabelHost],
     }).compileComponents();
   });
 
@@ -40,6 +52,25 @@ describe('DividerComponent', () => {
     expect(dividers[1].getAttribute('aria-orientation')).toBe('vertical');
     expect(dividers[1].className).toContain('w-px');
     expect(dividers[2].className).toContain('mx-10');
+  });
+
+  it('merges consumer class with host class', () => {
+    const fixture = TestBed.createComponent(DividerClassHost);
+    fixture.detectChanges();
+
+    const divider = fixture.nativeElement.querySelector('sanring-divider') as HTMLElement;
+
+    expect(divider.className).toContain('my-4');
+    expect(divider.className).toContain('h-px');
+  });
+
+  it('sets aria-label when provided', () => {
+    const fixture = TestBed.createComponent(DividerAriaLabelHost);
+    fixture.detectChanges();
+
+    const divider = fixture.nativeElement.querySelector('sanring-divider') as HTMLElement;
+
+    expect(divider.getAttribute('aria-label')).toBe('section divider');
   });
 
   it('has no axe-detectable a11y violations', async () => {
