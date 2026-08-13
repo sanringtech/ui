@@ -13,4 +13,4 @@ export const CHECKBOX_ICON_SIZE_CLASSES: Record<CheckboxSize, string> = {
   lg: 'size-5',
 };
 export const CHECKBOX_STATE_CLASS =
-  'data-[state=checked]:bg-primary data-[state=checked]:text-primary-foreground data-[state=indeterminate]:bg-primary data-[state=indeterminate]:text-primary-foreground';
+  'data-[state=checked]:bg-[var(--sanring-primary)] data-[state=checked]:text-[var(--sanring-primary-fg)] data-[state=indeterminate]:bg-[var(--sanring-primary)] data-[state=indeterminate]:text-[var(--sanring-primary-fg)]';

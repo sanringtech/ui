@@ -35,7 +35,7 @@ const ERROR_HINTS: Record<FileUploadErrorCode, string> = {
         <!-- hint 只在這個檔案被拒絕時才顯示，取代原本的檔案大小；上傳進度則取代大小顯示，
              progress 是不是還在跑、什麼時候清掉都由外部決定，這裡只負責畫 -->
         @if (hint(); as hintText) {
-          <p class="truncate text-xs text-red-500">{{ hintText }}</p>
+          <p class="truncate text-xs text-[var(--sanring-error-40)]">{{ hintText }}</p>
         } @else if (progress() !== null) {
           <p class="text-xs text-[var(--sanring-muted)]">{{ progress() }}%</p>
           <sanring-progress [value]="progress()!" class="mt-1" />
@@ -97,7 +97,7 @@ export class FileItemComponent {
     cn(
       'flex items-center gap-3 rounded-[var(--sanring-radius)] border p-2',
       this.hasError()
-        ? 'border-red-500/50 bg-red-500/5'
+        ? 'border-[color-mix(in_srgb,var(--sanring-error-50)_50%,transparent)] bg-[color-mix(in_srgb,var(--sanring-error-50)_5%,transparent)]'
         : 'border-[var(--sanring-border-strong)] bg-[var(--sanring-surface)]',
       this.class(),
     ),

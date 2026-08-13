@@ -69,7 +69,7 @@ export class StepHeaderComponent {
   protected readonly hostClass = computed(() =>
     cn(
       'group flex min-w-0 cursor-pointer items-center gap-3 rounded-[var(--sanring-radius-sm)] outline-none transition-opacity',
-      'focus-visible:ring-2 focus-visible:ring-[var(--sanring-ring)] focus-visible:ring-offset-2',
+      'focus-visible:ring-2 focus-visible:ring-[var(--sanring-border-strong)] focus-visible:ring-offset-2',
       this.disabled() && 'pointer-events-none cursor-not-allowed opacity-50',
       this.class(),
     ),
@@ -84,7 +84,7 @@ export class StepHeaderComponent {
         'border-[var(--sanring-foreground)] bg-[var(--sanring-background)] text-[var(--sanring-foreground)]',
       state === 'completed' &&
         'border-[var(--sanring-foreground)] bg-[var(--sanring-foreground)] text-[var(--sanring-background)]',
-      state === 'error' && 'border-red-500 bg-red-500 text-white',
+      state === 'error' && 'border-[var(--sanring-error-50)] bg-[var(--sanring-error-50)] text-white',
       state !== 'selected' &&
         state !== 'completed' &&
         state !== 'error' &&
@@ -98,7 +98,7 @@ export class StepHeaderComponent {
     return cn(
       'truncate text-sm font-medium transition-colors duration-200',
       (state === 'selected' || state === 'completed') && 'text-[var(--sanring-foreground)]',
-      state === 'error' && 'text-red-500',
+      state === 'error' && 'text-[var(--sanring-error-40)]',
       state !== 'selected' &&
         state !== 'completed' &&
         state !== 'error' &&

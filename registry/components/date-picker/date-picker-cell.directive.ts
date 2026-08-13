@@ -30,9 +30,11 @@ export class DatePickerCellDirective {
       'disabled:cursor-not-allowed disabled:opacity-40 disabled:line-through',
       GRANULARITY_CELL_SIZE_CLASSES[this.size()],
       !cell.isSelected && !cell.isInRange && 'text-[var(--sanring-foreground)]',
-      cell.isSelected && 'bg-primary text-primary-foreground',
-      cell.isInRange && !cell.isSelected && 'bg-primary/20',
-      cell.isFocused && 'ring-2 ring-primary',
+      cell.isSelected && 'bg-[var(--sanring-primary)] text-[var(--sanring-primary-fg)]',
+      cell.isInRange &&
+        !cell.isSelected &&
+        'bg-[color-mix(in_srgb,var(--sanring-primary)_20%,transparent)]',
+      cell.isFocused && 'ring-2 ring-[var(--sanring-primary)]',
       cell.isCurrentPeriod && !cell.isSelected && 'font-bold',
       !cell.isSelected &&
         !cell.isDisabled &&

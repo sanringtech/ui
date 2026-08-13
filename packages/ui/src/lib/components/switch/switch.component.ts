@@ -104,7 +104,7 @@ export class SwitchComponent implements ControlValueAccessor, OnInit {
       'peer inline-flex shrink-0 cursor-pointer items-center rounded-full border-2 transition-colors disabled:cursor-not-allowed disabled:opacity-50',
       SELECTION_CONTROL_FOCUS_CLASS,
       SWITCH_TRACK_SIZE_CLASSES[this.size()],
-      this.invalid() || this.errorState ? 'border-red-500' : 'border-transparent',
+      this.invalid() || this.errorState ? 'border-[var(--sanring-error-50)]' : 'border-transparent',
       this.checkedSignal() ? 'bg-[var(--sanring-foreground)]' : 'bg-[var(--sanring-border-strong)]',
       this.class(),
     ),

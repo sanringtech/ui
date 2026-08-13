@@ -106,12 +106,12 @@ export class CheckboxComponent implements ControlValueAccessor, OnInit {
     cn(
       SELECTION_CONTROL_BASE_CLASS,
       SELECTION_CONTROL_FOCUS_CLASS,
-      'rounded-[var(--sanring-radius-xs)] border border-primary',
+      'rounded-[var(--sanring-radius-xs)] border border-[var(--sanring-primary)]',
       CHECKBOX_SIZE_CLASSES[this.size()],
       CHECKBOX_STATE_CLASS,
       // 讀 this.errorState（getter）而不是直接寫條件，是為了讓下面 stateVersion 的橋接生效，
       // 否則 ngControl.invalid/touched 不是 signal，這個 computed 不會在驗證狀態改變時重算
-      this.errorState && 'border-red-500 focus-visible:ring-red-500',
+      this.errorState && 'border-[var(--sanring-error-50)] focus-visible:ring-[var(--sanring-error-40)]',
       this.class(),
     ),
   );
