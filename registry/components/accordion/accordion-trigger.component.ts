@@ -35,7 +35,7 @@ import { AccordionTriggerVariant } from './accordion.type';
 
         <svg
           lucideChevronDown
-          class="h-4 w-4 shrink-0 text-muted-foreground transition-transform duration-200"
+          class="h-4 w-4 shrink-0 text-[var(--sanring-muted)] transition-transform duration-200"
         ></svg>
       </button>
     }
