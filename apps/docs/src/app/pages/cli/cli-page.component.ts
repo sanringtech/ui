@@ -6,6 +6,7 @@ import {
   ComponentPageCodeBlock,
   ComponentPageComponent,
   ComponentPageSectionComponent,
+  DocsPageHeaderComponent,
 } from '../../layouts/component-page';
 
 const INLINE_CODE_CLASS =
@@ -13,19 +14,19 @@ const INLINE_CODE_CLASS =
 
 @Component({
   selector: 'app-cli-page',
-  imports: [ComponentPageCodeBlock, ComponentPageComponent, ComponentPageSectionComponent],
+  imports: [
+    ComponentPageCodeBlock,
+    ComponentPageComponent,
+    ComponentPageSectionComponent,
+    DocsPageHeaderComponent,
+  ],
   template: `
     <app-component-page [sections]="sections">
-      <header class="border-b border-[var(--docs-border)] pb-10">
-        <h1
-          class="m-0 text-[34px] font-semibold leading-tight tracking-normal text-[var(--docs-fg)]"
-        >
-          {{ i18n.t('sidebar.cli') }}
-        </h1>
-        <p class="mb-0 mt-4 max-w-[620px] text-base leading-[1.7] text-[var(--docs-muted)]">
-          {{ i18n.t('cli.page.description') }}
-        </p>
-      </header>
+      <app-docs-page-header
+        [title]="i18n.t('sidebar.cli')"
+        [description]="i18n.t('cli.page.description')"
+        eyebrow="docs / cli"
+      />
 
       <!-- 1. Overview -->
       <app-component-page-section [section]="sections[0]">

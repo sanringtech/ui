@@ -5,7 +5,7 @@ import { AlertComponent, AlertDescriptionDirective, AlertTitleDirective } from '
 import { ComponentPageSectionDefinition } from '../../docs-schema/component-page.types';
 import { I18nService } from '../../i18n/i18n.service';
 import { SeoService } from '../../seo/seo.service';
-import { ComponentPageComponent } from '../../layouts/component-page';
+import { ComponentPageComponent, DocsPageHeaderComponent } from '../../layouts/component-page';
 import {
   docsComponentStatusBadgeKeys,
   docsComponentStatusDotClass,
@@ -18,6 +18,7 @@ import { isRecentlyUpdatedComponentId } from '../changelog/component-changelog';
   selector: 'app-components-page',
   imports: [
     ComponentPageComponent,
+    DocsPageHeaderComponent,
     RouterLink,
     AlertComponent,
     AlertDescriptionDirective,
@@ -26,16 +27,11 @@ import { isRecentlyUpdatedComponentId } from '../changelog/component-changelog';
   ],
   template: `
     <app-component-page [sections]="sections">
-      <header class="border-b border-[var(--docs-border)] pb-10">
-        <h1
-          class="m-0 text-[34px] font-semibold leading-tight tracking-normal text-[var(--docs-fg)]"
-        >
-          {{ i18n.t('nav.components') }}
-        </h1>
-        <p class="mb-0 mt-4 max-w-[620px] text-base leading-[1.7] text-[var(--docs-muted)]">
-          {{ i18n.t('components.description') }}
-        </p>
-      </header>
+      <app-docs-page-header
+        [title]="i18n.t('nav.components')"
+        [description]="i18n.t('components.description')"
+        eyebrow="docs / components"
+      />
 
       <div class="grid gap-12 pt-10">
         <section id="updated-components" aria-labelledby="updated-components-title">

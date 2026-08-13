@@ -9,6 +9,7 @@ import {
   ComponentPageCodeBlock,
   ComponentPageComponent,
   ComponentPageSectionComponent,
+  DocsPageHeaderComponent,
 } from '../../layouts/component-page';
 import { TranslationKey } from '../../i18n/translations';
 
@@ -37,19 +38,16 @@ interface IntroNextLink {
     ComponentPageCodeBlock,
     ComponentPageComponent,
     ComponentPageSectionComponent,
+    DocsPageHeaderComponent,
   ],
   template: `
     <app-component-page [sections]="sections">
-      <header class="border-b border-[var(--docs-border)] pb-10">
-        <h1
-          class="m-0 text-[34px] font-semibold leading-tight tracking-normal text-[var(--docs-fg)]"
-        >
-          {{ i18n.t('sidebar.introduction') }}
-        </h1>
-        <p class="mb-0 mt-4 max-w-[620px] text-base leading-[1.7] text-[var(--docs-muted)]">
-          {{ i18n.t('intro.page.description') }}
-        </p>
-        <div class="mt-6 flex flex-wrap gap-3">
+      <app-docs-page-header
+        [title]="i18n.t('sidebar.introduction')"
+        [description]="i18n.t('intro.page.description')"
+        eyebrow="docs / introduction"
+      >
+        <div page-actions class="flex flex-wrap gap-3">
           <a sanringBtn routerLink="/cli">
             {{ i18n.t('intro.actions.start') }}
             <svg lucideArrowRight class="size-4"></svg>
@@ -58,7 +56,7 @@ interface IntroNextLink {
             {{ i18n.t('intro.actions.example') }}
           </a>
         </div>
-      </header>
+      </app-docs-page-header>
 
       <app-component-page-section [section]="sections[0]">
         <p class="mt-0 text-base leading-[1.7] text-[var(--docs-muted)]">

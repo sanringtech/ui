@@ -117,7 +117,7 @@ interface HomeVisualMetric {
         </div>
 
         <div
-          class="relative min-h-[430px] min-w-0 overflow-hidden rounded-[var(--sanring-radius)] border border-[var(--docs-border)] bg-[var(--docs-panel)] p-5 shadow-[0_24px_80px_color-mix(in_srgb,var(--docs-bg)_72%,transparent)] max-[640px]:min-h-0 max-[640px]:p-4"
+          class="relative min-h-[430px] min-w-0 overflow-hidden rounded-[var(--sanring-radius-lg)] border border-[color-mix(in_srgb,var(--docs-border)_82%,transparent)] bg-[color-mix(in_srgb,var(--docs-panel)_92%,transparent)] p-5 shadow-[var(--docs-shadow-strong)] max-[640px]:min-h-0 max-[640px]:p-4"
         >
           <div
             class="pointer-events-none absolute inset-0 opacity-60 [background-image:linear-gradient(color-mix(in_srgb,var(--docs-border)_44%,transparent)_1px,transparent_1px),linear-gradient(90deg,color-mix(in_srgb,var(--docs-border)_44%,transparent)_1px,transparent_1px)] [background-size:28px_28px]"
@@ -144,7 +144,7 @@ interface HomeVisualMetric {
 
           <div class="relative z-10 mt-8 grid gap-4 max-[520px]:mt-5">
             <div class="grid grid-cols-[minmax(0,0.85fr)_minmax(0,1.15fr)] items-stretch gap-4 max-[1180px]:grid-cols-1">
-              <div class="rounded-[var(--sanring-radius)] border border-[var(--docs-border)] bg-[color-mix(in_srgb,var(--docs-surface)_82%,transparent)] p-4 backdrop-blur max-[520px]:p-3">
+              <div class="rounded-[var(--sanring-radius)] border border-[color-mix(in_srgb,var(--docs-border)_82%,transparent)] bg-[color-mix(in_srgb,var(--docs-surface)_82%,transparent)] p-4 backdrop-blur max-[520px]:p-3">
                 <div class="flex items-center gap-2 text-sm font-semibold text-[var(--docs-fg)]">
                   <svg class="size-4 text-[var(--docs-accent-strong)]" lucideBlocks></svg>
                   {{ i18n.t('home.visual.registry') }}
@@ -163,7 +163,7 @@ interface HomeVisualMetric {
                 </div>
               </div>
 
-              <div class="rounded-[var(--sanring-radius)] border border-[var(--docs-border)] bg-[color-mix(in_srgb,var(--docs-code)_86%,transparent)] p-4 font-mono text-sm leading-7 text-[var(--docs-fg)] backdrop-blur max-[520px]:p-3 max-[520px]:text-[13px] max-[520px]:leading-6">
+              <div class="rounded-[var(--sanring-radius)] border border-[color-mix(in_srgb,var(--docs-border)_82%,transparent)] bg-[color-mix(in_srgb,var(--docs-code)_86%,transparent)] p-4 font-mono text-sm leading-7 text-[var(--docs-code-fg)] backdrop-blur max-[520px]:p-3 max-[520px]:text-[13px] max-[520px]:leading-6">
                 <div class="flex items-center gap-2 text-[var(--docs-muted)]">
                   <svg class="size-4" lucideTerminalSquare></svg>
                   {{ i18n.t('home.visual.command') }}
@@ -185,7 +185,7 @@ interface HomeVisualMetric {
 
             <div class="grid grid-cols-3 gap-3 max-[720px]:grid-cols-1">
               @for (metric of visualMetrics; track metric.labelKey) {
-                <div class="rounded-[var(--sanring-radius)] border border-[var(--docs-border)] bg-[color-mix(in_srgb,var(--docs-surface)_82%,transparent)] p-3 backdrop-blur">
+                <div class="rounded-[var(--sanring-radius)] border border-[color-mix(in_srgb,var(--docs-border)_82%,transparent)] bg-[color-mix(in_srgb,var(--docs-surface)_82%,transparent)] p-3 backdrop-blur">
                   <p class="m-0 text-[20px] font-semibold leading-none text-[var(--docs-accent-strong)]">
                     {{ metric.value }}
                   </p>
@@ -200,7 +200,7 @@ interface HomeVisualMetric {
       </div>
 
       <section
-        class="relative z-10 grid gap-4 rounded-[var(--sanring-radius)] border border-[var(--docs-border)] bg-[var(--docs-panel)] p-4 lg:grid-cols-[minmax(240px,0.9fr)_repeat(3,minmax(0,1fr))] max-[900px]:grid-cols-1 max-[520px]:p-3"
+        class="relative z-10 grid gap-4 rounded-[var(--sanring-radius-lg)] border border-[color-mix(in_srgb,var(--docs-border)_82%,transparent)] bg-[color-mix(in_srgb,var(--docs-panel)_86%,transparent)] p-4 shadow-[var(--docs-shadow-soft)] lg:grid-cols-[minmax(240px,0.9fr)_repeat(3,minmax(0,1fr))] max-[900px]:grid-cols-1 max-[520px]:p-3"
         aria-labelledby="home-snapshot-title"
       >
         <div class="flex min-w-0 items-center gap-3 border-r border-[var(--docs-border)] pr-4 max-[900px]:border-r-0 max-[900px]:border-b max-[900px]:pb-4 max-[900px]:pr-0">
@@ -259,7 +259,7 @@ interface HomeVisualMetric {
 
         <div class="grid grid-cols-4 gap-4 max-[980px]:grid-cols-2 max-[620px]:grid-cols-1">
           @for (feature of features; track feature.titleKey) {
-            <article class="rounded-[var(--sanring-radius)] border border-[var(--docs-border)] bg-[var(--docs-surface)] p-5 max-[520px]:p-4">
+            <article class="rounded-[var(--sanring-radius)] border border-[color-mix(in_srgb,var(--docs-border)_82%,transparent)] bg-[var(--docs-surface)] p-5 shadow-sm max-[520px]:p-4">
               <div class="mb-5 inline-flex rounded-[var(--sanring-radius-sm)] border border-[color-mix(in_srgb,var(--docs-accent)_28%,var(--docs-border))] bg-[color-mix(in_srgb,var(--docs-accent)_8%,var(--docs-elevated))] p-2 text-[var(--docs-accent-strong)]">
                 @switch (feature.icon) {
                   @case ('layers') {
@@ -301,7 +301,7 @@ interface HomeVisualMetric {
           </p>
         </div>
 
-        <div class="rounded-[var(--sanring-radius)] border border-[var(--docs-border)] bg-[var(--docs-panel)] p-4 max-[520px]:p-3">
+        <div class="rounded-[var(--sanring-radius-lg)] border border-[color-mix(in_srgb,var(--docs-border)_82%,transparent)] bg-[color-mix(in_srgb,var(--docs-panel)_86%,transparent)] p-4 shadow-[var(--docs-shadow-soft)] max-[520px]:p-3">
           <div class="mb-4 flex items-center justify-between gap-4 border-b border-[var(--docs-border)] pb-4 max-[520px]:gap-3">
             <p class="m-0 text-sm font-semibold text-[var(--docs-fg)]">
               {{ i18n.t('home.components.panelTitle') }}

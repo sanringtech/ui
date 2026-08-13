@@ -8,7 +8,11 @@ import {
 import { ComponentPageSectionDefinition } from '../../docs-schema/component-page.types';
 import { I18nService } from '../../i18n/i18n.service';
 import { SeoService } from '../../seo/seo.service';
-import { ComponentPageComponent, ComponentPageSectionComponent } from '../../layouts/component-page';
+import {
+  ComponentPageComponent,
+  ComponentPageSectionComponent,
+  DocsPageHeaderComponent,
+} from '../../layouts/component-page';
 import { ComponentChangeType, cliVersionChangelog, isPatch } from './component-changelog';
 
 const COMPONENT_TYPE_CLASS: Record<ComponentChangeType, string> = {
@@ -47,6 +51,7 @@ function renderInlineCode(text: string): string {
   imports: [
     ComponentPageComponent,
     ComponentPageSectionComponent,
+    DocsPageHeaderComponent,
     TimelineContentDirective,
     TimelineDirective,
     TimelineItemDirective,
@@ -54,16 +59,11 @@ function renderInlineCode(text: string): string {
   ],
   template: `
     <app-component-page [sections]="sections">
-      <header class="border-b border-[var(--docs-border)] pb-10">
-        <h1
-          class="m-0 text-[34px] font-semibold leading-tight tracking-normal text-[var(--docs-fg)]"
-        >
-          {{ i18n.t('sidebar.changelog') }}
-        </h1>
-        <p class="mb-0 mt-4 max-w-[620px] text-base leading-[1.7] text-[var(--docs-muted)]">
-          {{ i18n.t('changelog.page.description') }}
-        </p>
-      </header>
+      <app-docs-page-header
+        [title]="i18n.t('sidebar.changelog')"
+        [description]="i18n.t('changelog.page.description')"
+        eyebrow="docs / version-notes"
+      />
 
       <app-component-page-section [section]="sections[0]">
         <p class="mt-0 text-base leading-[1.7] text-[var(--docs-muted)]">

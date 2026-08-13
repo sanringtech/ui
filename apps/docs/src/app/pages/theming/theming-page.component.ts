@@ -1,6 +1,6 @@
 import { Component, effect, inject } from '@angular/core';
 import { I18nService } from '../../i18n/i18n.service';
-import { ComponentPageComponent } from '../../layouts/component-page';
+import { ComponentPageComponent, DocsPageHeaderComponent } from '../../layouts/component-page';
 import { SeoService } from '../../seo/seo.service';
 import { ThemingBrandSectionComponent } from './theming-brand-section.component';
 import { themingSections } from './theming.constants';
@@ -14,6 +14,7 @@ import { ThemingTailwindSectionComponent } from './theming-tailwind-section.comp
   selector: 'app-theming-page',
   imports: [
     ComponentPageComponent,
+    DocsPageHeaderComponent,
     ThemingBrandSectionComponent,
     ThemingDarkModeSectionComponent,
     ThemingDesignTokensSectionComponent,
@@ -23,16 +24,11 @@ import { ThemingTailwindSectionComponent } from './theming-tailwind-section.comp
   ],
   template: `
     <app-component-page [sections]="sections">
-      <header class="border-b border-[var(--docs-border)] pb-10">
-        <h1
-          class="m-0 text-[34px] font-semibold leading-tight tracking-normal text-[var(--docs-fg)]"
-        >
-          {{ i18n.t('sidebar.theming') }}
-        </h1>
-        <p class="mb-0 mt-4 max-w-[620px] text-base leading-[1.7] text-[var(--docs-muted)]">
-          {{ i18n.t('theming.page.description') }}
-        </p>
-      </header>
+      <app-docs-page-header
+        [title]="i18n.t('sidebar.theming')"
+        [description]="i18n.t('theming.page.description')"
+        eyebrow="docs / theming"
+      />
 
       <app-theming-design-tokens-section [section]="sections[0]" />
       <app-theming-tailwind-section [section]="sections[1]" />

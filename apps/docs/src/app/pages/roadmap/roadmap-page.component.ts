@@ -6,6 +6,7 @@ import { SeoService } from '../../seo/seo.service';
 import {
   ComponentPageComponent,
   ComponentPageSectionComponent,
+  DocsPageHeaderComponent,
 } from '../../layouts/component-page';
 
 interface RoadmapItem {
@@ -22,7 +23,12 @@ interface RoadmapComponentRow {
 
 @Component({
   selector: 'app-roadmap-page',
-  imports: [ComponentPageComponent, ComponentPageSectionComponent, NgTemplateOutlet],
+  imports: [
+    ComponentPageComponent,
+    ComponentPageSectionComponent,
+    DocsPageHeaderComponent,
+    NgTemplateOutlet,
+  ],
   styles: [
     `
       .documented-components {
@@ -76,16 +82,11 @@ interface RoadmapComponentRow {
   ],
   template: `
     <app-component-page [sections]="sections">
-      <header class="border-b border-[var(--docs-border)] pb-10">
-        <h1
-          class="m-0 text-[34px] font-semibold leading-tight tracking-normal text-[var(--docs-fg)]"
-        >
-          {{ i18n.t('sidebar.roadmap') }}
-        </h1>
-        <p class="mb-0 mt-4 max-w-[620px] text-base leading-[1.7] text-[var(--docs-muted)]">
-          {{ i18n.t('roadmap.page.description') }}
-        </p>
-      </header>
+      <app-docs-page-header
+        [title]="i18n.t('sidebar.roadmap')"
+        [description]="i18n.t('roadmap.page.description')"
+        eyebrow="docs / roadmap"
+      />
 
       <app-component-page-section [section]="sections[0]">
         <p class="mt-0 text-sm text-[var(--docs-muted)]">
