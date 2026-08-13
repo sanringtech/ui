@@ -48,12 +48,11 @@
 
 ---
 
-## P28 — P14 CVA 重構未套用到 `packages/ui` + spec 從未驗證過 `registry/`
+## P28 — P14 CVA 重構未套用到 `packages/ui`
 
-- [ ] **根因優先**：補一個機制讓既有的 `packages/ui` spec（或至少關鍵的 CVA/a11y regression test）也能對 `registry/` 的程式碼執行——不管是 symlink、build step 產生可測試版本、或另開一組跑在 registry 路徑上的 smoke test。目前 golden fixture 只驗證檔案結構跟 `registry.json` 對得上，完全不驗證程式碼行為，這是 `switch`/`checkbox`/`radio` 三次同類 regression 都沒被抓到的根本原因
-- [ ] `packages/ui` 的 9 個表單元件（`checkbox`/`switch`/`radio-group`/`slider`/`otp-input`/`date-picker`/`calendar`/`file-upload`/`combobox`）補做 P14 第二批重構：改成 `extends SanringCvaBase`，跟 `registry/` 對齊
+- [ ] `packages/ui` 的 9 個表單元件（`checkbox`/`switch`/`radio-group`/`slider`/`otp-input`/`date-picker`/`calendar`/`file-upload`/`combobox`）補做 P14 第二批重構：改成 `extends SanringCvaBase`，跟 `registry/` 對齊，徹底消除架構分岔
 
-**現況**：P14 第二批重構（`a9cb0fd`）只實際套用在 `registry/shared/cva-base.ts` + `registry/components/*`，`packages/ui` 的對應 9 個元件從未跟進，兩邊架構自此分岔——`packages/ui` 還是舊的手刻 `XxxFieldControlAdapter`。這次分岔在 `/audit-component` 稽核 Tier 2 元件時連續三次意外揪出 `registry/` 端的 regression（`switch` 漏 `ariaLabel`/`checkedChange`、`checkbox`/`radio-group` 都漏 `aria-required` 的 `fieldRequired` 偵測），全部已修正；但每一次 `packages/ui` 都早就有對應的 regression test，只是從沒跑在 `registry/` 上面而失效——這才是要優先解決的根因，不然接下來 `slider`/`otp-input`/`file-upload`/`combobox`/`calendar`/`date-picker` 還要一個一個手動 diff 才能抓。
+**現況**：P14 第二批重構（`a9cb0fd`）只實際套用在 `registry/shared/cva-base.ts` + `registry/components/*`，`packages/ui` 的對應 9 個元件從未跟進，兩邊架構自此分岔——`packages/ui` 還是舊的手刻 `XxxFieldControlAdapter`。**根因（驗證缺口）已解決**：新增 `packages/cli/scripts/check-registry-parity.mjs`（已掛進 `.github/workflows/registry-sync-check.yml`），靜態比對 `packages/ui` 與 `registry/` 每個同名元件檔案的 `input()`/`output()`/`model()` 宣告 + a11y 相關 attribute binding 表達式（`aria-*`/`role`/`disabled`/`tabindex`/`id`）。跑起來後除了 `/audit-component` 已經抓到的 `switch`/`checkbox`/`radio-group` 三筆,又額外挖出四筆獨立的 registry-only regression 並修正：`button`（本次 session 自己 cherry-pick 時漏同步 `role="button"` 修復，外加 `rounded-lg`/硬編碼 destructive 色碼兩個更早的 design token 漂移）、`context-menu-sub-trigger`（漏 `aria-disabled`）、`resizable-handle` + `resizable-group`（整組 `aria-valuenow`/`min`/`max` keyboard-splitter 支援完全沒同步過去）。目前這個腳本是純靜態 regex 比對,不是真的執行 registry 程式碼(嘗試讓 `packages/ui` 的 TestBed 直接 import registry 元件失敗了——Angular 的 build 工具鏈假設單一 project rootDir,跨 project import 會讓 `extends SanringCvaBase` 的型別解析失敗,細節見下方腳本檔頭註解)。剩餘工作(改用 `SanringCvaBase`)是解決架構分岔本身,優先度較低,兩邊行為已經有腳本守著。
 
 ---
 
@@ -109,7 +108,7 @@
 - [ ] `dropdown-menu`
 - [ ] `context-menu`
 - [ ] `select`
-- [ ] `file-upload`
+- [ ] `file-upload`（已知：registry 的 `id` 是 `input()`，`packages/ui` 是純字串，消費者無法在 npm 套件版覆寫 id——見 `check-registry-parity.mjs` 允許清單，正式稽核時處理）
 - [ ] `carousel`
 - [ ] `dialog`
 - [ ] `alert-dialog`
