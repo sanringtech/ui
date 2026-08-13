@@ -1,5 +1,24 @@
 # @sanring/cli
 
+## 0.23.1
+
+### Patch Changes
+
+- Tier 1 component audit — seven registry/packages-ui bug fixes:
+  - **divider**: added missing `class` and `ariaLabel` inputs; registry now matches packages/ui API
+  - **skeleton**: registry CSS token corrected (`rounded-md` → `rounded-[var(--sanring-radius-sm)]`)
+  - **progress**: registry `ProgressComponent` was silently dropping `ariaValueText`; added input and template binding
+  - **tag**: close button had `focus-visible:outline-none` with no replacement ring (WCAG 2.4.7); added `focus-visible:ring-1`
+  - **card**: registry `rounded-xl` → `rounded-[var(--sanring-radius-lg)]` to respect theme token
+  - **avatar**: `AvatarImageDirective` constructed `MutationObserver` eagerly; deferred to `afterNextRender` for SSR safety
+  - **alert**: registry `destructive` variant used hardcoded `red-*` Tailwind classes instead of `--sanring-error-*` tokens; base radius corrected
+
+## 0.23.0
+
+### Minor Changes
+
+- `sanring build` command: scans `registry/components/` and generates `registry/registry.json` automatically, with `componentDeps`, `sharedDeps`, and `peerDependencies` resolved from import analysis. Includes `--dry-run` flag, registry integrity golden-fixture test, and `canonicalizePeerDependencies` dedup. Multi-registry support: `sanring.config.json` accepts `registries` (alias → URL) and `defaultRegistry`; `sanring add` accepts `alias:componentName` syntax.
+
 ## 0.22.0
 
 ### Minor Changes
