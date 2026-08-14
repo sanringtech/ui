@@ -22,6 +22,7 @@ import { ContextMenuSubComponent } from './context-menu-sub.component';
     'aria-haspopup': 'menu',
     '[attr.aria-expanded]': 'sub.isOpen() ? "true" : "false"',
     '[attr.data-state]': 'sub.isOpen() ? "open" : "closed"',
+    '[attr.aria-disabled]': 'disabled() ? "true" : null',
     '[attr.data-disabled]': 'disabled() ? "" : null',
     '[attr.tabindex]': 'disabled() ? "-1" : "0"',
     '[class]': 'itemClass()',
@@ -30,6 +31,7 @@ import { ContextMenuSubComponent } from './context-menu-sub.component';
     '(click)': 'onOpen()',
     '(keydown.arrowright)': 'onOpenKey($event)',
     '(keydown.enter)': 'onOpenKey($event)',
+    '(keydown.space)': 'onOpenKey($event)',
   },
   template: `
     <ng-content></ng-content>
@@ -71,6 +73,6 @@ export class ContextMenuSubTriggerComponent {
   protected onOpenKey(event: Event): void {
     if (this.disabled()) return;
     event.preventDefault();
-    this.sub.open();
+    this.sub.open({ focusFirstItem: true });
   }
 }

@@ -23,7 +23,7 @@ export class SidebarMenuBadgeComponent {
   protected readonly hostClass = computed(() =>
     cn(
       'pointer-events-none absolute right-2 top-1/2 flex h-5 min-w-5 -translate-y-1/2 items-center justify-center rounded-[var(--sanring-radius-xs)] px-1 text-xs font-medium',
-      'text-[var(--sanring-muted-foreground)]',
+      'text-[var(--sanring-muted)]',
       this.isIconRail() && 'hidden',
       this.class(),
     ),

@@ -19,7 +19,7 @@ import { CommandListComponent } from './command-list.component';
     CommandListComponent,
   ],
   template: `
-    <sanring-command (valueChange)="onValueChange($event)">
+    <sanring-command class="custom-command-class" (valueChange)="onValueChange($event)">
       <sanring-command-input placeholder="Search..." />
       <sanring-command-list>
         <sanring-command-empty>No results found.</sanring-command-empty>
@@ -97,6 +97,24 @@ describe('CommandComponent', () => {
     inputEl(fixture).dispatchEvent(arrowKeydown(keyCode));
     fixture.detectChanges();
   }
+
+  it('merges host class with consumer class', async () => {
+    const fixture = await createFixture();
+
+    const host = nativeElement(fixture).querySelector('sanring-command');
+    expect(host?.classList.contains('custom-command-class')).toBe(true);
+  });
+
+  it('links the group heading to its role="group" container via aria-labelledby', async () => {
+    const fixture = await createFixture();
+
+    const group = nativeElement(fixture).querySelector('[role="group"]') as HTMLElement;
+    const labelledBy = group.getAttribute('aria-labelledby');
+    expect(labelledBy).toBeTruthy();
+
+    const heading = nativeElement(fixture).querySelector(`[id="${labelledBy}"]`);
+    expect(heading?.textContent?.trim()).toBe('Fruits');
+  });
 
   it('renders every item and activates the first focusable one by default', async () => {
     const fixture = await createFixture();

@@ -51,6 +51,32 @@ describe('ToasterComponent', () => {
     expect(toast.querySelector('button[aria-label="Dismiss notification"]')).toBeTruthy();
   });
 
+  it('removes the toast from the service when the dismiss button is clicked', () => {
+    toastService.show({ title: 'Saved', duration: 0 });
+
+    const fixture = createFixture();
+    const dismissButton = fixture.nativeElement.querySelector(
+      'button[aria-label="Dismiss notification"]',
+    ) as HTMLButtonElement;
+
+    dismissButton.click();
+    fixture.detectChanges();
+
+    expect(toastService.toasts()[0]?.leaving).toBe(true);
+  });
+
+  it('dismisses the focused toast on Escape', () => {
+    toastService.show({ title: 'Saved', duration: 0 });
+
+    const fixture = createFixture();
+    const toast = fixture.nativeElement.querySelector('sanring-toast') as HTMLElement;
+
+    toast.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape', bubbles: true }));
+    fixture.detectChanges();
+
+    expect(toastService.toasts()[0]?.leaving).toBe(true);
+  });
+
   it('has no axe-detectable a11y violations', async () => {
     toastService.show({
       type: 'success',

@@ -39,6 +39,12 @@ describe('ResizableComponent', () => {
     return fixture;
   }
 
+  it('renders without error', async () => {
+    const fixture = await setup();
+
+    expect(fixture.nativeElement).toBeTruthy();
+  });
+
   it('renders panels and an accessible separator handle', async () => {
     const fixture = await setup();
 
@@ -72,9 +78,108 @@ describe('ResizableComponent', () => {
     expect(handle.getAttribute('aria-valuenow')).toBe('50');
   });
 
+  it('jumps to the min/max size with Home/End', async () => {
+    const fixture = await setup();
+
+    const handle = fixture.nativeElement.querySelector('sanring-resizable-handle') as HTMLElement;
+
+    handle.dispatchEvent(new KeyboardEvent('keydown', { key: 'End', bubbles: true }));
+    fixture.detectChanges();
+    expect(fixture.componentInstance.sizes).toEqual([100, 0]);
+
+    handle.dispatchEvent(new KeyboardEvent('keydown', { key: 'Home', bubbles: true }));
+    fixture.detectChanges();
+    expect(fixture.componentInstance.sizes).toEqual([0, 100]);
+  });
+
   it('has no axe-detectable a11y violations', async () => {
     const fixture = await setup();
 
     await expectNoA11yViolations(fixture.nativeElement);
+  });
+});
+
+@Component({
+  imports: [ResizableGroupComponent, ResizablePanelComponent, ResizableHandleComponent],
+  template: `
+    <sanring-resizable-group [(sizes)]="sizes" [disabled]="disabled">
+      <sanring-resizable-panel [defaultSize]="40">One</sanring-resizable-panel>
+      <sanring-resizable-handle [keyboardStep]="10" />
+      <sanring-resizable-panel [defaultSize]="60">Two</sanring-resizable-panel>
+    </sanring-resizable-group>
+  `,
+})
+class ResizableDisabledTestHost {
+  sizes = [40, 60];
+  disabled = true;
+}
+
+describe('ResizableComponent (disabled)', () => {
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      imports: [ResizableDisabledTestHost],
+    }).compileComponents();
+  });
+
+  it('marks the handle non-interactive and ignores keyboard resize while the group is disabled', async () => {
+    const fixture = TestBed.createComponent(ResizableDisabledTestHost);
+    fixture.detectChanges();
+    await fixture.whenStable();
+    fixture.detectChanges();
+
+    const handle = fixture.nativeElement.querySelector('sanring-resizable-handle') as HTMLElement;
+
+    expect(handle.getAttribute('aria-disabled')).toBe('true');
+    expect(handle.getAttribute('tabindex')).toBe('-1');
+
+    handle.dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowRight', bubbles: true }));
+    fixture.detectChanges();
+
+    expect(fixture.componentInstance.sizes).toEqual([40, 60]);
+  });
+});
+
+@Component({
+  imports: [ResizableGroupComponent, ResizablePanelComponent, ResizableHandleComponent],
+  template: `
+    <sanring-resizable-group [(sizes)]="sizes">
+      <sanring-resizable-panel
+        [defaultSize]="40"
+        [collapsible]="true"
+        [collapsedSize]="0"
+        [minSize]="20"
+      >
+        One
+      </sanring-resizable-panel>
+      <sanring-resizable-handle [keyboardStep]="25" />
+      <sanring-resizable-panel [defaultSize]="60">Two</sanring-resizable-panel>
+    </sanring-resizable-group>
+  `,
+})
+class ResizableCollapsibleTestHost {
+  sizes = [40, 60];
+}
+
+describe('ResizableComponent (collapsible panel)', () => {
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      imports: [ResizableCollapsibleTestHost],
+    }).compileComponents();
+  });
+
+  it('snaps a collapsible panel to its collapsedSize once dragged past minSize, instead of clamping at minSize', async () => {
+    const fixture = TestBed.createComponent(ResizableCollapsibleTestHost);
+    fixture.detectChanges();
+    await fixture.whenStable();
+    fixture.detectChanges();
+
+    const handle = fixture.nativeElement.querySelector('sanring-resizable-handle') as HTMLElement;
+
+    // step=25 從 40 打到 15 —— 已經低於 minSize(20),collapsible panel 應該直接吸附到
+    // collapsedSize(0),而不是卡在 minSize(20)。
+    handle.dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowLeft', bubbles: true }));
+    fixture.detectChanges();
+
+    expect(fixture.componentInstance.sizes).toEqual([0, 100]);
   });
 });

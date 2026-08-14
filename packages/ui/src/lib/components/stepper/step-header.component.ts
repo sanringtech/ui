@@ -84,7 +84,7 @@ export class StepHeaderComponent {
         'border-[var(--sanring-foreground)] bg-[var(--sanring-background)] text-[var(--sanring-foreground)]',
       state === 'completed' &&
         'border-[var(--sanring-foreground)] bg-[var(--sanring-foreground)] text-[var(--sanring-background)]',
-      state === 'error' && 'border-red-500 bg-red-500 text-white',
+      state === 'error' && 'border-[var(--sanring-error-50)] bg-[var(--sanring-error-50)] text-white',
       state !== 'selected' &&
         state !== 'completed' &&
         state !== 'error' &&
@@ -98,7 +98,7 @@ export class StepHeaderComponent {
     return cn(
       'truncate text-sm font-medium transition-colors duration-200',
       (state === 'selected' || state === 'completed') && 'text-[var(--sanring-foreground)]',
-      state === 'error' && 'text-red-500',
+      state === 'error' && 'text-[var(--sanring-error-40)]',
       state !== 'selected' &&
         state !== 'completed' &&
         state !== 'error' &&

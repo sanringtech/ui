@@ -27,6 +27,11 @@ export class NavigationMenuSubComponent {
   private readonly _triggerRef = signal<ElementRef<HTMLElement> | null>(null);
   readonly triggerRef = this._triggerRef.asReadonly();
 
+  // One-shot flag: keyboard-initiated opens (ArrowRight/Enter/Space on the sub-trigger)
+  // should move focus straight to the first item, matching native menu conventions.
+  // Mouse-initiated opens (hover/click) must not steal focus.
+  private readonly _focusFirstItemOnOpen = signal(false);
+
   private closeTimeoutId: ReturnType<typeof setTimeout> | null = null;
 
   constructor() {
@@ -37,9 +42,18 @@ export class NavigationMenuSubComponent {
     this._triggerRef.set(ref);
   }
 
-  show(): void {
+  show(options?: { focusFirstItem?: boolean }): void {
     this.clearCloseTimer();
+    if (options?.focusFirstItem) {
+      this._focusFirstItemOnOpen.set(true);
+    }
     this.open.set(true);
+  }
+
+  consumeFocusFirstItemOnOpen(): boolean {
+    const value = this._focusFirstItemOnOpen();
+    if (value) this._focusFirstItemOnOpen.set(false);
+    return value;
   }
 
   close(): void {

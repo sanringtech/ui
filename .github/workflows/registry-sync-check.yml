@@ -22,3 +22,6 @@ jobs:
 
       - name: Run registry sync check
         run: node packages/cli/scripts/check-registry-sync.mjs
+
+      - name: Run registry parity check
+        run: node packages/cli/scripts/check-registry-parity.mjs

@@ -2,8 +2,8 @@ import {
   ChangeDetectionStrategy,
   Component,
   ElementRef,
-  AfterViewInit,
   OnDestroy,
+  afterNextRender,
   inject,
   computed,
   effect,
@@ -29,7 +29,7 @@ import { CAROUSEL_ITEM_SPACING_CLASS, CarouselComponent } from './carousel.compo
     </div>
   `,
 })
-export class CarouselContentComponent implements AfterViewInit, OnDestroy {
+export class CarouselContentComponent implements OnDestroy {
   readonly class = input<string | undefined>();
 
   // 🪄 牽起與總指揮的連結，我們需要它的設定，也要把引擎交給它
@@ -65,16 +65,18 @@ export class CarouselContentComponent implements AfterViewInit, OnDestroy {
 
       this.emblaApi.reInit({ ...opts, axis: orientation === 'horizontal' ? 'x' : 'y' });
     });
-  }
 
-  ngAfterViewInit() {
-    // 組合外部傳入的選項，並且強制覆寫滑動軸向 (x 軸或 y 軸)
-    const options = {
-      ...this.carousel.opts(),
-      axis: this.carousel.orientation() === 'horizontal' ? 'x' : 'y',
-    } as const;
-    this.emblaApi = EmblaCarousel(this.el.nativeElement, options);
-    this.carousel.setApi(this.emblaApi);
+    // EmblaCarousel() constructs a ResizeObserver internally — a browser-only API that would
+    // throw during SSR. afterNextRender never runs on the server, so this defers the whole
+    // engine initialization until the view is actually rendered in the browser.
+    afterNextRender(() => {
+      const options = {
+        ...this.carousel.opts(),
+        axis: this.carousel.orientation() === 'horizontal' ? 'x' : 'y',
+      } as const;
+      this.emblaApi = EmblaCarousel(this.el.nativeElement, options);
+      this.carousel.setApi(this.emblaApi);
+    });
   }
 
   ngOnDestroy() {

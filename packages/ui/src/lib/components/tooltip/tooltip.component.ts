@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, OnDestroy, computed, inject, input, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnDestroy, computed, inject, input, numberAttribute, signal } from '@angular/core';
 import { _IdGenerator } from '@angular/cdk/a11y';
 import { CdkOverlayOrigin } from '@angular/cdk/overlay';
 import { cn } from '../../utils';
@@ -15,7 +15,7 @@ import { cn } from '../../utils';
 })
 export class TooltipComponent implements OnDestroy {
   readonly class = input<string | undefined>();
-  readonly delayDuration = input(200);
+  readonly delayDuration = input(200, { transform: numberAttribute });
 
   readonly isOpen = signal(false);
   readonly triggerOrigin = signal<CdkOverlayOrigin | null>(null);

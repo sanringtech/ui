@@ -36,6 +36,197 @@ function isPatch(version: string): boolean {
  */
 export const cliVersionChangelog: readonly CliVersionEntry[] = [
   {
+    version: '0.23.2',
+    date: '2026-08-14',
+    changes: [
+      {
+        type: 'fixed',
+        componentIds: ['select'],
+        text: 'Registry was completely missing `FocusKeyManager` keyboard navigation and `FocusableOption` on `select-item` — arrow keys did nothing after `sanring add select`.',
+      },
+      {
+        type: 'fixed',
+        componentIds: ['sheet'],
+        text: 'Registry panel wasn’t portalled into a CDK overlay, didn’t restore focus to the trigger on close, and didn’t mark background content `aria-hidden` while open.',
+      },
+      {
+        type: 'fixed',
+        componentIds: ['carousel'],
+        text: 'Registry initialized Embla outside `afterNextRender()`, crashing on the server (SSR).',
+      },
+      {
+        type: 'fixed',
+        componentIds: ['popover', 'select'],
+        text: 'Focus never moved into the panel on open, nor back to the trigger on close/Escape.',
+      },
+      {
+        type: 'fixed',
+        componentIds: ['context-menu', 'navigation-menu'],
+        text: 'Keyboard-opening a submenu didn’t move focus into it, requiring an extra keypress before you could start navigating.',
+      },
+      {
+        type: 'fixed',
+        componentIds: ['navigation-menu'],
+        text: 'A directive `tabindex` binding unconditionally overwrote the consumer’s manually-set `tabindex="0"` on submenu links, breaking arrow-key navigation between items.',
+      },
+      {
+        type: 'fixed',
+        componentIds: ['command'],
+        text: '`command-group` heading text wasn’t linked via `aria-labelledby` to its `role="group"` container.',
+      },
+      {
+        type: 'fixed',
+        componentIds: ['tree'],
+        text: '`TreeKeyManager` was created but never destroyed, leaking a subscription on repeated mount/unmount.',
+      },
+      {
+        type: 'fixed',
+        componentIds: ['combobox'],
+        text: '`role="listbox"` was missing `aria-multiselectable="true"` in multi-select mode; the popup-trigger variant didn’t auto-focus its search input on open; `disabled`/`required`/`multiple` lacked `booleanAttribute` transforms.',
+      },
+      {
+        type: 'fixed',
+        componentIds: ['file-upload'],
+        text: 'Registry `id` was a plain string instead of an `input()`; also fixed an unreliable opacity modifier on the drag-over highlight.',
+      },
+      {
+        type: 'fixed',
+        componentIds: ['switch'],
+        text: 'Registry was missing `ariaLabel`/`ariaLabelledBy`/`checkedChange`, dropped during an earlier registry refactor.',
+      },
+      {
+        type: 'fixed',
+        componentIds: ['checkbox', 'radio'],
+        text: '`aria-required` only checked the bare `required()` input in the registry, missing the `Validators.required`-based case.',
+      },
+      {
+        type: 'fixed',
+        componentIds: [
+          'collapsible',
+          'accordion',
+          'alert-dialog',
+          'alert',
+          'avatar',
+          'card',
+          'dialog',
+          'radio',
+          'scroll-area',
+          'tabs',
+          'toast',
+          'tooltip',
+        ],
+        text: 'Registry `index.ts` was missing the `SANRING_*_IMPORTS` convenience export that the docs’ own install examples import — following the docs after `sanring add` would fail to compile.',
+      },
+      {
+        type: 'fixed',
+        componentIds: ['pagination'],
+        text: 'The page-size select trigger button had no accessible name — a directive `ariaLabel` input silently overrode the component’s own `aria-label` binding.',
+      },
+      {
+        type: 'fixed',
+        componentIds: ['scroll-area'],
+        text: 'Keyboard users couldn’t scroll overflowing content. Added `tabindex="0"` and a focus-visible ring.',
+      },
+      {
+        type: 'fixed',
+        componentIds: ['field', 'input', 'textarea'],
+        text: 'Error-message/label text and the error-state border/ring used hardcoded red classes instead of design tokens; `field` was missing a `class` input.',
+      },
+      {
+        type: 'fixed',
+        componentIds: ['badge', 'switch', 'toast', 'stepper', 'file-upload', 'otp-input', 'checkbox', 'radio', 'calendar', 'date-picker'],
+        text: 'Assorted hardcoded colors replaced with the project’s actual design tokens — several were only defined in the docs site’s own stylesheet, so components installed via the CLI never had them applied.',
+      },
+      {
+        type: 'fixed',
+        componentIds: ['tabs'],
+        text: 'Registry `tabs-content` had a structural difference from the npm package (missing a `value` input), plus rounded-corner token drift.',
+      },
+      {
+        type: 'fixed',
+        componentIds: ['stepper'],
+        text: 'Focus ring used an undefined CSS variable; registry `StepState` type was missing the escape hatch for custom state strings.',
+      },
+      {
+        type: 'fixed',
+        componentIds: ['otp-input'],
+        text: 'Active slot border used the same undefined CSS variable as `stepper`’s focus ring.',
+      },
+      {
+        type: 'fixed',
+        componentIds: ['table'],
+        text: 'Registry `index.ts` was missing the `SANRING_TABLE_IMPORTS` convenience export.',
+      },
+      {
+        type: 'fixed',
+        componentIds: ['button'],
+        text: '`a[sanringBtn]` without `href` was missing `role="button"`.',
+      },
+      {
+        type: 'fixed',
+        componentIds: ['toggle', 'dialog', 'alert-dialog', 'tooltip', 'toast'],
+        text: 'Rounded-corner classes hardcoded instead of using the project’s radius design tokens.',
+      },
+      {
+        type: 'fixed',
+        componentIds: ['sidebar'],
+        text: '`text-[var(--sanring-muted-foreground)]` referenced a CSS variable that was never defined in `theme.css` — replaced with the actual token.',
+      },
+    ],
+  },
+  {
+    version: '0.23.1',
+    date: '2026-08-13',
+    changes: [
+      {
+        type: 'fixed',
+        componentIds: ['divider'],
+        text: 'Registry was missing `class` and `ariaLabel` inputs present on the npm package.',
+      },
+      {
+        type: 'fixed',
+        componentIds: ['skeleton'],
+        text: 'Registry CSS used a hardcoded radius class instead of the design token.',
+      },
+      {
+        type: 'fixed',
+        componentIds: ['progress'],
+        text: 'Registry was silently dropping the `ariaValueText` input.',
+      },
+      {
+        type: 'fixed',
+        componentIds: ['tag'],
+        text: 'Close button had no visible focus ring, failing WCAG 2.4.7.',
+      },
+      {
+        type: 'fixed',
+        componentIds: ['card'],
+        text: 'Registry radius class didn’t respect the theme’s radius token.',
+      },
+      {
+        type: 'fixed',
+        componentIds: ['avatar'],
+        text: '`AvatarImageDirective` constructed a `MutationObserver` eagerly instead of deferring to `afterNextRender`, unsafe under SSR.',
+      },
+      {
+        type: 'fixed',
+        componentIds: ['alert'],
+        text: 'Registry `destructive` variant used hardcoded red classes instead of the project’s error-color tokens.',
+      },
+    ],
+  },
+  {
+    version: '0.23.0',
+    date: '2026-08-11',
+    changes: [
+      {
+        type: 'added',
+        notable: true,
+        text: 'New `sanring build` command: scans `registry/components/` and generates `registry/registry.json` automatically, resolving `componentDeps`, `sharedDeps`, and `peerDependencies` from import analysis. Includes a `--dry-run` flag.',
+      },
+    ],
+  },
+  {
     version: '0.22.0',
     date: '2026-08-10',
     changes: [

@@ -35,9 +35,11 @@ export class CalendarDayDirective {
       CALENDAR_DAY_SIZE_CLASSES[this.size()],
       !day.isCurrentMonth && !day.isSelected && !day.isInRange && 'text-[var(--sanring-muted)]',
       day.isCurrentMonth && !day.isSelected && 'text-[var(--sanring-foreground)]',
-      day.isSelected && 'bg-primary text-primary-foreground',
-      day.isInRange && !day.isSelected && 'bg-primary/20',
-      day.isFocused && 'ring-2 ring-primary',
+      day.isSelected && 'bg-[var(--sanring-primary)] text-[var(--sanring-primary-fg)]',
+      day.isInRange &&
+        !day.isSelected &&
+        'bg-[color-mix(in_srgb,var(--sanring-primary)_20%,transparent)]',
+      day.isFocused && 'ring-2 ring-[var(--sanring-primary)]',
       day.isToday && !day.isSelected && 'font-bold',
       !day.isSelected &&
         !day.isDisabled &&

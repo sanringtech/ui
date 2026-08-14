@@ -13,6 +13,7 @@ import { OtpInputValueChangeEvent } from './otp-input.types';
   imports: [OtpInputComponent, ReactiveFormsModule],
   template: `
     <sanring-otp-input
+      class="custom-class"
       [length]="4"
       [value]="value"
       [pattern]="pattern"
@@ -78,6 +79,21 @@ function slotValues(fixture: { nativeElement: HTMLElement }): string[] {
 }
 
 describe('OtpInputComponent', () => {
+  it('renders without error', () => {
+    const fixture = TestBed.createComponent(OtpInputTestHost);
+    fixture.detectChanges();
+
+    expect(fixture.nativeElement).toBeTruthy();
+  });
+
+  it('merges host class with consumer class', () => {
+    const fixture = TestBed.createComponent(OtpInputTestHost);
+    fixture.detectChanges();
+
+    const host = fixture.nativeElement.querySelector('sanring-otp-input');
+    expect(host?.classList.contains('custom-class')).toBe(true);
+  });
+
   it('renders the requested number of slots', () => {
     const fixture = TestBed.createComponent(OtpInputTestHost);
     fixture.detectChanges();
@@ -156,6 +172,35 @@ describe('OtpInputComponent', () => {
 
     expect(slotValues(fixture)).toEqual(['1', '', '3', '4']);
     expect(fixture.componentInstance.latestValue).toBe('134');
+  });
+
+  it('moves the active slot with ArrowLeft/ArrowRight/Home/End', () => {
+    const fixture = TestBed.createComponent(OtpInputTestHost);
+    fixture.componentInstance.value = '1234';
+    fixture.detectChanges();
+
+    const nativeElement = fixture.nativeElement as HTMLElement;
+    const activeState = () =>
+      Array.from(nativeElement.querySelectorAll<HTMLElement>('[data-otp-slot]')).findIndex(
+        (slot) => slot.getAttribute('data-state') === 'active',
+      );
+
+    const input = inputAt(fixture, 0);
+    input.dispatchEvent(new KeyboardEvent('keydown', { key: 'End', bubbles: true }));
+    fixture.detectChanges();
+    expect(activeState()).toBe(3);
+
+    input.dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowLeft', bubbles: true }));
+    fixture.detectChanges();
+    expect(activeState()).toBe(2);
+
+    input.dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowRight', bubbles: true }));
+    fixture.detectChanges();
+    expect(activeState()).toBe(3);
+
+    input.dispatchEvent(new KeyboardEvent('keydown', { key: 'Home', bubbles: true }));
+    fixture.detectChanges();
+    expect(activeState()).toBe(0);
   });
 
   it('does not emit changes while disabled', () => {

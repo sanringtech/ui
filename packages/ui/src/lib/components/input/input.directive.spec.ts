@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
+import { FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
 
 import { expectNoA11yViolations } from '../../../testing/axe-a11y';
 import { LabelDirective } from '../field/label.directive';
@@ -24,6 +25,20 @@ import { InputDirective } from './input.directive';
 })
 class InputA11yHost {}
 
+@Component({
+  imports: [InputDirective],
+  template: `<input sanringInput class="custom-class" />`,
+})
+class InputClassHost {}
+
+@Component({
+  imports: [ReactiveFormsModule, InputDirective],
+  template: `<input sanringInput [formControl]="control" />`,
+})
+class InputValidationHost {
+  readonly control = new FormControl<string | null>(null, { validators: [Validators.required] });
+}
+
 describe('InputDirective', () => {
   it('has no axe-detectable a11y violations when wrapped in sanring-field with a label', async () => {
     await TestBed.configureTestingModule({ imports: [InputA11yHost] }).compileComponents();
@@ -31,5 +46,29 @@ describe('InputDirective', () => {
     fixture.detectChanges();
 
     await expectNoA11yViolations(fixture.nativeElement);
+  });
+
+  it('merges host class with consumer class', async () => {
+    await TestBed.configureTestingModule({ imports: [InputClassHost] }).compileComponents();
+    const fixture = TestBed.createComponent(InputClassHost);
+    fixture.detectChanges();
+
+    const input = fixture.nativeElement.querySelector('input') as HTMLInputElement;
+    expect(input.classList.contains('custom-class')).toBe(true);
+    expect(input.classList.contains('peer')).toBe(true);
+  });
+
+  it('sets aria-invalid once the bound control is invalid and touched', async () => {
+    await TestBed.configureTestingModule({ imports: [InputValidationHost] }).compileComponents();
+    const fixture = TestBed.createComponent(InputValidationHost);
+    fixture.detectChanges();
+
+    const input = fixture.nativeElement.querySelector('input') as HTMLInputElement;
+    expect(input.getAttribute('aria-invalid')).toBeNull();
+
+    fixture.componentInstance.control.markAsTouched();
+    fixture.detectChanges();
+
+    expect(input.getAttribute('aria-invalid')).toBe('true');
   });
 });

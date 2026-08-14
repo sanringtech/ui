@@ -79,6 +79,6 @@ export class NavigationMenuSubTriggerComponent {
   protected openFromKeyboard(event: Event): void {
     if (this.disabled()) return;
     event.preventDefault();
-    this.sub.show();
+    this.sub.show({ focusFirstItem: true });
   }
 }

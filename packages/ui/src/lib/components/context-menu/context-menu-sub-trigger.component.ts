@@ -31,6 +31,7 @@ import { ContextMenuSubComponent } from './context-menu-sub.component';
     '(click)': 'onOpen()',
     '(keydown.arrowright)': 'onOpenKey($event)',
     '(keydown.enter)': 'onOpenKey($event)',
+    '(keydown.space)': 'onOpenKey($event)',
   },
   template: `
     <ng-content></ng-content>
@@ -72,6 +73,6 @@ export class ContextMenuSubTriggerComponent {
   protected onOpenKey(event: Event): void {
     if (this.disabled()) return;
     event.preventDefault();
-    this.sub.open();
+    this.sub.open({ focusFirstItem: true });
   }
 }

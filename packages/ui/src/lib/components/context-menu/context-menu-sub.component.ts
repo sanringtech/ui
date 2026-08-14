@@ -30,6 +30,11 @@ export class ContextMenuSubComponent {
   private readonly _triggerRef = signal<ElementRef<HTMLElement> | null>(null);
   readonly triggerRef = this._triggerRef.asReadonly();
 
+  // Set by open({ focusFirstItem: true }) — read-and-cleared by
+  // ContextMenuSubContentComponent once it's actually focused the item, so it's a
+  // one-shot signal rather than a persistent flag.
+  private readonly _focusFirstItemOnOpen = signal(false);
+
   private closeTimeoutId: ReturnType<typeof setTimeout> | null = null;
 
   constructor() {
@@ -40,9 +45,20 @@ export class ContextMenuSubComponent {
     this._triggerRef.set(ref);
   }
 
-  open(): void {
+  // ArrowRight/Enter on the trigger passes focusFirstItem: true — keyboard-initiated
+  // opens should land focus on the first item immediately (matches native menus and
+  // the ARIA APG submenu pattern). Mouse-initiated opens (hover/click) don't, since
+  // pointer interactions shouldn't steal focus.
+  open(options?: { focusFirstItem?: boolean }): void {
     this.clearCloseTimer();
+    this._focusFirstItemOnOpen.set(options?.focusFirstItem ?? false);
     this.isOpen.set(true);
+  }
+
+  consumeFocusFirstItemOnOpen(): boolean {
+    const value = this._focusFirstItemOnOpen();
+    this._focusFirstItemOnOpen.set(false);
+    return value;
   }
 
   close(): void {

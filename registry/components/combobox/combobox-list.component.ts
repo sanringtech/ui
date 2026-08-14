@@ -12,6 +12,7 @@ import { ComboboxComponent } from './combobox.component';
     '[id]': 'combobox.listId',
     '[class]': 'listClass()',
     role: 'listbox',
+    '[attr.aria-multiselectable]': "combobox.multiple() ? 'true' : null",
   },
 })
 export class ComboboxListComponent {

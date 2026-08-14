@@ -49,12 +49,32 @@ class CalendarTestHost {
   selectedDate: Date | null = null;
 }
 
+@Component({
+  imports: [CalendarComponent],
+  template: `
+    <sanring-calendar mode="range" [locale]="locale" (selectedRangeChange)="range = $event" />
+  `,
+})
+class CalendarRangeTestHost {
+  readonly locale = testLocale;
+  range: { start: Date | null; end: Date | null } = { start: null, end: null };
+}
+
+@Component({
+  imports: [CalendarComponent],
+  template: `<sanring-calendar [locale]="locale" [disabled]="isDisabled" />`,
+})
+class CalendarDisabledDayTestHost {
+  readonly locale = testLocale;
+  readonly isDisabled = (date: Date) => date.getDate() === 15;
+}
+
 describe('CalendarComponent', () => {
   let overlayContainer: OverlayContainer;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [CalendarTestHost],
+      imports: [CalendarTestHost, CalendarRangeTestHost, CalendarDisabledDayTestHost],
     }).compileComponents();
 
     overlayContainer = TestBed.inject(OverlayContainer);
@@ -117,6 +137,43 @@ describe('CalendarComponent', () => {
     fixture.detectChanges();
 
     expect(fixture.componentInstance.selectedDate).toBeInstanceOf(Date);
+  });
+
+  it('commits a range on the second pick and emits selectedRangeChange', () => {
+    const fixture = TestBed.createComponent(CalendarRangeTestHost);
+    fixture.detectChanges();
+
+    const days = fixture.nativeElement.querySelectorAll(
+      'button[role="gridcell"]:not([disabled])',
+    ) as NodeListOf<HTMLButtonElement>;
+
+    days[5].click();
+    fixture.detectChanges();
+    expect(fixture.componentInstance.range.start).toBeNull(); // first pick is only a draft
+
+    days[10].click();
+    fixture.detectChanges();
+
+    expect(fixture.componentInstance.range.start).toBeInstanceOf(Date);
+    expect(fixture.componentInstance.range.end).toBeInstanceOf(Date);
+  });
+
+  it('blocks selecting a day matched by the disabled input', () => {
+    const fixture = TestBed.createComponent(CalendarDisabledDayTestHost);
+    fixture.detectChanges();
+
+    const dayButtons = Array.from(
+      fixture.nativeElement.querySelectorAll('button[role="gridcell"]'),
+    ) as HTMLButtonElement[];
+    const day15 = dayButtons.find((b) => b.textContent?.trim() === '15');
+
+    expect(day15?.disabled).toBe(true);
+    expect(day15?.getAttribute('aria-disabled')).toBe('true');
+
+    day15?.click();
+    fixture.detectChanges();
+
+    expect(day15?.getAttribute('aria-selected')).toBeNull();
   });
 
   it('has no axe-detectable a11y violations', async () => {

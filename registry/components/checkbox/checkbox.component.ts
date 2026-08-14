@@ -51,7 +51,7 @@ import { CheckedState, CheckboxSize } from './checkbox.types';
       [attr.name]="name()"
       [attr.value]="value()"
       [attr.aria-checked]="checkedSignal() === 'indeterminate' ? 'mixed' : checkedSignal()"
-      [attr.aria-required]="required()"
+      [attr.aria-required]="fieldRequired ? 'true' : null"
       [attr.aria-invalid]="errorState ? 'true' : null"
       [attr.aria-label]="ariaLabel()"
       [attr.aria-labelledby]="ariaLabelledBy()"
@@ -104,10 +104,10 @@ export class CheckboxComponent extends SanringCvaBase<CheckedState> {
     cn(
       SELECTION_CONTROL_BASE_CLASS,
       SELECTION_CONTROL_FOCUS_CLASS,
-      'rounded-[var(--sanring-radius-xs)] border border-primary',
+      'rounded-[var(--sanring-radius-xs)] border border-[var(--sanring-primary)]',
       CHECKBOX_SIZE_CLASSES[this.size()],
       CHECKBOX_STATE_CLASS,
-      this.errorState && 'border-red-500 focus-visible:ring-red-500',
+      this.errorState && 'border-[var(--sanring-error-50)] focus-visible:ring-[var(--sanring-error-40)]',
       this.class(),
     ),
   );

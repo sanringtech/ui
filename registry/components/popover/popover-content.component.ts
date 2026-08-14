@@ -8,6 +8,7 @@ import {
   ChangeDetectionStrategy,
   Component,
   DestroyRef,
+  ElementRef,
   Signal,
   computed,
   effect,
@@ -15,6 +16,7 @@ import {
   input,
   signal,
   untracked,
+  viewChild,
 } from '@angular/core';
 import { cn } from '../shared/utils';
 import { OVERLAY_SURFACE_CLASS, POPOVER_SURFACE_CLASS } from '../shared/component-styles';
@@ -69,11 +71,13 @@ function getPlacementFromPosition(position: ConnectionPositionPair): PopoverPlac
         [cdkConnectedOverlayViewportMargin]="16"
         [cdkConnectedOverlayScrollStrategy]="scrollStrategy"
         (overlayOutsideClick)="requestClose()"
+        (attach)="onAttach()"
         (detach)="onDetach()"
         (overlayKeydown)="handleOverlayKeydown($event)"
         (positionChange)="handlePositionChange($event)"
       >
         <div
+          #panelEl
           tabindex="-1"
           role="dialog"
           [id]="popover.contentId"
@@ -103,6 +107,7 @@ export class PopoverContentComponent {
 
   protected readonly scrollStrategy = this.overlay.scrollStrategies.close();
   protected readonly renderedPlacement = signal<PopoverPlacement>('bottom');
+  private readonly panelEl = viewChild<ElementRef<HTMLElement>>('panelEl');
 
   private readonly _leaving = signal(false);
   private _leaveTimer: ReturnType<typeof setTimeout> | undefined;
@@ -153,6 +158,16 @@ export class PopoverContentComponent {
     // isOpen change triggers the effect which calls _startLeave
   }
 
+  /**
+   * Moves focus into the panel once the overlay is actually attached (role="dialog"
+   * needs an initial focus target per the ARIA dialog pattern; the panel's own
+   * tabindex="-1" exists specifically as that fallback target since popover content
+   * is often not just static text — see the docs "Dimensions" example).
+   */
+  protected onAttach(): void {
+    this.panelEl()?.nativeElement.focus();
+  }
+
   protected onDetach(): void {
     this._endLeave();
     if (this.popover.isOpen()) {
@@ -171,6 +186,10 @@ export class PopoverContentComponent {
     event.preventDefault();
     event.stopPropagation();
     this.requestClose();
+    // Escape is keyboard-initiated, so restore focus to the trigger (matching the
+    // ARIA non-modal-dialog convention). Outside-click close deliberately does NOT
+    // do this — the click's own target should keep focus, not get overridden.
+    this.popover.triggerOrigin?.elementRef.nativeElement.focus();
   }
 
   protected handlePositionChange(event: ConnectedOverlayPositionChange): void {

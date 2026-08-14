@@ -26,7 +26,7 @@ import { NavigationMenuComponent } from './navigation-menu.component';
     NavigationMenuSubContentComponent,
   ],
   template: `
-    <sanring-navigation-menu ariaLabel="Main">
+    <sanring-navigation-menu ariaLabel="Main" class="custom-nav-class">
       <sanring-navigation-menu-list>
         <sanring-navigation-menu-item value="docs">
           <button sanringNavigationMenuTrigger>Docs</button>
@@ -53,6 +53,18 @@ import { NavigationMenuComponent } from './navigation-menu.component';
 })
 class NavigationMenuTestHost {}
 
+@Component({
+  imports: [NavigationMenuLinkDirective],
+  template: `
+    <a sanringNavigationMenuLink href="/menuitem" role="menuitem" tabindex="0" [disabled]="disabled">
+      Item
+    </a>
+  `,
+})
+class DisabledLinkTestHost {
+  disabled = false;
+}
+
 function keydown(key: string): KeyboardEvent {
   return new KeyboardEvent('keydown', { key, bubbles: true, cancelable: true });
 }
@@ -62,7 +74,7 @@ describe('NavigationMenuComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [NavigationMenuTestHost],
+      imports: [NavigationMenuTestHost, DisabledLinkTestHost],
     }).compileComponents();
 
     overlayContainer = TestBed.inject(OverlayContainer);
@@ -89,6 +101,12 @@ describe('NavigationMenuComponent', () => {
       'sanring-navigation-menu-content',
     ) as HTMLElement;
   }
+
+  it('merges host class with consumer class', () => {
+    const fixture = createFixture();
+    const root = (fixture.nativeElement as HTMLElement).querySelector('sanring-navigation-menu');
+    expect(root?.classList.contains('custom-nav-class')).toBe(true);
+  });
 
   it('opens a content panel and connects trigger aria-controls to the content id', () => {
     const fixture = createFixture();
@@ -124,11 +142,76 @@ describe('NavigationMenuComponent', () => {
     expect(overlay.textContent).toContain('Forms');
     expect(subTrigger.getAttribute('aria-expanded')).toBe('true');
 
+    // Keyboard-initiated open should land focus on the first submenu item immediately,
+    // matching native menu conventions (no extra ArrowDown needed to start navigating).
+    const firstItem = overlay.querySelector('[role="menuitem"]');
+    expect(document.activeElement).toBe(firstItem);
+
     overlay.dispatchEvent(keydown('ArrowLeft'));
     fixture.detectChanges();
 
     expect(subTrigger.getAttribute('aria-expanded')).toBe('false');
     expect(document.activeElement).toBe(subTrigger);
+  });
+
+  it('moves focus between submenu items with ArrowDown/ArrowUp', async () => {
+    const fixture = createFixture();
+    trigger(fixture).click();
+    fixture.detectChanges();
+
+    const subTrigger = (fixture.nativeElement as HTMLElement).querySelector(
+      'sanring-navigation-menu-sub-trigger',
+    ) as HTMLElement;
+
+    subTrigger.dispatchEvent(keydown('ArrowRight'));
+    fixture.detectChanges();
+    await fixture.whenStable();
+    fixture.detectChanges();
+
+    const overlay = overlayContainer.getContainerElement();
+    const items = overlay.querySelectorAll('[role="menuitem"]');
+    expect(document.activeElement).toBe(items[0]);
+
+    overlay.dispatchEvent(keydown('ArrowDown'));
+    fixture.detectChanges();
+    expect(document.activeElement).toBe(items[1]);
+
+    overlay.dispatchEvent(keydown('ArrowUp'));
+    fixture.detectChanges();
+    expect(document.activeElement).toBe(items[0]);
+  });
+
+  it('preserves a template-set tabindex when enabled, and forces "-1" when disabled', () => {
+    const enabledFixture = TestBed.createComponent(DisabledLinkTestHost);
+    enabledFixture.detectChanges();
+    const enabledLink = enabledFixture.nativeElement.querySelector('a') as HTMLAnchorElement;
+    expect(enabledLink.getAttribute('tabindex')).toBe('0');
+    expect(enabledLink.getAttribute('aria-disabled')).toBeNull();
+
+    const disabledFixture = TestBed.createComponent(DisabledLinkTestHost);
+    disabledFixture.componentInstance.disabled = true;
+    disabledFixture.detectChanges();
+    const disabledLink = disabledFixture.nativeElement.querySelector('a') as HTMLAnchorElement;
+    expect(disabledLink.getAttribute('tabindex')).toBe('-1');
+    expect(disabledLink.getAttribute('aria-disabled')).toBe('true');
+  });
+
+  it('does not steal focus when the submenu is opened via mouse hover', () => {
+    const fixture = createFixture();
+    trigger(fixture).click();
+    fixture.detectChanges();
+
+    const subTrigger = (fixture.nativeElement as HTMLElement).querySelector(
+      'sanring-navigation-menu-sub-trigger',
+    ) as HTMLElement;
+
+    subTrigger.dispatchEvent(new MouseEvent('mouseenter', { bubbles: true }));
+    fixture.detectChanges();
+
+    expect(subTrigger.getAttribute('aria-expanded')).toBe('true');
+    expect(document.activeElement).not.toBe(
+      overlayContainer.getContainerElement().querySelector('[role="menuitem"]'),
+    );
   });
 
   it('has no axe-detectable a11y violations with the menu and submenu open', async () => {

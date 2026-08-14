@@ -1,5 +1,5 @@
 import { CdkTableModule } from '@angular/cdk/table';
-import { Component } from '@angular/core';
+import { Component, signal } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 
 import { expectNoA11yViolations } from '../../../testing/axe-a11y';
@@ -11,6 +11,7 @@ import {
   TableHeaderCellDirective,
 } from './cell.directive';
 import { TableColumnDefDirective } from './column-def.directive';
+import { TableNoDataRowDirective } from './no-data-row.directive';
 import {
   TableHeaderRowDefDirective,
   TableHeaderRowDirective,
@@ -87,6 +88,13 @@ describe('TableComponent', () => {
     }).compileComponents();
   });
 
+  it('renders without error', () => {
+    const fixture = TestBed.createComponent(TableTestHost);
+    fixture.detectChanges();
+
+    expect(fixture.nativeElement).toBeTruthy();
+  });
+
   it('renders a native table composition and merges classes', () => {
     const fixture = TestBed.createComponent(TableTestHost);
     fixture.detectChanges();
@@ -126,5 +134,216 @@ describe('TableComponent', () => {
     fixture.detectChanges();
 
     await expectNoA11yViolations(fixture.nativeElement);
+  });
+});
+
+@Component({
+  imports: [
+    CdkTableModule,
+    TableDirective,
+    TableColumnDefDirective,
+    TableHeaderCellDefDirective,
+    TableCellDefDirective,
+    TableHeaderCellDirective,
+    TableCellDirective,
+    TableHeaderRowDefDirective,
+    TableRowDefDirective,
+    TableHeaderRowDirective,
+    TableRowDirective,
+    TableNoDataRowDirective,
+  ],
+  template: `
+    <table cdk-table sanringTable [dataSource]="data">
+      <ng-container sanringColumnDef="name">
+        <th sanringHeaderCell *sanringHeaderCellDef>Name</th>
+        <td sanringCell *sanringCellDef="let person">{{ person.name }}</td>
+      </ng-container>
+
+      <tr cdk-header-row sanringRow *sanringHeaderRowDef="columns"></tr>
+      <tr cdk-row sanringRow *sanringRowDef="let row; columns: columns"></tr>
+      <tr *sanringNoDataRow>
+        <td class="no-data-cell">Nothing to show</td>
+      </tr>
+    </table>
+  `,
+})
+class TableNoDataTestHost {
+  columns = ['name'];
+  data: Person[] = [];
+}
+
+describe('TableComponent (no-data row)', () => {
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      imports: [TableNoDataTestHost],
+    }).compileComponents();
+  });
+
+  it('shows the no-data row when the data source is empty', () => {
+    const fixture = TestBed.createComponent(TableNoDataTestHost);
+    fixture.detectChanges();
+
+    expect(fixture.nativeElement.querySelector('.no-data-cell')).not.toBeNull();
+  });
+
+  it('hides the no-data row once the data source has rows', () => {
+    const fixture = TestBed.createComponent(TableNoDataTestHost);
+    fixture.componentInstance.data = [{ name: 'Ada', role: 'Engineer' }];
+    fixture.detectChanges();
+
+    expect(fixture.nativeElement.querySelector('.no-data-cell')).toBeNull();
+    expect(fixture.nativeElement.textContent).toContain('Ada');
+  });
+});
+
+@Component({
+  imports: [
+    CdkTableModule,
+    TableDirective,
+    TableColumnDefDirective,
+    TableHeaderCellDefDirective,
+    TableCellDefDirective,
+    TableHeaderCellDirective,
+    TableCellDirective,
+    TableHeaderRowDefDirective,
+    TableRowDefDirective,
+    TableHeaderRowDirective,
+    TableRowDirective,
+  ],
+  template: `
+    <table cdk-table sanringTable [dataSource]="data">
+      <ng-container sanringColumnDef="name" [ratio]="2">
+        <th sanringHeaderCell *sanringHeaderCellDef>Name</th>
+        <td sanringCell *sanringCellDef="let person">{{ person.name }}</td>
+      </ng-container>
+
+      <ng-container sanringColumnDef="role" [ratio]="1">
+        <th sanringHeaderCell *sanringHeaderCellDef>Role</th>
+        <td sanringCell *sanringCellDef="let person">{{ person.role }}</td>
+      </ng-container>
+
+      <ng-container sanringColumnDef="id" width="48px">
+        <th sanringHeaderCell *sanringHeaderCellDef>ID</th>
+        <td sanringCell *sanringCellDef="let person">{{ person.id }}</td>
+      </ng-container>
+
+      <tr cdk-header-row sanringRow *sanringHeaderRowDef="columns"></tr>
+      <tr cdk-row sanringRow *sanringRowDef="let row; columns: columns"></tr>
+    </table>
+  `,
+})
+class TableColumnSizingTestHost {
+  columns = ['name', 'role', 'id'];
+  data = [{ name: 'Ada', role: 'Engineer', id: 1 }];
+}
+
+describe('TableComponent (column sizing)', () => {
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      imports: [TableColumnSizingTestHost],
+    }).compileComponents();
+  });
+
+  it('splits ratio columns proportionally and leaves fixed-width columns untouched by the pool', () => {
+    const fixture = TestBed.createComponent(TableColumnSizingTestHost);
+    fixture.detectChanges();
+
+    const nativeElement = fixture.nativeElement as HTMLElement;
+    const headers = nativeElement.querySelectorAll<HTMLElement>('th[sanringHeaderCell]');
+
+    // ratio 2:1 之間分配 100% —— name 66.67%、role 33.33%；id 是固定寬度，不進比例池
+    expect(headers[0].style.width).toBe('66.66666666666666%');
+    expect(headers[1].style.width).toBe('33.33333333333333%');
+    expect(headers[2].style.width).toBe('48px');
+  });
+
+  it('enables fixed table-layout only when a column actually registers a ratio', () => {
+    const fixture = TestBed.createComponent(TableColumnSizingTestHost);
+    fixture.detectChanges();
+
+    const table = fixture.nativeElement.querySelector('table') as HTMLTableElement;
+    expect(table.classList.contains('cdk-table-fixed-layout')).toBe(true);
+  });
+});
+
+@Component({
+  imports: [
+    CdkTableModule,
+    TableDirective,
+    TableColumnDefDirective,
+    TableHeaderCellDefDirective,
+    TableCellDefDirective,
+    TableHeaderCellDirective,
+    TableCellDirective,
+    TableHeaderRowDefDirective,
+    TableRowDefDirective,
+    TableHeaderRowDirective,
+    TableRowDirective,
+  ],
+  template: `
+    <table cdk-table sanringTable [dataSource]="data">
+      <ng-container sanringColumnDef="name" [ratio]="2">
+        <th sanringHeaderCell *sanringHeaderCellDef>Name</th>
+        <td sanringCell *sanringCellDef="let person">{{ person.name }}</td>
+      </ng-container>
+
+      <ng-container sanringColumnDef="role" [ratio]="role.ratio()" [width]="role.width()">
+        <th sanringHeaderCell *sanringHeaderCellDef>Role</th>
+        <td sanringCell *sanringCellDef="let person">{{ person.role }}</td>
+      </ng-container>
+
+      <tr cdk-header-row sanringRow *sanringHeaderRowDef="columns"></tr>
+      <tr cdk-row sanringRow *sanringRowDef="let row; columns: columns"></tr>
+    </table>
+  `,
+})
+class TableDynamicColumnSizingTestHost {
+  columns = ['name', 'role'];
+  data = [{ name: 'Ada', role: 'Engineer' }];
+  role = {
+    ratio: signal<number | undefined>(1),
+    width: signal<string | undefined>(undefined),
+  };
+}
+
+describe('TableComponent (dynamic column sizing)', () => {
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      imports: [TableDynamicColumnSizingTestHost],
+    }).compileComponents();
+  });
+
+  // Regression: TableColumnDefDirective only called registerColumnRatio(), never
+  // unregisterColumnRatio(), when a column's ratio dropped out or width came in —
+  // only ngOnDestroy unregistered. A column that stopped being ratio-based (without
+  // being destroyed) kept contributing to widthPercentFor's denominator forever,
+  // permanently understating every other ratio column's percentage.
+  it('drops a column out of the ratio pool once its ratio input becomes undefined', () => {
+    const fixture = TestBed.createComponent(TableDynamicColumnSizingTestHost);
+    fixture.detectChanges();
+
+    const headers = () =>
+      (fixture.nativeElement as HTMLElement).querySelectorAll<HTMLElement>('th[sanringHeaderCell]');
+    expect(headers()[0].style.width).toBe('66.66666666666666%');
+
+    fixture.componentInstance.role.ratio.set(undefined);
+    fixture.detectChanges();
+
+    expect(headers()[0].style.width).toBe('100%');
+  });
+
+  it('drops a column out of the ratio pool once it switches to a fixed width', () => {
+    const fixture = TestBed.createComponent(TableDynamicColumnSizingTestHost);
+    fixture.detectChanges();
+
+    const headers = () =>
+      (fixture.nativeElement as HTMLElement).querySelectorAll<HTMLElement>('th[sanringHeaderCell]');
+    expect(headers()[0].style.width).toBe('66.66666666666666%');
+
+    fixture.componentInstance.role.width.set('80px');
+    fixture.detectChanges();
+
+    expect(headers()[0].style.width).toBe('100%');
+    expect(headers()[1].style.width).toBe('80px');
   });
 });

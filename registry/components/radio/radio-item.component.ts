@@ -80,8 +80,8 @@ export class RadioItemComponent {
       SELECTION_CONTROL_BASE_CLASS,
       SELECTION_CONTROL_FOCUS_CLASS,
       RADIO_SIZE_CLASS,
-      'rounded-full border border-primary text-primary',
-      'data-[state=checked]:border-primary',
+      'rounded-full border border-[var(--sanring-primary)] text-[var(--sanring-primary)]',
+      'data-[state=checked]:border-[var(--sanring-primary)]',
       this.class(),
     ),
   );

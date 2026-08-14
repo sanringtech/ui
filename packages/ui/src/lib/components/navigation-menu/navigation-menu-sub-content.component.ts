@@ -85,6 +85,10 @@ export class NavigationMenuSubContentComponent {
           }
         },
       });
+
+      if (this.sub.consumeFocusFirstItemOnOpen()) {
+        focusAdjacentMenuItem(this.elementRef.nativeElement, 1);
+      }
     });
   }
 }

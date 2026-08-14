@@ -22,7 +22,7 @@ export class SidebarGroupLabelComponent {
 
   protected readonly hostClass = computed(() =>
     cn(
-      'flex h-8 shrink-0 items-center px-2 text-xs font-medium text-[var(--sanring-muted-foreground)]',
+      'flex h-8 shrink-0 items-center px-2 text-xs font-medium text-[var(--sanring-muted)]',
       this.isIconRail() && 'hidden',
       this.class(),
     ),

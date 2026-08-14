@@ -1,5 +1,44 @@
 # @sanring/cli
 
+## 0.23.2
+
+### Patch Changes
+
+- Tier 2 component audit (`/audit-component`) — registry/packages-ui parity fixes and design-token drift across ~20 components, mostly regressions introduced by the P14 `SanringCvaBase` registry refactor that never got synced back:
+
+  - **switch**: registry was missing `ariaLabel`/`ariaLabelledBy`/`checkedChange` (dropped during the P14 refactor)
+  - **checkbox**, **radio**: registry `aria-required` only checked the bare `required()` input, missing the `Validators.required`-based `fieldRequired` case
+  - **collapsible**: registry `index.ts` was missing the `SANRING_COLLAPSIBLE_IMPORTS` convenience export used by the docs' own install examples — `sanring add collapsible` then following the docs would fail to compile
+  - **accordion**: same missing-export bug as collapsible, plus the same drift found and fixed in **alert-dialog**, **alert**, **avatar**, **card**, **dialog**, **radio**, **scroll-area**, **tabs**, **toast**, **tooltip**
+  - **pagination**: the page-size select trigger button had no accessible name — a directive `ariaLabel` input silently overrode the component's own `aria-label` binding
+  - **scroll-area**: keyboard users couldn't scroll overflowing content — added `tabindex="0"` + focus-visible ring (WCAG 2.1.1)
+  - **field**: error-message/label text and the `input`/`textarea` error-state border/ring used hardcoded `red-*` classes instead of `--sanring-error-*` tokens; `SanringFieldComponent` was missing a `class` input
+  - **badge**, **switch**, **toast**, **stepper**, **file-upload**, **otp-input**, **checkbox**, **radio**, **calendar**, **date-picker**: assorted hardcoded `red-*`/`emerald-*`/`yellow-*`/`blue-*`/`border-primary`/`text-primary` colors replaced with the project's actual `--sanring-*` design tokens (several only defined in the docs site's own stylesheet, so components installed via the CLI never had them applied)
+  - **tabs**: registry `tabs-content` had a structural difference from `packages/ui` (missing `value` input), plus `rounded-lg`/`rounded-md` token drift
+  - **stepper**: focus ring used an undefined `--sanring-ring` token; registry `StepState` type was missing the `| (string & {})` escape hatch for custom states
+  - **otp-input**: same undefined `--sanring-ring` token on the active slot border
+  - **table**: registry `index.ts` was missing the `SANRING_TABLE_IMPORTS` convenience export
+  - **button**: `a[sanringBtn]` without `href` was missing `role="button"`
+  - **toggle**: `rounded-md` → `--sanring-radius` token
+
+- Tier 3 component audit (`/audit-component`) — CDK Overlay / complex-keyboard components. Several high-severity registry-only regressions (registry drifted from the already-fixed `packages/ui` behavior) plus a few defects present in both:
+
+  - **select**: registry was completely missing `FocusKeyManager` keyboard navigation (arrow keys did nothing) and `FocusableOption` on `select-item` — despite `registry.json` describing the component as having keyboard navigation
+  - **sheet**: registry predated the `0bbb1e8` fix — panel wasn't portalled into a CDK overlay (`position: fixed` could get hijacked by an ancestor's `transform`/`filter`), closing didn't restore focus to the trigger, and background content wasn't marked `aria-hidden` while open
+  - **carousel**: registry initialized Embla outside `afterNextRender()`, crashing on the server — the same SSR bug already fixed in `packages/ui`
+  - **file-upload**: registry's `id` was a plain string instead of an `input()` like `packages/ui`; also fixed an unreliable `bg-[var(--sanring-active)]/30` opacity modifier and a `rounded-lg` token-drift
+  - **popover**, **select**: focus never moved into the panel on open, nor back to the trigger on close/Escape
+  - **context-menu**, **navigation-menu** (submenus): keyboard-opening a submenu didn't move focus into it, requiring an extra keypress to start navigating
+  - **navigation-menu**: a directive `[attr.tabindex]` binding unconditionally overwrote the consumer's manually-set `tabindex="0"` on submenu links, breaking arrow-key navigation between items entirely
+  - **command**: `command-group` heading text wasn't linked via `aria-labelledby` to its `role="group"` container
+  - **dialog**, **alert-dialog**: `rounded-lg`/`rounded-sm` design-token drift in the registry stylesheet
+  - **tree**: `TreeKeyManager` was created but never destroyed, leaking a subscription on repeated mount/unmount
+  - **combobox**: `role="listbox"` was missing `aria-multiselectable="true"` in multi-select mode; opening the popup-trigger variant didn't auto-focus the search input; `disabled`/`required`/`multiple` inputs lacked `booleanAttribute` transforms
+  - **sidebar**: `text-[var(--sanring-muted-foreground)]` referenced a CSS variable that was never defined anywhere in `theme.css` — replaced with the actual `--sanring-muted` token
+  - **tooltip**, **toast**: `rounded-md`/`rounded-lg` design-token drift
+
+  `packages/ui` already had the correct behavior for the registry-only regressions above; this release re-syncs `registry/` so `sanring add`/`sanring update` installs match.
+
 ## 0.23.1
 
 ### Patch Changes

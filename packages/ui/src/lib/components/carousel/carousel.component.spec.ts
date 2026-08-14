@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { vi } from 'vitest';
 
@@ -45,7 +45,9 @@ class MockResizeObserver {
     </sanring-carousel>
   `,
 })
-class CarouselTestHost {}
+class CarouselTestHost {
+  @ViewChild(CarouselComponent) carousel!: CarouselComponent;
+}
 
 describe('CarouselComponent', () => {
   beforeEach(async () => {
@@ -113,6 +115,67 @@ describe('CarouselComponent', () => {
 
     expect(previous.type).toBe('button');
     expect(next.type).toBe('button');
+  });
+
+  it('wires the previous/next buttons to scrollPrev/scrollNext', async () => {
+    const fixture = await setup();
+    const carousel = fixture.componentInstance.carousel;
+    const scrollPrev = vi.spyOn(carousel, 'scrollPrev');
+    const scrollNext = vi.spyOn(carousel, 'scrollNext');
+
+    // Both buttons start disabled (canScrollPrev/canScrollNext default false) — enable
+    // them so the click actually reaches the host listener, same as a real carousel
+    // with content on both sides of the current slide.
+    carousel.canScrollPrev.set(true);
+    carousel.canScrollNext.set(true);
+    fixture.detectChanges();
+
+    const previous = fixture.nativeElement.querySelector('.previous') as HTMLButtonElement;
+    const next = fixture.nativeElement.querySelector('.next') as HTMLButtonElement;
+
+    previous.click();
+    expect(scrollPrev).toHaveBeenCalledTimes(1);
+
+    next.click();
+    expect(scrollNext).toHaveBeenCalledTimes(1);
+  });
+
+  it('disables the previous/next buttons based on canScrollPrev/canScrollNext', async () => {
+    const fixture = await setup();
+    const carousel = fixture.componentInstance.carousel;
+
+    carousel.canScrollPrev.set(false);
+    carousel.canScrollNext.set(true);
+    fixture.detectChanges();
+
+    const previous = fixture.nativeElement.querySelector('.previous') as HTMLButtonElement;
+    const next = fixture.nativeElement.querySelector('.next') as HTMLButtonElement;
+    expect(previous.disabled).toBe(true);
+    expect(next.disabled).toBe(false);
+
+    carousel.canScrollPrev.set(true);
+    carousel.canScrollNext.set(false);
+    fixture.detectChanges();
+
+    expect(previous.disabled).toBe(false);
+    expect(next.disabled).toBe(true);
+  });
+
+  it('scrolls with ArrowUp/ArrowDown when vertical, ignoring the horizontal keys', async () => {
+    const fixture = await setup();
+    const carousel = fixture.componentInstance.carousel;
+    const scrollPrev = vi.spyOn(carousel, 'scrollPrev');
+    const scrollNext = vi.spyOn(carousel, 'scrollNext');
+    const root = fixture.nativeElement.querySelector('sanring-carousel') as HTMLElement;
+
+    root.dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowLeft', bubbles: true }));
+    expect(scrollPrev).not.toHaveBeenCalled();
+
+    root.dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowUp', bubbles: true }));
+    expect(scrollPrev).toHaveBeenCalledTimes(1);
+
+    root.dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowDown', bubbles: true }));
+    expect(scrollNext).toHaveBeenCalledTimes(1);
   });
 
   it('has no axe-detectable a11y violations', async () => {

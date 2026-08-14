@@ -351,9 +351,9 @@ export class OtpInputComponent implements ControlValueAccessor, OnInit, OtpInput
       !isFirst && !isLast && 'rounded-none',
       this.readOnly() && 'cursor-default',
       slot.state === 'active' &&
-        'z-10 border-[var(--sanring-ring)] shadow-md ring-2 ring-[var(--sanring-border-strong)] ring-offset-2 ring-offset-[var(--sanring-background)]',
+        'z-10 border-[var(--sanring-border-strong)] shadow-md ring-2 ring-[var(--sanring-border-strong)] ring-offset-2 ring-offset-[var(--sanring-background)]',
       slot.state === 'filled' && 'text-[var(--sanring-foreground)]',
-      slot.state === 'invalid' && 'z-10 border-red-500',
+      slot.state === 'invalid' && 'z-10 border-[var(--sanring-error-50)]',
       className,
     );
   }

@@ -35,7 +35,7 @@ export class SidebarMenuActionDirective {
   protected readonly actionClass = computed(() =>
     cn(
       'absolute right-1 top-1/2 flex size-7 -translate-y-1/2 items-center justify-center rounded-[var(--sanring-radius-xs)]',
-      'text-[var(--sanring-muted-foreground)] transition-[background-color,color,opacity]',
+      'text-[var(--sanring-muted)] transition-[background-color,color,opacity]',
       'hover:bg-[var(--sanring-surface-strong)] hover:text-[var(--sanring-foreground)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--sanring-border-strong)]',
       'aria-disabled:pointer-events-none aria-disabled:opacity-50',
       this.isIconRail() && 'hidden',

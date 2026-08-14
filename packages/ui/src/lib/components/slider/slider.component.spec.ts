@@ -16,6 +16,7 @@ import { SliderComponent } from './slider.component';
       (valueChange)="latestValue = $event"
     />
     <sanring-slider disabled [value]="4" />
+    <sanring-slider [ariaLabel]="'Custom'" class="custom-class" />
   `,
 })
 class SliderTestHost {
@@ -95,6 +96,16 @@ describe('SliderComponent', () => {
     expect(disabledSlider.getAttribute('aria-disabled')).toBe('true');
     expect(disabledSlider.getAttribute('tabindex')).toBe('-1');
     expect(disabledSlider.getAttribute('aria-valuenow')).toBe('4');
+  });
+
+  it('merges host class with consumer class', () => {
+    const fixture = TestBed.createComponent(SliderTestHost);
+    fixture.detectChanges();
+
+    const sliders = fixture.nativeElement.querySelectorAll('sanring-slider[role="slider"]');
+    const slider = sliders[2] as HTMLElement;
+    expect(slider.classList.contains('custom-class')).toBe(true);
+    expect(slider.classList.contains('touch-none')).toBe(true);
   });
 
   it('has no axe-detectable a11y violations when given an accessible name', async () => {

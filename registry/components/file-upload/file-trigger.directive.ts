@@ -44,7 +44,7 @@ export class FileTriggerDirective implements OnDestroy {
     // 🌟 2. 建立隱藏的原生 input
     this.hiddenInput = this.renderer.createElement('input');
     this.renderer.setAttribute(this.hiddenInput, 'type', 'file');
-    this.renderer.setAttribute(this.hiddenInput, 'id', this.upload.id);
+    this.renderer.setAttribute(this.hiddenInput, 'id', this.upload.id());
     this.renderer.setStyle(this.hiddenInput, 'display', 'none');
     this.syncHiddenInputAttributes();
 

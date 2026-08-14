@@ -51,7 +51,7 @@ export class FileDropzoneComponent {
   // 一樣要有視覺回饋，所以 isDragging 的樣式獨立在最外層、跟 hasContent 是否顯示清單無關。
   protected readonly dropzoneClass = computed(() =>
     cn(
-      'relative rounded-lg border-2',
+      'relative rounded-[var(--sanring-radius-lg)] border-2',
       // p-0 讓外層 border 直接貼在 sanring-file-item 自己的 border 上——平常外層是透明的
       // 看不出來，但拖曳時外層變色，兩條 border 會緊貼著同時出現，看起來像重複的線。
       // 留一點 padding 讓兩層 border 之間有間距，拖曳變色時才不會黏在一起。
@@ -64,7 +64,7 @@ export class FileDropzoneComponent {
       // 破碎殘影（看起來像兩側凸起的小三角形）。拿掉基礎 transition-colors 後，這個切換
       // 會直接跳過去，不再嘗試動畫化一個做不到的轉場；只有 isDragging 這個「同一個狀態內」
       // 的顏色變化才需要、也才能被平滑轉場。
-      this.isDragging() && 'transition-colors border-[var(--sanring-active)] bg-[var(--sanring-active)]/30',
+      this.isDragging() && 'transition-colors border-[var(--sanring-active)] bg-[color-mix(in_srgb,var(--sanring-active)_30%,transparent)]',
       this.upload.isDisabled && 'pointer-events-none opacity-50 cursor-not-allowed',
       this.class(),
     ),

@@ -23,7 +23,7 @@ import { cn } from '../shared/utils';
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <sanring-select [ngModel]="pageSize()" (ngModelChange)="pageSize.set($event)">
-      <button sanringSelectTrigger [class]="triggerClass()" [attr.aria-label]="ariaLabel()">
+      <button sanringSelectTrigger [class]="triggerClass()" [ariaLabel]="ariaLabel()">
         <sanring-select-value />
       </button>
 

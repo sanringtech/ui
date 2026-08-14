@@ -10,6 +10,7 @@ import {
   inject,
   input,
 } from '@angular/core';
+import { FocusableOption } from '@angular/cdk/a11y';
 import { LucideCheck } from '@lucide/angular';
 import { SelectComponent } from './select.component';
 import { cn } from '../shared/utils';
@@ -47,20 +48,31 @@ import { SelectIndicatorPosition, SelectValue } from './select.type';
     </span>
   `,
 })
-export class SelectItemComponent implements AfterViewInit {
+export class SelectItemComponent implements AfterViewInit, FocusableOption {
   protected readonly select = inject(SelectComponent);
   private readonly elementRef = inject<ElementRef<HTMLElement>>(ElementRef);
 
   @ViewChild('label') private labelRef?: ElementRef<HTMLElement>;
 
   readonly value = input.required<SelectValue>();
-  readonly disabled = input(false, { transform: booleanAttribute });
+  // FocusKeyManager's FocusableOption requires a plain `disabled` boolean property, which a
+  // signal input() can't double as (it's a function) — same reason combobox-item/command-item
+  // alias their disabled input to `disabledInput` and expose a plain getter for their
+  // interface. Template usage stays `[disabled]="..."` either way.
+  // eslint-disable-next-line @angular-eslint/no-input-rename
+  readonly disabledInput = input(false, { alias: 'disabled', transform: booleanAttribute });
   readonly showIndicator = input(true, { transform: booleanAttribute });
   readonly indicatorPosition = input<SelectIndicatorPosition>('start');
   readonly class = input<string | undefined>();
 
   protected readonly isSelected = computed(() => this.select.selectedValue() === this.value());
-  protected readonly isDisabled = computed(() => this.disabled() || this.select.disabledState());
+  protected readonly isDisabled = computed(() => this.disabledInput() || this.select.disabledState());
+
+  // FocusableOption.disabled — used by SelectContentComponent's FocusKeyManager to skip this
+  // item during Arrow-key navigation.
+  get disabled(): boolean {
+    return this.isDisabled();
+  }
 
   protected readonly itemClass = computed(() =>
     cn(
@@ -112,6 +124,16 @@ export class SelectItemComponent implements AfterViewInit {
     if (this.isDisabled()) return;
     event.preventDefault();
     this.selectItem();
+  }
+
+  // FocusableOption — called by SelectContentComponent's FocusKeyManager to move real DOM
+  // focus onto this item during Arrow-key navigation.
+  focus(): void {
+    this.elementRef.nativeElement.focus();
+  }
+
+  getLabel(): string {
+    return this.itemText();
   }
 
   private itemText(): string {

@@ -9,6 +9,7 @@ import {
   forwardRef,
   inject,
   input,
+  output,
   signal,
 } from '@angular/core';
 import { _IdGenerator } from '@angular/cdk/a11y';
@@ -53,6 +54,8 @@ import { SwitchSize } from './switch.type';
       [attr.aria-checked]="checkedSignal()"
       [attr.aria-invalid]="invalid() || errorState ? 'true' : null"
       [attr.aria-required]="fieldRequired ? 'true' : null"
+      [attr.aria-label]="ariaLabel()"
+      [attr.aria-labelledby]="ariaLabelledBy()"
       [attr.aria-describedby]="computedAriaDescribedBy()"
       [attr.data-state]="checkedSignal() ? 'checked' : 'unchecked'"
       [disabled]="isDisabled()"
@@ -84,7 +87,11 @@ export class SwitchComponent extends SanringCvaBase<boolean> {
   readonly checked = input(false, { transform: booleanAttribute });
   readonly disabled = input(false, { transform: booleanAttribute });
   readonly invalid = input(false, { transform: booleanAttribute });
+  readonly ariaLabel = input<string | undefined>();
+  readonly ariaLabelledBy = input<string | undefined>();
   readonly size = input<SwitchSize>('md');
+
+  readonly checkedChange = output<boolean>();
 
   protected readonly checkedSignal = signal(false);
   protected readonly isDisabled = computed(() => this.disabled() || this.disabledState());
@@ -93,7 +100,7 @@ export class SwitchComponent extends SanringCvaBase<boolean> {
       'peer inline-flex shrink-0 cursor-pointer items-center rounded-full border-2 transition-colors disabled:cursor-not-allowed disabled:opacity-50',
       SELECTION_CONTROL_FOCUS_CLASS,
       SWITCH_TRACK_SIZE_CLASSES[this.size()],
-      this.invalid() || this.errorState ? 'border-red-500' : 'border-transparent',
+      this.invalid() || this.errorState ? 'border-[var(--sanring-error-50)]' : 'border-transparent',
       this.checkedSignal() ? 'bg-[var(--sanring-foreground)]' : 'bg-[var(--sanring-border-strong)]',
       this.class(),
     ),
@@ -138,6 +145,7 @@ export class SwitchComponent extends SanringCvaBase<boolean> {
     this.checkedSignal.set(!this.checkedSignal());
     this.onChange(this.checkedSignal());
     this.onTouched();
+    this.checkedChange.emit(this.checkedSignal());
     this.emitStateChanges();
   }
 

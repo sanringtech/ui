@@ -32,7 +32,7 @@ const ENTER_KEY = 13;
     StepperPreviousDirective,
   ],
   template: `
-    <sanring-stepper lineStyle="dashed" optionalLabel="選填">
+    <sanring-stepper lineStyle="dashed" optionalLabel="選填" class="custom-class">
       <sanring-step label="Account">
         <ng-template sanringStepLabel>
           <span class="custom-label">Account label</span>
@@ -57,6 +57,21 @@ describe('StepperComponent', () => {
     await TestBed.configureTestingModule({
       imports: [StepperTestHost],
     }).compileComponents();
+  });
+
+  it('renders without error', () => {
+    const fixture = TestBed.createComponent(StepperTestHost);
+    fixture.detectChanges();
+
+    expect(fixture.nativeElement).toBeTruthy();
+  });
+
+  it('merges host class with consumer class', () => {
+    const fixture = TestBed.createComponent(StepperTestHost);
+    fixture.detectChanges();
+
+    const host = fixture.nativeElement as HTMLElement;
+    expect(host.querySelector('sanring-stepper')?.classList.contains('custom-class')).toBe(true);
   });
 
   it('renders headers, dashed connectors, selected content, and custom icons', () => {
@@ -284,7 +299,7 @@ describe('StepperComponent (completed / hasError rendering)', () => {
     const headers = host.querySelectorAll('sanring-step-header');
 
     expect(headers[2].querySelector('svg[lucidecirclealert]')).not.toBeNull();
-    expect(headers[2].querySelector('.border-red-500')).not.toBeNull();
+    expect(headers[2].querySelector('.border-\\[var\\(--sanring-error-50\\)\\]')).not.toBeNull();
   });
 });
 

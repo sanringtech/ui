@@ -27,6 +27,36 @@ class DatePickerTestHost {
   selectedDate: Date | null = null;
 }
 
+@Component({
+  imports: [DatePickerComponent],
+  template: `
+    <sanring-date-picker
+      mode="range"
+      granularity="month"
+      (selectedRangeChange)="range = $event"
+    />
+  `,
+})
+class RangeDatePickerTestHost {
+  range: { start: Date | null; end: Date | null } | null = null;
+}
+
+@Component({
+  imports: [DatePickerComponent],
+  template: `
+    <sanring-date-picker
+      granularity="month"
+      [disabled]="disabledMatcher"
+      (selectedDateChange)="selectedDate = $event"
+    />
+  `,
+})
+class DisabledDatePickerTestHost {
+  selectedDate: Date | null = null;
+  // Blocks January — month grid cell 0 (see DEFAULT_GRID_COLUMNS.month layout).
+  disabledMatcher = (date: Date) => date.getMonth() === 0;
+}
+
 describe('DatePickerComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -79,6 +109,41 @@ describe('DatePickerComponent', () => {
     fixture.detectChanges();
 
     expect(fixture.componentInstance.selectedDate).toBeInstanceOf(Date);
+  });
+
+  it('supports mode="range": two clicks commit a start/end range', () => {
+    const fixture = TestBed.createComponent(RangeDatePickerTestHost);
+    fixture.detectChanges();
+
+    const cells = fixture.nativeElement.querySelectorAll(
+      'button[role="gridcell"]',
+    ) as NodeListOf<HTMLButtonElement>;
+
+    cells[0].click();
+    fixture.detectChanges();
+    cells[2].click();
+    fixture.detectChanges();
+
+    const range = fixture.componentInstance.range;
+    expect(range?.start).toBeInstanceOf(Date);
+    expect(range?.end).toBeInstanceOf(Date);
+  });
+
+  it('blocks selection of dates matched by the disabled input', () => {
+    const fixture = TestBed.createComponent(DisabledDatePickerTestHost);
+    fixture.detectChanges();
+
+    const cells = fixture.nativeElement.querySelectorAll(
+      'button[role="gridcell"]',
+    ) as NodeListOf<HTMLButtonElement>;
+    const januaryCell = cells[0];
+
+    expect(januaryCell.disabled).toBe(true);
+
+    januaryCell.click();
+    fixture.detectChanges();
+
+    expect(fixture.componentInstance.selectedDate).toBeNull();
   });
 
   it('has no axe-detectable a11y violations', async () => {

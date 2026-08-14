@@ -48,70 +48,11 @@
 
 ---
 
-## P26 — `/audit-component` 全元件稽核佇列（52 個）
+## P28 — P14 CVA 重構未套用到 `packages/ui`
 
-依 `/audit-component` skill 的 Tier 判定排序：先 Tier 1（純顯示型），再 Tier 2（互動型），再 Tier 3（有 CDK Overlay / 複雜鍵盤）。每個元件稽核完成後移除該行，缺陷修正記入 DEVLOG.md。
+- [ ] `packages/ui` 的 9 個表單元件（`checkbox`/`switch`/`radio-group`/`slider`/`otp-input`/`date-picker`/`calendar`/`file-upload`/`combobox`）補做 P14 第二批重構：改成 `extends SanringCvaBase`，跟 `registry/` 對齊，徹底消除架構分岔
 
-### Tier 1 — Low-interaction primitive（純顯示型，無 Overlay）
-
-- [x] `divider` — class merging + ariaLabel 已補，spec 5/5 通過
-- [x] `skeleton` — registry CSS 對齊設計 token，spec 補 class merging test（3/3 通過）
-- [x] `spinner` — 零缺陷，spec 3/3 通過
-- [x] `progress` — registry 補 `ariaValueText` input + template binding，spec 補 class/barClass merging test（5/5 通過）
-- [x] `badge` — 零缺陷，spec 3/3 通過
-- [x] `tag` — 關閉按鈕補 focus-visible ring（WCAG 2.4.7），spec 補 class merging + remove output test（4/4 通過）
-- [x] `aspect-ratio` — 零缺陷，spec 4/4 通過
-- [x] `card` — registry 補 design token（rounded-xl → rounded-[var(--sanring-radius-lg)]），spec 3/3 通過
-- [x] `avatar` — registry AvatarImageDirective 補 afterNextRender SSR 防護，spec 3/3 通過
-- [x] `label` — 零缺陷，spec 2/2 通過
-- [x] `link` — 零缺陷，spec 3/3 通過
-- [x] `alert` — registry 補 design token（rounded-lg + destructive 紅色 → CSS var），spec 3/3 通過
-- [x] `timeline` — 零缺陷，spec 5/5 通過
-- [x] `breadcrumb` — 零缺陷，spec 4/4 通過
-
-### Tier 2 — Interactive / composite（有互動，無 Overlay）
-
-- [x] `button` — `a[sanringBtn]` 無 `href` 時補 `role="button"`，spec 補 2 個 host component 測試（6/6 通過）
-- [x] `toggle` — 零缺陷（工程面）；registry 端 `rounded-md` 補齊 `--sanring-radius` design token 漂移，spec 補 class merging test（4/4 通過）。Tier 1 by design（單顆 toggle button，無方向鍵語意）
-- [ ] `input`
-- [ ] `textarea`
-- [ ] `switch`
-- [ ] `checkbox`
-- [ ] `radio`
-- [ ] `slider`
-- [ ] `scroll-area`
-- [ ] `field`
-- [ ] `pagination`
-- [ ] `collapsible`
-- [ ] `accordion`
-- [ ] `tabs`
-- [ ] `stepper`
-- [ ] `otp-input`
-- [ ] `table`
-- [ ] `resizable`
-
-### Tier 3 — High-risk interaction（CDK Overlay / 複雜鍵盤 / Focus trap）
-
-- [ ] `tooltip`
-- [ ] `hover-card`
-- [ ] `popover`
-- [ ] `toast`
-- [ ] `calendar`
-- [ ] `dropdown-menu`
-- [ ] `context-menu`
-- [ ] `select`
-- [ ] `file-upload`
-- [ ] `carousel`
-- [ ] `dialog`
-- [ ] `alert-dialog`
-- [ ] `sheet`
-- [ ] `command`
-- [ ] `date-picker`
-- [ ] `navigation-menu`
-- [ ] `combobox`
-- [ ] `tree`
-- [ ] `transfer`
-- [ ] `sidebar`
+**現況**：P14 第二批重構（`a9cb0fd`）只實際套用在 `registry/shared/cva-base.ts` + `registry/components/*`，`packages/ui` 的對應 9 個元件從未跟進，兩邊架構自此分岔——`packages/ui` 還是舊的手刻 `XxxFieldControlAdapter`。**根因（驗證缺口）已解決**：新增 `packages/cli/scripts/check-registry-parity.mjs`（已掛進 `.github/workflows/registry-sync-check.yml`），靜態比對 `packages/ui` 與 `registry/` 每個同名元件檔案的 `input()`/`output()`/`model()` 宣告 + a11y 相關 attribute binding 表達式（`aria-*`/`role`/`disabled`/`tabindex`/`id`）。跑起來後除了 `/audit-component` 已經抓到的 `switch`/`checkbox`/`radio-group` 三筆,又額外挖出四筆獨立的 registry-only regression 並修正：`button`（本次 session 自己 cherry-pick 時漏同步 `role="button"` 修復，外加 `rounded-lg`/硬編碼 destructive 色碼兩個更早的 design token 漂移）、`context-menu-sub-trigger`（漏 `aria-disabled`）、`resizable-handle` + `resizable-group`（整組 `aria-valuenow`/`min`/`max` keyboard-splitter 支援完全沒同步過去）。目前這個腳本是純靜態 regex 比對,不是真的執行 registry 程式碼(嘗試讓 `packages/ui` 的 TestBed 直接 import registry 元件失敗了——Angular 的 build 工具鏈假設單一 project rootDir,跨 project import 會讓 `extends SanringCvaBase` 的型別解析失敗,細節見下方腳本檔頭註解)。剩餘工作(改用 `SanringCvaBase`)是解決架構分岔本身,優先度較低,兩邊行為已經有腳本守著。
 
 ---
 

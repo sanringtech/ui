@@ -2,7 +2,6 @@ import {
   ChangeDetectionStrategy,
   Component,
   booleanAttribute,
-  computed,
   forwardRef,
   inject,
   input,
@@ -13,7 +12,7 @@ import {
 import { _IdGenerator } from '@angular/cdk/a11y';
 import { NG_VALUE_ACCESSOR } from '@angular/forms';
 import { Observable } from 'rxjs';
-import { SanringCvaBase, SanringFieldControlAdapter } from '../shared/cva-base';
+import { SanringCvaBase } from '../shared/cva-base';
 import { FieldType, SANRING_FIELD_CONTROL, SanringFieldControl } from '../field/field.type';
 import { FileRejection, FileUploadErrorCode } from './file-upload.type';
 
@@ -213,8 +212,8 @@ export class FileUploadComponent extends SanringCvaBase<File[]> {
   }
 }
 
-// file-upload has a plain-string `id` (not an input signal) and `isDisabled` instead of `fieldDisabled`,
-// so it uses its own slim adapter rather than SanringFieldControlAdapter.
+// file-upload exposes `isDisabled` instead of `fieldDisabled`, so it uses its own slim
+// adapter rather than SanringFieldControlAdapter.
 class FileUploadFieldControlAdapter implements SanringFieldControl<File[]> {
   readonly controlType = FieldType.fileUpload;
 

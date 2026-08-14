@@ -25,12 +25,37 @@ function wait(ms: number): Promise<void> {
 })
 class HoverCardTestHost {}
 
+// Non-zero closeDelay so a content mouseenter has a window to cancel a
+// pending close before it fires — closeDelay=0 (used by HoverCardTestHost)
+// closes synchronously and can't exercise that cancellation path.
+@Component({
+  imports: [HoverCardComponent, HoverCardTriggerDirective, HoverCardContentComponent],
+  template: `
+    <sanring-hover-card [openDelay]="0" [closeDelay]="50">
+      <button type="button" sanringHoverCardTrigger>Profile</button>
+      <sanring-hover-card-content class="custom-hover-card">Details</sanring-hover-card-content>
+    </sanring-hover-card>
+  `,
+})
+class HoverCardCloseDelayTestHost {}
+
+@Component({
+  imports: [HoverCardComponent, HoverCardTriggerDirective, HoverCardContentComponent],
+  template: `
+    <sanring-hover-card openDelay="0" closeDelay="0">
+      <button type="button" sanringHoverCardTrigger>Profile</button>
+      <sanring-hover-card-content sideOffset="10">Details</sanring-hover-card-content>
+    </sanring-hover-card>
+  `,
+})
+class HoverCardAttributeTestHost {}
+
 describe('HoverCardComponent', () => {
   let overlayContainer: OverlayContainer;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [HoverCardTestHost],
+      imports: [HoverCardTestHost, HoverCardCloseDelayTestHost, HoverCardAttributeTestHost],
     }).compileComponents();
 
     overlayContainer = TestBed.inject(OverlayContainer);
@@ -42,6 +67,14 @@ describe('HoverCardComponent', () => {
 
   async function setup() {
     const fixture = TestBed.createComponent(HoverCardTestHost);
+    fixture.detectChanges();
+    await fixture.whenStable();
+    fixture.detectChanges();
+    return fixture;
+  }
+
+  async function setupCloseDelay() {
+    const fixture = TestBed.createComponent(HoverCardCloseDelayTestHost);
     fixture.detectChanges();
     await fixture.whenStable();
     fixture.detectChanges();
@@ -82,6 +115,67 @@ describe('HoverCardComponent', () => {
 
     content = overlayContainer.getContainerElement().querySelector('.custom-hover-card');
     expect(content).toBeNull();
+  });
+
+  it('opens on trigger mouseenter and closes on mouseleave', async () => {
+    const fixture = await setup();
+    const trigger = fixture.nativeElement.querySelector('button') as HTMLElement;
+
+    trigger.dispatchEvent(new MouseEvent('mouseenter'));
+    await wait(0);
+    fixture.detectChanges();
+
+    expect(overlayContainer.getContainerElement().querySelector('.custom-hover-card')).toBeTruthy();
+
+    trigger.dispatchEvent(new MouseEvent('mouseleave'));
+    fixture.detectChanges();
+    // isOpen flips synchronously-ish (closeDelay=0) but the element stays in the
+    // DOM through the leave animation (see the Escape test above for the same wait).
+    await wait(POPOVER_LEAVE_DURATION_MS + 20);
+    fixture.detectChanges();
+
+    expect(overlayContainer.getContainerElement().querySelector('.custom-hover-card')).toBeFalsy();
+  });
+
+  it('stays open when the pointer moves from the trigger onto the card content itself', async () => {
+    const fixture = await setupCloseDelay();
+    const trigger = fixture.nativeElement.querySelector('button') as HTMLElement;
+
+    trigger.dispatchEvent(new MouseEvent('mouseenter'));
+    await wait(0);
+    fixture.detectChanges();
+
+    const content = overlayContainer
+      .getContainerElement()
+      .querySelector('.custom-hover-card') as HTMLElement;
+    expect(content).toBeTruthy();
+
+    // Leaving the trigger starts the (50ms) close timer, but moving onto the
+    // content itself before it fires should cancel it — this is the whole
+    // point of the content div also having its own mouseenter handler.
+    trigger.dispatchEvent(new MouseEvent('mouseleave'));
+    content.dispatchEvent(new MouseEvent('mouseenter'));
+    await wait(80);
+    fixture.detectChanges();
+
+    expect(overlayContainer.getContainerElement().querySelector('.custom-hover-card')).toBeTruthy();
+  });
+
+  it('coerces numeric attribute inputs', () => {
+    const fixture = TestBed.createComponent(HoverCardAttributeTestHost);
+    fixture.detectChanges();
+
+    const hoverCardDebug = fixture.debugElement.query(
+      (debugEl) => debugEl.componentInstance instanceof HoverCardComponent,
+    );
+    const contentDebug = fixture.debugElement.query(
+      (debugEl) => debugEl.componentInstance instanceof HoverCardContentComponent,
+    );
+
+    const hoverCard = hoverCardDebug.componentInstance as HoverCardComponent;
+    expect(hoverCard.openDelay()).toBe(0);
+    expect(hoverCard.closeDelay()).toBe(0);
+    expect((contentDebug.componentInstance as HoverCardContentComponent).sideOffset()).toBe(10);
   });
 
   it('has no axe-detectable a11y violations, trigger and open card together', async () => {

@@ -1,5 +1,7 @@
+import { TreeKeyManager } from '@angular/cdk/a11y';
 import { Component, signal } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
+import { vi } from 'vitest';
 
 import { expectNoA11yViolations } from '../../../testing/axe-a11y';
 import { TreeComponent } from './tree.component';
@@ -11,6 +13,7 @@ import { TreeTriggerDirective } from './tree-trigger.directive';
   imports: [TreeComponent, TreeNodeComponent, TreeGroupComponent, TreeTriggerDirective],
   template: `
     <sanring-tree
+      class="custom-tree-class"
       [expandedValue]="expandedValue()"
       (expandedValueChange)="expandedValue.set($event)"
       [selectedValue]="selectedValue()"
@@ -76,6 +79,22 @@ describe('TreeComponent', () => {
     if (!item) throw new Error(`Expected tree item with value "${value}"`);
     return item;
   }
+
+  it('merges host class with consumer class', async () => {
+    const fixture = await createFixture();
+    const tree = fixture.nativeElement.querySelector('[role="tree"]');
+    expect(tree?.classList.contains('custom-tree-class')).toBe(true);
+  });
+
+  it('destroys the TreeKeyManager when the component is destroyed', async () => {
+    const destroySpy = vi.spyOn(TreeKeyManager.prototype, 'destroy');
+    const fixture = await createFixture();
+
+    fixture.destroy();
+
+    expect(destroySpy).toHaveBeenCalled();
+    destroySpy.mockRestore();
+  });
 
   it('renders tree roles, selection state, and roving tabindex', async () => {
     const fixture = await createFixture();

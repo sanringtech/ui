@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
+import { FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
 
 import { expectNoA11yViolations } from '../../../testing/axe-a11y';
 import { SanringFieldComponent } from '../field/field.component';
@@ -28,6 +29,14 @@ class TextareaTestHost {}
 })
 class TextareaA11yHost {}
 
+@Component({
+  imports: [ReactiveFormsModule, TextareaDirective],
+  template: `<textarea sanringTextarea [formControl]="control"></textarea>`,
+})
+class TextareaValidationHost {
+  readonly control = new FormControl<string | null>(null, { validators: [Validators.required] });
+}
+
 describe('TextareaDirective', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -52,5 +61,19 @@ describe('TextareaDirective', () => {
     fixture.detectChanges();
 
     await expectNoA11yViolations(fixture.nativeElement);
+  });
+
+  it('sets aria-invalid once the bound control is invalid and touched', async () => {
+    await TestBed.configureTestingModule({ imports: [TextareaValidationHost] }).compileComponents();
+    const fixture = TestBed.createComponent(TextareaValidationHost);
+    fixture.detectChanges();
+
+    const textarea = fixture.nativeElement.querySelector('textarea') as HTMLTextAreaElement;
+    expect(textarea.getAttribute('aria-invalid')).toBeNull();
+
+    fixture.componentInstance.control.markAsTouched();
+    fixture.detectChanges();
+
+    expect(textarea.getAttribute('aria-invalid')).toBe('true');
   });
 });

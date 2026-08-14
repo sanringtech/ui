@@ -1,6 +1,6 @@
 import { TreeKeyManager } from '@angular/cdk/a11y';
 import { toObservable } from '@angular/core/rxjs-interop';
-import { ChangeDetectionStrategy, Component, Injector, computed, contentChildren, inject, input, model, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, DestroyRef, Injector, computed, contentChildren, inject, input, model, signal } from '@angular/core';
 import { map } from 'rxjs';
 import { cn } from '../shared/utils';
 import { TreeNodeComponent } from './tree-node.component';
@@ -47,6 +47,9 @@ export class TreeComponent {
 
   constructor() {
     this.keyManager.change.subscribe((node) => this.explicitActiveNode.set(node));
+    // TreeKeyManager holds its own subscription to the nodes$ stream and never tears it
+    // down on its own — without this, every destroyed <sanring-tree> instance leaks it.
+    inject(DestroyRef).onDestroy(() => this.keyManager.destroy());
   }
 
   toggleExpand(value: string) {

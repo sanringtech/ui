@@ -19,10 +19,10 @@ import {
 import type { Toast, ToastAction, ToastType } from './toast.types';
 
 const TYPE_ICON_CLASS: Partial<Record<ToastType, string>> = {
-  success: 'text-emerald-500',
-  error: 'text-red-500',
-  warning: 'text-yellow-500',
-  info: 'text-blue-400',
+  success: 'text-[var(--sanring-success-40)]',
+  error: 'text-[var(--sanring-error-40)]',
+  warning: 'text-[var(--sanring-warn-40)]',
+  info: 'text-[var(--sanring-info-40)]',
 };
 
 @Component({

@@ -57,6 +57,8 @@ export class SanringFieldComponent {
   // 產生這組 Field 專屬的 ID 前綴
   readonly id = uniqueId('sanring-field');
 
+  readonly class = input<string | undefined>();
+
   // 是否使用 floating label 排版（label 從 input 內部浮到上方）
   readonly floating = input(false, { transform: booleanAttribute });
 
@@ -113,6 +115,7 @@ export class SanringFieldComponent {
       this.isRequired() && 'is-required',
       this.isFocused() && 'is-focused',
       this.isEmpty() && 'is-empty',
+      this.class(),
     ),
   );
 
