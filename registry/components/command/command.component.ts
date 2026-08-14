@@ -77,11 +77,6 @@ export class CommandComponent {
   }
 
   protected onKeydown(event: KeyboardEvent) {
-    if (event.key === 'Enter') {
-      this.collection.onKeydown(event);
-      return;
-    }
-
     this.collection.onKeydown(event);
   }
 }

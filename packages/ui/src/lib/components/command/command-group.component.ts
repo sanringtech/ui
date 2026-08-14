@@ -1,4 +1,5 @@
-import { ChangeDetectionStrategy, Component, computed, input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject, input } from '@angular/core';
+import { _IdGenerator } from '@angular/cdk/a11y';
 import { cn } from '../../utils';
 import { COLLECTION_GROUP_CLASS, COLLECTION_GROUP_HEADING_CLASS } from '../component-styles';
 
@@ -8,12 +9,12 @@ import { COLLECTION_GROUP_CLASS, COLLECTION_GROUP_HEADING_CLASS } from '../compo
   standalone: true,
   template: `
     @if (heading()) {
-      <div [class]="headingClass">
+      <div [id]="headingId" [class]="headingClass">
         {{ heading() }}
       </div>
     }
 
-    <div role="group">
+    <div role="group" [attr.aria-labelledby]="heading() ? headingId : null">
       <ng-content></ng-content>
     </div>
   `,
@@ -25,6 +26,7 @@ export class CommandGroupComponent {
   readonly heading = input<string>();
   readonly class = input<string | undefined>();
 
+  protected readonly headingId = inject(_IdGenerator).getId('sanring-command-group-heading-', true);
   protected readonly headingClass = COLLECTION_GROUP_HEADING_CLASS;
 
   protected readonly groupClass = computed(() =>
