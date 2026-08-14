@@ -104,7 +104,7 @@
 
 ### Tier 3 — High-risk interaction（CDK Overlay / 複雜鍵盤 / Focus trap）
 
-- [ ] `tooltip`
+- [x] `tooltip` — 唯一缺陷是這個 session 很早期（`toggle` 稽核時）就發現、特意留給 tooltip 自己稽核時處理的 `rounded-md` design token 漂移，已修正。用 `cdkConnectedOverlay` 宣告式寫法（非手動 `Overlay.create()`），CDK 自動管理 attach/detach，Phase 1-C 手動生命週期檢查項目多數不適用。spec 補 class merging + hover 開關（原本只測 Escape，沒測過主要的 hover 觸發路徑）共 2 個 test（4/4 通過）。Tier 3，consumer usage 只有自己 demo 頁
 - [ ] `hover-card`
 - [ ] `popover`
 - [ ] `toast`
