@@ -31,7 +31,7 @@ import { DialogTitleDirective } from '../dialog/dialog-title.directive';
     </button>
 
     <ng-template #alertDialog>
-      <sanring-alert-dialog-content>
+      <sanring-alert-dialog-content class="custom-alert-class">
         <h2 sanringDialogTitle>Delete item?</h2>
         <p sanringDialogDescription>This cannot be undone.</p>
         <button type="button" sanringAlertDialogCancel>Cancel</button>
@@ -207,6 +207,49 @@ describe('AlertDialog', () => {
     fixture.detectChanges();
 
     expect(result).toBe(false);
+  });
+
+  it('merges host class with consumer class on the content panel', () => {
+    const fixture = TestBed.createComponent(AlertDialogTestHost);
+    fixture.detectChanges();
+
+    fixture.componentInstance.alertDialogService.open(fixture.componentInstance.alertDialog);
+    fixture.detectChanges();
+
+    const content = overlayContainer.getContainerElement().querySelector('sanring-alert-dialog-content');
+    expect(content?.classList.contains('custom-alert-class')).toBe(true);
+  });
+
+  it('moves focus into the dialog on open and restores it to the trigger on close', async () => {
+    const fixture = TestBed.createComponent(AlertDialogTestHost);
+    document.body.appendChild(fixture.nativeElement);
+
+    try {
+      fixture.detectChanges();
+      const trigger = fixture.nativeElement.querySelector('button') as HTMLElement;
+      trigger.focus();
+
+      const ref = fixture.componentInstance.alertDialogService.open(fixture.componentInstance.alertDialog);
+      fixture.detectChanges();
+      await fixture.whenStable();
+      fixture.detectChanges();
+
+      const dialogContainer = overlayContainer
+        .getContainerElement()
+        .querySelector('cdk-dialog-container') as HTMLElement;
+      // autoFocus: 'first-tabbable' inherited from DialogService's defaults — AlertDialogService's
+      // mergedConfig only sets role/disableClose, so this is never overridden.
+      expect(dialogContainer.contains(document.activeElement)).toBe(true);
+
+      ref.close(false);
+      fixture.detectChanges();
+      await fixture.whenStable();
+      fixture.detectChanges();
+
+      expect(document.activeElement).toBe(trigger);
+    } finally {
+      fixture.nativeElement.remove();
+    }
   });
 
   it('has no axe-detectable a11y violations, trigger and open alert dialog content together', async () => {
