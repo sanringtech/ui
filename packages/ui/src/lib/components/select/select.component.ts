@@ -118,6 +118,10 @@ export class SelectComponent<T extends SelectValue = SelectValue>
     this.onChange(val);
     this.onTouched();
     this.isOpen.set(false); // 選完自動關閉
+    // 選完值後焦點回到 trigger（native <select> 本來就不會失焦），不管是滑鼠點選還是
+    // 鍵盤 Enter/Space 選的都一樣——這是使用者主動完成的操作,跟「點擊選單外面關閉」
+    // 不同,不會有搶走使用者焦點的問題。
+    this.focus();
     this.emitStateChanges();
   }
 

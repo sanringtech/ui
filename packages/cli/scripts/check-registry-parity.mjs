@@ -38,13 +38,6 @@ const REGISTRY_COMPONENTS_DIR = join(REPO_ROOT, 'registry/components');
 // Known, deliberate asymmetries — documented so this doesn't cry wolf.
 // key: `${dirName}/${fileName}` -> array of property names or attr names to ignore.
 const EXPECTED_INPUT_OUTPUT_GAPS = {
-  // packages/ui aliases the input to `disabledInput` (public API stays
-  // `[disabled]="..."` via `{ alias: 'disabled' }`) so it doesn't collide with
-  // the SanringFieldControl-adapter-style `disabled` getter pattern used
-  // elsewhere in this file; registry didn't need the alias. Verified the
-  // rendered aria-disabled/data-disabled/tabindex bindings are identical on
-  // both sides (2026-08-13) — this is a naming difference only, not drift.
-  'select/select-item.component.ts': ['disabledInput', 'disabled'],
   // packages/ui's `id` is a plain generated string (not input()-wrapped), so
   // consumers can't override it with `[id]="..."`; registry's is. Real,
   // pre-existing asymmetry — file-upload hasn't had its Tier 3

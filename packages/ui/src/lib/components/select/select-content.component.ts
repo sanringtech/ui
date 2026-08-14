@@ -170,6 +170,10 @@ export class SelectContentComponent {
       event.preventDefault();
       event.stopPropagation();
       this.close();
+      // Escape is keyboard-initiated, so restore focus to the trigger — matching
+      // selectValue()'s reasoning. Outside-click close deliberately does NOT do this
+      // (see close()); the click's own target should keep focus.
+      this.select.focus();
       return;
     }
 

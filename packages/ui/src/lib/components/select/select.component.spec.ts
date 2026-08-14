@@ -68,6 +68,21 @@ class SelectTestHost {
 })
 class SelectA11yHost {}
 
+@Component({
+  imports: [SelectComponent, SelectContentComponent, SelectItemComponent, SelectTriggerDirective, SelectValueComponent],
+  template: `
+    <sanring-select>
+      <button type="button" sanringSelectTrigger class="custom-trigger-class" ariaLabel="Fruit">
+        <sanring-select-value placeholder="Pick one" />
+      </button>
+      <sanring-select-content class="custom-content-class">
+        <sanring-select-item value="apple" class="custom-item-class">Apple</sanring-select-item>
+      </sanring-select-content>
+    </sanring-select>
+  `,
+})
+class SelectClassTestHost {}
+
 // CDK's ListKeyManager (which FocusKeyManager/SelectContentComponent's arrow-key handling
 // delegates to) reads event.keyCode, which the KeyboardEvent constructor's init dict can't
 // set (it's a read-only getter) — same workaround already used in stepper.component.spec.ts
@@ -86,7 +101,7 @@ describe('SelectComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [SelectTestHost, SelectA11yHost],
+      imports: [SelectTestHost, SelectA11yHost, SelectClassTestHost],
     }).compileComponents();
 
     overlayContainer = TestBed.inject(OverlayContainer);
@@ -240,6 +255,65 @@ describe('SelectComponent', () => {
     fixture.detectChanges();
 
     expect(trigger.getAttribute('aria-expanded')).toBe('false');
+  });
+
+  it('returns focus to the trigger after selecting a value', async () => {
+    const fixture = TestBed.createComponent(SelectTestHost);
+    document.body.appendChild(fixture.nativeElement);
+
+    try {
+      fixture.detectChanges();
+      const trigger = triggers(fixture)[0];
+      trigger.click();
+      fixture.detectChanges();
+      await fixture.whenStable();
+
+      const option = overlayContainer.getContainerElement().querySelector('[role="option"]') as HTMLElement;
+      option.click();
+      fixture.detectChanges();
+
+      expect(document.activeElement).toBe(trigger);
+    } finally {
+      fixture.nativeElement.remove();
+    }
+  });
+
+  it('returns focus to the trigger on Escape', async () => {
+    const fixture = TestBed.createComponent(SelectTestHost);
+    document.body.appendChild(fixture.nativeElement);
+
+    try {
+      fixture.detectChanges();
+      const trigger = triggers(fixture)[0];
+      trigger.click();
+      fixture.detectChanges();
+      await fixture.whenStable();
+
+      document.activeElement?.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape', bubbles: true }));
+      fixture.detectChanges();
+
+      expect(trigger.getAttribute('aria-expanded')).toBe('false');
+      expect(document.activeElement).toBe(trigger);
+    } finally {
+      fixture.nativeElement.remove();
+    }
+  });
+
+  it('merges host class with consumer class on the trigger, content, and an item', async () => {
+    const fixture = TestBed.createComponent(SelectClassTestHost);
+    fixture.detectChanges();
+
+    const trigger = fixture.nativeElement.querySelector('button[sanringSelectTrigger]') as HTMLElement;
+    expect(trigger.classList.contains('custom-trigger-class')).toBe(true);
+
+    trigger.click();
+    fixture.detectChanges();
+    await fixture.whenStable();
+
+    const listbox = overlayContainer.getContainerElement().querySelector('[role="listbox"]');
+    const option = overlayContainer.getContainerElement().querySelector('[role="option"]');
+    expect(listbox?.classList.contains('custom-content-class')).toBe(true);
+    expect(option?.classList.contains('custom-item-class')).toBe(true);
   });
 
   it('has no axe-detectable a11y violations, trigger and open listbox together', async () => {
