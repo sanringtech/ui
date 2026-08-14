@@ -25,7 +25,7 @@ import { DialogTriggerDirective } from './dialog-trigger.directive';
     </button>
 
     <ng-template #dialog>
-      <sanring-dialog-content>
+      <sanring-dialog-content class="custom-content-class">
         <h2 sanringDialogTitle>Dialog title</h2>
         <p sanringDialogDescription>Dialog description</p>
         <button type="button" [sanringDialogClose]="'saved'">Save</button>
@@ -129,6 +129,50 @@ describe('DialogComponent', () => {
     fixture.detectChanges();
 
     expect(result).toBeUndefined();
+  });
+
+  it('merges host class with consumer class on the content panel', () => {
+    const fixture = TestBed.createComponent(DialogTestHost);
+    fixture.detectChanges();
+
+    fixture.nativeElement.querySelector('button').click();
+    fixture.detectChanges();
+
+    const content = overlayContainer.getContainerElement().querySelector('sanring-dialog-content');
+    expect(content?.classList.contains('custom-content-class')).toBe(true);
+  });
+
+  it('moves focus into the dialog on open and restores it to the trigger on close', async () => {
+    const fixture = TestBed.createComponent(DialogTestHost);
+    document.body.appendChild(fixture.nativeElement);
+
+    try {
+      fixture.detectChanges();
+      const trigger = fixture.nativeElement.querySelector('button') as HTMLElement;
+      trigger.focus();
+
+      const ref = fixture.componentInstance.dialogService.open(fixture.componentInstance.dialog);
+      fixture.detectChanges();
+      await fixture.whenStable();
+      fixture.detectChanges();
+
+      const dialogContainer = overlayContainer
+        .getContainerElement()
+        .querySelector('cdk-dialog-container') as HTMLElement;
+      // autoFocus: 'first-tabbable' — focus should land inside the dialog panel, not stay
+      // on the trigger (which is now behind the modal backdrop).
+      expect(dialogContainer.contains(document.activeElement)).toBe(true);
+
+      ref.close();
+      fixture.detectChanges();
+      await fixture.whenStable();
+      fixture.detectChanges();
+
+      // restoreFocus: true — closing should hand focus back to whatever opened the dialog.
+      expect(document.activeElement).toBe(trigger);
+    } finally {
+      fixture.nativeElement.remove();
+    }
   });
 
   it('has no axe-detectable a11y violations, trigger and open dialog content together', async () => {
