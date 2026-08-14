@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, signal } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 
 import { expectNoA11yViolations } from '../../../testing/axe-a11y';
@@ -51,8 +51,8 @@ import { SidebarComponent } from './sidebar.component';
     SidebarTriggerDirective,
   ],
   template: `
-    <sanring-sidebar-provider collapsible="icon">
-      <sanring-sidebar>
+    <sanring-sidebar-provider [collapsible]="collapsible()">
+      <sanring-sidebar class="custom-sidebar-class">
         <sanring-sidebar-header>
           <button type="button" sanringSidebarTrigger aria-label="Toggle sidebar">Toggle</button>
         </sanring-sidebar-header>
@@ -104,7 +104,9 @@ import { SidebarComponent } from './sidebar.component';
     </sanring-sidebar-provider>
   `,
 })
-class SidebarTestHost {}
+class SidebarTestHost {
+  readonly collapsible = signal<'icon' | 'none'>('icon');
+}
 
 describe('SidebarComponent', () => {
   beforeEach(async () => {
@@ -118,6 +120,46 @@ describe('SidebarComponent', () => {
     fixture.detectChanges();
     return fixture;
   }
+
+  it('merges host class with consumer class', () => {
+    const fixture = createFixture();
+    const sidebar = fixture.nativeElement.querySelector('sanring-sidebar');
+    expect(sidebar?.classList.contains('custom-sidebar-class')).toBe(true);
+  });
+
+  it('locks the sidebar open and ignores toggle attempts when collapsible="none"', () => {
+    const fixture = createFixture();
+    fixture.componentInstance.collapsible.set('none');
+    fixture.detectChanges();
+
+    const root = fixture.nativeElement as HTMLElement;
+    const sidebar = root.querySelector('sanring-sidebar') as HTMLElement;
+    const [sidebarTrigger] = Array.from(root.querySelectorAll('button[sanringSidebarTrigger]'));
+
+    expect(sidebar.getAttribute('data-state')).toBe('open');
+
+    (sidebarTrigger as HTMLButtonElement).click();
+    fixture.detectChanges();
+
+    expect(sidebar.getAttribute('data-state')).toBe('open');
+    expect(sidebar.getAttribute('data-open')).toBe('');
+  });
+
+  it('toggles open state through sanringSidebarRail', () => {
+    const fixture = createFixture();
+    const root = fixture.nativeElement as HTMLElement;
+    const sidebar = root.querySelector('sanring-sidebar') as HTMLElement;
+    const rail = root.querySelector('button[sanringSidebarRail]') as HTMLButtonElement;
+
+    expect(sidebar.getAttribute('data-state')).toBe('open');
+    expect(rail.getAttribute('aria-expanded')).toBe('true');
+
+    rail.click();
+    fixture.detectChanges();
+
+    expect(sidebar.getAttribute('data-state')).toBe('closed');
+    expect(rail.getAttribute('aria-expanded')).toBe('false');
+  });
 
   it('toggles open state through sanringSidebarTrigger, reflected as data-state on the sidebar', () => {
     const fixture = createFixture();
