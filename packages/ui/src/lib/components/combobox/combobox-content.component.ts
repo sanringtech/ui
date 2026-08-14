@@ -1,8 +1,12 @@
 import {
   ChangeDetectionStrategy,
   Component,
+  ElementRef,
   HostListener,
+  Injector,
+  afterNextRender,
   computed,
+  effect,
   inject,
   input,
 } from '@angular/core';
@@ -36,6 +40,8 @@ export class ComboboxContentComponent {
   readonly class = input<string | undefined>();
 
   protected combobox = inject(ComboboxComponent);
+  private readonly elementRef = inject<ElementRef<HTMLElement>>(ElementRef);
+  private readonly injector = inject(Injector);
 
   protected readonly contentClass = computed(() =>
     cn(
@@ -44,6 +50,21 @@ export class ComboboxContentComponent {
       this.class(),
     ),
   );
+
+  constructor() {
+    // Focus the search input inside the panel when it opens — matters for the "collapsed
+    // trigger button expands into a search box" pattern (see ComboboxTriggerDirective),
+    // where opening otherwise leaves focus stranded on the (now hidden-behind-the-panel)
+    // trigger. A no-op for the plain always-visible-input usage, since that input already
+    // has focus by the time it calls toggleOpen(true) itself.
+    effect(() => {
+      if (!this.combobox.isOpen()) return;
+      afterNextRender(
+        () => this.elementRef.nativeElement.querySelector<HTMLElement>('input[role="combobox"]')?.focus(),
+        { injector: this.injector },
+      );
+    });
+  }
 
   protected close(): void {
     this.combobox.toggleOpen(false);

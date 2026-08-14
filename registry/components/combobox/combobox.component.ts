@@ -1,6 +1,7 @@
 import {
   ChangeDetectionStrategy,
   Component,
+  booleanAttribute,
   computed,
   contentChildren,
   effect,
@@ -58,9 +59,9 @@ export class ComboboxComponent extends SanringCvaBase<ComboboxValue> {
   // 1. 外部屬性與 Models
   // ==========================================
   readonly class = input<string | undefined>();
-  readonly disabled = input<boolean>(false);
-  readonly required = input<boolean>(false);
-  readonly multiple = input<boolean>(false);
+  readonly disabled = input(false, { transform: booleanAttribute });
+  readonly required = input(false, { transform: booleanAttribute });
+  readonly multiple = input(false, { transform: booleanAttribute });
   readonly value = model<ComboboxValue>(null);
 
   // ==========================================
