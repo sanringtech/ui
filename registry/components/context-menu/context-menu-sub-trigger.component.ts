@@ -72,6 +72,6 @@ export class ContextMenuSubTriggerComponent {
   protected onOpenKey(event: Event): void {
     if (this.disabled()) return;
     event.preventDefault();
-    this.sub.open();
+    this.sub.open({ focusFirstItem: true });
   }
 }

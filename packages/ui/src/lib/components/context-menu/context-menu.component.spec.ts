@@ -66,6 +66,25 @@ class ContextMenuTestHost {
   }
 }
 
+@Component({
+  imports: [
+    ContextMenuComponent,
+    ContextMenuTriggerDirective,
+    ContextMenuContentComponent,
+    ContextMenuItemComponent,
+  ],
+  template: `
+    <sanring-context-menu>
+      <div sanringContextMenuTrigger>Right click here</div>
+
+      <sanring-context-menu-content class="custom-menu-class">
+        <sanring-context-menu-item value="back" class="custom-item-class">Back</sanring-context-menu-item>
+      </sanring-context-menu-content>
+    </sanring-context-menu>
+  `,
+})
+class ContextMenuClassTestHost {}
+
 // CDK's overlay keydownEvents listener reads event.keyCode for some downstream consumers and
 // requires cancelable/bubbles to behave like a real browser event — set every relevant field
 // explicitly rather than relying on the KeyboardEvent constructor's (unreliable in jsdom)
@@ -79,7 +98,7 @@ describe('ContextMenuComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [ContextMenuTestHost],
+      imports: [ContextMenuTestHost, ContextMenuClassTestHost],
     }).compileComponents();
 
     overlayContainer = TestBed.inject(OverlayContainer);
@@ -119,6 +138,25 @@ describe('ContextMenuComponent', () => {
       (item) => item.closest('[role="menu"]') === menu,
     );
   }
+
+  it('merges host class with consumer class on the content panel and an item', async () => {
+    const fixture = TestBed.createComponent(ContextMenuClassTestHost);
+    fixture.detectChanges();
+
+    (fixture.nativeElement as HTMLElement)
+      .querySelector('[sanringcontextmenutrigger]')
+      ?.dispatchEvent(
+        new MouseEvent('contextmenu', { bubbles: true, cancelable: true, clientX: 10, clientY: 10 }),
+      );
+    fixture.detectChanges();
+    await fixture.whenStable();
+    fixture.detectChanges();
+
+    const menu = overlayContainer.getContainerElement().querySelector('[role="menu"]');
+    const item = overlayContainer.getContainerElement().querySelector('[role="menuitem"]');
+    expect(menu?.classList.contains('custom-menu-class')).toBe(true);
+    expect(item?.classList.contains('custom-item-class')).toBe(true);
+  });
 
   it('opens on right-click and renders its items', async () => {
     const fixture = await createFixture();
@@ -247,11 +285,33 @@ describe('ContextMenuComponent', () => {
     const subItems = Array.from(subContentHost.querySelectorAll<HTMLElement>('[role="menuitem"]'));
     expect(subItems.map((el) => el.textContent?.trim())).toEqual(['Save Page', 'Print']);
 
+    // Keyboard-initiated open must land focus on the first submenu item immediately —
+    // matches native menus / the ARIA APG submenu pattern. Without this, a keyboard user
+    // would need an extra ArrowDown press before Enter/typeahead does anything useful.
+    expect(document.activeElement).toBe(subItems[0]);
+
     document.activeElement?.dispatchEvent(keydown('ArrowLeft'));
     fixture.detectChanges();
 
     expect(subTrigger.getAttribute('aria-expanded')).toBe('false');
     expect(document.activeElement).toBe(subTrigger);
+  });
+
+  it('does not steal focus into the submenu when opened by mouse hover', async () => {
+    const fixture = await createFixture();
+    await openMenu(fixture);
+
+    const subTrigger = overlayContainer
+      .getContainerElement()
+      .querySelector('[aria-haspopup="menu"]') as HTMLElement;
+    subTrigger.dispatchEvent(new MouseEvent('mouseenter', { bubbles: true }));
+    fixture.detectChanges();
+    await fixture.whenStable();
+    fixture.detectChanges();
+
+    expect(subTrigger.getAttribute('aria-expanded')).toBe('true');
+    // Pointer-driven open must not move focus — only the keyboard path does.
+    expect(document.activeElement).toBe(document.body);
   });
 
   it('has no axe-detectable a11y violations, trigger zone and open menu together', async () => {
