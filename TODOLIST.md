@@ -108,7 +108,7 @@
 - [x] `hover-card` — 零缺陷，`registry`/`packages/ui` 除了 4 個方法的 `protected`/`public` 可見度標記外完全一致。內容區塊刻意不加 `role`/`aria-describedby`（跟 tooltip 不同——內容常含可互動元素，做法對齊 Radix HoverCard 的既有慣例）。spec 補主要滑鼠 hover 開關路徑 + 「移到卡片內容不關閉」這個元件特有行為共 2 個 test（5/5 通過）。Tier 3，consumer usage 只有自己 demo 頁
 - [x] `popover` — **中高嚴重度**：`role="dialog"` 面板有 `tabindex="-1"`（明顯預留給程式化 focus 用）但從未被呼叫，開啟時焦點不會移進面板、Escape/關閉時也不會回到 trigger，鍵盤/screen reader 使用者會迷失焦點。已修正：attach 時 focus 進面板、Escape 關閉時 focus 回 trigger（比照 `context-menu-sub-content` 既有慣例），outside-click 關閉時刻意不搶焦點。`packages/ui`/`registry` 皆有此問題（非單邊 drift），兩邊同步修正。spec 補 class merging + 3 個 focus 行為 test（331/331 通過）。Tier 3，**consumer usage 找到真正的內部依賴**（`calendar`/`calendar-header` 組件用它做月份/年份選單，不只是自己的 demo）
 - [x] `toast` — 最後一筆 `toggle` 稽核時期發現、留給自己稽核處理的 `rounded-md`/`rounded-lg` design token 漂移，已修正。工程設計很紮實：SR 播報統一走 `LiveAnnouncer`（有註解說明避免雙重播報）、hover pause/resume 保留剩餘時間、非 modal 刻意不搶焦點都是正確設計。不使用 CDK Overlay，Phase 2-C 只有 1 項適用，**實際判定 Tier 1**（非原本手動分類的 Tier 3）。spec 補點擊/Escape 真的會關閉的測試（原本只驗證按鈕存在）共 2 個 test（4/4 通過）。consumer usage 找到全站廣泛真實使用（docs shell 掛載、複製回饋提示等），不只自己的 demo 頁
-- [ ] `calendar`
+- [x] `calendar` — 零缺陷。P14 CVA 遷移純機械性搬移，`aria-required` 兩邊都是既有設計的 `required()` 直接綁（非 drift）。鍵盤格狀導覽委託給外部套件 `@sanring/date-picker-core` 的 `CalendarGridDirective`，本 repo 無可審程式碼。透過組合 `<sanring-popover>` 間接使用 CDK Overlay 做月份/年份跳轉，直接受益於 popover 稽核時修的焦點管理。spec 補 range 模式 + disabled 日期 matcher 兩個零覆蓋的真實功能（6/6 通過）。Tier 3，consumer usage 只有自己 demo 頁（`date-picker` 雖共用同一套引擎但沒有直接組合這個元件）
 - [ ] `dropdown-menu`
 - [ ] `context-menu`
 - [ ] `select`
