@@ -27,12 +27,32 @@ import { DropdownMenuTriggerDirective } from './dropdown-menu-trigger.directive'
 })
 class DropdownMenuTestHost {}
 
+@Component({
+  imports: [
+    DropdownMenuComponent,
+    DropdownMenuContentComponent,
+    DropdownMenuItemDirective,
+    DropdownMenuTriggerDirective,
+  ],
+  template: `
+    <sanring-dropdown-menu>
+      <button type="button" sanringDropdownMenuTrigger [menu]="menu.menu">Open</button>
+      <sanring-dropdown-menu-content #menu="sanringDropdownMenuContent" class="custom-menu-class">
+        <button type="button" sanringDropdownMenuItem value="a" class="custom-item-class">
+          Item A
+        </button>
+      </sanring-dropdown-menu-content>
+    </sanring-dropdown-menu>
+  `,
+})
+class DropdownMenuClassTestHost {}
+
 describe('DropdownMenuComponent', () => {
   let overlayContainer: OverlayContainer;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [DropdownMenuTestHost],
+      imports: [DropdownMenuTestHost, DropdownMenuClassTestHost],
     }).compileComponents();
 
     overlayContainer = TestBed.inject(OverlayContainer);
@@ -109,6 +129,46 @@ describe('DropdownMenuComponent', () => {
     fixture.detectChanges();
 
     expect(trigger.getAttribute('aria-expanded')).toBe('false');
+  });
+
+  it('closes the menu on Escape', async () => {
+    const fixture = await setup();
+
+    const trigger = fixture.nativeElement.querySelector('[sanringDropdownMenuTrigger]') as HTMLElement;
+    trigger.click();
+    fixture.detectChanges();
+    await fixture.whenStable();
+    fixture.detectChanges();
+
+    expect(trigger.getAttribute('aria-expanded')).toBe('true');
+
+    const menu = overlayContainer.getContainerElement().querySelector('[role="menu"]') as HTMLElement;
+    menu.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape', bubbles: true }));
+    fixture.detectChanges();
+    await fixture.whenStable();
+    fixture.detectChanges();
+
+    expect(trigger.getAttribute('aria-expanded')).toBe('false');
+  });
+
+  it('merges host class with consumer class on both the content and an item', async () => {
+    const fixture = TestBed.createComponent(DropdownMenuClassTestHost);
+    fixture.detectChanges();
+    await fixture.whenStable();
+    fixture.detectChanges();
+
+    const trigger = fixture.nativeElement.querySelector('[sanringDropdownMenuTrigger]') as HTMLElement;
+    trigger.click();
+    fixture.detectChanges();
+    await fixture.whenStable();
+    fixture.detectChanges();
+
+    const overlayElement = overlayContainer.getContainerElement();
+    const menu = overlayElement.querySelector('[role="menu"]');
+    const item = overlayElement.querySelector('[role="menuitem"]');
+
+    expect(menu?.classList.contains('custom-menu-class')).toBe(true);
+    expect(item?.classList.contains('custom-item-class')).toBe(true);
   });
 
   it('has no axe-detectable a11y violations, trigger and open menu together', async () => {
