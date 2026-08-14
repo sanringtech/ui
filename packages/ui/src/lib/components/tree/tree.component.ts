@@ -3,6 +3,7 @@ import { toObservable } from '@angular/core/rxjs-interop';
 import {
   ChangeDetectionStrategy,
   Component,
+  DestroyRef,
   Injector,
   computed,
   contentChildren,
@@ -59,6 +60,9 @@ export class TreeComponent {
 
   constructor() {
     this.keyManager.change.subscribe((node) => this.explicitActiveNode.set(node));
+    // TreeKeyManager holds its own subscription to the nodes$ stream and never tears it
+    // down on its own — without this, every destroyed <sanring-tree> instance leaks it.
+    inject(DestroyRef).onDestroy(() => this.keyManager.destroy());
   }
 
   toggleExpand(value: string) {
