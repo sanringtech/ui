@@ -24,7 +24,7 @@ function wait(ms: number): Promise<void> {
   template: `
     <sanring-sheet>
       <button type="button" sanringSheetTrigger>Open</button>
-      <sanring-sheet-content>
+      <sanring-sheet-content class="custom-sheet-class">
         <sanring-sheet-title>Settings</sanring-sheet-title>
         <button type="button" sanringSheetClose>Close</button>
       </sanring-sheet-content>
@@ -75,6 +75,18 @@ describe('SheetComponent', () => {
     expect(panel.getAttribute('aria-modal')).toBe('true');
     expect(panel.getAttribute('aria-labelledby')).toBe(title.id);
     expect(document.body.style.overflow).toBe('hidden');
+  });
+
+  it('merges host class with consumer class on the content panel', () => {
+    const fixture = TestBed.createComponent(SheetTestHost);
+    fixture.detectChanges();
+
+    const trigger = fixture.nativeElement.querySelector('button[sanringSheetTrigger]') as HTMLElement;
+    trigger.click();
+    fixture.detectChanges();
+
+    const panel = overlayContainer.getContainerElement().querySelector('[role="dialog"]');
+    expect(panel?.classList.contains('custom-sheet-class')).toBe(true);
   });
 
   it('hides other body content from assistive tech while open, and restores it on close', async () => {

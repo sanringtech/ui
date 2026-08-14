@@ -108,22 +108,36 @@ export class SheetContentComponent {
   // 開啟期間把背景內容標成 aria-hidden，避免螢幕閱讀器使用者還能導覽到面板背後的內容
   private hiddenSiblings: Element[] = [];
 
+  // 只有真的在瀏覽器鎖過 scroll 才需要在 destroy 時解鎖；afterNextRender 保證 scroll-lock
+  // effect 的內容只會在瀏覽器執行，SSR 時這個旗標會一直是 false，onDestroy 就不會誤觸 document
+  private _scrollLocked = false;
+
   /** Keep DOM visible during leave animation */
   protected readonly shouldDisplay = computed(
     () => this.sheet.isOpen() || this._leaving(),
   );
 
   constructor() {
-    // Scroll lock: hold lock while visible (including leave phase)
+    // Scroll lock: hold lock while visible (including leave phase). Deferred into
+    // afterNextRender — window/document are real browser globals here (not the
+    // injected DOCUMENT token), so touching them outside a browser-only callback
+    // would throw during SSR.
     effect(() => {
-      if (this.shouldDisplay()) {
-        const scrollbarWidth = window.innerWidth - document.documentElement.clientWidth;
-        document.body.style.paddingRight = `${scrollbarWidth}px`;
-        document.body.style.overflow = 'hidden';
-      } else {
-        document.body.style.overflow = '';
-        document.body.style.paddingRight = '';
-      }
+      const locked = this.shouldDisplay();
+      afterNextRender(
+        () => {
+          if (locked) {
+            const scrollbarWidth = window.innerWidth - document.documentElement.clientWidth;
+            document.body.style.paddingRight = `${scrollbarWidth}px`;
+            document.body.style.overflow = 'hidden';
+          } else {
+            document.body.style.overflow = '';
+            document.body.style.paddingRight = '';
+          }
+          this._scrollLocked = locked;
+        },
+        { injector: this.injector },
+      );
     });
 
     // Attach/detach the overlay portal alongside visibility
@@ -158,19 +172,21 @@ export class SheetContentComponent {
 
     this.destroyRef.onDestroy(() => {
       clearTimeout(this._leaveTimer);
-      document.body.style.overflow = '';
-      document.body.style.paddingRight = '';
+      if (this._scrollLocked) {
+        document.body.style.overflow = '';
+        document.body.style.paddingRight = '';
+      }
       this.detachOverlay();
       this.overlayRef?.dispose();
     });
   }
 
-  onEscape(): void {
+  protected onEscape(): void {
     if (this.sheet.isOpen()) this.requestClose();
   }
 
   /** Trigger close with leave animation (used by backdrop click & Escape in content) */
-  requestClose(): void {
+  protected requestClose(): void {
     if (this._leaving() || !this.sheet.isOpen()) return;
     this.sheet.setOpen(false);
     // isOpen change is picked up by the effect above
@@ -236,7 +252,7 @@ export class SheetContentComponent {
   }
 
   /** 退場 CSS 動畫（animate-sheet-out-*）真的播完時觸發，是結束 leaving 狀態的主要途徑 */
-  onLeaveAnimationEnd(event: AnimationEvent): void {
+  protected onLeaveAnimationEnd(event: AnimationEvent): void {
     if (event.target !== event.currentTarget || !this._leaving()) return;
     this._endLeave();
   }
