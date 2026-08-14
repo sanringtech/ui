@@ -177,6 +177,11 @@ export class SelectContentComponent {
       return;
     }
 
+    if (event.key === 'Tab') {
+      this.close();
+      return;
+    }
+
     this.keyManager.onKeydown(event);
   }
 }

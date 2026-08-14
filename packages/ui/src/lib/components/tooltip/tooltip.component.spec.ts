@@ -29,13 +29,24 @@ class TooltipTestHost {}
 })
 class TooltipClassTestHost {}
 
+@Component({
+  imports: [TooltipComponent, TooltipContentComponent, TooltipTriggerDirective],
+  template: `
+    <sanring-tooltip delayDuration="0">
+      <button sanringTooltipTrigger type="button">Trigger</button>
+      <sanring-tooltip-content sideOffset="12">Helpful text</sanring-tooltip-content>
+    </sanring-tooltip>
+  `,
+})
+class TooltipAttributeTestHost {}
+
 describe('TooltipComponent', () => {
   let fixture: ComponentFixture<TooltipTestHost>;
   let overlayContainer: OverlayContainer;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [TooltipTestHost, TooltipClassTestHost],
+      imports: [TooltipTestHost, TooltipClassTestHost, TooltipAttributeTestHost],
     }).compileComponents();
 
     overlayContainer = TestBed.inject(OverlayContainer);
@@ -96,6 +107,21 @@ describe('TooltipComponent', () => {
 
     const tooltip = overlayContainer.getContainerElement().querySelector('[role="tooltip"]');
     expect(tooltip?.classList.contains('custom-content-class')).toBe(true);
+  });
+
+  it('coerces numeric attribute inputs', () => {
+    const attrFixture = TestBed.createComponent(TooltipAttributeTestHost);
+    attrFixture.detectChanges();
+
+    const tooltipDebug = attrFixture.debugElement.query(
+      (debugEl) => debugEl.componentInstance instanceof TooltipComponent,
+    );
+    const contentDebug = attrFixture.debugElement.query(
+      (debugEl) => debugEl.componentInstance instanceof TooltipContentComponent,
+    );
+
+    expect((tooltipDebug.componentInstance as TooltipComponent).delayDuration()).toBe(0);
+    expect((contentDebug.componentInstance as TooltipContentComponent).sideOffset()).toBe(12);
   });
 
   it('has no axe-detectable a11y violations, trigger and open tooltip together', async () => {

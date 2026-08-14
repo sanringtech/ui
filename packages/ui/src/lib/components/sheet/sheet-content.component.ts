@@ -111,6 +111,8 @@ export class SheetContentComponent {
   // 只有真的在瀏覽器鎖過 scroll 才需要在 destroy 時解鎖；afterNextRender 保證 scroll-lock
   // effect 的內容只會在瀏覽器執行，SSR 時這個旗標會一直是 false，onDestroy 就不會誤觸 document
   private _scrollLocked = false;
+  private _previousBodyOverflow: string | null = null;
+  private _previousBodyPaddingRight: string | null = null;
 
   /** Keep DOM visible during leave animation */
   protected readonly shouldDisplay = computed(
@@ -127,14 +129,10 @@ export class SheetContentComponent {
       afterNextRender(
         () => {
           if (locked) {
-            const scrollbarWidth = window.innerWidth - document.documentElement.clientWidth;
-            document.body.style.paddingRight = `${scrollbarWidth}px`;
-            document.body.style.overflow = 'hidden';
+            this.lockScroll();
           } else {
-            document.body.style.overflow = '';
-            document.body.style.paddingRight = '';
+            this.unlockScroll();
           }
-          this._scrollLocked = locked;
         },
         { injector: this.injector },
       );
@@ -172,13 +170,32 @@ export class SheetContentComponent {
 
     this.destroyRef.onDestroy(() => {
       clearTimeout(this._leaveTimer);
-      if (this._scrollLocked) {
-        document.body.style.overflow = '';
-        document.body.style.paddingRight = '';
-      }
+      this.unlockScroll();
       this.detachOverlay();
       this.overlayRef?.dispose();
     });
+  }
+
+  private lockScroll(): void {
+    if (!this._scrollLocked) {
+      this._previousBodyOverflow = document.body.style.overflow;
+      this._previousBodyPaddingRight = document.body.style.paddingRight;
+    }
+
+    const scrollbarWidth = window.innerWidth - document.documentElement.clientWidth;
+    document.body.style.paddingRight = `${scrollbarWidth}px`;
+    document.body.style.overflow = 'hidden';
+    this._scrollLocked = true;
+  }
+
+  private unlockScroll(): void {
+    if (!this._scrollLocked) return;
+
+    document.body.style.overflow = this._previousBodyOverflow ?? '';
+    document.body.style.paddingRight = this._previousBodyPaddingRight ?? '';
+    this._previousBodyOverflow = null;
+    this._previousBodyPaddingRight = null;
+    this._scrollLocked = false;
   }
 
   protected onEscape(): void {

@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, computed, effect, inject, input, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, effect, inject, input, numberAttribute, signal } from '@angular/core';
 import {
   ConnectedOverlayPositionChange,
   ConnectionPositionPair,
@@ -43,7 +43,7 @@ import { TooltipSide } from './tooltip.type';
 export class TooltipContentComponent {
   readonly class = input<string | undefined>();
   readonly side = input<TooltipSide>('top');
-  readonly sideOffset = input(6);
+  readonly sideOffset = input(6, { transform: numberAttribute });
 
   protected tooltip = inject(TooltipComponent);
 

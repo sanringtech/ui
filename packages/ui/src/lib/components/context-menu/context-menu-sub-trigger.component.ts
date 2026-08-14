@@ -31,6 +31,7 @@ import { ContextMenuSubComponent } from './context-menu-sub.component';
     '(click)': 'onOpen()',
     '(keydown.arrowright)': 'onOpenKey($event)',
     '(keydown.enter)': 'onOpenKey($event)',
+    '(keydown.space)': 'onOpenKey($event)',
   },
   template: `
     <ng-content></ng-content>

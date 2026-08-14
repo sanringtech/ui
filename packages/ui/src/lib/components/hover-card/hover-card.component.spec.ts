@@ -39,12 +39,23 @@ class HoverCardTestHost {}
 })
 class HoverCardCloseDelayTestHost {}
 
+@Component({
+  imports: [HoverCardComponent, HoverCardTriggerDirective, HoverCardContentComponent],
+  template: `
+    <sanring-hover-card openDelay="0" closeDelay="0">
+      <button type="button" sanringHoverCardTrigger>Profile</button>
+      <sanring-hover-card-content sideOffset="10">Details</sanring-hover-card-content>
+    </sanring-hover-card>
+  `,
+})
+class HoverCardAttributeTestHost {}
+
 describe('HoverCardComponent', () => {
   let overlayContainer: OverlayContainer;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [HoverCardTestHost, HoverCardCloseDelayTestHost],
+      imports: [HoverCardTestHost, HoverCardCloseDelayTestHost, HoverCardAttributeTestHost],
     }).compileComponents();
 
     overlayContainer = TestBed.inject(OverlayContainer);
@@ -148,6 +159,23 @@ describe('HoverCardComponent', () => {
     fixture.detectChanges();
 
     expect(overlayContainer.getContainerElement().querySelector('.custom-hover-card')).toBeTruthy();
+  });
+
+  it('coerces numeric attribute inputs', () => {
+    const fixture = TestBed.createComponent(HoverCardAttributeTestHost);
+    fixture.detectChanges();
+
+    const hoverCardDebug = fixture.debugElement.query(
+      (debugEl) => debugEl.componentInstance instanceof HoverCardComponent,
+    );
+    const contentDebug = fixture.debugElement.query(
+      (debugEl) => debugEl.componentInstance instanceof HoverCardContentComponent,
+    );
+
+    const hoverCard = hoverCardDebug.componentInstance as HoverCardComponent;
+    expect(hoverCard.openDelay()).toBe(0);
+    expect(hoverCard.closeDelay()).toBe(0);
+    expect((contentDebug.componentInstance as HoverCardContentComponent).sideOffset()).toBe(10);
   });
 
   it('has no axe-detectable a11y violations, trigger and open card together', async () => {

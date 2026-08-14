@@ -297,6 +297,28 @@ describe('ContextMenuComponent', () => {
     expect(document.activeElement).toBe(subTrigger);
   });
 
+  it('opens a submenu on Space and focuses the first submenu item', async () => {
+    const fixture = await createFixture();
+    await openMenu(fixture);
+
+    const subTrigger = overlayContainer
+      .getContainerElement()
+      .querySelector('[aria-haspopup="menu"]') as HTMLElement;
+    subTrigger.focus();
+    subTrigger.dispatchEvent(keydown(' '));
+    fixture.detectChanges();
+    await fixture.whenStable();
+    fixture.detectChanges();
+
+    const subContentHost = overlayContainer
+      .getContainerElement()
+      .querySelector('sanring-context-menu-sub-content') as HTMLElement;
+    const firstSubItem = subContentHost.querySelector('[role="menuitem"]') as HTMLElement;
+
+    expect(subTrigger.getAttribute('aria-expanded')).toBe('true');
+    expect(document.activeElement).toBe(firstSubItem);
+  });
+
   it('does not steal focus into the submenu when opened by mouse hover', async () => {
     const fixture = await createFixture();
     await openMenu(fixture);

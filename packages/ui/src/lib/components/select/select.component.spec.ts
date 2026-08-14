@@ -299,6 +299,27 @@ describe('SelectComponent', () => {
     }
   });
 
+  it('closes on Tab without preventing the browser focus move', async () => {
+    const fixture = TestBed.createComponent(SelectTestHost);
+    fixture.detectChanges();
+
+    const trigger = triggers(fixture)[0];
+    trigger.click();
+    fixture.detectChanges();
+    await fixture.whenStable();
+
+    const event = new KeyboardEvent('keydown', {
+      key: 'Tab',
+      bubbles: true,
+      cancelable: true,
+    });
+    document.activeElement?.dispatchEvent(event);
+    fixture.detectChanges();
+
+    expect(trigger.getAttribute('aria-expanded')).toBe('false');
+    expect(event.defaultPrevented).toBe(false);
+  });
+
   it('merges host class with consumer class on the trigger, content, and an item', async () => {
     const fixture = TestBed.createComponent(SelectClassTestHost);
     fixture.detectChanges();

@@ -12,6 +12,7 @@ import {
   effect,
   inject,
   input,
+  numberAttribute,
   signal,
   untracked,
 } from '@angular/core';
@@ -57,7 +58,7 @@ import { HoverCardSide } from './hover-card.type';
 })
 export class HoverCardContentComponent {
   readonly side = input<HoverCardSide>('bottom');
-  readonly sideOffset = input(8);
+  readonly sideOffset = input(8, { transform: numberAttribute });
   readonly class = input<string | undefined>();
 
   protected hoverCard = inject(HoverCardComponent);

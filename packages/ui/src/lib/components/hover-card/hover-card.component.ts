@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, OnDestroy, input, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnDestroy, input, numberAttribute, signal } from '@angular/core';
 import { CdkOverlayOrigin } from '@angular/cdk/overlay';
 
 @Component({
@@ -9,8 +9,8 @@ import { CdkOverlayOrigin } from '@angular/cdk/overlay';
   host: { style: 'display: contents' },
 })
 export class HoverCardComponent implements OnDestroy {
-  readonly openDelay = input(700);
-  readonly closeDelay = input(300);
+  readonly openDelay = input(700, { transform: numberAttribute });
+  readonly closeDelay = input(300, { transform: numberAttribute });
 
   // 唯一真相來源：控制卡片是否顯示
   readonly isOpen = signal(false);

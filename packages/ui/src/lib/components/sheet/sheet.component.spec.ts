@@ -162,6 +162,32 @@ describe('SheetComponent', () => {
     expect(document.body.style.overflow).toBe('');
   });
 
+  it('restores pre-existing inline body scroll styles after closing', async () => {
+    document.body.style.overflow = 'auto';
+    document.body.style.paddingRight = '12px';
+
+    const fixture = TestBed.createComponent(SheetTestHost);
+    fixture.detectChanges();
+
+    const trigger = fixture.nativeElement.querySelector('button[sanringSheetTrigger]') as HTMLElement;
+    trigger.click();
+    fixture.detectChanges();
+
+    expect(document.body.style.overflow).toBe('hidden');
+
+    const backdrop = overlayContainer
+      .getContainerElement()
+      .querySelector('[aria-hidden="true"]') as HTMLElement;
+    backdrop.click();
+    fixture.detectChanges();
+
+    await wait(250);
+    fixture.detectChanges();
+
+    expect(document.body.style.overflow).toBe('auto');
+    expect(document.body.style.paddingRight).toBe('12px');
+  });
+
   it('closes on Escape', () => {
     const fixture = TestBed.createComponent(SheetTestHost);
     fixture.detectChanges();
