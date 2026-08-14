@@ -17,7 +17,7 @@ import { LinkTarget } from '../link/link.type';
     '[attr.aria-current]': "active() ? 'page' : null",
     '[attr.aria-disabled]': 'disabled() ? "true" : null',
     '[attr.disabled]': 'disabled() && isButton ? true : null',
-    '[attr.tabindex]': 'disabled() ? -1 : null',
+    '[attr.tabindex]': 'resolvedTabIndex()',
     '[attr.target]': 'target() || null',
     '[attr.rel]': 'computedRel()',
     '[attr.data-active]': 'active() ? "" : null',
@@ -35,6 +35,17 @@ export class NavigationMenuLinkDirective {
   readonly rel = input<string | undefined>();
 
   protected readonly isButton = this.elementRef.nativeElement.tagName.toLowerCase() === 'button';
+
+  // Snapshot whatever tabindex the developer wrote directly in the template (e.g.
+  // tabindex="0" on a role="menuitem" link inside a submenu, per the ARIA menu pattern)
+  // before this directive's own binding starts managing the attribute — an [attr.tabindex]
+  // binding that returns null when not disabled would otherwise silently strip it, since
+  // Angular's attribute binding takes over the attribute entirely once bound.
+  private readonly baseTabIndex = this.elementRef.nativeElement.getAttribute('tabindex');
+
+  protected readonly resolvedTabIndex = computed(() =>
+    this.disabled() ? '-1' : this.baseTabIndex,
+  );
 
   protected readonly linkClass = computed(() =>
     cn(
