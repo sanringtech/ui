@@ -56,16 +56,23 @@ describe('ProgressComponent', () => {
     const fixture = TestBed.createComponent(ProgressTestHost);
     fixture.detectChanges();
 
-    const fill = bars(fixture)[1].querySelector('div') as HTMLElement;
+    const bar = bars(fixture)[1];
+    const fill = bar.querySelector('div') as HTMLElement;
     expect(fill.style.width).toBe('100%');
+    // aria-valuenow must stay within [aria-valuemin, aria-valuemax] — an unclamped
+    // 150 here would violate the ARIA spec against aria-valuemax="100".
+    expect(bar.getAttribute('aria-valuenow')).toBe('100');
   });
 
   it('treats a non-positive max as 0% instead of dividing by zero', () => {
     const fixture = TestBed.createComponent(ProgressTestHost);
     fixture.detectChanges();
 
-    const fill = bars(fixture)[2].querySelector('div') as HTMLElement;
+    const bar = bars(fixture)[2];
+    const fill = bar.querySelector('div') as HTMLElement;
     expect(fill.style.width).toBe('0%');
+    expect(bar.getAttribute('aria-valuenow')).toBe('0');
+    expect(bar.getAttribute('aria-valuemax')).toBe('0');
   });
 
   it('merges consumer class onto the container and barClass onto the bar', () => {

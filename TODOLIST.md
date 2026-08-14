@@ -65,7 +65,7 @@
 - [x] `divider` — class merging + ariaLabel 已補，spec 5/5 通過
 - [x] `skeleton` — registry CSS 對齊設計 token，spec 補 class merging test（3/3 通過）
 - [x] `spinner` — 零缺陷，spec 3/3 通過
-- [x] `progress` — registry 補 `ariaValueText` input + template binding，spec 補 class/barClass merging test（5/5 通過）
+- [x] `progress` — registry 補 `ariaValueText` input + template binding，spec 補 class/barClass merging test（5/5 通過）。**2026-08-14 補漏**：`aria-valuenow` 原本沒 clamp（`value` 超出 `max` 時會超出 `aria-valuemax`），已改綁 clamped 值，補齊 test 斷言
 - [x] `badge` — 零缺陷，spec 3/3 通過
 - [x] `tag` — 關閉按鈕補 focus-visible ring（WCAG 2.4.7），spec 補 class merging + remove output test（4/4 通過）
 - [x] `aspect-ratio` — 零缺陷，spec 4/4 通過
