@@ -1,5 +1,5 @@
 import { CdkTableModule } from '@angular/cdk/table';
-import { Component } from '@angular/core';
+import { Component, signal } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 
 import { expectNoA11yViolations } from '../../../testing/axe-a11y';
@@ -263,5 +263,87 @@ describe('TableComponent (column sizing)', () => {
 
     const table = fixture.nativeElement.querySelector('table') as HTMLTableElement;
     expect(table.classList.contains('cdk-table-fixed-layout')).toBe(true);
+  });
+});
+
+@Component({
+  imports: [
+    CdkTableModule,
+    TableDirective,
+    TableColumnDefDirective,
+    TableHeaderCellDefDirective,
+    TableCellDefDirective,
+    TableHeaderCellDirective,
+    TableCellDirective,
+    TableHeaderRowDefDirective,
+    TableRowDefDirective,
+    TableHeaderRowDirective,
+    TableRowDirective,
+  ],
+  template: `
+    <table cdk-table sanringTable [dataSource]="data">
+      <ng-container sanringColumnDef="name" [ratio]="2">
+        <th sanringHeaderCell *sanringHeaderCellDef>Name</th>
+        <td sanringCell *sanringCellDef="let person">{{ person.name }}</td>
+      </ng-container>
+
+      <ng-container sanringColumnDef="role" [ratio]="role.ratio()" [width]="role.width()">
+        <th sanringHeaderCell *sanringHeaderCellDef>Role</th>
+        <td sanringCell *sanringCellDef="let person">{{ person.role }}</td>
+      </ng-container>
+
+      <tr cdk-header-row sanringRow *sanringHeaderRowDef="columns"></tr>
+      <tr cdk-row sanringRow *sanringRowDef="let row; columns: columns"></tr>
+    </table>
+  `,
+})
+class TableDynamicColumnSizingTestHost {
+  columns = ['name', 'role'];
+  data = [{ name: 'Ada', role: 'Engineer' }];
+  role = {
+    ratio: signal<number | undefined>(1),
+    width: signal<string | undefined>(undefined),
+  };
+}
+
+describe('TableComponent (dynamic column sizing)', () => {
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      imports: [TableDynamicColumnSizingTestHost],
+    }).compileComponents();
+  });
+
+  // Regression: TableColumnDefDirective only called registerColumnRatio(), never
+  // unregisterColumnRatio(), when a column's ratio dropped out or width came in —
+  // only ngOnDestroy unregistered. A column that stopped being ratio-based (without
+  // being destroyed) kept contributing to widthPercentFor's denominator forever,
+  // permanently understating every other ratio column's percentage.
+  it('drops a column out of the ratio pool once its ratio input becomes undefined', () => {
+    const fixture = TestBed.createComponent(TableDynamicColumnSizingTestHost);
+    fixture.detectChanges();
+
+    const headers = () =>
+      (fixture.nativeElement as HTMLElement).querySelectorAll<HTMLElement>('th[sanringHeaderCell]');
+    expect(headers()[0].style.width).toBe('66.66666666666666%');
+
+    fixture.componentInstance.role.ratio.set(undefined);
+    fixture.detectChanges();
+
+    expect(headers()[0].style.width).toBe('100%');
+  });
+
+  it('drops a column out of the ratio pool once it switches to a fixed width', () => {
+    const fixture = TestBed.createComponent(TableDynamicColumnSizingTestHost);
+    fixture.detectChanges();
+
+    const headers = () =>
+      (fixture.nativeElement as HTMLElement).querySelectorAll<HTMLElement>('th[sanringHeaderCell]');
+    expect(headers()[0].style.width).toBe('66.66666666666666%');
+
+    fixture.componentInstance.role.width.set('80px');
+    fixture.detectChanges();
+
+    expect(headers()[0].style.width).toBe('100%');
+    expect(headers()[1].style.width).toBe('80px');
   });
 });

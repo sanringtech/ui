@@ -204,6 +204,13 @@
 
 `select-item.component.ts`(`disabledInput`/`disabled` 命名不同,兩邊功能驗證完全等價,是 `packages/ui` 用 `input({ alias: 'disabled' })` 避免跟 adapter getter 撞名)與 `file-upload.component.ts`(`registry` 的 `id` 是 `input()`、`packages/ui` 是純字串,消費者無法在 npm 套件版覆寫 id)兩筆記進腳本的允許清單,前者純粹是命名差異不是 bug,後者是真的、但範圍屬於 `file-upload` 自己的 Tier 3 稽核(改 `packages/ui` 的 `id` 型別是 public API 變動,留給正式稽核處理,見 TODOLIST)。**這個腳本目前是純靜態比對,不執行程式碼**——能抓到「欄位被刪掉」和「binding 表達式被換成弱化版本」這兩類已經發生過的具體錯誤模式,但抓不到更深的行為邏輯錯誤(那需要真的執行,即上面試過失敗的路線)。剩餘的「`packages/ui` 補做 P14 CVA 遷移」工作見 TODOLIST P28,優先度降低——兩邊行為現在有腳本守著,不會再無聲漂移。
 
+**Code review 補漏(2026-08-14)**:上面的 parity script 與零星修復被拿去做了一次 code review,揪出三點:
+1. **腳本本身有盲區(Medium)**:`extractInputOutputNames` 的正則只匹配 `input(`/`input<`/`model(`/`model<`,漏了 `input.required<T>()`/`model.required<T>()` 這兩種常見寫法(`.required` 後面接的是 `<`,但前面隔了一個 `.`,原正則抓不到)。全 repo 掃出 42 處用到 `.required()`,理論上這個範圍內任何一個被刪掉都不會被腳本抓到。已修正正則為 `(?:input|output|model)(?:\.required)?[<(]`,補完後重跑腳本仍是綠燈(現有 42 處都沒有實際 drift,純粹是補防線)。
+2. **`accordion/accordion-trigger.component.ts` 有獨立的 design token 漂移(Low/Medium)**:`registry/` 還是硬編碼 `rounded-md`,`packages/ui` 已經是 `rounded-[var(--sanring-radius-sm)]`——跟 `toggle`/`card`/`alert`/`button` 同一種、但這個 parity script 的檢查範圍本來就不含任意 Tailwind class 字串,抓不到。已直接修正。`accordion` 本身還沒排到正式 `/audit-component` Tier 2 稽核,這筆只是順手處理,不代表 accordion 已經稽核完畢。
+3. **`table/column-def.directive.ts` 有真實的動態 input 邊界案例(Low)**:`registry.ts` 的 `widthPercentFor()` 分母是所有已註冊 ratio 的總和,但 `TableColumnDefDirective` 的 constructor `effect()` 只在「有 ratio 且沒 width」時呼叫 `registerColumnRatio()`,條件不成立時什麼都不做——只有整個 directive 被銷毀(`ngOnDestroy`)才會 `unregisterColumnRatio()`。代表如果某欄位執行期把 `ratio` 動態改成 `undefined`,或原本沒設 `width` 後來動態補上,舊的 ratio 值會一直留在分母裡,永久拉低其他 ratio 欄位算出來的百分比,直到那個欄位真的從 DOM 移除為止。修法:改成 `else` 分支呼叫 `unregisterColumnRatio()`,並把 `ratio()`/`width()` 兩個 signal 都移到 `if` 判斷式外先讀取,確保 effect 的依賴追蹤在任何分支都完整(避免只在 `ratio != null` 才讀 `width()` 導致 `ratio` 為 null 時漏追蹤 `width` 變化,雖然那個特定路徑沒有 unregister 需求所以現況不算 bug,但一起修比較乾淨)。`packages/ui`/`registry` 兩份完全同源(diff 為零,含 import path),一次改完。補了兩個 regression test(`table.component.spec.ts`)驗證 ratio 清空、width 動態補上時分母都會正確調整。`table` 本身也還沒排到正式稽核,這筆同樣是順手處理。
+
+三筆結論:兩筆(parity script 正則、table stale state)是可驗證、可重現的真實缺陷,已修正;`accordion` 那筆是已知模式的重複實例,修正方式與既有先例一致。都在合理範圍內,不是誤判。
+
 ---
 
 ## P15 — 版本兼容追蹤與 `sanring migrate` 指令

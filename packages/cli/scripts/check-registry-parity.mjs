@@ -89,8 +89,9 @@ function stripComments(source) {
 
 function extractInputOutputNames(source) {
   const names = new Set();
-  // `readonly foo = input(...)`, `readonly foo = output<...>(...)`, `readonly foo = model(...)`
-  const re = /readonly\s+(\w+)\s*=\s*(?:input|output|model)[<(]/g;
+  // `readonly foo = input(...)`, `readonly foo = output<...>(...)`, `readonly foo = model(...)`,
+  // and the `.required` variants: `input.required<T>()`, `model.required<T>()`.
+  const re = /readonly\s+(\w+)\s*=\s*(?:input|output|model)(?:\.required)?[<(]/g;
   for (const m of source.matchAll(re)) names.add(m[1]);
   return names;
 }
