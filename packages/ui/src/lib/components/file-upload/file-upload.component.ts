@@ -67,7 +67,7 @@ export class FileUploadComponent implements ControlValueAccessor, OnInit {
   // 3. 給子元件 (Dropzone/Trigger) 呼叫的 API
   // ==========================================
 
-  readonly id = inject(_IdGenerator).getId('sanring-file-upload-', true);
+  readonly id = input(inject(_IdGenerator).getId('sanring-file-upload-', true));
   focused = false;
   ngControl: NgControl | null = null;
 
@@ -273,7 +273,7 @@ class FileUploadFieldControlAdapter implements SanringFieldControl<File[]> {
   constructor(private readonly host: FileUploadComponent) {}
 
   get id(): string {
-    return this.host.id;
+    return this.host.id();
   }
 
   get value(): File[] {

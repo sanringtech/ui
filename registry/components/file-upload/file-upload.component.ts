@@ -212,8 +212,8 @@ export class FileUploadComponent extends SanringCvaBase<File[]> {
   }
 }
 
-// file-upload has a plain-string `id` (not an input signal) and `isDisabled` instead of `fieldDisabled`,
-// so it uses its own slim adapter rather than SanringFieldControlAdapter.
+// file-upload exposes `isDisabled` instead of `fieldDisabled`, so it uses its own slim
+// adapter rather than SanringFieldControlAdapter.
 class FileUploadFieldControlAdapter implements SanringFieldControl<File[]> {
   readonly controlType = FieldType.fileUpload;
 

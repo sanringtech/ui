@@ -37,15 +37,7 @@ const REGISTRY_COMPONENTS_DIR = join(REPO_ROOT, 'registry/components');
 
 // Known, deliberate asymmetries — documented so this doesn't cry wolf.
 // key: `${dirName}/${fileName}` -> array of property names or attr names to ignore.
-const EXPECTED_INPUT_OUTPUT_GAPS = {
-  // packages/ui's `id` is a plain generated string (not input()-wrapped), so
-  // consumers can't override it with `[id]="..."`; registry's is. Real,
-  // pre-existing asymmetry — file-upload hasn't had its Tier 3
-  // /audit-component pass yet (see TODOLIST), and fixing packages/ui means
-  // changing its public `id` shape from `string` to a signal, which needs
-  // that audit's scrutiny rather than a drive-by fix here.
-  'file-upload/file-upload.component.ts': ['id'],
-};
+const EXPECTED_INPUT_OUTPUT_GAPS = {};
 const EXPECTED_ATTR_GAPS = {};
 
 let hasError = false;
