@@ -524,6 +524,10 @@ P9 golden fixture 掃完 53 元件後發現一批長期存在的 registry 宣告
 
 **已完成(2026-08-15,使用者截圖回報)**:這次不是顏色問題,是箱模型算術對不起來。`feature-list.component.ts` 的主題切換器外層容器是 `h-10`(40px,border-box)+ `border`(1px×2=2px)+ `p-1`(4px×2=8px),扣掉之後內容區只剩 30px;但裡面的三顆圖示按鈕跟滑動指示條都是 `size-8`(32px)——內容比容器能容納的空間還大 2px。容器上還掛了 `overflow-hidden`,這 2px 溢出會被裁掉,但 `items-center` 置中演算法在「內容大於容器」時算出來的置中偏移量,兩端各裁多少常常因為次像素捨入不對稱,這就是視覺上「上下 padding 看起來不一樣」的成因,不是肉眼幻覺,是算得出來的箱模型錯誤。**修法**:容器從 `h-10`(40px)改成 `h-11`(44px),扣掉 border/padding 後內容區變 34px,比 32px 的按鈕多 2px 餘裕,`items-center` 有空間可以對稱置中,不會再觸發裁切。指示條的 `top-1 left-1`(對應原本的 `p-1`)不用跟著動,因為 padding 值沒變,只是容器變高了。`tsc --noEmit`/`eslint` 驗證乾淨。全站搜過同款「固定 h-10 容器裝 size-8 固定尺寸子元素」的組合,只有這一處,不是重複出現的系統性問題。
 
+- [x] home page 兩個 H2 section 標題字級偏離 Type Scale 表格
+
+**已完成(2026-08-15)**:使用者授權「Phase 2 中間不用再問,一律通過」後,開始做「數值規範」稽核(不是主觀美感,是核對實際寫的 px 數字跟 `DOCS_VISUAL_SYSTEM.md` Type Scale 表格對不對得上)。home page 的 `home.highlights.title`(第 250 行)跟 `home.components.title`(第 293 行)兩個 `<h2>` 都寫 `text-[30px] ... max-[520px]:text-[26px]`——30/26 這兩個數字整張 Type Scale 表格裡完全沒出現,是憑感覺選的,不是表定的 Section title `28px`/`24px`(表格明文規定「Do not introduce new arbitrary text sizes without updating this table」)。已改成 `28px`/`24px`。同一份檔案裡另外兩處看起來像素數字的地方(`text-[20px]`/`text-[22px]`,視覺化面板裡的統計數字跟 highlight 數值)判斷不算違規——沒有動,因為它們是數字/指標展示(視覺系統文件裡 `DocsMetric` 這個未來要做的 pattern 就是給這種用途),不是標題,不適用 heading 的 Type Scale 角色,套用文字級表格反而是誤用。`tsc --noEmit`/`eslint` 驗證乾淨。
+
 ---
 
 ## 查證後確認「不算差距」的項目(備查,避免重複討論)

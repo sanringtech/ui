@@ -247,7 +247,7 @@ interface HomeVisualMetric {
           <p class="m-0 text-sm font-semibold uppercase text-[var(--docs-muted)]">
             {{ i18n.t('home.highlights.eyebrow') }}
           </p>
-          <h2 class="m-0 mt-2 text-[30px] font-semibold leading-tight text-[var(--docs-fg)] max-[520px]:text-[26px]">
+          <h2 class="m-0 mt-2 text-[28px] font-semibold leading-tight text-[var(--docs-fg)] max-[520px]:text-[24px]">
             {{ i18n.t('home.highlights.title') }}
           </h2>
           <p class="m-0 mt-3 text-base leading-7 text-[var(--docs-muted)]">
@@ -290,7 +290,7 @@ interface HomeVisualMetric {
           <p class="m-0 text-sm font-semibold uppercase text-[var(--docs-muted)]">
             {{ i18n.t('home.components.eyebrow') }}
           </p>
-          <h2 class="m-0 mt-2 text-[30px] font-semibold leading-tight text-[var(--docs-fg)] max-[520px]:text-[26px]">
+          <h2 class="m-0 mt-2 text-[28px] font-semibold leading-tight text-[var(--docs-fg)] max-[520px]:text-[24px]">
             {{ i18n.t('home.components.title') }}
           </h2>
           <p class="m-0 mt-4 text-base leading-7 text-[var(--docs-muted)]">
