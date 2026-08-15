@@ -176,7 +176,7 @@ interface HomeVisualMetric {
                 <div class="mt-3 grid gap-1 border-t border-[var(--docs-border)] pt-3 text-xs text-[var(--docs-muted)]">
                   <span>{{ i18n.t('home.visual.output.one') }}</span>
                   <span>{{ i18n.t('home.visual.output.two') }}</span>
-                  <span class="text-[var(--docs-success-fg)]">{{ i18n.t('home.visual.output.three') }}</span>
+                  <span class="text-[var(--docs-success)]">{{ i18n.t('home.visual.output.three') }}</span>
                 </div>
               </div>
             </div>
