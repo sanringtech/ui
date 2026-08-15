@@ -8,13 +8,7 @@
 
 ## P29 — Docs visual refresh 三階段整理 / 翻新 / 收斂
 
-目標是把 docs 站從目前偏保守、偏死板的技術文件介面,推進成更現代、精緻、可掃描的產品文件體驗。前置提交已先整理 `apps/docs` 的 visual system、docs semantic tokens、shell/page surfaces 與部分頁面樣式。**Phase 1(整理基線)已收斂完成**:open decisions 全部拍板、token 命名清乾淨、頁面矩陣盤點完畢,細節見 `DEVLOG.md`。接下來進入 Phase 2 大幅視覺翻新。
-
-### Phase 2 — 視覺翻新
-
-- [ ] 重新設計 home page 首屏與主要內容節奏:保留 Sanring 的工程感,但提高視覺層次、品牌記憶點與第一眼完成度。~~`.home-particles` 動畫背景~~、~~H1 字級偏離 type scale~~ 兩個稽核發現的具體缺口已修掉(見 `DEVLOG.md`);首屏是否要用 `app-docs-page-header`(規範刻意把 Display 56px 保留給 home H1、跟 DocsPageHeaderComponent 的 Page title 36px 分開),以及整體節奏/品牌記憶點的完整重新設計,還沒動
-- [ ] 翻新 long-form docs pages:introduction、CLI、registry、MCP、theming、roadmap、changelog 使用一致的 page header、section rhythm、callout/list/card 語言。結構面已對齊(page matrix audit 確認),數值規範(字級/間距對照 Type Scale/Spacing 表格)已全面稽核並修完 4 處真的偏離,見 `DEVLOG.md`;**還沒做的**是超出「符合規範」以外、真正讓這些頁面更精緻好掃描的視覺提升,這塊需要實際肉眼比對,不是靠讀 code 能完成
-- [ ] 翻新 component docs:component page header、examples、installation、API table、recent changes 的視覺層次與掃描效率。結構面與數值規範都已稽核過(見 `DEVLOG.md`,含全站共用的 `docs-page-header`/`component-page-recent-changes` 修正);跟上一項一樣,視覺提升本身需要肉眼驗證才能動
+目標是把 docs 站從目前偏保守、偏死板的技術文件介面,推進成更現代、精緻、可掃描的產品文件體驗。前置提交已先整理 `apps/docs` 的 visual system、docs semantic tokens、shell/page surfaces 與部分頁面樣式。**Phase 1(整理基線)、Phase 2(視覺翻新裡所有能用規則/數字/codebase 先例客觀驗證的部分)都已收斂完成**,細節見 `DEVLOG.md`。Phase 2 原本列的「首屏重新設計」「long-form/component docs 視覺提升」三項無法在沒有瀏覽器的情況下負責任地繼續做,移到下面 Phase 4,不再卡在 Phase 2 裡。
 
 ### Phase 3 — 重構與驗證收斂
 
@@ -23,6 +17,14 @@
 - [ ] 建置 Playwright/e2e 基礎設施:查證後確認 repo 內目前完全沒有 playwright config 或既有 e2e 目錄,不是「加測試案例」而已,要先建 test runner + config,再補 screenshot/最小 smoke coverage,至少覆蓋 home、component page、long-form docs page、mobile shell 與 theme toggle
 - [ ] 跑 build/lint/test 後再拆分 commit:整理基線、視覺翻新、重構驗證分開提交,避免之後 review 時混在一起
 - [ ] 將完成項目的查證、決策與驗證結果移到 `DEVLOG.md`,並同步必要的方向性摘要到 `ROADMAP.md`
+
+### Phase 4 — 視覺精修(卡在需要肉眼驗證,暫緩)
+
+這三項的共同點:規範裡查得到的字級/間距/token/先例都已經核對過(見 `DEVLOG.md` Phase 2 條目),剩下的是「這樣改會不會比較好看」的主觀判斷,這個環境沒有瀏覽器/screenshot 工具,盲改風險太高,所以先移出 Phase 2、不列入常態進度。**解封條件**:Phase 3 的 Playwright/screenshot 基礎設施建好、或使用者提供截圖/具體視覺方向(像先前 CLI 面板顏色、主題切換器 padding 那兩次一樣),才適合繼續動。
+
+- [ ] 重新設計 home page 首屏與主要內容節奏:保留 Sanring 的工程感,但提高視覺層次、品牌記憶點與第一眼完成度。首屏是否要用 `app-docs-page-header`(規範刻意把 Display 56px 保留給 home H1、跟 DocsPageHeaderComponent 的 Page title 36px 分開)這件事規範已經有答案,不算卡點
+- [ ] 翻新 long-form docs pages(introduction、CLI、registry、MCP、theming、roadmap、changelog):超出「符合規範」以外、真正讓頁面更精緻好掃描的視覺提升
+- [ ] 翻新 component docs:component page header、examples、installation、API table、recent changes 超出「符合規範」以外的視覺層次與掃描效率提升
 
 ---
 
