@@ -542,6 +542,10 @@ P9 golden fixture 掃完 53 元件後發現一批長期存在的 registry 宣告
 
 三處**發現偏離但判斷不出正確值,沒有動,只回報**:`component-page-recent-changes.component.ts` 的面板 padding(`p-6`/`p-4`)介於 Card padding(16-20px)跟 Hero panel padding(28-36px)兩個表格角色中間,查無其他線索判斷該歸哪一類;同檔案 H2 用 `text-xl`(20px)且無響應式降級,精神上介於 Section title 跟 Subsection title 之間,不確定是刻意壓低視覺層級(Recent Changes 文件裡定位成「支援區塊,不是主要內容」)還是漏掉響應式;`roadmap-page.component.ts` 5 處章節說明段落用 `text-sm`(14px,Small 角色本身合法),但其他四個 long-form 頁同角色內容一律用 `text-base`(16px, Body)——這屬於「該歸哪個角色」的設計判斷,不是數字亂填,沒有動。全部改動跑過 `tsc --noEmit`/`eslint`,另外我自己重新對 4 個改動檔案再跑一次 lint/typecheck、外加整個 `ng build docs` 全站編譯(因為 `docs-page-header`/`component-page-recent-changes` 是共用層,影響 50+ 頁面),全部乾淨。
 
+- [x] `component-page-recent-changes.component.ts` 的 H2 字級補上桌機 22px(重新評估後判斷可以確定,跟同檔案的 padding 疑問不是同一種情況)
+
+**已完成(2026-08-15)**:回頭重新看上面回報「不確定」的兩個案例,發現 H2 字級這個其實有足夠證據可以判斷,跟面板 padding 那個真正兩難的情況不一樣。原本 `text-xl`(20px)在所有寬度都一樣,沒有響應式降級。查 Type Scale 表格:Subsection title 定義是 22px 桌機/20px 手機,`leading-tight`(Tailwind 1.25)剛好精確對上表格寫的 line-height 1.25,唯一對不上的只有桌機該是 22 卻寫成 20。給這個標題套 Subsection title 角色是合理的(它是「支援區塊」而非主要 H2 section,語意上本來就該比 Section title 弱一階,但仍需要有一個表定角色,不能沒有依歸),改成 `text-[22px] ... max-[520px]:text-xl`(桌機 22px、手機維持原本的 20px)。面板 padding 那個沒有動,因為兩個規範文字互相矛盾(`--sanring-radius-lg` 暗示該套 Hero panel padding,但「supporting surface」「compact rows」的敘述又暗示該收斂),沒有站得住腳的單一結論,留在 TODOLIST 等人決定。`tsc --noEmit`/`eslint` 驗證乾淨。
+
 ---
 
 ## 查證後確認「不算差距」的項目(備查,避免重複討論)

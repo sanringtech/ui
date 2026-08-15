@@ -57,7 +57,7 @@ function renderInlineCode(text: string): string {
           <div>
             <h2
               id="recent-changes-title"
-              class="m-0 text-xl font-semibold leading-tight tracking-normal text-[var(--docs-fg)]"
+              class="m-0 text-[22px] font-semibold leading-tight tracking-normal text-[var(--docs-fg)] max-[520px]:text-xl"
             >
               {{ i18n.t('component.recentChanges.title') }}
             </h2>
