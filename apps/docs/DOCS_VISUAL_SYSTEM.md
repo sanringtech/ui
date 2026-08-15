@@ -147,7 +147,7 @@ Use a fixed type scale. Do not introduce new arbitrary text sizes without updati
 
 | Role | Desktop | Mobile | Weight | Line Height | Usage |
 | --- | ---: | ---: | ---: | ---: | --- |
-| Display | `56px` | `36px` | 600 | `1.04` | Home page H1 only |
+| Display | `clamp(48px, 5.2vw, 88px)` | `45px` | 600 | `0.98` | Home page H1 only |
 | Page title | `36px` | `30px` | 600 | `1.15` | Docs article and component page H1 |
 | Section title | `28px` | `24px` | 600 | `1.2` | Main H2 sections |
 | Subsection title | `22px` | `20px` | 600 | `1.25` | H3 sections |
@@ -234,7 +234,7 @@ Mobile:
 | Component page default | `832px` |
 | Component page wide | `960px` |
 | Long-form docs page | `832px` |
-| Home page | `1280px` |
+| Home page | `80vw` with roughly `10vw` side gutters |
 
 Use `min-w-0` on custom component hosts and grid/flex children that contain code or long strings.
 
