@@ -490,6 +490,14 @@ P9 golden fixture 掃完 53 元件後發現一批長期存在的 registry 宣告
 
 **已完成(2026-08-15)**:working tree 裡本來就有的 code sample 背景色調整(`--docs-bg` → `--docs-code-header`,讓 command block 底色跟其他 code surface 一致)跟今天的 token 修復、文件更新一起收進同一個 commit,**Phase 1「整理基線」全部項目完成**,進入 Phase 2。
 
+- [x] Phase 2 起手:修掉頁面矩陣稽核發現的三個具體缺口(home particle background、home H1 type scale、theming presets 表格 overflow)
+
+**已完成(2026-08-15)**:(1) `home-page.component.ts` 移除 `.home-particles` 動畫背景 div 跟對應的 CSS(含 `@keyframes home-particles-drift`、reduced-motion/mobile media query),落實 Decision Log 已拍板的決議,home page 現在跟內頁一樣用 `--docs-bg` 頁面背景,沒有裝飾性動態層。(2) H1 字級從 `56/40/32px` 三段式改成 `56/36px` 兩段式(`max-[860px]:text-[36px]`),對齊 type scale 表格定義的 Display 角色(規範只定義 Desktop/Mobile 兩態,40px 這個中間值本來就不在表列範圍內)。(3) `theming-presets-section.component.ts` 的手刻 `<table>` 外面包一層 `overflow-x-auto` 容器 + `min-w-[420px]`,長主題名稱在窄螢幕改成內部捲動而不是撐爆頁面版寬。
+
+**判斷未做的部分**:components 列表頁的 H2 沒有換成 `ComponentPageSectionComponent`,只補了稽核發現的 `max-[520px]:text-[24px]` 缺字級——查證後發現 `ComponentPageSectionComponent` 綁定了不少 component-page 專屬行為(accessibility/stateModel 的結構化描述解析、level-2 專屬的漸層 accent bar、`mt-16` 是為長文件單欄捲動調的間距),硬套進 components 列表頁這種兩區塊 grid 排版反而可能生出不合適的視覺元素(例如不該出現的 accent bar),真正的缺口只有「手機縮字沒補」,已經用最小改動修掉,不強行換元件。Home page 的完整首屏重新設計(視覺層次/品牌記憶點/第一眼完成度)沒有做,那是需要跟你對過方向的創意設計工作,不是稽核發現的機械性缺陷。
+
+**驗證**:`tsc -p apps/docs/tsconfig.app.json --noEmit`、`eslint` 三個改動檔案都乾淨;起了一份 `ng serve docs --port 4300`(跟你原本已經在跑的 dev server 分開的獨立實例,驗證完就關掉了),`ng build` watch 模式編譯成功,`/`、`/components`、`/theming` 三條路由都回 200。**沒有**用瀏覽器實際看過畫面——這個環境沒有瀏覽器/screenshot 工具,只驗證了編譯乾淨跟路由能載入,沒驗證視覺結果是否符合預期,建議你自己开 dev server 肉眼確認一次。
+
 ---
 
 ## 查證後確認「不算差距」的項目(備查,避免重複討論)

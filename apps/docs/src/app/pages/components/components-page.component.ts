@@ -38,7 +38,7 @@ import { isRecentlyUpdatedComponentId } from '../changelog/component-changelog';
           <div class="mb-5">
             <h2
               id="updated-components-title"
-              class="m-0 text-[28px] font-semibold leading-tight tracking-normal text-[var(--docs-fg)]"
+              class="m-0 text-[28px] font-semibold leading-tight tracking-normal text-[var(--docs-fg)] max-[520px]:text-[24px]"
             >
               {{ i18n.t('components.updatedTitle') }}
             </h2>
@@ -72,7 +72,7 @@ import { isRecentlyUpdatedComponentId } from '../changelog/component-changelog';
         <section id="all-components" aria-labelledby="all-components-title">
           <h2
             id="all-components-title"
-            class="m-0 mb-5 text-[28px] font-semibold leading-tight tracking-normal text-[var(--docs-fg)]"
+            class="m-0 mb-5 text-[28px] font-semibold leading-tight tracking-normal text-[var(--docs-fg)] max-[520px]:text-[24px]"
           >
             {{ i18n.t('components.allTitle') }}
           </h2>

@@ -12,10 +12,9 @@
 
 ### Phase 2 — 視覺翻新
 
-- [ ] 重新設計 home page 首屏與主要內容節奏:保留 Sanring 的工程感,但提高視覺層次、品牌記憶點與第一眼完成度。**頁面矩陣稽核發現的具體缺口**(見 `apps/docs/DOCS_VISUAL_SYSTEM.md` Page Matrix Audit):home 完全沒用 `app-docs-page-header`,自己刻整個 hero;H1 字級用 `56/40/32px`,偏離規範的 `56/36px` type scale;`.home-particles` 動畫背景仍在程式碼裡,跟 Decision Log 已拍板的「移除 particle background」決議矛盾,尚未落實
-- [ ] 新增/整理 components 列表頁的 section 樣式:稽核發現這頁沒用 `ComponentPageSectionComponent`,自己刻 H2,手機版也沒有對應規範的 24px 縮字
+- [ ] 重新設計 home page 首屏與主要內容節奏:保留 Sanring 的工程感,但提高視覺層次、品牌記憶點與第一眼完成度。~~`.home-particles` 動畫背景~~、~~H1 字級偏離 type scale~~ 兩個稽核發現的具體缺口已修掉(見 `DEVLOG.md`);首屏是否要用 `app-docs-page-header`(規範刻意把 Display 56px 保留給 home H1、跟 DocsPageHeaderComponent 的 Page title 36px 分開),以及整體節奏/品牌記憶點的完整重新設計,還沒動
 - [ ] 翻新 docs shell:調整 header、sidebar、TOC 的密度、active state、hover/focus state、背景層次與窄螢幕表現
-- [ ] 翻新 long-form docs pages:introduction、CLI、registry、MCP、theming、roadmap、changelog 使用一致的 page header、section rhythm、callout/list/card 語言。**稽核發現**:`theming-presets-section.component.ts` 手刻 `<table>`,沒有 overflow-x 容器也沒用共用的 `ComponentPageApiTableComponent`,長主題名稱在窄螢幕有爆版風險
+- [ ] 翻新 long-form docs pages:introduction、CLI、registry、MCP、theming、roadmap、changelog 使用一致的 page header、section rhythm、callout/list/card 語言(`theming-presets-section.component.ts` 表格 overflow 缺口已修,見 `DEVLOG.md`;其餘頁面尚未逐一翻新)
 - [ ] 翻新 component docs:component page header、examples、installation、API table、recent changes 的視覺層次與掃描效率
 - [ ] 補強 light/dark theme 對比與層次:確認兩種主題不只是顏色反轉,而是保留相同資訊階層與 code readability
 - [ ] 移除不必要的 one-off Tailwind styling:把重複出現的頁面級樣式收斂到共同 pattern 或 docs-only primitive
