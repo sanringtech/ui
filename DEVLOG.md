@@ -516,6 +516,14 @@ P9 golden fixture 掃完 53 元件後發現一批長期存在的 registry 宣告
 
 **已完成(2026-08-15,查證後確認 Phase 2 範圍內沒有更多要做的)**:`grep` 系統性掃過 `apps/docs/src/app/pages/` 底下所有超過 40 字元的 class 字串,按出現次數排序,再額外掃了所有 `uppercase` 標籤的變體。結論是沒有大範圍的 one-off drift:排名最高的重複(例如一模一樣的 preview 容器 class 出現 72 次)是既有慣例被全站一致遵守的結果,不是各頁各寫一套、需要收斂的「不一致」。唯一抓到的「同一個 pattern 兩種寫法」——eyebrow 標籤有 `text-xs uppercase` 跟 `text-sm font-semibold uppercase` 兩種——查證後發現前者出現在 `scroll-area-page.component.ts` 裡,是 `scroll-area` 元件示範用的假資料內容(demo 裡的一個分類標籤),不是文件頁自己的 chrome 樣式,不算真正的不一致。**判斷**:像那 72 次重複的 preview 容器這種「已經證明穩定、大量重複」的樣式,屬於 TODOLIST Phase 3 明確列出的「將已證明穩定的重複 layout 抽成 docs-only Angular component」,不是 Phase 2「清掉不一致」的範疇——Phase 2 這條的實際工作在稽核順手抓到的兩個個案(theming presets 表格、components 列表頁縮字)修完後就已經做完,沒有更多需要在 Phase 2 處理的一次性樣式問題。
 
+- [x] 全站對比度稽核(延續上一條「CLI run」bug 的方法論,交給背景 agent 做系統性掃描)
+
+**已完成(2026-08-15)**:把剛才手動抓 `--docs-success-fg` bug 的算法(WCAG relative luminance 公式,往上找有效背景、`color-mix()` 展開成實際 RGB 再算)套用到全站,逐一算了 506 個 `text-[var(--docs-*)]`/`text-[var(--sanring-*)]` 用法在兩個主題下的對比度。抓到 1 個真的 fail:`shell/sidebar/docs-section.component.ts` 的側邊欄分類標題(例如「GETTING STARTED」)用了 `text-[color-mix(in_srgb,var(--docs-muted)_82%,transparent)]`,多餘的透明度稀釋把 light theme 對比度拉到 3.59(12px 文字門檻是 4.5,dark theme 6.26 沒事)——`--docs-muted` 這個 token 本身沒問題(dark 8.63 / light 5.16 都過),問題是額外疊加的 `color-mix(...82%, transparent)`。已拿掉這層多餘的透明度,直接用 `--docs-muted`。`tsc --noEmit`/`eslint` 驗證乾淨。另外算出 3 處數字偏低但**不是** bug:`docs-section.component.ts` 側邊欄停用項、home page 元件面板停用項、components 列表頁停用項,這三處都是 `@if (item.disabled)` 分支渲染的純文字佔位標籤(語意上等同 disabled 按鈕),WCAG 1.4.3 明文排除「inactive user interface component」的對比度要求,不算違規,沒有動。其餘檢查過的重點案例(status chip 的 `-fg`/`-bg` 配對、`accent-fg`/`control-fg`、code 區塊文字)全部 pass,沒有找不到既有 token、只能回報不能修的案例。
+
+- [x] header 主題切換器(light/dark/system 三顆圖示的膠囊選單)上下 padding 視覺上不對稱
+
+**已完成(2026-08-15,使用者截圖回報)**:這次不是顏色問題,是箱模型算術對不起來。`feature-list.component.ts` 的主題切換器外層容器是 `h-10`(40px,border-box)+ `border`(1px×2=2px)+ `p-1`(4px×2=8px),扣掉之後內容區只剩 30px;但裡面的三顆圖示按鈕跟滑動指示條都是 `size-8`(32px)——內容比容器能容納的空間還大 2px。容器上還掛了 `overflow-hidden`,這 2px 溢出會被裁掉,但 `items-center` 置中演算法在「內容大於容器」時算出來的置中偏移量,兩端各裁多少常常因為次像素捨入不對稱,這就是視覺上「上下 padding 看起來不一樣」的成因,不是肉眼幻覺,是算得出來的箱模型錯誤。**修法**:容器從 `h-10`(40px)改成 `h-11`(44px),扣掉 border/padding 後內容區變 34px,比 32px 的按鈕多 2px 餘裕,`items-center` 有空間可以對稱置中,不會再觸發裁切。指示條的 `top-1 left-1`(對應原本的 `p-1`)不用跟著動,因為 padding 值沒變,只是容器變高了。`tsc --noEmit`/`eslint` 驗證乾淨。全站搜過同款「固定 h-10 容器裝 size-8 固定尺寸子元素」的組合,只有這一處,不是重複出現的系統性問題。
+
 ---
 
 ## 查證後確認「不算差距」的項目(備查,避免重複討論)

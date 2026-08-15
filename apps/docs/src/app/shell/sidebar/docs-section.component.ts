@@ -12,7 +12,7 @@ import { I18nService } from '../../i18n/i18n.service';
   imports: [RouterLink, RouterLinkActive],
   template: `
     <section [class]="sectionClass">
-      <p class="mb-3 px-2 text-xs font-semibold uppercase tracking-[0.08em] text-[color-mix(in_srgb,var(--docs-muted)_82%,transparent)]">{{ title }}</p>
+      <p class="mb-3 px-2 text-xs font-semibold uppercase tracking-[0.08em] text-[var(--docs-muted)]">{{ title }}</p>
 
       @for (item of items; track item.labelKey) {
         @if (item.disabled) {

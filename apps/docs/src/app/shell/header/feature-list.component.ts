@@ -175,7 +175,7 @@ const MAX_SEARCH_RESULTS = 8;
         </app-header-action-button>
 
         <div
-          class="relative inline-grid h-10 grid-cols-3 items-center gap-1.5 overflow-hidden rounded-[var(--sanring-radius)] border border-[color-mix(in_srgb,var(--docs-border)_86%,transparent)] bg-[color-mix(in_srgb,var(--docs-elevated)_82%,transparent)] p-1 shadow-sm"
+          class="relative inline-grid h-11 grid-cols-3 items-center gap-1.5 overflow-hidden rounded-[var(--sanring-radius)] border border-[color-mix(in_srgb,var(--docs-border)_86%,transparent)] bg-[color-mix(in_srgb,var(--docs-elevated)_82%,transparent)] p-1 shadow-sm"
           role="group"
           [attr.aria-label]="i18n.t('actions.selectTheme')"
         >
