@@ -247,9 +247,15 @@ interface HomeVisualMetric {
           <p class="m-0 text-sm font-semibold uppercase text-[var(--docs-muted)]">
             {{ i18n.t('home.highlights.eyebrow') }}
           </p>
-          <h2 class="m-0 mt-2 text-[28px] font-semibold leading-tight text-[var(--docs-fg)] max-[520px]:text-[24px]">
-            {{ i18n.t('home.highlights.title') }}
-          </h2>
+          <div class="mt-2 flex items-start gap-3">
+            <span
+              class="mt-1 h-8 w-1.5 rounded-full bg-[linear-gradient(180deg,var(--docs-accent),var(--docs-accent-alt))]"
+              aria-hidden="true"
+            ></span>
+            <h2 class="m-0 text-[28px] font-semibold leading-tight text-[var(--docs-fg)] max-[520px]:text-[24px]">
+              {{ i18n.t('home.highlights.title') }}
+            </h2>
+          </div>
           <p class="m-0 mt-3 text-base leading-7 text-[var(--docs-muted)]">
             {{ i18n.t('home.highlights.description') }}
           </p>
@@ -290,9 +296,15 @@ interface HomeVisualMetric {
           <p class="m-0 text-sm font-semibold uppercase text-[var(--docs-muted)]">
             {{ i18n.t('home.components.eyebrow') }}
           </p>
-          <h2 class="m-0 mt-2 text-[28px] font-semibold leading-tight text-[var(--docs-fg)] max-[520px]:text-[24px]">
-            {{ i18n.t('home.components.title') }}
-          </h2>
+          <div class="mt-2 flex items-start gap-3">
+            <span
+              class="mt-1 h-8 w-1.5 rounded-full bg-[linear-gradient(180deg,var(--docs-accent),var(--docs-accent-alt))]"
+              aria-hidden="true"
+            ></span>
+            <h2 class="m-0 text-[28px] font-semibold leading-tight text-[var(--docs-fg)] max-[520px]:text-[24px]">
+              {{ i18n.t('home.components.title') }}
+            </h2>
+          </div>
           <p class="m-0 mt-4 text-base leading-7 text-[var(--docs-muted)]">
             {{ i18n.t('home.components.descriptionPrefix') }} {{ componentCount }}
             {{ i18n.t('home.components.descriptionSuffix') }}
