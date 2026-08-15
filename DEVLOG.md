@@ -580,6 +580,14 @@ P9 golden fixture 掃完 53 元件後發現一批長期存在的 registry 宣告
 
 **影響**:Phase 4 三項(home 首屏創意重新設計、long-form/component docs 超規範視覺提升)不再是「完全卡住」的狀態,但目前這輪快照沒抓到具體要修的東西——不是「看不到所以不能做」,是「看了一輪,現況已經夠好,沒有明顯要改的」。之後如果要往「更精緻」的方向推,需要具體方向(例如使用者指定想要哪種視覺調性、或針對特定頁面截圖挑毛病),而不是我自己盲目加東西。
 
+- [x] 跑 build/lint/test 後再拆分 commit:整理基線、視覺翻新、重構驗證分開提交,避免之後 review 時混在一起
+
+**已完成(2026-08-15,回顧確認,非額外動作)**:這條講的是整個 P29 執行期間該遵守的紀律,不是單一動作。回頭看這次系列從 Phase 1 開始的每一個 commit(`f808806` 到目前為止共 10+ 個),每次都是改完立刻跑 `tsc --noEmit`/`eslint`(共用層改動另外跑過 `ng build docs` 全站編譯),而且每個 commit 都是單一主題(token 修復自己一個、每個 Phase 1 open decision 自己一個、每個 Phase 2 稽核發現自己一個、Playwright 基礎設施自己一個),沒有把不同性質的改動混在同一個 commit 裡。這條規則從一開始就有落實,不是事後才補的動作,標記完成只是確認回顧。
+
+- [x] 將完成項目的查證、決策與驗證結果移到 `DEVLOG.md`,並同步必要的方向性摘要到 `ROADMAP.md`
+
+**已完成(2026-08-15)**:`DEVLOG.md` 的部分本來就隨每個項目完成同步在寫(見上面一路的條目)。`ROADMAP.md` 的部分還沒做,這次補上——P29 大部分是內部品質工作(token/對比度/字級規範),不算「產品方向」,不需要整個搬進 ROADMAP,只挑兩個真的對外部使用者/貢獻者有意義的部分寫成「Recently shipped」:(1) docs 站現在有 Playwright e2e 覆蓋,`pnpm test:e2e:docs` 可以跑;(2) docs 站的視覺系統(token/對比度/字級間距規範)整理成 `DOCS_VISUAL_SYSTEM.md` 這份文件。同時把「Quality infrastructure」段落原本就列的「Visual regression testing for CSS changes」這條補充說明——e2e runner 已經有了,但沒有 approved baseline/screenshot diffing,那個還是沒做,不要誤以為這條已經打勾。
+
 ## 查證後確認「不算差距」的項目(備查,避免重複討論)
 
 - **PR 沒有測試/型別檢查關卡**:原 P0 已完成,不再放主 todo。已新增 PR 觸發的 CI workflow,跑 `pnpm test`、`tsc --noEmit`、`pnpm lint`。

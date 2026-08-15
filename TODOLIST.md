@@ -12,9 +12,7 @@
 
 ### Phase 3 — 重構與驗證收斂
 
-- [ ] 將已證明穩定的重複 layout 抽成 docs-only Angular component,避免頁面模板持續複製長串 class
-- [ ] 跑 build/lint/test 後再拆分 commit:整理基線、視覺翻新、重構驗證分開提交,避免之後 review 時混在一起
-- [ ] 將完成項目的查證、決策與驗證結果移到 `DEVLOG.md`,並同步必要的方向性摘要到 `ROADMAP.md`
+- [ ] 將已證明穩定的重複 layout 抽成 docs-only Angular component,避免頁面模板持續複製長串 class(進行中,`app-component-page-code-block` 這個最大宗的重複——95 處手動包框——正在收斂,見 `DEVLOG.md`)
 
 ### Phase 4 — 視覺精修(已解封,但目前沒有具體待辦)
 
