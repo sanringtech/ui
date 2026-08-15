@@ -482,3 +482,48 @@ should be added here when raised, not left implicit in code review threads.
 | Roadmap marquee animation | Keep, `[planned]` items unaffected | It is a content presentation device (scrolling item list), not decoration, and already respects `prefers-reduced-motion`; the "avoid ambient motion" rule targets decorative backgrounds like the home page particles, not this |
 
 Full rationale for each is in `DEVLOG.md` under the P29 entry.
+
+## Visual QA Checklist
+
+Run this manually before shipping a visual change, and whenever `[automated]` coverage below
+doesn't apply. Pages to sample: home, a component page (e.g. `button`), a long-form page (e.g.
+`introduction`), and the mobile shell.
+
+### Breakpoints
+
+- [ ] Desktop `1440px` — no layout is unusually sparse or overly wide; TOC and sidebar both visible.
+- [ ] Desktop `1180px` — side columns compress per the breakpoint table; no overlap.
+- [ ] Desktop `1024px` — still above the `980px` TOC-hide threshold; check nothing clips early.
+- [ ] Mobile `390px` — sidebar collapses into the sheet nav; header wraps correctly. `[automated]`
+      basic sheet-open check in `apps/docs/e2e/mobile-shell.spec.ts`.
+- [ ] Mobile `360px` — no horizontal page overflow anywhere. `[automated]` scroll-width check runs
+      on home, a long-form page, and this exact viewport in the e2e suite.
+
+### Theme
+
+- [ ] Light theme — surfaces (`panel`/`surface`/`elevated`) are visually distinguishable from each
+      other and from `bg`, not just from border/shadow.
+- [ ] Dark theme — same hierarchy check; code blocks stay dark in both themes (resolved decision).
+- [ ] Toggle light → dark → system and back; no flash of unstyled content, no stuck intermediate
+      state. `[automated]` `apps/docs/e2e/theme-toggle.spec.ts` checks `data-theme` + persistence
+      across reload, but not the transition animation itself — that still needs eyes.
+
+### Content stress cases
+
+- [ ] A code block with a long unbroken line (e.g. a long CLI command or URL) scrolls horizontally
+      inside its own container and does not widen the page. `[automated]` covered for the CLI page
+      command block.
+- [ ] Switch the docs language to Chinese and re-check page headers, nav labels, and button text —
+      confirm bilingual copy doesn't overflow or wrap awkwardly (spec requires layouts to work with
+      either language without relying on exact text length). No automated coverage yet; the e2e
+      suite only exercises the English locale.
+
+### What's automated vs. what still needs eyes
+
+`apps/docs/e2e/` (Playwright, see `apps/docs/playwright.config.ts`) covers: page renders without
+console errors, key landmarks/headings are present, no horizontal overflow at two viewports, the
+mobile sheet nav opens, and theme switching updates `data-theme` and persists. It does **not**
+cover subjective visual quality — spacing rhythm, color harmony, "does this look premium" — none of
+that is testable without a human (or a visual-diff tool with an approved baseline, which this repo
+doesn't have yet). Run `pnpm test:e2e:docs` before merging a visual change; still walk through this
+checklist by eye for anything the automated suite doesn't assert on.

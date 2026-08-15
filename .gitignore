@@ -51,6 +51,13 @@ testem.log
 /typings
 __screenshots__/
 
+# Playwright
+/playwright-report/
+/test-results/
+apps/*/playwright-report/
+apps/*/test-results/
+blob-report/
+
 # System files
 .DS_Store
 Thumbs.db

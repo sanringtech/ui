@@ -13,8 +13,6 @@
 ### Phase 3 — 重構與驗證收斂
 
 - [ ] 將已證明穩定的重複 layout 抽成 docs-only Angular component,避免頁面模板持續複製長串 class
-- [ ] 補 docs visual QA checklist:桌面 `1440px` / `1180px` / `1024px`,手機 `390px` / `360px`,light/dark theme,長 code line,中英文文案長度
-- [ ] 建置 Playwright/e2e 基礎設施:查證後確認 repo 內目前完全沒有 playwright config 或既有 e2e 目錄,不是「加測試案例」而已,要先建 test runner + config,再補 screenshot/最小 smoke coverage,至少覆蓋 home、component page、long-form docs page、mobile shell 與 theme toggle
 - [ ] 跑 build/lint/test 後再拆分 commit:整理基線、視覺翻新、重構驗證分開提交,避免之後 review 時混在一起
 - [ ] 將完成項目的查證、決策與驗證結果移到 `DEVLOG.md`,並同步必要的方向性摘要到 `ROADMAP.md`
 

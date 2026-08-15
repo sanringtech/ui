@@ -560,6 +560,18 @@ P9 golden fixture 掃完 53 元件後發現一批長期存在的 registry 宣告
 
 **已完成(2026-08-15)**:Phase 2 原本 6 個項目——docs shell 翻新、long-form pages 翻新、component docs 翻新、light/dark theme 對比、one-off Tailwind 清理、home page 首屏重新設計——裡,shell 翻新、light/dark 對比、one-off Tailwind 清理三項已經完整做完(見上面各自的條目);long-form/component docs 翻新的「結構面對齊」跟「數值規範(字級/間距對照表格、全站先例)」也已經做完,唯獨這三項剩下的「超出規範以外、純粹靠肉眼判斷好不好看」的部分,在這個沒有瀏覽器/screenshot 工具的環境下没辦法負責任地繼續執行——硬做等於盲猜,跟這次系列其他修法(每一個都有算得出來的數字或查得到的先例撐腰)性質不同。使用者確認後,把這三項從 Phase 2 移到新的「Phase 4 — 視覺精修」,並列出解封條件(Phase 3 的 Playwright/screenshot 基礎設施建好,或使用者提供截圖/具體方向)。Phase 2 本身視為收斂完成,不再是進行中狀態。
 
+- [x] 建置 Playwright/e2e 基礎設施
+- [x] 補 docs visual QA checklist:桌面 `1440px` / `1180px` / `1024px`,手機 `390px` / `360px`,light/dark theme,長 code line,中英文文案長度
+
+**已完成(2026-08-15)**:確認 repo 內完全沒有 Playwright,從零建置。裝了 `@playwright/test`(root devDependency,`-w` 加到 workspace root)跟 chromium 瀏覽器。新增 `apps/docs/playwright.config.ts`:`webServer` 用 `ng serve docs --port 4310 --configuration development` 自動起 dev server(跟使用者原本自己開著的 dev server 用不同 port,不衝突),兩個 project(`desktop-chromium` 1440×900、`mobile-chromium` 用 Pixel 7 裝置設定檔)。`apps/docs/e2e/` 底下 5 個 spec 檔,對應 TODOLIST 原本要求的覆蓋範圍:
+- `home.spec.ts`:首頁渲染、無 console error、無橫向溢出
+- `component-page.spec.ts`:`button` component page 的 header/basic example/API reference 都渲染,code block 複製按鈕可鍵盤聚焦
+- `long-form-page.spec.ts`:`introduction` 頁 header/TOC 渲染(TOC 只在 ≥980px 檢查,對應規範的隱藏斷點),`cli` 頁的長指令 code block 不撐爆頁面
+- `mobile-shell.spec.ts`:390px 下桌面版 sidebar 隱藏、漢堡選單觸發 sheet(`role="dialog"`);360px 下無橫向溢出
+- `theme-toggle.spec.ts`:切換 light/dark 更新 `<html data-theme>`、`aria-pressed`,重新整理後設定持續
+
+寫的時候踩到一個真的很有參考價值的坑:`home.spec.ts` 一開始用 `getByRole('link', { name: 'Browse components' })` 抓不到元素,以為選字錯了,查 Playwright 存的 accessibility snapshot 才發現這個 `<a sanringBtn routerLink="/components">` 實際上的 role 是 **`button`** 不是 `link`——`sanringBtn` 指令會把宿主元素的 ARIA role 覆寫成 button,不管它原本是 `<a>` 還是 `<button>`。這是 `@sanring/ui` 既有的設計行為(讓消費者可以用 `<a sanringBtn>` 做出「看起來是按鈕的連結」),不是這次要修的 bug,只是把測試斷言改成符合實際 role。全部 18 個測試(9 個 spec × 2 個 project)`pnpm exec playwright test --config=apps/docs/playwright.config.ts` 綠燈。加了 `pnpm test:e2e:docs` 腳本方便之後跑。`.gitignore` 補了 `playwright-report/`/`test-results/`。QA checklist 直接寫進 `DOCS_VISUAL_SYSTEM.md` 新增的「Visual QA Checklist」章節,每一條都標明有沒有 `[automated]` 對應的 e2e 覆蓋,講清楚 Playwright 這層只驗證「有沒有渲染出來、有沒有爆版」這種結構性斷言,「好不好看」這種主觀判斷還是驗證不到,需要肉眼或視覺回歸工具(這個 repo 目前沒有 approved baseline,之後如果要做 screenshot diff 得另外決定要不要投資這塊)。
+
 ## 查證後確認「不算差距」的項目(備查,避免重複討論)
 
 - **PR 沒有測試/型別檢查關卡**:原 P0 已完成,不再放主 todo。已新增 PR 觸發的 CI workflow,跑 `pnpm test`、`tsc --noEmit`、`pnpm lint`。
