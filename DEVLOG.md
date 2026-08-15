@@ -457,6 +457,41 @@ P9 golden fixture 掃完 53 元件後發現一批長期存在的 registry 宣告
 
 ---
 
+## P29 — Docs visual refresh 三階段整理 / 翻新 / 收斂
+
+- [x] 清掉 docs token 命名不一致:統一 `--docs-focus-ring` / `--docs-accent-fg` 等語意命名,移除或替換 `--docs-ring`、`--docs-accent-foreground` 這類殘留用法
+
+**已完成**:全域比對 `apps/docs/src/styles.css` 實際定義的 35 個 `--docs-*` token 與全站 `src/**/*.ts`/`*.css`/`*.html` 內 `var(--docs-*)` 的使用清單,取差集,共揪出 5 個懸空 token——比 TODOLIST 原本點名的 `--docs-ring`/`--docs-accent-foreground` 兩個更多:`tree-page.component.ts` 的 `--docs-ring`(節點 focus ring)、`--docs-accent-foreground`(選中節點文字色,2 處)從未在 `styles.css` 定義過;`changelog-page.component.ts` 的 `--docs-danger-bg`/`--docs-danger-fg`(BREAKING chip 底色/文字色,2 處)雖然帶了 CSS fallback(`#fee2e2`/`#b91c1c`)所以視覺上沒有整個消失,但完全不吃 dark theme——BREAKING chip 在 dark mode 下會是刺眼的淺色底深色字,跟其餘 chip 用色風格不一致;`collapsible-page.component.ts` 的 `--docs-hover`(file-tree demo 按鈕的 hover 背景)沒有 fallback,hover 實際上完全沒有視覺回饋。全部改成 `styles.css` 已定義的對應語意 token:`--docs-ring`→`--docs-focus-ring`,`--docs-accent-foreground`→`--docs-accent-fg`,`--docs-danger-bg`/`-fg`→`--docs-error-bg`/`-fg`(沿用既有 error 語意色,不另建 danger 語意),`--docs-hover`→`--docs-elevated`(語意表定義的「Interactive/hover surface」正是這個 token)。改完重新跑一次同樣的差集比對,確認全站 `var(--docs-*)` 使用清單已是定義清單的子集,無殘留懸空引用。
+
+**風險**:帶 fallback 的兩個 token(`--docs-danger-bg`/`-fg`)不是「完全沒有視覺效果」那種明顯 bug,只是 light/dark 語意錯位,比較容易在 code review 被略過,值得記一筆避免以後又長回來;沒有 fallback 的那三個則是真的會壞——`focus-visible` ring、選中節點文字色、hover 背景在對應頁面上實際上是失效的。
+
+- [x] 更新 `apps/docs/DOCS_VISUAL_SYSTEM.md` 狀態:從 planning specification 調整為 living visual system,標記已落地項目、待實作項目與仍需決策的項目
+- [x] 收斂 open decisions:code block 在 light theme 是否固定深色、docs page header 是否全面使用 framed panel、home page 是否保留獨立視覺語言、docs-only layout primitive 是否正式元件化
+
+**已完成(2026-08-15)**:四題 open decisions 請使用者拍板,全部採用推薦選項:(1) code block 在 light/dark theme 一律固定深色,不切換 Shiki theme,理由是跟 GitHub/Vercel/shadcn 等主流文件站慣例一致,且不用維護第二套語法上色主題;(2) docs page header 全面採用 framed panel,不只限 component page,理由是符合「整站一致體驗」這個 Phase 2 的既定目標;(3) home page 拿掉 particle background,改跟內頁背景語言一致,理由是避免首頁跟其餘頁面看起來像兩個不同產品,品牌記憶點改靠排版/字級/品牌色而非動態背景;(4) `DocsCallout`/`DocsMetric`/`DocsFeatureList` 這類內容用 layout primitive 正式做成 Angular component,理由是跟進 `component-page-*` 系列已經證明可行的慣例,避免 Phase 3 再重構一次。四項決議與理由已寫進 `DOCS_VISUAL_SYSTEM.md` 的 Decision Log(取代原本的 Open Decisions 段落),同時把 Theme Rules/Component Page Structure/Motion/Implementation Rules 四個章節內對應段落標上 `**Resolved**` 直接落實決議內容,`Status` 欄位改成 living visual system 並註明 Phase 2/3 未落地項目一律標 `[planned]`。
+
+**現況**:`DocsCallout`/`DocsMetric`/`DocsFeatureList` 決議做成元件,但實作本身還沒動工(TODOLIST 仍列為待辦),這裡完成的只是「要不要做成元件」這個決策本身。
+
+- [x] 定義可重用視覺 pattern 的其中一項:`component-page-*` 系列要不要統一改名對齊 `Docs*` prefix
+
+**已完成(2026-08-15)**:維持現有命名,不做全域改名。理由:`component-page-*` 系列已經在用、已經被 50+ 個 component page import,改名等於一次大範圍搬遷但沒有實質功能收益;新建的 `DocsCallout`/`DocsMetric`/`DocsFeatureList` 直接用 `Docs*` prefix 即可,新舊並存不影響可讀性——docs 目錄下本來就分「component-page 專用」跟「docs 泛用」兩層,命名前綴剛好對應這個分層。
+
+- [x] 盤點 docs 頁面矩陣:列出 home、introduction、components、cli、registry、mcp、theming、roadmap、changelog 與 component pages 的 header、surface、typography、mobile overflow、one-off layout 現況
+
+**已完成(2026-08-15)**:逐一讀 `apps/docs/src/app/pages/` 底下 home、introduction、components 列表頁、cli、registry、mcp、theming(含 6 個子 section)、roadmap、changelog,加上抽查 button/select/dialog/table/tree/collapsible 六個 component page,記錄 header pattern、surface token 用法、字級是否對齊 type scale、mobile overflow 處理、one-off layout。完整表格寫進 `apps/docs/DOCS_VISUAL_SYSTEM.md` 新增的「Page Matrix Audit」章節。結論:cli、registry、mcp、introduction、changelog 跟抽查的 6 個 component page 都對齊良好,沒有結構性問題——真正需要 Phase 2 處理的落在三個地方:(1) home page 完全沒用 `app-docs-page-header`、H1 字級偏離 type scale、`.home-particles` 動畫背景還在(跟已拍板要移除的決議矛盾,尚未落實只是還沒動工);(2) components 列表頁沒用 `ComponentPageSectionComponent`,自己刻 H2,手機版缺縮字;(3) `theming-presets-section.component.ts` 手刻 `<table>` 沒包 overflow-x 容器也沒用 `ComponentPageApiTableComponent`。另外發現 roadmap 頁有個無限跑馬燈動畫,雖然有遵守 `prefers-reduced-motion`,但跟系統文件「避免環境動效」的精神是否衝突,Decision Log 沒有明講涵蓋這頁,列為新的待決事項。這三項具體缺口跟 roadmap 動效的決定都已經搬進 TODOLIST Phase 2,不留在這裡重複。
+
+**風險**:這次稽核只讀程式碼、沒有動任何實作,`.home-particles` 目前仍在運作中,不要誤以為 Decision Log 拍板等於已經落地。
+
+- [x] 收斂 open decisions 追加一題:roadmap 頁無限跑馬燈動畫要不要保留
+
+**已完成(2026-08-15)**:保留。理由:Decision Log 的「避免環境動效」規則針對的是裝飾性背景(像 home 的 particle background),roadmap 的跑馬燈是內容展示手法(捲動看項目)而非裝飾,且已正確實作 `prefers-reduced-motion`,不算違反精神。已寫進 `DOCS_VISUAL_SYSTEM.md` Decision Log 補上這條。
+
+- [x] 收掉目前 home page command/code surface 微調,避免後續翻新混入未分類的小改
+
+**已完成(2026-08-15)**:working tree 裡本來就有的 code sample 背景色調整(`--docs-bg` → `--docs-code-header`,讓 command block 底色跟其他 code surface 一致)跟今天的 token 修復、文件更新一起收進同一個 commit,**Phase 1「整理基線」全部項目完成**,進入 Phase 2。
+
+---
+
 ## 查證後確認「不算差距」的項目(備查,避免重複討論)
 
 - **PR 沒有測試/型別檢查關卡**:原 P0 已完成,不再放主 todo。已新增 PR 觸發的 CI workflow,跑 `pnpm test`、`tsc --noEmit`、`pnpm lint`。

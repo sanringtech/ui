@@ -169,7 +169,7 @@ interface HomeVisualMetric {
                   {{ i18n.t('home.visual.command') }}
                 </div>
                 <div
-                  class="mt-3 rounded-[var(--sanring-radius-sm)] border border-[var(--docs-border)] bg-[var(--docs-bg)] px-3 py-2 text-sm leading-6"
+                  class="mt-3 rounded-[var(--sanring-radius-sm)] border border-[var(--docs-border)] bg-[var(--docs-code-header)] px-3 py-2 text-sm leading-6"
                 >
                   <code class="break-words [overflow-wrap:anywhere]">
                     pnpm dlx &#64;sanring/cli add button dialog toast

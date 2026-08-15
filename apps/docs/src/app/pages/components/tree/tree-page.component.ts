@@ -309,7 +309,7 @@ export class TreePageComponent {
   protected readonly navigationSelectedValue = signal<string | null>('settings/team');
 
   private readonly baseNodeButtonClass =
-    'flex h-8 w-full min-w-0 items-center gap-2 rounded-[var(--sanring-radius-xs)] px-2 text-left text-sm outline-none transition-colors focus-visible:ring-2 focus-visible:ring-[var(--docs-ring)]';
+    'flex h-8 w-full min-w-0 items-center gap-2 rounded-[var(--sanring-radius-xs)] px-2 text-left text-sm outline-none transition-colors focus-visible:ring-2 focus-visible:ring-[var(--docs-focus-ring)]';
 
   // 靠 exportAs="sanringTreeNode" 直接讀節點自己的狀態，範例不用再自己拿 value
   // 字串去跟 expandedValue()/selectedValue() 比對。
@@ -317,7 +317,7 @@ export class TreePageComponent {
     return cn(
       this.baseNodeButtonClass,
       node.isSelected()
-        ? 'bg-[var(--docs-accent)] text-[var(--docs-accent-foreground)]'
+        ? 'bg-[var(--docs-accent)] text-[var(--docs-accent-fg)]'
         : 'text-[var(--docs-fg)] hover:bg-[var(--docs-surface-strong)]',
     );
   }
@@ -326,7 +326,7 @@ export class TreePageComponent {
     return cn(
       this.baseNodeButtonClass,
       node.isSelected()
-        ? 'bg-[var(--docs-accent)] text-[var(--docs-accent-foreground)]'
+        ? 'bg-[var(--docs-accent)] text-[var(--docs-accent-fg)]'
         : 'text-[var(--docs-muted)] hover:bg-[var(--docs-surface-strong)] hover:text-[var(--docs-fg)]',
     );
   }

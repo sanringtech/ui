@@ -186,7 +186,7 @@ import { collapsiblePage, collapsiblePageExamples } from './collapsible.docs';
                   <button
                     sanringCollapsibleTrigger
                     type="button"
-                    class="flex w-full items-center gap-2 rounded-[var(--sanring-radius-sm)] px-2 py-1.5 text-left hover:bg-[var(--docs-hover)]"
+                    class="flex w-full items-center gap-2 rounded-[var(--sanring-radius-sm)] px-2 py-1.5 text-left hover:bg-[var(--docs-elevated)]"
                   >
                     <span class="text-[var(--docs-muted)]">-</span>
                     <span>src</span>

@@ -139,7 +139,7 @@ function renderInlineCode(text: string): string {
                           }}</span>
                           @if (change.breaking) {
                             <span
-                              [class]="chipClass + ' bg-[var(--docs-danger-bg,#fee2e2)] text-[var(--docs-danger-fg,#b91c1c)]'"
+                              [class]="chipClass + ' bg-[var(--docs-error-bg)] text-[var(--docs-error-fg)]'"
                             >BREAKING</span>
                           }
                           <span
@@ -186,7 +186,7 @@ function renderInlineCode(text: string): string {
                                 }}</span>
                                 @if (change.breaking) {
                                   <span
-                                    [class]="chipClass + ' bg-[var(--docs-danger-bg,#fee2e2)] text-[var(--docs-danger-fg,#b91c1c)]'"
+                                    [class]="chipClass + ' bg-[var(--docs-error-bg)] text-[var(--docs-error-fg)]'"
                                   >BREAKING</span>
                                 }
                                 <span

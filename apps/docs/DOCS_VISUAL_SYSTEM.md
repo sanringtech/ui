@@ -1,11 +1,15 @@
 # Docs Visual System
 
-Version: 0.1
+Version: 0.2
 Scope: `apps/docs` only
-Status: planning specification, not implementation
+Status: living visual system — rules below are enforced in code unless flagged `[planned]`;
+resolved decisions are recorded in the Decision Log, not left open
 
 This document defines the visual direction and reusable rules for the Sanring UI documentation
-site. It is intended to guide a full visual refresh before changing templates or tokens.
+site. Phase 1 (P29 in `TODOLIST.md`) landed the token contract and closed all four open decisions
+that were blocking Phase 2. Phase 2/3 items (shell refresh, long-form page refresh, primitive
+componentization) are `[planned]` until implemented — see `TODOLIST.md` for current status and
+`DEVLOG.md` for what shipped and why.
 
 ## Goals
 
@@ -101,8 +105,8 @@ Add these semantic tokens before the visual refresh:
 
 - Dark and light themes should preserve the same hierarchy. Do not invert which surface is
   stronger between themes.
-- Code blocks should use a dark code surface in both themes unless the syntax highlighter is
-  changed to a light theme for light mode.
+- **Resolved**: code blocks always use a dark code surface, in both light and dark theme. Do not
+  switch the syntax highlighter to a light Shiki theme for light mode.
 - Status backgrounds must be readable in both themes and should not be reused as general
   decorative colors.
 
@@ -238,6 +242,9 @@ Required content:
 Visual rules:
 
 - Header should be visually stronger than ordinary sections.
+- **Resolved**: framed panel treatment applies to every docs page header, not just component
+  pages — long-form pages (introduction, CLI, registry, MCP, theming, roadmap, changelog) use the
+  same header pattern as component pages.
 - Header actions wrap below content at mobile widths.
 - Header description max width: `620px`.
 
@@ -362,21 +369,59 @@ Motion should support orientation, not decoration.
 
 - Theme transition: keep current View Transitions API behavior.
 - Toast/sheet/popover animations can remain as defined in `styles.css`.
-- Decorative background motion is acceptable only on home page and must respect
-  `prefers-reduced-motion`.
+- **Resolved**: home page drops the particle background and moves to the same background
+  language as inner docs pages — no ambient decorative background motion anywhere in the app.
+  Brand richness on the home page comes from layout, typography, and color, not motion.
 - Component docs pages should avoid ambient motion.
 
 ## Implementation Rules
 
-- Use semantic `--docs-*` tokens in docs templates.
+- Use semantic `--docs-*` tokens in docs templates. Before adding a new `--docs-*` token, check
+  it against `src/styles.css` — do not reference a token in a template without defining it; the
+  P29 token sweep (see `DEVLOG.md`) found 5 dangling references that had gone unnoticed.
 - Use raw `--sanring-*` palette tokens only inside semantic token definitions or carefully scoped
   examples.
-- Prefer docs-only components for repeated documentation structures:
-  `DocsPageHeader`, `DocsSection`, `DocsPreviewer`, `DocsCodeBlock`, `DocsApiTable`.
+- Prefer docs-only components for repeated documentation structures. Component page structure
+  already has this layer implemented under `apps/docs/src/app/layouts/component-page/`:
+  `DocsPageHeaderComponent`, `ComponentPageSectionComponent`, `ComponentPageCodePreviewerComponent`,
+  `ComponentPageCodeBlockComponent`, `ComponentPageApiTableComponent`,
+  `ComponentPageRecentChangesComponent`. **Resolved**: content-level primitives
+  (`DocsCallout`, `DocsMetric`, `DocsFeatureList`) follow the same precedent and should be built
+  as Angular components, not static class patterns — `[planned]`, not yet built.
 - Keep `@sanring/ui` for product primitives and avoid leaking docs styling into the library.
 - Static Tailwind classes in templates are acceptable, but repeated visual contracts should move
   into shared docs layout components.
 - Avoid nested UI cards unless the inner card is a repeated item or a framed tool.
+
+## Page Matrix Audit (P29 Phase 1)
+
+Baseline inventory of every top-level docs page plus a spot-check of the component page template,
+recorded before Phase 2 work starts. "Shared primitives" refers to
+`apps/docs/src/app/layouts/component-page/`: `DocsPageHeaderComponent` (`app-docs-page-header`),
+`ComponentPageSectionComponent` (`app-component-page-section`), `ComponentPageCodePreviewerComponent`,
+`ComponentPageCodeBlockComponent`, `ComponentPageApiTableComponent`, `ComponentPageRecentChangesComponent`.
+
+| Page | Header pattern | Surface tokens | Typography | Mobile overflow | One-off layout notes |
+| --- | --- | --- | --- | --- | --- |
+| Home (`pages/home/home-page.component.ts`) | Fully hand-rolled hero markup — does not use `app-docs-page-header` | Full `--docs-*` semantic token usage with heavy `color-mix`; well aligned | Off-scale: H1 uses `56px/40px/32px` across three breakpoints instead of the Display scale's `56px/36px`; section titles use `30px/26px` instead of the Section title scale's `28px/24px` | Good — consistent `min-w-0`, `truncate`, `break-words` on flex/grid children | Hero grid, visual-metrics panel, and component-shortcuts nav are all one-off; the component still ships an animated `.home-particles` background, contradicting the Decision Log's resolved "drop particle background" decision |
+| Introduction (`pages/introduction/introduction-page.component.ts`) | `app-docs-page-header`, correct | Full `--docs-*` usage | Aligned via `ComponentPageSectionComponent` (28/24 H2) | Good — code blocks wrapped in `min-w-0 overflow-hidden` containers | Feature-card grid, requirements `dl` grid, and next-step link list are small local card patterns; low risk, could be replaced by the planned `DocsFeatureList`/`DocsCallout` primitives |
+| Components landing (`pages/components/components-page.component.ts`) | `app-docs-page-header`, correct | Full `--docs-*` usage | Hand-rolled `<h2 class="text-[28px] ...">` with **no mobile downscale** — the canonical `ComponentPageSectionComponent` H2 drops to 24px under 520px, this page stays at 28px | `truncate` on long labels, responsive 3/2/1-column grid | Does not use `ComponentPageSectionComponent` at all; both sections ("Recently updated", "All components") are fully hand-rolled instead of reusing the shared section primitive |
+| CLI (`pages/cli/cli-page.component.ts`) | `app-docs-page-header`, correct | Full `--docs-*` usage | Aligned via `ComponentPageSectionComponent` | Good — every code sample wrapped in an `overflow-hidden` container; `ComponentPageCodeBlock` is internally `overflow-auto` | None significant — 11 sections repeat the same body + code + option-list pattern; the most systematized long-form page in the audit |
+| Registry (`pages/registry/registry-page.component.ts`) | `app-docs-page-header`, correct | Full `--docs-*` usage | Aligned via `ComponentPageSectionComponent` | Good — same wrapped-code-block pattern as CLI | None significant |
+| MCP (`pages/mcp/mcp-page.component.ts`) | `app-docs-page-header`, correct | Full `--docs-*` usage | Aligned via `ComponentPageSectionComponent` | Good — same wrapped-code-block pattern as CLI | None significant — shortest page in the audit |
+| Theming (`pages/theming/` — shell + 6 sub-section components) | `app-docs-page-header` on the shell; every sub-section wraps `ComponentPageSectionComponent` | `--docs-*` throughout the shell and most sub-sections; `theming-playground-section.component.ts` deliberately switches to its own `--playground-*` runtime custom properties (hex defaults) driven by live color pickers — an intentional sandbox, not token misuse | Aligned via `ComponentPageSectionComponent` | Playground grid uses `min-w-0` and an `overflow-x-auto` `<pre>` for generated CSS; **`theming-presets-section.component.ts` hand-rolls a raw `<table>` with no `overflow-x-auto` wrapper** — low risk today given short content, but no guard against growth | `theming-playground-section.component.ts` (~390 lines) is the single largest one-off in the site — a live theme sandbox that legitimately can't reuse `ComponentPageCodePreviewer`; `theming-presets-section.component.ts` hand-rolls a table instead of reusing `ComponentPageApiTableComponent` |
+| Roadmap (`pages/roadmap/roadmap-page.component.ts`) | `app-docs-page-header`, correct | `--docs-*` plus `--docs-surface-strong` for meta chips | Aligned via `ComponentPageSectionComponent` | `min-w-0 overflow-hidden` on each marquee row | Infinite auto-scrolling "shipped components" marquee ticker with its own keyframe animation (respects `prefers-reduced-motion`) — decorative ambient motion that sits in tension with the system's "no ambient motion" principle, even though the Decision Log only names the home page explicitly |
+| Changelog (`pages/changelog/changelog-page.component.ts`) | `app-docs-page-header`, correct | `--docs-*` including status-tinted chips (`--docs-success-bg`, `--docs-info-bg`, `--docs-warn-bg`, `--docs-error-bg`) | Aligned via `ComponentPageSectionComponent` | Rows use `flex items-start gap-2.5` + `min-w-0 flex-1`; inline `<code>` fragments rendered via `[innerHTML]` have no explicit `break-words`/`overflow-wrap`, so an unusually long unbroken inline code token could overflow on narrow viewports (not observed today, no guard) | Built on `sanringTimeline` from `@sanring/ui` with an expand/collapse "other fixes" panel — unique to this page, but appropriately built on a library primitive rather than a hand-rolled one |
+| Component page template (spot-check: `button`, `select`, `dialog`, `table`, `tree`, `collapsible`) | All six consistently use `app-component-page-header` (which itself wraps `app-docs-page-header`) — no deviation found | `--docs-*` throughout chrome; `select` page sets two demo icon colors directly with raw `--sanring-muted` / `--sanring-border-strong` instead of `--docs-*` (borderline-acceptable "scoped example" per this doc's raw-token rule, worth a lint pass) | All inherit `ComponentPageSectionComponent`'s scale — no arbitrary sizes found | Shared primitives handle it: `ComponentPageCodeBlock` is `overflow-auto`, `ComponentPageApiTableComponent` swaps to a card layout below `md:`, `ComponentPageCodePreviewer` is `overflow-hidden`; `table` page's sticky-column demos force `min-w-[760px]`/`min-w-[820px]` on the `<table>` but correctly scope scrolling inside `sanring-table-container`, so the page itself doesn't widen | None structural — the shared layer is consistently adopted across the sample; `table` is the most visually dense page but stays inside the primitives |
+
+**Biggest inconsistencies for Phase 2 sequencing**: the home page is the clear outlier — it bypasses
+`app-docs-page-header` entirely, uses off-scale type sizes, and still ships the particle background the
+Decision Log already marked as removed, so it should be first in line for the "Home alignment" step.
+The components landing page and theming presets table both hand-roll patterns (section headings, a data
+table) that the shared primitives already solve, which is cheap, low-risk cleanup during the "Long-form
+docs refresh" step. The roadmap marquee is the only other page with ambient motion, worth a deliberate
+keep-or-cut decision rather than leaving it as an implicit exception. The component page template itself
+needs no structural work — Phase 3 there is closer to polish than refactor.
 
 ## Refresh Plan
 
@@ -422,11 +467,18 @@ A page satisfies the visual system when:
 - Its header, section rhythm, previewer, code block, and API table match the shared patterns.
 - Light and dark themes preserve contrast and hierarchy.
 
-## Open Decisions
+## Decision Log
 
-- Whether code blocks should always stay dark in light theme or switch Shiki themes by mode.
-- Whether page headers should be framed panels on all docs pages or only component pages.
-- Whether home page should keep particle background or move to the same background language as
-  inner docs.
-- Whether docs-only layout primitives should be created as Angular components or kept as static
-  class patterns in existing components.
+All Phase 1 open decisions are resolved as of 2026-08-15. No open decisions remain; new ones
+should be added here when raised, not left implicit in code review threads.
+
+| Decision | Resolution | Rationale |
+| --- | --- | --- |
+| Code block theme | Always dark, in both light and dark theme | Matches GitHub/Vercel/shadcn convention; avoids maintaining a second Shiki theme |
+| Page header treatment | Framed panel on every docs page, not just component pages | Coherent single header pattern across the whole site is the stated Phase 2 goal |
+| Home page background | Drop particle background, align with inner docs background language | Avoids the home page reading as a different product from the rest of the site; brand richness comes from layout/typography/color instead |
+| Layout primitive componentization | Build `DocsCallout`/`DocsMetric`/`DocsFeatureList` as Angular components | Follows the existing `component-page-*` precedent; avoids a second Phase 3 refactor pass |
+| `component-page-*` naming | Keep existing names; new primitives use `Docs*` prefix | Renaming 50+ existing imports has no functional payoff; the prefix split matches the existing component-page-only vs. docs-wide layering |
+| Roadmap marquee animation | Keep, `[planned]` items unaffected | It is a content presentation device (scrolling item list), not decoration, and already respects `prefers-reduced-motion`; the "avoid ambient motion" rule targets decorative backgrounds like the home page particles, not this |
+
+Full rationale for each is in `DEVLOG.md` under the P29 entry.

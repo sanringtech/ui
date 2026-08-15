@@ -6,6 +6,30 @@
 
 ---
 
+## P29 — Docs visual refresh 三階段整理 / 翻新 / 收斂
+
+目標是把 docs 站從目前偏保守、偏死板的技術文件介面,推進成更現代、精緻、可掃描的產品文件體驗。前置提交已先整理 `apps/docs` 的 visual system、docs semantic tokens、shell/page surfaces 與部分頁面樣式。**Phase 1(整理基線)已收斂完成**:open decisions 全部拍板、token 命名清乾淨、頁面矩陣盤點完畢,細節見 `DEVLOG.md`。接下來進入 Phase 2 大幅視覺翻新。
+
+### Phase 2 — 視覺翻新
+
+- [ ] 重新設計 home page 首屏與主要內容節奏:保留 Sanring 的工程感,但提高視覺層次、品牌記憶點與第一眼完成度。**頁面矩陣稽核發現的具體缺口**(見 `apps/docs/DOCS_VISUAL_SYSTEM.md` Page Matrix Audit):home 完全沒用 `app-docs-page-header`,自己刻整個 hero;H1 字級用 `56/40/32px`,偏離規範的 `56/36px` type scale;`.home-particles` 動畫背景仍在程式碼裡,跟 Decision Log 已拍板的「移除 particle background」決議矛盾,尚未落實
+- [ ] 新增/整理 components 列表頁的 section 樣式:稽核發現這頁沒用 `ComponentPageSectionComponent`,自己刻 H2,手機版也沒有對應規範的 24px 縮字
+- [ ] 翻新 docs shell:調整 header、sidebar、TOC 的密度、active state、hover/focus state、背景層次與窄螢幕表現
+- [ ] 翻新 long-form docs pages:introduction、CLI、registry、MCP、theming、roadmap、changelog 使用一致的 page header、section rhythm、callout/list/card 語言。**稽核發現**:`theming-presets-section.component.ts` 手刻 `<table>`,沒有 overflow-x 容器也沒用共用的 `ComponentPageApiTableComponent`,長主題名稱在窄螢幕有爆版風險
+- [ ] 翻新 component docs:component page header、examples、installation、API table、recent changes 的視覺層次與掃描效率
+- [ ] 補強 light/dark theme 對比與層次:確認兩種主題不只是顏色反轉,而是保留相同資訊階層與 code readability
+- [ ] 移除不必要的 one-off Tailwind styling:把重複出現的頁面級樣式收斂到共同 pattern 或 docs-only primitive
+
+### Phase 3 — 重構與驗證收斂
+
+- [ ] 將已證明穩定的重複 layout 抽成 docs-only Angular component,避免頁面模板持續複製長串 class
+- [ ] 補 docs visual QA checklist:桌面 `1440px` / `1180px` / `1024px`,手機 `390px` / `360px`,light/dark theme,長 code line,中英文文案長度
+- [ ] 建置 Playwright/e2e 基礎設施:查證後確認 repo 內目前完全沒有 playwright config 或既有 e2e 目錄,不是「加測試案例」而已,要先建 test runner + config,再補 screenshot/最小 smoke coverage,至少覆蓋 home、component page、long-form docs page、mobile shell 與 theme toggle
+- [ ] 跑 build/lint/test 後再拆分 commit:整理基線、視覺翻新、重構驗證分開提交,避免之後 review 時混在一起
+- [ ] 將完成項目的查證、決策與驗證結果移到 `DEVLOG.md`,並同步必要的方向性摘要到 `ROADMAP.md`
+
+---
+
 ## P27 — CLI command UX / robustness 補強
 
 針對 `packages/cli/src/commands/*` 逐一掃描後列出的待補項目。現況不是缺少核心 command，而是部分 command 的責任邊界、失敗狀態與 CI/agent 可讀性還可以再收斂。
