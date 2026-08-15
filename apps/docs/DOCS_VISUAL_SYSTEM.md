@@ -147,7 +147,7 @@ Use a fixed type scale. Do not introduce new arbitrary text sizes without updati
 
 | Role | Desktop | Mobile | Weight | Line Height | Usage |
 | --- | ---: | ---: | ---: | ---: | --- |
-| Display | `56px` | `36px` | 600 | `1.04` | Home page H1 only |
+| Display | `clamp(48px, 4.8vw, 84px)` | `50px` | 600 | `0.97` | Home page H1 only; generous but bounded |
 | Page title | `36px` | `30px` | 600 | `1.15` | Docs article and component page H1 |
 | Section title | `28px` | `24px` | 600 | `1.2` | Main H2 sections |
 | Subsection title | `22px` | `20px` | 600 | `1.25` | H3 sections |
@@ -234,7 +234,7 @@ Mobile:
 | Component page default | `832px` |
 | Component page wide | `960px` |
 | Long-form docs page | `832px` |
-| Home page | `1280px` |
+| Home page | `80vw`, max `1760px` |
 
 Use `min-w-0` on custom component hosts and grid/flex children that contain code or long strings.
 
@@ -503,7 +503,7 @@ should be added here when raised, not left implicit in code review threads.
 | `component-page-*` naming | Keep existing names; new primitives use `Docs*` prefix | Renaming 50+ existing imports has no functional payoff; the prefix split matches the existing component-page-only vs. docs-wide layering |
 | Roadmap marquee animation | Keep, `[planned]` items unaffected | It is a content presentation device (scrolling item list), not decoration, and already respects `prefers-reduced-motion`; the "avoid ambient motion" rule targets decorative backgrounds like the home page particles, not this |
 | Phase 4 identity | Position Sanring docs as a compact engineering control surface, not a shadcn-style neutral docs clone | The refresh goal is stronger brand recognition: emphasize CLI, registry, dependency, token, and agent-ready visual language instead of generic card/hero patterns |
-| Home page composition | Keep `Curated component entry points` as the only approved existing section; redesign the rest from a fresh information architecture | The user approved that specific section, not its visual vocabulary as a site-wide system. The command center direction and the later product-entry/system-map direction were both rejected for home, so future work should restart from content priority and visual concept rather than iterating either attempted layout |
+| Home page composition | Use the approved `Curated component entry points` section and the approved source-workflow hero as references; redesign the remaining page from a fresh information architecture | The user approved these two areas independently, not either branch's full visual language. The page should combine their strongest hierarchy cues while remaining distinct from both attempts |
 
 Full rationale for each is in `DEVLOG.md` under the P29 entry.
 
