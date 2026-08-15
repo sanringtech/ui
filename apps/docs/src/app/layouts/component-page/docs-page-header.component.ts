@@ -35,7 +35,7 @@ import { Component, Input } from '@angular/core';
         </h1>
 
         @if (description) {
-          <p class="mb-0 mt-3 max-w-[620px] text-[17px] leading-[1.75] text-[var(--docs-muted)] max-[520px]:text-base">
+          <p class="mb-0 mt-3 max-w-[620px] text-[18px] leading-[1.75] text-[var(--docs-muted)] max-[520px]:text-base">
             {{ description }}
           </p>
         }

@@ -528,6 +528,20 @@ P9 golden fixture 掃完 53 元件後發現一批長期存在的 registry 宣告
 
 **已完成(2026-08-15)**:使用者授權「Phase 2 中間不用再問,一律通過」後,開始做「數值規範」稽核(不是主觀美感,是核對實際寫的 px 數字跟 `DOCS_VISUAL_SYSTEM.md` Type Scale 表格對不對得上)。home page 的 `home.highlights.title`(第 250 行)跟 `home.components.title`(第 293 行)兩個 `<h2>` 都寫 `text-[30px] ... max-[520px]:text-[26px]`——30/26 這兩個數字整張 Type Scale 表格裡完全沒出現,是憑感覺選的,不是表定的 Section title `28px`/`24px`(表格明文規定「Do not introduce new arbitrary text sizes without updating this table」)。已改成 `28px`/`24px`。同一份檔案裡另外兩處看起來像素數字的地方(`text-[20px]`/`text-[22px]`,視覺化面板裡的統計數字跟 highlight 數值)判斷不算違規——沒有動,因為它們是數字/指標展示(視覺系統文件裡 `DocsMetric` 這個未來要做的 pattern 就是給這種用途),不是標題,不適用 heading 的 Type Scale 角色,套用文字級表格反而是誤用。`tsc --noEmit`/`eslint` 驗證乾淨。
 
+- [x] home page 兩個 H2 補上其餘頁面都有的 section accent bar,消掉跟全站的視覺語言落差
+
+**已完成(2026-08-15)**:`ComponentPageSectionComponent`(被所有 long-form/component page 共用)在 level-2 標題旁邊固定加一條 `h-8 w-1.5` 的漸層 accent bar(`bg-[linear-gradient(180deg,var(--docs-accent),var(--docs-accent-alt))]`),但 home page 自己刻的兩個 H2 section(highlights、components)沒有這個元素,讀起來跟其他頁面的標題語言不一致。直接複製 `ComponentPageSectionComponent` 現成的 class 跟 wrapper 結構(`flex items-start gap-3` + 同樣的 accent bar span)套進這兩處,不是自己發明新的視覺處理——這個 pattern 已經在全站每個 long-form/component page 上線很久,風險等同於零。`tsc --noEmit`/`eslint` 驗證乾淨。
+
+- [x] Phase 2「數值規範」全站稽核(long-form 頁面 + component-page 共用層),交給背景 agent 做系統性掃描
+
+**已完成(2026-08-15)**:延續上面 home page 的做法,把「核對 px 數字跟 Type Scale/Spacing/Radius 三張表對不對得上」的方法套用到 7 個 long-form 頁面(introduction/cli/registry/mcp/theming 含 6 個子 section/roadmap/changelog,共 15 個檔案)加上 `layouts/component-page/` 共用元件(12 個檔案,被 50+ 個 component page 共用,改一次全部受益)。抓到 4 處真的偏離、已修:
+
+1. `layouts/component-page/docs-page-header.component.ts`——**這是全站所有 long-form 頁跟 component page 共用的 header**,描述文字用 `text-[17px]`,Type Scale 表格裡沒有 17 這個數字,對應的角色是 Body large(18px/16px,規範明寫給 hero descriptions 用,行高 1.75 跟手機 16px 都已經符合),改成 `18px`。影響面最大的一處修正。
+2. `pages/changelog/changelog-page.component.ts` 與 `layouts/component-page/component-page-recent-changes.component.ts`——兩處狀態 chip 的 `CHIP_CLASS` 都用 `text-[11px]`,低於 Type Scale 最小角色 Caption(12px,規範明寫「Chips, labels, uppercase headings」正好對應這個用途),改成 `text-xs`(12px)。
+3. `pages/introduction/introduction-page.component.ts` 兩處「段落說明→code block」的間距用 `mt-4`(16px),但 Spacing 表定義「Body to example」是 24-36px(桌機)/24px(手機),而且同一頁跟 cli/registry/mcp 三頁在完全相同的情境下全部一致用 `mt-6`(24px)——這兩處是隨手漏改的孤例,已統一成 `mt-6`。
+
+三處**發現偏離但判斷不出正確值,沒有動,只回報**:`component-page-recent-changes.component.ts` 的面板 padding(`p-6`/`p-4`)介於 Card padding(16-20px)跟 Hero panel padding(28-36px)兩個表格角色中間,查無其他線索判斷該歸哪一類;同檔案 H2 用 `text-xl`(20px)且無響應式降級,精神上介於 Section title 跟 Subsection title 之間,不確定是刻意壓低視覺層級(Recent Changes 文件裡定位成「支援區塊,不是主要內容」)還是漏掉響應式;`roadmap-page.component.ts` 5 處章節說明段落用 `text-sm`(14px,Small 角色本身合法),但其他四個 long-form 頁同角色內容一律用 `text-base`(16px, Body)——這屬於「該歸哪個角色」的設計判斷,不是數字亂填,沒有動。全部改動跑過 `tsc --noEmit`/`eslint`,另外我自己重新對 4 個改動檔案再跑一次 lint/typecheck、外加整個 `ng build docs` 全站編譯(因為 `docs-page-header`/`component-page-recent-changes` 是共用層,影響 50+ 頁面),全部乾淨。
+
 ---
 
 ## 查證後確認「不算差距」的項目(備查,避免重複討論)

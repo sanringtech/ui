@@ -94,7 +94,7 @@ interface IntroNextLink {
           {{ i18n.t('intro.quickStart.body') }}
         </p>
         <div
-          class="mt-4 overflow-hidden rounded-[var(--sanring-radius)] border border-[var(--docs-border)]"
+          class="mt-6 overflow-hidden rounded-[var(--sanring-radius)] border border-[var(--docs-border)]"
         >
           <app-component-page-code-block [code]="cliWorkflow" language="bash" />
         </div>
@@ -102,7 +102,7 @@ interface IntroNextLink {
           {{ i18n.t('intro.quickStart.tailwind') }}
         </p>
         <div
-          class="mt-4 overflow-hidden rounded-[var(--sanring-radius)] border border-[var(--docs-border)]"
+          class="mt-6 overflow-hidden rounded-[var(--sanring-radius)] border border-[var(--docs-border)]"
         >
           <app-component-page-code-block [code]="tailwindSource" language="css" />
         </div>

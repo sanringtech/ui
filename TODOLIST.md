@@ -13,8 +13,10 @@
 ### Phase 2 — 視覺翻新
 
 - [ ] 重新設計 home page 首屏與主要內容節奏:保留 Sanring 的工程感,但提高視覺層次、品牌記憶點與第一眼完成度。~~`.home-particles` 動畫背景~~、~~H1 字級偏離 type scale~~ 兩個稽核發現的具體缺口已修掉(見 `DEVLOG.md`);首屏是否要用 `app-docs-page-header`(規範刻意把 Display 56px 保留給 home H1、跟 DocsPageHeaderComponent 的 Page title 36px 分開),以及整體節奏/品牌記憶點的完整重新設計,還沒動
-- [ ] 翻新 long-form docs pages:introduction、CLI、registry、MCP、theming、roadmap、changelog 使用一致的 page header、section rhythm、callout/list/card 語言。結構面已對齊(page matrix audit 確認),`theming-presets-section.component.ts` 表格 overflow 缺口已修;**還沒做的**是超出「符合規範」以外、真正讓這些頁面更精緻好掃描的視覺提升,這塊需要實際肉眼比對,不是靠讀 code 能完成
-- [ ] 翻新 component docs:component page header、examples、installation、API table、recent changes 的視覺層次與掃描效率。抽查 6 個 component page 結構面正常;跟上一項一樣,視覺提升本身需要肉眼驗證才能動
+- [ ] 翻新 long-form docs pages:introduction、CLI、registry、MCP、theming、roadmap、changelog 使用一致的 page header、section rhythm、callout/list/card 語言。結構面已對齊(page matrix audit 確認),數值規範(字級/間距對照 Type Scale/Spacing 表格)已全面稽核並修完 4 處真的偏離,見 `DEVLOG.md`;**還沒做的**是超出「符合規範」以外、真正讓這些頁面更精緻好掃描的視覺提升,這塊需要實際肉眼比對,不是靠讀 code 能完成
+- [ ] 翻新 component docs:component page header、examples、installation、API table、recent changes 的視覺層次與掃描效率。結構面與數值規範都已稽核過(見 `DEVLOG.md`,含全站共用的 `docs-page-header`/`component-page-recent-changes` 修正);跟上一項一樣,視覺提升本身需要肉眼驗證才能動
+- [ ] `component-page-recent-changes.component.ts` 兩個待決:面板 padding(`p-6`/`p-4`)介於 Spacing 表 Card padding(16-20px)跟 Hero panel padding(28-36px)兩個角色中間,不確定該歸哪一類;H2 用 `text-xl`(20px)且無響應式降級,介於 Type Scale 的 Section title 跟 Subsection title 之間,不確定是刻意壓低視覺層級(這區塊本來就定位成支援性內容)還是漏補手機字級——兩個都需要人判斷,不要自己套一個表格值上去
+- [ ] `roadmap-page.component.ts` 5 處章節說明段落用 `text-sm`(14px, Small 角色),其他 long-form 頁同角色內容一律用 `text-base`(16px, Body)——14px 本身合法,但這是「這裡的內容算 Small 還是 Body」的角色歸屬判斷,不是數字亂填,需要決定要不要統一
 
 ### Phase 3 — 重構與驗證收斂
 

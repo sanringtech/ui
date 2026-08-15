@@ -22,7 +22,7 @@ const COMPONENT_TYPE_CLASS: Record<ComponentChangeType, string> = {
 };
 
 const CHIP_CLASS =
-  'shrink-0 rounded-[var(--sanring-radius-xs)] px-1.5 py-0.5 text-[11px] font-medium leading-none uppercase tracking-wide';
+  'shrink-0 rounded-[var(--sanring-radius-xs)] px-1.5 py-0.5 text-xs font-medium leading-none uppercase tracking-wide';
 
 const ROW_CLASS =
   'flex items-start gap-2.5 text-sm font-normal leading-relaxed text-[var(--docs-muted)]';

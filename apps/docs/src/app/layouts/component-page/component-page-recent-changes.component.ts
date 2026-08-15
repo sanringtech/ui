@@ -23,7 +23,7 @@ const TYPE_CLASS: Record<ComponentChangeType, string> = {
 };
 
 const CHIP_CLASS =
-  'shrink-0 rounded-[var(--sanring-radius-xs)] px-1.5 py-0.5 text-[11px] font-medium leading-none uppercase tracking-normal';
+  'shrink-0 rounded-[var(--sanring-radius-xs)] px-1.5 py-0.5 text-xs font-medium leading-none uppercase tracking-normal';
 const INLINE_CODE_CLASS =
   'rounded-[var(--sanring-radius-xs)] bg-[var(--docs-surface-strong)] px-1 py-0.5 font-mono text-[0.9em] text-[var(--docs-fg)]';
 
