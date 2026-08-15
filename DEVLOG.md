@@ -594,6 +594,24 @@ P9 golden fixture 掃完 53 元件後發現一批長期存在的 registry 宣告
 
 **驗證**:agent 自己跑過 `tsc --noEmit`/`eslint`/`ng build docs` 都乾淨,我又獨立重跑一次三項確認(不是只信任 agent 的回報)。另外用 Playwright 截圖 + `Read` 工具肉眼比對了 `badge`(純框案例)、`registry`(帶 `mt-6` 案例)、`theming` 全頁(含兩個正確跳過的案例)——三種情況渲染結果都正常,沒有雙重邊框、沒有斷開的縫隙,`mt-6` 移到元件標籤上之後間距跟改之前一樣。這是這次系列第一次能用真的肉眼驗證取代「盲目相信沒問題」,比純看 build 綠燈更有信心。
 
+- [x] Phase 4 重新開題:把「沒有具體待辦」改成 Sanring 風格差異化 backlog
+
+**已完成(2026-08-15,使用者指定方向)**:使用者明確提出 Phase 4 不是要修既有 bug,而是希望重新開始設計視覺,並且盡量跟原生 shadcn 拉開差距、提高 Sanring 的風格辨識度。回頭整理 TODOLIST 後判斷:這跟已完成的 Phase 2 不重複。Phase 2 處理的是「符合規範」與可用數字/codebase 先例驗證的視覺收斂;Phase 4 處理的是品牌辨識度、視覺記憶點與掃描體驗,也就是超出規範以外的設計提升。因此把 `TODOLIST.md` 的 P29 Phase 4 從「已解封,但目前沒有具體待辦」改成「視覺精修與 Sanring 風格差異化」,保留 home / long-form docs / component docs 三個 epic,並新增 Direction、Home、Long-form Docs、Component Docs、Verification 五組可執行拆解。
+
+**設計決策**:Phase 4 的視覺 thesis 寫進 `apps/docs/DOCS_VISUAL_SYSTEM.md`:Sanring docs should feel like a compact engineering control surface for installing, inspecting, and composing Angular UI primitives。後續翻新要避免走 shadcn clone 路線(大留白、黑白灰、單純 code preview card),改以 CLI command center、registry nodes、component dependency graph、token mapping、install result timeline、agent-readable status 作為 Sanring 自己的產品視覺語彙。mint accent 應用在訊號線、狀態燈、active edge、命令結果,而不只是 CTA 顏色;radius 與陰影維持專業工具感,避免大圓角、大陰影、行銷式漸層。
+
+- [x] Phase 4 第一批實作:Home 首屏改成 Sanring command center
+
+**已完成(2026-08-15)**:先從最能定義整體風格的 home page 下手,把原本偏「文件 hero + registry/CLI 卡片」的右側視覺改成更明確的 command center。首屏右側新增 4 段 pipeline status(resolve/install/compose/verify)、registry graph(帶 source 節點與 ready 狀態)、CLI run 面板(命令、0 drift、resolved/mapped/ready 輸出)、底部 signal strip(components/docs token/MCP)。mint accent 改用在訊號線、狀態點、active edge 與命令輸出,不只是 CTA 色。首頁文案也同步改成「installing, inspecting, and composing Angular UI primitives」的控制面語氣,四張 feature card 從一般 highlights 改成 Install / Inspect / Compose / Ship 的工作流敘事。這一批只動 home 與 i18n,沒有展開 long-form/component docs,避免一次把 Phase 4 全部混在一起。
+
+**驗證**:`pnpm exec tsc --noEmit` 通過;`pnpm lint` 通過。Playwright 需啟動 localhost dev server,在 sandbox 內直接跑會被 `listen EPERM 127.0.0.1:4310` 擋下,用 escalated local server 跑 `pnpm exec playwright test --config=apps/docs/playwright.config.ts apps/docs/e2e/home.spec.ts apps/docs/e2e/mobile-shell.spec.ts apps/docs/e2e/theme-toggle.spec.ts`,10 tests 全過。另用 Playwright 等 `h1` 後拍 home light/dark/mobile 快照到 `/tmp`,肉眼檢查桌機 light/dark 沒有重疊或破版,dark 版的 command center 辨識度明顯提高;手機 390px 無水平溢出,CTA 與 command center 依序堆疊,資訊密度偏高但可讀。
+
+**後續修正(2026-08-15,使用者截圖回報)**:使用者指出兩個問題:(1) registry graph 的垂直線和節點沒有對齊;(2) hero 底部 signal strip(`52/docs-*/MCP`)跟下方 Registry snapshot 的 Components/Registry/CLI 概況資訊打架。修法:registry graph 改成 `grid-cols-[12px_minmax(0,1fr)]`,點和線放在同一個固定軌道,線從第一點中心延伸到最後一點中心,不再用卡片絕對定位往左推;hero signal 改成三個特色訊號(`source-owned`/`token-visible`/`agent-readable`),下方 snapshot 改成 Inventory/current docs coverage/source channel/install tool,並把原本不明確的 `1 Registry` 改成 `source Source channel`,讓上方講「特色」、下方講「概況」,避免重複。`pnpm exec tsc --noEmit`/`pnpm lint` 通過,Playwright home/mobile/theme subset 10 tests 全過,重新截圖確認暗色版點線已對齊、資訊層級分開。
+
+**首頁重做嘗試撤回(2026-08-15,使用者重新定義方向後的修正)**:使用者明確表示首頁目前只有 `Curated component entry points` 區塊令人滿意,但這不代表要把該區塊的語彙擴張成整站方向。依此曾嘗試移除 command center、signal strip、snapshot 與四張 workflow cards,改成首頁入口、系統導覽、元件索引與後續文件探索的版面;使用者隨後明確指出這個調整後的 home page 很差。因此此實作已撤回,首頁檔案與首頁 i18n 文案回到改動前狀態。後續不得沿用這版產品入口 / 系統導覽配置作為基礎,正確狀態是「首頁仍待重新設計」。
+
+**撤回驗證**:已確認工作樹只剩 `TODOLIST.md`、`DEVLOG.md`、`apps/docs/DOCS_VISUAL_SYSTEM.md` 三個紀錄檔變更;`home-page.component.ts` 與首頁中英文 i18n 檔已無本次錯誤方案 diff。
+
 ## 查證後確認「不算差距」的項目(備查,避免重複討論)
 
 - **PR 沒有測試/型別檢查關卡**:原 P0 已完成,不再放主 todo。已新增 PR 觸發的 CI workflow,跑 `pnpm test`、`tsc --noEmit`、`pnpm lint`。

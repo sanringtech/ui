@@ -51,6 +51,28 @@ Sanring docs should feel:
 The target style is a refined technical documentation interface: structured, spacious where it
 matters, compact where repeated navigation or reference content needs scanning.
 
+### Phase 4 Style Thesis
+
+Phase 4 moves beyond conformance and into Sanring-specific identity. The docs should feel like a
+compact engineering control surface for installing, inspecting, and composing Angular UI
+primitives.
+
+This means Sanring should not read as a shadcn clone with a different accent color. Avoid using
+large empty hero space, neutral-only card stacks, or a single code preview card as the main brand
+memory. Prefer product-native visual language:
+
+- CLI command center surfaces.
+- Registry nodes and source maps.
+- Component dependency graphs.
+- Token mapping and light/dark comparison panels.
+- Install result timelines.
+- Agent-readable status and safe-operation boundaries.
+
+Use the mint accent as signal rather than decoration: status lights, active edges, command output,
+selection traces, and dependency links. Keep the physical feel crisp and tool-like: `6px`/`8px`
+radius for most controls and repeated surfaces, `12px` only for major panels, restrained shadows,
+and no decorative blobs or generic marketing gradients.
+
 ## Color System
 
 ### Raw Palettes
@@ -480,6 +502,8 @@ should be added here when raised, not left implicit in code review threads.
 | Layout primitive componentization | Build `DocsCallout`/`DocsMetric`/`DocsFeatureList` as Angular components | Follows the existing `component-page-*` precedent; avoids a second Phase 3 refactor pass |
 | `component-page-*` naming | Keep existing names; new primitives use `Docs*` prefix | Renaming 50+ existing imports has no functional payoff; the prefix split matches the existing component-page-only vs. docs-wide layering |
 | Roadmap marquee animation | Keep, `[planned]` items unaffected | It is a content presentation device (scrolling item list), not decoration, and already respects `prefers-reduced-motion`; the "avoid ambient motion" rule targets decorative backgrounds like the home page particles, not this |
+| Phase 4 identity | Position Sanring docs as a compact engineering control surface, not a shadcn-style neutral docs clone | The refresh goal is stronger brand recognition: emphasize CLI, registry, dependency, token, and agent-ready visual language instead of generic card/hero patterns |
+| Home page composition | Keep `Curated component entry points` as the only approved existing section; redesign the rest from a fresh information architecture | The user approved that specific section, not its visual vocabulary as a site-wide system. The command center direction and the later product-entry/system-map direction were both rejected for home, so future work should restart from content priority and visual concept rather than iterating either attempted layout |
 
 Full rationale for each is in `DEVLOG.md` under the P29 entry.
 

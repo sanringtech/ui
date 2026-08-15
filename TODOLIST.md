@@ -8,15 +8,54 @@
 
 ## P29 — Docs visual refresh 三階段整理 / 翻新 / 收斂
 
-目標是把 docs 站從目前偏保守、偏死板的技術文件介面,推進成更現代、精緻、可掃描的產品文件體驗。前置提交已先整理 `apps/docs` 的 visual system、docs semantic tokens、shell/page surfaces 與部分頁面樣式。**Phase 1(整理基線)、Phase 2(視覺翻新裡所有能用規則/數字/codebase 先例客觀驗證的部分)、Phase 3(重構與驗證收斂)都已收斂完成**,細節見 `DEVLOG.md`。Phase 2 原本列的「首屏重新設計」「long-form/component docs 視覺提升」三項無法在沒有瀏覽器的情況下負責任地繼續做,移到下面 Phase 4,不再卡在 Phase 2 裡。
+目標是把 docs 站從目前偏保守、偏死板的技術文件介面,推進成更現代、精緻、可掃描的產品文件體驗。前置提交已先整理 `apps/docs` 的 visual system、docs semantic tokens、shell/page surfaces 與部分頁面樣式。**Phase 1(整理基線)、Phase 2(視覺翻新裡所有能用規則/數字/codebase 先例客觀驗證的部分)、Phase 3(重構與驗證收斂)都已收斂完成**,細節見 `DEVLOG.md`。
 
-### Phase 4 — 視覺精修(已解封,但目前沒有具體待辦)
+### Phase 4 — 視覺精修與 Sanring 風格差異化
 
-原本以為這個環境沒有瀏覽器/screenshot 工具,後來發現 Playwright 截圖 + `Read` 工具可以組合起來實際看到畫面(見 `DEVLOG.md`),所以解封條件已經滿足。用這個方法對 home(light/dark/mobile)、component page、long-form pages 拍了一輪基準快照,**沒有抓到明顯要修的視覺問題**——現況已經相當完整。所以這裡目前是空的,不是卡住,是還沒有具體要做的項目。之後要往「更精緻」推進,需要具體方向(使用者指定視覺調性,或針對特定頁面截圖挑毛病),而不是自己盲目加東西。
+Phase 4 已解封:Playwright 截圖 + `Read` 工具可以實際檢視 home(light/dark/mobile)、component page、long-form pages 的畫面。前一輪基準快照沒有抓到明顯 bug,所以 Phase 4 不是修壞掉的畫面,而是進入「有方向的重新設計」:讓 Sanring 跟原生 shadcn 的極簡灰階文件感拉開差距,建立更高辨識度的工程產品語言。
 
-- [ ] 重新設計 home page 首屏與主要內容節奏:保留 Sanring 的工程感,但提高視覺層次、品牌記憶點與第一眼完成度。首屏是否要用 `app-docs-page-header`(規範刻意把 Display 56px 保留給 home H1、跟 DocsPageHeaderComponent 的 Page title 36px 分開)這件事規範已經有答案,不算卡點
+**設計判斷**:這裡跟原本 Phase 2 不重複。Phase 2 已處理「符合規範」與可客觀驗證的部分;Phase 4 處理的是超出規範以外的品牌辨識度、視覺記憶點與掃描體驗。原本列在 Phase 4 的三個大項保留為 epic,下面新增具體可執行拆解。
+
+#### Direction — 視覺定位
+
+- [x] 定義 Sanring docs 的視覺 thesis:`compact engineering control surface for installing, inspecting, and composing Angular UI primitives`
+- [x] 避免走 shadcn clone 路線:不以大留白、黑白灰、單純 code preview card 作為主要記憶點
+- [x] 建立 Sanring 專屬視覺語彙:CLI command center、registry nodes、component dependency graph、token mapping、install result timeline、agent-readable status
+- [x] 保持專業工具感:radius 維持俐落(`6px`/`8px`/少量 `12px`),避免過度柔和、大圓角、大陰影、行銷式漸層
+
+#### Home — 首屏與首頁節奏
+
+- [ ] 重新設計 home page 首屏與主要內容節奏:保留 Sanring 的工程感,但提高視覺層次、品牌記憶點與第一眼完成度。首屏是否要用 `app-docs-page-header` 不是卡點:規範刻意把 Display `56px` 保留給 home H1,跟 DocsPageHeaderComponent 的 Page title `36px` 分開
+- [x] 首版方向已撤回:registry / CLI command center 曾完成驗證,但不符合使用者對首頁整體的期待,保留於 `DEVLOG.md` 作為歷史紀錄
+- [x] 第二版方向已撤回:移除 command center 後改成產品入口 / 系統導覽 / 元件索引 / 文件探索的首頁方案,仍被使用者判定視覺方向很差,不得作為後續依據
+- [ ] 重新盤點首頁資訊架構:先決定首頁到底要強調哪些特色、哪些證據、哪些入口,避免 Components / Registry / CLI 資訊重複或互相搶層級
+- [ ] 重新提出至少一版更大幅度的首頁視覺方向,不要沿用第二版的產品入口 / 系統導覽配置,也不要把 `Curated component entry points` 的語彙擴張成整頁
+- [ ] 保留並重新安置使用者目前唯一認可的 `Curated component entry points` 區塊,但不要讓它限制整個首頁的設計語言
+- [ ] 驗證重做後的首頁在 light/dark/mobile 狀態下沒有導覽、排版或主題切換回歸
+
+#### Long-form Docs — 內容頁視覺提升
+
 - [ ] 翻新 long-form docs pages(introduction、CLI、registry、MCP、theming、roadmap、changelog):超出「符合規範」以外、真正讓頁面更精緻好掃描的視覺提升
+- [ ] CLI page 使用 command groups、流程線、exit state、dry-run/result summary,讓頁面像可操作的 CLI 參考面板
+- [ ] Registry page 使用 registry schema、source graph、component/shared/block 分區,強化 Sanring registry-first 的產品差異
+- [ ] MCP page 使用 agent tool map、read/write boundary、safe operation flow,呈現 agent-ready 的工作方式
+- [ ] Theming page 使用 token cascade、light/dark comparison、semantic token map,把主題系統做成可理解的視覺模型
+- [ ] Changelog page 往 release console / timeline 方向調整,比普通 news feed 更像工程釋出紀錄
+
+#### Component Docs — 掃描效率與工程證據
+
 - [ ] 翻新 component docs:component page header、examples、installation、API table、recent changes 超出「符合規範」以外的視覺層次與掃描效率提升
+- [ ] Component header 補強工程 metadata 呈現:registry name、install command、package path、stability/status、updated/recent changes affordance
+- [ ] Example previewer 強化 Preview / Code / Install / API 的切換與視覺階層,讓使用者更快定位可複製資訊
+- [ ] API table 朝 dense reference surface 調整:提高欄位掃描效率,但保留 mobile card layout 的可讀性
+- [ ] Recent changes 改成 compact release strip,避免像頁尾附錄
+- [ ] 補一致的 evidence chips:a11y、keyboard support、controlled/uncontrolled、SSR/browser-only、registry deps 等,把 Sanring 的工程品質變成可見資產
+
+#### Verification — 視覺驗證
+
+- [ ] 每次 Phase 4 改動後用 Playwright 重拍 home light/dark/mobile、代表性 long-form page、代表性 component page
+- [ ] 檢查 `360px` / `390px` 無水平 overflow,長 command/code line 不撐破版面,中英文文案長度不互相遮擋
+- [ ] 完成後將具體設計決策、截圖觀察與驗證結果同步到 `DEVLOG.md`
 
 ---
 
