@@ -16,9 +16,9 @@
 - [ ] 跑 build/lint/test 後再拆分 commit:整理基線、視覺翻新、重構驗證分開提交,避免之後 review 時混在一起
 - [ ] 將完成項目的查證、決策與驗證結果移到 `DEVLOG.md`,並同步必要的方向性摘要到 `ROADMAP.md`
 
-### Phase 4 — 視覺精修(卡在需要肉眼驗證,暫緩)
+### Phase 4 — 視覺精修(已解封,但目前沒有具體待辦)
 
-這三項的共同點:規範裡查得到的字級/間距/token/先例都已經核對過(見 `DEVLOG.md` Phase 2 條目),剩下的是「這樣改會不會比較好看」的主觀判斷,這個環境沒有瀏覽器/screenshot 工具,盲改風險太高,所以先移出 Phase 2、不列入常態進度。**解封條件**:Phase 3 的 Playwright/screenshot 基礎設施建好、或使用者提供截圖/具體視覺方向(像先前 CLI 面板顏色、主題切換器 padding 那兩次一樣),才適合繼續動。
+原本以為這個環境沒有瀏覽器/screenshot 工具,後來發現 Playwright 截圖 + `Read` 工具可以組合起來實際看到畫面(見 `DEVLOG.md`),所以解封條件已經滿足。用這個方法對 home(light/dark/mobile)、component page、long-form pages 拍了一輪基準快照,**沒有抓到明顯要修的視覺問題**——現況已經相當完整。所以這裡目前是空的,不是卡住,是還沒有具體要做的項目。之後要往「更精緻」推進,需要具體方向(使用者指定視覺調性,或針對特定頁面截圖挑毛病),而不是自己盲目加東西。
 
 - [ ] 重新設計 home page 首屏與主要內容節奏:保留 Sanring 的工程感,但提高視覺層次、品牌記憶點與第一眼完成度。首屏是否要用 `app-docs-page-header`(規範刻意把 Display 56px 保留給 home H1、跟 DocsPageHeaderComponent 的 Page title 36px 分開)這件事規範已經有答案,不算卡點
 - [ ] 翻新 long-form docs pages(introduction、CLI、registry、MCP、theming、roadmap、changelog):超出「符合規範」以外、真正讓頁面更精緻好掃描的視覺提升

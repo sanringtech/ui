@@ -572,6 +572,14 @@ P9 golden fixture 掃完 53 元件後發現一批長期存在的 registry 宣告
 
 寫的時候踩到一個真的很有參考價值的坑:`home.spec.ts` 一開始用 `getByRole('link', { name: 'Browse components' })` 抓不到元素,以為選字錯了,查 Playwright 存的 accessibility snapshot 才發現這個 `<a sanringBtn routerLink="/components">` 實際上的 role 是 **`button`** 不是 `link`——`sanringBtn` 指令會把宿主元素的 ARIA role 覆寫成 button,不管它原本是 `<a>` 還是 `<button>`。這是 `@sanring/ui` 既有的設計行為(讓消費者可以用 `<a sanringBtn>` 做出「看起來是按鈕的連結」),不是這次要修的 bug,只是把測試斷言改成符合實際 role。全部 18 個測試(9 個 spec × 2 個 project)`pnpm exec playwright test --config=apps/docs/playwright.config.ts` 綠燈。加了 `pnpm test:e2e:docs` 腳本方便之後跑。`.gitignore` 補了 `playwright-report/`/`test-results/`。QA checklist 直接寫進 `DOCS_VISUAL_SYSTEM.md` 新增的「Visual QA Checklist」章節,每一條都標明有沒有 `[automated]` 對應的 e2e 覆蓋,講清楚 Playwright 這層只驗證「有沒有渲染出來、有沒有爆版」這種結構性斷言,「好不好看」這種主觀判斷還是驗證不到,需要肉眼或視覺回歸工具(這個 repo 目前沒有 approved baseline,之後如果要做 screenshot diff 得另外決定要不要投資這塊)。
 
+- [x] 重大更正:之前一路認定「這個環境沒有瀏覽器/screenshot 工具,Phase 4 沒辦法做」是錯的——Playwright 截圖 + `Read` 工具可以讀圖片,兩個合起來我其實看得到畫面
+
+**已完成(2026-08-15)**:建置完 Playwright 之後,順手測了一件事:寫一個 `page.screenshot()` 把渲染結果存成 PNG,再用 `Read` 工具讀那個 PNG 檔——結果真的能看到實際畫面,不是只有 DOM/accessibility tree。這推翻了 Phase 1 到 Phase 3 一路的假設(「這個環境沒有瀏覽器,純美感判斷不能碰」),Phase 4 移出去的三項理論上現在有辦法做了。
+
+用這個方法對現有狀態拍了一輪快照當基準:home(light/dark/mobile 390)、`button` component page(light/dark,含 recent-changes 區塊特寫)、`introduction` 頁、`roadmap` 頁、`theming` 頁的 presets 表格。**結論:目前狀態其實相當完整,沒有看到明顯需要緊急修的視覺問題**——particle background 移除後 home 首屏乾淨;accent bar 補上後 home 兩個 H2 跟其他頁面标題語言一致;light/dark 兩個主題的層次都算清楚,CLI run 面板裡「ready to compose」那行 fix 後清楚可讀;`recent-changes` 面板改完的 padding/字級比例看起來恰當,不會太擠也不會太鬆;`theming` presets 表格在桌機寬度下正常顯示(overflow 修復是防禦性的,這個寬度本來就用不到,沒有回歸);roadmap 頁的跑馬燈只是截圖抓到動畫過程中chip 被裁到一半,不是真的版面錯誤。這輪快照存在 scratchpad,沒有進 repo(用完即丟,不是要建立 approved baseline 的視覺回歸測試)。
+
+**影響**:Phase 4 三項(home 首屏創意重新設計、long-form/component docs 超規範視覺提升)不再是「完全卡住」的狀態,但目前這輪快照沒抓到具體要修的東西——不是「看不到所以不能做」,是「看了一輪,現況已經夠好,沒有明顯要改的」。之後如果要往「更精緻」的方向推,需要具體方向(例如使用者指定想要哪種視覺調性、或針對特定頁面截圖挑毛病),而不是我自己盲目加東西。
+
 ## 查證後確認「不算差距」的項目(備查,避免重複討論)
 
 - **PR 沒有測試/型別檢查關卡**:原 P0 已完成,不再放主 todo。已新增 PR 觸發的 CI workflow,跑 `pnpm test`、`tsc --noEmit`、`pnpm lint`。
