@@ -55,7 +55,10 @@ import { otpInputPage, otpInputPageExamples } from './otp-input.docs';
 
       <app-component-page-section [section]="section('basic')">
         <app-component-page-code-previewer [code]="examples.basic" language="angular-html">
-          <div previewer class="flex min-h-24 w-full items-center justify-start overflow-x-auto px-1 sm:justify-center sm:px-4">
+          <div
+            previewer
+            class="flex min-h-24 w-full items-center justify-start overflow-x-auto px-1 sm:justify-center sm:px-4"
+          >
             <sanring-otp-input
               [length]="6"
               size="lg"
@@ -69,11 +72,7 @@ import { otpInputPage, otpInputPageExamples } from './otp-input.docs';
       <app-component-page-section [section]="section('usage')">
         <div class="grid gap-6">
           <app-component-page-usage-imports [code]="examples.usageImport" />
-          <div
-            class="overflow-hidden rounded-[var(--sanring-radius)] border border-[var(--docs-border)]"
-          >
-            <app-component-page-code-block [code]="examples.usageMain" language="angular-html" />
-          </div>
+          <app-component-page-code-block [code]="examples.usageMain" language="angular-html" />
         </div>
       </app-component-page-section>
 
@@ -88,7 +87,10 @@ import { otpInputPage, otpInputPageExamples } from './otp-input.docs';
         <div class="grid gap-2">
           <app-component-page-section [section]="section('example-pattern')">
             <app-component-page-code-previewer [code]="examples.pattern" language="angular-html">
-              <div previewer class="flex min-h-24 w-full items-center justify-start overflow-x-auto px-1 sm:justify-center sm:px-4">
+              <div
+                previewer
+                class="flex min-h-24 w-full items-center justify-start overflow-x-auto px-1 sm:justify-center sm:px-4"
+              >
                 <sanring-otp-input
                   [length]="6"
                   [pattern]="digitsOnlyPattern"
@@ -102,7 +104,10 @@ import { otpInputPage, otpInputPageExamples } from './otp-input.docs';
 
           <app-component-page-section [section]="section('example-separator')">
             <app-component-page-code-previewer [code]="examples.separator" language="angular-html">
-              <div previewer class="flex min-h-24 w-full items-center justify-start overflow-x-auto px-1 sm:justify-center sm:px-4">
+              <div
+                previewer
+                class="flex min-h-24 w-full items-center justify-start overflow-x-auto px-1 sm:justify-center sm:px-4"
+              >
                 <sanring-otp-input
                   [length]="6"
                   [value]="separatorValue"
@@ -124,7 +129,10 @@ import { otpInputPage, otpInputPageExamples } from './otp-input.docs';
 
           <app-component-page-section [section]="section('example-disabled')">
             <app-component-page-code-previewer [code]="examples.disabled" language="angular-html">
-              <div previewer class="flex min-h-24 w-full items-center justify-start overflow-x-auto px-1 sm:justify-center sm:px-4">
+              <div
+                previewer
+                class="flex min-h-24 w-full items-center justify-start overflow-x-auto px-1 sm:justify-center sm:px-4"
+              >
                 <sanring-otp-input
                   [value]="'123456'"
                   size="lg"
@@ -138,7 +146,10 @@ import { otpInputPage, otpInputPageExamples } from './otp-input.docs';
 
           <app-component-page-section [section]="section('example-controlled')">
             <app-component-page-code-previewer [code]="examples.controlled" language="angular-html">
-              <div previewer class="flex min-h-24 w-full items-center justify-start overflow-x-auto px-1 sm:justify-center sm:px-4">
+              <div
+                previewer
+                class="flex min-h-24 w-full items-center justify-start overflow-x-auto px-1 sm:justify-center sm:px-4"
+              >
                 <sanring-otp-input
                   [value]="controlledValue()"
                   size="lg"
@@ -152,7 +163,10 @@ import { otpInputPage, otpInputPageExamples } from './otp-input.docs';
 
           <app-component-page-section [section]="section('example-invalid')">
             <app-component-page-code-previewer [code]="examples.invalid" language="angular-html">
-              <div previewer class="grid min-h-32 w-full max-w-sm content-center gap-3 overflow-x-auto px-1 sm:px-4">
+              <div
+                previewer
+                class="grid min-h-32 w-full max-w-sm content-center gap-3 overflow-x-auto px-1 sm:px-4"
+              >
                 <sanring-field>
                   <label sanringLabel for="invalid-otp-code">
                     {{ i18n.t('otpInput.demo.verificationCode') }}
@@ -174,7 +188,10 @@ import { otpInputPage, otpInputPageExamples } from './otp-input.docs';
 
           <app-component-page-section [section]="section('example-four-digits')">
             <app-component-page-code-previewer [code]="examples.fourDigits" language="angular-html">
-              <div previewer class="flex min-h-24 w-full items-center justify-start overflow-x-auto px-1 sm:justify-center sm:px-4">
+              <div
+                previewer
+                class="flex min-h-24 w-full items-center justify-start overflow-x-auto px-1 sm:justify-center sm:px-4"
+              >
                 <sanring-otp-input
                   [length]="4"
                   [pattern]="digitsOnlyPattern"
@@ -191,7 +208,10 @@ import { otpInputPage, otpInputPageExamples } from './otp-input.docs';
               [code]="examples.alphanumeric"
               language="angular-html"
             >
-              <div previewer class="flex min-h-24 w-full items-center justify-start overflow-x-auto px-1 sm:justify-center sm:px-4">
+              <div
+                previewer
+                class="flex min-h-24 w-full items-center justify-start overflow-x-auto px-1 sm:justify-center sm:px-4"
+              >
                 <sanring-otp-input
                   type="alphanumeric"
                   [length]="5"

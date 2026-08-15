@@ -87,11 +87,7 @@ import { comboboxPage, comboboxPageExamples } from './combobox.docs';
             [code]="examples.usageImport"
             [individualCode]="examples.usageIndividualImports"
           />
-          <div
-            class="overflow-hidden rounded-[var(--sanring-radius)] border border-[var(--docs-border)]"
-          >
-            <app-component-page-code-block [code]="examples.usageMain" language="angular-html" />
-          </div>
+          <app-component-page-code-block [code]="examples.usageMain" language="angular-html" />
         </div>
       </app-component-page-section>
 
@@ -103,11 +99,7 @@ import { comboboxPage, comboboxPageExamples } from './combobox.docs';
       </app-component-page-section>
 
       <app-component-page-section [section]="section('composition')">
-        <div
-          class="overflow-hidden rounded-[var(--sanring-radius)] border border-[var(--docs-border)]"
-        >
-          <app-component-page-code-block [code]="examples.composition" language="bash" />
-        </div>
+        <app-component-page-code-block [code]="examples.composition" language="bash" />
       </app-component-page-section>
 
       <app-component-page-section [section]="section('example')">
@@ -281,7 +273,9 @@ import { comboboxPage, comboboxPageExamples } from './combobox.docs';
                       </sanring-combobox-list>
                     </sanring-combobox-content>
                   </sanring-combobox>
-                  <sanring-error-message>{{ i18n.t('combobox.demo.fieldError') }}</sanring-error-message>
+                  <sanring-error-message>{{
+                    i18n.t('combobox.demo.fieldError')
+                  }}</sanring-error-message>
                 </sanring-field>
               </div>
             </app-component-page-code-previewer>

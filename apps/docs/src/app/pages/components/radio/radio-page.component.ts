@@ -68,11 +68,7 @@ import { radioGroupApiRows, radioItemApiRows, radioPage, radioPageExamples } fro
             [code]="examples.usageImport"
             [individualCode]="examples.usageIndividualImports"
           />
-          <div
-            class="overflow-hidden rounded-[var(--sanring-radius)] border border-[var(--docs-border)]"
-          >
-            <app-component-page-code-block [code]="examples.usageMain" language="angular-html" />
-          </div>
+          <app-component-page-code-block [code]="examples.usageMain" language="angular-html" />
         </div>
       </app-component-page-section>
 
@@ -172,7 +168,9 @@ import { radioGroupApiRows, radioItemApiRows, radioPage, radioPageExamples } fro
                       <label for="plan-pro">{{ i18n.t('radio.demo.planPro') }}</label>
                     </div>
                   </sanring-radio-group>
-                  <sanring-error-message>{{ i18n.t('radio.demo.fieldError') }}</sanring-error-message>
+                  <sanring-error-message>{{
+                    i18n.t('radio.demo.fieldError')
+                  }}</sanring-error-message>
                 </sanring-field>
               </div>
             </app-component-page-code-previewer>

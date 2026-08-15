@@ -60,11 +60,7 @@ import { checkboxPage, checkboxPageExamples } from './checkbox.docs';
       <app-component-page-section [section]="section('usage')">
         <div class="grid gap-6">
           <app-component-page-usage-imports [code]="examples.usageImport" />
-          <div
-            class="overflow-hidden rounded-[var(--sanring-radius)] border border-[var(--docs-border)]"
-          >
-            <app-component-page-code-block [code]="examples.usageMain" language="angular-html" />
-          </div>
+          <app-component-page-code-block [code]="examples.usageMain" language="angular-html" />
         </div>
       </app-component-page-section>
 
@@ -208,7 +204,9 @@ import { checkboxPage, checkboxPageExamples } from './checkbox.docs';
                   {{ i18n.t('checkbox.demo.acceptTerms') }}
                 </label>
               </div>
-              <sanring-error-message>{{ i18n.t('checkbox.demo.fieldError') }}</sanring-error-message>
+              <sanring-error-message>{{
+                i18n.t('checkbox.demo.fieldError')
+              }}</sanring-error-message>
             </sanring-field>
           </div>
         </app-component-page-code-previewer>

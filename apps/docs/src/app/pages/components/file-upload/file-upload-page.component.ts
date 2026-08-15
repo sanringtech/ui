@@ -71,7 +71,9 @@ import { fileUploadPage, fileUploadPageExamples } from './file-upload.docs';
                   <svg lucideUpload class="size-4"></svg>
                   {{ i18n.t('fileUpload.demo.browse') }}
                 </button>
-                <p class="text-sm text-muted-foreground">{{ i18n.t('fileUpload.demo.dropHint') }}</p>
+                <p class="text-sm text-muted-foreground">
+                  {{ i18n.t('fileUpload.demo.dropHint') }}
+                </p>
               </sanring-file-dropzone>
             </sanring-file-upload>
           </div>
@@ -81,11 +83,7 @@ import { fileUploadPage, fileUploadPageExamples } from './file-upload.docs';
       <app-component-page-section [section]="section('usage')">
         <div class="grid gap-6">
           <app-component-page-usage-imports [code]="examples.usageImport" />
-          <div
-            class="overflow-hidden rounded-[var(--sanring-radius)] border border-[var(--docs-border)]"
-          >
-            <app-component-page-code-block [code]="examples.usageMain" language="angular-html" />
-          </div>
+          <app-component-page-code-block [code]="examples.usageMain" language="angular-html" />
         </div>
       </app-component-page-section>
 
@@ -209,7 +207,9 @@ import { fileUploadPage, fileUploadPageExamples } from './file-upload.docs';
             <app-component-page-code-previewer [code]="examples.field" language="angular-html">
               <div previewer class="w-[min(420px,100%)]">
                 <sanring-field>
-                  <label sanringLabel for="resume-upload">{{ i18n.t('fileUpload.demo.fieldLabel') }}</label>
+                  <label sanringLabel for="resume-upload">{{
+                    i18n.t('fileUpload.demo.fieldLabel')
+                  }}</label>
                   <sanring-file-upload
                     accept=".pdf"
                     [maxSize]="2 * 1024 * 1024"
@@ -226,7 +226,9 @@ import { fileUploadPage, fileUploadPageExamples } from './file-upload.docs';
                     </sanring-file-dropzone>
                   </sanring-file-upload>
                   <p sanringDescription>{{ i18n.t('fileUpload.demo.fieldHint') }}</p>
-                  <sanring-error-message>{{ i18n.t('fileUpload.demo.fieldError') }}</sanring-error-message>
+                  <sanring-error-message>{{
+                    i18n.t('fileUpload.demo.fieldError')
+                  }}</sanring-error-message>
                 </sanring-field>
               </div>
             </app-component-page-code-previewer>

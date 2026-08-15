@@ -60,11 +60,7 @@ import { alertPage, alertPageExamples } from './alert.docs';
             [code]="examples.usageImport"
             [individualCode]="examples.usageIndividualImports"
           />
-          <div
-            class="overflow-hidden rounded-[var(--sanring-radius)] border border-[var(--docs-border)]"
-          >
-            <app-component-page-code-block [code]="examples.usageMain" language="angular-html" />
-          </div>
+          <app-component-page-code-block [code]="examples.usageMain" language="angular-html" />
         </div>
       </app-component-page-section>
 
@@ -141,7 +137,6 @@ import { alertPage, alertPageExamples } from './alert.docs';
       </app-component-page-section>
 
       <app-component-page-section [section]="section('accessibility')" />
-
 
       <app-component-page-section [section]="section('stateModel')" />
     </app-component-page>

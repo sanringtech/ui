@@ -93,19 +93,11 @@ interface IntroNextLink {
         <p class="mt-0 text-sm leading-6 text-[var(--docs-muted)]">
           {{ i18n.t('intro.quickStart.body') }}
         </p>
-        <div
-          class="mt-6 overflow-hidden rounded-[var(--sanring-radius)] border border-[var(--docs-border)]"
-        >
-          <app-component-page-code-block [code]="cliWorkflow" language="bash" />
-        </div>
+        <app-component-page-code-block class="mt-6" [code]="cliWorkflow" language="bash" />
         <p class="mt-6 text-sm leading-6 text-[var(--docs-muted)]">
           {{ i18n.t('intro.quickStart.tailwind') }}
         </p>
-        <div
-          class="mt-6 overflow-hidden rounded-[var(--sanring-radius)] border border-[var(--docs-border)]"
-        >
-          <app-component-page-code-block [code]="tailwindSource" language="css" />
-        </div>
+        <app-component-page-code-block class="mt-6" [code]="tailwindSource" language="css" />
         <p class="mt-6 text-sm leading-6 text-[var(--docs-muted)]">
           {{ i18n.t('intro.quickStart.import') }}
         </p>
@@ -118,11 +110,11 @@ interface IntroNextLink {
             </span>
             {{ i18n.t('intro.quickStart.expectedBody') }}
           </div>
-          <div
-            class="min-w-0 overflow-hidden rounded-[var(--sanring-radius)] border border-[var(--docs-border)]"
-          >
-            <app-component-page-code-block [code]="firstComponent" language="angular-ts" />
-          </div>
+          <app-component-page-code-block
+            class="min-w-0"
+            [code]="firstComponent"
+            language="angular-ts"
+          />
         </div>
       </app-component-page-section>
 

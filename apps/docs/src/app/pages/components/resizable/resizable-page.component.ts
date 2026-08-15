@@ -64,11 +64,7 @@ import { resizablePage, resizablePageExamples } from './resizable.docs';
               <sanring-resizable-handle withHandle />
               <sanring-resizable-panel [defaultSize]="76" [minSize]="35">
                 <sanring-resizable-group direction="vertical">
-                  <sanring-resizable-panel
-                    [defaultSize]="35"
-                    [minSize]="20"
-                    collapsible
-                  >
+                  <sanring-resizable-panel [defaultSize]="35" [minSize]="20" collapsible>
                     <div class="grid h-full place-items-center p-4">
                       <span class="text-base font-semibold text-[var(--docs-fg)]">
                         {{ i18n.t('resizable.demo.two') }}
@@ -93,11 +89,7 @@ import { resizablePage, resizablePageExamples } from './resizable.docs';
       <app-component-page-section [section]="section('usage')">
         <div class="grid gap-6">
           <app-component-page-usage-imports [code]="examples.usageImport" />
-          <div
-            class="overflow-hidden rounded-[var(--sanring-radius)] border border-[var(--docs-border)]"
-          >
-            <app-component-page-code-block [code]="examples.usageMain" language="angular-html" />
-          </div>
+          <app-component-page-code-block [code]="examples.usageMain" language="angular-html" />
         </div>
       </app-component-page-section>
 
@@ -153,7 +145,10 @@ import { resizablePage, resizablePageExamples } from './resizable.docs';
                     class="rounded-[var(--sanring-radius)] border border-[var(--docs-border)] bg-[var(--sanring-surface)]"
                     [(sizes)]="layoutSizes"
                   >
-                    <sanring-resizable-panel [minSize]="20" class="bg-[var(--sanring-surface-muted)]">
+                    <sanring-resizable-panel
+                      [minSize]="20"
+                      class="bg-[var(--sanring-surface-muted)]"
+                    >
                       <div class="h-full p-4 text-sm font-medium text-[var(--docs-fg)]">
                         {{ i18n.t('resizable.demo.files') }}
                       </div>

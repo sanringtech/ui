@@ -67,9 +67,7 @@ import { timelinePage, timelinePageExamples } from './timeline.docs';
                 </span>
                 <div sanringTimelineContent class="pb-6">
                   <sanring-card>
-                    <sanring-card-content
-                      class="flex items-center justify-between gap-4 p-4"
-                    >
+                    <sanring-card-content class="flex items-center justify-between gap-4 p-4">
                       <div class="min-w-0">
                         <p class="m-0 text-sm font-medium text-[var(--docs-fg)]">
                           {{ i18n.t(event.titleKey) }}
@@ -93,11 +91,7 @@ import { timelinePage, timelinePageExamples } from './timeline.docs';
       <app-component-page-section [section]="section('usage')">
         <div class="grid gap-6">
           <app-component-page-usage-imports [code]="examples.usageImport" />
-          <div
-            class="overflow-hidden rounded-[var(--sanring-radius)] border border-[var(--docs-border)]"
-          >
-            <app-component-page-code-block [code]="examples.usageMain" language="angular-html" />
-          </div>
+          <app-component-page-code-block [code]="examples.usageMain" language="angular-html" />
         </div>
       </app-component-page-section>
 
@@ -188,7 +182,6 @@ import { timelinePage, timelinePageExamples } from './timeline.docs';
       </app-component-page-section>
 
       <app-component-page-section [section]="section('accessibility')" />
-
 
       <app-component-page-section [section]="section('stateModel')" />
     </app-component-page>

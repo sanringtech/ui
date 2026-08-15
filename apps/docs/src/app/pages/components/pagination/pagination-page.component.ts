@@ -53,7 +53,9 @@ interface OrderRow {
       <app-component-page-section [section]="section('basic')">
         <app-component-page-code-previewer [code]="examples.basic" language="angular-html">
           <div previewer class="grid w-full gap-4">
-            <div class="grid gap-2 rounded-[var(--sanring-radius)] border border-[var(--docs-border)] p-4">
+            <div
+              class="grid gap-2 rounded-[var(--sanring-radius)] border border-[var(--docs-border)] p-4"
+            >
               @for (order of pagedOrders(); track order.id) {
                 <div class="flex items-center justify-between gap-4 text-sm">
                   <div class="min-w-0">
@@ -80,9 +82,7 @@ interface OrderRow {
       <app-component-page-section [section]="section('usage')">
         <div class="grid gap-6">
           <app-component-page-usage-imports [code]="examples.usageImport" />
-          <div class="overflow-hidden rounded-[var(--sanring-radius)] border border-[var(--docs-border)]">
-            <app-component-page-code-block [code]="examples.usageMain" language="angular-html" />
-          </div>
+          <app-component-page-code-block [code]="examples.usageMain" language="angular-html" />
         </div>
       </app-component-page-section>
 
@@ -98,7 +98,9 @@ interface OrderRow {
           <app-component-page-section [section]="section('example-controlled')">
             <app-component-page-code-previewer [code]="examples.controlled" language="angular-html">
               <div previewer class="grid w-full gap-4">
-                <div class="flex items-center justify-between gap-4 text-sm text-[var(--docs-muted)]">
+                <div
+                  class="flex items-center justify-between gap-4 text-sm text-[var(--docs-muted)]"
+                >
                   <span>{{ i18n.t('pagination.demo.currentPage') }} {{ pageIndex() + 1 }}</span>
                   <span>{{ orders.length }} {{ i18n.t('pagination.demo.items') }}</span>
                 </div>
@@ -119,7 +121,9 @@ interface OrderRow {
             <app-component-page-code-previewer [code]="examples.pageSize" language="angular-html">
               <div previewer class="grid w-full gap-4">
                 <div class="flex items-center justify-between gap-3 text-sm">
-                  <span class="text-[var(--docs-muted)]">{{ i18n.t('pagination.demo.rowsPerPage') }}</span>
+                  <span class="text-[var(--docs-muted)]">{{
+                    i18n.t('pagination.demo.rowsPerPage')
+                  }}</span>
                   <sanring-page-size-select
                     [pageSize]="pageSize()"
                     (pageSizeChange)="setPageSize($event)"
@@ -128,14 +132,20 @@ interface OrderRow {
                   />
                 </div>
 
-                <div class="grid gap-2 rounded-[var(--sanring-radius)] border border-[var(--docs-border)] p-4">
+                <div
+                  class="grid gap-2 rounded-[var(--sanring-radius)] border border-[var(--docs-border)] p-4"
+                >
                   @for (order of pageSizeOrders(); track order.id) {
                     <div class="flex items-center justify-between gap-4 text-sm">
                       <div class="min-w-0">
-                        <div class="font-medium text-[var(--sanring-foreground)]">{{ order.id }}</div>
+                        <div class="font-medium text-[var(--sanring-foreground)]">
+                          {{ order.id }}
+                        </div>
                         <div class="truncate text-[var(--docs-muted)]">{{ order.customer }}</div>
                       </div>
-                      <span class="shrink-0 text-xs text-[var(--docs-muted)]">{{ order.status }}</span>
+                      <span class="shrink-0 text-xs text-[var(--docs-muted)]">{{
+                        order.status
+                      }}</span>
                     </div>
                   }
                 </div>

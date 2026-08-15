@@ -40,11 +40,7 @@ const INLINE_CODE_CLASS =
         <p class="mt-0 text-base leading-[1.7] text-[var(--docs-muted)]">
           {{ i18n.t('registry.schema.body') }}
         </p>
-        <div
-          class="mt-6 overflow-hidden rounded-[var(--sanring-radius)] border border-[var(--docs-border)]"
-        >
-          <app-component-page-code-block [code]="examples.schema" language="json" />
-        </div>
+        <app-component-page-code-block class="mt-6" [code]="examples.schema" language="json" />
       </app-component-page-section>
 
       <!-- 3. Project structure -->
@@ -52,11 +48,7 @@ const INLINE_CODE_CLASS =
         <p class="mt-0 text-base leading-[1.7] text-[var(--docs-muted)]">
           {{ i18n.t('registry.structure.body') }}
         </p>
-        <div
-          class="mt-6 overflow-hidden rounded-[var(--sanring-radius)] border border-[var(--docs-border)]"
-        >
-          <app-component-page-code-block [code]="examples.structure" language="bash" />
-        </div>
+        <app-component-page-code-block class="mt-6" [code]="examples.structure" language="bash" />
       </app-component-page-section>
 
       <!-- 4. sanring build -->
@@ -64,21 +56,17 @@ const INLINE_CODE_CLASS =
         <p class="mt-0 text-base leading-[1.7] text-[var(--docs-muted)]">
           {{ i18n.t('registry.build.body') }}
         </p>
-        <div
-          class="mt-6 overflow-hidden rounded-[var(--sanring-radius)] border border-[var(--docs-border)]"
-        >
-          <app-component-page-code-block [code]="examples.build" language="bash" />
-        </div>
+        <app-component-page-code-block class="mt-6" [code]="examples.build" language="bash" />
         <ul class="mt-4 list-none space-y-2 p-0 text-sm text-[var(--docs-muted)]">
           <li>
             <code [class]="inlineCodeClass">--source &lt;dir&gt;</code>
-            &mdash; root directory containing your components/ and shared/ folders
-            (default: <code [class]="inlineCodeClass">.</code>)
+            &mdash; root directory containing your components/ and shared/ folders (default:
+            <code [class]="inlineCodeClass">.</code>)
           </li>
           <li>
             <code [class]="inlineCodeClass">--out &lt;file&gt;</code>
-            &mdash; output path for registry.json
-            (default: <code [class]="inlineCodeClass">registry.json</code>)
+            &mdash; output path for registry.json (default:
+            <code [class]="inlineCodeClass">registry.json</code>)
           </li>
           <li>
             <code [class]="inlineCodeClass">--name &lt;name&gt;</code>
@@ -96,11 +84,7 @@ const INLINE_CODE_CLASS =
         <p class="mt-0 text-base leading-[1.7] text-[var(--docs-muted)]">
           {{ i18n.t('registry.hosting.body') }}
         </p>
-        <div
-          class="mt-6 overflow-hidden rounded-[var(--sanring-radius)] border border-[var(--docs-border)]"
-        >
-          <app-component-page-code-block [code]="examples.hosting" language="bash" />
-        </div>
+        <app-component-page-code-block class="mt-6" [code]="examples.hosting" language="bash" />
       </app-component-page-section>
 
       <!-- 6. Using your registry -->
@@ -108,16 +92,8 @@ const INLINE_CODE_CLASS =
         <p class="mt-0 text-base leading-[1.7] text-[var(--docs-muted)]">
           {{ i18n.t('registry.consuming.body') }}
         </p>
-        <div
-          class="mt-6 overflow-hidden rounded-[var(--sanring-radius)] border border-[var(--docs-border)]"
-        >
-          <app-component-page-code-block [code]="examples.config" language="json" />
-        </div>
-        <div
-          class="mt-4 overflow-hidden rounded-[var(--sanring-radius)] border border-[var(--docs-border)]"
-        >
-          <app-component-page-code-block [code]="examples.consuming" language="bash" />
-        </div>
+        <app-component-page-code-block class="mt-6" [code]="examples.config" language="json" />
+        <app-component-page-code-block class="mt-4" [code]="examples.consuming" language="bash" />
       </app-component-page-section>
     </app-component-page>
   `,

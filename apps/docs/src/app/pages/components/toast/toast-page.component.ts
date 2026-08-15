@@ -92,11 +92,7 @@ export class ToastPositionDemoComponent {
             [code]="examples.usageImport"
             [individualCode]="examples.usageIndividualImports"
           />
-          <div
-            class="overflow-hidden rounded-[var(--sanring-radius)] border border-[var(--docs-border)]"
-          >
-            <app-component-page-code-block [code]="examples.usageMain" language="typescript" />
-          </div>
+          <app-component-page-code-block [code]="examples.usageMain" language="typescript" />
         </div>
       </app-component-page-section>
 

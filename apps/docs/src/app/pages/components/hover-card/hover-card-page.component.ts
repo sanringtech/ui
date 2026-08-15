@@ -49,18 +49,20 @@ import { hoverCardPage, hoverCardPageExamples } from './hover-card.docs';
               <sanring-hover-card-content>
                 <div class="space-y-3">
                   <div>
-                    <h3 class="m-0 text-sm font-semibold text-[var(--docs-fg)]">
-                      Sanring UI
-                    </h3>
+                    <h3 class="m-0 text-sm font-semibold text-[var(--docs-fg)]">Sanring UI</h3>
                     <p class="m-0 mt-1 text-sm leading-6 text-[var(--docs-muted)]">
                       {{ i18n.t('hoverCard.demo.description') }}
                     </p>
                   </div>
                   <div class="flex gap-2 text-xs text-[var(--docs-muted)]">
-                    <span class="rounded-[var(--sanring-radius-xs)] bg-[var(--docs-surface-strong)] px-2 py-1">
+                    <span
+                      class="rounded-[var(--sanring-radius-xs)] bg-[var(--docs-surface-strong)] px-2 py-1"
+                    >
                       Angular
                     </span>
-                    <span class="rounded-[var(--sanring-radius-xs)] bg-[var(--docs-surface-strong)] px-2 py-1">
+                    <span
+                      class="rounded-[var(--sanring-radius-xs)] bg-[var(--docs-surface-strong)] px-2 py-1"
+                    >
                       Primitives
                     </span>
                   </div>
@@ -77,11 +79,7 @@ import { hoverCardPage, hoverCardPageExamples } from './hover-card.docs';
             [code]="examples.usageImport"
             [individualCode]="examples.usageIndividualImports"
           />
-          <div
-            class="overflow-hidden rounded-[var(--sanring-radius)] border border-[var(--docs-border)]"
-          >
-            <app-component-page-code-block [code]="examples.usageMain" language="angular-html" />
-          </div>
+          <app-component-page-code-block [code]="examples.usageMain" language="angular-html" />
         </div>
       </app-component-page-section>
 
@@ -93,11 +91,7 @@ import { hoverCardPage, hoverCardPageExamples } from './hover-card.docs';
       </app-component-page-section>
 
       <app-component-page-section [section]="section('composition')">
-        <div
-          class="overflow-hidden rounded-[var(--sanring-radius)] border border-[var(--docs-border)]"
-        >
-          <app-component-page-code-block [code]="examples.composition" language="bash" />
-        </div>
+        <app-component-page-code-block [code]="examples.composition" language="bash" />
       </app-component-page-section>
 
       <app-component-page-section [section]="section('example')">
@@ -107,7 +101,13 @@ import { hoverCardPage, hoverCardPageExamples } from './hover-card.docs';
               <div previewer class="flex min-h-[280px] flex-wrap items-center justify-center gap-3">
                 @for (side of sides; track side) {
                   <sanring-hover-card [openDelay]="150" [closeDelay]="250">
-                    <button sanringBtn type="button" size="sm" variant="outline" sanringHoverCardTrigger>
+                    <button
+                      sanringBtn
+                      type="button"
+                      size="sm"
+                      variant="outline"
+                      sanringHoverCardTrigger
+                    >
                       {{ side }}
                     </button>
                     <sanring-hover-card-content [side]="side">

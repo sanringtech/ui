@@ -94,7 +94,9 @@ import { navigationMenuPage, navigationMenuPageExamples } from './navigation-men
                           >
                             <svg lucideRocket class="size-6"></svg>
                             <div>
-                              <sanring-navigation-menu-label class="text-[var(--sanring-background)]">
+                              <sanring-navigation-menu-label
+                                class="text-[var(--sanring-background)]"
+                              >
                                 Sanring UI
                               </sanring-navigation-menu-label>
                               <p
@@ -107,27 +109,42 @@ import { navigationMenuPage, navigationMenuPageExamples } from './navigation-men
                           </a>
                           <div class="grid gap-1">
                             <a sanringNavigationMenuLink href="#" (click)="$event.preventDefault()">
-                              <svg lucideBox class="mt-0.5 size-4 shrink-0 text-[var(--sanring-muted)]"></svg>
+                              <svg
+                                lucideBox
+                                class="mt-0.5 size-4 shrink-0 text-[var(--sanring-muted)]"
+                              ></svg>
                               <div>
-                                <sanring-navigation-menu-label>Components</sanring-navigation-menu-label>
+                                <sanring-navigation-menu-label
+                                  >Components</sanring-navigation-menu-label
+                                >
                                 <p sanringNavigationMenuDescription>
                                   Dialogs, forms, overlays, display blocks, and navigation.
                                 </p>
                               </div>
                             </a>
                             <a sanringNavigationMenuLink href="#" (click)="$event.preventDefault()">
-                              <svg lucidePalette class="mt-0.5 size-4 shrink-0 text-[var(--sanring-muted)]"></svg>
+                              <svg
+                                lucidePalette
+                                class="mt-0.5 size-4 shrink-0 text-[var(--sanring-muted)]"
+                              ></svg>
                               <div>
-                                <sanring-navigation-menu-label>Theming</sanring-navigation-menu-label>
+                                <sanring-navigation-menu-label
+                                  >Theming</sanring-navigation-menu-label
+                                >
                                 <p sanringNavigationMenuDescription>
                                   Customize the --sanring-* token layer once.
                                 </p>
                               </div>
                             </a>
                             <a sanringNavigationMenuLink href="#" (click)="$event.preventDefault()">
-                              <svg lucideLayoutDashboard class="mt-0.5 size-4 shrink-0 text-[var(--sanring-muted)]"></svg>
+                              <svg
+                                lucideLayoutDashboard
+                                class="mt-0.5 size-4 shrink-0 text-[var(--sanring-muted)]"
+                              ></svg>
                               <div>
-                                <sanring-navigation-menu-label>Examples</sanring-navigation-menu-label>
+                                <sanring-navigation-menu-label
+                                  >Examples</sanring-navigation-menu-label
+                                >
                                 <p sanringNavigationMenuDescription>
                                   Production-shaped layouts composed from primitives.
                                 </p>
@@ -145,11 +162,17 @@ import { navigationMenuPage, navigationMenuPageExamples } from './navigation-men
                       </button>
                       <sanring-navigation-menu-content class="w-72 p-2">
                         <a sanringNavigationMenuLink href="#" (click)="$event.preventDefault()">
-                          <svg lucideBookOpen class="size-4 shrink-0 text-[var(--sanring-muted)]"></svg>
+                          <svg
+                            lucideBookOpen
+                            class="size-4 shrink-0 text-[var(--sanring-muted)]"
+                          ></svg>
                           Guides
                         </a>
                         <a sanringNavigationMenuLink href="#" (click)="$event.preventDefault()">
-                          <svg lucideFileText class="size-4 shrink-0 text-[var(--sanring-muted)]"></svg>
+                          <svg
+                            lucideFileText
+                            class="size-4 shrink-0 text-[var(--sanring-muted)]"
+                          ></svg>
                           Changelog
                         </a>
                         <a sanringNavigationMenuLink href="#" (click)="$event.preventDefault()">
@@ -158,7 +181,10 @@ import { navigationMenuPage, navigationMenuPageExamples } from './navigation-men
                         </a>
                         <sanring-navigation-menu-separator />
                         <a sanringNavigationMenuLink href="#" (click)="$event.preventDefault()">
-                          <svg lucideFolder class="size-4 shrink-0 text-[var(--sanring-muted)]"></svg>
+                          <svg
+                            lucideFolder
+                            class="size-4 shrink-0 text-[var(--sanring-muted)]"
+                          ></svg>
                           Repository
                         </a>
                       </sanring-navigation-menu-content>
@@ -177,7 +203,9 @@ import { navigationMenuPage, navigationMenuPageExamples } from './navigation-men
                           (click)="$event.preventDefault()"
                         >
                           <div>
-                            <sanring-navigation-menu-label>Introduction</sanring-navigation-menu-label>
+                            <sanring-navigation-menu-label
+                              >Introduction</sanring-navigation-menu-label
+                            >
                             <p sanringNavigationMenuDescription>
                               Start here for the core concepts.
                             </p>
@@ -185,7 +213,9 @@ import { navigationMenuPage, navigationMenuPageExamples } from './navigation-men
                         </a>
                         <a sanringNavigationMenuLink href="#" (click)="$event.preventDefault()">
                           <div>
-                            <sanring-navigation-menu-label>Installation</sanring-navigation-menu-label>
+                            <sanring-navigation-menu-label
+                              >Installation</sanring-navigation-menu-label
+                            >
                             <p sanringNavigationMenuDescription>
                               Add the CLI or copy component source.
                             </p>
@@ -204,24 +234,40 @@ import { navigationMenuPage, navigationMenuPageExamples } from './navigation-men
                   </sanring-navigation-menu-list>
                 </sanring-navigation-menu>
 
-                <div class="ml-auto hidden items-center gap-2 text-xs text-[var(--sanring-muted)] sm:flex">
-                  <span class="rounded-[var(--sanring-radius-xs)] border border-[var(--sanring-border)] px-2 py-1">
+                <div
+                  class="ml-auto hidden items-center gap-2 text-xs text-[var(--sanring-muted)] sm:flex"
+                >
+                  <span
+                    class="rounded-[var(--sanring-radius-xs)] border border-[var(--sanring-border)] px-2 py-1"
+                  >
                     v0.17
                   </span>
                 </div>
               </div>
               <div class="grid gap-4 p-6 sm:grid-cols-3">
-                <div class="rounded-[var(--sanring-radius)] border border-[var(--sanring-border)] p-5">
+                <div
+                  class="rounded-[var(--sanring-radius)] border border-[var(--sanring-border)] p-5"
+                >
                   <div class="text-sm font-medium">Angular-first</div>
-                  <div class="mt-1 text-sm text-[var(--sanring-muted)]">Standalone imports and template-native APIs.</div>
+                  <div class="mt-1 text-sm text-[var(--sanring-muted)]">
+                    Standalone imports and template-native APIs.
+                  </div>
                 </div>
-                <div class="rounded-[var(--sanring-radius)] border border-[var(--sanring-border)] p-5">
+                <div
+                  class="rounded-[var(--sanring-radius)] border border-[var(--sanring-border)] p-5"
+                >
                   <div class="text-sm font-medium">Composable</div>
-                  <div class="mt-1 text-sm text-[var(--sanring-muted)]">Use links, triggers, panels, labels, and descriptions separately.</div>
+                  <div class="mt-1 text-sm text-[var(--sanring-muted)]">
+                    Use links, triggers, panels, labels, and descriptions separately.
+                  </div>
                 </div>
-                <div class="rounded-[var(--sanring-radius)] border border-[var(--sanring-border)] p-5">
+                <div
+                  class="rounded-[var(--sanring-radius)] border border-[var(--sanring-border)] p-5"
+                >
                   <div class="text-sm font-medium">Token driven</div>
-                  <div class="mt-1 text-sm text-[var(--sanring-muted)]">Every state maps back to the shared theme layer.</div>
+                  <div class="mt-1 text-sm text-[var(--sanring-muted)]">
+                    Every state maps back to the shared theme layer.
+                  </div>
                 </div>
               </div>
             </div>
@@ -236,11 +282,7 @@ import { navigationMenuPage, navigationMenuPageExamples } from './navigation-men
             [individualCode]="examples.usageIndividualImports"
           />
 
-          <div
-            class="overflow-hidden rounded-[var(--sanring-radius)] border border-[var(--docs-border)]"
-          >
-            <app-component-page-code-block [code]="examples.usageMain" language="angular-html" />
-          </div>
+          <app-component-page-code-block [code]="examples.usageMain" language="angular-html" />
         </div>
       </app-component-page-section>
 
@@ -325,11 +367,7 @@ import { navigationMenuPage, navigationMenuPageExamples } from './navigation-men
                     <sanring-navigation-menu-item value="docs">
                       <button sanringNavigationMenuTrigger>Docs</button>
                       <sanring-navigation-menu-content class="w-64 p-2">
-                        <a
-                          sanringNavigationMenuLink
-                          href="#"
-                          (click)="$event.preventDefault()"
-                        >
+                        <a sanringNavigationMenuLink href="#" (click)="$event.preventDefault()">
                           Overview
                         </a>
 
@@ -368,11 +406,7 @@ import { navigationMenuPage, navigationMenuPageExamples } from './navigation-men
                           </sanring-navigation-menu-sub-content>
                         </sanring-navigation-menu-sub>
 
-                        <a
-                          sanringNavigationMenuLink
-                          href="#"
-                          (click)="$event.preventDefault()"
-                        >
+                        <a sanringNavigationMenuLink href="#" (click)="$event.preventDefault()">
                           Theming
                         </a>
                       </sanring-navigation-menu-content>
@@ -389,7 +423,12 @@ import { navigationMenuPage, navigationMenuPageExamples } from './navigation-men
                 <sanring-navigation-menu orientation="vertical" class="w-56">
                   <sanring-navigation-menu-list>
                     <sanring-navigation-menu-item>
-                      <a sanringNavigationMenuLink href="#" active (click)="$event.preventDefault()">
+                      <a
+                        sanringNavigationMenuLink
+                        href="#"
+                        active
+                        (click)="$event.preventDefault()"
+                      >
                         Dashboard
                       </a>
                     </sanring-navigation-menu-item>

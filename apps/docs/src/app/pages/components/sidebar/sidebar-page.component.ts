@@ -92,442 +92,477 @@ import { sidebarPage, sidebarPageExamples } from './sidebar.docs';
       />
 
       <app-component-page-section [section]="section('basic')">
-        <app-component-page-code-previewer [code]="examples.basic" language="angular-html" [wide]="true">
+        <app-component-page-code-previewer
+          [code]="examples.basic"
+          language="angular-html"
+          [wide]="true"
+        >
           <div previewer class="flex w-full justify-center">
             <sanring-sidebar-provider collapsible="icon" #sidebarProvider>
-            <div
-              class="flex h-[620px] w-full max-w-[928px] overflow-hidden rounded-[var(--sanring-radius)] border border-[var(--docs-border)] bg-[var(--sanring-background)]" style="--sanring-sidebar-width: 13rem"
-            >
-              @let isOpen = sidebarProvider.isOpen();
-              <sanring-sidebar
-                class="shrink-0"
+              <div
+                class="flex h-[620px] w-full max-w-[928px] overflow-hidden rounded-[var(--sanring-radius)] border border-[var(--docs-border)] bg-[var(--sanring-background)]"
+                style="--sanring-sidebar-width: 13rem"
               >
-                <sanring-sidebar-header>
-                  <sanring-dropdown-menu>
-                    <button
-                      type="button"
-                      sanringDropdownMenuTrigger
-                      [menu]="teamMenu.menu"
-                      side="right"
-                      align="start"
-                      class="flex min-w-0 items-center rounded-[var(--sanring-radius)] transition-colors hover:bg-[var(--sanring-surface-strong)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--sanring-border-strong)]"
-                      [class.w-full]="isOpen"
-                      [class.gap-3]="isOpen"
-                      [class.p-2]="isOpen"
-                      [class.size-10]="!isOpen"
-                      [class.justify-center]="!isOpen"
-                      [attr.aria-label]="i18n.t('sidebar.demo.switchTeam')"
-                    >
-                      <div
-                        class="flex size-9 shrink-0 items-center justify-center rounded-[var(--sanring-radius)] bg-[var(--sanring-foreground)] text-[var(--sanring-background)]"
+                @let isOpen = sidebarProvider.isOpen();
+                <sanring-sidebar class="shrink-0">
+                  <sanring-sidebar-header>
+                    <sanring-dropdown-menu>
+                      <button
+                        type="button"
+                        sanringDropdownMenuTrigger
+                        [menu]="teamMenu.menu"
+                        side="right"
+                        align="start"
+                        class="flex min-w-0 items-center rounded-[var(--sanring-radius)] transition-colors hover:bg-[var(--sanring-surface-strong)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--sanring-border-strong)]"
+                        [class.w-full]="isOpen"
+                        [class.gap-3]="isOpen"
+                        [class.p-2]="isOpen"
+                        [class.size-10]="!isOpen"
+                        [class.justify-center]="!isOpen"
+                        [attr.aria-label]="i18n.t('sidebar.demo.switchTeam')"
                       >
-                        <svg lucideGalleryVerticalEnd class="size-5"></svg>
-                      </div>
-                      @if (isOpen) {
-                        <div class="min-w-0 text-left">
-                          <div class="truncate text-sm font-semibold">Acme Inc</div>
-                          <div class="truncate text-xs text-[var(--sanring-muted-foreground)]">
-                            Enterprise
-                          </div>
+                        <div
+                          class="flex size-9 shrink-0 items-center justify-center rounded-[var(--sanring-radius)] bg-[var(--sanring-foreground)] text-[var(--sanring-background)]"
+                        >
+                          <svg lucideGalleryVerticalEnd class="size-5"></svg>
                         </div>
-                        <svg lucideChevronsUpDown class="ml-auto size-4 shrink-0"></svg>
+                        @if (isOpen) {
+                          <div class="min-w-0 text-left">
+                            <div class="truncate text-sm font-semibold">Acme Inc</div>
+                            <div class="truncate text-xs text-[var(--sanring-muted-foreground)]">
+                              Enterprise
+                            </div>
+                          </div>
+                          <svg lucideChevronsUpDown class="ml-auto size-4 shrink-0"></svg>
+                        }
+                      </button>
+                      <sanring-dropdown-menu-content
+                        #teamMenu="sanringDropdownMenuContent"
+                        class="w-64"
+                      >
+                        <sanring-dropdown-menu-label>{{
+                          i18n.t('sidebar.demo.teams')
+                        }}</sanring-dropdown-menu-label>
+                        <button type="button" sanringDropdownMenuItem value="acme">
+                          <span
+                            class="flex size-7 items-center justify-center rounded-[var(--sanring-radius-xs)] border border-[var(--sanring-border)]"
+                          >
+                            <svg lucideGalleryVerticalEnd class="size-4"></svg>
+                          </span>
+                          <span class="min-w-0 flex-1 truncate">Acme Inc</span>
+                          <span class="text-xs text-[var(--sanring-muted-foreground)]">⌘ 1</span>
+                        </button>
+                        <button type="button" sanringDropdownMenuItem value="acme-corp">
+                          <span
+                            class="flex size-7 items-center justify-center rounded-[var(--sanring-radius-xs)] border border-[var(--sanring-border)]"
+                          >
+                            <svg lucideAudioWaveform class="size-4"></svg>
+                          </span>
+                          <span class="min-w-0 flex-1 truncate">Acme Corp.</span>
+                          <span class="text-xs text-[var(--sanring-muted-foreground)]">⌘ 2</span>
+                        </button>
+                        <button type="button" sanringDropdownMenuItem value="evil-corp">
+                          <span
+                            class="flex size-7 items-center justify-center rounded-[var(--sanring-radius-xs)] border border-[var(--sanring-border)]"
+                          >
+                            <svg lucideCommand class="size-4"></svg>
+                          </span>
+                          <span class="min-w-0 flex-1 truncate">Evil Corp.</span>
+                          <span class="text-xs text-[var(--sanring-muted-foreground)]">⌘ 3</span>
+                        </button>
+                        <sanring-dropdown-menu-separator />
+                        <button type="button" sanringDropdownMenuItem value="add-team">
+                          <span
+                            class="flex size-7 items-center justify-center rounded-[var(--sanring-radius-xs)] border border-[var(--sanring-border)]"
+                          >
+                            <svg lucidePlus class="size-4"></svg>
+                          </span>
+                          <span>{{ i18n.t('sidebar.demo.addTeam') }}</span>
+                        </button>
+                      </sanring-dropdown-menu-content>
+                    </sanring-dropdown-menu>
+                  </sanring-sidebar-header>
+                  <sanring-sidebar-content>
+                    <sanring-sidebar-group>
+                      @if (isOpen) {
+                        <sanring-sidebar-group-label>{{
+                          i18n.t('sidebar.demo.platform')
+                        }}</sanring-sidebar-group-label>
                       }
-                    </button>
-                    <sanring-dropdown-menu-content
-                      #teamMenu="sanringDropdownMenuContent"
-                      class="w-64"
-                    >
-                      <sanring-dropdown-menu-label>{{
-                        i18n.t('sidebar.demo.teams')
-                      }}</sanring-dropdown-menu-label>
-                      <button type="button" sanringDropdownMenuItem value="acme">
-                        <span
-                          class="flex size-7 items-center justify-center rounded-[var(--sanring-radius-xs)] border border-[var(--sanring-border)]"
-                        >
-                          <svg lucideGalleryVerticalEnd class="size-4"></svg>
-                        </span>
-                        <span class="min-w-0 flex-1 truncate">Acme Inc</span>
-                        <span class="text-xs text-[var(--sanring-muted-foreground)]">⌘ 1</span>
-                      </button>
-                      <button type="button" sanringDropdownMenuItem value="acme-corp">
-                        <span
-                          class="flex size-7 items-center justify-center rounded-[var(--sanring-radius-xs)] border border-[var(--sanring-border)]"
-                        >
-                          <svg lucideAudioWaveform class="size-4"></svg>
-                        </span>
-                        <span class="min-w-0 flex-1 truncate">Acme Corp.</span>
-                        <span class="text-xs text-[var(--sanring-muted-foreground)]">⌘ 2</span>
-                      </button>
-                      <button type="button" sanringDropdownMenuItem value="evil-corp">
-                        <span
-                          class="flex size-7 items-center justify-center rounded-[var(--sanring-radius-xs)] border border-[var(--sanring-border)]"
-                        >
-                          <svg lucideCommand class="size-4"></svg>
-                        </span>
-                        <span class="min-w-0 flex-1 truncate">Evil Corp.</span>
-                        <span class="text-xs text-[var(--sanring-muted-foreground)]">⌘ 3</span>
-                      </button>
-                      <sanring-dropdown-menu-separator />
-                      <button type="button" sanringDropdownMenuItem value="add-team">
-                        <span
-                          class="flex size-7 items-center justify-center rounded-[var(--sanring-radius-xs)] border border-[var(--sanring-border)]"
-                        >
-                          <svg lucidePlus class="size-4"></svg>
-                        </span>
-                        <span>{{ i18n.t('sidebar.demo.addTeam') }}</span>
-                      </button>
-                    </sanring-dropdown-menu-content>
-                  </sanring-dropdown-menu>
-                </sanring-sidebar-header>
-                <sanring-sidebar-content>
-                  <sanring-sidebar-group>
-                    @if (isOpen) {
-                      <sanring-sidebar-group-label>{{
-                        i18n.t('sidebar.demo.platform')
-                      }}</sanring-sidebar-group-label>
-                    }
-                    <sanring-sidebar-group-content>
-                      <sanring-sidebar-menu>
-                        <sanring-sidebar-menu-item>
-                          <sanring-collapsible [open]="true">
-                            <button
-                              type="button"
-                              sanringSidebarMenuButton
-                              active
-                              sanringCollapsibleTrigger
-                            >
-                              <svg lucideLayoutDashboard class="size-4 shrink-0"></svg>
-                              @if (isOpen) {
-                                <span class="truncate">{{ i18n.t('sidebar.demo.dashboard') }}</span>
-                                <svg lucideChevronRight class="ml-auto size-4 shrink-0"></svg>
-                              }
-                            </button>
-                            @if (isOpen) {
-                              <sanring-sidebar-menu-sub sanringCollapsibleContent>
-                                <sanring-sidebar-menu-sub-item>
-                                  <a
-                                    href="#"
-                                    class="block rounded-[var(--sanring-radius-xs)] px-2 py-1.5 text-sm hover:bg-[var(--sanring-surface-strong)]"
-                                    (click)="$event.preventDefault()"
-                                  >
-                                    {{ i18n.t('sidebar.demo.overview') }}
-                                  </a>
-                                </sanring-sidebar-menu-sub-item>
-                                <sanring-sidebar-menu-sub-item>
-                                  <a
-                                    href="#"
-                                    class="block rounded-[var(--sanring-radius-xs)] px-2 py-1.5 text-sm hover:bg-[var(--sanring-surface-strong)]"
-                                    (click)="$event.preventDefault()"
-                                  >
-                                    {{ i18n.t('sidebar.demo.reports') }}
-                                  </a>
-                                </sanring-sidebar-menu-sub-item>
-                              </sanring-sidebar-menu-sub>
-                            }
-                          </sanring-collapsible>
-                        </sanring-sidebar-menu-item>
-                        <sanring-sidebar-menu-item>
-                          <sanring-collapsible>
-                            <button
-                              type="button"
-                              sanringSidebarMenuButton
-                              sanringCollapsibleTrigger
-                            >
-                              <svg lucideUsers class="size-4 shrink-0"></svg>
-                              @if (isOpen) {
-                                <span class="truncate">{{ i18n.t('sidebar.demo.customers') }}</span>
-                                <svg lucideChevronRight class="ml-auto size-4 shrink-0"></svg>
-                              }
-                            </button>
-                            @if (isOpen) {
-                              <sanring-sidebar-menu-sub sanringCollapsibleContent>
-                                <sanring-sidebar-menu-sub-item>
-                                  <a
-                                    href="#"
-                                    class="block rounded-[var(--sanring-radius-xs)] px-2 py-1.5 text-sm hover:bg-[var(--sanring-surface-strong)]"
-                                    (click)="$event.preventDefault()"
-                                  >
-                                    {{ i18n.t('sidebar.demo.accounts') }}
-                                  </a>
-                                </sanring-sidebar-menu-sub-item>
-                                <sanring-sidebar-menu-sub-item>
-                                  <a
-                                    href="#"
-                                    class="block rounded-[var(--sanring-radius-xs)] px-2 py-1.5 text-sm hover:bg-[var(--sanring-surface-strong)]"
-                                    (click)="$event.preventDefault()"
-                                  >
-                                    {{ i18n.t('sidebar.demo.segments') }}
-                                  </a>
-                                </sanring-sidebar-menu-sub-item>
-                              </sanring-sidebar-menu-sub>
-                            }
-                          </sanring-collapsible>
-                        </sanring-sidebar-menu-item>
-                        <sanring-sidebar-menu-item>
-                          <sanring-collapsible>
-                            <button
-                              type="button"
-                              sanringSidebarMenuButton
-                              sanringCollapsibleTrigger
-                            >
-                              <svg lucideBell class="size-4 shrink-0"></svg>
-                              @if (isOpen) {
-                                <span class="truncate">{{
-                                  i18n.t('sidebar.demo.notifications')
-                                }}</span>
-                                <svg lucideChevronRight class="ml-auto size-4 shrink-0"></svg>
-                              }
-                            </button>
-                            @if (isOpen) {
-                              <sanring-sidebar-menu-sub sanringCollapsibleContent>
-                                <sanring-sidebar-menu-sub-item>
-                                  <a
-                                    href="#"
-                                    class="block rounded-[var(--sanring-radius-xs)] px-2 py-1.5 text-sm hover:bg-[var(--sanring-surface-strong)]"
-                                    (click)="$event.preventDefault()"
-                                  >
-                                    {{ i18n.t('sidebar.demo.inbox') }}
-                                  </a>
-                                </sanring-sidebar-menu-sub-item>
-                                <sanring-sidebar-menu-sub-item>
-                                  <a
-                                    href="#"
-                                    class="block rounded-[var(--sanring-radius-xs)] px-2 py-1.5 text-sm hover:bg-[var(--sanring-surface-strong)]"
-                                    (click)="$event.preventDefault()"
-                                  >
-                                    {{ i18n.t('sidebar.demo.rules') }}
-                                  </a>
-                                </sanring-sidebar-menu-sub-item>
-                              </sanring-sidebar-menu-sub>
-                            }
-                          </sanring-collapsible>
-                        </sanring-sidebar-menu-item>
-                      </sanring-sidebar-menu>
-                    </sanring-sidebar-group-content>
-                  </sanring-sidebar-group>
-                  @if (isOpen) {
-                    <sanring-sidebar-group class="mt-2">
-                      <sanring-sidebar-group-label>{{
-                        i18n.t('sidebar.demo.projects')
-                      }}</sanring-sidebar-group-label>
                       <sanring-sidebar-group-content>
                         <sanring-sidebar-menu>
                           <sanring-sidebar-menu-item>
-                            <a href="#" sanringSidebarMenuButton (click)="$event.preventDefault()">
-                              <svg lucideFrame class="size-4 shrink-0"></svg>
-                              <span class="truncate">{{
-                                i18n.t('sidebar.demo.designEngineering')
-                              }}</span>
-                            </a>
-                            <sanring-dropdown-menu>
+                            <sanring-collapsible [open]="true">
                               <button
                                 type="button"
-                                sanringSidebarMenuAction
-                                sanringDropdownMenuTrigger
-                                [menu]="designProjectMenu.menu"
-                                side="right"
-                                align="start"
-                                [attr.aria-label]="i18n.t('sidebar.demo.projectActions')"
+                                sanringSidebarMenuButton
+                                active
+                                sanringCollapsibleTrigger
                               >
-                                <svg lucideEllipsis class="size-4"></svg>
+                                <svg lucideLayoutDashboard class="size-4 shrink-0"></svg>
+                                @if (isOpen) {
+                                  <span class="truncate">{{
+                                    i18n.t('sidebar.demo.dashboard')
+                                  }}</span>
+                                  <svg lucideChevronRight class="ml-auto size-4 shrink-0"></svg>
+                                }
                               </button>
-                              <sanring-dropdown-menu-content
-                                #designProjectMenu="sanringDropdownMenuContent"
-                                class="w-48"
-                              >
-                                <button type="button" sanringDropdownMenuItem value="view-project">
-                                  <svg lucideFolder class="size-4"></svg>
-                                  <span>{{ i18n.t('sidebar.demo.viewProject') }}</span>
-                                </button>
-                                <button type="button" sanringDropdownMenuItem value="share-project">
-                                  <svg lucideShare class="size-4"></svg>
-                                  <span>{{ i18n.t('sidebar.demo.shareProject') }}</span>
-                                </button>
-                                <sanring-dropdown-menu-separator />
-                                <button
-                                  type="button"
-                                  sanringDropdownMenuItem
-                                  value="delete-project"
-                                  variant="destructive"
-                                >
-                                  <svg lucideTrash2 class="size-4"></svg>
-                                  <span>{{ i18n.t('sidebar.demo.deleteProject') }}</span>
-                                </button>
-                              </sanring-dropdown-menu-content>
-                            </sanring-dropdown-menu>
+                              @if (isOpen) {
+                                <sanring-sidebar-menu-sub sanringCollapsibleContent>
+                                  <sanring-sidebar-menu-sub-item>
+                                    <a
+                                      href="#"
+                                      class="block rounded-[var(--sanring-radius-xs)] px-2 py-1.5 text-sm hover:bg-[var(--sanring-surface-strong)]"
+                                      (click)="$event.preventDefault()"
+                                    >
+                                      {{ i18n.t('sidebar.demo.overview') }}
+                                    </a>
+                                  </sanring-sidebar-menu-sub-item>
+                                  <sanring-sidebar-menu-sub-item>
+                                    <a
+                                      href="#"
+                                      class="block rounded-[var(--sanring-radius-xs)] px-2 py-1.5 text-sm hover:bg-[var(--sanring-surface-strong)]"
+                                      (click)="$event.preventDefault()"
+                                    >
+                                      {{ i18n.t('sidebar.demo.reports') }}
+                                    </a>
+                                  </sanring-sidebar-menu-sub-item>
+                                </sanring-sidebar-menu-sub>
+                              }
+                            </sanring-collapsible>
                           </sanring-sidebar-menu-item>
                           <sanring-sidebar-menu-item>
-                            <a href="#" sanringSidebarMenuButton (click)="$event.preventDefault()">
-                              <svg lucideChartPie class="size-4 shrink-0"></svg>
-                              <span class="truncate">{{
-                                i18n.t('sidebar.demo.salesMarketing')
-                              }}</span>
-                            </a>
-                            <sanring-dropdown-menu>
+                            <sanring-collapsible>
                               <button
                                 type="button"
-                                sanringSidebarMenuAction
-                                sanringDropdownMenuTrigger
-                                [menu]="salesProjectMenu.menu"
-                                side="right"
-                                align="start"
-                                [attr.aria-label]="i18n.t('sidebar.demo.projectActions')"
+                                sanringSidebarMenuButton
+                                sanringCollapsibleTrigger
                               >
-                                <svg lucideEllipsis class="size-4"></svg>
+                                <svg lucideUsers class="size-4 shrink-0"></svg>
+                                @if (isOpen) {
+                                  <span class="truncate">{{
+                                    i18n.t('sidebar.demo.customers')
+                                  }}</span>
+                                  <svg lucideChevronRight class="ml-auto size-4 shrink-0"></svg>
+                                }
                               </button>
-                              <sanring-dropdown-menu-content
-                                #salesProjectMenu="sanringDropdownMenuContent"
-                                class="w-48"
+                              @if (isOpen) {
+                                <sanring-sidebar-menu-sub sanringCollapsibleContent>
+                                  <sanring-sidebar-menu-sub-item>
+                                    <a
+                                      href="#"
+                                      class="block rounded-[var(--sanring-radius-xs)] px-2 py-1.5 text-sm hover:bg-[var(--sanring-surface-strong)]"
+                                      (click)="$event.preventDefault()"
+                                    >
+                                      {{ i18n.t('sidebar.demo.accounts') }}
+                                    </a>
+                                  </sanring-sidebar-menu-sub-item>
+                                  <sanring-sidebar-menu-sub-item>
+                                    <a
+                                      href="#"
+                                      class="block rounded-[var(--sanring-radius-xs)] px-2 py-1.5 text-sm hover:bg-[var(--sanring-surface-strong)]"
+                                      (click)="$event.preventDefault()"
+                                    >
+                                      {{ i18n.t('sidebar.demo.segments') }}
+                                    </a>
+                                  </sanring-sidebar-menu-sub-item>
+                                </sanring-sidebar-menu-sub>
+                              }
+                            </sanring-collapsible>
+                          </sanring-sidebar-menu-item>
+                          <sanring-sidebar-menu-item>
+                            <sanring-collapsible>
+                              <button
+                                type="button"
+                                sanringSidebarMenuButton
+                                sanringCollapsibleTrigger
                               >
-                                <button type="button" sanringDropdownMenuItem value="view-project">
-                                  <svg lucideFolder class="size-4"></svg>
-                                  <span>{{ i18n.t('sidebar.demo.viewProject') }}</span>
-                                </button>
-                                <button type="button" sanringDropdownMenuItem value="share-project">
-                                  <svg lucideShare class="size-4"></svg>
-                                  <span>{{ i18n.t('sidebar.demo.shareProject') }}</span>
-                                </button>
-                                <sanring-dropdown-menu-separator />
-                                <button
-                                  type="button"
-                                  sanringDropdownMenuItem
-                                  value="delete-project"
-                                  variant="destructive"
-                                >
-                                  <svg lucideTrash2 class="size-4"></svg>
-                                  <span>{{ i18n.t('sidebar.demo.deleteProject') }}</span>
-                                </button>
-                              </sanring-dropdown-menu-content>
-                            </sanring-dropdown-menu>
-                          </sanring-sidebar-menu-item>
-                          <sanring-sidebar-menu-item>
-                            <a href="#" sanringSidebarMenuButton (click)="$event.preventDefault()">
-                              <svg lucideMap class="size-4 shrink-0"></svg>
-                              <span class="truncate">{{ i18n.t('sidebar.demo.travel') }}</span>
-                            </a>
-                          </sanring-sidebar-menu-item>
-                          <sanring-sidebar-menu-item>
-                            <a
-                              href="#"
-                              sanringSidebarMenuButton
-                              class="text-[var(--sanring-muted-foreground)]"
-                              (click)="$event.preventDefault()"
-                            >
-                              <svg lucideEllipsis class="size-4 shrink-0"></svg>
-                              <span class="truncate">{{ i18n.t('sidebar.demo.more') }}</span>
-                            </a>
+                                <svg lucideBell class="size-4 shrink-0"></svg>
+                                @if (isOpen) {
+                                  <span class="truncate">{{
+                                    i18n.t('sidebar.demo.notifications')
+                                  }}</span>
+                                  <svg lucideChevronRight class="ml-auto size-4 shrink-0"></svg>
+                                }
+                              </button>
+                              @if (isOpen) {
+                                <sanring-sidebar-menu-sub sanringCollapsibleContent>
+                                  <sanring-sidebar-menu-sub-item>
+                                    <a
+                                      href="#"
+                                      class="block rounded-[var(--sanring-radius-xs)] px-2 py-1.5 text-sm hover:bg-[var(--sanring-surface-strong)]"
+                                      (click)="$event.preventDefault()"
+                                    >
+                                      {{ i18n.t('sidebar.demo.inbox') }}
+                                    </a>
+                                  </sanring-sidebar-menu-sub-item>
+                                  <sanring-sidebar-menu-sub-item>
+                                    <a
+                                      href="#"
+                                      class="block rounded-[var(--sanring-radius-xs)] px-2 py-1.5 text-sm hover:bg-[var(--sanring-surface-strong)]"
+                                      (click)="$event.preventDefault()"
+                                    >
+                                      {{ i18n.t('sidebar.demo.rules') }}
+                                    </a>
+                                  </sanring-sidebar-menu-sub-item>
+                                </sanring-sidebar-menu-sub>
+                              }
+                            </sanring-collapsible>
                           </sanring-sidebar-menu-item>
                         </sanring-sidebar-menu>
                       </sanring-sidebar-group-content>
                     </sanring-sidebar-group>
-                  }
-                </sanring-sidebar-content>
-                <sanring-sidebar-footer>
-                  <sanring-dropdown-menu>
-                    <button
-                      type="button"
-                      sanringDropdownMenuTrigger
-                      [menu]="accountMenu.menu"
-                      side="right"
-                      align="end"
-                      class="flex min-w-0 items-center rounded-[var(--sanring-radius)] transition-colors hover:bg-[var(--sanring-surface-strong)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--sanring-border-strong)]"
-                      [class.w-full]="isOpen"
-                      [class.gap-3]="isOpen"
-                      [class.p-2]="isOpen"
-                      [class.size-10]="!isOpen"
-                      [class.justify-center]="!isOpen"
-                      [attr.aria-label]="i18n.t('sidebar.demo.accountMenu')"
-                    >
-                      <img
-                        src="https://i.pravatar.cc/80?img=5"
-                        alt=""
-                        class="size-9 shrink-0 rounded-full"
-                      />
-                      @if (isOpen) {
-                        <span class="min-w-0 flex-1 text-left">
-                          <span class="block truncate text-sm font-medium">shadcn</span>
-                          <span
-                            class="block truncate text-xs text-[var(--sanring-muted-foreground)]"
-                          >
-                            m@example.com
-                          </span>
-                        </span>
-                        <svg lucideChevronsUpDown class="size-4 shrink-0"></svg>
-                      }
-                    </button>
-                    <sanring-dropdown-menu-content
-                      #accountMenu="sanringDropdownMenuContent"
-                      class="w-64"
-                    >
-                      <div class="flex min-w-0 items-center gap-3 px-2 py-2">
+                    @if (isOpen) {
+                      <sanring-sidebar-group class="mt-2">
+                        <sanring-sidebar-group-label>{{
+                          i18n.t('sidebar.demo.projects')
+                        }}</sanring-sidebar-group-label>
+                        <sanring-sidebar-group-content>
+                          <sanring-sidebar-menu>
+                            <sanring-sidebar-menu-item>
+                              <a
+                                href="#"
+                                sanringSidebarMenuButton
+                                (click)="$event.preventDefault()"
+                              >
+                                <svg lucideFrame class="size-4 shrink-0"></svg>
+                                <span class="truncate">{{
+                                  i18n.t('sidebar.demo.designEngineering')
+                                }}</span>
+                              </a>
+                              <sanring-dropdown-menu>
+                                <button
+                                  type="button"
+                                  sanringSidebarMenuAction
+                                  sanringDropdownMenuTrigger
+                                  [menu]="designProjectMenu.menu"
+                                  side="right"
+                                  align="start"
+                                  [attr.aria-label]="i18n.t('sidebar.demo.projectActions')"
+                                >
+                                  <svg lucideEllipsis class="size-4"></svg>
+                                </button>
+                                <sanring-dropdown-menu-content
+                                  #designProjectMenu="sanringDropdownMenuContent"
+                                  class="w-48"
+                                >
+                                  <button
+                                    type="button"
+                                    sanringDropdownMenuItem
+                                    value="view-project"
+                                  >
+                                    <svg lucideFolder class="size-4"></svg>
+                                    <span>{{ i18n.t('sidebar.demo.viewProject') }}</span>
+                                  </button>
+                                  <button
+                                    type="button"
+                                    sanringDropdownMenuItem
+                                    value="share-project"
+                                  >
+                                    <svg lucideShare class="size-4"></svg>
+                                    <span>{{ i18n.t('sidebar.demo.shareProject') }}</span>
+                                  </button>
+                                  <sanring-dropdown-menu-separator />
+                                  <button
+                                    type="button"
+                                    sanringDropdownMenuItem
+                                    value="delete-project"
+                                    variant="destructive"
+                                  >
+                                    <svg lucideTrash2 class="size-4"></svg>
+                                    <span>{{ i18n.t('sidebar.demo.deleteProject') }}</span>
+                                  </button>
+                                </sanring-dropdown-menu-content>
+                              </sanring-dropdown-menu>
+                            </sanring-sidebar-menu-item>
+                            <sanring-sidebar-menu-item>
+                              <a
+                                href="#"
+                                sanringSidebarMenuButton
+                                (click)="$event.preventDefault()"
+                              >
+                                <svg lucideChartPie class="size-4 shrink-0"></svg>
+                                <span class="truncate">{{
+                                  i18n.t('sidebar.demo.salesMarketing')
+                                }}</span>
+                              </a>
+                              <sanring-dropdown-menu>
+                                <button
+                                  type="button"
+                                  sanringSidebarMenuAction
+                                  sanringDropdownMenuTrigger
+                                  [menu]="salesProjectMenu.menu"
+                                  side="right"
+                                  align="start"
+                                  [attr.aria-label]="i18n.t('sidebar.demo.projectActions')"
+                                >
+                                  <svg lucideEllipsis class="size-4"></svg>
+                                </button>
+                                <sanring-dropdown-menu-content
+                                  #salesProjectMenu="sanringDropdownMenuContent"
+                                  class="w-48"
+                                >
+                                  <button
+                                    type="button"
+                                    sanringDropdownMenuItem
+                                    value="view-project"
+                                  >
+                                    <svg lucideFolder class="size-4"></svg>
+                                    <span>{{ i18n.t('sidebar.demo.viewProject') }}</span>
+                                  </button>
+                                  <button
+                                    type="button"
+                                    sanringDropdownMenuItem
+                                    value="share-project"
+                                  >
+                                    <svg lucideShare class="size-4"></svg>
+                                    <span>{{ i18n.t('sidebar.demo.shareProject') }}</span>
+                                  </button>
+                                  <sanring-dropdown-menu-separator />
+                                  <button
+                                    type="button"
+                                    sanringDropdownMenuItem
+                                    value="delete-project"
+                                    variant="destructive"
+                                  >
+                                    <svg lucideTrash2 class="size-4"></svg>
+                                    <span>{{ i18n.t('sidebar.demo.deleteProject') }}</span>
+                                  </button>
+                                </sanring-dropdown-menu-content>
+                              </sanring-dropdown-menu>
+                            </sanring-sidebar-menu-item>
+                            <sanring-sidebar-menu-item>
+                              <a
+                                href="#"
+                                sanringSidebarMenuButton
+                                (click)="$event.preventDefault()"
+                              >
+                                <svg lucideMap class="size-4 shrink-0"></svg>
+                                <span class="truncate">{{ i18n.t('sidebar.demo.travel') }}</span>
+                              </a>
+                            </sanring-sidebar-menu-item>
+                            <sanring-sidebar-menu-item>
+                              <a
+                                href="#"
+                                sanringSidebarMenuButton
+                                class="text-[var(--sanring-muted-foreground)]"
+                                (click)="$event.preventDefault()"
+                              >
+                                <svg lucideEllipsis class="size-4 shrink-0"></svg>
+                                <span class="truncate">{{ i18n.t('sidebar.demo.more') }}</span>
+                              </a>
+                            </sanring-sidebar-menu-item>
+                          </sanring-sidebar-menu>
+                        </sanring-sidebar-group-content>
+                      </sanring-sidebar-group>
+                    }
+                  </sanring-sidebar-content>
+                  <sanring-sidebar-footer>
+                    <sanring-dropdown-menu>
+                      <button
+                        type="button"
+                        sanringDropdownMenuTrigger
+                        [menu]="accountMenu.menu"
+                        side="right"
+                        align="end"
+                        class="flex min-w-0 items-center rounded-[var(--sanring-radius)] transition-colors hover:bg-[var(--sanring-surface-strong)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--sanring-border-strong)]"
+                        [class.w-full]="isOpen"
+                        [class.gap-3]="isOpen"
+                        [class.p-2]="isOpen"
+                        [class.size-10]="!isOpen"
+                        [class.justify-center]="!isOpen"
+                        [attr.aria-label]="i18n.t('sidebar.demo.accountMenu')"
+                      >
                         <img
                           src="https://i.pravatar.cc/80?img=5"
                           alt=""
                           class="size-9 shrink-0 rounded-full"
                         />
-                        <div class="min-w-0">
-                          <div class="truncate text-sm font-medium">shadcn</div>
-                          <div class="truncate text-xs text-[var(--sanring-muted-foreground)]">
-                            m@example.com
+                        @if (isOpen) {
+                          <span class="min-w-0 flex-1 text-left">
+                            <span class="block truncate text-sm font-medium">shadcn</span>
+                            <span
+                              class="block truncate text-xs text-[var(--sanring-muted-foreground)]"
+                            >
+                              m@example.com
+                            </span>
+                          </span>
+                          <svg lucideChevronsUpDown class="size-4 shrink-0"></svg>
+                        }
+                      </button>
+                      <sanring-dropdown-menu-content
+                        #accountMenu="sanringDropdownMenuContent"
+                        class="w-64"
+                      >
+                        <div class="flex min-w-0 items-center gap-3 px-2 py-2">
+                          <img
+                            src="https://i.pravatar.cc/80?img=5"
+                            alt=""
+                            class="size-9 shrink-0 rounded-full"
+                          />
+                          <div class="min-w-0">
+                            <div class="truncate text-sm font-medium">shadcn</div>
+                            <div class="truncate text-xs text-[var(--sanring-muted-foreground)]">
+                              m@example.com
+                            </div>
                           </div>
                         </div>
-                      </div>
-                      <sanring-dropdown-menu-separator />
-                      <button type="button" sanringDropdownMenuItem value="upgrade">
-                        <svg lucideSparkles class="size-4"></svg>
-                        <span>{{ i18n.t('sidebar.demo.upgradeToPro') }}</span>
-                      </button>
-                      <sanring-dropdown-menu-separator />
-                      <button type="button" sanringDropdownMenuItem value="account">
-                        <svg lucideBadgeCheck class="size-4"></svg>
-                        <span>{{ i18n.t('sidebar.demo.account') }}</span>
-                      </button>
-                      <button type="button" sanringDropdownMenuItem value="billing">
-                        <svg lucideCreditCard class="size-4"></svg>
-                        <span>{{ i18n.t('sidebar.demo.billing') }}</span>
-                      </button>
-                      <button type="button" sanringDropdownMenuItem value="notifications">
-                        <svg lucideBell class="size-4"></svg>
-                        <span>{{ i18n.t('sidebar.demo.notifications') }}</span>
-                      </button>
-                      <sanring-dropdown-menu-separator />
-                      <button type="button" sanringDropdownMenuItem value="logout">
-                        <svg lucideLogOut class="size-4"></svg>
-                        <span>{{ i18n.t('sidebar.demo.logOut') }}</span>
-                      </button>
-                    </sanring-dropdown-menu-content>
-                  </sanring-dropdown-menu>
-                </sanring-sidebar-footer>
-                <!-- sanringSidebarRail 會在執行期把 ariaLabel 動態綁到 host 的 aria-label，
+                        <sanring-dropdown-menu-separator />
+                        <button type="button" sanringDropdownMenuItem value="upgrade">
+                          <svg lucideSparkles class="size-4"></svg>
+                          <span>{{ i18n.t('sidebar.demo.upgradeToPro') }}</span>
+                        </button>
+                        <sanring-dropdown-menu-separator />
+                        <button type="button" sanringDropdownMenuItem value="account">
+                          <svg lucideBadgeCheck class="size-4"></svg>
+                          <span>{{ i18n.t('sidebar.demo.account') }}</span>
+                        </button>
+                        <button type="button" sanringDropdownMenuItem value="billing">
+                          <svg lucideCreditCard class="size-4"></svg>
+                          <span>{{ i18n.t('sidebar.demo.billing') }}</span>
+                        </button>
+                        <button type="button" sanringDropdownMenuItem value="notifications">
+                          <svg lucideBell class="size-4"></svg>
+                          <span>{{ i18n.t('sidebar.demo.notifications') }}</span>
+                        </button>
+                        <sanring-dropdown-menu-separator />
+                        <button type="button" sanringDropdownMenuItem value="logout">
+                          <svg lucideLogOut class="size-4"></svg>
+                          <span>{{ i18n.t('sidebar.demo.logOut') }}</span>
+                        </button>
+                      </sanring-dropdown-menu-content>
+                    </sanring-dropdown-menu>
+                  </sanring-sidebar-footer>
+                  <!-- sanringSidebarRail 會在執行期把 ariaLabel 動態綁到 host 的 aria-label，
                      eslint 的靜態分析看不到這層 host binding，屬於已知的 false positive -->
-                <!-- eslint-disable-next-line @angular-eslint/template/elements-content -->
-                <button sanringSidebarRail [ariaLabel]="i18n.t('sidebar.demo.toggle')"></button>
-              </sanring-sidebar>
-              <main sanringSidebarInset class="bg-[var(--docs-surface)] p-6">
-                <button
-                  type="button"
-                  sanringSidebarTrigger
-                  class="mb-6 flex size-9 items-center justify-center rounded-[var(--sanring-radius)] hover:bg-[var(--sanring-surface-strong)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--sanring-border-strong)]"
-                  [attr.aria-label]="i18n.t('sidebar.demo.toggle')"
-                >
-                  <svg lucidePanelsTopLeft class="size-5"></svg>
-                </button>
-                <div class="grid gap-4">
-                  <div class="h-5 w-44 rounded bg-[var(--docs-border)]"></div>
-                  <div class="grid grid-cols-2 gap-3">
+                  <!-- eslint-disable-next-line @angular-eslint/template/elements-content -->
+                  <button sanringSidebarRail [ariaLabel]="i18n.t('sidebar.demo.toggle')"></button>
+                </sanring-sidebar>
+                <main sanringSidebarInset class="bg-[var(--docs-surface)] p-6">
+                  <button
+                    type="button"
+                    sanringSidebarTrigger
+                    class="mb-6 flex size-9 items-center justify-center rounded-[var(--sanring-radius)] hover:bg-[var(--sanring-surface-strong)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--sanring-border-strong)]"
+                    [attr.aria-label]="i18n.t('sidebar.demo.toggle')"
+                  >
+                    <svg lucidePanelsTopLeft class="size-5"></svg>
+                  </button>
+                  <div class="grid gap-4">
+                    <div class="h-5 w-44 rounded bg-[var(--docs-border)]"></div>
+                    <div class="grid grid-cols-2 gap-3">
+                      <div
+                        class="h-24 rounded border border-[var(--docs-border)] bg-[var(--docs-bg)]"
+                      ></div>
+                      <div
+                        class="h-24 rounded border border-[var(--docs-border)] bg-[var(--docs-bg)]"
+                      ></div>
+                    </div>
                     <div
-                      class="h-24 rounded border border-[var(--docs-border)] bg-[var(--docs-bg)]"
-                    ></div>
-                    <div
-                      class="h-24 rounded border border-[var(--docs-border)] bg-[var(--docs-bg)]"
+                      class="h-28 rounded border border-[var(--docs-border)] bg-[var(--docs-bg)]"
                     ></div>
                   </div>
-                  <div
-                    class="h-28 rounded border border-[var(--docs-border)] bg-[var(--docs-bg)]"
-                  ></div>
-                </div>
-              </main>
-            </div>
+                </main>
+              </div>
             </sanring-sidebar-provider>
           </div>
         </app-component-page-code-previewer>
@@ -539,11 +574,7 @@ import { sidebarPage, sidebarPageExamples } from './sidebar.docs';
             [code]="examples.usageImport"
             [individualCode]="examples.usageIndividualImports"
           />
-          <div
-            class="overflow-hidden rounded-[var(--sanring-radius)] border border-[var(--docs-border)]"
-          >
-            <app-component-page-code-block [code]="examples.usageMain" language="angular-html" />
-          </div>
+          <app-component-page-code-block [code]="examples.usageMain" language="angular-html" />
         </div>
       </app-component-page-section>
 
@@ -555,22 +586,23 @@ import { sidebarPage, sidebarPageExamples } from './sidebar.docs';
       </app-component-page-section>
 
       <app-component-page-section [section]="section('composition')">
-        <div
-          class="overflow-hidden rounded-[var(--sanring-radius)] border border-[var(--docs-border)]"
-        >
-          <app-component-page-code-block [code]="examples.composition" language="bash" />
-        </div>
+        <app-component-page-code-block [code]="examples.composition" language="bash" />
       </app-component-page-section>
 
       <app-component-page-section [section]="section('example')">
         <div class="grid gap-2">
           <app-component-page-section [section]="section('example-icon')">
-            <app-component-page-code-previewer [code]="examples.iconMode" language="angular-html" [wide]="true">
+            <app-component-page-code-previewer
+              [code]="examples.iconMode"
+              language="angular-html"
+              [wide]="true"
+            >
               <div previewer class="flex w-full justify-center">
                 <sanring-sidebar-provider collapsible="icon" #iconProvider>
                   @let iconIsOpen = iconProvider.isOpen();
                   <div
-                    class="flex h-[480px] w-full max-w-[928px] overflow-hidden rounded-[var(--sanring-radius)] border border-[var(--docs-border)] bg-[var(--sanring-background)]" style="--sanring-sidebar-width: 13rem"
+                    class="flex h-[480px] w-full max-w-[928px] overflow-hidden rounded-[var(--sanring-radius)] border border-[var(--docs-border)] bg-[var(--sanring-background)]"
+                    style="--sanring-sidebar-width: 13rem"
                   >
                     <sanring-sidebar class="shrink-0">
                       <sanring-sidebar-header>
@@ -647,7 +679,8 @@ import { sidebarPage, sidebarPageExamples } from './sidebar.docs';
               <div previewer class="flex w-full justify-center">
                 <sanring-sidebar-provider collapsible="offcanvas">
                   <div
-                    class="flex h-[480px] w-full max-w-[928px] overflow-hidden rounded-[var(--sanring-radius)] border border-[var(--docs-border)] bg-[var(--sanring-background)]" style="--sanring-sidebar-width: 13rem"
+                    class="flex h-[480px] w-full max-w-[928px] overflow-hidden rounded-[var(--sanring-radius)] border border-[var(--docs-border)] bg-[var(--sanring-background)]"
+                    style="--sanring-sidebar-width: 13rem"
                   >
                     <sanring-sidebar class="shrink-0">
                       <sanring-sidebar-header>
@@ -706,10 +739,15 @@ import { sidebarPage, sidebarPageExamples } from './sidebar.docs';
           </app-component-page-section>
 
           <app-component-page-section [section]="section('example-none')">
-            <app-component-page-code-previewer [code]="examples.noneMode" language="angular-html" [wide]="true">
+            <app-component-page-code-previewer
+              [code]="examples.noneMode"
+              language="angular-html"
+              [wide]="true"
+            >
               <div previewer class="flex w-full justify-center">
                 <div
-                  class="flex h-[480px] w-full max-w-[928px] overflow-hidden rounded-[var(--sanring-radius)] border border-[var(--docs-border)] bg-[var(--sanring-background)]" style="--sanring-sidebar-width: 13rem"
+                  class="flex h-[480px] w-full max-w-[928px] overflow-hidden rounded-[var(--sanring-radius)] border border-[var(--docs-border)] bg-[var(--sanring-background)]"
+                  style="--sanring-sidebar-width: 13rem"
                 >
                   <sanring-sidebar collapsible="none" class="shrink-0">
                     <sanring-sidebar-content>

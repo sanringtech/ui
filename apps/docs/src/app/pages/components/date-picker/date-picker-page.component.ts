@@ -1,5 +1,10 @@
 import { Component, computed, inject, signal } from '@angular/core';
-import { CalendarLocale, DateRange, DisabledInput, PickerGranularity } from '@sanring/date-picker-core';
+import {
+  CalendarLocale,
+  DateRange,
+  DisabledInput,
+  PickerGranularity,
+} from '@sanring/date-picker-core';
 import {
   ButtonDirective,
   DatePickerComponent,
@@ -112,11 +117,7 @@ interface DatePickerPreset {
       <app-component-page-section [section]="section('usage')">
         <div class="grid gap-6">
           <app-component-page-usage-imports [code]="examples.usageImport" />
-          <div
-            class="overflow-hidden rounded-[var(--sanring-radius)] border border-[var(--docs-border)]"
-          >
-            <app-component-page-code-block [code]="examples.usageMain" language="angular-html" />
-          </div>
+          <app-component-page-code-block [code]="examples.usageMain" language="angular-html" />
         </div>
       </app-component-page-section>
 
@@ -320,7 +321,10 @@ interface DatePickerPreset {
               <div previewer class="w-full max-w-[28rem]">
                 <div class="grid gap-3 sm:grid-cols-2">
                   <sanring-field>
-                    <label for="date-picker-field-start" class="text-sm font-medium text-[var(--docs-fg)]">
+                    <label
+                      for="date-picker-field-start"
+                      class="text-sm font-medium text-[var(--docs-fg)]"
+                    >
                       {{ i18n.t('datePicker.demo.field.start') }}
                     </label>
                     <sanring-popover #fieldStartPopover>
@@ -346,7 +350,10 @@ interface DatePickerPreset {
                   </sanring-field>
 
                   <sanring-field>
-                    <label for="date-picker-field-end" class="text-sm font-medium text-[var(--docs-fg)]">
+                    <label
+                      for="date-picker-field-end"
+                      class="text-sm font-medium text-[var(--docs-fg)]"
+                    >
                       {{ i18n.t('datePicker.demo.field.end') }}
                     </label>
                     <sanring-popover #fieldEndPopover>

@@ -588,6 +588,12 @@ P9 golden fixture 掃完 53 元件後發現一批長期存在的 registry 宣告
 
 **已完成(2026-08-15)**:`DEVLOG.md` 的部分本來就隨每個項目完成同步在寫(見上面一路的條目)。`ROADMAP.md` 的部分還沒做,這次補上——P29 大部分是內部品質工作(token/對比度/字級規範),不算「產品方向」,不需要整個搬進 ROADMAP,只挑兩個真的對外部使用者/貢獻者有意義的部分寫成「Recently shipped」:(1) docs 站現在有 Playwright e2e 覆蓋,`pnpm test:e2e:docs` 可以跑;(2) docs 站的視覺系統(token/對比度/字級間距規範)整理成 `DOCS_VISUAL_SYSTEM.md` 這份文件。同時把「Quality infrastructure」段落原本就列的「Visual regression testing for CSS changes」這條補充說明——e2e runner 已經有了,但沒有 approved baseline/screenshot diffing,那個還是沒做,不要誤以為這條已經打勾。
 
+- [x] 將已證明穩定的重複 layout 抽成 docs-only Angular component,避免頁面模板持續複製長串 class
+
+**已完成(2026-08-15)**:全站最大宗的重複是 `<app-component-page-code-block>` 外面手動包一層 `<div class="overflow-hidden rounded-[var(--sanring-radius)] border border-[var(--docs-border)]">`(有些帶額外 `mt-6`/`mt-4`/`min-w-0`)——grep 出 95 處,幾乎每個 component page 的「Usage」section 跟部分 long-form 頁(`cli`/`registry`/`introduction`/`mcp`)都在重複同一段。沒有另外新建一個包裝元件,而是直接把框樣式移進 `ComponentPageCodeBlock` 自己的 `host` binding(`rounded-[var(--sanring-radius)] border border-[var(--docs-border)] bg-[var(--docs-code)]` 現在是元件自己的,不用消費端再包)——這樣比「抽成新元件再全站替換」更乾淨,少一層 DOM,也少一個新元件要維護。交給背景 agent 做機械性清理:79 處純框 wrapper 直接刪除,14 處帶額外 margin class(`mt-6`/`mt-4`/`min-w-0`)的把 margin 移到 `<app-component-page-code-block>` 標籤自己的 `class` 上再刪除 wrapper,共 56 個檔案。2 處正確跳過沒有動:`theming-code-panel.component.ts`、`theming-playground-section.component.ts` 的 wrapper 裡除了 code-block 還有一個檔名/語言標籤列的 header,不是純框,agent 有正確識別出來保留。
+
+**驗證**:agent 自己跑過 `tsc --noEmit`/`eslint`/`ng build docs` 都乾淨,我又獨立重跑一次三項確認(不是只信任 agent 的回報)。另外用 Playwright 截圖 + `Read` 工具肉眼比對了 `badge`(純框案例)、`registry`(帶 `mt-6` 案例)、`theming` 全頁(含兩個正確跳過的案例)——三種情況渲染結果都正常,沒有雙重邊框、沒有斷開的縫隙,`mt-6` 移到元件標籤上之後間距跟改之前一樣。這是這次系列第一次能用真的肉眼驗證取代「盲目相信沒問題」,比純看 build 綠燈更有信心。
+
 ## 查證後確認「不算差距」的項目(備查,避免重複討論)
 
 - **PR 沒有測試/型別檢查關卡**:原 P0 已完成,不再放主 todo。已新增 PR 觸發的 CI workflow,跑 `pnpm test`、`tsc --noEmit`、`pnpm lint`。

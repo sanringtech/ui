@@ -1,6 +1,12 @@
 import { Component, inject, signal } from '@angular/core';
 import { LucideChevronLeft, LucideChevronRight, LucideX } from '@lucide/angular';
-import { ButtonDirective, CheckboxComponent, InputDirective, SANRING_TRANSFER_IMPORTS, TransferItem } from '@sanring/ui';
+import {
+  ButtonDirective,
+  CheckboxComponent,
+  InputDirective,
+  SANRING_TRANSFER_IMPORTS,
+  TransferItem,
+} from '@sanring/ui';
 import { getComponentPageSection } from '../../../docs-schema/component-page.utils';
 import { I18nService } from '../../../i18n/i18n.service';
 import {
@@ -53,7 +59,11 @@ import { transferPage, transferPageExamples } from './transfer.docs';
               [(selectedKeys)]="basicSelectedKeys"
               class="flex items-stretch gap-2"
             >
-              <sanring-transfer-panel direction="source" class="h-72 w-56" #basicSourcePanel="sanringTransferPanel">
+              <sanring-transfer-panel
+                direction="source"
+                class="h-72 w-56"
+                #basicSourcePanel="sanringTransferPanel"
+              >
                 <sanring-transfer-header isShow>
                   <sanring-checkbox
                     size="sm"
@@ -87,7 +97,11 @@ import { transferPage, transferPageExamples } from './transfer.docs';
                 </button>
               </div>
 
-              <sanring-transfer-panel direction="target" class="h-72 w-56" #basicTargetPanel="sanringTransferPanel">
+              <sanring-transfer-panel
+                direction="target"
+                class="h-72 w-56"
+                #basicTargetPanel="sanringTransferPanel"
+              >
                 <sanring-transfer-header isShow>
                   <sanring-checkbox
                     size="sm"
@@ -107,11 +121,7 @@ import { transferPage, transferPageExamples } from './transfer.docs';
       <app-component-page-section [section]="section('usage')">
         <div class="grid gap-6">
           <app-component-page-usage-imports [code]="examples.usageImport" />
-          <div
-            class="overflow-hidden rounded-[var(--sanring-radius)] border border-[var(--docs-border)]"
-          >
-            <app-component-page-code-block [code]="examples.usageMain" language="angular-html" />
-          </div>
+          <app-component-page-code-block [code]="examples.usageMain" language="angular-html" />
         </div>
       </app-component-page-section>
 
@@ -123,11 +133,7 @@ import { transferPage, transferPageExamples } from './transfer.docs';
       </app-component-page-section>
 
       <app-component-page-section [section]="section('composition')">
-        <div
-          class="overflow-hidden rounded-[var(--sanring-radius)] border border-[var(--docs-border)]"
-        >
-          <app-component-page-code-block [code]="examples.composition" language="bash" />
-        </div>
+        <app-component-page-code-block [code]="examples.composition" language="bash" />
       </app-component-page-section>
 
       <app-component-page-section [section]="section('example')">
@@ -141,7 +147,11 @@ import { transferPage, transferPageExamples } from './transfer.docs';
                   [(selectedKeys)]="disabledSelectedKeys"
                   class="flex items-stretch gap-2"
                 >
-                  <sanring-transfer-panel direction="source" class="h-72 w-56" #disabledSourcePanel="sanringTransferPanel">
+                  <sanring-transfer-panel
+                    direction="source"
+                    class="h-72 w-56"
+                    #disabledSourcePanel="sanringTransferPanel"
+                  >
                     <sanring-transfer-header isShow>
                       <sanring-checkbox
                         size="sm"
@@ -175,7 +185,11 @@ import { transferPage, transferPageExamples } from './transfer.docs';
                     </button>
                   </div>
 
-                  <sanring-transfer-panel direction="target" class="h-72 w-56" #disabledTargetPanel="sanringTransferPanel">
+                  <sanring-transfer-panel
+                    direction="target"
+                    class="h-72 w-56"
+                    #disabledTargetPanel="sanringTransferPanel"
+                  >
                     <sanring-transfer-header isShow>
                       <sanring-checkbox
                         size="sm"
@@ -204,7 +218,11 @@ import { transferPage, transferPageExamples } from './transfer.docs';
                   [(selectedKeys)]="countedSelectedKeys"
                   class="flex items-stretch gap-2"
                 >
-                  <sanring-transfer-panel direction="source" class="h-72 w-56" #countedSourcePanel="sanringTransferPanel">
+                  <sanring-transfer-panel
+                    direction="source"
+                    class="h-72 w-56"
+                    #countedSourcePanel="sanringTransferPanel"
+                  >
                     <sanring-transfer-header isShow>
                       <sanring-checkbox
                         size="sm"
@@ -238,7 +256,11 @@ import { transferPage, transferPageExamples } from './transfer.docs';
                     </button>
                   </div>
 
-                  <sanring-transfer-panel direction="target" class="h-72 w-56" #countedTargetPanel="sanringTransferPanel">
+                  <sanring-transfer-panel
+                    direction="target"
+                    class="h-72 w-56"
+                    #countedTargetPanel="sanringTransferPanel"
+                  >
                     <sanring-transfer-header isShow>
                       <sanring-checkbox
                         size="sm"
@@ -256,7 +278,10 @@ import { transferPage, transferPageExamples } from './transfer.docs';
           </app-component-page-section>
 
           <app-component-page-section [section]="section('example-custom-actions')">
-            <app-component-page-code-previewer [code]="examples.customActions" language="angular-html">
+            <app-component-page-code-previewer
+              [code]="examples.customActions"
+              language="angular-html"
+            >
               <div previewer class="w-[min(480px,100%)]">
                 <sanring-transfer
                   #customActionsTransfer
@@ -264,7 +289,11 @@ import { transferPage, transferPageExamples } from './transfer.docs';
                   [(selectedKeys)]="customActionsSelectedKeys"
                   class="flex items-stretch gap-2"
                 >
-                  <sanring-transfer-panel direction="source" class="h-72 w-56" #customActionsSourcePanel="sanringTransferPanel">
+                  <sanring-transfer-panel
+                    direction="source"
+                    class="h-72 w-56"
+                    #customActionsSourcePanel="sanringTransferPanel"
+                  >
                     <sanring-transfer-header isShow>
                       <sanring-checkbox
                         size="sm"
@@ -278,17 +307,31 @@ import { transferPage, transferPageExamples } from './transfer.docs';
                   </sanring-transfer-panel>
 
                   <div sanringTransferAction>
-                    <button sanringBtn variant="outline" size="sm" (click)="customActionsTransfer.moveToTarget()">
+                    <button
+                      sanringBtn
+                      variant="outline"
+                      size="sm"
+                      (click)="customActionsTransfer.moveToTarget()"
+                    >
                       <svg lucideChevronRight class="size-4"></svg>
                       {{ i18n.t('transfer.demo.add') }}
                     </button>
-                    <button sanringBtn variant="ghost" size="sm" (click)="customActionsTransfer.moveToSource()">
+                    <button
+                      sanringBtn
+                      variant="ghost"
+                      size="sm"
+                      (click)="customActionsTransfer.moveToSource()"
+                    >
                       <svg lucideChevronLeft class="size-4"></svg>
                       {{ i18n.t('transfer.demo.remove') }}
                     </button>
                   </div>
 
-                  <sanring-transfer-panel direction="target" class="h-72 w-56" #customActionsTargetPanel="sanringTransferPanel">
+                  <sanring-transfer-panel
+                    direction="target"
+                    class="h-72 w-56"
+                    #customActionsTargetPanel="sanringTransferPanel"
+                  >
                     <sanring-transfer-header isShow>
                       <sanring-checkbox
                         size="sm"
@@ -315,7 +358,11 @@ import { transferPage, transferPageExamples } from './transfer.docs';
                   mode="one-way"
                   class="flex items-stretch gap-2"
                 >
-                  <sanring-transfer-panel direction="source" class="h-72 w-56" #oneWaySourcePanel="sanringTransferPanel">
+                  <sanring-transfer-panel
+                    direction="source"
+                    class="h-72 w-56"
+                    #oneWaySourcePanel="sanringTransferPanel"
+                  >
                     <sanring-transfer-header isShow>
                       <sanring-checkbox
                         size="sm"
@@ -340,7 +387,11 @@ import { transferPage, transferPageExamples } from './transfer.docs';
                     </button>
                   </div>
 
-                  <sanring-transfer-panel direction="target" class="h-72 w-56" #oneWayTargetPanel="sanringTransferPanel">
+                  <sanring-transfer-panel
+                    direction="target"
+                    class="h-72 w-56"
+                    #oneWayTargetPanel="sanringTransferPanel"
+                  >
                     <sanring-transfer-header isShow>
                       <sanring-checkbox
                         size="sm"
@@ -366,7 +417,11 @@ import { transferPage, transferPageExamples } from './transfer.docs';
                   [(selectedKeys)]="searchSelectedKeys"
                   class="flex items-stretch gap-2"
                 >
-                  <sanring-transfer-panel direction="source" class="h-72 w-56" #searchSourcePanel="sanringTransferPanel">
+                  <sanring-transfer-panel
+                    direction="source"
+                    class="h-72 w-56"
+                    #searchSourcePanel="sanringTransferPanel"
+                  >
                     <sanring-transfer-header isShow>
                       <sanring-checkbox
                         size="sm"
@@ -383,14 +438,21 @@ import { transferPage, transferPageExamples } from './transfer.docs';
                         type="text"
                         [placeholder]="i18n.t('transfer.demo.searchPlaceholder')"
                         class="h-8 w-full pr-6 text-xs"
-                        (input)="searchSourceQuery.set(searchSrcInput.value); searchSourcePanel.setQuery(searchSrcInput.value)"
+                        (input)="
+                          searchSourceQuery.set(searchSrcInput.value);
+                          searchSourcePanel.setQuery(searchSrcInput.value)
+                        "
                       />
                       @if (searchSourceQuery()) {
                         <button
                           type="button"
                           class="absolute right-2 top-1/2 -translate-y-1/2 text-[var(--sanring-muted)] transition-colors hover:text-[var(--sanring-foreground)]"
                           [attr.aria-label]="i18n.t('transfer.demo.clearSearch')"
-                          (click)="searchSourceQuery.set(''); searchSourcePanel.setQuery(''); searchSrcInput.value = ''"
+                          (click)="
+                            searchSourceQuery.set('');
+                            searchSourcePanel.setQuery('');
+                            searchSrcInput.value = ''
+                          "
                         >
                           <svg lucideX class="size-3"></svg>
                         </button>
@@ -420,7 +482,11 @@ import { transferPage, transferPageExamples } from './transfer.docs';
                     </button>
                   </div>
 
-                  <sanring-transfer-panel direction="target" class="h-72 w-56" #searchTargetPanel="sanringTransferPanel">
+                  <sanring-transfer-panel
+                    direction="target"
+                    class="h-72 w-56"
+                    #searchTargetPanel="sanringTransferPanel"
+                  >
                     <sanring-transfer-header isShow>
                       <sanring-checkbox
                         size="sm"
@@ -437,14 +503,21 @@ import { transferPage, transferPageExamples } from './transfer.docs';
                         type="text"
                         [placeholder]="i18n.t('transfer.demo.searchPlaceholder')"
                         class="h-8 w-full pr-6 text-xs"
-                        (input)="searchTargetQuery.set(searchTgtInput.value); searchTargetPanel.setQuery(searchTgtInput.value)"
+                        (input)="
+                          searchTargetQuery.set(searchTgtInput.value);
+                          searchTargetPanel.setQuery(searchTgtInput.value)
+                        "
                       />
                       @if (searchTargetQuery()) {
                         <button
                           type="button"
                           class="absolute right-2 top-1/2 -translate-y-1/2 text-[var(--sanring-muted)] transition-colors hover:text-[var(--sanring-foreground)]"
                           [attr.aria-label]="i18n.t('transfer.demo.clearSearch')"
-                          (click)="searchTargetQuery.set(''); searchTargetPanel.setQuery(''); searchTgtInput.value = ''"
+                          (click)="
+                            searchTargetQuery.set('');
+                            searchTargetPanel.setQuery('');
+                            searchTgtInput.value = ''
+                          "
                         >
                           <svg lucideX class="size-3"></svg>
                         </button>
@@ -495,7 +568,10 @@ import { transferPage, transferPageExamples } from './transfer.docs';
                       >
                         {{ i18n.t('transfer.demo.previousPage') }}
                       </button>
-                      <span>{{ paginationSourcePanel.currentPage() + 1 }} / {{ paginationSourcePanel.totalPages() }}</span>
+                      <span
+                        >{{ paginationSourcePanel.currentPage() + 1 }} /
+                        {{ paginationSourcePanel.totalPages() }}</span
+                      >
                       <button
                         sanringBtn
                         variant="ghost"
@@ -530,7 +606,11 @@ import { transferPage, transferPageExamples } from './transfer.docs';
                     </button>
                   </div>
 
-                  <sanring-transfer-panel direction="target" class="h-72 w-56" #paginationTargetPanel="sanringTransferPanel">
+                  <sanring-transfer-panel
+                    direction="target"
+                    class="h-72 w-56"
+                    #paginationTargetPanel="sanringTransferPanel"
+                  >
                     <sanring-transfer-header isShow>
                       <sanring-checkbox
                         size="sm"
@@ -556,7 +636,11 @@ import { transferPage, transferPageExamples } from './transfer.docs';
                   [(selectedKeys)]="selectAllSelectedKeys"
                   class="flex items-stretch gap-2"
                 >
-                  <sanring-transfer-panel direction="source" class="h-72 w-56" #selectAllSourcePanel="sanringTransferPanel">
+                  <sanring-transfer-panel
+                    direction="source"
+                    class="h-72 w-56"
+                    #selectAllSourcePanel="sanringTransferPanel"
+                  >
                     <sanring-transfer-header isShow>
                       <sanring-checkbox
                         size="sm"
@@ -590,7 +674,11 @@ import { transferPage, transferPageExamples } from './transfer.docs';
                     </button>
                   </div>
 
-                  <sanring-transfer-panel direction="target" class="h-72 w-56" #selectAllTargetPanel="sanringTransferPanel">
+                  <sanring-transfer-panel
+                    direction="target"
+                    class="h-72 w-56"
+                    #selectAllTargetPanel="sanringTransferPanel"
+                  >
                     <sanring-transfer-header isShow>
                       <sanring-checkbox
                         size="sm"

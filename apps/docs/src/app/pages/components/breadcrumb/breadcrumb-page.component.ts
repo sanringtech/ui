@@ -67,11 +67,7 @@ import { breadcrumbPage, breadcrumbPageExamples } from './breadcrumb.docs';
             [code]="examples.usageImport"
             [individualCode]="examples.usageIndividualImports"
           />
-          <div
-            class="overflow-hidden rounded-[var(--sanring-radius)] border border-[var(--docs-border)]"
-          >
-            <app-component-page-code-block [code]="examples.usageMain" language="angular-html" />
-          </div>
+          <app-component-page-code-block [code]="examples.usageMain" language="angular-html" />
         </div>
       </app-component-page-section>
 
@@ -85,11 +81,7 @@ import { breadcrumbPage, breadcrumbPageExamples } from './breadcrumb.docs';
 
       <!-- Composition -->
       <app-component-page-section [section]="section('composition')">
-        <div
-          class="overflow-hidden rounded-[var(--sanring-radius)] border border-[var(--docs-border)]"
-        >
-          <app-component-page-code-block [code]="examples.composition" language="bash" />
-        </div>
+        <app-component-page-code-block [code]="examples.composition" language="bash" />
       </app-component-page-section>
 
       <!-- Examples -->
@@ -189,7 +181,6 @@ import { breadcrumbPage, breadcrumbPageExamples } from './breadcrumb.docs';
       </app-component-page-section>
 
       <app-component-page-section [section]="section('accessibility')" />
-
 
       <app-component-page-section [section]="section('stateModel')" />
     </app-component-page>

@@ -1,6 +1,11 @@
 import { Component, inject, signal } from '@angular/core';
 import { FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
-import { ErrorMessageComponent, LabelDirective, SanringFieldComponent, SliderComponent } from '@sanring/ui';
+import {
+  ErrorMessageComponent,
+  LabelDirective,
+  SanringFieldComponent,
+  SliderComponent,
+} from '@sanring/ui';
 import { getComponentPageSection } from '../../../docs-schema/component-page.utils';
 import { I18nService } from '../../../i18n/i18n.service';
 import {
@@ -63,11 +68,7 @@ import { sliderPage, sliderPageExamples } from './slider.docs';
       <app-component-page-section [section]="section('usage')">
         <div class="grid gap-6">
           <app-component-page-usage-imports [code]="examples.usageImport" />
-          <div
-            class="overflow-hidden rounded-[var(--sanring-radius)] border border-[var(--docs-border)]"
-          >
-            <app-component-page-code-block [code]="examples.usageMain" language="angular-html" />
-          </div>
+          <app-component-page-code-block [code]="examples.usageMain" language="angular-html" />
         </div>
       </app-component-page-section>
 
@@ -144,7 +145,9 @@ import { sliderPage, sliderPageExamples } from './slider.docs';
                     [formControl]="volumeControl"
                     [ariaLabel]="i18n.t('slider.demo.minVolume')"
                   />
-                  <sanring-error-message>{{ i18n.t('slider.demo.fieldError') }}</sanring-error-message>
+                  <sanring-error-message>{{
+                    i18n.t('slider.demo.fieldError')
+                  }}</sanring-error-message>
                 </sanring-field>
               </div>
             </app-component-page-code-previewer>

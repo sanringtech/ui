@@ -79,11 +79,7 @@ import { contextMenuPage, contextMenuPageExamples } from './context-menu.docs';
             [individualCode]="examples.usageIndividualImports"
           />
 
-          <div
-            class="overflow-hidden rounded-[var(--sanring-radius)] border border-[var(--docs-border)]"
-          >
-            <app-component-page-code-block [code]="examples.usageMain" language="angular-html" />
-          </div>
+          <app-component-page-code-block [code]="examples.usageMain" language="angular-html" />
         </div>
       </app-component-page-section>
 
@@ -95,11 +91,7 @@ import { contextMenuPage, contextMenuPageExamples } from './context-menu.docs';
       </app-component-page-section>
 
       <app-component-page-section [section]="section('composition')">
-        <div
-          class="overflow-hidden rounded-[var(--sanring-radius)] border border-[var(--docs-border)]"
-        >
-          <app-component-page-code-block [code]="examples.composition" language="bash" />
-        </div>
+        <app-component-page-code-block [code]="examples.composition" language="bash" />
       </app-component-page-section>
 
       <app-component-page-section [section]="section('example')">
@@ -172,7 +164,9 @@ import { contextMenuPage, contextMenuPageExamples } from './context-menu.docs';
                       Save Page As...
                     </sanring-context-menu-item>
                     <sanring-context-menu-sub>
-                      <sanring-context-menu-sub-trigger>More Tools</sanring-context-menu-sub-trigger>
+                      <sanring-context-menu-sub-trigger
+                        >More Tools</sanring-context-menu-sub-trigger
+                      >
                       <sanring-context-menu-sub-content class="w-48">
                         <sanring-context-menu-item value="developer-tools">
                           Developer Tools

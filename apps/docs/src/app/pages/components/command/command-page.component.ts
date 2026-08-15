@@ -51,13 +51,17 @@ import { commandPage, commandPageExamples } from './command.docs';
 
                 <sanring-command-group [heading]="i18n.t('command.demo.suggestions')">
                   @for (item of suggestions; track item.value) {
-                    <sanring-command-item [value]="item.value">{{ item.label }}</sanring-command-item>
+                    <sanring-command-item [value]="item.value">{{
+                      item.label
+                    }}</sanring-command-item>
                   }
                 </sanring-command-group>
 
                 <sanring-command-group [heading]="i18n.t('command.demo.settingsGroup')">
                   @for (item of settingsItems; track item.value) {
-                    <sanring-command-item [value]="item.value">{{ item.label }}</sanring-command-item>
+                    <sanring-command-item [value]="item.value">{{
+                      item.label
+                    }}</sanring-command-item>
                   }
                 </sanring-command-group>
               </sanring-command-list>
@@ -72,11 +76,7 @@ import { commandPage, commandPageExamples } from './command.docs';
             [code]="examples.usageImport"
             [individualCode]="examples.usageIndividualImports"
           />
-          <div
-            class="overflow-hidden rounded-[var(--sanring-radius)] border border-[var(--docs-border)]"
-          >
-            <app-component-page-code-block [code]="examples.usageMain" language="angular-html" />
-          </div>
+          <app-component-page-code-block [code]="examples.usageMain" language="angular-html" />
         </div>
       </app-component-page-section>
 
@@ -88,11 +88,7 @@ import { commandPage, commandPageExamples } from './command.docs';
       </app-component-page-section>
 
       <app-component-page-section [section]="section('composition')">
-        <div
-          class="overflow-hidden rounded-[var(--sanring-radius)] border border-[var(--docs-border)]"
-        >
-          <app-component-page-code-block [code]="examples.composition" language="bash" />
-        </div>
+        <app-component-page-code-block [code]="examples.composition" language="bash" />
       </app-component-page-section>
 
       <app-component-page-section [section]="section('example')">
@@ -100,12 +96,7 @@ import { commandPage, commandPageExamples } from './command.docs';
           <app-component-page-section [section]="section('example-dialog')">
             <app-component-page-code-previewer [code]="examples.dialog" language="angular-html">
               <div previewer class="flex min-h-[160px] items-center justify-center">
-                <button
-                  sanringBtn
-                  type="button"
-                  variant="outline"
-                  (click)="commandDialog.open()"
-                >
+                <button sanringBtn type="button" variant="outline" (click)="commandDialog.open()">
                   {{ i18n.t('command.demo.openDialog') }}
                   <span
                     class="ml-2 rounded-[var(--sanring-radius-xs)] border border-[var(--docs-border)] px-1.5 py-0.5 text-xs text-[var(--docs-muted)]"
@@ -118,10 +109,14 @@ import { commandPage, commandPageExamples } from './command.docs';
                   <sanring-command (valueChange)="onDialogSelect($event, commandDialog)">
                     <sanring-command-input [placeholder]="i18n.t('command.demo.placeholder')" />
                     <sanring-command-list>
-                      <sanring-command-empty>{{ i18n.t('command.demo.empty') }}</sanring-command-empty>
+                      <sanring-command-empty>{{
+                        i18n.t('command.demo.empty')
+                      }}</sanring-command-empty>
                       <sanring-command-group [heading]="i18n.t('command.demo.suggestions')">
                         @for (item of suggestions; track item.value) {
-                          <sanring-command-item [value]="item.value">{{ item.label }}</sanring-command-item>
+                          <sanring-command-item [value]="item.value">{{
+                            item.label
+                          }}</sanring-command-item>
                         }
                       </sanring-command-group>
                     </sanring-command-list>
@@ -134,10 +129,14 @@ import { commandPage, commandPageExamples } from './command.docs';
           <app-component-page-section [section]="section('example-shortcuts')">
             <app-component-page-code-previewer [code]="examples.shortcuts" language="angular-html">
               <div previewer class="w-[min(420px,100%)]">
-                <sanring-command class="rounded-[var(--sanring-radius)] border border-[var(--docs-border)]">
+                <sanring-command
+                  class="rounded-[var(--sanring-radius)] border border-[var(--docs-border)]"
+                >
                   <sanring-command-input [placeholder]="i18n.t('command.demo.placeholder')" />
                   <sanring-command-list>
-                    <sanring-command-empty>{{ i18n.t('command.demo.empty') }}</sanring-command-empty>
+                    <sanring-command-empty>{{
+                      i18n.t('command.demo.empty')
+                    }}</sanring-command-empty>
                     <sanring-command-group [heading]="i18n.t('command.demo.settingsGroup')">
                       <sanring-command-item value="profile">
                         Profile

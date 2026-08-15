@@ -1,7 +1,12 @@
 import { Component, inject } from '@angular/core';
 import { FormControl, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { LucideCircleCheck } from '@lucide/angular';
-import { ErrorMessageComponent, SANRING_SELECT_IMPORTS, SanringFieldComponent, SelectValue } from '@sanring/ui';
+import {
+  ErrorMessageComponent,
+  SANRING_SELECT_IMPORTS,
+  SanringFieldComponent,
+  SelectValue,
+} from '@sanring/ui';
 import { getComponentPageSection } from '../../../docs-schema/component-page.utils';
 import { I18nService } from '../../../i18n/i18n.service';
 import {
@@ -69,11 +74,7 @@ import { selectPage, selectPageExamples } from './select.docs';
             [code]="examples.usageImport"
             [individualCode]="examples.usageIndividualImports"
           />
-          <div
-            class="overflow-hidden rounded-[var(--sanring-radius)] border border-[var(--docs-border)]"
-          >
-            <app-component-page-code-block [code]="examples.usageMain" language="angular-html" />
-          </div>
+          <app-component-page-code-block [code]="examples.usageMain" language="angular-html" />
         </div>
       </app-component-page-section>
 
@@ -227,7 +228,9 @@ import { selectPage, selectPageExamples } from './select.docs';
                       <sanring-select-item value="engineering">Engineering</sanring-select-item>
                     </sanring-select-content>
                   </sanring-select>
-                  <sanring-error-message>{{ i18n.t('select.demo.fieldError') }}</sanring-error-message>
+                  <sanring-error-message>{{
+                    i18n.t('select.demo.fieldError')
+                  }}</sanring-error-message>
                 </sanring-field>
               </div>
             </app-component-page-code-previewer>

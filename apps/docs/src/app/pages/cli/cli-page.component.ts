@@ -33,11 +33,7 @@ const INLINE_CODE_CLASS =
         <p class="mt-0 text-base leading-[1.7] text-[var(--docs-muted)]">
           {{ i18n.t('cli.overview.body') }}
         </p>
-        <div
-          class="mt-6 overflow-hidden rounded-[var(--sanring-radius)] border border-[var(--docs-border)]"
-        >
-          <app-component-page-code-block [code]="commands.overview" language="bash" />
-        </div>
+        <app-component-page-code-block class="mt-6" [code]="commands.overview" language="bash" />
       </app-component-page-section>
 
       <!-- 2. init -->
@@ -45,11 +41,7 @@ const INLINE_CODE_CLASS =
         <p class="mt-0 text-base leading-[1.7] text-[var(--docs-muted)]">
           {{ i18n.t('cli.init.body') }}
         </p>
-        <div
-          class="mt-6 overflow-hidden rounded-[var(--sanring-radius)] border border-[var(--docs-border)]"
-        >
-          <app-component-page-code-block [code]="commands.init" language="bash" />
-        </div>
+        <app-component-page-code-block class="mt-6" [code]="commands.init" language="bash" />
         <ul class="mt-4 list-none space-y-2 p-0 text-sm text-[var(--docs-muted)]">
           <li>
             <code [class]="inlineCodeClass">-p, --path &lt;path&gt;</code>
@@ -76,11 +68,7 @@ const INLINE_CODE_CLASS =
         <p class="mt-0 text-base leading-[1.7] text-[var(--docs-muted)]">
           {{ i18n.t('cli.add.body') }}
         </p>
-        <div
-          class="mt-6 overflow-hidden rounded-[var(--sanring-radius)] border border-[var(--docs-border)]"
-        >
-          <app-component-page-code-block [code]="commands.add" language="bash" />
-        </div>
+        <app-component-page-code-block class="mt-6" [code]="commands.add" language="bash" />
         <ul class="mt-4 list-none space-y-2 p-0 text-sm text-[var(--docs-muted)]">
           <li>
             <code [class]="inlineCodeClass">-p, --path &lt;path&gt;</code>
@@ -124,11 +112,7 @@ const INLINE_CODE_CLASS =
         <p class="mt-0 text-base leading-[1.7] text-[var(--docs-muted)]">
           {{ i18n.t('cli.remove.body') }}
         </p>
-        <div
-          class="mt-6 overflow-hidden rounded-[var(--sanring-radius)] border border-[var(--docs-border)]"
-        >
-          <app-component-page-code-block [code]="commands.remove" language="bash" />
-        </div>
+        <app-component-page-code-block class="mt-6" [code]="commands.remove" language="bash" />
         <ul class="mt-4 list-none space-y-2 p-0 text-sm text-[var(--docs-muted)]">
           <li>
             <code [class]="inlineCodeClass">-p, --path &lt;path&gt;</code>
@@ -154,11 +138,7 @@ const INLINE_CODE_CLASS =
         <p class="mt-0 text-base leading-[1.7] text-[var(--docs-muted)]">
           {{ i18n.t('cli.info.body') }}
         </p>
-        <div
-          class="mt-6 overflow-hidden rounded-[var(--sanring-radius)] border border-[var(--docs-border)]"
-        >
-          <app-component-page-code-block [code]="commands.info" language="bash" />
-        </div>
+        <app-component-page-code-block class="mt-6" [code]="commands.info" language="bash" />
         <ul class="mt-4 list-none space-y-2 p-0 text-sm text-[var(--docs-muted)]">
           <li>
             <code [class]="inlineCodeClass">-p, --path &lt;path&gt;</code>
@@ -180,11 +160,7 @@ const INLINE_CODE_CLASS =
         <p class="mt-0 text-base leading-[1.7] text-[var(--docs-muted)]">
           {{ i18n.t('cli.diff.body') }}
         </p>
-        <div
-          class="mt-6 overflow-hidden rounded-[var(--sanring-radius)] border border-[var(--docs-border)]"
-        >
-          <app-component-page-code-block [code]="commands.diff" language="bash" />
-        </div>
+        <app-component-page-code-block class="mt-6" [code]="commands.diff" language="bash" />
         <ul class="mt-4 list-none space-y-2 p-0 text-sm text-[var(--docs-muted)]">
           <li>
             <code [class]="inlineCodeClass">-p, --path &lt;path&gt;</code>
@@ -206,11 +182,7 @@ const INLINE_CODE_CLASS =
         <p class="mt-0 text-base leading-[1.7] text-[var(--docs-muted)]">
           {{ i18n.t('cli.update.body') }}
         </p>
-        <div
-          class="mt-6 overflow-hidden rounded-[var(--sanring-radius)] border border-[var(--docs-border)]"
-        >
-          <app-component-page-code-block [code]="commands.update" language="bash" />
-        </div>
+        <app-component-page-code-block class="mt-6" [code]="commands.update" language="bash" />
         <ul class="mt-4 list-none space-y-2 p-0 text-sm text-[var(--docs-muted)]">
           <li>
             <code [class]="inlineCodeClass">-p, --path &lt;path&gt;</code>
@@ -241,11 +213,7 @@ const INLINE_CODE_CLASS =
         <p class="mt-0 text-base leading-[1.7] text-[var(--docs-muted)]">
           {{ i18n.t('cli.list.body') }}
         </p>
-        <div
-          class="mt-6 overflow-hidden rounded-[var(--sanring-radius)] border border-[var(--docs-border)]"
-        >
-          <app-component-page-code-block [code]="commands.list" language="bash" />
-        </div>
+        <app-component-page-code-block class="mt-6" [code]="commands.list" language="bash" />
         <ul class="mt-4 list-none space-y-2 p-0 text-sm text-[var(--docs-muted)]">
           <li>
             <code [class]="inlineCodeClass">-i, --installed</code>
@@ -263,11 +231,7 @@ const INLINE_CODE_CLASS =
         <p class="mt-0 text-base leading-[1.7] text-[var(--docs-muted)]">
           {{ i18n.t('cli.search.body') }}
         </p>
-        <div
-          class="mt-6 overflow-hidden rounded-[var(--sanring-radius)] border border-[var(--docs-border)]"
-        >
-          <app-component-page-code-block [code]="commands.search" language="bash" />
-        </div>
+        <app-component-page-code-block class="mt-6" [code]="commands.search" language="bash" />
         <ul class="mt-4 list-none space-y-2 p-0 text-sm text-[var(--docs-muted)]">
           <li>
             <code [class]="inlineCodeClass">-p, --path &lt;path&gt;</code>
@@ -285,11 +249,7 @@ const INLINE_CODE_CLASS =
         <p class="mt-0 text-base leading-[1.7] text-[var(--docs-muted)]">
           {{ i18n.t('cli.doctor.body') }}
         </p>
-        <div
-          class="mt-6 overflow-hidden rounded-[var(--sanring-radius)] border border-[var(--docs-border)]"
-        >
-          <app-component-page-code-block [code]="commands.doctor" language="bash" />
-        </div>
+        <app-component-page-code-block class="mt-6" [code]="commands.doctor" language="bash" />
         <ul class="mt-4 list-none space-y-2 p-0 text-sm text-[var(--docs-muted)]">
           <li>
             <code [class]="inlineCodeClass">--offline</code>

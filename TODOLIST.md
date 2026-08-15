@@ -8,11 +8,7 @@
 
 ## P29 — Docs visual refresh 三階段整理 / 翻新 / 收斂
 
-目標是把 docs 站從目前偏保守、偏死板的技術文件介面,推進成更現代、精緻、可掃描的產品文件體驗。前置提交已先整理 `apps/docs` 的 visual system、docs semantic tokens、shell/page surfaces 與部分頁面樣式。**Phase 1(整理基線)、Phase 2(視覺翻新裡所有能用規則/數字/codebase 先例客觀驗證的部分)都已收斂完成**,細節見 `DEVLOG.md`。Phase 2 原本列的「首屏重新設計」「long-form/component docs 視覺提升」三項無法在沒有瀏覽器的情況下負責任地繼續做,移到下面 Phase 4,不再卡在 Phase 2 裡。
-
-### Phase 3 — 重構與驗證收斂
-
-- [ ] 將已證明穩定的重複 layout 抽成 docs-only Angular component,避免頁面模板持續複製長串 class(進行中,`app-component-page-code-block` 這個最大宗的重複——95 處手動包框——正在收斂,見 `DEVLOG.md`)
+目標是把 docs 站從目前偏保守、偏死板的技術文件介面,推進成更現代、精緻、可掃描的產品文件體驗。前置提交已先整理 `apps/docs` 的 visual system、docs semantic tokens、shell/page surfaces 與部分頁面樣式。**Phase 1(整理基線)、Phase 2(視覺翻新裡所有能用規則/數字/codebase 先例客觀驗證的部分)、Phase 3(重構與驗證收斂)都已收斂完成**,細節見 `DEVLOG.md`。Phase 2 原本列的「首屏重新設計」「long-form/component docs 視覺提升」三項無法在沒有瀏覽器的情況下負責任地繼續做,移到下面 Phase 4,不再卡在 Phase 2 裡。
 
 ### Phase 4 — 視覺精修(已解封,但目前沒有具體待辦)
 

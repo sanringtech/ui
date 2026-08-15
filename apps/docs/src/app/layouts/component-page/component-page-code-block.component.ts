@@ -48,50 +48,49 @@ const codeTheme = 'vitesse-dark';
   imports: [LucideClipboard],
   standalone: true,
   host: {
-    class: 'block min-w-0',
+    class:
+      'relative block min-w-0 overflow-hidden rounded-[var(--sanring-radius)] border border-[var(--docs-border)] bg-[var(--docs-code)]',
   },
   template: `
-    <div class="relative bg-[var(--docs-code)]">
-      <div class="flex items-center justify-between gap-3 border-b border-[var(--docs-border)] bg-[var(--docs-code-header)] px-4 py-2.5">
-        <div class="flex items-center gap-2" aria-hidden="true">
-          <span class="size-2.5 rounded-full bg-[var(--docs-error)]"></span>
-          <span class="size-2.5 rounded-full bg-[var(--docs-warn)]"></span>
-          <span class="size-2.5 rounded-full bg-[var(--docs-success)]"></span>
-        </div>
-        <span class="min-w-0 truncate font-mono text-xs font-semibold uppercase tracking-[0.08em] text-[var(--docs-code-muted)]">
-          {{ language() }}
-        </span>
-        <button
-          type="button"
-          class="grid size-8 cursor-pointer place-items-center rounded-[var(--sanring-radius-sm)] border border-[var(--docs-border)] bg-[var(--docs-elevated)] text-[var(--docs-muted)] transition-colors hover:border-[var(--docs-border-strong)] hover:text-[var(--docs-fg)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--docs-focus-ring)]"
-          [attr.aria-label]="i18n.t('actions.copyCode')"
-          (click)="copyCode()"
-        >
-          <svg class="size-4" lucideClipboard></svg>
-        </button>
+    <div class="flex items-center justify-between gap-3 border-b border-[var(--docs-border)] bg-[var(--docs-code-header)] px-4 py-2.5">
+      <div class="flex items-center gap-2" aria-hidden="true">
+        <span class="size-2.5 rounded-full bg-[var(--docs-error)]"></span>
+        <span class="size-2.5 rounded-full bg-[var(--docs-warn)]"></span>
+        <span class="size-2.5 rounded-full bg-[var(--docs-success)]"></span>
       </div>
-
-      <div
-        class="overflow-auto px-4 py-5 font-mono text-[13px] leading-6 text-[var(--docs-code-fg)] sm:px-6 sm:py-7 sm:text-[14px] sm:leading-[1.65]"
+      <span class="min-w-0 truncate font-mono text-xs font-semibold uppercase tracking-[0.08em] text-[var(--docs-code-muted)]">
+        {{ language() }}
+      </span>
+      <button
+        type="button"
+        class="grid size-8 cursor-pointer place-items-center rounded-[var(--sanring-radius-sm)] border border-[var(--docs-border)] bg-[var(--docs-elevated)] text-[var(--docs-muted)] transition-colors hover:border-[var(--docs-border-strong)] hover:text-[var(--docs-fg)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--docs-focus-ring)]"
+        [attr.aria-label]="i18n.t('actions.copyCode')"
+        (click)="copyCode()"
       >
-        <code class="block min-w-max">
-          @for (line of highlightedLines(); track line.number) {
-            <span class="grid grid-cols-[2.25rem_minmax(0,1fr)] sm:grid-cols-[3rem_minmax(0,1fr)]">
-              <span class="select-none pr-3 text-right text-[var(--docs-muted)] sm:pr-5">
-                {{ line.number }}
-              </span>
-              <span class="min-w-0 whitespace-pre">
-                @for (token of line.tokens; track $index) {
-                  <span [style.color]="token.color">{{ token.text }}</span>
-                }
-                @if (!line.tokens.length) {
-                  <span>&nbsp;</span>
-                }
-              </span>
+        <svg class="size-4" lucideClipboard></svg>
+      </button>
+    </div>
+
+    <div
+      class="overflow-auto px-4 py-5 font-mono text-[13px] leading-6 text-[var(--docs-code-fg)] sm:px-6 sm:py-7 sm:text-[14px] sm:leading-[1.65]"
+    >
+      <code class="block min-w-max">
+        @for (line of highlightedLines(); track line.number) {
+          <span class="grid grid-cols-[2.25rem_minmax(0,1fr)] sm:grid-cols-[3rem_minmax(0,1fr)]">
+            <span class="select-none pr-3 text-right text-[var(--docs-muted)] sm:pr-5">
+              {{ line.number }}
             </span>
-          }
-        </code>
-      </div>
+            <span class="min-w-0 whitespace-pre">
+              @for (token of line.tokens; track $index) {
+                <span [style.color]="token.color">{{ token.text }}</span>
+              }
+              @if (!line.tokens.length) {
+                <span>&nbsp;</span>
+              }
+            </span>
+          </span>
+        }
+      </code>
     </div>
   `,
 })

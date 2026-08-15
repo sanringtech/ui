@@ -56,11 +56,7 @@ import { dialogPage, dialogPageExamples } from './dialog.docs';
             [code]="examples.usageImport"
             [individualCode]="examples.usageIndividualImports"
           />
-          <div
-            class="overflow-hidden rounded-[var(--sanring-radius)] border border-[var(--docs-border)]"
-          >
-            <app-component-page-code-block [code]="examples.usageMain" language="angular-html" />
-          </div>
+          <app-component-page-code-block [code]="examples.usageMain" language="angular-html" />
         </div>
       </app-component-page-section>
 
@@ -72,11 +68,7 @@ import { dialogPage, dialogPageExamples } from './dialog.docs';
       </app-component-page-section>
 
       <app-component-page-section [section]="section('composition')">
-        <div
-          class="overflow-hidden rounded-[var(--sanring-radius)] border border-[var(--docs-border)]"
-        >
-          <app-component-page-code-block [code]="examples.composition" language="bash" />
-        </div>
+        <app-component-page-code-block [code]="examples.composition" language="bash" />
       </app-component-page-section>
 
       <app-component-page-section [section]="section('example')">
@@ -197,9 +189,7 @@ import { dialogPage, dialogPageExamples } from './dialog.docs';
               <svg lucideShare2></svg>
             </sanring-dialog-media>
             <h2 sanringDialogTitle>Share project?</h2>
-            <p sanringDialogDescription>
-              Anyone with the link will be able to view this project.
-            </p>
+            <p sanringDialogDescription>Anyone with the link will be able to view this project.</p>
           </sanring-dialog-header>
         </sanring-dialog-content>
       </ng-template>
@@ -208,9 +198,7 @@ import { dialogPage, dialogPageExamples } from './dialog.docs';
         <sanring-dialog-content [showClose]="false">
           <sanring-dialog-header>
             <h2 sanringDialogTitle>Review changes</h2>
-            <p sanringDialogDescription>
-              This dialog cannot be dismissed by Escape or backdrop.
-            </p>
+            <p sanringDialogDescription>This dialog cannot be dismissed by Escape or backdrop.</p>
           </sanring-dialog-header>
           <sanring-dialog-footer>
             <button sanringBtn variant="outline" [sanringDialogClose]="'cancel'" type="button">

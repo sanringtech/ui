@@ -69,7 +69,12 @@ import { treePage, treePageExamples } from './tree.docs';
               #tree
             >
               <sanring-tree-node value="src" #srcNode="sanringTreeNode">
-                <button type="button" tabindex="-1" [class]="folderButtonClass(srcNode)" sanringTreeTrigger>
+                <button
+                  type="button"
+                  tabindex="-1"
+                  [class]="folderButtonClass(srcNode)"
+                  sanringTreeTrigger
+                >
                   <svg lucideChevronRight [class]="chevronClass(srcNode)"></svg>
                   @if (srcNode.isExpanded()) {
                     <svg lucideFolderOpen class="size-4 text-[var(--docs-accent-strong)]"></svg>
@@ -80,7 +85,12 @@ import { treePage, treePageExamples } from './tree.docs';
                 </button>
                 <sanring-tree-group>
                   <sanring-tree-node value="src/app" #appNode="sanringTreeNode">
-                    <button type="button" tabindex="-1" [class]="folderButtonClass(appNode)" sanringTreeTrigger>
+                    <button
+                      type="button"
+                      tabindex="-1"
+                      [class]="folderButtonClass(appNode)"
+                      sanringTreeTrigger
+                    >
                       <svg lucideChevronRight [class]="chevronClass(appNode)"></svg>
                       @if (appNode.isExpanded()) {
                         <svg lucideFolderOpen class="size-4 text-[var(--docs-accent-strong)]"></svg>
@@ -90,7 +100,10 @@ import { treePage, treePageExamples } from './tree.docs';
                       <span>app</span>
                     </button>
                     <sanring-tree-group>
-                      <sanring-tree-node value="src/app/app.component.ts" #appComponentNode="sanringTreeNode">
+                      <sanring-tree-node
+                        value="src/app/app.component.ts"
+                        #appComponentNode="sanringTreeNode"
+                      >
                         <button
                           type="button"
                           tabindex="-1"
@@ -102,7 +115,10 @@ import { treePage, treePageExamples } from './tree.docs';
                           <span>app.component.ts</span>
                         </button>
                       </sanring-tree-node>
-                      <sanring-tree-node value="src/app/app.routes.ts" #appRoutesNode="sanringTreeNode">
+                      <sanring-tree-node
+                        value="src/app/app.routes.ts"
+                        #appRoutesNode="sanringTreeNode"
+                      >
                         <button
                           type="button"
                           tabindex="-1"
@@ -261,11 +277,7 @@ import { treePage, treePageExamples } from './tree.docs';
             [code]="examples.usageImport"
             [individualCode]="examples.usageIndividualImports"
           />
-          <div
-            class="overflow-hidden rounded-[var(--sanring-radius)] border border-[var(--docs-border)]"
-          >
-            <app-component-page-code-block [code]="examples.usageMain" language="angular-html" />
-          </div>
+          <app-component-page-code-block [code]="examples.usageMain" language="angular-html" />
         </div>
       </app-component-page-section>
 
@@ -277,11 +289,7 @@ import { treePage, treePageExamples } from './tree.docs';
       </app-component-page-section>
 
       <app-component-page-section [section]="section('composition')">
-        <div
-          class="overflow-hidden rounded-[var(--sanring-radius)] border border-[var(--docs-border)]"
-        >
-          <app-component-page-code-block [code]="examples.composition" language="bash" />
-        </div>
+        <app-component-page-code-block [code]="examples.composition" language="bash" />
       </app-component-page-section>
 
       <app-component-page-section [section]="section('api')">

@@ -33,11 +33,7 @@ const INLINE_CODE_CLASS =
         <p class="mt-0 text-base leading-[1.7] text-[var(--docs-muted)]">
           {{ i18n.t('mcp.overview.body') }}
         </p>
-        <div
-          class="mt-6 overflow-hidden rounded-[var(--sanring-radius)] border border-[var(--docs-border)]"
-        >
-          <app-component-page-code-block [code]="commands.start" language="bash" />
-        </div>
+        <app-component-page-code-block class="mt-6" [code]="commands.start" language="bash" />
         <ul class="mt-4 list-none space-y-2 p-0 text-sm text-[var(--docs-muted)]">
           <li>
             <code [class]="inlineCodeClass">--registry &lt;source&gt;</code>
@@ -85,11 +81,11 @@ const INLINE_CODE_CLASS =
         <p class="mt-0 text-base leading-[1.7] text-[var(--docs-muted)]">
           {{ i18n.t('mcp.setup.body') }}
         </p>
-        <div
-          class="mt-6 overflow-hidden rounded-[var(--sanring-radius)] border border-[var(--docs-border)]"
-        >
-          <app-component-page-code-block [code]="commands.claudeConfig" language="json" />
-        </div>
+        <app-component-page-code-block
+          class="mt-6"
+          [code]="commands.claudeConfig"
+          language="json"
+        />
       </app-component-page-section>
     </app-component-page>
   `,

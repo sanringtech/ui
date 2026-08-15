@@ -90,7 +90,9 @@ interface InvoiceRow {
       <app-component-page-section [section]="section('basic')">
         <app-component-page-code-previewer [code]="examples.basic" language="angular-html">
           <div previewer class="w-full">
-            <sanring-table-container class="rounded-[var(--sanring-radius)] border border-[var(--docs-border)]">
+            <sanring-table-container
+              class="rounded-[var(--sanring-radius)] border border-[var(--docs-border)]"
+            >
               <table cdk-table sanringTable [dataSource]="invoices">
                 <ng-container sanringColumnDef="invoice">
                   <th sanringHeaderCell *sanringHeaderCellDef>Invoice</th>
@@ -127,9 +129,7 @@ interface InvoiceRow {
       <app-component-page-section [section]="section('usage')">
         <div class="grid gap-6">
           <app-component-page-usage-imports [code]="examples.usageImport" />
-          <div class="overflow-hidden rounded-[var(--sanring-radius)] border border-[var(--docs-border)]">
-            <app-component-page-code-block [code]="examples.usageMain" language="angular-html" />
-          </div>
+          <app-component-page-code-block [code]="examples.usageMain" language="angular-html" />
         </div>
       </app-component-page-section>
 
@@ -145,7 +145,9 @@ interface InvoiceRow {
           <app-component-page-section [section]="section('example-sortable')">
             <app-component-page-code-previewer [code]="examples.sortable" language="angular-html">
               <div previewer class="w-full">
-                <sanring-table-container class="rounded-[var(--sanring-radius)] border border-[var(--docs-border)]">
+                <sanring-table-container
+                  class="rounded-[var(--sanring-radius)] border border-[var(--docs-border)]"
+                >
                   <table
                     cdk-table
                     sanringTable
@@ -171,7 +173,11 @@ interface InvoiceRow {
                     </ng-container>
 
                     <ng-container sanringColumnDef="amount">
-                      <th sanringSortHeader="amount" *sanringHeaderCellDef class="justify-end text-right">
+                      <th
+                        sanringSortHeader="amount"
+                        *sanringHeaderCellDef
+                        class="justify-end text-right"
+                      >
                         Amount
                       </th>
                       <td sanringCell *sanringCellDef="let invoice" class="text-right tabular-nums">
@@ -193,7 +199,9 @@ interface InvoiceRow {
               language="angular-html"
             >
               <div previewer class="w-full">
-                <sanring-table-container class="rounded-[var(--sanring-radius)] border border-[var(--docs-border)]">
+                <sanring-table-container
+                  class="rounded-[var(--sanring-radius)] border border-[var(--docs-border)]"
+                >
                   <table cdk-table sanringTable [dataSource]="invoices">
                     <ng-container sanringColumnDef="select" width="48px">
                       <th sanringHeaderCell *sanringHeaderCellDef></th>
@@ -243,7 +251,9 @@ interface InvoiceRow {
           <app-component-page-section [section]="section('example-sticky')">
             <app-component-page-code-previewer [code]="examples.sticky" language="angular-html">
               <div previewer class="grid w-full gap-4">
-                <sanring-table-container class="max-w-full rounded-[var(--sanring-radius)] border border-[var(--docs-border)]">
+                <sanring-table-container
+                  class="max-w-full rounded-[var(--sanring-radius)] border border-[var(--docs-border)]"
+                >
                   <table cdk-table sanringTable [dataSource]="invoices" class="min-w-[760px]">
                     <ng-container sanringColumnDef="invoice" sticky>
                       <th
@@ -282,11 +292,17 @@ interface InvoiceRow {
                     </ng-container>
 
                     <tr cdk-header-row sanringRow *sanringHeaderRowDef="stickyStartColumns"></tr>
-                    <tr cdk-row sanringRow *sanringRowDef="let row; columns: stickyStartColumns"></tr>
+                    <tr
+                      cdk-row
+                      sanringRow
+                      *sanringRowDef="let row; columns: stickyStartColumns"
+                    ></tr>
                   </table>
                 </sanring-table-container>
 
-                <sanring-table-container class="max-w-full rounded-[var(--sanring-radius)] border border-[var(--docs-border)]">
+                <sanring-table-container
+                  class="max-w-full rounded-[var(--sanring-radius)] border border-[var(--docs-border)]"
+                >
                   <table cdk-table sanringTable [dataSource]="invoices" class="min-w-[820px]">
                     <ng-container sanringColumnDef="invoice">
                       <th sanringHeaderCell *sanringHeaderCellDef>Invoice</th>
@@ -342,7 +358,9 @@ interface InvoiceRow {
           <app-component-page-section [section]="section('example-empty')">
             <app-component-page-code-previewer [code]="examples.empty" language="angular-html">
               <div previewer class="w-full">
-                <sanring-table-container class="rounded-[var(--sanring-radius)] border border-[var(--docs-border)]">
+                <sanring-table-container
+                  class="rounded-[var(--sanring-radius)] border border-[var(--docs-border)]"
+                >
                   <table cdk-table sanringTable [dataSource]="emptyRows">
                     <ng-container sanringColumnDef="invoice">
                       <th sanringHeaderCell *sanringHeaderCellDef>Invoice</th>
@@ -385,7 +403,9 @@ interface InvoiceRow {
           <app-component-page-section [section]="section('example-selection')">
             <app-component-page-code-previewer [code]="examples.selection" language="angular-html">
               <div previewer class="w-full">
-                <sanring-table-container class="rounded-[var(--sanring-radius)] border border-[var(--docs-border)]">
+                <sanring-table-container
+                  class="rounded-[var(--sanring-radius)] border border-[var(--docs-border)]"
+                >
                   <table cdk-table sanringTable [dataSource]="invoices">
                     <ng-container sanringColumnDef="select">
                       <th sanringHeaderCell *sanringHeaderCellDef class="w-12">
@@ -435,12 +455,11 @@ interface InvoiceRow {
           </app-component-page-section>
 
           <app-component-page-section [section]="section('example-actions')">
-            <app-component-page-code-previewer
-              [code]="examples.actions"
-              language="angular-html"
-            >
+            <app-component-page-code-previewer [code]="examples.actions" language="angular-html">
               <div previewer class="w-full">
-                <sanring-table-container class="rounded-[var(--sanring-radius)] border border-[var(--docs-border)]">
+                <sanring-table-container
+                  class="rounded-[var(--sanring-radius)] border border-[var(--docs-border)]"
+                >
                   <table cdk-table sanringTable [dataSource]="invoices">
                     <ng-container sanringColumnDef="invoice">
                       <th sanringHeaderCell *sanringHeaderCellDef>Invoice</th>
@@ -512,7 +531,9 @@ interface InvoiceRow {
           <app-component-page-section [section]="section('example-pagination')">
             <app-component-page-code-previewer [code]="examples.pagination" language="angular-html">
               <div previewer class="grid w-full gap-4">
-                <sanring-table-container class="rounded-[var(--sanring-radius)] border border-[var(--docs-border)]">
+                <sanring-table-container
+                  class="rounded-[var(--sanring-radius)] border border-[var(--docs-border)]"
+                >
                   <table cdk-table sanringTable [dataSource]="pagedInvoices()">
                     <ng-container sanringColumnDef="select">
                       <th sanringHeaderCell *sanringHeaderCellDef class="w-12">
@@ -575,7 +596,6 @@ interface InvoiceRow {
       </app-component-page-section>
 
       <app-component-page-section [section]="section('accessibility')" />
-
 
       <app-component-page-section [section]="section('stateModel')" />
     </app-component-page>
@@ -664,8 +684,7 @@ export class TablePageComponent {
   }
 
   protected statusClass(status: InvoiceRow['status']): string {
-    const base =
-      'inline-flex rounded-[var(--sanring-radius)] px-2 py-0.5 text-xs font-medium';
+    const base = 'inline-flex rounded-[var(--sanring-radius)] px-2 py-0.5 text-xs font-medium';
 
     if (status === 'Paid') {
       return `${base} bg-emerald-50 text-emerald-700 dark:bg-emerald-500/15 dark:text-emerald-300`;
