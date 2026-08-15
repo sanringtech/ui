@@ -15,7 +15,6 @@
 - [ ] 重新設計 home page 首屏與主要內容節奏:保留 Sanring 的工程感,但提高視覺層次、品牌記憶點與第一眼完成度。~~`.home-particles` 動畫背景~~、~~H1 字級偏離 type scale~~ 兩個稽核發現的具體缺口已修掉(見 `DEVLOG.md`);首屏是否要用 `app-docs-page-header`(規範刻意把 Display 56px 保留給 home H1、跟 DocsPageHeaderComponent 的 Page title 36px 分開),以及整體節奏/品牌記憶點的完整重新設計,還沒動
 - [ ] 翻新 long-form docs pages:introduction、CLI、registry、MCP、theming、roadmap、changelog 使用一致的 page header、section rhythm、callout/list/card 語言。結構面已對齊(page matrix audit 確認),`theming-presets-section.component.ts` 表格 overflow 缺口已修;**還沒做的**是超出「符合規範」以外、真正讓這些頁面更精緻好掃描的視覺提升,這塊需要實際肉眼比對,不是靠讀 code 能完成
 - [ ] 翻新 component docs:component page header、examples、installation、API table、recent changes 的視覺層次與掃描效率。抽查 6 個 component page 結構面正常;跟上一項一樣,視覺提升本身需要肉眼驗證才能動
-- [ ] 移除不必要的 one-off Tailwind styling:把重複出現的頁面級樣式收斂到共同 pattern 或 docs-only primitive。目前只做了稽核順手抓到的個案(theming presets 表格、components 列表頁縮字),還沒有系統性掃過重複樣式
 
 ### Phase 3 — 重構與驗證收斂
 
