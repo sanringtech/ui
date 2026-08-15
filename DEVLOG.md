@@ -498,6 +498,14 @@ P9 golden fixture 掃完 53 元件後發現一批長期存在的 registry 宣告
 
 **驗證**:`tsc -p apps/docs/tsconfig.app.json --noEmit`、`eslint` 三個改動檔案都乾淨;起了一份 `ng serve docs --port 4300`(跟你原本已經在跑的 dev server 分開的獨立實例,驗證完就關掉了),`ng build` watch 模式編譯成功,`/`、`/components`、`/theming` 三條路由都回 200。**沒有**用瀏覽器實際看過畫面——這個環境沒有瀏覽器/screenshot 工具,只驗證了編譯乾淨跟路由能載入,沒驗證視覺結果是否符合預期,建議你自己开 dev server 肉眼確認一次。
 
+- [x] 翻新 docs shell:調整 header、sidebar、TOC 的密度、active state、hover/focus state、背景層次與窄螢幕表現
+
+**已完成(2026-08-15,查證後確認不是缺口)**:逐檔讀完 `apps/docs/src/app/shell/` 底下 `header.component.ts`、`menu-list.component.ts`、`feature-list.component.ts`、`docs-sidebar.component.ts`、`docs-toc.component.ts`、`docs-section.component.ts`、`footer.component.ts`,對照 `DOCS_VISUAL_SYSTEM.md` 的 Navigation/Interactive States 規則逐條核對:header sticky 76px、優先順序(品牌→主導覽→搜尋→GitHub→主題切換)、搜尋在 860px 以下變滿寬、GitHub 在 520px 以下允許隱藏、主題切換手機版仍可用,全部符合;sidebar 用 fade mask 隱藏捲軸(符合「scrollbar 可以隱藏,只要有 fade mask」);TOC active state 用 accent border 指示、巢狀縮排一致;sidebar active state(`--docs-active` 底色 + accent border + shadow)明顯比 hover state(`--docs-elevated` 混色)更強烈,new/status 圓點跟 active state 是獨立視覺元素沒有互相取代;focus-visible 全部正確走 `--docs-focus-ring`/`--docs-border-strong`。**結論**:這塊在 P29 前置提交就已經做到位,沒有找到結構性缺口,不需要额外翻新。之前 TODOLIST 把它跟 long-form/component docs 並列成「還要大改」的項目,查證後撤回這個假設。
+
+- [x] 補強 light/dark theme 對比與層次:確認兩種主題不只是顏色反轉,而是保留相同資訊階層與 code readability
+
+**已完成(2026-08-15)**:讀 `apps/docs/src/styles.css` 的 dark/light token 定義,發現真正的 bug——dark theme 的 `--docs-panel`(`#182021`)、`--docs-bg`(`#202424`)、`--docs-surface`(`#232a2b`)、`--docs-elevated`(`#2b3334`)四個 token 各自不同色階,層次分明;但 light theme 的 `--docs-panel`/`--docs-surface`/`--docs-elevated` 三個語意完全不同的 token(「主要面板」「重複項目 surface」「互動/hover surface」)全部寫死 `#ffffff`,只有 `--docs-bg`(`#f6f8f8`)不同——三層語意在 light theme 底下視覺上完全塌縮成同一個顏色,只能靠 border/shadow 撐出層次,跟 dark theme「靠背景色本身分層」的做法不一致,符合我在這個任務一開始分析時提出的疑慮(light theme 容易變成 dark theme 的補丁)。**修法**:把 `--docs-surface` 改成 `color-mix(in srgb, var(--docs-bg) 14%, white)`(從 panel 的純白往 bg 的淺灰微退一階)、`--docs-elevated` 改成 `color-mix(in srgb, var(--docs-border) 16%, white)`(用 border 色系帶出微冷灰調,對應 dark theme 裡 elevated 明顯比 surface「更有存在感」的角色)。兩個都用 `color-mix()` 從既有 token 推導,不是憑感覺猜十六進位值,方便之後微調百分比。`ng build docs` 編譯過。**風險/警語**:這個改動**完全沒有肉眼驗證過**——這個環境沒有瀏覽器或 screenshot 工具,只確認了 CSS 語法正確、build 不報錯,沒辦法確認實際色階是否好看、對比是否恰當。跟這次其他修復(結構性 bug,對錯客觀)不同,這是視覺判斷,信心程度較低,建議你開 dev server 用肉眼看一次 light theme,不滿意就直接調整這兩行的 `color-mix` 百分比。
+
 ---
 
 ## 查證後確認「不算差距」的項目(備查,避免重複討論)

@@ -397,9 +397,9 @@
   :root[data-theme='light'] {
     --docs-bg: #f6f8f8;
     --docs-panel: #ffffff;
-    --docs-surface: #ffffff;
+    --docs-surface: color-mix(in srgb, var(--docs-bg) 14%, white);
     --docs-surface-strong: #eef4f5;
-    --docs-elevated: #ffffff;
+    --docs-elevated: color-mix(in srgb, var(--docs-border) 16%, white);
     --docs-code: #101718;
     --docs-code-header: #172022;
     --docs-code-fg: #d7e2e4;
