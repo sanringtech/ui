@@ -89,7 +89,7 @@ interface RoadmapComponentRow {
       />
 
       <app-component-page-section [section]="sections[0]">
-        <p class="mt-0 text-sm text-[var(--docs-muted)]">
+        <p class="mt-0 text-base leading-[1.7] text-[var(--docs-muted)]">
           {{ i18n.t('roadmap.shipped.description') }}
         </p>
         <div class="documented-components mt-5 grid gap-3 overflow-hidden py-1">
@@ -130,7 +130,7 @@ interface RoadmapComponentRow {
       </ng-template>
 
       <app-component-page-section [section]="sections[1]">
-        <p class="mt-0 text-sm text-[var(--docs-muted)]">
+        <p class="mt-0 text-base leading-[1.7] text-[var(--docs-muted)]">
           {{ i18n.t('roadmap.tier1.description') }}
         </p>
         <ng-container
@@ -140,7 +140,7 @@ interface RoadmapComponentRow {
       </app-component-page-section>
 
       <app-component-page-section [section]="sections[2]">
-        <p class="mt-0 text-sm text-[var(--docs-muted)]">
+        <p class="mt-0 text-base leading-[1.7] text-[var(--docs-muted)]">
           {{ i18n.t('roadmap.tier2.description') }}
         </p>
         <ng-container
@@ -150,7 +150,7 @@ interface RoadmapComponentRow {
       </app-component-page-section>
 
       <app-component-page-section [section]="sections[3]">
-        <p class="mt-0 text-sm text-[var(--docs-muted)]">
+        <p class="mt-0 text-base leading-[1.7] text-[var(--docs-muted)]">
           {{ i18n.t('roadmap.tier3.description') }}
         </p>
         <ng-container
@@ -160,7 +160,7 @@ interface RoadmapComponentRow {
       </app-component-page-section>
 
       <app-component-page-section [section]="sections[4]">
-        <p class="mt-0 text-sm text-[var(--docs-muted)]">
+        <p class="mt-0 text-base leading-[1.7] text-[var(--docs-muted)]">
           {{ i18n.t('roadmap.tier4.description') }}
         </p>
         <ng-container

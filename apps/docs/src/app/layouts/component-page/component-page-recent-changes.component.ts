@@ -50,7 +50,7 @@ function renderInlineCode(text: string): string {
     @if (changes().length > 0) {
       <section
         id="recent-changes"
-        class="mt-16 rounded-[var(--sanring-radius-lg)] border border-[color-mix(in_srgb,var(--docs-border)_82%,transparent)] bg-[color-mix(in_srgb,var(--docs-panel)_72%,transparent)] p-6 shadow-[var(--docs-shadow-soft)] max-[520px]:p-4"
+        class="mt-16 rounded-[var(--sanring-radius-lg)] border border-[color-mix(in_srgb,var(--docs-border)_82%,transparent)] bg-[color-mix(in_srgb,var(--docs-panel)_72%,transparent)] p-4 shadow-[var(--docs-shadow-soft)]"
         [attr.aria-labelledby]="'recent-changes-title'"
       >
         <div class="flex flex-wrap items-end justify-between gap-3">

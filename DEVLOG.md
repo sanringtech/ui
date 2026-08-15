@@ -544,7 +544,17 @@ P9 golden fixture 掃完 53 元件後發現一批長期存在的 registry 宣告
 
 - [x] `component-page-recent-changes.component.ts` 的 H2 字級補上桌機 22px(重新評估後判斷可以確定,跟同檔案的 padding 疑問不是同一種情況)
 
-**已完成(2026-08-15)**:回頭重新看上面回報「不確定」的兩個案例,發現 H2 字級這個其實有足夠證據可以判斷,跟面板 padding 那個真正兩難的情況不一樣。原本 `text-xl`(20px)在所有寬度都一樣,沒有響應式降級。查 Type Scale 表格:Subsection title 定義是 22px 桌機/20px 手機,`leading-tight`(Tailwind 1.25)剛好精確對上表格寫的 line-height 1.25,唯一對不上的只有桌機該是 22 卻寫成 20。給這個標題套 Subsection title 角色是合理的(它是「支援區塊」而非主要 H2 section,語意上本來就該比 Section title 弱一階,但仍需要有一個表定角色,不能沒有依歸),改成 `text-[22px] ... max-[520px]:text-xl`(桌機 22px、手機維持原本的 20px)。面板 padding 那個沒有動,因為兩個規範文字互相矛盾(`--sanring-radius-lg` 暗示該套 Hero panel padding,但「supporting surface」「compact rows」的敘述又暗示該收斂),沒有站得住腳的單一結論,留在 TODOLIST 等人決定。`tsc --noEmit`/`eslint` 驗證乾淨。
+**已完成(2026-08-15)**:回頭重新看上面回報「不確定」的兩個案例,發現 H2 字級這個其實有足夠證據可以判斷,跟面板 padding 那個真正兩難的情況不一樣。原本 `text-xl`(20px)在所有寬度都一樣,沒有響應式降級。查 Type Scale 表格:Subsection title 定義是 22px 桌機/20px 手機,`leading-tight`(Tailwind 1.25)剛好精確對上表格寫的 line-height 1.25,唯一對不上的只有桌機該是 22 卻寫成 20。給這個標題套 Subsection title 角色是合理的(它是「支援區塊」而非主要 H2 section,語意上本來就該比 Section title 弱一階,但仍需要有一個表定角色,不能沒有依歸),改成 `text-[22px] ... max-[520px]:text-xl`(桌機 22px、手機維持原本的 20px)。面板 padding 那個當時沒有動,因為兩個規範文字互相矛盾(`--sanring-radius-lg` 暗示該套 Hero panel padding,但「supporting surface」「compact rows」的敘述又暗示該收斂),沒有站得住腳的單一結論。`tsc --noEmit`/`eslint` 驗證乾淨。
+
+- [x] `component-page-recent-changes.component.ts` 面板 padding——回頭用「查其他 `radius-lg` 面板實際怎麼用」找到夠強的實證,不再是死結
+
+**已完成(2026-08-15)**:使用者追問「Phase 2 那 5 點是不是完全處理不了」,逼自己回頭重新檢查這個當時判定「兩難、不能猜」的案例,發現漏查了一件事——之前只從規範文字本身推論(「`radius-lg` 對應 Hero panel padding」vs「supporting surface 該收斂」互相矛盾),但沒有去查全站其他真正在用 `--sanring-radius-lg` 的地方實際上都怎麼設 padding,那個才是可查證的事實,不是文字解讀。全站 grep 出 7 個其他 `radius-lg` 面板:只有 `docs-page-header.component.ts`(真正的頁面 Hero header)用 `p-7`(28px)/`p-5`(20px 手機),精確對上 Hero panel padding 表定範圍;其餘 6 個(`docs-toc.component.ts`、home page 三個視覺面板、`component-page-api-table.component.ts`)全部落在 `p-4`(16px)或 `p-3`(12px 手機)這個 Card padding 範圍,沒有一個額外套用 Hero panel 的 28-36px。也就是說「`radius-lg` 就該用 Hero panel padding」這個推論在這個 codebase 裡根本不成立,只有真正的頁面 header 才用;其餘 `radius-lg` 面板實務上一律用 Card padding 範圍,這才是跟「supporting surface, compact」的規範文字互相印證、沒有矛盾的那個結論。已把面板 padding 從 `p-6`(24px)/`max-[520px]:p-4` 改成統一 `p-4`(16px,拿掉響應式覆寫,因為手機值本來就是 16px,現在桌機也一樣不用再寫兩份),對齊最多數的既有先例。`tsc --noEmit`/`eslint` 驗證乾淨。
+
+- [x] `roadmap-page.component.ts` 5 處章節說明段落字級——同一輪回頭複查抓到的證據更直接
+
+**已完成(2026-08-15)**:比對後發現這 5 段 `<p class="mt-0 text-sm text-[var(--docs-muted)]">` 全部出現在同一個結構位置——`<app-component-page-section>` 內容開頭的第一段說明文字。查其他 long-form 頁(以 `cli-page.component.ts` 為代表)在完全相同的結構位置,一律用 `<p class="mt-0 text-base leading-[1.7] text-[var(--docs-muted)]">`(Body 角色,10 處以上全部一致)。這不是「這裡的內容該算 Small 還是 Body」的設計判斷,是同一個元件插槽在不同頁面被寫成兩種字級的單純 drift——roadmap 是唯一的例外。已把 5 處全部改成跟其他頁面一致的 `text-base leading-[1.7]`。`tsc --noEmit`/`eslint` 驗證乾淨。
+
+**檢討**:這兩個案例第一輪都被我標成「判斷不出來,需要人決定」,但其實只是查得不夠深——沒去找同一個 codebase 裡的實際先例當作可驗證的證據,只停留在抽象比對規範文字。之後遇到「規範文字看起來矛盾」的情況,應該先查 codebase 裡其他地方實際怎麼做,而不是急著結論「這是主觀判斷,不能碰」。
 
 ---
 
