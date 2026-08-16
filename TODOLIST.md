@@ -35,12 +35,12 @@ Phase 4 已解封:Playwright 截圖 + `Read` 工具可以實際檢視 home(light
 
 #### Long-form Docs — 內容頁視覺提升
 
-- [ ] 翻新 long-form docs pages(introduction、CLI、registry、MCP、theming、roadmap、changelog):超出「符合規範」以外、真正讓頁面更精緻好掃描的視覺提升
-- [ ] CLI page 使用 command groups、流程線、exit state、dry-run/result summary,讓頁面像可操作的 CLI 參考面板
-- [ ] Registry page 使用 registry schema、source graph、component/shared/block 分區,強化 Sanring registry-first 的產品差異
-- [ ] MCP page 使用 agent tool map、read/write boundary、safe operation flow,呈現 agent-ready 的工作方式
-- [ ] Theming page 使用 token cascade、light/dark comparison、semantic token map,把主題系統做成可理解的視覺模型
-- [ ] Changelog page 往 release console / timeline 方向調整,比普通 news feed 更像工程釋出紀錄
+- [x] 翻新 long-form docs pages(introduction、CLI、registry、MCP、theming、roadmap、changelog):超出「符合規範」以外、真正讓頁面更精緻好掃描的視覺提升
+- [x] CLI page 使用 command groups、流程線、exit state、dry-run/result summary,讓頁面像可操作的 CLI 參考面板
+- [x] Registry page 使用 registry schema、source graph、component/shared/block 分區,強化 Sanring registry-first 的產品差異
+- [x] MCP page 使用 agent tool map、read/write boundary、safe operation flow,呈現 agent-ready 的工作方式
+- [x] Theming page 使用 token cascade、light/dark comparison、semantic token map,把主題系統做成可理解的視覺模型
+- [x] Changelog page 往 release console / timeline 方向調整,比普通 news feed 更像工程釋出紀錄
 
 #### Component Docs — 掃描效率與工程證據
 

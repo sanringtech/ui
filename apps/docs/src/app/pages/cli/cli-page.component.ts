@@ -28,6 +28,37 @@ const INLINE_CODE_CLASS =
         eyebrow="docs / cli"
       />
 
+      <section class="mb-4 overflow-hidden rounded-[var(--sanring-radius-lg)] border border-[var(--docs-border)] bg-[var(--docs-code)] text-[var(--docs-code-fg)] shadow-[var(--docs-shadow-soft)]" aria-label="CLI workflow overview">
+        <header class="flex flex-wrap items-center justify-between gap-3 border-b border-[color-mix(in_srgb,var(--docs-code-fg)_18%,transparent)] px-5 py-4">
+          <div><p class="m-0 font-mono text-xs font-semibold uppercase tracking-[0.12em] text-[var(--docs-accent)]">CLI WORKFLOW</p><p class="m-0 mt-1 text-sm text-[color-mix(in_srgb,var(--docs-code-fg)_62%,transparent)]">Move from intent to a reviewed local change.</p></div>
+          <span class="rounded-[var(--sanring-radius-sm)] border border-[color-mix(in_srgb,var(--docs-code-fg)_22%,transparent)] px-2 py-1 font-mono text-[11px] text-[color-mix(in_srgb,var(--docs-code-fg)_68%,transparent)]">dry-run safe</span>
+        </header>
+        <div class="grid lg:grid-cols-[minmax(190px,0.72fr)_minmax(0,1.28fr)]">
+          <nav class="border-b border-[color-mix(in_srgb,var(--docs-code-fg)_18%,transparent)] p-4 lg:border-b-0 lg:border-r" aria-label="CLI command groups">
+            <p class="m-0 font-mono text-[10px] uppercase tracking-[0.12em] text-[color-mix(in_srgb,var(--docs-code-fg)_48%,transparent)]">COMMAND GROUPS</p>
+            <div class="mt-3 grid gap-1.5">
+              @for (group of commandGroups; track group.command; let first = $first) {
+                <div [class]="first ? 'rounded-[var(--sanring-radius-sm)] bg-[var(--docs-accent)] px-3 py-2.5 text-[var(--docs-accent-fg)]' : 'rounded-[var(--sanring-radius-sm)] px-3 py-2.5 text-[color-mix(in_srgb,var(--docs-code-fg)_68%,transparent)]'">
+                  <div class="flex items-center justify-between gap-3 font-mono text-xs"><span>{{ group.command }}</span><span>{{ group.index }}</span></div>
+                  <p class="m-0 mt-1 text-[11px] leading-4 opacity-75">{{ group.description }}</p>
+                </div>
+              }
+            </div>
+          </nav>
+          <div class="min-w-0 p-4 sm:p-5">
+            <div class="relative mb-4 grid grid-cols-4 gap-2" aria-label="CLI process flow">
+              <div class="absolute left-[12.5%] right-[12.5%] top-3 border-t border-dashed border-[color-mix(in_srgb,var(--docs-code-fg)_24%,transparent)]" aria-hidden="true"></div>
+              @for (step of workflowSteps; track step.index) {
+                <div class="relative z-10 text-center"><span class="mx-auto grid size-6 place-items-center rounded-full border border-[var(--docs-accent)] bg-[var(--docs-code)] font-mono text-[10px] text-[var(--docs-accent)]">{{ step.index }}</span><p class="m-0 mt-2 font-mono text-[10px] uppercase tracking-[0.08em] text-[color-mix(in_srgb,var(--docs-code-fg)_72%,transparent)]">{{ step.label }}</p></div>
+              }
+            </div>
+            <div class="flex items-center justify-between gap-3 rounded-t-[var(--sanring-radius)] border border-[color-mix(in_srgb,var(--docs-code-fg)_18%,transparent)] bg-[color-mix(in_srgb,var(--docs-code-fg)_5%,transparent)] px-3 py-2 font-mono text-[11px] text-[color-mix(in_srgb,var(--docs-code-fg)_58%,transparent)]"><span>~/sanring-app</span><span>terminal</span></div>
+            <div class="border-x border-b border-[color-mix(in_srgb,var(--docs-code-fg)_18%,transparent)] p-4 font-mono text-xs leading-6 sm:p-5"><p class="m-0"><span class="text-[var(--docs-accent)]">$</span> sanring add button --dry-run</p><p class="m-0 mt-3 text-[color-mix(in_srgb,var(--docs-code-fg)_58%,transparent)]">resolve component + shared dependencies</p><div class="mt-4 grid gap-2 border-t border-[color-mix(in_srgb,var(--docs-code-fg)_14%,transparent)] pt-3 text-[color-mix(in_srgb,var(--docs-code-fg)_78%,transparent)]"><p class="m-0"><span class="text-[var(--docs-success)]">✓</span> button/button.directive.ts</p><p class="m-0"><span class="text-[var(--docs-success)]">✓</span> shared/utils.ts</p><p class="m-0"><span class="text-[var(--docs-accent)]">→</span> no files written</p></div></div>
+            <div class="mt-3 grid gap-2 sm:grid-cols-3"><div class="rounded-[var(--sanring-radius-sm)] border border-[color-mix(in_srgb,var(--docs-code-fg)_18%,transparent)] px-3 py-2.5"><p class="m-0 font-mono text-[10px] uppercase text-[color-mix(in_srgb,var(--docs-code-fg)_52%,transparent)]">exit 0</p><p class="m-0 mt-1 text-xs text-[color-mix(in_srgb,var(--docs-code-fg)_76%,transparent)]">ready to apply</p></div><div class="rounded-[var(--sanring-radius-sm)] border border-[color-mix(in_srgb,var(--docs-code-fg)_18%,transparent)] px-3 py-2.5"><p class="m-0 font-mono text-[10px] uppercase text-[color-mix(in_srgb,var(--docs-code-fg)_52%,transparent)]">dry-run</p><p class="m-0 mt-1 text-xs text-[color-mix(in_srgb,var(--docs-code-fg)_76%,transparent)]">no writes</p></div><div class="rounded-[var(--sanring-radius-sm)] border border-[color-mix(in_srgb,var(--docs-code-fg)_18%,transparent)] px-3 py-2.5"><p class="m-0 font-mono text-[10px] uppercase text-[color-mix(in_srgb,var(--docs-code-fg)_52%,transparent)]">diff</p><p class="m-0 mt-1 text-xs text-[color-mix(in_srgb,var(--docs-code-fg)_76%,transparent)]">review first</p></div></div>
+          </div>
+        </div>
+      </section>
+
       <!-- 1. Overview -->
       <app-component-page-section [section]="sections[0]">
         <p class="mt-0 text-base leading-[1.7] text-[var(--docs-muted)]">
@@ -291,6 +322,19 @@ export class CliPageComponent {
   protected readonly i18n = inject(I18nService);
   private readonly seo = inject(SeoService);
   protected readonly inlineCodeClass = INLINE_CODE_CLASS;
+  protected readonly commandGroups = [
+    { index: '01', command: 'init', description: 'create the local theme' },
+    { index: '02', command: 'add', description: 'install source files' },
+    { index: '03', command: 'inspect', description: 'read project context' },
+    { index: '04', command: 'verify', description: 'diff and diagnose' },
+  ];
+
+  protected readonly workflowSteps = [
+    { index: '01', label: 'intent' },
+    { index: '02', label: 'resolve' },
+    { index: '03', label: 'preview' },
+    { index: '04', label: 'apply' },
+  ];
 
   constructor() {
     effect(() => {

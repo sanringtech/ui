@@ -88,6 +88,11 @@ interface RoadmapComponentRow {
         eyebrow="docs / roadmap"
       />
 
+      <section class="mb-4 rounded-[var(--sanring-radius-lg)] border border-[var(--docs-border)] bg-[var(--docs-panel)] p-5 shadow-[var(--docs-shadow-soft)] sm:p-6" aria-label="Roadmap delivery map">
+        <div class="flex flex-wrap items-end justify-between gap-4 border-b border-[var(--docs-border)] pb-5"><div><p class="m-0 font-mono text-xs font-semibold uppercase tracking-[0.12em] text-[var(--docs-accent-strong)]">DELIVERY MAP</p><h2 class="m-0 mt-2 text-2xl font-semibold tracking-[-0.03em] text-[var(--docs-fg)]">What is shipped, next, and forming.</h2></div><span class="font-mono text-xs text-[var(--docs-muted)]">v0.23.2</span></div>
+        <div class="mt-5 grid gap-2 sm:grid-cols-4"><div class="rounded-[var(--sanring-radius)] bg-[var(--docs-accent)] p-4 text-[var(--docs-accent-fg)]"><p class="m-0 font-mono text-xs">SHIPPED</p><p class="m-0 mt-4 text-3xl font-semibold">{{ shipped.length }}</p><p class="m-0 mt-1 text-xs opacity-75">available now</p></div><div class="rounded-[var(--sanring-radius)] border border-[var(--docs-border)] bg-[var(--docs-surface)] p-4"><p class="m-0 font-mono text-xs text-[var(--docs-muted)]">TIER 1</p><p class="m-0 mt-4 text-3xl font-semibold text-[var(--docs-fg)]">{{ tier1.length }}</p><p class="m-0 mt-1 text-xs text-[var(--docs-muted)]">next in line</p></div><div class="rounded-[var(--sanring-radius)] border border-[var(--docs-border)] bg-[var(--docs-surface)] p-4"><p class="m-0 font-mono text-xs text-[var(--docs-muted)]">TIER 2</p><p class="m-0 mt-4 text-3xl font-semibold text-[var(--docs-fg)]">{{ tier2.length }}</p><p class="m-0 mt-1 text-xs text-[var(--docs-muted)]">in planning</p></div><div class="rounded-[var(--sanring-radius)] border border-[var(--docs-border)] bg-[var(--docs-surface)] p-4"><p class="m-0 font-mono text-xs text-[var(--docs-muted)]">TIER 3+</p><p class="m-0 mt-4 text-3xl font-semibold text-[var(--docs-fg)]">{{ tier3.length + tier4.length }}</p><p class="m-0 mt-1 text-xs text-[var(--docs-muted)]">forming</p></div></div>
+      </section>
+
       <app-component-page-section [section]="sections[0]">
         <p class="mt-0 text-base leading-[1.7] text-[var(--docs-muted)]">
           {{ i18n.t('roadmap.shipped.description') }}

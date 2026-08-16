@@ -29,7 +29,7 @@ const ROW_CLASS =
 const NOTABLE_ROW_CLASS =
   'flex items-start gap-2.5 text-sm font-normal leading-relaxed text-[var(--docs-fg)]';
 const INLINE_CODE_CLASS =
-  'rounded-[var(--sanring-radius-xs)] bg-[var(--docs-surface-strong)] px-1 py-0.5 font-mono text-[0.9em] text-[var(--docs-fg)]';
+  'break-words rounded-[var(--sanring-radius-xs)] bg-[var(--docs-surface-strong)] px-1 py-0.5 font-mono text-[0.9em] text-[var(--docs-fg)]';
 
 function escapeHtml(value: string): string {
   return value.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
@@ -64,6 +64,11 @@ function renderInlineCode(text: string): string {
         [description]="i18n.t('changelog.page.description')"
         eyebrow="docs / version-notes"
       />
+
+      <section class="mb-4 overflow-hidden rounded-[var(--sanring-radius-lg)] border border-[var(--docs-border)] bg-[var(--docs-code)] text-[var(--docs-code-fg)] shadow-[var(--docs-shadow-soft)]" aria-label="Release console">
+        <header class="flex flex-wrap items-center justify-between gap-3 border-b border-[color-mix(in_srgb,var(--docs-code-fg)_18%,transparent)] px-5 py-4"><div><p class="m-0 font-mono text-xs font-semibold uppercase tracking-[0.12em] text-[var(--docs-accent)]">RELEASE CONSOLE</p><p class="m-0 mt-1 text-sm text-[color-mix(in_srgb,var(--docs-code-fg)_62%,transparent)]">A compact record of what changed and when.</p></div><span class="font-mono text-xs text-[color-mix(in_srgb,var(--docs-code-fg)_58%,transparent)]">latest release</span></header>
+        <div class="grid sm:grid-cols-[1.2fr_0.8fr_0.8fr]"><div class="p-5"><p class="m-0 font-mono text-[10px] uppercase tracking-[0.12em] text-[color-mix(in_srgb,var(--docs-code-fg)_52%,transparent)]">CURRENT</p><div class="mt-3 flex items-baseline gap-3"><span class="text-3xl font-semibold text-[var(--docs-code-fg)]">v{{ versionedChangelog[0]?.version }}</span><time class="font-mono text-xs text-[color-mix(in_srgb,var(--docs-code-fg)_58%,transparent)]">{{ versionedChangelog[0]?.date }}</time></div></div><div class="border-t border-[color-mix(in_srgb,var(--docs-code-fg)_18%,transparent)] p-5 sm:border-l sm:border-t-0"><p class="m-0 font-mono text-[10px] uppercase tracking-[0.12em] text-[color-mix(in_srgb,var(--docs-code-fg)_52%,transparent)]">CHANGES</p><p class="m-0 mt-3 text-3xl font-semibold text-[var(--docs-accent)]">{{ versionedChangelog[0]?.changes.length }}</p></div><div class="border-t border-[color-mix(in_srgb,var(--docs-code-fg)_18%,transparent)] p-5 sm:border-l sm:border-t-0"><p class="m-0 font-mono text-[10px] uppercase tracking-[0.12em] text-[color-mix(in_srgb,var(--docs-code-fg)_52%,transparent)]">NOTABLE</p><p class="m-0 mt-3 text-3xl font-semibold text-[var(--docs-code-fg)]">{{ versionedChangelog[0]?.visible.length }}</p></div></div>
+      </section>
 
       <app-component-page-section [section]="sections[0]">
         <p class="mt-0 text-base leading-[1.7] text-[var(--docs-muted)]">

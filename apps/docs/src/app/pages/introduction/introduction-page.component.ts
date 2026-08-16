@@ -58,6 +58,11 @@ interface IntroNextLink {
         </div>
       </app-docs-page-header>
 
+      <section class="mb-4 overflow-hidden rounded-[var(--sanring-radius-lg)] border border-[var(--docs-border)] bg-[var(--docs-panel)] shadow-[var(--docs-shadow-soft)]" aria-label="Introduction path">
+        <div class="flex flex-wrap items-center justify-between gap-3 border-b border-[var(--docs-border)] px-5 py-4"><p class="m-0 font-mono text-xs font-semibold uppercase tracking-[0.12em] text-[var(--docs-accent-strong)]">START HERE</p><span class="font-mono text-xs text-[var(--docs-muted)]">3 moves to a local UI</span></div>
+        <div class="grid divide-y divide-[var(--docs-border)] sm:grid-cols-3 sm:divide-x sm:divide-y-0"><div class="p-5"><p class="m-0 font-mono text-xs text-[var(--docs-accent-strong)]">01</p><h2 class="m-0 mt-7 text-lg font-semibold text-[var(--docs-fg)]">Install the source</h2><code class="mt-3 block font-mono text-xs text-[var(--docs-muted)]">npx @sanring/cli init</code></div><div class="p-5"><p class="m-0 font-mono text-xs text-[var(--docs-accent-strong)]">02</p><h2 class="m-0 mt-7 text-lg font-semibold text-[var(--docs-fg)]">Choose a primitive</h2><p class="m-0 mt-3 text-sm leading-6 text-[var(--docs-muted)]">Bring only the component your product needs.</p></div><div class="bg-[var(--docs-accent)] p-5 text-[var(--docs-accent-fg)]"><p class="m-0 font-mono text-xs">03</p><h2 class="m-0 mt-7 text-lg font-semibold">Compose the edge</h2><p class="m-0 mt-3 text-sm leading-6 text-[color-mix(in_srgb,var(--docs-accent-fg)_78%,transparent)]">Keep the important decisions inside your app.</p></div></div>
+      </section>
+
       <app-component-page-section [section]="sections[0]">
         <p class="mt-0 text-base leading-[1.7] text-[var(--docs-muted)]">
           {{ i18n.t('intro.whatIs.body') }}
