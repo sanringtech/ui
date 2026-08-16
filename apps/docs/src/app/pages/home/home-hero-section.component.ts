@@ -1,41 +1,30 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { RouterLink } from '@angular/router';
-import { LucideChevronRight, LucideLayers3, LucideRocket } from '@lucide/angular';
-import { ButtonDirective, SANRING_DIALOG_IMPORTS, ToastService } from '@sanring/ui';
+import { LucideChevronRight, LucideRocket } from '@lucide/angular';
+import { ButtonDirective } from '@sanring/ui';
 import { I18nService } from '../../i18n/i18n.service';
+import { HomeHeroDemoPanelComponent } from './home-hero-demo-panel.component';
 
 @Component({
   selector: 'app-home-hero-section',
   standalone: true,
-  imports: [
-    RouterLink,
-    ButtonDirective,
-    SANRING_DIALOG_IMPORTS,
-    LucideChevronRight,
-    LucideLayers3,
-    LucideRocket,
-  ],
+  imports: [RouterLink, ButtonDirective, HomeHeroDemoPanelComponent, LucideChevronRight, LucideRocket],
   template: `
     <section
       class="grid gap-14 lg:grid-cols-[minmax(0,1.08fr)_minmax(360px,0.92fr)] lg:items-start lg:gap-20"
       aria-labelledby="home-title"
     >
       <div class="min-w-0">
-        <div class="flex items-center justify-between gap-4">
-          <span
-            class="inline-flex h-8 items-center rounded-[var(--sanring-radius)] border border-[var(--docs-border)] bg-[var(--docs-elevated)] px-3 font-mono text-xs font-semibold text-[var(--docs-fg)]"
-          >
-            {{ releaseVersion }}
-          </span>
-          <a
-            class="inline-flex min-w-0 items-center gap-2 rounded-[var(--sanring-radius)] px-2 py-2 text-sm font-semibold text-[var(--docs-accent-strong)] no-underline transition-colors hover:bg-[var(--docs-elevated)] max-[520px]:text-xs"
-            routerLink="/version-notes"
-          >
-            <svg class="size-4 shrink-0" lucideRocket></svg>
-            <span class="truncate">{{ i18n.t('home.release.label') }}</span>
-            <svg class="size-4 shrink-0" lucideChevronRight></svg>
-          </a>
-        </div>
+        <a
+          class="inline-flex min-w-0 items-center gap-2.5 rounded-[var(--sanring-radius)] border border-[var(--docs-border)] bg-[var(--docs-surface)] py-2 pl-3.5 pr-3 text-sm font-semibold text-[var(--docs-fg)] no-underline transition-colors hover:border-[var(--docs-border-strong)] hover:bg-[var(--docs-elevated)]"
+          routerLink="/version-notes"
+        >
+          <svg class="size-4 shrink-0 text-[var(--docs-accent-strong)]" lucideRocket></svg>
+          <span class="font-mono">{{ releaseVersion }}</span>
+          <span class="h-3.5 w-px shrink-0 bg-[var(--docs-border-strong)]"></span>
+          <span class="truncate text-[var(--docs-accent-strong)]">{{ i18n.t('home.release.label') }}</span>
+          <svg class="size-4 shrink-0" lucideChevronRight></svg>
+        </a>
 
         <div class="mt-20 max-[860px]:mt-16 max-[520px]:mt-14">
           <p
@@ -80,110 +69,12 @@ import { I18nService } from '../../i18n/i18n.service';
         </div>
       </div>
 
-      <div
-        class="min-w-0 rounded-[var(--sanring-radius-lg)] border border-[var(--docs-border)] bg-[var(--docs-code)] p-5 text-[var(--docs-code-fg)] shadow-[var(--docs-shadow-soft)] lg:mt-6 lg:p-6 max-[520px]:p-4"
-      >
-        <div
-          class="flex min-w-0 items-center justify-between gap-4 border-b border-[color-mix(in_srgb,var(--docs-code-fg)_18%,transparent)] pb-4"
-        >
-          <div
-            class="flex min-w-0 items-center gap-2 font-mono text-xs font-semibold uppercase tracking-[0.1em] text-[var(--docs-accent)]"
-          >
-            <svg class="size-4 shrink-0" lucideLayers3></svg
-            ><span class="truncate">{{ i18n.t('home.hero.panel.eyebrow') }}</span>
-          </div>
-          <span
-            class="shrink-0 font-mono text-xs text-[color-mix(in_srgb,var(--docs-code-fg)_58%,transparent)]"
-            >{{ i18n.t('home.hero.panel.status') }}</span
-          >
-        </div>
-
-        <div class="mt-5 overflow-hidden rounded-[var(--sanring-radius-lg)] border border-[color-mix(in_srgb,var(--docs-code-fg)_22%,transparent)] bg-[var(--docs-surface)]">
-          <div class="grid lg:grid-cols-[minmax(180px,0.86fr)_minmax(0,1.14fr)]">
-            <div class="border-b border-[var(--docs-border)] bg-[var(--docs-code)] p-4 lg:border-b-0 lg:border-r max-[520px]:p-3">
-              <div class="flex items-center justify-between gap-3 border-b border-[color-mix(in_srgb,var(--docs-code-fg)_18%,transparent)] pb-3 font-mono text-[10px] uppercase tracking-[0.1em] text-[color-mix(in_srgb,var(--docs-code-fg)_58%,transparent)]">
-                <span>{{ i18n.t('home.hero.panel.file') }}</span>
-                <button
-                  type="button"
-                  class="inline-flex items-center gap-1 rounded-[var(--sanring-radius-sm)] px-1.5 py-0.5 normal-case tracking-normal text-[var(--docs-accent)] transition-colors hover:bg-[color-mix(in_srgb,var(--docs-code-fg)_14%,transparent)]"
-                  (click)="copySource()"
-                >
-                  {{ copied() ? i18n.t('home.hero.panel.copied') : i18n.t('home.hero.panel.copy') }}
-                </button>
-              </div>
-              <div class="mt-5 grid gap-1 font-mono text-[11px] leading-6 text-[color-mix(in_srgb,var(--docs-code-fg)_78%,transparent)]">
-                <div><span class="text-[var(--docs-accent)]">&lt;button</span></div>
-                <div class="pl-4"><span class="text-[var(--docs-accent)]">sanringBtn</span></div>
-                <div class="pl-4"><span class="text-[var(--docs-accent)]">variant</span>=&quot;default&quot;</div>
-                <div class="pl-4">Browse components</div>
-                <div><span class="text-[var(--docs-accent)]">/&gt;</span></div>
-              </div>
-            </div>
-
-            <div class="min-w-0 bg-[var(--docs-surface)] p-5 text-[var(--docs-fg)] max-[520px]:p-4">
-              <div class="flex items-center justify-between gap-3"><div><p class="m-0 font-mono text-[10px] font-semibold uppercase tracking-[0.1em] text-[var(--docs-muted)]">{{ i18n.t('home.hero.panel.title') }}</p><p class="m-0 mt-1 text-xs text-[var(--docs-muted)]">{{ i18n.t('home.hero.panel.sourceLabel') }}</p></div><span class="rounded-[var(--sanring-radius-sm)] bg-[var(--docs-elevated)] px-2 py-1 font-mono text-[10px] text-[var(--docs-muted)]">Angular</span></div>
-              <p class="m-0 mt-5 text-sm leading-6 text-[var(--docs-muted)]">{{ i18n.t('home.hero.panel.description') }}</p>
-              <div class="mt-6 flex justify-center">
-                <button
-                  sanringBtn
-                  type="button"
-                  variant="default"
-                  size="md"
-                  class="min-h-11 min-w-[170px]"
-                  [sanringDialogTrigger]="demoDialog"
-                >
-                  {{ i18n.t('home.hero.panel.demoButton') }}
-                </button>
-              </div>
-              <div class="mt-5 flex min-w-0 flex-wrap items-center gap-x-4 gap-y-2 border-t border-[var(--docs-border)] pt-4 font-mono text-[10px] text-[var(--docs-muted)]"><span class="font-semibold text-[var(--docs-accent-strong)]">Button</span><span>Dialog</span><span>Toast</span><span class="ml-auto">{{ i18n.t('home.hero.panel.interactive') }}</span></div>
-            </div>
-          </div>
-        </div>
-      </div>
+      <app-home-hero-demo-panel />
     </section>
-
-    <ng-template #demoDialog>
-      <sanring-dialog-content>
-        <sanring-dialog-header>
-          <h2 sanringDialogTitle>{{ i18n.t('home.hero.panel.dialogTitle') }}</h2>
-          <p sanringDialogDescription>{{ i18n.t('home.hero.panel.dialogDescription') }}</p>
-        </sanring-dialog-header>
-        <sanring-dialog-footer>
-          <button sanringBtn type="button" variant="outline" sanringDialogClose>
-            {{ i18n.t('home.hero.panel.dialogClose') }}
-          </button>
-          <button sanringBtn type="button" variant="default" (click)="fireToast()">
-            {{ i18n.t('home.hero.panel.dialogAction') }}
-          </button>
-        </sanring-dialog-footer>
-      </sanring-dialog-content>
-    </ng-template>
   `,
   styles: [':host { display: block; }'],
 })
 export class HomeHeroSectionComponent {
   protected readonly i18n = inject(I18nService);
-  private readonly toast = inject(ToastService);
-
   protected readonly releaseVersion = 'v0.23.2';
-  protected readonly copied = signal(false);
-
-  private readonly sourceSnippet = '<button sanringBtn variant="default">\n  Browse components\n</button>';
-
-  protected async copySource(): Promise<void> {
-    try {
-      await navigator.clipboard.writeText(this.sourceSnippet);
-      this.copied.set(true);
-      setTimeout(() => this.copied.set(false), 1800);
-    } catch {
-      // Clipboard permission denied or unavailable (e.g. insecure context) — leave button inert.
-    }
-  }
-
-  protected fireToast(): void {
-    this.toast.success(this.i18n.t('home.hero.panel.toastTitle'), {
-      description: this.i18n.t('home.hero.panel.toastDescription'),
-      duration: 3000,
-    });
-  }
 }
