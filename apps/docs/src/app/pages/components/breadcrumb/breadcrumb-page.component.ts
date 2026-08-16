@@ -33,6 +33,11 @@ import { breadcrumbPage, breadcrumbPageExamples } from './breadcrumb.docs';
         [componentId]="page.componentId"
         [title]="i18n.t(page.titleKey)"
         [description]="i18n.t(page.descriptionKey)"
+        [registryDeps]="page.registryDeps"
+        [ssrSafe]="page.ssrSafe"
+        [hasAccessibilityNotes]="true"
+        [hasKeyboardSupport]="false"
+        [stateModelLabel]="i18n.t('component.header.stateless')"
       />
 
       <!-- Basic -->

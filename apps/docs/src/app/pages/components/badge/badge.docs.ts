@@ -7,6 +7,8 @@ export const badgePage = {
   componentId: 'badge',
   titleKey: 'component.badge',
   descriptionKey: 'badge.description',
+  registryDeps: ['utils'],
+  ssrSafe: true,
   sections: [
     {
       id: 'basic',

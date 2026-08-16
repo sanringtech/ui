@@ -8,6 +8,8 @@ export const tabsPage = {
   componentId: 'tabs',
   titleKey: 'component.tabs',
   descriptionKey: 'tabs.description',
+  registryDeps: ['utils'],
+  ssrSafe: true,
   sections: [
     {
       id: 'basic',

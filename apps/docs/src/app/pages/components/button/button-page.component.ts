@@ -40,7 +40,7 @@ import { buttonPage, buttonPageExamples } from './button.docs';
         [registryDeps]="page.registryDeps"
         [ssrSafe]="page.ssrSafe"
         [hasAccessibilityNotes]="true"
-        [isStateless]="true"
+        [stateModelLabel]="i18n.t('component.header.stateless')"
       />
 
       <app-component-page-section [section]="section('basic')">

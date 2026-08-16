@@ -7,6 +7,8 @@ export const alertPage = {
   componentId: 'alert',
   titleKey: 'component.alert',
   descriptionKey: 'alert.description',
+  registryDeps: ['utils'],
+  ssrSafe: true,
   sections: [
     {
       id: 'basic',

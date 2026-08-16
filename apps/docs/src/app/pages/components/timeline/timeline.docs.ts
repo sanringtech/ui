@@ -7,6 +7,8 @@ export const timelinePage = {
   componentId: 'timeline',
   titleKey: 'component.timeline',
   descriptionKey: 'timeline.description',
+  registryDeps: ['utils'],
+  ssrSafe: true,
   sections: [
     {
       id: 'basic',

@@ -8,6 +8,8 @@ export const calendarPage = {
   componentId: 'calendar',
   titleKey: 'component.calendar',
   descriptionKey: 'calendar.description',
+  registryDeps: ['cva-base', 'utils'],
+  ssrSafe: true,
   sections: [
     {
       id: 'basic',

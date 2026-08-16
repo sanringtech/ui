@@ -7,6 +7,8 @@ export const cardPage = {
   componentId: 'card',
   titleKey: 'component.card',
   descriptionKey: 'card.description',
+  registryDeps: ['utils'],
+  ssrSafe: true,
   sections: [
     {
       id: 'basic',

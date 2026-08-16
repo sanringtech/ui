@@ -7,6 +7,8 @@ export const fieldPage = {
   componentId: 'field',
   titleKey: 'component.field',
   descriptionKey: 'field.description',
+  registryDeps: ['utils'],
+  ssrSafe: true,
   sections: [
     {
       id: 'basic',

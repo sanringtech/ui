@@ -8,6 +8,8 @@ export const sheetPage = {
   componentId: 'sheet',
   titleKey: 'component.sheet',
   descriptionKey: 'sheet.description',
+  registryDeps: ['utils', 'component-styles', 'component-timing'],
+  ssrSafe: false,
   sections: [
     {
       id: 'basic',

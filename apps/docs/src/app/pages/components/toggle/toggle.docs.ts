@@ -8,6 +8,8 @@ export const togglePage = {
   componentId: 'toggle',
   titleKey: 'component.toggle',
   descriptionKey: 'toggle.description',
+  registryDeps: ['utils', 'component-styles'],
+  ssrSafe: true,
   sections: [
     {
       id: 'basic',

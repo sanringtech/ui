@@ -7,6 +7,8 @@ export const spinnerPage = {
   componentId: 'spinner',
   titleKey: 'component.spinner',
   descriptionKey: 'spinner.description',
+  registryDeps: ['utils'],
+  ssrSafe: true,
   sections: [
     {
       id: 'basic',

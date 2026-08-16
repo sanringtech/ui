@@ -8,6 +8,8 @@ export const otpInputPage = {
   componentId: 'otp-input',
   titleKey: 'component.otpInput',
   descriptionKey: 'otpInput.description',
+  registryDeps: ['component-styles', 'cva-base', 'utils'],
+  ssrSafe: true,
   sections: [
     {
       id: 'basic',

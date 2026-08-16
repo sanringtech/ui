@@ -8,6 +8,8 @@ export const dialogPage = {
   componentId: 'dialog',
   titleKey: 'component.dialog',
   descriptionKey: 'dialog.description',
+  registryDeps: ['utils', 'component-styles'],
+  ssrSafe: true,
   sections: [
     {
       id: 'basic',

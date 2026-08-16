@@ -8,6 +8,8 @@ export const commandPage = {
   componentId: 'command',
   titleKey: 'component.command',
   descriptionKey: 'command.description',
+  registryDeps: ['utils', 'component-styles', 'collection-controller', 'collection-state'],
+  ssrSafe: false,
   sections: [
     {
       id: 'basic',

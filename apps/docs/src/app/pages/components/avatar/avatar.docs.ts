@@ -7,6 +7,8 @@ export const avatarPage = {
   componentId: 'avatar',
   titleKey: 'component.avatar',
   descriptionKey: 'avatar.description',
+  registryDeps: ['utils'],
+  ssrSafe: true,
   sections: [
     {
       id: 'basic',

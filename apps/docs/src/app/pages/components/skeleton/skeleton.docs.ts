@@ -7,6 +7,8 @@ export const skeletonPage = {
   componentId: 'skeleton',
   titleKey: 'component.skeleton',
   descriptionKey: 'skeleton.description',
+  registryDeps: ['utils'],
+  ssrSafe: true,
   sections: [
     {
       id: 'basic',

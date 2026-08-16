@@ -56,6 +56,11 @@ import { fileUploadPage, fileUploadPageExamples } from './file-upload.docs';
         [componentId]="page.componentId"
         [title]="i18n.t(page.titleKey)"
         [description]="i18n.t(page.descriptionKey)"
+        [registryDeps]="page.registryDeps"
+        [ssrSafe]="page.ssrSafe"
+        [hasAccessibilityNotes]="true"
+        [hasKeyboardSupport]="true"
+        [stateModelLabel]="i18n.t('component.header.cva')"
       />
 
       <app-component-page-section [section]="section('basic')">

@@ -7,6 +7,8 @@ export const labelPage = {
   componentId: 'label',
   titleKey: 'component.label',
   descriptionKey: 'label.description',
+  registryDeps: ['utils'],
+  ssrSafe: true,
   sections: [
     {
       id: 'basic',

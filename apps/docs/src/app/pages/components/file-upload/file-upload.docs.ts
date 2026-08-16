@@ -8,6 +8,8 @@ export const fileUploadPage = {
   componentId: 'file-upload',
   titleKey: 'component.fileUpload',
   descriptionKey: 'fileUpload.description',
+  registryDeps: ['cva-base', 'utils'],
+  ssrSafe: true,
   sections: [
     {
       id: 'basic',

@@ -8,6 +8,8 @@ export const sidebarPage = {
   componentId: 'sidebar',
   titleKey: 'component.sidebar',
   descriptionKey: 'sidebar.description',
+  registryDeps: ['utils'],
+  ssrSafe: true,
   sections: [
     {
       id: 'basic',

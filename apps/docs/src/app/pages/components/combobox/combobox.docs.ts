@@ -8,6 +8,8 @@ export const comboboxPage = {
   componentId: 'combobox',
   titleKey: 'component.combobox',
   descriptionKey: 'combobox.description',
+  registryDeps: ['collection-controller', 'collection-state', 'component-styles', 'cva-base', 'utils'],
+  ssrSafe: true,
   sections: [
     {
       id: 'basic',

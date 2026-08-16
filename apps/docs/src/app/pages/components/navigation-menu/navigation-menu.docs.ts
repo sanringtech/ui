@@ -8,6 +8,8 @@ export const navigationMenuPage = {
   componentId: 'navigation-menu',
   titleKey: 'component.navigationMenu',
   descriptionKey: 'navigationMenu.description',
+  registryDeps: ['utils', 'component-styles', 'menu-navigation', 'menu-overlay-controller'],
+  ssrSafe: true,
   sections: [
     {
       id: 'basic',

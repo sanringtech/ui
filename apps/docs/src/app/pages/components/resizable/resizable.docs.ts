@@ -8,6 +8,8 @@ export const resizablePage = {
   componentId: 'resizable',
   titleKey: 'component.resizable',
   descriptionKey: 'resizable.description',
+  registryDeps: ['utils'],
+  ssrSafe: true,
   sections: [
     {
       id: 'basic',

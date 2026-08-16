@@ -8,6 +8,8 @@ export const treePage = {
   componentId: 'tree',
   titleKey: 'component.tree',
   descriptionKey: 'tree.description',
+  registryDeps: ['utils'],
+  ssrSafe: true,
   sections: [
     {
       id: 'basic',

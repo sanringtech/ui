@@ -7,6 +7,8 @@ export const scrollAreaPage = {
   componentId: 'scroll-area',
   titleKey: 'component.scrollArea',
   descriptionKey: 'scrollArea.description',
+  registryDeps: ['utils'],
+  ssrSafe: true,
   sections: [
     {
       id: 'basic',

@@ -8,6 +8,8 @@ export const transferPage = {
   componentId: 'transfer',
   titleKey: 'component.transfer',
   descriptionKey: 'transfer.description',
+  registryDeps: ['component-styles', 'utils'],
+  ssrSafe: true,
   sections: [
     {
       id: 'basic',

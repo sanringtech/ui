@@ -7,6 +7,8 @@ export const dividerPage = {
   componentId: 'divider',
   titleKey: 'component.divider',
   descriptionKey: 'divider.description',
+  registryDeps: ['utils'],
+  ssrSafe: true,
   sections: [
     {
       id: 'basic',

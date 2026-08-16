@@ -8,6 +8,8 @@ export const stepperPage = {
   componentId: 'stepper',
   titleKey: 'component.stepper',
   descriptionKey: 'stepper.description',
+  registryDeps: ['utils'],
+  ssrSafe: true,
   sections: [
     {
       id: 'basic',

@@ -7,6 +7,8 @@ export const toastPage = {
   componentId: 'toast',
   titleKey: 'component.toast',
   descriptionKey: 'toast.description',
+  registryDeps: ['utils', 'component-styles', 'component-timing'],
+  ssrSafe: true,
   sections: [
     {
       id: 'basic',

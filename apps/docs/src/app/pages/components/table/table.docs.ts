@@ -7,6 +7,8 @@ export const tablePage = {
   componentId: 'table',
   titleKey: 'component.table',
   descriptionKey: 'table.description',
+  registryDeps: ['utils'],
+  ssrSafe: true,
   sections: [
     {
       id: 'basic',

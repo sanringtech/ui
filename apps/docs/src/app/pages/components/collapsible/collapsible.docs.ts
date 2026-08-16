@@ -8,6 +8,8 @@ export const collapsiblePage = {
   componentId: 'collapsible',
   titleKey: 'component.collapsible',
   descriptionKey: 'collapsible.description',
+  registryDeps: ['utils'],
+  ssrSafe: true,
   sections: [
     {
       id: 'installation',

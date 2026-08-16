@@ -103,6 +103,8 @@ export const commonTranslations = {
   'component.header.a11y': 'Accessible',
   'component.header.keyboard': 'Keyboard nav',
   'component.header.stateless': 'Stateless',
+  'component.header.stateful': 'Stateful',
+  'component.header.cva': 'CVA-integrated',
   'component.header.updated': 'Updated',
   'component.header.jumpInstall': 'Installation',
   'component.header.jumpApi': 'API',

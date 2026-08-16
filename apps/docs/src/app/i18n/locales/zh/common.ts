@@ -101,6 +101,8 @@ export const commonTranslations = {
   'component.header.a11y': '無障礙',
   'component.header.keyboard': '鍵盤操作',
   'component.header.stateless': '無內部狀態',
+  'component.header.stateful': '有內部狀態',
+  'component.header.cva': '支援 CVA',
   'component.header.updated': '最近更新',
   'component.header.jumpInstall': '安裝方式',
   'component.header.jumpApi': 'API',

@@ -8,6 +8,8 @@ export const radioPage = {
   componentId: 'radio',
   titleKey: 'component.radio',
   descriptionKey: 'radio.description',
+  registryDeps: ['component-styles', 'cva-base', 'utils'],
+  ssrSafe: true,
   sections: [
     {
       id: 'basic',

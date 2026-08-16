@@ -8,6 +8,8 @@ export const accordionPage = {
   componentId: 'accordion',
   titleKey: 'component.accordion',
   descriptionKey: 'accordion.description',
+  registryDeps: ['utils'],
+  ssrSafe: true,
   sections: [
     {
       id: 'basic',

@@ -45,6 +45,11 @@ import { fieldPage, fieldPageExamples } from './field.docs';
         [componentId]="page.componentId"
         [title]="i18n.t(page.titleKey)"
         [description]="i18n.t(page.descriptionKey)"
+        [registryDeps]="page.registryDeps"
+        [ssrSafe]="page.ssrSafe"
+        [hasAccessibilityNotes]="true"
+        [hasKeyboardSupport]="false"
+        [stateModelLabel]="i18n.t('component.header.stateful')"
       />
 
       <app-component-page-section [section]="section('basic')">

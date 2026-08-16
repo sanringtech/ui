@@ -8,6 +8,8 @@ export const hoverCardPage = {
   componentId: 'hover-card',
   titleKey: 'component.hoverCard',
   descriptionKey: 'hoverCard.description',
+  registryDeps: ['utils', 'component-styles', 'component-timing'],
+  ssrSafe: true,
   sections: [
     {
       id: 'basic',

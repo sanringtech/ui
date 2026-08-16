@@ -8,6 +8,8 @@ export const switchPage = {
   componentId: 'switch',
   titleKey: 'component.switch',
   descriptionKey: 'switch.description',
+  registryDeps: ['component-styles', 'cva-base', 'utils'],
+  ssrSafe: true,
   sections: [
     {
       id: 'basic',

@@ -8,6 +8,8 @@ export const contextMenuPage = {
   componentId: 'context-menu',
   titleKey: 'component.contextMenu',
   descriptionKey: 'contextMenu.description',
+  registryDeps: ['utils', 'component-styles', 'menu-navigation', 'menu-overlay-controller'],
+  ssrSafe: true,
   sections: [
     {
       id: 'basic',

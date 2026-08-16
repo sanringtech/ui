@@ -8,6 +8,8 @@ export const inputPage = {
   componentId: 'input',
   titleKey: 'component.input',
   descriptionKey: 'input.description',
+  registryDeps: ['utils', 'component-styles'],
+  ssrSafe: true,
   sections: [
     {
       id: 'basic',

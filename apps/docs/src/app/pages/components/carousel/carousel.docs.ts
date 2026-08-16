@@ -8,6 +8,8 @@ export const carouselPage = {
   componentId: 'carousel',
   titleKey: 'component.carousel',
   descriptionKey: 'carousel.description',
+  registryDeps: ['utils'],
+  ssrSafe: true,
   sections: [
     {
       id: 'basic',

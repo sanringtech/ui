@@ -36,6 +36,11 @@ import { commandPage, commandPageExamples } from './command.docs';
         [componentId]="page.componentId"
         [title]="i18n.t(page.titleKey)"
         [description]="i18n.t(page.descriptionKey)"
+        [registryDeps]="page.registryDeps"
+        [ssrSafe]="page.ssrSafe"
+        [hasAccessibilityNotes]="true"
+        [hasKeyboardSupport]="true"
+        [stateModelLabel]="i18n.t('component.header.stateless')"
       />
 
       <app-component-page-section [section]="section('basic')">

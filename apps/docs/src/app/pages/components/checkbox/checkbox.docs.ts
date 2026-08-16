@@ -8,6 +8,8 @@ export const checkboxPage = {
   componentId: 'checkbox',
   titleKey: 'component.checkbox',
   descriptionKey: 'checkbox.description',
+  registryDeps: ['component-styles', 'cva-base', 'utils'],
+  ssrSafe: true,
   sections: [
     {
       id: 'basic',

@@ -8,6 +8,8 @@ export const selectPage = {
   componentId: 'select',
   titleKey: 'component.select',
   descriptionKey: 'select.description',
+  registryDeps: ['utils', 'component-styles'],
+  ssrSafe: true,
   sections: [
     {
       id: 'basic',

@@ -8,6 +8,8 @@ export const textareaPage = {
   componentId: 'textarea',
   titleKey: 'component.textarea',
   descriptionKey: 'textarea.description',
+  registryDeps: ['utils'],
+  ssrSafe: true,
   sections: [
     {
       id: 'basic',

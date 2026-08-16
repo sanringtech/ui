@@ -8,6 +8,8 @@ export const alertDialogPage = {
   componentId: 'alert-dialog',
   titleKey: 'component.alertDialog',
   descriptionKey: 'alertDialog.description',
+  registryDeps: [],
+  ssrSafe: true,
   sections: [
     {
       id: 'basic',

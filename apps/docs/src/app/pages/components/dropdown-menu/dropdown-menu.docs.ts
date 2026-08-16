@@ -8,6 +8,8 @@ export const dropdownMenuPage = {
   componentId: 'dropdown-menu',
   titleKey: 'component.dropdownMenu',
   descriptionKey: 'dropdownMenu.description',
+  registryDeps: ['utils', 'component-styles'],
+  ssrSafe: true,
   sections: [
     {
       id: 'basic',

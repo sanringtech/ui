@@ -8,6 +8,8 @@ export const sliderPage = {
   componentId: 'slider',
   titleKey: 'component.slider',
   descriptionKey: 'slider.description',
+  registryDeps: ['component-styles', 'cva-base', 'utils'],
+  ssrSafe: true,
   sections: [
     {
       id: 'basic',

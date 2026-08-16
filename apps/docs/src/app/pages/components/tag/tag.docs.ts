@@ -8,6 +8,8 @@ export const tagPage = {
   componentId: 'tag',
   titleKey: 'component.tag',
   descriptionKey: 'tag.description',
+  registryDeps: ['utils'],
+  ssrSafe: true,
   sections: [
     {
       id: 'basic',

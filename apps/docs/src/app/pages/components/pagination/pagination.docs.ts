@@ -8,6 +8,8 @@ export const paginationPage = {
   componentId: 'pagination',
   titleKey: 'component.pagination',
   descriptionKey: 'pagination.description',
+  registryDeps: ['utils'],
+  ssrSafe: true,
   sections: [
     {
       id: 'basic',

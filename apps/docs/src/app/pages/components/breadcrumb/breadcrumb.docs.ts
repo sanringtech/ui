@@ -7,6 +7,8 @@ export const breadcrumbPage = {
   componentId: 'breadcrumb',
   titleKey: 'component.breadcrumb',
   descriptionKey: 'breadcrumb.description',
+  registryDeps: ['utils'],
+  ssrSafe: true,
   sections: [
     {
       id: 'basic',

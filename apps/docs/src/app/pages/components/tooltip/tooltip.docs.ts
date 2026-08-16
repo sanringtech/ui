@@ -8,6 +8,8 @@ export const tooltipPage = {
   componentId: 'tooltip',
   titleKey: 'component.tooltip',
   descriptionKey: 'tooltip.description',
+  registryDeps: ['utils'],
+  ssrSafe: true,
   sections: [
     {
       id: 'basic',

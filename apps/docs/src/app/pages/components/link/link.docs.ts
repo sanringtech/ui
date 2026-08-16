@@ -7,6 +7,8 @@ export const linkPage = {
   componentId: 'link',
   titleKey: 'component.link',
   descriptionKey: 'link.description',
+  registryDeps: ['utils'],
+  ssrSafe: true,
   sections: [
     {
       id: 'basic',

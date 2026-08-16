@@ -7,6 +7,8 @@ export const aspectRatioPage = {
   componentId: 'aspect-ratio',
   titleKey: 'component.aspectRatio',
   descriptionKey: 'aspectRatio.description',
+  registryDeps: ['utils'],
+  ssrSafe: true,
   sections: [
     {
       id: 'basic',

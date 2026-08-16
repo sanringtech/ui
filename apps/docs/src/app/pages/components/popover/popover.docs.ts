@@ -8,6 +8,8 @@ export const popoverPage = {
   componentId: 'popover',
   titleKey: 'component.popover',
   descriptionKey: 'popover.description',
+  registryDeps: ['utils', 'component-styles', 'component-timing'],
+  ssrSafe: true,
   sections: [
     {
       id: 'basic',

@@ -8,6 +8,8 @@ export const datePickerPage = {
   componentId: 'date-picker',
   titleKey: 'component.datePicker',
   descriptionKey: 'datePicker.description',
+  registryDeps: ['cva-base', 'utils'],
+  ssrSafe: true,
   sections: [
     {
       id: 'basic',

@@ -7,6 +7,8 @@ export const progressPage = {
   componentId: 'progress',
   titleKey: 'component.progress',
   descriptionKey: 'progress.description',
+  registryDeps: ['utils'],
+  ssrSafe: true,
   sections: [
     {
       id: 'basic',

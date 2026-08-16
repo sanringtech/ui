@@ -86,8 +86,8 @@ import { DocsPageHeaderComponent } from './docs-page-header.component';
             <span [class]="metaChipClass">{{ i18n.t('component.header.keyboard') }}</span>
           }
 
-          @if (isStateless) {
-            <span [class]="metaChipClass">{{ i18n.t('component.header.stateless') }}</span>
+          @if (stateModelLabel) {
+            <span [class]="metaChipClass">{{ stateModelLabel }}</span>
           }
 
           @if (latestChangeVersion) {
@@ -179,7 +179,7 @@ export class ComponentPageHeaderComponent implements OnChanges {
   @Input() ssrSafe: boolean | null = null;
   @Input() hasAccessibilityNotes = false;
   @Input() hasKeyboardSupport = false;
-  @Input() isStateless = false;
+  @Input() stateModelLabel: string | null = null;
 
   protected readonly i18n = inject(I18nService);
   protected readonly metaChipClass =
