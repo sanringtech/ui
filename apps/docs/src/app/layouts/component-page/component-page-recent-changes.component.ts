@@ -25,7 +25,7 @@ const TYPE_CLASS: Record<ComponentChangeType, string> = {
 const CHIP_CLASS =
   'shrink-0 rounded-[var(--sanring-radius-xs)] px-1.5 py-0.5 text-xs font-medium leading-none uppercase tracking-normal';
 const INLINE_CODE_CLASS =
-  'rounded-[var(--sanring-radius-xs)] bg-[var(--docs-surface-strong)] px-1 py-0.5 font-mono text-[0.9em] text-[var(--docs-fg)]';
+  'break-words rounded-[var(--sanring-radius-xs)] bg-[var(--docs-surface-strong)] px-1 py-0.5 font-mono text-[0.9em] text-[var(--docs-fg)]';
 
 function escapeHtml(value: string): string {
   return value.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
@@ -73,35 +73,27 @@ function renderInlineCode(text: string): string {
           </a>
         </div>
 
-        <ol class="mt-6 list-none space-y-3 p-0">
+        <ol class="mt-5 list-none divide-y divide-[color-mix(in_srgb,var(--docs-border)_82%,transparent)] p-0">
           @for (entry of changes(); track entry.version + '-' + $index) {
-            <li
-              class="rounded-[var(--sanring-radius)] border border-[color-mix(in_srgb,var(--docs-border)_82%,transparent)] bg-[color-mix(in_srgb,var(--docs-elevated)_58%,transparent)] p-4"
-            >
-              <div class="mb-3 flex flex-wrap items-center gap-2">
-                <span class="font-mono text-sm font-semibold text-[var(--docs-fg)]">
-                  v{{ entry.version }}
+            <li class="flex flex-wrap items-baseline gap-x-2.5 gap-y-1 py-2.5">
+              <span class="shrink-0 font-mono text-xs font-semibold text-[var(--docs-fg)]">
+                v{{ entry.version }}
+              </span>
+              <time class="shrink-0 font-mono text-[11px] text-[var(--docs-muted)]" [attr.datetime]="entry.date">
+                {{ entry.date }}
+              </time>
+              <span [class]="chipClass + ' ' + typeClass[entry.change.type]">
+                {{ entry.change.type }}
+              </span>
+              @if (entry.change.breaking) {
+                <span [class]="chipClass + ' bg-[var(--docs-error-bg)] text-[var(--docs-error-fg)]'">
+                  BREAKING
                 </span>
-                <time
-                  class="text-xs text-[var(--docs-muted)]"
-                  [attr.datetime]="entry.date"
-                >
-                  {{ entry.date }}
-                </time>
-              </div>
-              <div class="flex items-start gap-2.5 text-sm leading-relaxed text-[var(--docs-fg)]">
-                <span [class]="chipClass + ' ' + typeClass[entry.change.type]">
-                  {{ entry.change.type }}
-                </span>
-                @if (entry.change.breaking) {
-                  <span
-                    [class]="chipClass + ' bg-[var(--docs-error-bg)] text-[var(--docs-error-fg)]'"
-                  >
-                    BREAKING
-                  </span>
-                }
-                <span class="min-w-0 flex-1" [innerHTML]="renderText(entry.change.text)"></span>
-              </div>
+              }
+              <span
+                class="min-w-0 flex-1 basis-full text-sm leading-relaxed text-[var(--docs-fg)] sm:basis-0"
+                [innerHTML]="renderText(entry.change.text)"
+              ></span>
             </li>
           }
         </ol>

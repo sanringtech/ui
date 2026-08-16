@@ -15,6 +15,7 @@ import {
 } from '../../navigation/docs-navigation';
 import { I18nService } from '../../i18n/i18n.service';
 import { SeoService } from '../../seo/seo.service';
+import { cliVersionChangelog } from '../../pages/changelog/component-changelog';
 import { DocsPageHeaderComponent } from './docs-page-header.component';
 
 @Component({
@@ -38,6 +39,66 @@ import { DocsPageHeaderComponent } from './docs-page-header.component';
       [description]="description"
       [eyebrow]="componentEyebrow"
     >
+      @if (componentId) {
+        <div page-meta class="flex flex-wrap items-center gap-2">
+          <span [class]="metaChipClass">
+            <span class="text-[var(--docs-muted)]">{{ i18n.t('component.header.registry') }}</span>
+            <span class="font-mono text-[var(--docs-fg)]">{{ componentId }}</span>
+          </span>
+
+          <button
+            type="button"
+            [class]="metaChipClass + ' transition-colors hover:border-[var(--docs-border-strong)]'"
+            (click)="copyInstallCommand()"
+          >
+            <span class="font-mono text-[var(--docs-accent-strong)]">$</span>
+            <span class="font-mono text-[var(--docs-fg)]">{{ installCommand }}</span>
+            <svg class="size-3.5 shrink-0 text-[var(--docs-muted)]" lucideCopy></svg>
+          </button>
+
+          <span [class]="metaChipClass">
+            <span class="text-[var(--docs-muted)]">{{ i18n.t('component.header.packagePath') }}</span>
+            <span class="font-mono text-[var(--docs-fg)]">{{ packagePath }}</span>
+          </span>
+
+          @if (registryDeps.length > 0) {
+            <span [class]="metaChipClass">
+              <span class="text-[var(--docs-muted)]">{{ i18n.t('component.header.sharedDeps') }}</span>
+              <span class="font-mono text-[var(--docs-fg)]">{{ registryDeps.join(' · ') }}</span>
+            </span>
+          }
+
+          @if (ssrSafe === true) {
+            <span [class]="metaChipClass + ' border-[color-mix(in_srgb,var(--docs-success)_38%,var(--docs-border))] bg-[color-mix(in_srgb,var(--docs-success)_10%,var(--docs-surface))]'">
+              {{ i18n.t('component.header.ssrSafe') }}
+            </span>
+          } @else if (ssrSafe === false) {
+            <span [class]="metaChipClass">
+              {{ i18n.t('component.header.browserOnly') }}
+            </span>
+          }
+
+          @if (hasAccessibilityNotes) {
+            <span [class]="metaChipClass">{{ i18n.t('component.header.a11y') }}</span>
+          }
+
+          @if (hasKeyboardSupport) {
+            <span [class]="metaChipClass">{{ i18n.t('component.header.keyboard') }}</span>
+          }
+
+          @if (isStateless) {
+            <span [class]="metaChipClass">{{ i18n.t('component.header.stateless') }}</span>
+          }
+
+          @if (latestChangeVersion) {
+            <a [class]="metaChipClass + ' no-underline transition-colors hover:border-[var(--docs-border-strong)]'" href="#recent-changes">
+              <span class="text-[var(--docs-muted)]">{{ i18n.t('component.header.updated') }}</span>
+              <span class="font-mono text-[var(--docs-accent-strong)]">v{{ latestChangeVersion }}</span>
+            </a>
+          }
+        </div>
+      }
+
       <div page-actions class="flex shrink-0 items-center gap-2">
         <sanring-dropdown-menu>
           <div class="flex items-center">
@@ -114,8 +175,15 @@ export class ComponentPageHeaderComponent implements OnChanges {
   @Input({ required: true }) title = '';
   @Input({ required: true }) description = '';
   @Input() componentId: DocsComponentId | null = null;
+  @Input() registryDeps: readonly string[] = [];
+  @Input() ssrSafe: boolean | null = null;
+  @Input() hasAccessibilityNotes = false;
+  @Input() hasKeyboardSupport = false;
+  @Input() isStateless = false;
 
   protected readonly i18n = inject(I18nService);
+  protected readonly metaChipClass =
+    'inline-flex items-center gap-1.5 rounded-[var(--sanring-radius-sm)] border border-[var(--docs-border)] bg-[var(--docs-surface)] px-2 py-1 text-xs font-medium text-[var(--docs-muted)]';
   private readonly router = inject(Router);
   private readonly seo = inject(SeoService);
   private readonly toast = inject(ToastService);
@@ -124,6 +192,43 @@ export class ComponentPageHeaderComponent implements OnChanges {
   ngOnChanges() {
     if (this.title && this.description) {
       this.seo.setPage({ title: this.title, description: this.description });
+    }
+  }
+
+  protected get installCommand() {
+    return `npx @sanring/cli@latest add ${this.componentId ?? ''}`;
+  }
+
+  protected get packagePath() {
+    return `src/app/components/ui/${this.componentId ?? ''}/`;
+  }
+
+  protected get latestChangeVersion(): string | null {
+    const componentId = this.componentId;
+    if (!componentId) return null;
+
+    const entry = cliVersionChangelog.find((version) =>
+      version.changes.some((change) => change.componentIds?.includes(componentId)),
+    );
+    return entry?.version ?? null;
+  }
+
+  protected async copyInstallCommand() {
+    try {
+      await navigator.clipboard.writeText(this.installCommand);
+      this.toast.show({
+        type: 'success',
+        title: this.i18n.t('actions.copied'),
+        duration: 2000,
+        closable: false,
+      });
+    } catch {
+      this.toast.show({
+        type: 'error',
+        title: this.i18n.t('actions.copyFailed'),
+        duration: 3000,
+        closable: true,
+      });
     }
   }
 

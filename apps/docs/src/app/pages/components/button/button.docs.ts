@@ -7,6 +7,8 @@ export const buttonPage = {
   componentId: 'button',
   titleKey: 'component.button',
   descriptionKey: 'button.description',
+  registryDeps: ['utils', 'component-styles'],
+  ssrSafe: true,
   sections: [
     {
       id: 'basic',

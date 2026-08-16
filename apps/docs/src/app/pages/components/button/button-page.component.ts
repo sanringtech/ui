@@ -37,6 +37,10 @@ import { buttonPage, buttonPageExamples } from './button.docs';
         [componentId]="page.componentId"
         [title]="i18n.t(page.titleKey)"
         [description]="i18n.t(page.descriptionKey)"
+        [registryDeps]="page.registryDeps"
+        [ssrSafe]="page.ssrSafe"
+        [hasAccessibilityNotes]="true"
+        [isStateless]="true"
       />
 
       <app-component-page-section [section]="section('basic')">

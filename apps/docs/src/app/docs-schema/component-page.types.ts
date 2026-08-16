@@ -29,4 +29,8 @@ export interface ComponentPageDefinition {
   sections: readonly ComponentPageSectionDefinition[];
   apiRows?: readonly ComponentPageApiRow[];
   keyboardRows?: readonly ComponentPageKeyboardRow[];
+  /** Shared registry deps (registry.json `sharedDeps`), e.g. `['utils', 'component-styles']`. */
+  registryDeps?: readonly string[];
+  /** Whether the component avoids direct browser-only APIs (window/document/navigator) and is safe under SSR. */
+  ssrSafe?: boolean;
 }

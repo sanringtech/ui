@@ -40,6 +40,10 @@ import { Component, Input } from '@angular/core';
           </p>
         }
 
+        <div class="docs-page-header__meta mt-5 flex flex-wrap items-center gap-2">
+          <ng-content select="[page-meta]" />
+        </div>
+
         <div class="docs-page-header__actions mt-6 flex flex-wrap gap-3">
           <ng-content select="[page-actions]" />
         </div>
@@ -48,6 +52,7 @@ import { Component, Input } from '@angular/core';
   `,
   styles: [
     `
+      .docs-page-header__meta:empty,
       .docs-page-header__actions:empty {
         display: none;
       }

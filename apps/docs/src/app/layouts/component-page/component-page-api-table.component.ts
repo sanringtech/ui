@@ -7,19 +7,19 @@ import { I18nService } from '../../i18n/i18n.service';
   standalone: true,
   template: `
     <div class="hidden overflow-hidden rounded-[var(--sanring-radius-lg)] border border-[color-mix(in_srgb,var(--docs-border)_82%,transparent)] bg-[color-mix(in_srgb,var(--docs-panel)_78%,transparent)] shadow-[var(--docs-shadow-soft)] md:block">
-      <table class="w-full table-fixed border-collapse text-left text-sm">
+      <table class="w-full table-fixed border-collapse text-left text-[13px]">
         <thead class="bg-[color-mix(in_srgb,var(--docs-elevated)_86%,transparent)] text-[var(--docs-muted)]">
           <tr>
-            <th class="w-[22%] border-b border-[var(--docs-border)] px-4 py-3 font-medium">
+            <th class="w-[20%] border-b border-[var(--docs-border)] px-3 py-2 font-medium">
               {{ i18n.t('docs.api.property') }}
             </th>
-            <th class="w-[24%] border-b border-[var(--docs-border)] px-4 py-3 font-medium">
+            <th class="w-[26%] border-b border-[var(--docs-border)] px-3 py-2 font-medium">
               {{ i18n.t('docs.api.type') }}
             </th>
-            <th class="w-[20%] border-b border-[var(--docs-border)] px-4 py-3 font-medium">
+            <th class="w-[16%] border-b border-[var(--docs-border)] px-3 py-2 font-medium">
               {{ i18n.t('docs.api.default') }}
             </th>
-            <th class="border-b border-[var(--docs-border)] px-4 py-3 font-medium">
+            <th class="border-b border-[var(--docs-border)] px-3 py-2 font-medium">
               {{ i18n.t('docs.api.description') }}
             </th>
           </tr>
@@ -27,10 +27,10 @@ import { I18nService } from '../../i18n/i18n.service';
         <tbody>
           @for (row of rows; track row.property; let last = $last) {
             <tr [class.border-b]="!last" class="border-[var(--docs-border)] transition-colors hover:bg-[color-mix(in_srgb,var(--docs-elevated)_42%,transparent)]">
-              <td class="break-words px-4 py-3 font-mono text-[var(--docs-fg)]">{{ row.property }}</td>
-              <td class="break-words px-4 py-3 font-mono text-[var(--docs-muted)]">{{ row.type }}</td>
-              <td class="break-words px-4 py-3 font-mono text-[var(--docs-muted)]">{{ row.defaultValue }}</td>
-              <td class="px-4 py-3 leading-6 text-[var(--docs-muted)]">{{ i18n.t(row.descriptionKey) }}</td>
+              <td class="break-words px-3 py-2 font-mono text-[var(--docs-fg)]">{{ row.property }}</td>
+              <td class="break-words px-3 py-2 font-mono text-[var(--docs-muted)]">{{ row.type }}</td>
+              <td class="break-words px-3 py-2 font-mono text-[var(--docs-muted)]">{{ row.defaultValue }}</td>
+              <td class="px-3 py-2 leading-5 text-[var(--docs-muted)]">{{ i18n.t(row.descriptionKey) }}</td>
             </tr>
           }
         </tbody>
