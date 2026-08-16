@@ -46,6 +46,12 @@ import { DocsPageHeaderComponent } from './docs-page-header.component';
             <span class="font-mono text-[var(--docs-fg)]">{{ componentId }}</span>
           </span>
 
+          <span
+            [class]="metaChipClass + ' border-[color-mix(in_srgb,var(--docs-accent)_38%,var(--docs-border))] bg-[color-mix(in_srgb,var(--docs-accent)_10%,var(--docs-surface))] font-mono uppercase tracking-[0.06em] text-[var(--docs-accent-strong)]'"
+          >
+            {{ i18n.t('component.header.shipped') }}
+          </span>
+
           <button
             type="button"
             [class]="metaChipClass + ' transition-colors hover:border-[var(--docs-border-strong)]'"

@@ -94,6 +94,7 @@ export const commonTranslations = {
   'component.recentChanges.description': '這個元件最近的 registry 與文件更新。',
   'component.recentChanges.viewAll': '查看完整 changelog',
   'component.header.registry': 'Registry',
+  'component.header.shipped': '已上線',
   'component.header.packagePath': '路徑',
   'component.header.ssrSafe': 'SSR 安全',
   'component.header.browserOnly': '僅限瀏覽器',

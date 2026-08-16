@@ -96,6 +96,7 @@ export const commonTranslations = {
   'component.recentChanges.description': 'Latest registry and documentation updates for this component.',
   'component.recentChanges.viewAll': 'View changelog',
   'component.header.registry': 'Registry',
+  'component.header.shipped': 'Shipped',
   'component.header.packagePath': 'Path',
   'component.header.ssrSafe': 'SSR-safe',
   'component.header.browserOnly': 'Browser-only',
