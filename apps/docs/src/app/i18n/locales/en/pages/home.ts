@@ -1,27 +1,26 @@
 export const homeTranslations = {
   'home.eyebrow': 'Source-first Angular primitives',
-  'home.title': 'Angular UI, shaped for your product.',
+  'home.title': 'Angular primitives, owned by your app.',
   'home.description':
-    'Install only what you need, keep the source in your application, and shape each part around the product you are building.',
+    'Install the primitives you need, keep the source in your app, and compose the interface around your product.',
   'home.release.label': 'Version notes',
   'home.actions.browseComponents': 'Browse components',
   'home.actions.viewExample': 'View example',
-  'home.hero.workflowEyebrow': 'Source workflow',
-  'home.hero.status': 'Ready to install',
-  'home.hero.workflowTitle': 'Start with the source. Keep your path open.',
-  'home.hero.workflowDescription':
-    'The CLI brings selected primitives into your project as source, so the next decision stays yours.',
-  'home.hero.commandLabel': 'Install selected source',
-  'home.hero.output.one': 'components resolved',
-  'home.hero.output.two': 'local source files',
-  'home.hero.output.three': 'ready to compose',
+  'home.hero.panel.eyebrow': 'Sanring UI / Angular primitives',
+  'home.hero.panel.status': 'button.ts',
+  'home.hero.panel.file': 'button.ts',
+  'home.hero.panel.title': 'Button',
+  'home.hero.panel.description':
+    'A source-owned action primitive for your product.',
+  'home.hero.panel.sourceLabel': 'source available',
+  'home.hero.panel.ready': 'source-first',
   'home.features.eyebrow': 'The important part',
-  'home.features.title': 'Source stays close to the product.',
+  'home.features.title': 'Build close to the edge.',
   'home.features.description':
     'There is no package-shaped boundary between your interface and its building blocks. Read the source, change the edge, and keep the decisions visible as the product grows.',
-  'home.features.trace.source': 'source',
-  'home.features.trace.compose': 'compose',
-  'home.features.trace.ship': 'ship',
+  'home.feature.source.title': 'Own the source',
+  'home.feature.source.description':
+    'Bring the implementation into your app so the important decisions stay local, readable, and easy to change.',
   'home.feature.composable.title': 'Compose with clear boundaries',
   'home.feature.composable.description':
     'Root, trigger, content, and directive boundaries stay legible when an interface grows.',
@@ -36,4 +35,10 @@ export const homeTranslations = {
   'home.components.panelEyebrow': 'Available now',
   'home.components.panelTitle': 'Component directory',
   'home.components.newBadge': 'New',
+  'home.start.eyebrow': 'Make the first move',
+  'home.start.title': 'Start with one surface. Shape the rest yourself.',
+  'home.start.description':
+    'Read the primitives, choose an entry point, and move from documentation to working UI at your own pace.',
+  'home.start.readDocs': 'Read the introduction',
+  'home.start.viewCli': 'View the CLI',
 } as const;

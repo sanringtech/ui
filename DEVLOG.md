@@ -612,6 +612,10 @@ P9 golden fixture 掃完 53 元件後發現一批長期存在的 registry 宣告
 
 **撤回驗證**:已確認工作樹只剩 `TODOLIST.md`、`DEVLOG.md`、`apps/docs/DOCS_VISUAL_SYSTEM.md` 三個紀錄檔變更;`home-page.component.ts` 與首頁中英文 i18n 檔已無本次錯誤方案 diff。
 
+**Phase 4 首頁首屏與節奏重新實作(2026-08-16)**:使用者撤回前一版後,從乾淨舊版重新執行 Home epic。新方向採開放式 editorial hero:左側用 source-first 主張、清楚的 metadata spacing、兩個主要 CTA 與三個可掃描 proof signals;右側改成正常流動的 `Source composition` panel,以 button/dialog/toast 三個 primitive 呈現 source、compose、ready 的產品證據,沒有使用會裁切內容的絕對定位或過度裝飾。第二區塊改成「Build close to the edge」+ 三個獨立工程證據卡,第三區塊保留使用者認可的 `Curated component entry points`,最後以 introduction / CLI CTA 收束。中英文首頁文案同步更新。
+
+**驗證**:`pnpm exec tsc --noEmit`、`pnpm lint`、`git diff --check` 通過;development bundle 成功。Playwright 首頁、mobile shell、theme toggle 共 10 tests 全部通過;1440px desktop 與 390px mobile 截圖確認首屏、source composition panel、Curated directory 均完整,且無水平 overflow。
+
 ## 查證後確認「不算差距」的項目(備查,避免重複討論)
 
 - **PR 沒有測試/型別檢查關卡**:原 P0 已完成,不再放主 todo。已新增 PR 觸發的 CI workflow,跑 `pnpm test`、`tsc --noEmit`、`pnpm lint`。

@@ -25,13 +25,13 @@ Phase 4 已解封:Playwright 截圖 + `Read` 工具可以實際檢視 home(light
 
 #### Home — 首屏與首頁節奏
 
-- [ ] 重新設計 home page 首屏與主要內容節奏:保留 Sanring 的工程感,但提高視覺層次、品牌記憶點與第一眼完成度。首屏是否要用 `app-docs-page-header` 不是卡點:規範刻意把 Display `56px` 保留給 home H1,跟 DocsPageHeaderComponent 的 Page title `36px` 分開
+- [x] 重新設計 home page 首屏與主要內容節奏:保留 Sanring 的工程感,但提高視覺層次、品牌記憶點與第一眼完成度。首屏是否要用 `app-docs-page-header` 不是卡點:規範刻意把 Display `56px` 保留給 home H1,跟 DocsPageHeaderComponent 的 Page title `36px` 分開
 - [x] 首版方向已撤回:registry / CLI command center 曾完成驗證,但不符合使用者對首頁整體的期待,保留於 `DEVLOG.md` 作為歷史紀錄
 - [x] 第二版方向已撤回:移除 command center 後改成產品入口 / 系統導覽 / 元件索引 / 文件探索的首頁方案,仍被使用者判定視覺方向很差,不得作為後續依據
-- [ ] 重新盤點首頁資訊架構:先決定首頁到底要強調哪些特色、哪些證據、哪些入口,避免 Components / Registry / CLI 資訊重複或互相搶層級
-- [ ] 重新提出至少一版更大幅度的首頁視覺方向,不要沿用第二版的產品入口 / 系統導覽配置,也不要把 `Curated component entry points` 的語彙擴張成整頁
-- [ ] 保留並重新安置使用者目前唯一認可的 `Curated component entry points` 區塊,但不要讓它限制整個首頁的設計語言
-- [ ] 驗證重做後的首頁在 light/dark/mobile 狀態下沒有導覽、排版或主題切換回歸
+- [x] 重新盤點首頁資訊架構:首屏聚焦 source-first 主張與 source composition 證據,中段呈現三個工程原則,再進入 Components 探索與文件 CTA,避免 Components / Registry / CLI 資訊重複或互相搶層級
+- [x] 重新提出至少一版更大幅度的首頁視覺方向:採開放式 editorial hero + 完整 source composition panel,不沿用產品入口 / 系統導覽配置,也沒有把 `Curated component entry points` 的語彙擴張成整頁
+- [x] 保留並重新安置使用者目前唯一認可的 `Curated component entry points` 區塊:作為首頁主要探索區,位於工程證據之後、收束 CTA 之前
+- [x] 驗證重做後的首頁在 light/dark/mobile 狀態下沒有導覽、排版或主題切換回歸
 
 #### Long-form Docs — 內容頁視覺提升
 
