@@ -12,8 +12,19 @@ export const homeTranslations = {
   'home.hero.panel.title': 'Button',
   'home.hero.panel.description':
     'A source-owned action primitive for your product.',
-  'home.hero.panel.sourceLabel': 'source available',
+  'home.hero.panel.sourceLabel': 'Live render, not a screenshot',
   'home.hero.panel.ready': 'source-first',
+  'home.hero.panel.copy': 'Copy',
+  'home.hero.panel.copied': 'Copied',
+  'home.hero.panel.demoButton': 'Open dialog',
+  'home.hero.panel.dialogTitle': 'This is the real source',
+  'home.hero.panel.dialogDescription':
+    'Copy it and you own it — restyle, rewire, or rename anything.',
+  'home.hero.panel.dialogClose': 'Close',
+  'home.hero.panel.dialogAction': 'Trigger toast',
+  'home.hero.panel.toastTitle': 'This toast is real too',
+  'home.hero.panel.toastDescription': 'Same source, same package.',
+  'home.hero.panel.interactive': 'Try it →',
   'home.features.eyebrow': 'The important part',
   'home.features.title': 'Build close to the edge.',
   'home.features.description':

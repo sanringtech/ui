@@ -12,8 +12,19 @@ export const homeTranslations = {
   'home.hero.panel.title': 'Button',
   'home.hero.panel.description':
     '可直接帶進產品的原始碼操作元件。',
-  'home.hero.panel.sourceLabel': '可取得原始碼',
+  'home.hero.panel.sourceLabel': '即時渲染,不是截圖',
   'home.hero.panel.ready': 'source-first',
+  'home.hero.panel.copy': '複製',
+  'home.hero.panel.copied': '已複製',
+  'home.hero.panel.demoButton': '開啟 Dialog',
+  'home.hero.panel.dialogTitle': '這是真正的原始碼',
+  'home.hero.panel.dialogDescription':
+    '複製後就是你的程式碼——樣式、行為、文案都能直接改。',
+  'home.hero.panel.dialogClose': '關閉',
+  'home.hero.panel.dialogAction': '觸發 Toast',
+  'home.hero.panel.toastTitle': '這個 toast 也一樣是真的',
+  'home.hero.panel.toastDescription': '同一份原始碼,同一個套件。',
+  'home.hero.panel.interactive': '試試看 →',
   'home.features.eyebrow': '真正重要的部分',
   'home.features.title': '把建構貼近產品邊界。',
   'home.features.description':
