@@ -625,3 +625,26 @@ P9 golden fixture 掃完 53 元件後發現一批長期存在的 registry 宣告
 - **PR 沒有測試/型別檢查關卡**:原 P0 已完成,不再放主 todo。已新增 PR 觸發的 CI workflow,跑 `pnpm test`、`tsc --noEmit`、`pnpm lint`。
 - **可編輯 playground(Monaco/StackBlitz 匯出)**:查證後 shadcn 自己的元件文件頁也是「靜態 demo + 程式碼區塊」,沒有即時可編輯的 playground,兩邊打平,不是缺口。
 - **文件版本切換(per-CLI-version docs)**:shadcn 文件站同樣沒有明顯的版本切換機制,兩邊打平,不是缺口。
+
+## Phase 4 視覺驗證(2026-08-17)
+
+- [x] 用 Playwright 重拍 home light/dark/mobile、代表性 long-form page 與 representative component page
+- [x] 檢查 360px / 390px 無水平 overflow、長 command/code line 不撐破版面、中英文文案沒有互相遮擋
+- [x] 將設計決策、截圖觀察與驗證結果同步到本紀錄
+
+**設計決策**:本輪驗證以 home、CLI、registry、MCP、theming、introduction 與 `button` component page 作為代表樣本。Home light/dark 保留「Angular primitives owned by your app」的左重右輕首屏,右側 terminal/source proof panel 作為安裝結果證據;CLI 以 command groups、intent→resolve→preview→apply 流程與 dry-run result summary 作為長頁代表;registry、MCP、theming 分別驗證 source graph、read/plan/write boundary、token cascade 的工程視覺語彙;`/components/button` 用來確認 component docs 的 header、TOC 與內容欄位仍可掃描。
+
+**截圖觀察**:
+
+- Home light/dark: H1、說明、CTA 與右側 source/terminal panel 均完整,暗色主題正確套用,沒有裁切或重疊。
+- Home 360px / 390px: mobile header、搜尋列、version notes、H1 與兩個 CTA 依序排列;CTA 沒有互相擠壓,首頁沒有水平溢出。
+- CLI 360px / 390px: page header 文案正常換行,CLI WORKFLOW 面板由 command groups 轉為垂直閱讀,長 command 保持在 code surface 內。
+- Introduction、registry、MCP、theming、button component: header、主要工程證據面板、TOC/內容結構均正常渲染,沒有看到中英文文案遮擋。
+
+**驗證結果**:
+
+- `phase4-visual-verification.spec.ts`: **5 passed**(desktop light routes、dark home、360px、390px、long code line containment)。
+- 既有回歸 suite(`long-form-page.spec.ts`、`home.spec.ts`、`mobile-shell.spec.ts`、`theme-toggle.spec.ts`): **14 passed**(desktop/mobile)。
+- 本輪截圖存於 `/tmp/sanring-phase4-*.png`,未加入 repository;驗證 spec 新增於 `apps/docs/e2e/phase4-visual-verification.spec.ts`。
+
+**範圍限制**:Component Docs 全面掃描效率與工程證據尚未完成,所以本輪只用 `/components/button` 作為 representative component page;其餘 component docs 完成後,應用同一套驗證重新覆蓋。
