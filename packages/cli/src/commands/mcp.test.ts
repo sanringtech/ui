@@ -75,7 +75,11 @@ describe('mcp server', () => {
     const result = await testClient.listTools();
 
     expect(result.tools.map((tool) => tool.name)).toEqual([
+      'refresh_registry',
       'list_components',
+      'diff_component',
+      'doctor_project',
+      'migration_status',
       'search_components',
       'get_component_info',
       'plan_component_install',

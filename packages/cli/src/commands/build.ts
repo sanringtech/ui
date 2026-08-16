@@ -1,6 +1,6 @@
 import { Command } from 'commander';
 import { copyFileSync, existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
-import { basename, join, resolve } from 'node:path';
+import { basename, dirname, join, relative, resolve } from 'node:path';
 import pc from 'picocolors';
 import {
   type Registry,
@@ -25,6 +25,12 @@ interface CwdPackageJson extends PackageJsonLike {
   name?: string;
 }
 
+interface RegistryManifest {
+  groups?: Registry['groups'];
+  components?: Record<string, Partial<Pick<RegistryComponent, 'description' | 'since' | 'migrations' | 'tags'>>>;
+  shared?: Record<string, Partial<Pick<RegistryShared, 'description'>>>;
+}
+
 function readCwdPackageJson(cwd: string): CwdPackageJson | null {
   const path = join(cwd, 'package.json');
   if (!existsSync(path)) return null;
@@ -35,10 +41,22 @@ function readCwdPackageJson(cwd: string): CwdPackageJson | null {
   }
 }
 
+function readManifest(cwd: string, path?: string): RegistryManifest | null {
+  const manifestPath = resolve(cwd, path ?? 'registry.manifest.json');
+  if (!existsSync(manifestPath)) return null;
+  try {
+    return JSON.parse(readFileSync(manifestPath, 'utf-8')) as RegistryManifest;
+  } catch (error) {
+    console.warn(pc.yellow(`⚠ Could not read registry manifest: ${error instanceof Error ? error.message : error}`));
+    return null;
+  }
+}
+
 // Raw import/export scan for one component: every file's specifiers,
 // classified and baseline-filtered, not yet validated against known targets.
 interface RawComponentScan {
   name: string;
+  dir: string;
   files: string[];
   componentDepCandidates: string[];
   sharedDepCandidates: string[];
@@ -64,7 +82,7 @@ function scanRawComponent(name: string, dir: string, files: string[]): RawCompon
     if (!description) description = extractDescription(content);
   }
 
-  return { name, files, componentDepCandidates, sharedDepCandidates, rawPeerDependencyCandidates, description };
+  return { name, dir, files, componentDepCandidates, sharedDepCandidates, rawPeerDependencyCandidates, description };
 }
 
 function scanRawShared(name: string, file: string): { name: string; file: string; rawPeerDependencyCandidates: string[] } {
@@ -94,8 +112,10 @@ export const buildCommand = new Command('build')
   .option('-s, --source <path>', 'directory containing your component subdirectories', './components')
   .option('-o, --out <path>', 'output directory for the generated registry', './dist-registry')
   .option('-n, --name <name>', 'registry name (defaults to package.json "name")')
+  .option('--manifest <path>', 'optional metadata manifest (default: registry.manifest.json)')
   .option('--dry-run', 'preview without writing files', false)
-  .action(async (options: { source: string; out: string; name?: string; dryRun: boolean }) => {
+  .option('--check', 'scan and validate without writing files (CI mode)', false)
+  .action(async (options: { source: string; out: string; name?: string; manifest?: string; dryRun: boolean; check: boolean }) => {
     const cwd = process.cwd();
     const sourceDir = resolve(cwd, options.source);
     const outDir = resolve(cwd, options.out);
@@ -162,7 +182,7 @@ export const buildCommand = new Command('build')
       const component: RegistryComponent = {
         name: raw.name,
         description: raw.description,
-        files: raw.files.map((f) => `${raw.name}/${basename(f)}`),
+        files: raw.files.map((f) => `${raw.name}/${relative(raw.dir, f).split('\\').join('/')}`),
       };
       if (v.sharedDeps.length > 0) component.sharedDeps = v.sharedDeps;
       if (v.componentDeps.length > 0) component.componentDeps = v.componentDeps;
@@ -197,7 +217,11 @@ export const buildCommand = new Command('build')
       return;
     }
 
+    const manifest = readManifest(cwd, options.manifest);
+    for (const component of components) Object.assign(component, manifest?.components?.[component.name] ?? {});
+    for (const item of shared) Object.assign(item, manifest?.shared?.[item.name] ?? {});
     const registry: Registry = { name: registryName, shared, components };
+    if (manifest?.groups) registry.groups = manifest.groups;
 
     let validatedRegistry: Registry;
     try {
@@ -220,8 +244,8 @@ export const buildCommand = new Command('build')
       console.log(`  ${pc.bold(component.name)}${deps.length ? pc.dim(`  (${deps.join('; ')})`) : ''}`);
     }
 
-    if (options.dryRun) {
-      console.log(pc.dim(`\n  Dry run — nothing written. Run without --dry-run to write to ${outDir}.\n`));
+    if (options.dryRun || options.check) {
+      console.log(pc.dim(`\n  ${options.check ? 'Check' : 'Dry run'} — nothing written${options.check ? '.' : `; run without --dry-run to write to ${outDir}.`}\n`));
       return;
     }
 
@@ -231,13 +255,22 @@ export const buildCommand = new Command('build')
     for (const raw of rawComponents) {
       const destDir = join(outDir, 'components', raw.name);
       mkdirSync(destDir, { recursive: true });
-      for (const file of raw.files) copyFileSync(file, join(destDir, basename(file)));
+      for (const file of raw.files) {
+        const relativeFile = relative(raw.dir, file);
+        const destination = join(destDir, relativeFile);
+        mkdirSync(dirname(destination), { recursive: true });
+        copyFileSync(file, destination);
+      }
     }
 
     if (rawShared.length > 0) {
       const sharedDestDir = join(outDir, 'shared');
       mkdirSync(sharedDestDir, { recursive: true });
-      for (const raw of rawShared) copyFileSync(raw.file, join(sharedDestDir, basename(raw.file)));
+      for (const raw of rawShared) {
+        const destination = join(outDir, 'shared', basename(raw.file));
+        mkdirSync(dirname(destination), { recursive: true });
+        copyFileSync(raw.file, destination);
+      }
     }
 
     console.log(pc.green(`\n✔ Wrote ${outDir}\n`));

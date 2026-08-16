@@ -16,7 +16,7 @@ import {
   writeConfig,
 } from '../utils.js';
 import { writeFile } from './add.js';
-import { printFileDiff, resolveDiffTargets } from './diff.js';
+import { buildDiffJobs, printFileDiff, resolveDiffTargets } from './diff.js';
 import { THEME_FILE_PATH } from './init.js';
 
 const FILE_FETCH_CONCURRENCY = 6;
@@ -105,9 +105,12 @@ export const updateCommand = new Command('update')
         console.error(
           pc.red(`✖ Unknown component${missing.length > 1 ? 's' : ''}: ${missing.join(', ')}`),
         );
+        process.exit(1);
+        return;
       }
       if (notInstalled.length > 0) {
-        console.log(pc.dim(`  Not installed, skipping: ${notInstalled.join(', ')}`));
+        console.log(pc.yellow(`  Not installed, skipping: ${notInstalled.join(', ')}`));
+        console.log(pc.dim(`  Run ${pc.white(`sanring add ${notInstalled.join(' ')}`)} first.`));
       }
 
       // Gather every file that differs, same set diff.ts would compare, and
@@ -148,43 +151,13 @@ export const updateCommand = new Command('update')
         else pending.push(classification);
       }
 
-      // Collect all jobs then fetch in parallel — avoids waterfall latency
-      // when many components or files are installed on a remote registry.
-      type UpdateJob = { label: string; dest: string; remotePath: string };
-      const jobs: UpdateJob[] = [];
-
       const themeDest = join(cwd, THEME_FILE_PATH);
-      const themeShared = registryIndex.sharedByName.get('theme');
-      if (themeShared && existsSync(themeDest)) {
-        jobs.push({ label: THEME_FILE_PATH, dest: themeDest, remotePath: themeShared.file });
-      }
-
-      const sharedNamesNeeded = new Set<string>();
-      for (const component of components) {
-        for (const depName of component.sharedDeps ?? []) sharedNamesNeeded.add(depName);
-      }
-      for (const depName of sharedNamesNeeded) {
-        const shared = registryIndex.sharedByName.get(depName);
-        if (!shared) continue;
-        const fileName = shared.file.split('/').pop()!;
-        jobs.push({
-          label: `shared/${fileName}`,
-          dest: join(sharedDestDir, fileName),
-          remotePath: shared.file,
-        });
-      }
-
-      for (const component of components) {
-        const destDir = join(componentBasePath, component.name);
-        for (const file of component.files) {
-          const fileName = file.split('/').pop()!;
-          jobs.push({
-            label: `${component.name}/${fileName}`,
-            dest: join(destDir, fileName),
-            remotePath: `components/${file}`,
-          });
-        }
-      }
+      const jobs = buildDiffJobs(components, registryIndex, {
+        componentBasePath,
+        sharedDestDir,
+        themeDest,
+        installedHashes: config?.installedHashes,
+      });
 
       const remoteResults = await fetchTextTargetsConcurrent(
         jobs,
@@ -201,7 +174,7 @@ export const updateCommand = new Command('update')
           );
           continue;
         }
-        const { label, dest, content: remote } = result;
+        const { label, localPath: dest, content: remote } = result;
         if (!existsSync(dest)) {
           added.push({ label, dest, remote });
           continue;

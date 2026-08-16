@@ -1,5 +1,5 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-import { mkdirSync, mkdtempSync, rmSync, writeFileSync } from 'node:fs';
+import { mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { writeRegistryFixture } from '../__tests__/registry-fixture.js';
@@ -86,5 +86,28 @@ describe('doctorCommand (integration)', () => {
     expect(output).toMatch(/widget\/index\.ts/);
 
     exitSpy.mockRestore();
+  });
+
+  it('reports JSON checks and backfills missing hashes with --fix', async () => {
+    const configPath = join(projectDir, 'sanring.config.json');
+    const config = JSON.parse(readFileSync(configPath, 'utf-8')) as {
+      installedHashes?: Record<string, string>;
+    };
+    delete config.installedHashes?.['widget/index.ts'];
+    writeFileSync(configPath, JSON.stringify(config, null, 2) + '\n', 'utf-8');
+
+    doctorCommand.setOptionValue('offline', false);
+    doctorCommand.setOptionValue('json', true);
+    await doctorCommand.parseAsync(['--registry', registryDir, '--json'], { from: 'user' });
+    const report = JSON.parse(logs.join('')) as { checks: Array<{ message: string }> };
+    expect(report.checks.some((check) => check.message.includes('no baseline hash'))).toBe(true);
+
+    logs = [];
+    doctorCommand.setOptionValue('json', false);
+    await doctorCommand.parseAsync(['--registry', registryDir, '--fix'], { from: 'user' });
+    const repaired = JSON.parse(readFileSync(configPath, 'utf-8')) as {
+      installedHashes?: Record<string, string>;
+    };
+    expect(repaired.installedHashes?.['widget/index.ts']).toBeTruthy();
   });
 });

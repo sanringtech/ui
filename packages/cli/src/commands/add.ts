@@ -29,7 +29,7 @@ import {
   satisfiesMinimumPackageSpec,
   writeConfig,
 } from '../utils.js';
-import { printFileDiff } from './diff.js';
+import { buildDiffJobs, printFileDiff, registryRelativePath } from './diff.js';
 
 // Splits the `alias:componentName` syntax from ADR-0001 apart. No colon
 // means "no explicit registry" — the caller falls back to defaultRegistry.
@@ -91,7 +91,7 @@ export function collectOverwriteCandidates(
     const shared = sharedByName.get(depName);
     if (!shared) continue;
 
-    const fileName = shared.file.split('/').pop()!;
+    const fileName = registryRelativePath(shared.file, 'shared');
     const dest = join(sharedDestDir, fileName);
     if (existsSync(dest)) candidates.push({ label: `shared/${fileName}`, dest });
   }
@@ -99,7 +99,7 @@ export function collectOverwriteCandidates(
   for (const component of components) {
     const destDir = join(componentBasePath, component.name);
     for (const file of component.files) {
-      const fileName = file.split('/').pop()!;
+      const fileName = registryRelativePath(file, component.name);
       const dest = join(destDir, fileName);
       if (existsSync(dest)) candidates.push({ label: `${component.name}/${fileName}`, dest });
     }
@@ -198,6 +198,7 @@ export const addCommand = new Command('add')
   .option('-y, --yes', 'skip overwrite confirmation when using --force', false)
   .option('--registry <source>', 'custom registry (URL or local path)')
   .option('--dry-run', 'preview changes without writing files', false)
+  .option('--check', 'validate every registry file can be fetched without writing files', false)
   .option('--diff', 'show diff between registry and local files without installing', false)
   .option('--view', 'show registry file contents without installing', false)
   .action(
@@ -210,6 +211,7 @@ export const addCommand = new Command('add')
         yes: boolean;
         registry?: string;
         dryRun: boolean;
+        check: boolean;
         diff: boolean;
         view: boolean;
       },
@@ -281,25 +283,26 @@ export const addCommand = new Command('add')
       // --diff: show diff between registry and local without installing
       if (options.diff) {
         console.log(pc.cyan(`\nDiff: ${pc.bold(requestedLabel)}${autoLabel}\n`));
-        for (const component of toInstall) {
-          const destDir = join(componentBasePath, component.name);
-          const label = autoAdded.includes(component.name)
-            ? `${component.name} ${pc.dim('(dependency)')}`
-            : component.name;
-          console.log(pc.dim(`  ${label}:`));
-          for (const file of component.files) {
-            const fileName = file.split('/').pop()!;
-            const dest = join(destDir, fileName);
-            const fileLabel = `${component.name}/${fileName}`;
-            if (!existsSync(dest)) {
-              console.log(pc.cyan(`  + ${fileLabel} (new, not yet installed)`));
-              continue;
-            }
-            const remote = await fetchFile(`components/${file}`, registrySource);
-            const local = readFileSync(dest, 'utf-8');
-            printFileDiff(fileLabel, local, remote, config?.installedHashes?.[fileLabel]);
+        const jobs = buildDiffJobs(toInstall, registryIndex, {
+          componentBasePath,
+          sharedDestDir: config?.sharedPath ? resolve(cwd, config.sharedPath) : join(componentBasePath, 'shared'),
+          installedHashes: config?.installedHashes,
+        });
+        const results = await fetchTextTargetsConcurrent(
+          jobs,
+          FILE_FETCH_CONCURRENCY,
+          (remotePath) => fetchFile(remotePath, registrySource),
+        );
+        for (const result of results) {
+          if (!existsSync(result.localPath)) {
+            console.log(pc.cyan(`  + ${result.label} (new, not yet installed)`));
+            continue;
           }
-          console.log('');
+          if (!result.ok) {
+            console.warn(pc.yellow(`  ⚠ Could not fetch ${result.remotePath}: ${result.error instanceof Error ? result.error.message : result.error}`));
+            continue;
+          }
+          printFileDiff(result.label, readFileSync(result.localPath, 'utf-8'), result.content, result.recordedHash);
         }
         return;
       }
@@ -312,7 +315,7 @@ export const addCommand = new Command('add')
             ? `${component.name} ${pc.dim('(dependency)')}`
             : component.name;
           for (const file of component.files) {
-            const fileName = file.split('/').pop()!;
+            const fileName = registryRelativePath(file, component.name);
             console.log(pc.bold(`── ${label}/${fileName} ──\n`));
             const content = await fetchFile(`components/${file}`, registrySource);
             console.log(content);
@@ -332,6 +335,44 @@ export const addCommand = new Command('add')
           ? resolve(cwd, config.sharedPath)
           : join(componentBasePath, 'shared');
 
+      // A metadata-only dry run can look healthy while an individual source
+      // file is missing from a remote/custom registry. Validate the complete
+      // install set before presenting the plan (and expose the same check as
+      // an explicit CI-friendly flag).
+      if (options.dryRun || options.check) {
+        const validationTargets = [
+          ...[...new Set(toInstall.flatMap((component) => component.sharedDeps ?? []))]
+            .map((depName) => registryIndex.sharedByName.get(depName))
+            .filter((shared): shared is RegistryShared => Boolean(shared))
+            .map((shared) => ({ remotePath: shared.file, label: `shared/${shared.name}` })),
+          ...toInstall.flatMap((component) =>
+            component.files.map((file) => ({
+              remotePath: `components/${file}`,
+              label: `${component.name}/${file}`,
+            })),
+          ),
+        ];
+        const validation = await fetchTextTargetsConcurrent(
+          validationTargets,
+          FILE_FETCH_CONCURRENCY,
+          (remotePath) => fetchFile(remotePath, registrySource),
+        );
+        const failedValidation = validation.filter((result) => !result.ok);
+        if (failedValidation.length > 0) {
+          console.error(pc.red(`✖ ${failedValidation.length} registry file${failedValidation.length > 1 ? 's' : ''} could not be fetched:`));
+          for (const result of failedValidation) {
+            console.error(pc.dim(`  ${result.label}: ${result.error instanceof Error ? result.error.message : result.error}`));
+          }
+          console.error(pc.dim('  Fix the registry or run with a different --registry source.\n'));
+          process.exit(1);
+          return;
+        }
+        if (options.check) {
+          console.log(pc.green(`✔ Validated ${validation.length} registry file${validation.length !== 1 ? 's' : ''}; nothing written.\n`));
+          return;
+        }
+      }
+
       if (options.force && !options.dryRun) {
         const overwriteCandidates = collectOverwriteCandidates(
           toInstall,
@@ -349,7 +390,8 @@ export const addCommand = new Command('add')
 
       let written = 0,
         skipped = 0,
-        failed = 0;
+        failed = 0,
+        peerInstallFailed = false;
 
       // Shared utilities — deduped across the whole install set so a dep used
       // by multiple requested components is only fetched/written once.
@@ -366,7 +408,7 @@ export const addCommand = new Command('add')
             console.warn(pc.yellow(`  ⚠ Unknown shared dep "${depName}"`));
             return [];
           }
-          const fileName = shared.file.split('/').pop()!;
+          const fileName = registryRelativePath(shared.file, 'shared');
           const dest = join(sharedDestDir, fileName);
           return [{ shared, fileName, dest, remotePath: shared.file }];
         });
@@ -425,7 +467,7 @@ export const addCommand = new Command('add')
         console.log(pc.dim(`  ${label}:`));
 
         const fileJobs: ComponentFileJob[] = component.files.map((file) => {
-          const fileName = file.split('/').pop()!;
+          const fileName = registryRelativePath(file, component.name);
           const dest = join(destDir, fileName);
           return { file, fileName, dest, remotePath: `components/${file}` };
         });
@@ -514,6 +556,7 @@ export const addCommand = new Command('add')
             const { bin, args } = installCommandParts(pm, pkgs);
             const result = spawnSync(bin, args, { stdio: 'inherit', shell: false });
             if (result.status !== 0) {
+              peerInstallFailed = true;
               console.warn(pc.yellow(`  ⚠ Install failed. Run manually:\n  ${pc.white(cmd)}`));
             }
           }
@@ -543,8 +586,15 @@ export const addCommand = new Command('add')
       if (written > 0) parts.push(pc.green(`${written} ${options.dryRun ? 'to add' : 'added'}`));
       if (skipped > 0) parts.push(pc.dim(`${skipped} skipped`));
       if (failed > 0) parts.push(pc.yellow(`${failed} failed`));
+      if (peerInstallFailed) parts.push(pc.red('peer dependencies failed'));
       const suffix = options.dryRun ? pc.dim(' (dry run, no files written)') : '';
       console.log(`${pc.bold(requestedLabel)} — ${parts.join(', ')}${suffix}\n`);
+
+      if (peerInstallFailed) {
+        console.error(pc.yellow(`  Source files were written, but dependencies were not installed.`));
+        console.error(pc.dim(`  Run ${pc.white('sanring doctor')} after repairing the package manager state.\n`));
+        process.exit(1);
+      }
 
       if (skipped > 0 && !options.dryRun) {
         console.log(pc.dim(`  Run with ${pc.white('--force')} to overwrite existing files.\n`));

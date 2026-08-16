@@ -1,6 +1,6 @@
 import { Command } from 'commander';
 import { spawnSync } from 'node:child_process';
-import { existsSync, readFileSync, writeFileSync } from 'node:fs';
+import { existsSync, readFileSync, unlinkSync, writeFileSync } from 'node:fs';
 import { dirname, join, relative, sep } from 'node:path';
 import { createInterface } from 'node:readline/promises';
 import pc from 'picocolors';
@@ -19,6 +19,7 @@ import {
   getInstalledPackages,
   hashContent,
   isAngularProject,
+  confirmPrompt,
   readConfig,
   writeConfig,
 } from '../utils.js';
@@ -116,7 +117,7 @@ export const initCommand = new Command('init')
   .description('Initialize Sanring UI in your Angular project')
   .option('-p, --path <path>', 'component destination path', DEFAULT_COMPONENT_PATH)
   .option('-y, --yes', 'accept all defaults without prompting', false)
-  .option('-f, --force', 'overwrite an existing theme file', false)
+  .option('-f, --force', 'overwrite existing config and theme files without prompting', false)
   .option(
     '--theme <preset>',
     `named theme preset (${THEME_PRESETS.join(', ')})`,
@@ -204,7 +205,21 @@ export const initCommand = new Command('init')
         pc.yellow('⚠') +
           pc.dim(` ${CONFIG_FILE} already exists (componentPath: ${existing.componentPath})`),
       );
-      console.log(pc.dim('  Re-running init will overwrite it.\n'));
+      if (!options.force) {
+        const confirmed = await confirmPrompt({
+          yes: options.yes,
+          question: pc.dim('  Re-run init and update this config?') + ' [y/N]: ',
+          nonTtyRefusal: {
+            title: 'Refusing to overwrite an existing Sanring config without confirmation.',
+            hint: `Re-run with ${pc.white('--force --yes')} to confirm in CI or non-interactive environments.`,
+          },
+        });
+        if (!confirmed) {
+          console.log(pc.dim('\n  Nothing was changed.\n'));
+          return;
+        }
+      }
+      console.log(pc.dim('  Re-running init will update the existing config.\n'));
     }
 
     // 3. Resolve component path
@@ -222,38 +237,26 @@ export const initCommand = new Command('init')
       if (answer.trim()) componentPath = answer.trim();
     }
 
-    // 4. Write config
+    // Keep the config in memory until theme/dependency setup succeeds. This
+    // prevents a failed init from claiming the project is initialized.
     const nextConfig = {
       ...existing,
       componentPath,
       sharedPath: existing?.sharedPath,
       installedHashes: existing?.installedHashes,
     };
-    writeConfig(projectRoot, nextConfig);
-    console.log(
-      pc.green('\n✔') + ` ${CONFIG_FILE} written` + pc.dim(` (componentPath: ${componentPath})`),
-    );
-    console.log(pc.dim(`  Components will be installed to: ./${componentPath}`));
-    console.log(
-      pc.dim('  Paths are resolved from your project root, not appended to the default path.'),
-    );
-
-    // 5. Write the design-token stylesheet every component reads (--sanring-*).
+    // Write the design-token stylesheet every component reads (--sanring-*).
     // Skipped if it already exists (protects any brand-color edits) unless --force.
     const themeDest = join(projectRoot, THEME_FILE_PATH);
+    const themeBefore = existsSync(themeDest) ? readFileSync(themeDest, 'utf-8') : null;
     try {
       const themeContent = await resolveThemeContent(theme, options.registry);
       const themeResult = writeFile(themeDest, themeContent, options.force);
       if (themeResult === 'written') {
-        writeConfig(projectRoot, {
-          ...existing,
-          componentPath,
-          sharedPath: existing?.sharedPath,
-          installedHashes: {
-            ...existing?.installedHashes,
-            [THEME_FILE_PATH]: hashContent(themeContent),
-          },
-        });
+        nextConfig.installedHashes = {
+          ...existing?.installedHashes,
+          [THEME_FILE_PATH]: hashContent(themeContent),
+        };
         console.log(
           pc.green('✔') +
             ` ${THEME_FILE_PATH} written` +
@@ -265,15 +268,16 @@ export const initCommand = new Command('init')
         );
       }
     } catch (e) {
-      console.warn(
-        pc.yellow(`⚠ Could not fetch shared/theme.css: ${e instanceof Error ? e.message : e}`),
-      );
+      console.error(pc.red(`✖ Could not prepare ${THEME_FILE_PATH}: ${e instanceof Error ? e.message : e}`));
+      console.error(pc.dim('  No config was written. Fix the registry/theme source and run init again.'));
+      return;
     }
 
     // 6. Install base deps if missing
     const installed = getInstalledPackages(projectRoot);
     const missing = Object.entries(BASE_DEPS).filter(([pkg]) => !installed.has(pkg));
 
+    let dependenciesReady = true;
     if (missing.length === 0) {
       console.log(pc.green('✔') + pc.dim(' Base dependencies already installed'));
     } else {
@@ -284,7 +288,9 @@ export const initCommand = new Command('init')
       const { bin, args } = installCommandParts(pm, pkgs);
       const result = spawnSync(bin, args, { stdio: 'inherit', shell: false });
       if (result.status !== 0) {
-        console.warn(pc.yellow(`\n  ⚠ Install failed. Run manually:\n  ${pc.white(cmd)}`));
+        dependenciesReady = false;
+        console.error(pc.red(`\n✖ Base dependency install failed.`));
+        console.error(pc.yellow(`  Run manually:\n  ${pc.white(cmd)}`));
       } else {
         console.log(pc.green('\n✔') + ' Base dependencies installed');
       }
@@ -292,7 +298,37 @@ export const initCommand = new Command('init')
 
     const globalStylesheet = findGlobalStylesheet(projectRoot) ?? DEFAULT_GLOBAL_STYLESHEET_PATH;
     const themeImport = importPathForStylesheet(globalStylesheet);
+    const globalStylesheetPath = join(projectRoot, globalStylesheet);
+    const globalStylesheetBefore = existsSync(globalStylesheetPath)
+      ? readFileSync(globalStylesheetPath, 'utf-8')
+      : null;
     const importResult = ensureThemeImport(projectRoot, globalStylesheet, themeImport);
+
+    if (!dependenciesReady) {
+      // Roll back files created or overwritten during this init attempt so a
+      // failed dependency install cannot leave a project half-initialized.
+      if (themeBefore === null) {
+        if (existsSync(themeDest)) unlinkSync(themeDest);
+      } else {
+        writeFileSync(themeDest, themeBefore, 'utf-8');
+      }
+      if (globalStylesheetBefore === null) {
+        if (importResult === 'added' && existsSync(globalStylesheetPath)) unlinkSync(globalStylesheetPath);
+      } else if (importResult === 'added') {
+        writeFileSync(globalStylesheetPath, globalStylesheetBefore, 'utf-8');
+      }
+      console.error(pc.red('\n✖ Init stopped before writing sanring.config.json.'));
+      console.error(pc.yellow(`  Repair command: ${pc.white(installCommand(detectPackageManager(projectRoot), missing.map(([pkg, ver]) => `${pkg}@${ver}`)))}`));
+      console.error(pc.dim('  Remove the theme import/file if you want to retry from a clean state.\n'));
+      return;
+    }
+
+    writeConfig(projectRoot, nextConfig);
+    console.log(
+      pc.green('\n✔') + ` ${CONFIG_FILE} written` + pc.dim(` (componentPath: ${componentPath})`),
+    );
+    console.log(pc.dim(`  Components will be installed to: ./${componentPath}`));
+    console.log(pc.dim('  Paths are resolved from your project root, not appended to the default path.'));
 
     if (importResult === 'added') {
       console.log(pc.green('✔') + ` ${globalStylesheet} now imports ${THEME_FILE_PATH}`);

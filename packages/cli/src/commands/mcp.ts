@@ -12,12 +12,14 @@ import { Command } from 'commander';
 import {
   createRegistryIndex,
   createRegistryGroups,
+  fetchFile,
   fetchRegistry,
   type Registry,
   type RegistryComponent,
 } from '../registry.js';
-import { readConfig, resolveComponentBasePath, resolveRegistrySource } from '../utils.js';
+import { isAngularProject, readConfig, resolveComponentBasePath, resolveRegistrySource, semverLte } from '../utils.js';
 import { resolveInstallSet, collectPeerDeps } from './add.js';
+import { registryRelativePath } from './diff.js';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
@@ -162,8 +164,13 @@ export function createMcpServer(options: CreateMcpServerOptions = {}): Server {
   });
 
   let cachedRegistry: Registry | null = null;
-  const getRegistry = async (): Promise<Registry> => {
-    if (!cachedRegistry) cachedRegistry = await fetchRegistry(registryUrl);
+  let cachedAt = 0;
+  const CACHE_TTL_MS = 30_000;
+  const getRegistry = async (forceRefresh = false): Promise<Registry> => {
+    if (forceRefresh || !cachedRegistry || Date.now() - cachedAt > CACHE_TTL_MS) {
+      cachedRegistry = await fetchRegistry(registryUrl);
+      cachedAt = Date.now();
+    }
     return cachedRegistry;
   };
 
@@ -175,9 +182,44 @@ export function createMcpServer(options: CreateMcpServerOptions = {}): Server {
   server.setRequestHandler(ListToolsRequestSchema, async () => ({
     tools: [
       {
+        name: 'refresh_registry',
+        description: 'Refresh the registry cache for long-running agent sessions. Safe and read-only.',
+        inputSchema: { type: 'object' as const, properties: {} },
+      },
+      {
         name: 'list_components',
         description: 'List all available Sanring UI components with their names and descriptions.',
         inputSchema: { type: 'object' as const, properties: {} },
+      },
+      {
+        name: 'diff_component',
+        description: 'Read-only comparison of an installed component against the current registry. Does not write files.',
+        inputSchema: {
+          type: 'object' as const,
+          properties: {
+            name: { type: 'string', description: 'Component name' },
+            cwd: { type: 'string', description: 'Absolute Angular project root' },
+          },
+          required: ['name', 'cwd'],
+        },
+      },
+      {
+        name: 'doctor_project',
+        description: 'Read-only project and registry health checks for an Angular project.',
+        inputSchema: {
+          type: 'object' as const,
+          properties: { cwd: { type: 'string', description: 'Absolute Angular project root' } },
+          required: ['cwd'],
+        },
+      },
+      {
+        name: 'migration_status',
+        description: 'Read-only check for registry migrations affecting installed components.',
+        inputSchema: {
+          type: 'object' as const,
+          properties: { cwd: { type: 'string', description: 'Absolute Angular project root' } },
+          required: ['cwd'],
+        },
       },
       {
         name: 'search_components',
@@ -250,6 +292,79 @@ export function createMcpServer(options: CreateMcpServerOptions = {}): Server {
     const { name, arguments: args } = request.params;
 
     switch (name) {
+      case 'refresh_registry': {
+        const registry = await getRegistry(true);
+        return { content: [{ type: 'text' as const, text: `Registry refreshed: ${registry.components.length} components available.` }] };
+      }
+
+      case 'diff_component': {
+        const validated = requireStrings(args, ['name', 'cwd']);
+        if ('isError' in validated) return validated;
+        const { name: componentName, cwd } = validated.values;
+        if (!isAbsolute(cwd) || !isAngularProject(cwd)) {
+          return { isError: true, content: [{ type: 'text' as const, text: '`cwd` must be an absolute Angular project root.' }] };
+        }
+        const registry = await getRegistry();
+        const component = registry.components.find((item) => item.name === componentName);
+        if (!component) return { isError: true, content: [{ type: 'text' as const, text: `Component "${componentName}" not found.` }] };
+        const config = readConfig(cwd);
+        const base = resolveComponentBasePath(cwd, undefined, config);
+        const lines: string[] = [`Diff: ${componentName}`, ''];
+        let changed = 0;
+        for (const file of component.files) {
+          const fileName = registryRelativePath(file, component.name);
+          const localPath = join(base, component.name, fileName);
+          if (!existsSync(localPath)) {
+            lines.push(`+ ${component.name}/${fileName} (missing locally)`);
+            changed++;
+            continue;
+          }
+          const remote = await fetchFile(`components/${file}`, registryUrl);
+          const same = readFileSync(localPath, 'utf-8') === remote;
+          lines.push(`${same ? '✓' : '●'} ${component.name}/${fileName}${same ? '' : ' (changed)'}`);
+          if (!same) changed++;
+        }
+        lines.push('', `${changed} changed file${changed === 1 ? '' : 's'}.`);
+        return { content: [{ type: 'text' as const, text: lines.join('\n') }] };
+      }
+
+      case 'doctor_project': {
+        const validated = requireStrings(args, ['cwd']);
+        if ('isError' in validated) return validated;
+        const { cwd } = validated.values;
+        if (!isAbsolute(cwd)) return { isError: true, content: [{ type: 'text' as const, text: '`cwd` must be absolute.' }] };
+        const config = readConfig(cwd);
+        const lines = [
+          `Angular project: ${isAngularProject(cwd) ? 'yes' : 'no'}`,
+          `Config: ${config ? 'present' : 'missing'}`,
+          `Theme: ${existsSync(join(cwd, 'src/sanring-theme.css')) ? 'present' : 'missing'}`,
+        ];
+        try {
+          const registry = await getRegistry();
+          lines.push(`Registry: reachable (${registry.components.length} components)`);
+        } catch (error) {
+          lines.push(`Registry: unreachable (${error instanceof Error ? error.message : String(error)})`);
+        }
+        return { content: [{ type: 'text' as const, text: lines.join('\n') }] };
+      }
+
+      case 'migration_status': {
+        const validated = requireStrings(args, ['cwd']);
+        if ('isError' in validated) return validated;
+        const { cwd } = validated.values;
+        if (!isAbsolute(cwd)) return { isError: true, content: [{ type: 'text' as const, text: '`cwd` must be absolute.' }] };
+        const config = readConfig(cwd);
+        const registry = await getRegistry();
+        const lines: string[] = [];
+        for (const [key, version] of Object.entries(config?.installedVersions ?? {})) {
+          const name = key.includes(':') ? key.slice(key.indexOf(':') + 1) : key;
+          const component = registry.components.find((item) => item.name === name);
+          const needed = component?.migrations?.some((migration) => semverLte(version, migration.fromVersion)) ?? false;
+          lines.push(`${needed ? '⚠' : '✓'} ${key}: ${version}${needed ? ' migration available' : ' up to date'}`);
+        }
+        return { content: [{ type: 'text' as const, text: lines.length ? lines.join('\n') : 'No installed version baselines found.' }] };
+      }
+
       case 'list_components': {
         const registry = await getRegistry();
         const lines = formatGroupedComponents(registry, registry.components);
@@ -385,7 +500,7 @@ export function createMcpServer(options: CreateMcpServerOptions = {}): Server {
           for (const depName of sharedNames) {
             const shared = registryIndex.sharedByName.get(depName);
             if (!shared) continue;
-            const fileName = shared.file.split('/').pop()!;
+            const fileName = registryRelativePath(shared.file, 'shared');
             const exists = existsSync(join(sharedDestDir, fileName));
             fileLines.push(`  ${exists ? '~' : '+'} shared/${fileName}${exists ? ' (exists, would be skipped)' : ' (new)'}`);
             if (exists) skipCount++;
@@ -395,7 +510,7 @@ export function createMcpServer(options: CreateMcpServerOptions = {}): Server {
           for (const c of toInstall) {
             const destDir = join(componentBasePath, c.name);
             for (const file of c.files) {
-              const fileName = file.split('/').pop()!;
+              const fileName = registryRelativePath(file, c.name);
               const exists = existsSync(join(destDir, fileName));
               fileLines.push(`  ${exists ? '~' : '+'} ${c.name}/${fileName}${exists ? ' (exists, would be skipped)' : ' (new)'}`);
               if (exists) skipCount++;

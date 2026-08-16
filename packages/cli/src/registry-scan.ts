@@ -27,9 +27,15 @@ export function discoverComponentSources(sourceDir: string): DiscoveredComponent
     .filter((entry) => entry.isDirectory() && entry.name !== 'shared')
     .map((entry) => {
       const dir = join(sourceDir, entry.name);
-      const files = readdirSync(dir, { withFileTypes: true })
-        .filter((f) => f.isFile() && f.name.endsWith('.ts') && !SOURCE_FILE_EXCLUDE.test(f.name))
-        .map((f) => join(dir, f.name));
+      const files: string[] = [];
+      function collect(current: string): void {
+        for (const entry of readdirSync(current, { withFileTypes: true })) {
+          const file = join(current, entry.name);
+          if (entry.isDirectory()) collect(file);
+          else if (entry.name.endsWith('.ts') && !SOURCE_FILE_EXCLUDE.test(entry.name)) files.push(file);
+        }
+      }
+      collect(dir);
       return { name: entry.name, dir, files };
     });
 }

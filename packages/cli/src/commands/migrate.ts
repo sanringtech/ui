@@ -1,6 +1,7 @@
 import { Command } from 'commander';
 import pc from 'picocolors';
 import { createRegistryIndex, fetchRegistry } from '../registry.js';
+import { parseComponentRef } from './add.js';
 import {
   getCliVersion,
   readConfig,
@@ -43,12 +44,12 @@ export const migrateCommand = new Command('migrate')
       const currentCliVersion = getCliVersion();
 
       // Determine which components to check
-      const installedComponentNames = Object.keys(config.installedVersions ?? {});
+      const installedComponentKeys = Object.keys(config.installedVersions ?? {});
 
       // If config has no installedVersions at all, fall back to inferring from
       // installedHashes (keys like "button/button.component.ts" → "button")
       const inferredNames = new Set<string>();
-      if (installedComponentNames.length === 0 && config.installedHashes) {
+      if (installedComponentKeys.length === 0 && config.installedHashes) {
         for (const label of Object.keys(config.installedHashes)) {
           const parts = label.split('/');
           if (parts.length >= 2 && parts[0] !== 'shared' && parts[0] !== 'src') {
@@ -57,14 +58,13 @@ export const migrateCommand = new Command('migrate')
         }
       }
 
-      const targetNames =
-        componentNames.length > 0
-          ? componentNames
-          : installedComponentNames.length > 0
-          ? installedComponentNames
-          : [...inferredNames];
+      const targetRefs = componentNames.length > 0
+        ? componentNames.map((ref) => ({ key: ref, name: parseComponentRef(ref).name }))
+        : installedComponentKeys.length > 0
+          ? installedComponentKeys.map((key) => ({ key, name: parseComponentRef(key).name }))
+          : [...inferredNames].map((name) => ({ key: name, name }));
 
-      if (targetNames.length === 0) {
+      if (targetRefs.length === 0) {
         console.log(pc.dim('No installed components found in sanring.config.json.\n'));
         return;
       }
@@ -82,15 +82,18 @@ export const migrateCommand = new Command('migrate')
 
       const results: MigrationResult[] = [];
 
-      for (const name of targetNames) {
+      for (const { key, name } of targetRefs) {
         const component = registryIndex.componentsByName.get(name);
         if (!component) {
           results.push({ kind: 'notFound', name });
           continue;
         }
 
-        const installedVersion =
-          config.installedVersions?.[name] ?? '0.0.0';
+        const installedVersion = config.installedVersions?.[key];
+        if (!installedVersion) {
+          results.push({ kind: 'noData', name, installedVersion: 'unknown' });
+          continue;
+        }
 
         if (!component.migrations || component.migrations.length === 0) {
           results.push({ kind: 'upToDate', name });
@@ -137,7 +140,11 @@ export const migrateCommand = new Command('migrate')
           continue;
         }
         if (result.kind === 'upToDate') continue;
-        if (result.kind === 'noData') continue;
+        if (result.kind === 'noData') {
+          console.log(`  ${pc.yellow(`⚠ ${result.name}`)}  ${pc.dim('no installed version baseline; run `sanring add` or `sanring update` to record one')}`);
+          anyOutput = true;
+          continue;
+        }
 
         if (result.kind === 'needsMigration') {
           const { name, installedVersion, migrations } = result;

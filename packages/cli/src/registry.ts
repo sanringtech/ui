@@ -111,6 +111,7 @@ export interface RegistryComponent {
   componentDeps?: string[];
   peerDependencies?: Record<string, string>;
   files: string[];
+  tags?: string[];
   /** Breaking-change migration guides, ordered oldest-first. */
   migrations?: RegistryMigration[];
 }
@@ -253,6 +254,7 @@ export function validateRegistry(value: unknown): Registry {
         errors.push(`${path}.description must be a string`);
       }
       if (!isStringArray(item.files)) errors.push(`${path}.files must be an array of strings`);
+      validateOptionalStringArray(errors, item.tags, `${path}.tags`);
       validateOptionalStringArray(errors, item.sharedDeps, `${path}.sharedDeps`);
       validateOptionalStringArray(errors, item.componentDeps, `${path}.componentDeps`);
       validateOptionalPeerDependencies(errors, item.peerDependencies, `${path}.peerDependencies`);

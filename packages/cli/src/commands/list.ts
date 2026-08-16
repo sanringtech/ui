@@ -18,7 +18,7 @@ import {
   resolveComponentBasePath,
   resolveRegistrySource,
 } from '../utils.js';
-import { listInstalledComponentNames } from './diff.js';
+import { listInstalledComponentNames, registryRelativePath } from './diff.js';
 import { classifyUpdate } from './update.js';
 
 const FILE_FETCH_CONCURRENCY = 6;
@@ -70,7 +70,7 @@ export async function getComponentOutdatedSummaries(
     for (const depName of component.sharedDeps ?? []) {
       const shared = registryIndex.sharedByName.get(depName);
       if (!shared) continue;
-      const fileName = shared.file.split('/').pop()!;
+      const fileName = registryRelativePath(shared.file, 'shared');
       const label = `shared/${fileName}`;
       jobs.push({
         componentName: component.name,
@@ -83,7 +83,7 @@ export async function getComponentOutdatedSummaries(
 
     const destDir = join(options.componentBasePath, component.name);
     for (const file of component.files) {
-      const fileName = file.split('/').pop()!;
+      const fileName = registryRelativePath(file, component.name);
       const label = `${component.name}/${fileName}`;
       jobs.push({
         componentName: component.name,
@@ -187,7 +187,7 @@ export const listCommand = new Command('list')
   .option('-i, --installed', 'show only installed components', false)
   .option('--outdated', 'show installed component update status against the current registry', false)
   .option('-p, --path <path>', 'component path relative to cwd (used with --installed)')
-  .option('--registry <url>', 'custom registry URL')
+  .option('--registry <source>', 'custom registry (URL or local path)')
   .action(async (options: { installed: boolean; outdated: boolean; path?: string; registry?: string }) => {
     const config = readConfig(process.cwd());
     const registrySource = resolveRegistrySource(undefined, config, options.registry);
@@ -201,7 +201,11 @@ export const listCommand = new Command('list')
     if (options.installed || options.outdated) {
       requireAngularProject(process.cwd());
       const componentBasePath = resolveComponentBasePath(process.cwd(), options.path, config);
-      const installedNames = new Set(listInstalledComponentNames(componentBasePath, registry));
+      const configuredNames = Object.keys(config?.installedVersions ?? {}).map((key) => key.split(':').pop()!);
+      const installedNames = new Set([
+        ...listInstalledComponentNames(componentBasePath, registry),
+        ...configuredNames,
+      ]);
       components = components.filter((c) => installedNames.has(c.name));
 
       if (options.outdated) {

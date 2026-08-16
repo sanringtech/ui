@@ -24,8 +24,11 @@ export const searchCommand = new Command('search')
   .description('Search available components by name or description')
   .argument('<query>', 'search term')
   .option('-p, --path <path>', 'component path relative to cwd (used to show install status)')
-  .option('--registry <url>', 'custom registry URL')
-  .action(async (query: string, options: { path?: string; registry?: string }) => {
+  .option('--registry <source>', 'custom registry (URL or local path)')
+  .option('--group <id>', 'filter by registry group')
+  .option('--tag <tag>', 'filter by component tag')
+  .option('--json', 'output machine-readable results', false)
+  .action(async (query: string, options: { path?: string; registry?: string; group?: string; tag?: string; json: boolean }) => {
     const config = readConfig(process.cwd());
     const spinner = ora('Loading components...').start();
     const registry = await fetchRegistry(resolveRegistrySource(undefined, config, options.registry));
@@ -33,16 +36,51 @@ export const searchCommand = new Command('search')
 
     const q = query.toLowerCase();
 
-    // Name matches ranked above description-only matches.
-    const nameMatches = registry.components.filter((c) => c.name.toLowerCase().includes(q));
-    const descMatches = registry.components.filter(
-      (c) => !c.name.toLowerCase().includes(q) && c.description.toLowerCase().includes(q),
-    );
-    const matches = [...nameMatches, ...descMatches];
+    const tokens = q.split(/[^a-z0-9]+/).filter(Boolean);
+    const groupNames = options.group
+      ? new Set(registry.groups?.find((group) => group.id === options.group || group.title.toLowerCase() === options.group?.toLowerCase())?.components ?? [])
+      : null;
+    const scored = registry.components
+      .filter((component) => !groupNames || groupNames.has(component.name))
+      .filter((component) => !options.tag || component.tags?.includes(options.tag))
+      .map((component) => {
+        const name = component.name.toLowerCase();
+        const description = component.description.toLowerCase();
+        let score = 0;
+        if (name === q) score += 100;
+        if (name.startsWith(q)) score += 40;
+        if (name.includes(q)) score += 20;
+        if (description.includes(q)) score += 8;
+        for (const token of tokens) {
+          if (name.includes(token)) score += 10;
+          if (description.includes(token)) score += 3;
+        }
+        return { component, score };
+      })
+      .filter((entry) => entry.score > 0)
+      .sort((a, b) => b.score - a.score || a.component.name.localeCompare(b.component.name));
+    const matches = scored.map((entry) => entry.component);
 
     if (matches.length === 0) {
+      if (options.json) {
+        console.log(JSON.stringify({ query, results: [] }, null, 2));
+        return;
+      }
       console.log(pc.dim(`\n  No components matching "${query}".\n`));
       console.log(pc.dim(`  Run ${pc.white('sanring list')} to see all available components.\n`));
+      return;
+    }
+
+    if (options.json) {
+      console.log(JSON.stringify({
+        query,
+        results: scored.map(({ component, score }) => ({
+          name: component.name,
+          description: component.description,
+          score,
+          installed: installedNames?.has(component.name) ?? false,
+        })),
+      }, null, 2));
       return;
     }
 

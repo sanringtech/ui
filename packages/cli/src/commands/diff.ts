@@ -77,6 +77,49 @@ export function resolveDiffTargets(
 
 export type FileDiffStatus = 'unchanged' | 'auto' | 'conflict';
 
+export function registryRelativePath(file: string, prefix: string): string {
+  const normalizedPrefix = prefix.endsWith('/') ? prefix : `${prefix}/`;
+  return file.startsWith(normalizedPrefix) ? file.slice(normalizedPrefix.length) : file.split('/').pop()!;
+}
+
+export interface DiffFileJob {
+  componentName: string;
+  label: string;
+  localPath: string;
+  remotePath: string;
+  recordedHash?: string;
+}
+
+/** Build the canonical file set consumed by diff, add --diff, and update. */
+export function buildDiffJobs(
+  components: RegistryComponent[],
+  registryIndex: RegistryIndex,
+  options: { componentBasePath: string; sharedDestDir: string; themeDest?: string; installedHashes?: Record<string, string> },
+): DiffFileJob[] {
+  const jobs: DiffFileJob[] = [];
+  if (options.themeDest && existsSync(options.themeDest) && registryIndex.sharedByName.has('theme')) {
+    const theme = registryIndex.sharedByName.get('theme')!;
+    jobs.push({ componentName: '__theme__', label: THEME_FILE_PATH, localPath: options.themeDest, remotePath: theme.file, recordedHash: options.installedHashes?.[THEME_FILE_PATH] });
+  }
+  const sharedNames = new Set(components.flatMap((component) => component.sharedDeps ?? []));
+  for (const name of sharedNames) {
+    const shared = registryIndex.sharedByName.get(name);
+    if (!shared) continue;
+    const fileName = registryRelativePath(shared.file, 'shared');
+    const label = `shared/${fileName}`;
+    jobs.push({ componentName: '__shared__', label, localPath: join(options.sharedDestDir, fileName), remotePath: shared.file, recordedHash: options.installedHashes?.[label] });
+  }
+  for (const component of components) {
+    const destDir = join(options.componentBasePath, component.name);
+    for (const file of component.files) {
+      const fileName = registryRelativePath(file, component.name);
+      const label = `${component.name}/${fileName}`;
+      jobs.push({ componentName: component.name, label, localPath: join(destDir, fileName), remotePath: `components/${file}`, recordedHash: options.installedHashes?.[label] });
+    }
+  }
+  return jobs;
+}
+
 // `recordedHash` — the baseline captured at the last add/update, if any —
 // lets this tell "registry moved on, you never touched this file" (auto)
 // apart from "you customized it" (conflict), same distinction `update` uses
@@ -120,10 +163,12 @@ export const diffCommand = new Command('diff')
   .option('-p, --path <path>', 'destination path relative to cwd')
   .option('--registry <source>', 'custom registry (URL or local path)')
   .option('--exit-code', 'exit with code 1 if any files differ (useful for CI)', false)
+  .option('--summary', 'print counts only, without line-by-line diff output', false)
+  .option('--json', 'output a machine-readable summary', false)
   .action(
     async (
       componentNames: string[],
-      options: { path?: string; registry?: string; exitCode: boolean },
+      options: { path?: string; registry?: string; exitCode: boolean; summary: boolean; json: boolean },
     ) => {
       const cwd = process.cwd();
 
@@ -148,6 +193,10 @@ export const diffCommand = new Command('diff')
         console.error(
           pc.red(`✖ Unknown component${missing.length > 1 ? 's' : ''}: ${missing.join(', ')}`),
         );
+        // Unknown targets are input errors. --exit-code only controls the
+        // result of a valid comparison that found drift.
+        process.exit(1);
+        return;
       }
       if (notInstalled.length > 0) {
         console.log(
@@ -160,73 +209,15 @@ export const diffCommand = new Command('diff')
       // Collect jobs upfront then fetch compare targets with bounded concurrency —
       // avoids sequential waterfall latency (and hammering a remote registry
       // unbounded) when many components are installed.
-      type DiffJob =
-        | { kind: 'new'; label: string }
-        | {
-            kind: 'compare';
-            label: string;
-            localPath: string;
-            remotePath: string;
-            recordedHash?: string;
-          };
-
-      const jobs: DiffJob[] = [];
-
       const themeDest = join(cwd, THEME_FILE_PATH);
-      const themeShared = registryIndex.sharedByName.get('theme');
-      if (themeShared && existsSync(themeDest)) {
-        jobs.push({
-          kind: 'compare',
-          label: THEME_FILE_PATH,
-          localPath: themeDest,
-          remotePath: themeShared.file,
-          recordedHash: config?.installedHashes?.[THEME_FILE_PATH],
-        });
-      }
+      const jobs = buildDiffJobs(components, registryIndex, {
+        componentBasePath,
+        sharedDestDir,
+        themeDest,
+        installedHashes: config?.installedHashes,
+      });
 
-      const sharedNamesNeeded = new Set<string>();
-      for (const component of components) {
-        for (const depName of component.sharedDeps ?? []) sharedNamesNeeded.add(depName);
-      }
-      for (const depName of sharedNamesNeeded) {
-        const shared = registryIndex.sharedByName.get(depName);
-        if (!shared) continue;
-        const fileName = shared.file.split('/').pop()!;
-        const dest = join(sharedDestDir, fileName);
-        const label = `shared/${fileName}`;
-        if (!existsSync(dest)) {
-          jobs.push({ kind: 'new', label });
-        } else {
-          jobs.push({
-            kind: 'compare',
-            label,
-            localPath: dest,
-            remotePath: shared.file,
-            recordedHash: config?.installedHashes?.[label],
-          });
-        }
-      }
-
-      for (const component of components) {
-        const destDir = join(componentBasePath, component.name);
-        for (const file of component.files) {
-          const fileName = file.split('/').pop()!;
-          const dest = join(destDir, fileName);
-          const label = `${component.name}/${fileName}`;
-          if (!existsSync(dest)) {
-            jobs.push({ kind: 'new', label });
-          } else {
-            jobs.push({
-              kind: 'compare',
-              label,
-              localPath: dest,
-              remotePath: `components/${file}`,
-              recordedHash: config?.installedHashes?.[label],
-            });
-          }
-        }
-      }
-
+      const fileResults: Array<{ label: string; status: FileDiffStatus }> = [];
       let changed = 0,
         checked = 0,
         autoSafe = 0;
@@ -237,7 +228,7 @@ export const diffCommand = new Command('diff')
         if (status === 'auto') autoSafe++;
       }
 
-      const compareJobs = jobs.filter((job) => job.kind === 'compare');
+      const compareJobs = jobs.filter((job) => existsSync(job.localPath));
       const results = await fetchTextTargetsConcurrent(
         compareJobs,
         FILE_FETCH_CONCURRENCY,
@@ -246,10 +237,9 @@ export const diffCommand = new Command('diff')
       const resultByLabel = new Map(results.map((result) => [result.label, result]));
 
       for (const job of jobs) {
-        if (job.kind === 'new') {
-          console.log(
-            pc.cyan(`  + ${job.label} (new in registry — run \`sanring update\` to install)`),
-          );
+        if (!existsSync(job.localPath)) {
+          if (!options.summary && !options.json) console.log(pc.cyan(`  + ${job.label} (new in registry — run \`sanring update\` to install)`));
+          fileResults.push({ label: job.label, status: 'auto' });
           checked++;
           changed++;
           autoSafe++;
@@ -266,11 +256,34 @@ export const diffCommand = new Command('diff')
         }
         const local = readFileSync(job.localPath, 'utf-8');
         checked++;
-        tally(printFileDiff(job.label, local, result.content, job.recordedHash));
+        const status = local === result.content
+          ? 'unchanged'
+          : isUntouchedSinceInstall(local, job.recordedHash)
+            ? 'auto'
+            : 'conflict';
+        fileResults.push({ label: job.label, status });
+        if (options.summary || options.json) tally(status);
+        else tally(printFileDiff(job.label, local, result.content, job.recordedHash));
       }
 
       if (checked === 0) {
+        if (options.json) {
+          console.log(JSON.stringify({ checked: 0, changed: 0, autoSafe: 0, conflicts: 0, files: [] }, null, 2));
+          return;
+        }
         console.log(pc.dim('\n  Nothing to compare — no installed files found.\n'));
+        return;
+      }
+
+      if (options.json) {
+        console.log(JSON.stringify({
+          checked,
+          changed,
+          autoSafe,
+          conflicts: fileResults.filter((result) => result.status === 'conflict').length,
+          files: fileResults,
+        }, null, 2));
+        if (options.exitCode && changed > 0) process.exit(1);
         return;
       }
 
@@ -290,6 +303,11 @@ export const diffCommand = new Command('diff')
             `● ${changed} of ${checked} file${checked > 1 ? 's' : ''} differ from the registry`,
           ) + pc.dim(` (${notes.join(', ')}). Run \`sanring update\` to apply.\n`),
         );
+      }
+
+      if (options.summary) {
+        const conflicts = fileResults.filter((result) => result.status === 'conflict').length;
+        console.log(pc.dim(`Summary: ${checked} checked, ${changed} changed, ${autoSafe} safe, ${conflicts} conflicts.\n`));
       }
 
       if (options.exitCode && changed > 0) process.exit(1);
