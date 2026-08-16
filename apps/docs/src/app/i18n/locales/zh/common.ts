@@ -107,7 +107,6 @@ export const commonTranslations = {
   'component.header.updated': '最近更新',
   'component.header.jumpInstall': '安裝方式',
   'component.header.jumpApi': 'API',
-  'toc.preview': '預覽',
   'components.disabledNotice.title': '為什麼有些元件是灰色的？',
   'components.disabledNotice.description':
     '它們還在開發中——文件頁面已經存在，但內容還沒準備好，所以清單裡先不開放點擊。可以到',

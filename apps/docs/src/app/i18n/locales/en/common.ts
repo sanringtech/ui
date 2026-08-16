@@ -109,7 +109,6 @@ export const commonTranslations = {
   'component.header.updated': 'Updated',
   'component.header.jumpInstall': 'Installation',
   'component.header.jumpApi': 'API',
-  'toc.preview': 'Preview',
   'components.disabledNotice.title': 'Why are some components greyed out?',
   'components.disabledNotice.description':
     "They're still in development — their docs page exists but isn't ready to use yet, so it isn't linked from this list. Track progress on the",
