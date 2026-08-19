@@ -83,6 +83,24 @@ class SelectA11yHost {}
 })
 class SelectClassTestHost {}
 
+// Regression: SelectComponent had no plain `disabled` input, only the CVA
+// setDisabledState() path (via [formControl]/[ngModel]) — a consumer using
+// [value]/(valueChange) directly had no way to disable the control at all.
+@Component({
+  imports: [SelectComponent, SelectContentComponent, SelectItemComponent, SelectTriggerDirective, SelectValueComponent],
+  template: `
+    <sanring-select disabled>
+      <button type="button" sanringSelectTrigger ariaLabel="Fruit">
+        <sanring-select-value placeholder="Pick one" />
+      </button>
+      <sanring-select-content>
+        <sanring-select-item value="apple">Apple</sanring-select-item>
+      </sanring-select-content>
+    </sanring-select>
+  `,
+})
+class SelectPlainDisabledHost {}
+
 // CDK's ListKeyManager (which FocusKeyManager/SelectContentComponent's arrow-key handling
 // delegates to) reads event.keyCode, which the KeyboardEvent constructor's init dict can't
 // set (it's a read-only getter) — same workaround already used in stepper.component.spec.ts
@@ -101,7 +119,7 @@ describe('SelectComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [SelectTestHost, SelectA11yHost, SelectClassTestHost],
+      imports: [SelectTestHost, SelectA11yHost, SelectClassTestHost, SelectPlainDisabledHost],
     }).compileComponents();
 
     overlayContainer = TestBed.inject(OverlayContainer);
@@ -254,6 +272,20 @@ describe('SelectComponent', () => {
     trigger.click();
     fixture.detectChanges();
 
+    expect(trigger.getAttribute('aria-expanded')).toBe('false');
+  });
+
+  it('disables via a plain `disabled` input, not just CVA setDisabledState()', () => {
+    const fixture = TestBed.createComponent(SelectPlainDisabledHost);
+    fixture.detectChanges();
+
+    const trigger = fixture.nativeElement.querySelector('button[sanringSelectTrigger]') as HTMLButtonElement;
+    expect(trigger.disabled).toBe(true);
+    expect(trigger.getAttribute('aria-disabled')).toBe('true');
+
+    // The trigger itself blocks opening while disabled — clicking it must not open the listbox.
+    trigger.click();
+    fixture.detectChanges();
     expect(trigger.getAttribute('aria-expanded')).toBe('false');
   });
 

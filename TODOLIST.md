@@ -129,9 +129,7 @@ Phase 4 已解封:Playwright 截圖 + `Read` 工具可以實際檢視 home(light
 
 - [ ] `calendar`：`calendar.component.ts:77` 的 host 是 `role="radiogroup"`，但模板內實際子孫節點是 `role="grid"` → `role="row"` → `role="gridcell"`（`:149,151,155`，用 `aria-selected` 不是 `aria-checked`）——`radiogroup` 應該直接擁有 `role="radio"` 子節點，這是無效的 ARIA 親子結構，screen reader 會宣告成 radio group 卻遇到 grid 導覽語意
 - [ ] `date-picker`：`date-picker.component.ts:82`（host `role="radiogroup"`）跟模板 `:102,110,114` 的 `role="grid"`/`"row"`/`"gridcell"` 巢狀結構，跟 `calendar` 是同一種無效 ARIA 親子結構問題（程式碼註解說明是為了讓 host 上的 `aria-required`/`aria-invalid` 合法才選這個 role，但代價是製造出無效的 ARIA tree）
-- [ ] `select`：`select.component.ts` 沒有一般的 `disabled` boolean input，只能透過 CVA 的 `setDisabledState()`（必須綁在真正的 `FormControl`/`NgModel` 且呼叫 disable）才能停用——不透過 Reactive/Template-driven Forms、單純 `[value]`/`(valueChange)` 用法的消費者完全沒有辦法停用這個元件，跟同批的 `radio-group`、`otp-input` 都直接暴露 `disabled = input(...)` 不一致
-
-**已修復(2026-08-19)**：`file-upload`（remove 按鈕缺 disabled guard、trigger 缺 aria-disabled/disabled）、`hover-card`（trigger 缺 aria-expanded）、`input`/`textarea`（`id` 不可覆寫，順手一併修了沒被本輪掃描抓到但同樣有這個 bug 的 `textarea`）、`link`（disabled 機制整組缺失）、`navigation-menu`（content region 缺 label）、`transfer`（root 缺 class merge）。詳見 DEVLOG。
+**已修復(2026-08-19)**：`select`（補一般 `disabled` boolean input，跟 CVA `setDisabledState()` 合併判斷）、`file-upload`（remove 按鈕缺 disabled guard、trigger 缺 aria-disabled/disabled）、`hover-card`（trigger 缺 aria-expanded）、`input`/`textarea`（`id` 不可覆寫，順手一併修了沒被本輪掃描抓到但同樣有這個 bug 的 `textarea`）、`link`（disabled 機制整組缺失）、`navigation-menu`（content region 缺 label）、`transfer`（root 缺 class merge）。詳見 DEVLOG。
 
 ### ⚠ 建議修正（次要，不阻擋加入,但值得排進之後的 `/audit-component` 逐一過）
 

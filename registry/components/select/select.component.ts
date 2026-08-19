@@ -6,8 +6,11 @@ import {
   ElementRef,
   Injector,
   OnInit,
+  booleanAttribute,
+  computed,
   forwardRef,
   inject,
+  input,
   model,
   signal,
 } from '@angular/core';
@@ -45,7 +48,12 @@ export class SelectComponent<T extends SelectValue = SelectValue>
   readonly isOpen = model<boolean>(false); // 選單開關狀態
   readonly selectedValue = signal<T | null>(null); // 當前選中的數值
   readonly selectedLabel = signal<string | null>(null);
-  readonly disabledState = signal<boolean>(false); // 禁用狀態
+  readonly disabledState = signal<boolean>(false); // CVA setDisabledState() 寫入的禁用狀態
+  // Plain-usage disabled input, same "combine with CVA state" pattern select-item.component.ts
+  // already uses for its own disabledInput/disabledState — root/trigger just hadn't caught up.
+  // eslint-disable-next-line @angular-eslint/no-input-rename
+  readonly disabledInput = input(false, { alias: 'disabled', transform: booleanAttribute });
+  readonly isDisabled = computed(() => this.disabledInput() || this.disabledState());
   triggerOrigin?: CdkOverlayOrigin;
   triggerElementRef?: ElementRef<HTMLElement>;
 
@@ -78,7 +86,7 @@ export class SelectComponent<T extends SelectValue = SelectValue>
   }
 
   get disabled(): boolean {
-    return this.disabledState();
+    return this.isDisabled();
   }
 
   get required(): boolean {
@@ -107,12 +115,12 @@ export class SelectComponent<T extends SelectValue = SelectValue>
 
   // 提供給子元件（Trigger、Item）呼叫的方法
   setOpen(open: boolean): void {
-    if (this.disabledState()) return;
+    if (this.isDisabled()) return;
     this.isOpen.set(open);
   }
 
   selectValue(val: T | null, label?: string): void {
-    if (this.disabledState()) return;
+    if (this.isDisabled()) return;
     this.selectedValue.set(val);
     this.selectedLabel.set(label ?? null);
     this.onChange(val);

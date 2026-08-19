@@ -66,7 +66,7 @@ export class SelectItemComponent implements AfterViewInit, FocusableOption {
   readonly class = input<string | undefined>();
 
   protected readonly isSelected = computed(() => this.select.selectedValue() === this.value());
-  protected readonly isDisabled = computed(() => this.disabledInput() || this.select.disabledState());
+  protected readonly isDisabled = computed(() => this.disabledInput() || this.select.isDisabled());
 
   // FocusableOption.disabled — used by SelectContentComponent's FocusKeyManager to skip this
   // item during Arrow-key navigation.

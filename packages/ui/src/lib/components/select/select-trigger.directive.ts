@@ -15,8 +15,8 @@ import { SelectComponent } from './select.component';
     '[attr.aria-expanded]': 'select.isOpen() ? "true" : "false"',
     '[attr.aria-controls]': 'select.isOpen() ? select.contentId : null',
     '[attr.data-state]': 'select.isOpen() ? "open" : "closed"',
-    '[disabled]': 'select.disabledState()',
-    '[attr.aria-disabled]': 'select.disabledState() ? "true" : "false"',
+    '[disabled]': 'select.isDisabled()',
+    '[attr.aria-disabled]': 'select.isDisabled() ? "true" : "false"',
     '[attr.aria-invalid]': 'select.errorState ? "true" : null',
     '[attr.aria-required]': 'select.required ? "true" : null',
     '[attr.aria-describedby]': 'select.describedByAttr',
@@ -56,12 +56,12 @@ export class SelectTriggerDirective {
   );
 
   protected onClick(): void {
-    if (this.select.disabledState()) return;
+    if (this.select.isDisabled()) return;
     this.select.setOpen(!this.select.isOpen());
   }
 
   protected onOpenKeydown(event: Event): void {
-    if (this.select.disabledState()) return;
+    if (this.select.isDisabled()) return;
     if (!(event instanceof KeyboardEvent)) return;
 
     event.preventDefault();

@@ -746,3 +746,23 @@ get id(): string { return this.idInput() ?? this.generatedId; }
 - 全量：`pnpm exec ng test "@sanring/ui" --watch=false` 70 個 spec 檔、**401** 個測試全過（比修復前的 398 多 3 個——`link` +1、`file-upload` +2；`input`/`textarea` 各 +2 但同時原本就有的測試數量打平，淨值算在對應檔案裡）；`pnpm lint` 乾淨（含新增的 `no-input-rename` disable comment）；`pnpm exec tsc --noEmit -p packages/ui/tsconfig.lib.json` 通過；`ng build docs --configuration=production` 成功；`check-registry-parity.mjs`/`check-registry-sync.mjs` 皆綠燈。
 
 **TODOLIST.md P30 現況**：❌ 清單從 15 項降到 3 項（`calendar`/`date-picker` 的 ARIA 巢狀結構、`select` 缺 `disabled` input），這三項都需要更多設計判斷（`calendar`/`date-picker` 涉及重新設計 role 結構，`select` 需要決定是否要跟其他表單元件一致補 plain boolean input），暫緩到下一輪再處理。
+
+---
+
+## P30 — `select` 補齊一般 `disabled` boolean input
+
+**查證**：跟使用者討論後確認這項其實不算大決策——同一個 select 家族裡 `select-item.component.ts` 早就已經在用「plain input alias 回 `disabled` + 跟 CVA state 用 `||` 合併」這個模式（`disabledInput`/`isDisabled`），只有 `select.component.ts`（root）跟 `select-trigger.directive.ts` 兩處沒跟上，一直只讀 CVA 專用的 `disabledState()`。所以不是要不要引入新設計，是把家族裡已經有前例、已經在用的既有模式補到少了兩處的地方。
+
+**修法**：`select.component.ts` 仿照 `select-item` 既有寫法新增：
+
+```ts
+// eslint-disable-next-line @angular-eslint/no-input-rename
+readonly disabledInput = input(false, { alias: 'disabled', transform: booleanAttribute });
+readonly isDisabled = computed(() => this.disabledInput() || this.disabledState());
+```
+
+`get disabled()`（`SanringFieldControl` 介面要求）、`setOpen()`、`selectValue()` 三處原本直接讀 `disabledState()` 的地方全部改讀 `isDisabled()`；`select-trigger.directive.ts` 的 `[disabled]`/`[attr.aria-disabled]` binding 與 `onClick()`/`onOpenKeydown()` 兩個 guard 同步改讀 `select.isDisabled()`。額外發現並一併修正一個關聯的小缺口：`select-item.component.ts:69` 自己的 `isDisabled` computed 原本讀的是 `this.select.disabledState()`（root 的原始 CVA state），不是新的 `isDisabled()`——這代表在這次修之前,就算之後幫 root 補了 plain `disabled` input,個別 item 也不會跟著變成 disabled,兩者会不一致。改讀 `this.select.isDisabled()` 後三層（root/trigger/item）行為統一。
+
+**驗證**：`select.component.spec.ts` 新增 `SelectPlainDisabledHost`（`<sanring-select disabled>`，不透過 `FormControl`）與對應測試,斷言 trigger 的 `disabled`/`aria-disabled` 屬性正確,且點擊不會打開選單;測試先手動把 `select-trigger.directive.ts` 改回讀 `disabledState()`,確認測試真的會紅（`expected false to be true`），再還原確認轉綠。`select` 資料夾兩個 spec 檔共 17 個測試全過（原 16 個 +1 個新的）。`packages/ui`/`registry` 三個檔案（`select.component.ts`/`select-trigger.directive.ts`/`select-item.component.ts`）同步修改,`diff` 確認除了既有的 import path 差異外完全一致。全量：`pnpm exec ng test "@sanring/ui" --watch=false` 70 個 spec 檔、**402** 個測試全過；`pnpm lint` 乾淨；`pnpm exec tsc --noEmit -p packages/ui/tsconfig.lib.json` 通過；`ng build docs --configuration=production` 成功；`check-registry-parity.mjs`/`check-registry-sync.mjs` 皆綠燈。
+
+**TODOLIST.md P30 現況**：❌ 清單只剩 `calendar`/`date-picker` 的 ARIA 巢狀結構這一組。已跟使用者討論過,`role="radiogroup"` 包 `role="grid"` 這個組合目前 axe-core（`calendar.component.spec.ts`/`date-picker.component.spec.ts` 都有跑 `expectNoA11yViolations`）並未判定為 violation,所以不是工具會擋的急迫問題,是嚴格照 ARIA spec 讀的理論缺口。候選解法（外層 host 的 `role="radiogroup"` 改成 `role="group"`，一個通用容器 role,不像 `radiogroup` 隱含子項必須是 `role="radio"`）已提出但尚未定案，暫緩。
