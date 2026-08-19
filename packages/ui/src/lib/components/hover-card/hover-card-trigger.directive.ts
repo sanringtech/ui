@@ -12,6 +12,7 @@ import { HoverCardComponent } from './hover-card.component';
     '(focus)': 'hoverCard.open()',
     '(blur)': 'hoverCard.close()',
     '(keydown.escape)': 'handleEscape($event)',
+    '[attr.aria-expanded]': 'hoverCard.isOpen() ? "true" : "false"',
   },
 })
 export class HoverCardTriggerDirective implements OnInit, OnDestroy {

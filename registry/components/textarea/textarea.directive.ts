@@ -25,7 +25,16 @@ export class TextareaDirective implements SanringFieldControl<string>, DoCheck, 
   readonly stateChanges = this.stateChangesSubject.asObservable();
   readonly controlType = FieldType.textarea;
   focused = false;
-  id = uniqueId('sanring-textarea');
+
+  // See input.directive.ts's identical `idInput`/`id` pair for the rationale:
+  // captures a consumer-authored `id` as an input instead of letting the `[id]`
+  // host binding below silently overwrite it.
+  // eslint-disable-next-line @angular-eslint/no-input-rename
+  readonly idInput = input<string | undefined>(undefined, { alias: 'id' });
+  private readonly generatedId = uniqueId('sanring-textarea');
+  get id(): string {
+    return this.idInput() ?? this.generatedId;
+  }
 
   readonly ngControl = inject(NgControl, { optional: true, self: true });
   private readonly el = inject(ElementRef<HTMLTextAreaElement>);

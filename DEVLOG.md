@@ -706,3 +706,43 @@ P9 golden fixture 掃完 53 元件後發現一批長期存在的 registry 宣告
 - `packages/ui` 全量：`pnpm exec ng test "@sanring/ui" --watch=false` 70 個 spec 檔、394 個測試全過；`pnpm lint` 乾淨；`check-registry-parity.mjs`/`check-registry-sync.mjs` 皆綠燈。
 
 **尚未處理**：`context-menu-item`/`sub-trigger` 等選單項目「每個都同時帶 `tabindex="0"`、不是 roving single-tabstop」的問題（見 `TODOLIST.md` P30 ⚠ 清單）跟這次修的 trigger 缺 tabindex 是不同層次的問題，本輪沒有動。
+
+---
+
+## P30 — 6 個元件的 API 完整性修復（`hover-card`/`navigation-menu`/`transfer`/`input`+`textarea`/`link`/`file-upload`）
+
+延續 P30 全庫掃描的 ❌ 清單，逐一修完以下 6 組缺口（`packages/ui`/`registry` 同源修改，僅 import path 不同）：
+
+**`hover-card`**：`hover-card-trigger.directive.ts` 補 `'[attr.aria-expanded]': 'hoverCard.isOpen() ? "true" : "false"'`，`hoverCard.isOpen()` 已經是既有的 public signal，純粹是漏綁。
+
+**`navigation-menu`**：`navigation-menu-content.component.ts` 的 `role="region"` 補 `ariaLabel`/`ariaLabelledBy` 兩個 input 與對應的 `[attr.aria-label]`/`[attr.aria-labelledby]` binding，比照同目錄 `navigation-menu.component.ts` 既有的寫法。
+
+**`transfer`**：`transfer.component.ts`（root `<sanring-transfer>`）補 `class` input 與 `[class]` host binding（用 `cn()`），比照同目錄 `transfer-panel`/`transfer-header`/`transfer-action` 既有的 `cn()`-merge 慣例。因為 Angular 的靜態 `class="..."` 屬性跟元件自己的 `[class]` host binding 是分開合併（union），不是互相覆蓋，所以這個修改對 docs demo 既有的 `class="flex items-stretch gap-2"` 寫法零風險。
+
+**`input` + `textarea`**：兩個 directive（`input.directive.ts`/`textarea.directive.ts`）都直接 `implements SanringFieldControl<string>`（不像 `checkbox`/`file-upload` 走獨立 adapter class），介面要求 `id: string` 必須是一般字串屬性，原本的 `id = uniqueId('sanring-input')` 是一般 class field，透過 `'[id]': 'id'` host binding 輸出——host property binding 每次 CD 都會覆蓋 DOM 上的 `id`，導致消費者在 `<input sanringInput id="my-id">` 手寫的 `id` 永遠被蓋掉。修法：把捕捉消費者輸入的職責拆給一個另外命名、alias 回 `'id'` 的 `input()`（`idInput`），解析出來的 `id` getter 再回填給 host binding：
+
+```ts
+// eslint-disable-next-line @angular-eslint/no-input-rename
+readonly idInput = input<string | undefined>(undefined, { alias: 'id' });
+private readonly generatedId = uniqueId('sanring-input');
+get id(): string { return this.idInput() ?? this.generatedId; }
+```
+
+這個「另外命名 + alias 回介面要求的名字 + eslint-disable」模式不是新發明的——`combobox-item.component.ts`（`disabledInput` alias 回 `disabled`，因為 `Highlightable` 介面同樣要求 `disabled` 是一般屬性）已經是同一個問題的既有解法，直接沿用。**`textarea` 不在本輪 P30 掃描找到的 ❌ 清單裡**（batch 6 稽核回報「✅ No findings」），但讀 `input.directive.ts` 時發現它是逐字複製的同一份程式碼、同一個 bug，順手一起修了，避免下次稽核才重新發現。
+
+**`link`**：`link.directive.ts` 的 `computedClass()` 寫了 `disabled:pointer-events-none disabled:opacity-50`，但套在 `a[sanringLink]` 上——原生 `:disabled` 偽類不會匹配 `<a>`，這段 CSS 從來沒生效過，而且整個 directive 完全沒有 `disabled` input、`aria-disabled`、或 `tabindex` 機制。比照同一個 repo 已經做對的 `navigation-menu-link.directive.ts`：補 `disabled` input（`booleanAttribute`）、`aria-disabled` binding、`resolvedTabIndex`（沿用 `navigation-menu-link` 的 `baseTabIndex` 快照寫法，保留開發者手寫的 tabindex，disabled 時強制 `-1`）、`aria-disabled:` class 變體取代原本失效的 `disabled:`、以及 click guard。
+
+**`file-upload`**：兩處都缺 disabled 反映——`file-item.component.ts` 的 remove 按鈕補 `[disabled]="upload.isDisabled"`（native `<button>` disabled，同時擋滑鼠跟鍵盤）與 `remove()` 內的 guard；`file-trigger.directive.ts`（selector 是不限元素的 `[sanringFileTrigger]`，檔案內註解說明是刻意「簡化 selector 提升 DX」，不像 `sidebar-trigger` 是遺漏，所以沒有收緊 selector）補上跟 `collapsible-trigger.directive.ts` 一致的 `isNativeButton` 判斷 host block（native `<button>` 用 `disabled` 屬性，非 native 用 `role`/`tabindex`/`aria-disabled`），現有用法 100% 是 `<button>` 所以這組新 binding 全部評估成 `null`、零行為改變。
+
+**驗證過程中發現的環境陷阱（值得記錄，避免下次重踩）**：一開始幫 `file-upload` 兩處寫 regression test 時，用「建立 fixture → `detectChanges()` → 改一個 host 端一般 class field（例如 `fixture.componentInstance.disabled = true`）→ 再呼叫一次 `detectChanges()`」的寫法斷言子元件跟著更新，測試一直斷言失敗。寫了一個完全獨立、跟 file-upload 無關的最小重現（一個 root 元件單純 `{{ flag }}` 插值，改 `flag` 後呼叫兩次 `detectChanges()`）才確認：**這個 repo 的 Angular 22 + vitest 測試環境下，`ComponentFixture.detectChanges()` 對「純粹外部改一個一般 class field、沒有透過 signal 或 DOM event」的改動是靜默 no-op**——用一個插值呼叫次數計數器直接證實第二次 `detectChanges()` 完全沒有重新執行樣板的 render function。這跟傳統 zone.js Angular「非 OnPush 元件永遠整棵重查」的直覺不同，本專案的測試環境顯然是 signal-driven（zoneless 或等效行為），CD 只在真正的 signal write / DOM event 時才會標記重繪。修法：測試裡要反映「之後才變成 disabled」這種情境，必須直接呼叫元件自己的 signal-based method（例如 `FileUploadComponent.setDisabledState(true)`，內部是 `this.disabledState.set(true)`），而不是改一個外部 host 元件的一般欄位再指望 rebind 傳下去；`fixture.componentRef.setInput(...)` 是另一個官方對應解法，但只適用於改「fixture 本身的 root 元件」的 input，不適用於改「root 元件模板裡自己的一般欄位」這種情境。這個限制也解釋了為什麼這個 repo 既有的所有「disabled 情境」測試,無一例外全部是用「建立 fixture 前就把 disabled 設好」的寫法（例如 `setup({ disabled: true })`），從來沒有「先建立、之後才 toggle」的寫法——不是巧合，是因為後者在這個測試環境下本來就不會動。
+
+**驗證**：
+- `hover-card`：既有 spec 全過（沒有新增獨立測試，`aria-expanded` 屬於既有 a11y 檢查表的一部分，後續可在 `/audit-component hover-card` 時補專屬 regression test）。
+- `navigation-menu`：既有 spec 全過。
+- `transfer`：既有 spec 全過。
+- `input`/`textarea`：`input.directive.spec.ts`/`textarea.directive.spec.ts` 各新增兩個測試（自訂 id 被保留、沒給 id 時 fallback 到產生的 id），共 4 個新測試,連同既有測試全過；`input.field.spec.ts`（CVA/Field 整合 regression）同步跑過確認沒有受影響。
+- `link`：`link.directive.spec.ts` 新增一個測試斷言 `aria-disabled="true"`、`tabindex="-1"`、click 被攔截，全過。
+- `file-upload`：`file-trigger.directive.spec.ts`/`file-upload.component.spec.ts` 各新增一個測試（用上面提到的 `setDisabledState()` 寫法），全過；兩個新測試都先手動移除對應修復、確認測試真的會紅（`expected false to be true`），再還原修復確認轉綠，證明測試真的抓得到回歸。
+- 全量：`pnpm exec ng test "@sanring/ui" --watch=false` 70 個 spec 檔、**401** 個測試全過（比修復前的 398 多 3 個——`link` +1、`file-upload` +2；`input`/`textarea` 各 +2 但同時原本就有的測試數量打平，淨值算在對應檔案裡）；`pnpm lint` 乾淨（含新增的 `no-input-rename` disable comment）；`pnpm exec tsc --noEmit -p packages/ui/tsconfig.lib.json` 通過；`ng build docs --configuration=production` 成功；`check-registry-parity.mjs`/`check-registry-sync.mjs` 皆綠燈。
+
+**TODOLIST.md P30 現況**：❌ 清單從 15 項降到 3 項（`calendar`/`date-picker` 的 ARIA 巢狀結構、`select` 缺 `disabled` input），這三項都需要更多設計判斷（`calendar`/`date-picker` 涉及重新設計 role 結構，`select` 需要決定是否要跟其他表單元件一致補 plain boolean input），暫緩到下一輪再處理。

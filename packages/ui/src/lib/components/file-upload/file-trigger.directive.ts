@@ -12,15 +12,24 @@ import {
 import { FileUploadComponent } from './file-upload.component';
 
 @Directive({
-  // 簡化 Selector 提升 DX (開發者體驗)
+  // 簡化 Selector 提升 DX (開發者體驗) — 因此不像 collapsible-trigger 限制在 button，
+  // 但代價是 disabled 狀態需要自己補齊原生 button 沒有的 aria-disabled/tabindex 語意。
   selector: '[sanringFileTrigger]',
   standalone: true,
+  host: {
+    '[attr.disabled]': 'isNativeButton && upload.isDisabled ? "" : null',
+    '[attr.aria-disabled]': '!isNativeButton && upload.isDisabled ? "true" : null',
+    '[attr.role]': 'isNativeButton ? null : "button"',
+    '[attr.tabindex]': 'isNativeButton ? null : "0"',
+  },
 })
 export class FileTriggerDirective implements OnDestroy {
   // 🌟 1. 注入大腦與 DOM 操作工具
-  private upload = inject(FileUploadComponent);
+  protected upload = inject(FileUploadComponent);
   private el = inject(ElementRef);
   private renderer = inject(Renderer2);
+
+  protected readonly isNativeButton = this.el.nativeElement.tagName.toLowerCase() === 'button';
 
   // 存放動態生成的隱藏 input
   private hiddenInput!: HTMLInputElement;

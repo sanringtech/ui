@@ -46,8 +46,9 @@ const ERROR_HINTS: Record<FileUploadErrorCode, string> = {
 
       <button
         type="button"
-        class="flex size-6 shrink-0 items-center justify-center rounded-full text-[var(--sanring-muted)] opacity-70 transition-opacity hover:opacity-100 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-[var(--sanring-border-strong)]"
+        class="flex size-6 shrink-0 items-center justify-center rounded-full text-[var(--sanring-muted)] opacity-70 transition-opacity hover:opacity-100 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-[var(--sanring-border-strong)] disabled:pointer-events-none disabled:opacity-30"
         [attr.aria-label]="'Remove ' + file().name"
+        [disabled]="upload.isDisabled"
         (click)="remove()"
       >
         <svg lucideX class="size-3.5"></svg>
@@ -64,7 +65,7 @@ export class FileItemComponent {
   // 維持 null 就不顯示 progress bar，什麼時候該歸零/清掉也由外部決定
   readonly progress = input<number | null>(null);
 
-  private readonly upload = inject(FileUploadComponent);
+  protected readonly upload = inject(FileUploadComponent);
 
   protected readonly formattedSize = computed(() => formatFileSize(this.file().size));
   protected readonly hasError = computed(() => this.errors().length > 0);
@@ -104,6 +105,7 @@ export class FileItemComponent {
   );
 
   remove(): void {
+    if (this.upload.isDisabled) return;
     if (this.hasError()) {
       this.upload.dismissRejection(this.file());
     } else {

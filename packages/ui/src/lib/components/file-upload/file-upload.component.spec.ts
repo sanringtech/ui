@@ -162,4 +162,28 @@ describe('FileUploadComponent', () => {
     expect(comp.files()).toEqual([]);
     expect(fixture.nativeElement.querySelector('sanring-file-item')).toBeFalsy();
   });
+
+  it('disables the file-item remove button (and blocks removal) once the upload is disabled', () => {
+    const fixture = setup();
+    const comp = upload(fixture);
+    comp.handleFiles([file('a.txt', 1)]);
+    fixture.detectChanges();
+
+    // Signal write (not a plain field mutation) — this repo's zoneless test
+    // environment only re-checks views a signal/event actually marks dirty;
+    // toggling a plain host field and calling detectChanges() again is a
+    // silent no-op here.
+    comp.setDisabledState(true);
+    fixture.detectChanges();
+
+    const removeButton = fixture.nativeElement.querySelector(
+      'sanring-file-item button',
+    ) as HTMLButtonElement;
+    expect(removeButton.disabled).toBe(true);
+
+    removeButton.click();
+    fixture.detectChanges();
+
+    expect(comp.files().map((f) => f.name)).toEqual(['a.txt']);
+  });
 });

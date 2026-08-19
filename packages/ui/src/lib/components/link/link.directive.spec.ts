@@ -13,6 +13,12 @@ import { LinkDirective } from './link.directive';
 })
 class LinkTestHost {}
 
+@Component({
+  imports: [LinkDirective],
+  template: `<a sanringLink href="/docs" [disabled]="true">Docs</a>`,
+})
+class DisabledLinkTestHost {}
+
 describe('LinkDirective', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -48,5 +54,20 @@ describe('LinkDirective', () => {
     fixture.detectChanges();
 
     await expectNoA11yViolations(fixture.nativeElement);
+  });
+
+  it('marks a disabled link with aria-disabled, removes it from tab order, and blocks navigation', async () => {
+    await TestBed.configureTestingModule({ imports: [DisabledLinkTestHost] }).compileComponents();
+    const fixture = TestBed.createComponent(DisabledLinkTestHost);
+    fixture.detectChanges();
+
+    const link = fixture.nativeElement.querySelector('a') as HTMLAnchorElement;
+    expect(link.getAttribute('aria-disabled')).toBe('true');
+    expect(link.getAttribute('tabindex')).toBe('-1');
+
+    const event = new MouseEvent('click', { cancelable: true, bubbles: true });
+    link.dispatchEvent(event);
+
+    expect(event.defaultPrevented).toBe(true);
   });
 });

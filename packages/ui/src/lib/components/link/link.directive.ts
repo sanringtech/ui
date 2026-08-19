@@ -1,4 +1,4 @@
-import { Directive, computed, input } from '@angular/core';
+import { Directive, ElementRef, HostListener, booleanAttribute, computed, inject, input } from '@angular/core';
 import { cn } from '../../utils';
 import { LINK_TEXT_CLASS } from './link.styles';
 import { LinkTarget } from './link.type';
@@ -13,12 +13,29 @@ import { LinkTarget } from './link.type';
     '[attr.target]': 'target() || null',
     // 2. 綁定智慧合併後的 rel
     '[attr.rel]': 'computedRel()',
+    '[attr.aria-disabled]': 'disabled() ? "true" : null',
+    '[attr.tabindex]': 'resolvedTabIndex()',
   },
 })
 export class LinkDirective {
+  private readonly elementRef = inject<ElementRef<HTMLElement>>(ElementRef);
+
   readonly class = input<string | undefined>();
   readonly target = input<LinkTarget | undefined>(); // 重新啟用高階型別
   readonly rel = input<string | undefined>();
+  // <a> has no native `disabled` attribute like a <button> does — aria-disabled
+  // + removing it from tab order + a click guard is the standard way to make an
+  // anchor behave as disabled (matches navigation-menu-link.directive.ts).
+  readonly disabled = input(false, { transform: booleanAttribute });
+
+  // Snapshot whatever tabindex the developer wrote directly in the template before
+  // this directive's own binding starts managing the attribute — see the identical
+  // comment in navigation-menu-link.directive.ts for why this can't just be `null`.
+  private readonly baseTabIndex = this.elementRef.nativeElement.getAttribute('tabindex');
+
+  protected readonly resolvedTabIndex = computed(() =>
+    this.disabled() ? '-1' : this.baseTabIndex,
+  );
 
   protected readonly computedClass = computed(() =>
     cn(
@@ -26,7 +43,7 @@ export class LinkDirective {
       LINK_TEXT_CLASS,
       'transition-colors hover:text-[var(--sanring-muted)] focus-visible:outline-none',
       'focus-visible:ring-2 focus-visible:ring-[var(--sanring-border-strong)]',
-      'disabled:pointer-events-none disabled:opacity-50',
+      'aria-disabled:pointer-events-none aria-disabled:opacity-50',
       this.class(),
     ),
   );
@@ -53,4 +70,12 @@ export class LinkDirective {
     // 5. 組裝回字串
     return Array.from(rels).join(' ') || null;
   });
+
+  @HostListener('click', ['$event'])
+  protected handleClick(event: Event): void {
+    if (!this.disabled()) return;
+
+    event.preventDefault();
+    event.stopImmediatePropagation();
+  }
 }

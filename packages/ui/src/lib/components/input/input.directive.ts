@@ -26,7 +26,20 @@ export class InputDirective implements SanringFieldControl<string>, DoCheck, OnD
   readonly stateChanges = this.stateChangesSubject.asObservable();
   readonly controlType = FieldType.input;
   focused = false;
-  id = uniqueId('sanring-input');
+
+  // Consumed as an input (aliased to the native `id` attribute) rather than read
+  // straight off the element, so an id the consumer writes on <input sanringInput
+  // id="..."> is captured here instead of being silently overwritten by the `[id]`
+  // host binding below — the same self-healing pattern as the CVA components'
+  // `input(inject(_IdGenerator).getId(...))`, adapted for a directive that
+  // implements SanringFieldControl directly (so `id` itself must stay a plain
+  // string getter, not a signal, to satisfy the interface).
+  // eslint-disable-next-line @angular-eslint/no-input-rename
+  readonly idInput = input<string | undefined>(undefined, { alias: 'id' });
+  private readonly generatedId = uniqueId('sanring-input');
+  get id(): string {
+    return this.idInput() ?? this.generatedId;
+  }
 
   readonly ngControl = inject(NgControl, { optional: true, self: true });
   private readonly el = inject(ElementRef<HTMLInputElement>);

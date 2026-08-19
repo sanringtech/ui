@@ -37,6 +37,18 @@ class TextareaValidationHost {
   readonly control = new FormControl<string | null>(null, { validators: [Validators.required] });
 }
 
+@Component({
+  imports: [TextareaDirective],
+  template: `<textarea sanringTextarea id="custom-textarea-id"></textarea>`,
+})
+class TextareaCustomIdHost {}
+
+@Component({
+  imports: [TextareaDirective],
+  template: `<textarea sanringTextarea></textarea>`,
+})
+class TextareaGeneratedIdHost {}
+
 describe('TextareaDirective', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -75,5 +87,23 @@ describe('TextareaDirective', () => {
     fixture.detectChanges();
 
     expect(textarea.getAttribute('aria-invalid')).toBe('true');
+  });
+
+  it('respects a consumer-provided id instead of overwriting it with a generated one', async () => {
+    await TestBed.configureTestingModule({ imports: [TextareaCustomIdHost] }).compileComponents();
+    const fixture = TestBed.createComponent(TextareaCustomIdHost);
+    fixture.detectChanges();
+
+    const textarea = fixture.nativeElement.querySelector('textarea') as HTMLTextAreaElement;
+    expect(textarea.id).toBe('custom-textarea-id');
+  });
+
+  it('falls back to a generated id when none is provided', async () => {
+    await TestBed.configureTestingModule({ imports: [TextareaGeneratedIdHost] }).compileComponents();
+    const fixture = TestBed.createComponent(TextareaGeneratedIdHost);
+    fixture.detectChanges();
+
+    const textarea = fixture.nativeElement.querySelector('textarea') as HTMLTextAreaElement;
+    expect(textarea.id).toMatch(/^sanring-textarea/);
   });
 });

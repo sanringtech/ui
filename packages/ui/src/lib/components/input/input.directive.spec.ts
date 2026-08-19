@@ -39,6 +39,18 @@ class InputValidationHost {
   readonly control = new FormControl<string | null>(null, { validators: [Validators.required] });
 }
 
+@Component({
+  imports: [InputDirective],
+  template: `<input sanringInput id="custom-input-id" />`,
+})
+class InputCustomIdHost {}
+
+@Component({
+  imports: [InputDirective],
+  template: `<input sanringInput />`,
+})
+class InputGeneratedIdHost {}
+
 describe('InputDirective', () => {
   it('has no axe-detectable a11y violations when wrapped in sanring-field with a label', async () => {
     await TestBed.configureTestingModule({ imports: [InputA11yHost] }).compileComponents();
@@ -70,5 +82,23 @@ describe('InputDirective', () => {
     fixture.detectChanges();
 
     expect(input.getAttribute('aria-invalid')).toBe('true');
+  });
+
+  it('respects a consumer-provided id instead of overwriting it with a generated one', async () => {
+    await TestBed.configureTestingModule({ imports: [InputCustomIdHost] }).compileComponents();
+    const fixture = TestBed.createComponent(InputCustomIdHost);
+    fixture.detectChanges();
+
+    const input = fixture.nativeElement.querySelector('input') as HTMLInputElement;
+    expect(input.id).toBe('custom-input-id');
+  });
+
+  it('falls back to a generated id when none is provided', async () => {
+    await TestBed.configureTestingModule({ imports: [InputGeneratedIdHost] }).compileComponents();
+    const fixture = TestBed.createComponent(InputGeneratedIdHost);
+    fixture.detectChanges();
+
+    const input = fixture.nativeElement.querySelector('input') as HTMLInputElement;
+    expect(input.id).toMatch(/^sanring-input/);
   });
 });

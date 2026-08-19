@@ -10,6 +10,8 @@ import { NavigationMenuItemComponent } from './navigation-menu-item.component';
   host: {
     '[id]': 'contentId()',
     role: 'region',
+    '[attr.aria-label]': 'ariaLabel() || null',
+    '[attr.aria-labelledby]': 'ariaLabelledBy() || null',
     '[attr.data-state]': 'item.isOpen() ? "open" : "closed"',
     '[hidden]': '!item.isOpen()',
     '[class]': 'contentClass()',
@@ -22,6 +24,8 @@ export class NavigationMenuContentComponent {
 
   readonly id = input<string | undefined>();
   readonly class = input<string | undefined>();
+  readonly ariaLabel = input<string | undefined>();
+  readonly ariaLabelledBy = input<string | undefined>();
 
   readonly contentId = computed(() => this.id() ?? this.generatedId);
 

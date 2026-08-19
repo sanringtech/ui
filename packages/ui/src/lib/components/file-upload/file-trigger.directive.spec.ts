@@ -58,6 +58,25 @@ describe('FileTriggerDirective projected through a conditional dropzone slot', (
     expect(fixture.nativeElement.querySelector('button[sanringfiletrigger]')).toBeTruthy();
   });
 
+  it('reflects the upload disabled state onto the trigger button', async () => {
+    const fixture = TestBed.createComponent(FileUploadTestHost);
+    fixture.detectChanges();
+    await fixture.whenStable();
+    fixture.detectChanges();
+
+    const trigger = fixture.nativeElement.querySelector('button[sanringfiletrigger]') as HTMLButtonElement;
+    expect(trigger.disabled).toBe(false);
+
+    // Signal write (not a plain field mutation) — this repo's zoneless test
+    // environment only re-checks views that a signal/event actually marks
+    // dirty; toggling a plain host field and calling detectChanges() again is
+    // a silent no-op here.
+    fixture.componentInstance.upload.setDisabledState(true);
+    fixture.detectChanges();
+
+    expect(trigger.disabled).toBe(true);
+  });
+
   it('has no axe-detectable a11y violations', async () => {
     const fixture = TestBed.createComponent(FileUploadTestHost);
     fixture.detectChanges();

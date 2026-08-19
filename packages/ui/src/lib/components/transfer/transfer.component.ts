@@ -1,4 +1,5 @@
 import { ChangeDetectionStrategy, Component, computed, input, model, signal } from '@angular/core';
+import { cn } from '../../utils';
 import { TransferItem, TransferMode } from './transfer.type';
 
 @Component({
@@ -6,9 +7,15 @@ import { TransferItem, TransferMode } from './transfer.type';
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `<ng-content></ng-content>`,
+  host: {
+    '[class]': 'rootClass()',
+  },
 })
 export class TransferComponent {
   readonly items = input<TransferItem[]>([]);
+  readonly class = input<string | undefined>();
+
+  protected readonly rootClass = computed(() => cn(this.class()));
   // 雙向綁定：目前在右側（target）的 key 清單，父層可用 [(selectedKeys)] 拿到結果
   readonly selectedKeys = model<string[]>([]);
   readonly mode = input<TransferMode>('two-way');
