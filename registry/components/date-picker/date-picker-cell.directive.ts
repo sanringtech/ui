@@ -1,6 +1,7 @@
 import { Directive, HostListener, computed, inject, input } from '@angular/core';
 import { GranularityCell, GranularityPickerEngine } from '@sanring/date-picker-core';
 import { cn } from '../shared/utils';
+import { DatePickerComponent } from './date-picker.component';
 import { GRANULARITY_CELL_SIZE_CLASSES } from './date-picker.styles';
 import { DatePickerSize } from './date-picker.type';
 
@@ -11,12 +12,17 @@ import { DatePickerSize } from './date-picker.type';
     '[disabled]': 'cell().isDisabled',
     '[attr.aria-selected]': "cell().isSelected ? 'true' : null",
     '[attr.aria-disabled]': "cell().isDisabled ? 'true' : null",
+    // role="gridcell" is one of the few roles aria-required is actually valid
+    // on — see the host block comment in date-picker.component.ts for why
+    // this moved here instead of living on the group host.
+    '[attr.aria-required]': 'datePicker.fieldRequired ? "true" : null',
     '[attr.aria-label]': 'label()',
     '[class]': 'cellClass()',
   },
 })
 export class DatePickerCellDirective {
   private readonly engine = inject(GranularityPickerEngine);
+  protected readonly datePicker = inject(DatePickerComponent);
 
   readonly cell = input.required<GranularityCell>();
   readonly label = input.required<string>();

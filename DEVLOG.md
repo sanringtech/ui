@@ -766,3 +766,31 @@ readonly isDisabled = computed(() => this.disabledInput() || this.disabledState(
 **驗證**：`select.component.spec.ts` 新增 `SelectPlainDisabledHost`（`<sanring-select disabled>`，不透過 `FormControl`）與對應測試,斷言 trigger 的 `disabled`/`aria-disabled` 屬性正確,且點擊不會打開選單;測試先手動把 `select-trigger.directive.ts` 改回讀 `disabledState()`,確認測試真的會紅（`expected false to be true`），再還原確認轉綠。`select` 資料夾兩個 spec 檔共 17 個測試全過（原 16 個 +1 個新的）。`packages/ui`/`registry` 三個檔案（`select.component.ts`/`select-trigger.directive.ts`/`select-item.component.ts`）同步修改,`diff` 確認除了既有的 import path 差異外完全一致。全量：`pnpm exec ng test "@sanring/ui" --watch=false` 70 個 spec 檔、**402** 個測試全過；`pnpm lint` 乾淨；`pnpm exec tsc --noEmit -p packages/ui/tsconfig.lib.json` 通過；`ng build docs --configuration=production` 成功；`check-registry-parity.mjs`/`check-registry-sync.mjs` 皆綠燈。
 
 **TODOLIST.md P30 現況**：❌ 清單只剩 `calendar`/`date-picker` 的 ARIA 巢狀結構這一組。已跟使用者討論過,`role="radiogroup"` 包 `role="grid"` 這個組合目前 axe-core（`calendar.component.spec.ts`/`date-picker.component.spec.ts` 都有跑 `expectNoA11yViolations`）並未判定為 violation,所以不是工具會擋的急迫問題,是嚴格照 ARIA spec 讀的理論缺口。候選解法（外層 host 的 `role="radiogroup"` 改成 `role="group"`，一個通用容器 role,不像 `radiogroup` 隱含子項必須是 `role="radio"`）已提出但尚未定案，暫緩。
+
+---
+
+## P30 — `calendar`/`date-picker` 的 `role="radiogroup"` 包 `role="grid"` 無效巢狀結構修復
+
+**查證：先去查了姊妹 repo `/Users/jack755051/Project/sanring/date-picker`**（`@sanring/date-picker-core` 與 `@sanring/date-picker` 的原始碼,`packages/ui` 的 `calendar`/`date-picker` 透過 `hostDirectives` 用的 `CalendarGridDirective`/`GranularityGridDirective` 就是這個套件出的）,確認兩件事：
+
+1. `@sanring/date-picker-core`（headless engine,套件說明就寫「zero DOM/CSS assumptions」）——`calendar-grid.directive.ts`/`granularity-grid.directive.ts` 完全沒有任何 role/aria 相關程式碼。這裡沒有「正確答案」可以抄,因為它本來就不管 ARIA 語意,這件事完全是消費端（`packages/ui`）自己的責任。
+2. `@sanring/date-picker`（組裝好的 input + popup + grid 完整元件,拿 `date-picker-core` 組出來的參考實作）——整個套件**沒有任何地方用 `role="radiogroup"`**,日曆格子一律是乾淨的 `role="grid"` → `row` → `gridcell`。但它的 `aria-invalid`/`aria-required` 是掛在一顆真正的文字 `<input role="combobox">` 上,不是掛在格子容器上——這個技巧沒辦法直接搬過來,因為 `packages/ui` 的 `calendar`/`date-picker` 沒有 input,格子本身直接就是表單控制項（inline 使用,不是 input+彈出視窗）。
+
+**所以兩個 repo 都沒有現成的答案,只能自己在 `packages/ui` 查證出正確解法**。用一個獨立的 throwaway spec（`aria-experiment.spec.ts`,驗證完就刪了,沒留在 repo 裡）直接對著這個 repo 自己的 axe-core 跑,逐一排除候選方案,而不是憑 spec 記憶猜：
+
+| 候選方案 | 結果 |
+| --- | --- |
+| host `role="group"` + `aria-required` | ❌ `aria-allowed-attr` violation——`group` 不支援 `aria-required` |
+| host `role="grid"`（單一 grid,無 radiogroup 包裝）+ `aria-required` | ❌ 同上,`grid` 也不支援 `aria-required` |
+| host `role="group"` + `aria-invalid`／`aria-describedby` 單獨測 | ✅ 兩個都合法（`aria-allowed-attr` 沒有擋——這兩個是 global/widget attribute,`aria-required` 才是限定角色的那個） |
+| `role="gridcell"`（正確巢狀在 `group` → `grid` → `row` 底下）+ `aria-required`／`aria-invalid` | ✅ 通過——`gridcell` 本來就是原始註解列出「支援 aria-required 的角色」清單裡的一個,只是原本沒人把它用在這裡 |
+
+也考慮過改成 `radiogroup` 直接擁有 `role="radio"` 子節點（丟掉 `grid`/`gridcell`,徹底改成合法的 radiogroup 結構）,但查了 `calendar.component.ts` 才發現 `calendar`/`date-picker` 都支援 `range`/`multi` 選取模式（同時有多個格子是「in range」／被選中）,`radio` 的「同組只能有一個 checked」語意跟這個天生衝突,這條路也是死的。
+
+**最終修法**：外層 host 從 `role="radiogroup"` 改成 `role="group"`,拿掉 host 上的 `[attr.aria-required]`；`aria-invalid`/`aria-describedby` 留在原地不動（反正 `group` 本來就支援）。`aria-required` 改成掛在逐個 `role="gridcell"` 按鈕上（`calendar-day.directive.ts`/`date-picker-cell.directive.ts`,inject 對應的父元件讀 `fieldRequired` getter,套用在整組 gridcell 而非只有目前 focus 的那一顆——跟既有的 `aria-selected`/`aria-disabled` 逐格子綁定風格一致,而不是只在容器層宣告一次）。`calendar-day.directive.ts`/`date-picker-cell.directive.ts` 因此需要 `inject(CalendarComponent)`/`inject(DatePickerComponent)`,跟父元件之間形成循環 import——這是這個 repo 既有、安全的既定模式（`select-item.component.ts` inject `SelectComponent`、`context-menu-item` inject `ContextMenuComponent` 等都是同一招,`inject()` 是執行期才解析,不是模組載入期的同步依賴,不會有實際的循環載入問題）。
+
+**驗證**：`calendar.component.spec.ts`/`date-picker.component.spec.ts` 各自原本斷言 `aria-required` 在 host 上的既有測試(`renders month grids with host field attributes...`/`renders the picker grid with host field attributes...`)改成斷言每個 `role="gridcell"` 按鈕都有 `aria-required="true"`,不是斷言 host。兩邊各自的 `has no axe-detectable a11y violations` 測試（本來就存在,不是新加的）在改完後直接驗證了新結構真的乾淨——這比額外寫新測試更有說服力,因為這正是原本抓到問題的同一個把關機制。`packages/ui`/`registry` 四個檔案（`calendar.component.ts`/`calendar-day.directive.ts`/`date-picker.component.ts`/`date-picker-cell.directive.ts`）同步修改,`check-registry-parity.mjs` 一開始就正確抓到我漏改 registry 那邊（`aria-required` binding drift 訊息精準點出四個檔案),修完後綠燈。全量：`pnpm exec ng test "@sanring/ui" --watch=false` 70 個 spec 檔、**402** 個測試全過（測試數沒變,是改既有斷言不是新增)；`pnpm lint` 乾淨；`pnpm exec tsc --noEmit -p packages/ui/tsconfig.lib.json` 通過；`ng build docs --configuration=production` 成功；`check-registry-parity.mjs`/`check-registry-sync.mjs` 皆綠燈。
+
+**TODOLIST.md P30 現況**：❌ 清單全部清空,15 項全部修復或查證排除完畢。
+
+**沒有動姊妹 repo `date-picker`**：`date-picker-core` 刻意「zero DOM/CSS assumptions」,幫它加上這次的 ARIA 慣例會違背它自己的設計目標,也會讓它多一個要跨 repo 發版/更新依賴版本的環節,而這次的問題純粹是 `packages/ui` 自己組裝 grid 結構時的角色選擇,不是 headless engine 該管的事。`@sanring/date-picker`（組裝好的參考實作）也沒有需要跟進的東西——它沒有這個 bug,是因為它的元件形狀本來就不一樣（input+popup vs. inline grid),不是因為它比較新或比較對。

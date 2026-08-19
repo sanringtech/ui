@@ -1,6 +1,7 @@
 import { Directive, HostListener, computed, inject, input } from '@angular/core';
 import { CalendarDay, CalendarEngine } from '@sanring/date-picker-core';
 import { cn } from '../../utils';
+import { CalendarComponent } from './calendar.component';
 import { CALENDAR_DAY_SIZE_CLASSES } from './calendar.styles';
 import { CalendarSize } from './calendar.type';
 
@@ -11,12 +12,17 @@ import { CalendarSize } from './calendar.type';
     '[disabled]': 'day().isDisabled',
     '[attr.aria-selected]': "day().isSelected ? 'true' : null",
     '[attr.aria-disabled]': "day().isDisabled ? 'true' : null",
+    // role="gridcell" is one of the few roles aria-required is actually valid
+    // on — see the host block comment in calendar.component.ts for why this
+    // moved here instead of living on the group host.
+    '[attr.aria-required]': 'calendar.fieldRequired ? "true" : null',
     '[attr.aria-label]': 'ariaLabel()',
     '[class]': 'dayClass()',
   },
 })
 export class CalendarDayDirective {
   private readonly engine = inject(CalendarEngine);
+  protected readonly calendar = inject(CalendarComponent);
 
   readonly day = input.required<CalendarDay>();
   readonly size = input<CalendarSize>('md');

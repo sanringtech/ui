@@ -90,15 +90,21 @@ describe('CalendarComponent', () => {
 
     const calendar = fixture.nativeElement.querySelector('sanring-calendar') as HTMLElement;
     const grids = fixture.nativeElement.querySelectorAll('[role="grid"]');
-    const dayButtons = fixture.nativeElement.querySelectorAll('button[role="gridcell"]');
+    const dayButtons = fixture.nativeElement.querySelectorAll(
+      'button[role="gridcell"]',
+    ) as NodeListOf<HTMLButtonElement>;
 
     expect(calendar.id).toBe('booking-calendar');
     expect(calendar.getAttribute('tabindex')).toBe('0');
-    expect(calendar.getAttribute('aria-required')).toBe('true');
     expect(calendar.getAttribute('aria-describedby')).toBe('booking-help');
     expect(calendar.className).toContain('custom-calendar');
     expect(grids.length).toBe(2);
     expect(dayButtons.length).toBe(84);
+    // aria-required lives on each gridcell, not the group host — "group" doesn't
+    // support aria-required per axe-core's aria-allowed-attr rule, "gridcell" does.
+    expect(Array.from(dayButtons).every((button) => button.getAttribute('aria-required') === 'true')).toBe(
+      true,
+    );
   });
 
   it('forwards navigation and jump-select accessibility labels', async () => {

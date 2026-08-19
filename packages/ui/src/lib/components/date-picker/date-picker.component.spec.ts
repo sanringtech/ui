@@ -77,11 +77,13 @@ describe('DatePickerComponent', () => {
 
     expect(picker.id).toBe('billing-period');
     expect(picker.getAttribute('tabindex')).toBe('0');
-    expect(picker.getAttribute('aria-required')).toBe('true');
     expect(picker.getAttribute('aria-describedby')).toBe('billing-help');
     expect(picker.className).toContain('custom-date-picker');
     expect(grid.style.gridTemplateColumns).toBe('repeat(4, minmax(0, 1fr))');
     expect(cells.length).toBe(4);
+    // aria-required lives on each gridcell, not the group host — "group" doesn't
+    // support aria-required per axe-core's aria-allowed-attr rule, "gridcell" does.
+    expect(Array.from(cells).every((cell) => cell.getAttribute('aria-required') === 'true')).toBe(true);
     expect(Array.from(cells).map((cell: HTMLButtonElement) => cell.textContent?.trim())).toEqual([
       'Q1',
       'Q2',

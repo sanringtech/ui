@@ -64,17 +64,22 @@ function quarterIndexOf(date: Date, quarterStartMonth: QuarterStartMonth): numbe
   ],
   host: {
     tabindex: '0',
-    // role="radiogroup": this outer element carries aria-required/aria-invalid/
-    // aria-describedby for Angular Forms/sanring-field integration, but those
-    // are only valid ARIA on specific roles (combobox, gridcell, listbox,
-    // radiogroup, spinbutton, textbox, tree) — a bare div (role="generic")
-    // doesn't support them, which axe-core's aria-allowed-attr rule catches.
-    // radiogroup is the closest fit semantically too: picking exactly one
-    // date from a set of cells.
-    role: 'radiogroup',
+    // role="group": a bare div (role="generic") doesn't support aria-invalid/
+    // aria-describedby, so this still needs a real role — "group" is a plain,
+    // unopinionated container that both attributes are valid on (verified
+    // against axe-core's aria-allowed-attr rule). It deliberately does NOT
+    // carry aria-required: axe-core rejects aria-required on "group" (and on
+    // "grid", and on the previously-used "radiogroup", which is also invalid
+    // here since this element's real children are role="grid"/"row", not
+    // role="radio" — radiogroup requires owning radio elements directly, and
+    // this picker supports range/multi modes where several cells can be
+    // simultaneously selected, which radio's single-checked semantics can't
+    // represent anyway). aria-required is instead applied per-cell in
+    // date-picker-cell.directive.ts, on role="gridcell" — one of the few
+    // roles that legitimately supports it.
+    role: 'group',
     '[id]': 'id()',
     '[class]': 'datePickerClass()',
-    '[attr.aria-required]': "required() ? 'true' : null",
     '[attr.aria-invalid]': "errorState ? 'true' : null",
     '[attr.aria-describedby]': 'computedAriaDescribedBy()',
     '(focus)': 'onFocus()',

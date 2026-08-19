@@ -66,13 +66,22 @@ const JUMP_YEAR_RANGE_FUTURE = 50;
   ],
   host: {
     tabindex: '0',
-    // role="radiogroup": see the identical comment in date-picker.component.ts —
-    // aria-required/aria-invalid/aria-describedby aren't valid ARIA on a bare
-    // div (role="generic"), only on specific roles including radiogroup.
-    role: 'radiogroup',
+    // role="group": a bare div (role="generic") doesn't support aria-invalid/
+    // aria-describedby, so this still needs a real role — "group" is a plain,
+    // unopinionated container that both attributes are valid on (verified
+    // against axe-core's aria-allowed-attr rule). It deliberately does NOT
+    // carry aria-required: axe-core rejects aria-required on "group" (and on
+    // "grid", and on the previously-used "radiogroup", which is also invalid
+    // here since this element's real children are role="grid"/"row", not
+    // role="radio" — radiogroup requires owning radio elements directly, and
+    // calendar supports range mode where multiple cells can be simultaneously
+    // "in range", which radio's single-checked semantics can't represent
+    // anyway). aria-required is instead applied per-cell in
+    // calendar-day.directive.ts, on role="gridcell" — one of the few roles
+    // that legitimately supports it.
+    role: 'group',
     '[id]': 'id()',
     '[class]': 'calendarClass()',
-    '[attr.aria-required]': "required() ? 'true' : null",
     '[attr.aria-invalid]': "errorState ? 'true' : null",
     '[attr.aria-describedby]': 'computedAriaDescribedBy()',
     '(focus)': 'onFocus()',
