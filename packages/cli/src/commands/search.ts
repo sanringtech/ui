@@ -71,6 +71,13 @@ export const searchCommand = new Command('search')
       return;
     }
 
+    // Check install status when inside an Angular project.
+    let installedNames: Set<string> | null = null;
+    if (isAngularProject(process.cwd())) {
+      const componentBasePath = resolveComponentBasePath(process.cwd(), options.path, config);
+      installedNames = new Set(listInstalledComponentNames(componentBasePath, registry));
+    }
+
     if (options.json) {
       console.log(JSON.stringify({
         query,
@@ -82,13 +89,6 @@ export const searchCommand = new Command('search')
         })),
       }, null, 2));
       return;
-    }
-
-    // Check install status when inside an Angular project.
-    let installedNames: Set<string> | null = null;
-    if (isAngularProject(process.cwd())) {
-      const componentBasePath = resolveComponentBasePath(process.cwd(), options.path, config);
-      installedNames = new Set(listInstalledComponentNames(componentBasePath, registry));
     }
 
     console.log(

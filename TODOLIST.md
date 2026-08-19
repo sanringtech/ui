@@ -66,9 +66,13 @@ Phase 4 已解封:Playwright 截圖 + `Read` 工具可以實際檢視 home(light
 ### 整體流程
 
 - [ ] 重新定義 CLI 對外主流程並同步 help/README/docs：`init`/`add` 是安裝流程，`info`/`list`/`search` 是探索流程，`diff`/`migrate`/`update`/`doctor` 是維護流程，`build` 是 registry 發布流程，`mcp` 是 agent 入口；npm README 只展示主流程，完整 flags 移到 docs
+  **查證(2026-08-19)**：`apps/docs` 的 CLI 頁面（`cli.overview.body`）文案寫「exposes nine commands — init, add, remove, info, diff, update, list, search, and doctor」，但 `packages/cli/src/index.ts` 實際註冊 12 個 top-level command。`mcp`、`build` 各有自己的文件頁（mcp page、registry page）不算缺，但 **`migrate` 在整個 docs 站完全沒有出現**（`apps/docs/src/app` 底下 grep 不到任何段落介紹它）。此外個別 command 的文件內文已經跟實際 flag 脫節：`add` 沒提到 `--check`、`remove` 沒提到 `--dry-run`、`list` 沒提到 `--outdated`、`doctor` 沒提到 `--fix`/`--json`、`diff` 沒提到 `--json`/`--summary`。
 - [ ] 補 `--json` 給 CI/agent 常用 command：至少 `doctor`、`diff`、`build --dry-run/--check`、`list --outdated`，避免只能解析人類可讀輸出
+  **查證(2026-08-19)**：`doctor`/`diff`/`search`/`info` 已有 `--json`。`build`（僅有 `--check` 純文字輸出，無機器可讀格式）與 `list`（`--outdated`/`--installed` 皆無 `--json`）仍缺，是剩餘缺口。
 - [ ] 把 registry 完整性檢查抽成共用工具：schema、componentDeps/sharedDeps dangling reference、registry file 是否存在/可 fetch、peer dependency version 是否可解析，供 `doctor`、`build`、CI 與 MCP 重用
+  **查證(2026-08-19)**：schema 驗證（`registry.ts` 的 `validateRegistry`）已經共用，`fetchRegistry` 內部會自動套用。但 componentDeps/sharedDeps dangling reference 檢查（`build.ts` 的 `validateReferencedTargets`）只在 `build` 產生 registry.json 當下驗證**自己掃描到的來源**，`doctor`/`mcp` 沒有等價入口可以驗證一份**已存在、可能是手寫或第三方**的 registry.json 內部 componentDeps/sharedDeps 是否有 dangling reference——`doctor` 目前只檢查「使用者專案安裝狀態 vs registry」，不檢查「registry.json 自己內部的引用完整性」，這仍是兩條分開的邏輯。
 - [ ] 將 `fetchRegistry`/`fetchFile` 底層錯誤改成 throw typed error，由 command 層決定怎麼印訊息與 exit；目前 `registry.ts` 內部 `die()` 直接 `process.exit(1)`，對測試與 MCP server reuse 都不理想
+  **查證(2026-08-19)**：`registry.ts:78-84` 的 `die()` 現狀不變，`fetchRegistry`/`fetchFileFromUrl` 仍直接呼叫它終止行程，此項仍為有效缺口。
 
 ### 各 command 弱點
 
@@ -98,6 +102,10 @@ Phase 4 已解封:Playwright 截圖 + `Read` 工具可以實際檢視 home(light
 - [x] `migrate`：`noData` result 型別目前未實際產生；補 legacy/no baseline 情境或移除 dead branch
 - [x] `mcp`：registry cache 沒有 refresh/invalidate；長時間 agent session 可能看不到 registry 更新，補 refresh tool 或 TTL
 - [x] `mcp`：目前 agent 只能 list/search/info/plan/add，缺 `diff`、`doctor`、`migrate`/`update` 的安全入口；補 read-only 檢查工具，再評估是否開放更新工具
+- [ ] `info`、`migrate`、`search` 三個 command 完全沒有對應的 `*.test.ts`（`commands/` 下其餘 9 個 command 都有）；`search --json` 曾經有一個未被任何測試發現的 TDZ crash（見下方查證），凸顯沒測試的 command 風險較高，優先補齊這三個
+  **查證(2026-08-19)**：`diff <(ls packages/cli/src/commands/*.ts | grep -v test) <(ls packages/cli/src/commands/*.test.ts)` 確認只有這三個 command 缺測試檔。
+- [ ] `remove`：混合 target（部分已安裝、部分未安裝）時，未安裝的目標會印出紅色 `✖` 錯誤訊息，但只要至少一個 target 成功移除，整個 process 仍以 exit code 0 結束——視覺上宣告失敗但退出碼宣告成功，跟 `diff`/`update` 對「未安裝視為軟性提示」或「未知一律 exit 1」的既有慣例都不一致，需要決定 remove 的未安裝目標到底該不該讓整體 exit code 非 0
+  **查證(2026-08-19)**：`remove.ts:127-136`——只有當 `plan.toRemove.length === 0`（也就是全部都未安裝）才會 `process.exit(plan.notInstalled.length > 0 ? 1 : 0)`；只要有任何一個 target 可以移除，函式跑到底沒有再檢查 `plan.notInstalled`，隱含 exit 0。
 
 ---
 
@@ -106,6 +114,50 @@ Phase 4 已解封:Playwright 截圖 + `Read` 工具可以實際檢視 home(light
 - [ ] `packages/ui` 的 9 個表單元件（`checkbox`/`switch`/`radio-group`/`slider`/`otp-input`/`date-picker`/`calendar`/`file-upload`/`combobox`）補做 P14 第二批重構：改成 `extends SanringCvaBase`，跟 `registry/` 對齊，徹底消除架構分岔
 
 **現況**：P14 第二批重構（`a9cb0fd`）只實際套用在 `registry/shared/cva-base.ts` + `registry/components/*`，`packages/ui` 的對應 9 個元件從未跟進，兩邊架構自此分岔——`packages/ui` 還是舊的手刻 `XxxFieldControlAdapter`。**根因（驗證缺口）已解決**：新增 `packages/cli/scripts/check-registry-parity.mjs`（已掛進 `.github/workflows/registry-sync-check.yml`），靜態比對 `packages/ui` 與 `registry/` 每個同名元件檔案的 `input()`/`output()`/`model()` 宣告 + a11y 相關 attribute binding 表達式（`aria-*`/`role`/`disabled`/`tabindex`/`id`）。跑起來後除了 `/audit-component` 已經抓到的 `switch`/`checkbox`/`radio-group` 三筆,又額外挖出四筆獨立的 registry-only regression 並修正：`button`（本次 session 自己 cherry-pick 時漏同步 `role="button"` 修復，外加 `rounded-lg`/硬編碼 destructive 色碼兩個更早的 design token 漂移）、`context-menu-sub-trigger`（漏 `aria-disabled`）、`resizable-handle` + `resizable-group`（整組 `aria-valuenow`/`min`/`max` keyboard-splitter 支援完全沒同步過去）。目前這個腳本是純靜態 regex 比對,不是真的執行 registry 程式碼(嘗試讓 `packages/ui` 的 TestBed 直接 import registry 元件失敗了——Angular 的 build 工具鏈假設單一 project rootDir,跨 project import 會讓 `extends SanringCvaBase` 的型別解析失敗,細節見下方腳本檔頭註解)。剩餘工作(改用 `SanringCvaBase`)是解決架構分岔本身,優先度較低,兩邊行為已經有腳本守著。
+
+---
+
+## P30 — `packages/ui` 52 個元件 headless 品質全庫掃描
+
+**現況(2026-08-19)**：用 `/audit-sweep`（本次新增的自檢 skill）對 `packages/ui/src/lib/components/` 下全部 52 個元件做了一輪唯讀分批稽核，套用 `/audit-component` Phase 1–3 的檢查表（Angular 結構、a11y、props/API 設計）。這不是逐元件的完整 `/audit-component`（沒有跑 Phase 4-6 的 spec 補寫與 usage evidence），純粹是「這個元件夠不夠格當一個 headless library 元件」的靜態掃描，找到 15 個元件有明確缺口、另外約 20 個是次要/建議事項。`packages/ui`↔`registry/` 的同步（`check-registry-parity.mjs`/`check-registry-sync.mjs`）目前都是綠燈，本節找到的都是 `packages/ui`/`registry` **兩邊共有**的新缺口，不是既有的分岔問題。
+
+**觀察到的重複模式**：`role="button"` 卻沒有同時給 `tabindex` 與 keydown handler，這個模式在 `button`、`context-menu-trigger`、`sidebar-trigger` 三個獨立元件各自出現一次——值得評估是否該有一個共用的「roving button-role host directive」而不是每個元件各自手刻，降低同類回歸重複發生的機率。
+
+### ❌ 必須修正（阻擋「合格 headless 元件」門檻）
+
+- [ ] `button`：`packages/ui/src/lib/components/button/button.directive.ts:12,15`——`sanringBtn` 套在沒有 `href` 的 `<a>` 上時給了 `role="button"`，但只有 `disabled()` 時才設 `tabindex="-1"`，非 disabled 情況完全沒設 `tabindex`，也沒有 `keydown.enter`/`keydown.space` handler，等於這個元素鍵盤完全無法聚焦或觸發
+- [ ] `calendar`：`calendar.component.ts:77` 的 host 是 `role="radiogroup"`，但模板內實際子孫節點是 `role="grid"` → `role="row"` → `role="gridcell"`（`:149,151,155`，用 `aria-selected` 不是 `aria-checked`）——`radiogroup` 應該直接擁有 `role="radio"` 子節點，這是無效的 ARIA 親子結構，screen reader 會宣告成 radio group 卻遇到 grid 導覽語意
+- [ ] `checkbox`：`checkbox.component.ts:70` 的 `(keydown.enter)="$event.preventDefault()"` 掛在原生 `<button>` 上，會取消 Enter 鍵原本會觸發的 synthetic click，導致 **Enter 鍵完全無法切換 checkbox**（Space 鍵仍正常，因為走 `(click)`）；`checkbox.component.spec.ts` 目前沒有任何 Enter/keydown 測試,所以沒被抓到
+- [ ] `context-menu`：`context-menu-trigger.directive.ts:14` 的 host 設了 `role: 'button'`，但沒有 `tabindex` 也沒有 keydown handler（只有滑鼠 `(contextmenu)`），鍵盤使用者完全無法聚焦或觸發這個 trigger
+- [ ] `date-picker`：`date-picker.component.ts:82`（host `role="radiogroup"`）跟模板 `:102,110,114` 的 `role="grid"`/`"row"`/`"gridcell"` 巢狀結構，跟 `calendar` 是同一種無效 ARIA 親子結構問題（程式碼註解說明是為了讓 host 上的 `aria-required`/`aria-invalid` 合法才選這個 role，但代價是製造出無效的 ARIA tree）
+- [ ] `select`：`select.component.ts` 沒有一般的 `disabled` boolean input，只能透過 CVA 的 `setDisabledState()`（必須綁在真正的 `FormControl`/`NgModel` 且呼叫 disable）才能停用——不透過 Reactive/Template-driven Forms、單純 `[value]`/`(valueChange)` 用法的消費者完全沒有辦法停用這個元件，跟同批的 `radio-group`、`otp-input` 都直接暴露 `disabled = input(...)` 不一致
+- [ ] `sheet`：`sheet-content.component.ts:142-148` 的 attach 邏輯（透過 `attachOverlay()` → `:238` 讀 `document.activeElement`、`:256` 的 `hideBackgroundFromAssistiveTech()` 讀 `document.body.children`）包在一個沒有 `afterNextRender()`/`isPlatformBrowser()` 保護的 `effect()` 裡——同一個檔案上面的 scroll-lock effect（`:122-139`）明確用註解解釋了為什麼要包 `afterNextRender`（SSR 環境沒有 `document`），這段卻沒有比照辦理；若 sheet 初始狀態就是開啟並做 SSR，會直接在伺服器端丟出 `document is not defined`
+- [ ] `file-upload`：`file-item.component.ts:106-112` 的 `remove()` 沒有 `this.upload.isDisabled` guard，父層的 disabled 狀態只靠 `pointer-events-none` CSS（`file-dropzone.component.ts:68`）擋滑鼠，鍵盤（Enter/Space 觸發 remove 按鈕）仍然可以在整個元件 disabled 時刪除檔案——典型的「只有 CSS disabled」反模式
+- [ ] `file-upload`：`file-trigger.directive.ts` 完全沒有 `host` binding，`upload.isDisabled` 不會反映成 `aria-disabled`/`disabled`；click guard（`:70` `if (this.upload.isDisabled) return;`）讓互動靜默失效，但 screen reader 使用者拿不到任何「這個控制項目前是停用的」訊號
+- [ ] `hover-card`：`hover-card-trigger.directive.ts` 沒有 `[attr.aria-expanded]` 綁定 `hoverCard.isOpen()`——checklist 明確要求 expandable/popover trigger 要暴露 `aria-expanded`，這個完全沒有
+- [ ] `input`：`input.directive.ts:29` 的 `id = uniqueId('sanring-input')` 是一般 class field 透過 `'[id]': 'id'` host binding 輸出，不是 `input()`；Angular 的 host property binding 永遠會覆蓋消費者在模板上手寫的 `id` 屬性，導致不透過 `sanring-field` 包裝、單獨使用 `<input sanringInput>` 的消費者無法指定自訂/穩定的 `id` 來搭配外部 `<label for="...">`。對照 `file-upload.component.ts:70` 用 `input(inject(_IdGenerator).getId(...))` 才是允許外部覆寫的正確寫法
+- [ ] `link`：`link.directive.ts:29` 的 `computedClass()` 裡有 `disabled:pointer-events-none disabled:opacity-50`，但這是死掉的 CSS——directive 套在 `a[sanringLink]` 上，原生 `:disabled` 偽類永遠不會匹配 `<a>`（只有表單控制項支援），而且完全沒有 `disabled` input、`aria-disabled`、或 `tabindex` binding 讓這個「disabled」真正生效。同一個 repo 的 `navigation-menu-link.directive.ts:17-19,80-86` 有正確實作（`aria-disabled` + 條件式 `tabindex="-1"` + click guard），可以直接參考
+- [ ] `navigation-menu`：`navigation-menu-content.component.ts:10-16` 的 host 是 `role: 'region'`，但整個檔案沒有任何 `ariaLabel`/`ariaLabelledBy` input 或 binding——沒有 accessible name 的 `role="region"` 大多數 AT/axe-core 都不會當成 landmark 曝光。同一批的 `navigation-menu.component.ts:27-28` 就有正確暴露這兩個 input，這個子元件漏掉了
+- [ ] `sidebar`：`sidebar-trigger.directive.ts:5` 的 selector `[sanringSidebarTrigger]` 沒有限制在 `button`（對照同目錄 `sidebar-rail.directive.ts:6` 用 `button[sanringSidebarRail]`），directive 也沒有加 `role="button"`、`tabindex`、或 keydown handler；如果套在 `<div>`/`<span>` 上會完全沒有鍵盤可及性
+- [ ] `transfer`：`transfer.component.ts:4-9` 的根元素（`<sanring-transfer>`，負責排 source/target panel + action column）完全沒有 `host` binding、沒有 `class` input——同目錄的 `transfer-panel.component.ts`、`transfer-header.component.ts`、`transfer-action.directive.ts` 都有透過 `cn()` 暴露 `class`，唯獨 root 元件沒有，消費者沒辦法用 Angular binding 覆寫/擴充最外層容器的樣式，違反 headless library 的 `cn()`-merge 慣例
+
+### ⚠ 建議修正（次要，不阻擋加入,但值得排進之後的 `/audit-component` 逐一過）
+
+- [ ] `avatar`：`avatar-group-count.component.ts` 的可點擊計數按鈕沒有 `disabled` input，`clickable()` 為真時永遠可操作
+- [ ] `breadcrumb`：`breadcrumb.component.ts:9-10` 的 `aria-label="breadcrumb"` 是寫死字串，沒有 `ariaLabel` input 可覆寫/在地化
+- [ ] `dialog`/`alert-dialog`：`dialog-content.component.ts:112-118` 的 `aria-labelledby`/`aria-describedby` 只在消費者實際 project 了 `DialogTitleDirective`/`DialogDescriptionDirective` 時才會設定，沒有標題的 `alertdialog` 會沒有 accessible name；同檔 `:121-124` 的 `clearDialogAria()` 也只清 `aria-describedby`，沒清 `aria-labelledby`,清理不對稱
+- [ ] `combobox`：搜尋框收合關閉時（Escape 或 outside-pointerdown）焦點會掉到 `<body>`，沒有邏輯把焦點送回 trigger；`inputId`/`listId` 只靠 `uniqueId()` 產生,沒有可覆寫的 `id` input
+- [ ] `date-picker`：沒有 `ariaLabel`/`ariaLabelledBy` input（只有 `ariaDescribedBy`）；`disabled` input 型別是逐日 predicate/matcher 而非單純 boolean，不透過 Reactive Forms 使用時沒有簡單的方式整體停用
+- [ ] `context-menu`：每個啟用中的 menu item/trigger 都同時帶 `tabindex="0"`（`context-menu-item.component.ts:24` 等），不是 roving single-tabstop，`Tab` 會依序穿過選單裡每一項而不是一次跳出選單，偏離 ARIA APG menu pattern
+- [ ] `field`：`field.component.ts` 沒有對外可設定的 `id` input（只有內部 `uniqueId()` 前綴），無法釘住穩定/自訂的 field id
+- [ ] `select`：`select.component.ts:41` 的 `id` 是唯讀 property 不是 `input()`，無法自訂；`select-content.component.ts` 用舊式 `@ViewChild` decorator 而非 signal `viewChild()`
+- [ ] `sheet`：`aria-labelledby`/`aria-describedby` 寫死綁定 `sheet.titleId`/`sheet.descId`，沒有 `ariaLabel` fallback（`popover` 也是同一套慣例，可能是刻意的「必須搭配 Title」設計,需要判斷是否要補 fallback）；`@ViewChild('contentTemplate')`/`@ViewChild('panelDiv')` 用舊式 decorator
+- [ ] `radio`：`radio-item.component.ts:68` 的 `@ViewChild('btn')` 用舊式 decorator 而非 signal `viewChild()`
+- [ ] `hover-card`：`hover-card-content.component.ts:44-54` 的內容 `<div>` 沒有 `role`/`id`/`aria-describedby`/`aria-labelledby` 跟 trigger 建立程式化關聯
+- [ ] `sidebar`：root 沒有預設 `role`（如 `complementary`/`navigation`）也沒有 `ariaLabel`/`ariaLabelledBy` input；`sidebar-menu-button`/`sidebar-menu-action` 算出 `isButton` 卻沒在非原生 button/anchor 標籤時補上 `role="button"`
+- [ ] `dropdown-menu`：`dropdown-menu-trigger.directive.ts:90-115` 手刻 CDK Overlay 生命週期而非重用 `shared/menu-overlay-controller.ts`（檔案內註解已說明是因為 `@angular/aria/menu` 的 attach 模型衝突，屬於有理由的刻意分岔，非 bug，僅記錄供後續參考）
+- [ ] `transfer`：`transfer-item.component.ts:9-26` 的整列 `(click)` 跟內部 `sanring-checkbox` 的 toggle 邏輯重複觸發（目前靠 effect 收斂到一致狀態，屬脆弱雙寫）；整列本身沒有 `role`/`tabindex`/keyboard handler,完全依賴內部 checkbox 的鍵盤可及性；面板內沒有方向鍵在項目間導覽
+- [ ] `tree`：`tree.component.ts` 的 `role="tree"` host 沒有 `ariaLabel`/`ariaLabelledBy` input；`tree-node.component.ts` 沒有逐節點的 `disabled` input；`getChildren()`（`tree-node.component.ts:55-57`）每個節點都重新過濾全部 `descendants()`，大型/深層樹是 O(n²)
 
 ---
 

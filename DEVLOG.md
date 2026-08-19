@@ -647,4 +647,16 @@ P9 golden fixture 掃完 53 元件後發現一批長期存在的 registry 宣告
 - 既有回歸 suite(`long-form-page.spec.ts`、`home.spec.ts`、`mobile-shell.spec.ts`、`theme-toggle.spec.ts`): **14 passed**(desktop/mobile)。
 - 本輪截圖存於 `/tmp/sanring-phase4-*.png`,未加入 repository;驗證 spec 新增於 `apps/docs/e2e/phase4-visual-verification.spec.ts`。
 
+---
+
+## P27 — `sanring search --json` 崩潰(全庫自檢時發現,非既有 P27 條目)
+
+**發現(2026-08-19)**：用 `/audit-sweep` 對 `packages/cli` 做完整性掃描時,注意到 `search.ts`/`migrate.ts`/`info.ts` 是僅有的三個沒有對應 `*.test.ts` 的 command,特別針對這三個實際跑一次而不只是讀程式碼——`npx tsx packages/cli/src/index.ts search button --json --registry ./registry` 直接丟出 `ReferenceError: Cannot access 'installedNames' before initialization`。
+
+**根因**：`search.ts` 的 `options.json` 分支（原本在第 74-85 行）在 `.map()` callback 裡讀取 `installedNames`,但 `let installedNames: Set<string> | null = null;` 的宣告在後面第 88 行才執行——同一個函式作用域內,`let` 的 temporal dead zone 讓这个提前引用直接拋錯。只要 `search --json` 有至少一筆結果就必定崩潰,零筆結果的空陣列分支因為在宣告之前 return 反而不會觸發。沒有任何測試覆蓋到這個 command,所以這個 bug 從新增 `--json` 那次改動起就一直存在没被發現。
+
+**修法**：把 `installedNames` 的宣告與計算搬到 `options.json` 分支之前（緊接在 `matches.length === 0` 的 early return 之後),讓兩個輸出分支(JSON/人類可讀)都能安全讀到它,不改變任何行為語意。
+
+**驗證**：修復後重跑同一條指令,`search button --json` 正確輸出含 `installed` 欄位的 JSON;`pnpm --filter @sanring/cli test`(`packages/cli` 目錄下 `npx vitest run`)175 個既有測試全數通過。`info.ts`/`migrate.ts` 沒有發現同類問題,但仍缺測試檔,已記在 `TODOLIST.md` P27。
+
 **範圍限制**:Component Docs 全面掃描效率與工程證據尚未完成,所以本輪只用 `/components/button` 作為 representative component page;其餘 component docs 完成後,應用同一套驗證重新覆蓋。
