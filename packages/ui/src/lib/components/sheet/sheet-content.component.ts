@@ -1,5 +1,6 @@
 import { CdkTrapFocus } from '@angular/cdk/a11y';
 import { Overlay, OverlayContainer, OverlayRef } from '@angular/cdk/overlay';
+import { Platform } from '@angular/cdk/platform';
 import { TemplatePortal } from '@angular/cdk/portal';
 import {
   ChangeDetectionStrategy,
@@ -85,6 +86,7 @@ export class SheetContentComponent {
   private readonly destroyRef = inject(DestroyRef);
   private readonly overlay = inject(Overlay);
   private readonly overlayContainer = inject(OverlayContainer);
+  private readonly platform = inject(Platform);
   private readonly viewContainerRef = inject(ViewContainerRef);
   private readonly injector = inject(Injector);
 
@@ -235,8 +237,13 @@ export class SheetContentComponent {
 
     if (this.overlayRef.hasAttached()) return;
 
-    this.previouslyFocusedElement = document.activeElement as HTMLElement | null;
-    this.hideBackgroundFromAssistiveTech();
+    // document.activeElement / document.body.children are raw browser globals
+    // (not the injected DOCUMENT token) — guard for SSR, same reasoning as the
+    // scroll-lock effect above.
+    if (this.platform.isBrowser) {
+      this.previouslyFocusedElement = document.activeElement as HTMLElement | null;
+      this.hideBackgroundFromAssistiveTech();
+    }
 
     this.portal ??= new TemplatePortal(this.contentTemplateRef, this.viewContainerRef);
     this.overlayRef.attach(this.portal);

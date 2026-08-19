@@ -179,6 +179,12 @@ describe('ContextMenuComponent', () => {
     ]);
   });
 
+  it('is keyboard-focusable so Shift+F10/the Menu key can reach it', async () => {
+    const fixture = await createFixture();
+
+    expect(trigger(fixture).getAttribute('tabindex')).toBe('0');
+  });
+
   it('moves focus between enabled items with ArrowDown/ArrowUp, skipping the disabled one', async () => {
     const fixture = await createFixture();
     await openMenu(fixture);

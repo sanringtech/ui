@@ -12,7 +12,9 @@ import type { ButtonSize, ButtonVariant } from './button.types';
     '[attr.role]': 'isAnchor && !hasHref ? "button" : null',
     '[attr.aria-disabled]': "disabled() ? 'true' : null",
     '[attr.disabled]': 'disabled() && !isAnchor ? true : null',
-    '[attr.tabindex]': 'disabled() && isAnchor ? -1 : null',
+    '[attr.tabindex]': 'hostTabIndex()',
+    '(keydown.enter)': 'handleActivationKey($event)',
+    '(keydown.space)': 'handleActivationKey($event)',
   },
 })
 export class ButtonDirective {
@@ -25,6 +27,15 @@ export class ButtonDirective {
 
   protected readonly isAnchor = this.elementRef.nativeElement.tagName.toLowerCase() === 'a';
   protected readonly hasHref = this.elementRef.nativeElement.hasAttribute('href');
+
+  // A hrefless <a> isn't natively focusable, so it needs an explicit tabindex
+  // to match the role="button" this directive gives it; an <a href> is already
+  // focusable natively; a <button> needs no tabindex at all.
+  protected readonly hostTabIndex = computed<number | null>(() => {
+    if (!this.isAnchor) return null;
+    if (this.disabled()) return -1;
+    return this.hasHref ? null : 0;
+  });
 
   protected readonly buttonClass = computed(() => {
     const variants: Record<ButtonVariant, string> = {
@@ -58,5 +69,13 @@ export class ButtonDirective {
 
     event.preventDefault();
     event.stopImmediatePropagation();
+  }
+
+  // Only a hrefless <a role="button"> needs this: a native <button> already
+  // activates on Enter/Space, and an <a href> already navigates on Enter.
+  protected handleActivationKey(event: Event) {
+    if (!this.isAnchor || this.hasHref || this.disabled()) return;
+    event.preventDefault();
+    this.elementRef.nativeElement.click();
   }
 }

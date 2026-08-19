@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { OverlayContainer } from '@angular/cdk/overlay';
+import { Platform } from '@angular/cdk/platform';
 import { TestBed } from '@angular/core/testing';
 
 import { expectNoA11yViolations } from '../../../testing/axe-a11y';
@@ -75,6 +76,30 @@ describe('SheetComponent', () => {
     expect(panel.getAttribute('aria-modal')).toBe('true');
     expect(panel.getAttribute('aria-labelledby')).toBe(title.id);
     expect(document.body.style.overflow).toBe('hidden');
+  });
+
+  it('opens without touching document.activeElement/body.children when Platform reports non-browser (SSR safety)', () => {
+    const platform = TestBed.inject(Platform);
+    Object.defineProperty(platform, 'isBrowser', { value: false, configurable: true });
+    const activeElementSpy = vi.spyOn(document, 'activeElement', 'get');
+    const bodyChildrenSpy = vi.spyOn(document.body, 'children', 'get');
+
+    const fixture = TestBed.createComponent(SheetTestHost);
+    fixture.detectChanges();
+
+    const trigger = fixture.nativeElement.querySelector('button[sanringSheetTrigger]') as HTMLElement;
+    expect(() => {
+      trigger.click();
+      fixture.detectChanges();
+    }).not.toThrow();
+
+    const panel = overlayContainer.getContainerElement().querySelector('[role="dialog"]');
+    expect(panel).toBeTruthy();
+    expect(activeElementSpy).not.toHaveBeenCalled();
+    expect(bodyChildrenSpy).not.toHaveBeenCalled();
+
+    activeElementSpy.mockRestore();
+    bodyChildrenSpy.mockRestore();
   });
 
   it('merges host class with consumer class on the content panel', () => {

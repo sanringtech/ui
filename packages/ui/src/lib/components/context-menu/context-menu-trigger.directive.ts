@@ -14,6 +14,13 @@ import { ContextMenuComponent } from './context-menu.component';
     role: 'button',
     'aria-haspopup': 'menu',
     '[attr.aria-expanded]': 'contextMenu.isOpen() ? "true" : "false"',
+    // tabindex="0": there's no dedicated ARIA "context menu trigger" keyboard
+    // pattern (Enter/Space aren't it) — the real keyboard equivalent of a
+    // right-click is Shift+F10 / the Menu key, which browsers already turn
+    // into a native `contextmenu` event (handled below) on whatever element
+    // currently has focus. Without a tabindex this zone can never receive
+    // that focus, so keyboard users have no way to reach it at all.
+    tabindex: '0',
   },
 })
 export class ContextMenuTriggerDirective {

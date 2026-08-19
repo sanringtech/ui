@@ -16,9 +16,19 @@ class ButtonTestHost {}
 
 @Component({
   imports: [ButtonDirective],
-  template: `<a sanringBtn>Action</a>`,
+  // sanringBtn adds tabindex/keydown handling itself for a hrefless <a> — the
+  // lint rules below can't see cross-directive host bindings.
+  template: `
+    <!-- eslint-disable-next-line @angular-eslint/template/click-events-have-key-events, @angular-eslint/template/interactive-supports-focus -->
+    <a sanringBtn (click)="activate()">Action</a>
+  `,
 })
-class AnchorNoHrefHost {}
+class AnchorNoHrefHost {
+  activated = 0;
+  activate() {
+    this.activated++;
+  }
+}
 
 @Component({
   imports: [ButtonDirective],
@@ -94,5 +104,29 @@ describe('ButtonDirective', () => {
 
     const anchor = fixture.nativeElement.querySelector('a') as HTMLAnchorElement;
     expect(anchor.getAttribute('role')).toBeNull();
+  });
+
+  it('is keyboard-focusable and activates on Enter/Space when acting as a hrefless button', async () => {
+    await TestBed.configureTestingModule({ imports: [AnchorNoHrefHost] }).compileComponents();
+    const fixture = TestBed.createComponent(AnchorNoHrefHost);
+    fixture.detectChanges();
+
+    const anchor = fixture.nativeElement.querySelector('a') as HTMLAnchorElement;
+    expect(anchor.getAttribute('tabindex')).toBe('0');
+
+    anchor.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true }));
+    expect(fixture.componentInstance.activated).toBe(1);
+
+    anchor.dispatchEvent(new KeyboardEvent('keydown', { key: ' ', bubbles: true }));
+    expect(fixture.componentInstance.activated).toBe(2);
+  });
+
+  it('does not add a tabindex on an anchor with href (already natively focusable)', async () => {
+    await TestBed.configureTestingModule({ imports: [AnchorWithHrefHost] }).compileComponents();
+    const fixture = TestBed.createComponent(AnchorWithHrefHost);
+    fixture.detectChanges();
+
+    const anchor = fixture.nativeElement.querySelector('a') as HTMLAnchorElement;
+    expect(anchor.getAttribute('tabindex')).toBeNull();
   });
 });

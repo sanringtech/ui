@@ -660,3 +660,49 @@ P9 golden fixture 掃完 53 元件後發現一批長期存在的 registry 宣告
 **驗證**：修復後重跑同一條指令,`search button --json` 正確輸出含 `installed` 欄位的 JSON;`pnpm --filter @sanring/cli test`(`packages/cli` 目錄下 `npx vitest run`)175 個既有測試全數通過。`info.ts`/`migrate.ts` 沒有發現同類問題,但仍缺測試檔,已記在 `TODOLIST.md` P27。
 
 **範圍限制**:Component Docs 全面掃描效率與工程證據尚未完成,所以本輪只用 `/components/button` 作為 representative component page;其餘 component docs 完成後,應用同一套驗證重新覆蓋。
+
+---
+
+## P30 — `checkbox` Enter 鍵「無法切換」查證後確認不是缺口
+
+**查證(2026-08-19)**：`/audit-sweep` 全庫掃描把 `checkbox.component.ts:70` 的 `(keydown.enter)="$event.preventDefault()"` 列成 ❌,理由是「攔掉了原生 `<button>` 的 Enter→click 行為,導致 Enter 鍵無法切換 checkbox」。動手修之前先比對同批用 `<button>` 冒充其他互動 role 的元件,發現這其實是刻意設計：
+
+| 元件 | 冒充的 role | Enter 鍵是否被攔截 | 對應的 WAI-ARIA APG 鍵盤規範 |
+| --- | --- | --- | --- |
+| `switch` | `switch` | 否 | switch pattern：`Enter or Space` 都是合法啟動鍵 |
+| `radio-item` | `radio` | 是（`radio-item.component.ts:47`,同一行寫法） | radio pattern：只有 `Space`/方向鍵,Enter 不列入 |
+| `checkbox` | `checkbox` | 是 | checkbox pattern：**只有 `Space`**,Enter 不列入 |
+
+原生 `<button>` 元素 Enter/Space 都會觸發 click,但這三個元件是拿 `<button>` 冒充三種不同 ARIA role,各自角色的鍵盤規範不同。`checkbox`/`radio` 用 `preventDefault()` 蓋掉 Enter 只留 Space,`switch` 完全不攔截,三者各自對得上規範且彼此一致,不像是意外遺漏同一行程式碼——如果是遺漏,`switch` 沒有理由「剛好」沒有這個問題。
+
+**結論**：不修改程式碼。已把 `TODOLIST.md` P30 裡這條從 ❌ 清單移除,改記一筆「查證後排除」的說明,避免下次重新調查同一個問題。`checkbox.component.spec.ts` 目前確實沒有 Enter/Space 鍵盤測試,如果之後要補,測試應該斷言「Enter 不切換、Space 才切換」,而不是反過來。
+
+---
+
+## P30 — `sheet` SSR crash 修復(`document.activeElement`/`document.body.children` 未保護)
+
+**根因**：`sheet-content.component.ts` 的「attach/detach overlay」`effect()`（原第 142-148 行）直接呼叫 `attachOverlay()`，內部讀 `document.activeElement`（記錄開啟前的焦點，供關閉時還原）與透過 `hideBackgroundFromAssistiveTech()` 讀 `document.body.children`（把背景內容標成 `aria-hidden`）。這兩個都是裸的全域 `document`，不是注入的 `DOCUMENT` token。同一個檔案上面的 scroll-lock effect 已經用 `afterNextRender()` 包住等價的 `document`/`window` 存取，並在註解裡明確寫了原因；attach/detach 這個 effect 沒有比照辦理。若 `<sanring-sheet [isOpen]="true">` 在 SSR 環境初始就是開啟狀態，建構子執行時這個 effect 會在伺服器端同步觸發，直接對著沒有 `document` 的環境呼叫 `document.activeElement`，丟出 `document is not defined`。
+
+**修法(非改動 effect 時序)**：沒有採用「把整個 attach/detach effect 包進 `afterNextRender()`」的做法——那個 effect 的同步執行時機被下面「開啟後 focus 面板」的 effect（用 `afterNextRender` 等 attach 真的 commit 完）依賴，貿然把 attach 本身也搬進 `afterNextRender` 有可能打亂兩個 effect 之間微妙的排程順序，且 CDK 的 `Overlay`/`OverlayRef`/`TemplatePortal` 本身透過注入的 `DOCUMENT` token 運作，SSR 是安全的，真正有問題的只有 `attachOverlay()` 內那兩行裸 `document` 存取。改成注入 `@angular/cdk/platform` 的 `Platform`（`command-dialog.component.ts` guard `navigator` 用的就是這個服務，屬於既有慣例），只把 `document.activeElement`/`hideBackgroundFromAssistiveTech()` 這兩行包進 `if (this.platform.isBrowser)`，其餘程式碼、effect 執行時機完全不動。`packages/ui`/`registry` 兩份完全同源，一次改完（僅 import path 不同）。
+
+**驗證**：新增 regression test（`sheet.component.spec.ts`）：把 `Platform.isBrowser` 覆寫成 `false`，`vi.spyOn` 監看 `document.activeElement`/`document.body.children` 的 getter，開啟 sheet 後斷言不拋錯、面板仍正常掛進 DOM、且這兩個 getter 完全沒被呼叫。修復前手動移除 guard 重跑這個測試,確認會如預期失敗(`expected "get activeElement" to not be called at all, but actually been called 1 times`),證明測試真的抓得到這個回歸,而不是一個永遠綠燈的假測試；修復還原後重跑,`sheet.component.spec.ts` 11 個測試全過。`pnpm exec tsc --noEmit -p packages/ui/tsconfig.lib.json` 通過；`check-registry-parity.mjs`/`check-registry-sync.mjs` 皆綠燈。
+
+---
+
+## P30 — `role="button"` 缺鍵盤支援的三個獨立元件修復（`button`/`context-menu-trigger`/`sidebar-trigger`）
+
+全庫掃描抓到三個元件各自獨立踩到同一種模式——設了 `role="button"` 卻沒有讓元素真的可以用鍵盤聚焦/觸發。三者的根因跟修法並不相同，分開處理：
+
+**`button`**：`button.directive.ts` 的 `sanringBtn` 套在沒有 `href` 的 `<a>` 上時給了 `role="button"`，但 `tabindex` 只在 `disabled()` 時設成 `-1`，非 disabled 情況完全沒有 `tabindex`，也沒有任何 keydown handler。修法：新增 `hostTabIndex` computed——`isAnchor && hasHref` 走原生 `<a href>` 的天然可聚焦性（不設 tabindex）；`isAnchor && !hasHref` 依 `disabled()` 給 `0`/`-1`；`<button>` 元素維持 `null`（原生已可聚焦）。同時新增 `handleActivationKey`，只在 `isAnchor && !hasHref && !disabled()` 時對 `keydown.enter`/`keydown.space` `preventDefault()` 後呼叫 `this.elementRef.nativeElement.click()`，讓消費者原本掛在同一個 host 上的 `(click)` binding 正常觸發——這樣做而不是直接呼叫某個 app 層 handler，是因為 `ButtonDirective` 是通用元件，不知道消費者在 `(click)` 上綁了什麼。`packages/ui`/`registry` 同源修完。
+
+**`context-menu-trigger`**：`context-menu-trigger.directive.ts` 的 host 設了 `role: 'button'`（檔案內既有註解已說明這只是「最接近的近似值」，因為 `aria-haspopup`/`aria-expanded` 需要合法 role 才能過 axe-core），但完全沒有 `tabindex`。這裡刻意**沒有**比照 `button` 補 Enter/Space handler——ARIA APG 沒有「context menu trigger」這個正式 pattern，Enter/Space 不是右鍵選單的鍵盤等價操作，真正的等價操作是 `Shift+F10`/鍵盤上的選單鍵，瀏覽器本身就會把這兩個按鍵轉成一個真正的 `contextmenu` DOM 事件（座標會落在目前 focus 的元素附近），而這個事件本來就已經被既有的 `(contextmenu)` handler 處理。所以整個修法只有一行：補 `tabindex: '0'`，讓這塊「右鍵區域」可以先被鍵盤聚焦到，後續瀏覽器原生行為自然接上。
+
+**`sidebar-trigger`**：`sidebar-trigger.directive.ts` 的 selector 是不受限的 `[sanringSidebarTrigger]`，同目錄的 `sidebar-rail.directive.ts` 則限制在 `button[sanringSidebarRail]`。查過全 repo（`apps/docs` 三處демо、`sidebar.docs.ts` 四處程式碼範例、`sidebar.component.spec.ts` 兩處測試）target 元素 100% 都已經是 `<button>`，所以把 selector 收緊成 `button[sanringSidebarTrigger]`（比照 `sidebar-rail`）對現有用法零行為改變，但讓 Angular 的 template 型別檢查在編譯期直接擋下「套在非 button 元素」這種誤用，比起在 directive 內補 `role`/`tabindex`/keydown 去支援任意元素更safe——後者等於變相鼓勵大家把它套在 `<div>` 上。
+
+**驗證**：
+- `button.directive.spec.ts` 新增兩個測試：hrefless anchor 有 `tabindex="0"`、Enter 與 Space 各自都會觸發 `(click)` binding；`a[href]` 確認沒有被多加 `tabindex`。新增的 `(click)` 測試 fixture 觸發了 `@angular-eslint/template/click-events-have-key-events`/`interactive-supports-focus` 兩個 lint false positive（linter 看不到 `sanringBtn` directive 自己補的鍵盤支援），比照專案既有的 `label-has-associated-control` false positive 慣例補了註明原因的 `eslint-disable-next-line`。8 個測試全過。
+- `context-menu.component.spec.ts` 新增一個測試斷言 trigger 有 `tabindex="0"`。12 個測試全過。
+- `sidebar.component.spec.ts` 原有 6 個測試全過（selector 收緊沒有影響任何既有行為）；`ng build docs --configuration=production` 成功，確認全站唯一的三處 `sanringSidebarTrigger` 用法都合法通過新的 template 型別檢查。
+- `packages/ui` 全量：`pnpm exec ng test "@sanring/ui" --watch=false` 70 個 spec 檔、394 個測試全過；`pnpm lint` 乾淨；`check-registry-parity.mjs`/`check-registry-sync.mjs` 皆綠燈。
+
+**尚未處理**：`context-menu-item`/`sub-trigger` 等選單項目「每個都同時帶 `tabindex="0"`、不是 roving single-tabstop」的問題（見 `TODOLIST.md` P30 ⚠ 清單）跟這次修的 trigger 缺 tabindex 是不同層次的問題，本輪沒有動。
