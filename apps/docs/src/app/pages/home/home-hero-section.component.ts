@@ -76,5 +76,5 @@ import { HomeHeroDemoPanelComponent } from './home-hero-demo-panel.component';
 })
 export class HomeHeroSectionComponent {
   protected readonly i18n = inject(I18nService);
-  protected readonly releaseVersion = 'v0.23.2';
+  protected readonly releaseVersion = 'v0.23.3';
 }

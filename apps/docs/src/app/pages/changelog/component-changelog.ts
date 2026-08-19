@@ -36,6 +36,76 @@ function isPatch(version: string): boolean {
  */
 export const cliVersionChangelog: readonly CliVersionEntry[] = [
   {
+    version: '0.23.3',
+    date: '2026-08-19',
+    changes: [
+      {
+        type: 'fixed',
+        componentIds: ['button'],
+        text: '`sanringBtn` on a hrefless `<a>` had no `tabindex` or keyboard handler outside the disabled state, making it unreachable by keyboard.',
+      },
+      {
+        type: 'fixed',
+        componentIds: ['context-menu'],
+        text: 'Trigger zone had no `tabindex`, so Shift+F10/the Menu key could never reach it.',
+      },
+      {
+        type: 'fixed',
+        componentIds: ['sidebar'],
+        text: '`sanringSidebarTrigger`’s selector wasn’t restricted to `<button>`, so misuse on a non-interactive element silently produced a keyboard-inaccessible trigger.',
+      },
+      {
+        type: 'fixed',
+        componentIds: ['sheet'],
+        text: '`document.activeElement`/`document.body.children` were read unguarded in an effect, crashing on the server if a sheet renders initially open.',
+      },
+      {
+        type: 'fixed',
+        componentIds: ['hover-card'],
+        text: 'Trigger was missing `aria-expanded`.',
+      },
+      {
+        type: 'fixed',
+        componentIds: ['navigation-menu'],
+        text: 'Content panel’s `role="region"` had no `aria-label`/`aria-labelledby`, so it wasn’t exposed as a landmark.',
+      },
+      {
+        type: 'fixed',
+        componentIds: ['transfer'],
+        text: 'Root element had no `class` input, so consumers couldn’t style or override it.',
+      },
+      {
+        type: 'fixed',
+        componentIds: ['input', 'textarea'],
+        text: '`id` was silently overwritten every change-detection cycle by the component’s own host binding, discarding any `id` a consumer wrote.',
+      },
+      {
+        type: 'fixed',
+        componentIds: ['link'],
+        text: 'The `disabled:` class variant never matches `<a>`, and there was no `aria-disabled`/`tabindex`/click-guard mechanism at all — a "disabled" link did nothing.',
+      },
+      {
+        type: 'fixed',
+        componentIds: ['file-upload'],
+        text: 'The remove button and the trigger directive didn’t reflect the upload’s disabled state.',
+      },
+      {
+        type: 'fixed',
+        componentIds: ['select'],
+        text: 'Had no plain `disabled` input, only CVA `setDisabledState()` — unusable outside Reactive/Template-driven Forms.',
+      },
+      {
+        type: 'fixed',
+        componentIds: ['calendar', 'date-picker'],
+        text: 'Host `role="radiogroup"` illegally wrapped `role="grid"`/`role="row"`/`role="gridcell"` children; moved to `role="group"` with `aria-required` applied per-cell instead.',
+      },
+      {
+        type: 'fixed',
+        text: '`sanring search --json` threw a `ReferenceError` whenever the search returned any results.',
+      },
+    ],
+  },
+  {
     version: '0.23.2',
     date: '2026-08-14',
     changes: [

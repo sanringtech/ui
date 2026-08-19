@@ -1,5 +1,26 @@
 # @sanring/cli
 
+## 0.23.3
+
+### Patch Changes
+
+- Full-library headless-quality audit (`/audit-sweep`) across all 52 `packages/ui`/`registry` components — found and fixed real behavior, SSR, and accessibility bugs (not registry-parity drift; both sides had the same issue):
+
+  - **button**: `sanringBtn` on a hrefless `<a>` had no `tabindex` or keyboard handler outside the disabled state — completely unreachable by keyboard
+  - **context-menu**: trigger zone had no `tabindex`, so Shift+F10/the Menu key (which browsers turn into a native `contextmenu` event) could never reach it
+  - **sidebar**: `sanringSidebarTrigger`'s selector wasn't restricted to `<button>` the way its sibling `sanringSidebarRail` is, so applying it to a non-interactive element silently produced a keyboard-inaccessible trigger
+  - **sheet**: `document.activeElement`/`document.body.children` were read unguarded inside an effect, crashing on the server if a sheet renders initially open
+  - **hover-card**: trigger was missing `aria-expanded`
+  - **navigation-menu**: content panel's `role="region"` had no `aria-label`/`aria-labelledby`, so it wasn't exposed as a landmark
+  - **transfer**: root element had no `class` input, so consumers couldn't style or override it
+  - **input**, **textarea**: `id` was silently overwritten every change-detection cycle by the component's own host binding, discarding any `id` a consumer wrote in the template
+  - **link**: the `disabled:` Tailwind variant never matches `<a>` (native `:disabled` only applies to form controls) and there was no `aria-disabled`/`tabindex`/click-guard mechanism at all, so a "disabled" link did nothing
+  - **file-upload**: the remove button and the trigger directive didn't reflect the upload's disabled state
+  - **select**: had no plain `disabled` input, only CVA `setDisabledState()` — unusable outside Reactive/Template-driven Forms
+  - **calendar**, **date-picker**: host `role="radiogroup"` illegally wrapped `role="grid"`/`role="row"`/`role="gridcell"` children — moved to `role="group"` with `aria-required` applied per-`gridcell` instead
+
+- Fixed a crash in `sanring search --json` — it threw a `ReferenceError` whenever the search returned at least one result, because a variable was read before its `let` declaration executed. Found via a full-library CLI completeness audit; `search.ts` was one of only three commands with no test coverage, which is why this had gone unnoticed.
+
 ## 0.23.2
 
 ### Patch Changes
