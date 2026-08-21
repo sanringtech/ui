@@ -1,4 +1,11 @@
-import { ChangeDetectionStrategy, Component, computed, inject, input, numberAttribute } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  computed,
+  inject,
+  input,
+  numberAttribute,
+} from '@angular/core';
 import { OTP_INPUT_ROOT } from './otp-input.context';
 
 @Component({
@@ -9,10 +16,6 @@ import { OTP_INPUT_ROOT } from './otp-input.context';
     `
       :host {
         display: contents;
-      }
-
-      span[data-state='active'] {
-        transform: translateY(-1px);
       }
 
       span[data-state='filled'] {

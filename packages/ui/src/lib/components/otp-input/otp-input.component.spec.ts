@@ -102,6 +102,38 @@ describe('OtpInputComponent', () => {
     expect(fixture.nativeElement.querySelectorAll('[data-otp-slot]')).toHaveLength(4);
   });
 
+  it('keeps the native input mobile-safe and lets slots shrink without a scrollbar', () => {
+    const fixture = TestBed.createComponent(OtpInputTestHost);
+    fixture.detectChanges();
+
+    const host = fixture.nativeElement.querySelector('sanring-otp-input') as HTMLElement;
+    const input = inputAt(fixture, 0);
+    const slot = fixture.nativeElement.querySelector('[data-otp-slot]') as HTMLElement;
+
+    expect(input.type).toBe('text');
+    expect(input.classList.contains('inset-0')).toBe(true);
+    expect(input.classList.contains('text-base')).toBe(true);
+    expect(host.classList.contains('overflow-x-auto')).toBe(false);
+    expect(slot.classList.contains('min-w-0')).toBe(true);
+    expect(slot.classList.contains('shrink')).toBe(true);
+    expect(slot.classList.contains('shrink-0')).toBe(false);
+  });
+
+  it('renders focus inside the active slot without moving it', () => {
+    const fixture = TestBed.createComponent(OtpInputTestHost);
+    fixture.detectChanges();
+
+    const input = inputAt(fixture, 0);
+    input.dispatchEvent(new FocusEvent('focus', { bubbles: true }));
+    fixture.detectChanges();
+
+    const activeSlot = fixture.nativeElement.querySelector(
+      '[data-otp-slot][data-state="active"]',
+    ) as HTMLElement;
+    expect(activeSlot.classList.contains('ring-inset')).toBe(true);
+    expect(activeSlot.classList.contains('ring-offset-2')).toBe(false);
+  });
+
   it('supports projected slots and separators', () => {
     const fixture = TestBed.createComponent(OtpInputComposedTestHost);
     fixture.detectChanges();

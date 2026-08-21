@@ -96,7 +96,7 @@ const OTP_INPUT_TEXT_ALIGN_CLASSES: Record<OtpInputTextAlign, string> = {
       [class]="inputClass()"
       [id]="id()"
       [attr.name]="name()"
-      type="search"
+      type="text"
       [attr.inputmode]="inputMode()"
       [attr.autocomplete]="autocomplete()"
       autocapitalize="off"
@@ -209,7 +209,7 @@ export class OtpInputComponent implements ControlValueAccessor, OnInit, OtpInput
 
   protected readonly hostClass = computed(() =>
     cn(
-      'relative inline-flex max-w-full overflow-x-auto',
+      'relative inline-flex max-w-full',
       this.orientation() === 'vertical' ? 'flex-col' : 'flex-row items-center',
       this.isDisabled() && 'cursor-not-allowed opacity-50',
       this.class(),
@@ -218,8 +218,8 @@ export class OtpInputComponent implements ControlValueAccessor, OnInit, OtpInput
 
   protected readonly inputClass = computed(() =>
     cn(
-      'pointer-events-none absolute left-1/2 top-1/2 size-px -translate-x-1/2 -translate-y-1/2 opacity-0',
-      'border-0 bg-transparent p-0 text-transparent outline-none',
+      'pointer-events-none absolute inset-0 size-full opacity-0',
+      'border-0 bg-transparent p-0 text-base text-transparent outline-none caret-transparent',
     ),
   );
 
@@ -335,7 +335,7 @@ export class OtpInputComponent implements ControlValueAccessor, OnInit, OtpInput
     const isLast = slot.index === this.slotCount() - 1;
 
     return cn(
-      'relative inline-flex shrink-0 cursor-text select-none items-center justify-center border border-[var(--sanring-border-strong)]',
+      'relative inline-flex min-w-0 shrink cursor-text select-none items-center justify-center border border-[var(--sanring-border-strong)]',
       'bg-[var(--sanring-surface)] text-[var(--sanring-foreground)]',
       FIELD_SIZE_CLASS,
       OTP_INPUT_SIZE_CLASSES[this.size()] ?? OTP_INPUT_SIZE_CLASSES.md,
@@ -351,7 +351,7 @@ export class OtpInputComponent implements ControlValueAccessor, OnInit, OtpInput
       !isFirst && !isLast && 'rounded-none',
       this.readOnly() && 'cursor-default',
       slot.state === 'active' &&
-        'z-10 border-[var(--sanring-border-strong)] shadow-md ring-2 ring-[var(--sanring-border-strong)] ring-offset-2 ring-offset-[var(--sanring-background)]',
+        'z-10 border-[var(--sanring-border-strong)] ring-1 ring-inset ring-[var(--sanring-border-strong)]',
       slot.state === 'filled' && 'text-[var(--sanring-foreground)]',
       slot.state === 'invalid' && 'z-10 border-[var(--sanring-error-50)]',
       className,

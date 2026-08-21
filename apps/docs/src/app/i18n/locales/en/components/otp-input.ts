@@ -63,14 +63,17 @@ export const otpInputTranslations = {
   'otpInput.api.stateChange.description':
     'Emits the next code string together with slot metadata and completion state.',
   'otpInput.api.complete.description': 'Emits when every slot has a value.',
-  'otpInput.api.pasted.description': 'Emits normalized paste details after a paste event is handled.',
+  'otpInput.api.pasted.description':
+    'Emits normalized paste details after a paste event is handled.',
   'otpInput.api.slotKeydown.description':
     'Emits per-slot keyboard metadata for advanced custom slot handling.',
-  'otpInput.accessibility.description': "role='group' on the host, aria-label / aria-labelledby, aria-describedby, aria-invalid, aria-required, and aria-disabled are synced automatically. Each slot is a native <input type='text' inputmode='numeric'>. A hidden native input stays in sync so password managers and autofill can propose one-time codes.",
-  'otpInput.keyboard.description': 'Each slot is a native text input with navigation glue between slots.',
+  'otpInput.accessibility.description':
+    "role='group' on the host, aria-label / aria-labelledby, aria-describedby, aria-invalid, aria-required, and aria-disabled are synced automatically. The visual slots are hidden from assistive technology, while one transparent native input receives the complete code and supports password managers and one-time-code autofill.",
+  'otpInput.keyboard.description': 'The native input provides navigation across the visual slots.',
   'otpInput.keyboard.type': 'Type a character to fill the focused slot and advance to the next.',
   'otpInput.keyboard.arrowLeftRight': 'Move focus to the adjacent slot.',
   'otpInput.keyboard.backspace': 'Clear the current slot and move focus to the previous slot.',
   'otpInput.keyboard.delete': 'Clear the current slot without moving focus.',
-  'otpInput.stateModel.description': 'Implements ControlValueAccessor. Use [(ngModel)] or formControl. Value type: string. The complete output fires when every slot has a character, making it easy to auto-submit verification forms.',
+  'otpInput.stateModel.description':
+    'Implements ControlValueAccessor. Use [(ngModel)] or formControl. Value type: string. The complete output fires when every slot has a character, making it easy to auto-submit verification forms.',
 } as const;
