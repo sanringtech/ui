@@ -794,3 +794,32 @@ readonly isDisabled = computed(() => this.disabledInput() || this.disabledState(
 **TODOLIST.md P30 現況**：❌ 清單全部清空,15 項全部修復或查證排除完畢。
 
 **沒有動姊妹 repo `date-picker`**：`date-picker-core` 刻意「zero DOM/CSS assumptions」,幫它加上這次的 ARIA 慣例會違背它自己的設計目標,也會讓它多一個要跨 repo 發版/更新依賴版本的環節,而這次的問題純粹是 `packages/ui` 自己組裝 grid 結構時的角色選擇,不是 headless engine 該管的事。`@sanring/date-picker`（組裝好的參考實作）也沒有需要跟進的東西——它沒有這個 bug,是因為它的元件形狀本來就不一樣（input+popup vs. inline grid),不是因為它比較新或比較對。
+
+
+---
+
+## P27 — `remove` 混合 target 時 exit code 隱含成功
+
+**查證**：`remove.ts` 原本把「registry 裡真的沒有這個元件（typo/未知）」跟「registry 裡有,只是這個專案沒裝」兩種完全不同的狀況混在同一個 `notInstalled` 陣列裡,只要陣列非空就印紅色 `✖` 錯誤,但退出碼只看 `plan.toRemove.length === 0` 這一個條件——只要至少一個 target 真的被移除,函式跑到底就是隱含 exit 0,即使其中混了一個打錯字的元件名稱。
+
+對照 `diff.ts`/`update.ts` 兩者共用的 `resolveDiffTargets()` 既有慣例：`missing`（registry 裡完全找不到）一律視為輸入錯誤,印紅字後立即 `process.exit(1)`、不執行任何後續動作；`notInstalled`（registry 裡有,只是專案沒裝）只是軟性提示,印一行 dim 文字後繼續處理其餘 target,不影響最終 exit code。`remove` 從來沒有對齊這個既有區分——它自己的 `notInstalled` 實際上是「上述兩種情況的聯集」。
+
+**修法**：`RemovalPlan` 拆成 `notInstalled`（registry 裡有、只是未安裝,沿用既有語意)與新增的 `unknown`（registry 裡完全沒有這個名字)。`planRemoval()` 用 `byName.has(n)` 區分兩者。command action 比照 `diff.ts` 的寫法：`plan.unknown.length > 0` 一律印紅字 `✖ Unknown component(s): ...` 並立即 `process.exit(1)`,在做任何刪除動作之前就擋下,徹底避免半調子的部分成功；`plan.notInstalled` 降級成 `pc.dim` 提示文字,不再影響 exit code——這修正了原本「視覺上宣告失敗但退出碼宣告成功」的不一致,做法是讓 `remove` 的兩種情境分別精確對齊 `diff`/`update` 各自既有的處理方式,而不是發明新規則。
+
+**驗證**：`remove.test.ts` 新增/調整 3 個測試——`planRemoval` 單元測試拆成兩個(一個驗證已知但未裝的 `notInstalled`,一個驗證 registry 裡沒有的 `unknown`,原本的測試用例其實誤用了一個 registry 裡不存在的元件名稱去驗證「未安裝」語意,已修正成用真正已知的 `combobox`);整合測試新增「混合已知-未裝 + 可移除 target 時 exit 0」與「混合 unknown + 可移除 target 時 exit 1 且完全不刪除任何檔案」兩case,後者用 `vi.spyOn(process, 'exit')` 攔截驗證真的呼叫了 `exit(1)`,並斷言 `installedHashes` 裡原本可移除的元件的 hash 仍然存在(證明 unknown 檢查真的在任何刪除動作之前就擋下,不是刪了一半才失敗)。`pnpm --filter @sanring/cli exec vitest run`：15 個測試檔、178 個測試全過；`pnpm --filter @sanring/cli exec tsc --noEmit` 通過。
+
+**TODOLIST.md P27 現況**：整體流程 4 項（CLI 主流程文件同步、`--json` 補齊、registry 完整性檢查抽共用工具、`fetchRegistry`/`fetchFile` typed error)與 `info`/`migrate`/`search` 缺測試這項仍待處理。
+
+---
+
+## P27 — `info`/`migrate`/`search` 補測試（過程中發現並修復一個真實 crash + 一個測試套件 flaky race）
+
+**執行**：`commands/` 下依 `check-registry-parity.mjs` 同一類手法先確認缺口範圍後，比照既有 command test（`doctor.test.ts`/`list.test.ts`）的慣例，新增 `info.test.ts`（7 個測試：project info 模式 `--json`/人類可讀、component 模式 `--json`/人類可讀/已安裝狀態、未知元件 exit 1、`alias:component` 語法）、`search.test.ts`（6 個測試：排序、無結果、`--json` 無結果、`--json` 含 `installed` 欄位的回歸測試、`--group`/`--tag` 過濾）、`migrate.test.ts`（9 個測試：up to date、breaking migration 印出步驟、`fromVersion` 早於已安裝版本時不重複觸發、`--check` 有/無待遷移時的 exit code、registry 裡已移除的元件、`alias:component` key 解析、`noData` 無 baseline 情境、config 不存在時的 exit 1）。
+
+**寫測試過程中發現的真實 bug（`info.ts`）**：幫 `info` 補 `alias:component` 語法的回歸測試時（`sanring info other:widget --json`),命令直接丟 `TypeError: Cannot read properties of undefined (reading 'name')`。查證後發現：`info.ts` 稍早的 P27 修復（見 TODOLIST 已勾選項）只改對了「用哪個 registry 抓資料」（`resolveRegistrySource(parsedRef.alias, ...)`)跟「查 registry 用裸名稱」（`resolveInstallSet([bareComponentName], ...)`),但最後一行 `const component = toInstall.find((c) => c.name === componentName)!` 沒有跟著改——`toInstall` 裡的元件 `name` 是裸名稱,但這裡拿去比對的 `componentName` 是原始帶 alias 前綴的完整字串（例如 `"other:widget"`),永遠比對不到,`.find()` 回傳 `undefined`,後面用非空斷言 `!` 硬拆導致 crash。這正是 P27 這個小節的核心論點的具體案例——`info` 先前雖然「查過」也「修過」alias 支援,但因為沒有對應測試,一個明顯會炸掉的殘留 bug 完全沒被抓到。修法：把 `componentName` 改成 `bareComponentName`,一行修復,`sanring info <alias>:<component> --json` 手動驗證正確輸出。
+
+**寫測試過程中發現並修復的測試套件本身的 flaky race**（跟 command 程式碼無關,是測試基礎設施缺口）：新增這三個檔案後,連續跑 `vitest run` 會間歇性（約 2-3/5 次）出現 `registry.test.ts` 裡完全不相關的測試失敗（`Cannot read properties of undefined (reading 'ok')`、`ENOENT: ... 'registry/registry.json'`）。追查後確認：`registry.test.ts` 有幾個測試用**相對路徑**（`'./registry'`）依賴 `process.cwd()` 停在 `packages/cli` 這個固定位置；但 `add`/`remove`/`doctor`/`list`/`info`/`migrate`/`search` 等每一個 command 的整合測試都會在 `beforeEach`/`afterEach` 呼叫 `process.chdir()` 切到各自的 temp project 目錄再切回來。`process.chdir()` 是**整個 process 共享的全域狀態**,不是 per-worker-thread 隔離的——Vitest 預設的 `threads` pool 用 `worker_threads` 在同一個 process 裡並行跑多個測試檔案,所以只要 `registry.test.ts` 剛好在另一個檔案的 `chdir` 視窗內執行,相對路徑就會解析到錯的目錄。用二分法驗證：拿掉新增的三個檔案,原本 178 個測試連續跑 10 次 0 次失敗；加回去後連續跑 5 次有 3 次失敗——不是我新測試邏輯本身有錯,是新增的三個「會 chdir」的檔案數量把既有的競速機率推高到容易觀察到的程度(這個 race 理論上原本就存在於 9 個既有的 chdir 檔案之間,只是機率較低沒被注意到)。**修法**：`packages/cli/vitest.config.ts` 加上 `pool: 'forks'`——改用真正獨立的 OS process(而非共享 process 的 worker thread)跑每個測試檔案,每個 process 有自己獨立的 `cwd`,徹底消除這整類競速,而不是逐一修 `registry.test.ts` 或新檔案去繞開它(那樣治標不治本,下一個新增的 chdir 檔案還是會重新觸發)。
+
+**驗證**：`pnpm --filter @sanring/cli exec vitest run` 加上 `pool: 'forks'` 後連續跑 8 次、`pnpm --filter @sanring/cli exec vitest run --pool=forks` 也連續跑 8 次,共 16 次 0 次失敗(相同條件下拿掉這個設定會在 5 次內大概率重現);18 個測試檔、**200** 個測試全過(原 178 + 新增 22:`info` 7 + `search` 6 + `migrate` 9);`pnpm --filter @sanring/cli exec tsc --noEmit` 通過。
+
+**TODOLIST.md P27 現況**：整體流程 4 項（CLI 主流程文件同步、`--json` 補齊、registry 完整性檢查抽共用工具、`fetchRegistry`/`fetchFile` typed error)仍待處理,`info`/`migrate`/`search` 缺測試與 `remove` exit code 兩項已完成。

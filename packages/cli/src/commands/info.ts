@@ -134,7 +134,7 @@ export const infoCommand = new Command('info')
         return;
       }
 
-      const component = toInstall.find((c) => c.name === componentName)!;
+      const component = toInstall.find((c) => c.name === bareComponentName)!;
       const componentBasePath = resolveComponentBasePath(cwd, options.path, config);
       const alreadyInstalled =
         isAngularProject(cwd) && existsSync(join(componentBasePath, component.name));

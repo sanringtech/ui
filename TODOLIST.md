@@ -102,10 +102,8 @@ Phase 4 已解封:Playwright 截圖 + `Read` 工具可以實際檢視 home(light
 - [x] `migrate`：`noData` result 型別目前未實際產生；補 legacy/no baseline 情境或移除 dead branch
 - [x] `mcp`：registry cache 沒有 refresh/invalidate；長時間 agent session 可能看不到 registry 更新，補 refresh tool 或 TTL
 - [x] `mcp`：目前 agent 只能 list/search/info/plan/add，缺 `diff`、`doctor`、`migrate`/`update` 的安全入口；補 read-only 檢查工具，再評估是否開放更新工具
-- [ ] `info`、`migrate`、`search` 三個 command 完全沒有對應的 `*.test.ts`（`commands/` 下其餘 9 個 command 都有）；`search --json` 曾經有一個未被任何測試發現的 TDZ crash（見下方查證），凸顯沒測試的 command 風險較高，優先補齊這三個
-  **查證(2026-08-19)**：`diff <(ls packages/cli/src/commands/*.ts | grep -v test) <(ls packages/cli/src/commands/*.test.ts)` 確認只有這三個 command 缺測試檔。
-- [ ] `remove`：混合 target（部分已安裝、部分未安裝）時，未安裝的目標會印出紅色 `✖` 錯誤訊息，但只要至少一個 target 成功移除，整個 process 仍以 exit code 0 結束——視覺上宣告失敗但退出碼宣告成功，跟 `diff`/`update` 對「未安裝視為軟性提示」或「未知一律 exit 1」的既有慣例都不一致，需要決定 remove 的未安裝目標到底該不該讓整體 exit code 非 0
-  **查證(2026-08-19)**：`remove.ts:127-136`——只有當 `plan.toRemove.length === 0`（也就是全部都未安裝）才會 `process.exit(plan.notInstalled.length > 0 ? 1 : 0)`；只要有任何一個 target 可以移除，函式跑到底沒有再檢查 `plan.notInstalled`，隱含 exit 0。
+- [x] `info`、`migrate`、`search` 三個 command 完全沒有對應的 `*.test.ts`（`commands/` 下其餘 9 個 command 都有）；`search --json` 曾經有一個未被任何測試發現的 TDZ crash（見下方查證），凸顯沒測試的 command 風險較高，優先補齊這三個
+- [x] `remove`：混合 target（部分已安裝、部分未安裝）時，未安裝的目標會印出紅色 `✖` 錯誤訊息，但只要至少一個 target 成功移除，整個 process 仍以 exit code 0 結束——視覺上宣告失敗但退出碼宣告成功，跟 `diff`/`update` 對「未安裝視為軟性提示」或「未知一律 exit 1」的既有慣例都不一致，需要決定 remove 的未安裝目標到底該不該讓整體 exit code 非 0
 
 ---
 
