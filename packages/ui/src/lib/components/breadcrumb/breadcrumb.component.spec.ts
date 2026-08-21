@@ -22,10 +22,12 @@ import { BreadcrumbComponent } from './breadcrumb.component';
     BreadcrumbEllipsisComponent,
   ],
   template: `
-    <sanring-breadcrumb class="custom-breadcrumb">
+    <sanring-breadcrumb ariaLabel="導覽路徑" class="custom-breadcrumb">
       <sanring-breadcrumb-list class="custom-list">
         <sanring-breadcrumb-item class="custom-item">
-          <sanring-breadcrumb-link routerLink="/docs" class="custom-link">Docs</sanring-breadcrumb-link>
+          <sanring-breadcrumb-link routerLink="/docs" class="custom-link"
+            >Docs</sanring-breadcrumb-link
+          >
         </sanring-breadcrumb-item>
         <sanring-breadcrumb-divider class="custom-divider" />
         <sanring-breadcrumb-ellipsis class="custom-ellipsis" />
@@ -55,7 +57,7 @@ describe('BreadcrumbComponent', () => {
     const items = fixture.nativeElement.querySelectorAll('sanring-breadcrumb-item');
 
     expect(breadcrumb.getAttribute('role')).toBe('navigation');
-    expect(breadcrumb.getAttribute('aria-label')).toBe('breadcrumb');
+    expect(breadcrumb.getAttribute('aria-label')).toBe('導覽路徑');
     expect(list.getAttribute('role')).toBe('list');
     expect(items[0].getAttribute('role')).toBe('listitem');
   });
@@ -65,8 +67,12 @@ describe('BreadcrumbComponent', () => {
     fixture.detectChanges();
 
     const page = fixture.nativeElement.querySelector('sanring-breadcrumb-page') as HTMLElement;
-    const divider = fixture.nativeElement.querySelector('sanring-breadcrumb-divider') as HTMLElement;
-    const ellipsis = fixture.nativeElement.querySelector('sanring-breadcrumb-ellipsis') as HTMLElement;
+    const divider = fixture.nativeElement.querySelector(
+      'sanring-breadcrumb-divider',
+    ) as HTMLElement;
+    const ellipsis = fixture.nativeElement.querySelector(
+      'sanring-breadcrumb-ellipsis',
+    ) as HTMLElement;
 
     expect(page.getAttribute('aria-current')).toBe('page');
     expect(page.getAttribute('aria-disabled')).toBe('true');

@@ -21,13 +21,19 @@ export const dialogTranslations = {
   'dialog.api.description': 'Inputs supported by the dialog primitives.',
   'dialog.api.class.description': 'Additional classes merged with DialogContent layout styles.',
   'dialog.api.showClose.description': 'Controls whether the built-in close button is rendered.',
+  'dialog.api.ariaLabel.description':
+    'Accessible-name fallback used when no sanringDialogTitle is projected. DialogConfig ariaLabel remains supported.',
+  'dialog.api.ariaLabelledBy.description':
+    'Ids of external elements that label the dialog. Takes precedence over the projected title and ariaLabel.',
+  'dialog.api.ariaDescribedBy.description':
+    'Ids of external elements that describe the dialog. Takes precedence over sanringDialogDescription.',
   'dialog.api.triggerConfig.description':
     'CDK DialogConfig passed when sanringDialogTrigger opens the template.',
   'dialog.api.closeResult.description':
     'Optional result value emitted when sanringDialogClose closes the dialog.',
   'dialog.api.mediaClass.description': 'Additional classes merged with the dialog media container.',
   'dialog.accessibility.description':
-    "The CDK Dialog container receives role='dialog' and aria-modal='true'. When sanringDialogTitle or sanringDialogDescription are present, their ids are automatically wired to aria-labelledby and aria-describedby on the container. Angular CDK's FocusTrap keeps Tab and Shift+Tab cycling within the open dialog.",
+    "The CDK Dialog container receives role='dialog' and aria-modal='true'. Projected titles and descriptions are wired automatically; ariaLabel provides a fallback name for untitled content. Angular CDK's FocusTrap keeps Tab and Shift+Tab cycling within the open dialog.",
   'dialog.keyboard.description': 'Focus is trapped inside the dialog while it is open.',
   'dialog.keyboard.tab': 'Move focus to the next focusable element within the dialog.',
   'dialog.keyboard.shiftTab': 'Move focus to the previous focusable element within the dialog.',

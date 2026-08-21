@@ -9,7 +9,6 @@ import {
   ElementRef,
   Injector,
   TemplateRef,
-  ViewChild,
   ViewContainerRef,
   afterNextRender,
   computed,
@@ -18,33 +17,37 @@ import {
   input,
   signal,
   untracked,
+  viewChild,
+  contentChild,
 } from '@angular/core';
 import { cn } from '../../utils';
 import { OVERLAY_SURFACE_CLASS } from '../component-styles';
 import { SHEET_LEAVE_DURATION_MS } from '../component-timing';
 import { SheetComponent } from './sheet.component';
+import { SheetDescriptionComponent } from './sheet-description.component';
+import { SheetTitleComponent } from './sheet-title.component';
 import { OVERLAY_BACKDROP_CLASS, SHEET_SURFACE_CLASS } from './sheet.styles';
 import type { SheetSide } from './sheet.type';
 
 const SIDE_CLASSES: Record<SheetSide, string> = {
-  top:    'inset-x-0 top-0 border-b border-[var(--sanring-border)]',
+  top: 'inset-x-0 top-0 border-b border-[var(--sanring-border)]',
   bottom: 'inset-x-0 bottom-0 border-t border-[var(--sanring-border)]',
-  left:   'inset-y-0 left-0 h-full w-3/4 border-r border-[var(--sanring-border)] sm:max-w-sm',
-  right:  'inset-y-0 right-0 h-full w-3/4 border-l border-[var(--sanring-border)] sm:max-w-sm',
+  left: 'inset-y-0 left-0 h-full w-3/4 border-r border-[var(--sanring-border)] sm:max-w-sm',
+  right: 'inset-y-0 right-0 h-full w-3/4 border-l border-[var(--sanring-border)] sm:max-w-sm',
 };
 
 const SIDE_ENTER: Record<SheetSide, string> = {
-  top:    'animate-sheet-in-top',
+  top: 'animate-sheet-in-top',
   bottom: 'animate-sheet-in-bottom',
-  left:   'animate-sheet-in-left',
-  right:  'animate-sheet-in-right',
+  left: 'animate-sheet-in-left',
+  right: 'animate-sheet-in-right',
 };
 
 const SIDE_LEAVE: Record<SheetSide, string> = {
-  top:    'animate-sheet-out-top',
+  top: 'animate-sheet-out-top',
   bottom: 'animate-sheet-out-bottom',
-  left:   'animate-sheet-out-left',
-  right:  'animate-sheet-out-right',
+  left: 'animate-sheet-out-left',
+  right: 'animate-sheet-out-right',
 };
 
 @Component({
@@ -57,11 +60,7 @@ const SIDE_LEAVE: Record<SheetSide, string> = {
   },
   template: `
     <ng-template #contentTemplate>
-      <div
-        [class]="backdropClass()"
-        aria-hidden="true"
-        (click)="requestClose()"
-      ></div>
+      <div [class]="backdropClass()" aria-hidden="true" (click)="requestClose()"></div>
 
       <div
         #panelDiv
@@ -71,8 +70,9 @@ const SIDE_LEAVE: Record<SheetSide, string> = {
         [id]="sheet.panelId"
         role="dialog"
         aria-modal="true"
-        [attr.aria-labelledby]="sheet.titleId"
-        [attr.aria-describedby]="sheet.descId"
+        [attr.aria-label]="computedAriaLabel()"
+        [attr.aria-labelledby]="computedAriaLabelledBy()"
+        [attr.aria-describedby]="computedAriaDescribedBy()"
         [class]="panelClass()"
         (animationend)="onLeaveAnimationEnd($event)"
       >
@@ -90,11 +90,29 @@ export class SheetContentComponent {
   private readonly viewContainerRef = inject(ViewContainerRef);
   private readonly injector = inject(Injector);
 
-  @ViewChild('contentTemplate') private contentTemplateRef!: TemplateRef<unknown>;
-  @ViewChild('panelDiv') private panelDiv?: ElementRef<HTMLElement>;
+  private readonly contentTemplateRef = viewChild.required<TemplateRef<unknown>>('contentTemplate');
+  private readonly panelDiv = viewChild<ElementRef<HTMLElement>>('panelDiv');
+  private readonly title = contentChild(SheetTitleComponent);
+  private readonly description = contentChild(SheetDescriptionComponent);
 
-  readonly side  = input<SheetSide>('right');
+  readonly side = input<SheetSide>('right');
   readonly class = input<string | undefined>();
+  /** Accessible-name fallback used when no SheetTitle is projected. */
+  readonly ariaLabel = input<string | undefined>('Sheet');
+  /** Explicit labelling relationship; takes precedence over SheetTitle and ariaLabel. */
+  readonly ariaLabelledBy = input<string | undefined>();
+  /** Explicit description relationship; takes precedence over SheetDescription. */
+  readonly ariaDescribedBy = input<string | undefined>();
+
+  protected readonly computedAriaLabelledBy = computed(
+    () => this.ariaLabelledBy() ?? (this.title() ? this.sheet.titleId : null),
+  );
+  protected readonly computedAriaDescribedBy = computed(
+    () => this.ariaDescribedBy() ?? (this.description() ? this.sheet.descId : null),
+  );
+  protected readonly computedAriaLabel = computed(() =>
+    this.computedAriaLabelledBy() ? null : (this.ariaLabel() ?? null),
+  );
 
   private readonly _leaving = signal(false);
   private _leaveTimer: ReturnType<typeof setTimeout> | undefined;
@@ -117,9 +135,7 @@ export class SheetContentComponent {
   private _previousBodyPaddingRight: string | null = null;
 
   /** Keep DOM visible during leave animation */
-  protected readonly shouldDisplay = computed(
-    () => this.sheet.isOpen() || this._leaving(),
-  );
+  protected readonly shouldDisplay = computed(() => this.sheet.isOpen() || this._leaving());
 
   constructor() {
     // Scroll lock: hold lock while visible (including leave phase). Deferred into
@@ -154,7 +170,7 @@ export class SheetContentComponent {
     // setTimeout(0) 只是賭一個任意 macrotask，遇到較慢的 attach 就可能撲空。
     effect(() => {
       if (this.sheet.isOpen()) {
-        afterNextRender(() => this.panelDiv?.nativeElement.focus(), { injector: this.injector });
+        afterNextRender(() => this.panelDiv()?.nativeElement.focus(), { injector: this.injector });
       }
     });
 
@@ -245,7 +261,7 @@ export class SheetContentComponent {
       this.hideBackgroundFromAssistiveTech();
     }
 
-    this.portal ??= new TemplatePortal(this.contentTemplateRef, this.viewContainerRef);
+    this.portal ??= new TemplatePortal(this.contentTemplateRef(), this.viewContainerRef);
     this.overlayRef.attach(this.portal);
   }
 

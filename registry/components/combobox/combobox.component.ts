@@ -1,6 +1,7 @@
 import {
   ChangeDetectionStrategy,
   Component,
+  afterNextRender,
   booleanAttribute,
   computed,
   contentChildren,
@@ -41,7 +42,7 @@ type ComboboxValue = string | string[] | null;
     },
     // value/disabled 已經被同名 @Input (model()/input()) 佔用，跟 checkbox 一樣改用
     // useFactory 產生轉接的 adapter 物件，而不是讓 ComboboxComponent 自己 implements。
-    // inputId (not a signal) is used as the field id, so this uses its own adapter.
+    // inputId rather than an `id` input is used as the field id, so this uses its own adapter.
     {
       provide: SANRING_FIELD_CONTROL,
       useFactory: (host: ComboboxComponent) => new ComboboxFieldControlAdapter(host),
@@ -52,8 +53,8 @@ type ComboboxValue = string | string[] | null;
 export class ComboboxComponent extends SanringCvaBase<ComboboxValue> {
   private readonly elementRef = inject<ElementRef<HTMLElement>>(ElementRef);
 
-  readonly inputId = uniqueId('sanring-combobox-input');
-  readonly listId = uniqueId('sanring-combobox-list');
+  readonly inputId = input(uniqueId('sanring-combobox-input'));
+  readonly listId = input(uniqueId('sanring-combobox-list'));
 
   // ==========================================
   // 1. 外部屬性與 Models
@@ -82,17 +83,17 @@ export class ComboboxComponent extends SanringCvaBase<ComboboxValue> {
     const current = this.value();
     if (!current || Array.isArray(current)) return '';
 
-    return this.items().find((item) => item.value() === current)?.getLabel() ?? current;
+    return (
+      this.items()
+        .find((item) => item.value() === current)
+        ?.getLabel() ?? current
+    );
   });
 
   readonly isDisabled = computed(() => this.disabled() || this.disabledState());
 
   protected readonly hostClass = computed(() =>
-    cn(
-      'relative block w-full',
-      this.isDisabled() && 'opacity-50 cursor-not-allowed',
-      this.class(),
-    ),
+    cn('relative block w-full', this.isDisabled() && 'opacity-50 cursor-not-allowed', this.class()),
   );
 
   readonly computedAriaDescribedBy = this.makeComputedAriaDescribedBy();
@@ -134,6 +135,17 @@ export class ComboboxComponent extends SanringCvaBase<ComboboxValue> {
     }
   }
 
+  closeAndRestoreFocus(): void {
+    this.toggleOpen(false);
+    // The focused search input may be inside the conditionally-rendered panel. Wait until
+    // Angular has removed that panel, then focus whichever combobox control remains (the
+    // collapsed trigger, or the always-visible input). Outside pointer interactions use
+    // toggleOpen(false) directly so the control the user clicked keeps focus.
+    afterNextRender(() => queueMicrotask(() => this.focus({ preventScroll: true })), {
+      injector: this._injector,
+    });
+  }
+
   containsElement(target: EventTarget | null): boolean {
     return target instanceof Node && this.elementRef.nativeElement.contains(target);
   }
@@ -169,7 +181,7 @@ export class ComboboxComponent extends SanringCvaBase<ComboboxValue> {
       }
     } else {
       this.value.set(newValue);
-      this.toggleOpen(false);
+      this.closeAndRestoreFocus();
     }
     this.onChange(this.value());
     this.onTouched();
@@ -207,21 +219,12 @@ export class ComboboxComponent extends SanringCvaBase<ComboboxValue> {
     this.emitStateChanges();
   }
 
-  onFocus(): void {
-    this.focused = true;
-    this.emitStateChanges();
-  }
-
-  onBlur(): void {
-    this.focused = false;
-    this.onTouched();
-    this.emitStateChanges();
-  }
-
   // 不管目前顯示的是純文字 input 還是 trigger 按鈕，實際可 focus 的元素一定在 host 底下，
   // 直接查詢就不用讓每個變體 (input / chip-input / trigger) 各自反過來註冊一次 ElementRef
   focus(options?: FocusOptions): void {
-    this.elementRef.nativeElement.querySelector<HTMLElement>('input, [role="combobox"]')?.focus(options);
+    this.elementRef.nativeElement
+      .querySelector<HTMLElement>('input, [role="combobox"]')
+      ?.focus(options);
   }
 
   // --- ControlValueAccessor 介面實作 ---
@@ -230,15 +233,15 @@ export class ComboboxComponent extends SanringCvaBase<ComboboxValue> {
   }
 }
 
-// combobox uses inputId (a plain string) as its field id, not an input() signal, so it
-// cannot use SanringFieldControlAdapter and keeps its own slim adapter.
+// Combobox exposes `inputId` rather than the generic adapter's expected `id`, so it keeps its
+// own slim adapter.
 class ComboboxFieldControlAdapter implements SanringFieldControl<ComboboxValue> {
   readonly controlType = FieldType.input;
 
   constructor(private readonly host: ComboboxComponent) {}
 
   get id(): string {
-    return this.host.inputId;
+    return this.host.inputId();
   }
 
   get value(): ComboboxValue {

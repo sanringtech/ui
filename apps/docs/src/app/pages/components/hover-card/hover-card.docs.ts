@@ -100,6 +100,18 @@ export const hoverCardPage = {
       defaultValue: "''",
       descriptionKey: 'hoverCard.api.class.description',
     },
+    {
+      property: 'ariaLabel',
+      type: 'string',
+      defaultValue: "'Additional information'",
+      descriptionKey: 'hoverCard.api.ariaLabel.description',
+    },
+    {
+      property: 'ariaLabelledBy',
+      type: 'string',
+      defaultValue: 'undefined',
+      descriptionKey: 'hoverCard.api.ariaLabelledBy.description',
+    },
   ] satisfies readonly ComponentPageApiRow[],
   keyboardRows: [
     { keys: 'Tab', descriptionKey: 'hoverCard.keyboard.focus' },

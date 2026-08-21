@@ -14,6 +14,7 @@ import { TreeTriggerDirective } from './tree-trigger.directive';
   template: `
     <sanring-tree
       class="custom-tree-class"
+      ariaLabel="Project files"
       [expandedValue]="expandedValue()"
       (expandedValueChange)="expandedValue.set($event)"
       [selectedValue]="selectedValue()"
@@ -49,6 +50,12 @@ import { TreeTriggerDirective } from './tree-trigger.directive';
       <sanring-tree-node value="package.json">
         <button type="button" tabindex="-1" (click)="tree.selectNode('package.json')">
           package.json
+        </button>
+      </sanring-tree-node>
+
+      <sanring-tree-node value="secret.env" disabled>
+        <button type="button" tabindex="-1" (click)="tree.selectNode('secret.env')">
+          secret.env
         </button>
       </sanring-tree-node>
     </sanring-tree>
@@ -106,12 +113,31 @@ describe('TreeComponent', () => {
     const packageJson = itemByValue(root, 'package.json');
 
     expect(tree).toBeTruthy();
+    expect(tree.getAttribute('aria-label')).toBe('Project files');
     expect(src.getAttribute('aria-expanded')).toBe('true');
     expect(app.getAttribute('aria-expanded')).toBe('false');
     expect(styles.getAttribute('aria-expanded')).toBeNull();
     expect(styles.getAttribute('aria-selected')).toBe('true');
     expect(styles.getAttribute('tabindex')).toBe('0');
     expect(packageJson.getAttribute('tabindex')).toBe('-1');
+  });
+
+  it('exposes disabled nodes without allowing selection or expansion', async () => {
+    const fixture = await createFixture();
+    const root = fixture.nativeElement as HTMLElement;
+    const host = fixture.componentInstance;
+    const disabledNode = itemByValue(root, 'secret.env');
+
+    expect(disabledNode.getAttribute('aria-disabled')).toBe('true');
+
+    disabledNode.focus();
+    disabledNode.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true }));
+    fixture.detectChanges();
+    expect(host.selectedValue()).toBe('src/styles.css');
+
+    (disabledNode.querySelector('button') as HTMLButtonElement).click();
+    fixture.detectChanges();
+    expect(host.selectedValue()).toBe('src/styles.css');
   });
 
   it('toggles a node with sanringTreeTrigger and shows or hides its group', async () => {

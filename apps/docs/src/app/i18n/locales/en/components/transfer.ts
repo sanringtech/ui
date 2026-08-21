@@ -65,10 +65,13 @@ export const transferTranslations = {
   'transfer.api.selectAllMethods.description':
     'Select all / deselect all / toggle all non-disabled items in the panel. selectAll and deselectAll are no-ops when interactive() is false.',
   'transfer.accessibility.description':
-    'Composed from checkboxes, buttons, and optional search inputs, preserving their native semantics. Panel headings should describe available and selected lists, and transfer buttons need aria-labels.',
+    'Each item exposes checkbox semantics with its label, checked state, and disabled state. A panel uses one roving tab stop so long lists do not flood the page tab order. Panel headings should describe the available and selected lists, and transfer buttons need aria-labels.',
   'transfer.keyboard.description':
-    'Transfer is composed from checkboxes, action buttons, search inputs, and optional pagination controls.',
-  'transfer.keyboard.tabShiftTab': 'Moves focus through panel items, actions, search fields, and pagination controls.',
+    'Transfer items use roving focus alongside the action buttons, search inputs, and optional pagination controls.',
+  'transfer.keyboard.tabShiftTab':
+    'Moves between each panel, its actions, search fields, and pagination controls.',
+  'transfer.keyboard.arrowKeys': 'Moves focus to the previous or next enabled item in a panel.',
+  'transfer.keyboard.homeEnd': 'Moves focus to the first or last enabled item in a panel.',
   'transfer.keyboard.space': 'Toggles the focused item or select-all checkbox.',
   'transfer.keyboard.enterSpace': 'Activates the focused transfer action or pagination control.',
   'transfer.keyboard.type': 'Filters the active panel when focus is inside a search input.',

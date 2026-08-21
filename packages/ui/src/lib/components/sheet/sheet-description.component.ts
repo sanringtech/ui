@@ -16,7 +16,5 @@ import { SheetComponent } from './sheet.component';
 export class SheetDescriptionComponent {
   protected readonly sheet = inject(SheetComponent, { optional: true });
   readonly class = input<string | undefined>();
-  protected readonly hostClass = computed(() =>
-    cn(DESCRIPTION_TEXT_CLASS, this.class()),
-  );
+  protected readonly hostClass = computed(() => cn(DESCRIPTION_TEXT_CLASS, this.class()));
 }

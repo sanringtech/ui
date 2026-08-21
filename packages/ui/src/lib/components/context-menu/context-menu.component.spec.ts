@@ -28,12 +28,15 @@ import { ContextMenuComponent } from './context-menu.component';
     ContextMenuSubContentComponent,
   ],
   template: `
+    <button type="button" class="before-menu">Before menu</button>
     <sanring-context-menu (itemSelected)="onItemSelected($event)">
       <div sanringContextMenuTrigger>Right click here</div>
 
       <sanring-context-menu-content>
         <sanring-context-menu-item value="back">Back</sanring-context-menu-item>
-        <sanring-context-menu-item value="forward" [disabled]="true">Forward</sanring-context-menu-item>
+        <sanring-context-menu-item value="forward" [disabled]="true"
+          >Forward</sanring-context-menu-item
+        >
         <sanring-context-menu-item value="reload">Reload</sanring-context-menu-item>
 
         <sanring-context-menu-checkbox-item [(checked)]="showBookmarks">
@@ -54,6 +57,7 @@ import { ContextMenuComponent } from './context-menu.component';
         </sanring-context-menu-sub>
       </sanring-context-menu-content>
     </sanring-context-menu>
+    <button type="button" class="after-menu">After menu</button>
   `,
 })
 class ContextMenuTestHost {
@@ -78,7 +82,9 @@ class ContextMenuTestHost {
       <div sanringContextMenuTrigger>Right click here</div>
 
       <sanring-context-menu-content class="custom-menu-class">
-        <sanring-context-menu-item value="back" class="custom-item-class">Back</sanring-context-menu-item>
+        <sanring-context-menu-item value="back" class="custom-item-class"
+          >Back</sanring-context-menu-item
+        >
       </sanring-context-menu-content>
     </sanring-context-menu>
   `,
@@ -89,8 +95,8 @@ class ContextMenuClassTestHost {}
 // requires cancelable/bubbles to behave like a real browser event — set every relevant field
 // explicitly rather than relying on the KeyboardEvent constructor's (unreliable in jsdom)
 // mapping from `key` to legacy properties.
-function keydown(key: string): KeyboardEvent {
-  return new KeyboardEvent('keydown', { key, bubbles: true, cancelable: true });
+function keydown(key: string, init: KeyboardEventInit = {}): KeyboardEvent {
+  return new KeyboardEvent('keydown', { key, bubbles: true, cancelable: true, ...init });
 }
 
 describe('ContextMenuComponent', () => {
@@ -133,7 +139,9 @@ describe('ContextMenuComponent', () => {
   // role="menu" ancestor is the root menu — a closed submenu's items stay in the DOM (just
   // hidden via CSS) until opened, so an unscoped query would also pick those up.
   function menuItems(): HTMLElement[] {
-    const menu = overlayContainer.getContainerElement().querySelector('[role="menu"]') as HTMLElement;
+    const menu = overlayContainer
+      .getContainerElement()
+      .querySelector('[role="menu"]') as HTMLElement;
     return Array.from(menu.querySelectorAll<HTMLElement>('[role^="menuitem"]')).filter(
       (item) => item.closest('[role="menu"]') === menu,
     );
@@ -146,7 +154,12 @@ describe('ContextMenuComponent', () => {
     (fixture.nativeElement as HTMLElement)
       .querySelector('[sanringcontextmenutrigger]')
       ?.dispatchEvent(
-        new MouseEvent('contextmenu', { bubbles: true, cancelable: true, clientX: 10, clientY: 10 }),
+        new MouseEvent('contextmenu', {
+          bubbles: true,
+          cancelable: true,
+          clientX: 10,
+          clientY: 10,
+        }),
       );
     fixture.detectChanges();
     await fixture.whenStable();
@@ -191,6 +204,7 @@ describe('ContextMenuComponent', () => {
 
     const [back, forward, reload, , , , moreTools] = menuItems();
     expect(forward.getAttribute('aria-disabled')).toBe('true');
+    expect(menuItems().filter((item) => item.tabIndex === 0)).toEqual([back]);
 
     // Nothing focused yet — ArrowDown lands on the first enabled item.
     document.activeElement?.dispatchEvent(keydown('ArrowDown'));
@@ -201,6 +215,8 @@ describe('ContextMenuComponent', () => {
     document.activeElement?.dispatchEvent(keydown('ArrowDown'));
     fixture.detectChanges();
     expect(document.activeElement).toBe(reload);
+    expect(back.tabIndex).toBe(-1);
+    expect(reload.tabIndex).toBe(0);
 
     // ArrowUp from the first item wraps back around to the last enabled item (the submenu
     // trigger).
@@ -208,6 +224,41 @@ describe('ContextMenuComponent', () => {
     document.activeElement?.dispatchEvent(keydown('ArrowUp'));
     fixture.detectChanges();
     expect(document.activeElement).toBe(moreTools);
+    expect(menuItems().filter((item) => item.tabIndex === 0)).toEqual([moreTools]);
+  });
+
+  it('uses a single roving tab stop and moves Tab beside the logical trigger', async () => {
+    const fixture = await createFixture();
+    document.body.appendChild(fixture.nativeElement);
+
+    try {
+      await openMenu(fixture);
+
+      let [back] = menuItems();
+      back.focus();
+      back.dispatchEvent(keydown('Tab'));
+      fixture.detectChanges();
+      await fixture.whenStable();
+
+      expect(trigger(fixture).getAttribute('aria-expanded')).toBe('false');
+      expect(document.activeElement).toBe(
+        fixture.nativeElement.querySelector('.after-menu') as HTMLButtonElement,
+      );
+
+      await openMenu(fixture);
+      [back] = menuItems();
+      back.focus();
+      back.dispatchEvent(keydown('Tab', { shiftKey: true }));
+      fixture.detectChanges();
+      await fixture.whenStable();
+
+      expect(trigger(fixture).getAttribute('aria-expanded')).toBe('false');
+      expect(document.activeElement).toBe(
+        fixture.nativeElement.querySelector('.before-menu') as HTMLButtonElement,
+      );
+    } finally {
+      fixture.nativeElement.remove();
+    }
   });
 
   it('selects the focused item on Enter, emits itemSelected, and closes the menu', async () => {
@@ -290,6 +341,7 @@ describe('ContextMenuComponent', () => {
       .querySelector('sanring-context-menu-sub-content') as HTMLElement;
     const subItems = Array.from(subContentHost.querySelectorAll<HTMLElement>('[role="menuitem"]'));
     expect(subItems.map((el) => el.textContent?.trim())).toEqual(['Save Page', 'Print']);
+    expect(subItems.filter((item) => item.tabIndex === 0)).toEqual([subItems[0]]);
 
     // Keyboard-initiated open must land focus on the first submenu item immediately —
     // matches native menus / the ARIA APG submenu pattern. Without this, a keyboard user
@@ -323,6 +375,38 @@ describe('ContextMenuComponent', () => {
 
     expect(subTrigger.getAttribute('aria-expanded')).toBe('true');
     expect(document.activeElement).toBe(firstSubItem);
+  });
+
+  it('closes the full menu and continues from the root trigger when tabbing from a submenu', async () => {
+    const fixture = await createFixture();
+    document.body.appendChild(fixture.nativeElement);
+
+    try {
+      await openMenu(fixture);
+      const subTrigger = overlayContainer
+        .getContainerElement()
+        .querySelector('[aria-haspopup="menu"]') as HTMLElement;
+      subTrigger.focus();
+      subTrigger.dispatchEvent(keydown('ArrowRight'));
+      fixture.detectChanges();
+      await fixture.whenStable();
+
+      const subItem = overlayContainer
+        .getContainerElement()
+        .querySelector('sanring-context-menu-sub-content [role="menuitem"]') as HTMLElement;
+      expect(document.activeElement).toBe(subItem);
+
+      subItem.dispatchEvent(keydown('Tab'));
+      fixture.detectChanges();
+      await fixture.whenStable();
+
+      expect(trigger(fixture).getAttribute('aria-expanded')).toBe('false');
+      expect(document.activeElement).toBe(
+        fixture.nativeElement.querySelector('.after-menu') as HTMLButtonElement,
+      );
+    } finally {
+      fixture.nativeElement.remove();
+    }
   });
 
   it('does not steal focus into the submenu when opened by mouse hover', async () => {

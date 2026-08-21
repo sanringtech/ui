@@ -21,7 +21,11 @@ function findAmbientBackground(el: HTMLElement): string | null {
   let current = el.parentElement;
   while (current) {
     const { backgroundColor } = getComputedStyle(current);
-    if (backgroundColor && backgroundColor !== 'transparent' && !/^rgba\(0, 0, 0, 0\)$/.test(backgroundColor)) {
+    if (
+      backgroundColor &&
+      backgroundColor !== 'transparent' &&
+      !/^rgba\(0, 0, 0, 0\)$/.test(backgroundColor)
+    ) {
       return backgroundColor;
     }
     current = current.parentElement;
@@ -34,6 +38,7 @@ function findAmbientBackground(el: HTMLElement): string | null {
   selector: 'sanring-field',
   standalone: true,
   host: {
+    '[id]': 'id()',
     '[class]': 'fieldClass()',
   },
   template: `
@@ -55,7 +60,7 @@ function findAmbientBackground(el: HTMLElement): string | null {
 })
 export class SanringFieldComponent {
   // 產生這組 Field 專屬的 ID 前綴
-  readonly id = uniqueId('sanring-field');
+  readonly id = input(uniqueId('sanring-field'));
 
   readonly class = input<string | undefined>();
 
@@ -127,7 +132,9 @@ export class SanringFieldComponent {
 
       this.stateVersion.update((v) => v + 1);
 
-      const subscription = ctrl.stateChanges.subscribe(() => this.stateVersion.update((v) => v + 1));
+      const subscription = ctrl.stateChanges.subscribe(() =>
+        this.stateVersion.update((v) => v + 1),
+      );
       onCleanup(() => subscription.unsubscribe());
     });
 
@@ -146,7 +153,9 @@ export class SanringFieldComponent {
       if (!this.floating()) return;
 
       const hostEl = this.elementRef.nativeElement;
-      const alreadyOverridden = getComputedStyle(hostEl).getPropertyValue(LABEL_BACKGROUND_VAR).trim();
+      const alreadyOverridden = getComputedStyle(hostEl)
+        .getPropertyValue(LABEL_BACKGROUND_VAR)
+        .trim();
       if (alreadyOverridden) return;
 
       const detected = findAmbientBackground(hostEl);
@@ -167,6 +176,6 @@ export class SanringFieldComponent {
 
   // 提供給內部 Label 取得對應的 Input ID
   get inputId(): string {
-    return this.control()?.id || `${this.id}-input`;
+    return this.control()?.id || `${this.id()}-input`;
   }
 }

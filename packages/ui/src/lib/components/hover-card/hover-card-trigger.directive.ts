@@ -13,6 +13,7 @@ import { HoverCardComponent } from './hover-card.component';
     '(blur)': 'hoverCard.close()',
     '(keydown.escape)': 'handleEscape($event)',
     '[attr.aria-expanded]': 'hoverCard.isOpen() ? "true" : "false"',
+    '[attr.aria-controls]': 'hoverCard.isOpen() ? hoverCard.contentId : null',
   },
 })
 export class HoverCardTriggerDirective implements OnInit, OnDestroy {

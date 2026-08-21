@@ -9,9 +9,9 @@ import { ComboboxComponent } from './combobox.component';
   host: {
     type: 'button',
     role: 'combobox',
-    '[id]': 'combobox.inputId',
+    '[id]': 'combobox.inputId()',
     '[attr.aria-expanded]': 'combobox.isOpen()',
-    '[attr.aria-controls]': 'combobox.listId',
+    '[attr.aria-controls]': 'combobox.listId()',
     '[attr.disabled]': 'combobox.isDisabled() ? true : null',
     '[attr.aria-invalid]': 'combobox.errorState ? "true" : null',
     '[attr.aria-required]': 'combobox.fieldRequired ? "true" : null',

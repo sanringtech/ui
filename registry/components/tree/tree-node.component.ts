@@ -1,5 +1,13 @@
 import { TreeKeyManagerItem } from '@angular/cdk/a11y';
-import { ChangeDetectionStrategy, Component, ElementRef, computed, contentChildren, inject, input } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  ElementRef,
+  booleanAttribute,
+  computed,
+  inject,
+  input,
+} from '@angular/core';
 import { cn } from '../shared/utils';
 import { TreeComponent } from './tree.component';
 
@@ -12,6 +20,8 @@ import { TreeComponent } from './tree.component';
   host: {
     role: 'treeitem',
     '[attr.aria-selected]': 'isSelected()',
+    '[attr.aria-disabled]': 'isDisabled() || null',
+    '[attr.data-disabled]': 'isDisabled() || null',
     // aria-expanded 只該出現在真的有子節點的 treeitem 上，葉節點完全不該有這個屬性
     '[attr.aria-expanded]': 'hasChildren() ? isExpanded() : null',
     // roving tabindex：同一時間整棵樹只有一個節點是 tab stop，其餘 -1，
@@ -24,27 +34,32 @@ import { TreeComponent } from './tree.component';
 export class TreeNodeComponent implements TreeKeyManagerItem {
   readonly value = input.required<string>();
   readonly class = input<string | undefined>();
+  readonly disabled = input(false, { transform: booleanAttribute });
 
   protected readonly tree = inject(TreeComponent);
   // 找最近的祖先節點（如果有巢狀），不是 self——用來讓 CDK TreeKeyManager 知道
   // Left 鍵該把焦點移去哪、getChildren() 又該怎麼篩出「只有直接子節點」。
   private readonly parentNode = inject(TreeNodeComponent, { optional: true, skipSelf: true });
   private readonly el = inject(ElementRef<HTMLElement>);
-  // descendants:true 才能穿過中間的 sanring-tree-group 找到巢狀節點，
-  // 但這樣會連孫節點也一起抓進來，所以 getChildren() 還要再篩一次「直接子節點」。
-  private readonly descendants = contentChildren(TreeNodeComponent, { descendants: true });
-
   readonly isSelected = computed(() => this.tree.selectedValue() === this.value());
   readonly isExpanded = computed(() => this.tree.isExpanded(this.value()));
+  readonly isDisabled = computed(() => this.disabled());
   readonly hasChildren = computed(() => this.getChildren().length > 0);
 
-  protected readonly nodeClass = computed(() => cn('flex flex-col outline-none', this.class()));
+  protected readonly nodeClass = computed(() =>
+    cn(
+      'flex flex-col outline-none',
+      this.isDisabled() && 'cursor-not-allowed opacity-50',
+      this.class(),
+    ),
+  );
 
   getLabel(): string {
     return this.el.nativeElement.textContent?.trim() ?? this.value();
   }
 
   activate(): void {
+    if (this.isDisabled()) return;
     this.tree.selectNode(this.value());
   }
 
@@ -53,14 +68,16 @@ export class TreeNodeComponent implements TreeKeyManagerItem {
   }
 
   getChildren(): TreeNodeComponent[] {
-    return this.descendants().filter((node) => node.getParent() === this);
+    return this.tree.childrenOf(this);
   }
 
   collapse(): void {
+    if (this.isDisabled()) return;
     if (this.isExpanded()) this.tree.toggleExpand(this.value());
   }
 
   expand(): void {
+    if (this.isDisabled()) return;
     if (!this.isExpanded()) this.tree.toggleExpand(this.value());
   }
 

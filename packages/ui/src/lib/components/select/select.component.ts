@@ -41,7 +41,14 @@ import { SelectValue } from './select.type';
 export class SelectComponent<T extends SelectValue = SelectValue>
   implements ControlValueAccessor, SanringFieldControl<T>, OnInit
 {
-  readonly id = inject(_IdGenerator).getId('sanring-select-', true);
+  // Keep the SanringFieldControl `id` contract as a string getter while still
+  // exposing a consumer-facing `id` input, matching InputDirective/TextareaDirective.
+  // eslint-disable-next-line @angular-eslint/no-input-rename
+  readonly idInput = input<string | undefined>(undefined, { alias: 'id' });
+  private readonly generatedId = inject(_IdGenerator).getId('sanring-select-', true);
+  get id(): string {
+    return this.idInput() ?? this.generatedId;
+  }
   readonly contentId = inject(_IdGenerator).getId('sanring-select-content-', true);
 
   // 🧠 元件的核心狀態

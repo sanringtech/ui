@@ -17,9 +17,6 @@ export class SelectSeparatorComponent {
   readonly class = input<string | undefined>();
 
   protected readonly separatorClass = computed(() =>
-    cn(
-      'block -mx-1.5 my-1.5 h-px bg-[var(--sanring-border)]',
-      this.class(),
-    ),
+    cn('block -mx-1.5 my-1.5 h-px bg-[var(--sanring-border)]', this.class()),
   );
 }

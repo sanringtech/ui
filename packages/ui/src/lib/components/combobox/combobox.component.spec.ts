@@ -22,14 +22,21 @@ import { ComboboxComponent } from './combobox.component';
     ComboboxListComponent,
   ],
   template: `
-    <sanring-combobox class="custom-combobox-class" [(value)]="value">
+    <sanring-combobox
+      class="custom-combobox-class"
+      inputId="framework-input"
+      listId="framework-list"
+      [(value)]="value"
+    >
       <sanring-combobox-label>Framework</sanring-combobox-label>
       <sanring-combobox-input placeholder="Search..." />
       <sanring-combobox-content>
         <sanring-combobox-list>
           <sanring-combobox-item value="angular" label="Angular">Angular</sanring-combobox-item>
           <sanring-combobox-item value="react" label="React">React</sanring-combobox-item>
-          <sanring-combobox-item value="vue" label="Vue" [disabled]="true">Vue</sanring-combobox-item>
+          <sanring-combobox-item value="vue" label="Vue" [disabled]="true"
+            >Vue</sanring-combobox-item
+          >
         </sanring-combobox-list>
       </sanring-combobox-content>
     </sanring-combobox>
@@ -75,7 +82,13 @@ class MultiComboboxTestHost {
 }
 
 @Component({
-  imports: [ComboboxComponent, ComboboxContentComponent, ComboboxInputComponent, ComboboxItemComponent, ComboboxTriggerDirective],
+  imports: [
+    ComboboxComponent,
+    ComboboxContentComponent,
+    ComboboxInputComponent,
+    ComboboxItemComponent,
+    ComboboxTriggerDirective,
+  ],
   template: `
     <sanring-combobox [(value)]="value">
       <button type="button" sanringComboboxTrigger>Open</button>
@@ -84,6 +97,7 @@ class MultiComboboxTestHost {
         <sanring-combobox-item value="angular" label="Angular">Angular</sanring-combobox-item>
       </sanring-combobox-content>
     </sanring-combobox>
+    <button type="button" class="outside-control">Outside control</button>
   `,
 })
 class TriggerComboboxTestHost {
@@ -130,6 +144,18 @@ describe('ComboboxComponent', () => {
     const fixture = createFixture();
     const host = fixture.nativeElement.querySelector('sanring-combobox');
     expect(host?.classList.contains('custom-combobox-class')).toBe(true);
+  });
+
+  it('uses consumer-provided input and list ids for the ARIA relationship', () => {
+    const fixture = createFixture();
+    const input = inputEl(fixture);
+    input.click();
+    fixture.detectChanges();
+
+    expect(input.id).toBe('framework-input');
+    expect(input.getAttribute('aria-controls')).toBe('framework-list');
+    expect(fixture.nativeElement.querySelector('[role="listbox"]')?.id).toBe('framework-list');
+    expect(fixture.nativeElement.querySelector('label')?.htmlFor).toBe('framework-input');
   });
 
   it('opens on input click and filters items by the typed search query', () => {
@@ -234,14 +260,18 @@ describe('ComboboxComponent', () => {
       inputEl(singleFixture).dispatchEvent(new Event('click'));
       singleFixture.detectChanges();
       expect(
-        singleFixture.nativeElement.querySelector('[role="listbox"]').getAttribute('aria-multiselectable'),
+        singleFixture.nativeElement
+          .querySelector('[role="listbox"]')
+          .getAttribute('aria-multiselectable'),
       ).toBeNull();
 
       const multiFixture = createMultiFixture();
       multiFixture.nativeElement.querySelector('input').dispatchEvent(new Event('click'));
       multiFixture.detectChanges();
       expect(
-        multiFixture.nativeElement.querySelector('[role="listbox"]').getAttribute('aria-multiselectable'),
+        multiFixture.nativeElement
+          .querySelector('[role="listbox"]')
+          .getAttribute('aria-multiselectable'),
       ).toBe('true');
     });
 
@@ -251,7 +281,9 @@ describe('ComboboxComponent', () => {
       input.dispatchEvent(new Event('click'));
       fixture.detectChanges();
 
-      const opts = Array.from(fixture.nativeElement.querySelectorAll('[role="option"]')) as HTMLElement[];
+      const opts = Array.from(
+        fixture.nativeElement.querySelectorAll('[role="option"]'),
+      ) as HTMLElement[];
       opts[0].click();
       fixture.detectChanges();
 
@@ -263,7 +295,9 @@ describe('ComboboxComponent', () => {
       fixture.detectChanges();
       expect(fixture.componentInstance.value).toEqual(['angular', 'react']);
 
-      const removeButton = fixture.nativeElement.querySelector('sanring-combobox-chip button') as HTMLButtonElement;
+      const removeButton = fixture.nativeElement.querySelector(
+        'sanring-combobox-chip button',
+      ) as HTMLButtonElement;
       removeButton.click();
       fixture.detectChanges();
       expect(fixture.componentInstance.value).toEqual(['react']);
@@ -283,6 +317,55 @@ describe('ComboboxComponent', () => {
 
         const innerInput = triggerFixture.nativeElement.querySelector('input[role="combobox"]');
         expect(document.activeElement).toBe(innerInput);
+      } finally {
+        triggerFixture.nativeElement.remove();
+      }
+    });
+
+    it('restores focus after Escape or selection without stealing it from an outside pointer target', async () => {
+      const triggerFixture = TestBed.createComponent(TriggerComboboxTestHost);
+      document.body.appendChild(triggerFixture.nativeElement);
+
+      try {
+        triggerFixture.detectChanges();
+        const trigger = triggerFixture.nativeElement.querySelector('button') as HTMLButtonElement;
+        trigger.click();
+        triggerFixture.detectChanges();
+
+        let innerInput = triggerFixture.nativeElement.querySelector(
+          'input[role="combobox"]',
+        ) as HTMLInputElement;
+        innerInput.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape', bubbles: true }));
+        triggerFixture.detectChanges();
+        await triggerFixture.whenStable();
+        expect(document.activeElement).toBe(trigger);
+
+        trigger.click();
+        triggerFixture.detectChanges();
+        innerInput = triggerFixture.nativeElement.querySelector(
+          'input[role="combobox"]',
+        ) as HTMLInputElement;
+        expect(document.activeElement).toBe(innerInput);
+
+        const outsideControl = triggerFixture.nativeElement.querySelector(
+          '.outside-control',
+        ) as HTMLButtonElement;
+        outsideControl.dispatchEvent(new Event('pointerdown', { bubbles: true }));
+        // jsdom does not perform a pointerdown default action, so model the browser moving
+        // focus to the clicked control before Angular's post-render work is flushed.
+        outsideControl.focus();
+        triggerFixture.detectChanges();
+        await triggerFixture.whenStable();
+        expect(document.activeElement).toBe(outsideControl);
+
+        trigger.click();
+        triggerFixture.detectChanges();
+        const option = triggerFixture.nativeElement.querySelector('[role="option"]') as HTMLElement;
+        option.click();
+        triggerFixture.detectChanges();
+        await triggerFixture.whenStable();
+        expect(triggerFixture.componentInstance.value).toBe('angular');
+        expect(document.activeElement).toBe(trigger);
       } finally {
         triggerFixture.nativeElement.remove();
       }

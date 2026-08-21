@@ -1,6 +1,17 @@
 import { TreeKeyManager } from '@angular/cdk/a11y';
 import { toObservable } from '@angular/core/rxjs-interop';
-import { ChangeDetectionStrategy, Component, DestroyRef, Injector, computed, contentChildren, inject, input, model, signal } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  DestroyRef,
+  Injector,
+  computed,
+  contentChildren,
+  inject,
+  input,
+  model,
+  signal,
+} from '@angular/core';
 import { map } from 'rxjs';
 import { cn } from '../shared/utils';
 import { TreeNodeComponent } from './tree-node.component';
@@ -13,16 +24,31 @@ import { TreeNodeComponent } from './tree-node.component';
   host: {
     role: 'tree',
     '[class]': 'treeClass()',
+    '[attr.aria-label]': 'ariaLabel()',
+    '[attr.aria-labelledby]': 'ariaLabelledBy()',
     '(keydown)': 'onKeydown($event)',
   },
 })
 export class TreeComponent {
   readonly class = input<string | undefined>();
+  readonly ariaLabel = input<string | undefined>();
+  readonly ariaLabelledBy = input<string | undefined>();
   readonly expandedValue = model<string[]>([]);
   readonly selectedValue = model<string | null>(null);
 
   private readonly injector = inject(Injector);
   private readonly nodes = contentChildren(TreeNodeComponent, { descendants: true });
+  private readonly childrenByParent = computed(() => {
+    const children = new Map<TreeNodeComponent, TreeNodeComponent[]>();
+    for (const node of this.nodes()) {
+      const parent = node.getParent();
+      if (!parent) continue;
+      const siblings = children.get(parent);
+      if (siblings) siblings.push(node);
+      else children.set(parent, [node]);
+    }
+    return children;
+  });
 
   // ARIA treeview 規範要求方向鍵在節點間移動焦點、左右鍵展開/收合、且同一時間只有
   // 一個節點是 tab stop（roving tabindex）——這些全部交給 CDK 的 TreeKeyManager 處理，
@@ -41,7 +67,9 @@ export class TreeComponent {
     if (nodes.length === 0) return null;
     return nodes.find((node) => node.value() === this.selectedValue()) ?? nodes[0];
   });
-  private readonly activeNode = computed(() => this.explicitActiveNode() ?? this.fallbackActiveNode());
+  private readonly activeNode = computed(
+    () => this.explicitActiveNode() ?? this.fallbackActiveNode(),
+  );
 
   protected readonly treeClass = computed(() => cn('flex flex-col gap-1 w-full', this.class()));
 
@@ -53,6 +81,12 @@ export class TreeComponent {
   }
 
   toggleExpand(value: string) {
+    if (
+      this.nodes()
+        .find((node) => node.value() === value)
+        ?.isDisabled()
+    )
+      return;
     const current = this.expandedValue();
     if (current.includes(value)) {
       // 如果已經在名單內，就把它移除 (收合)
@@ -65,6 +99,12 @@ export class TreeComponent {
 
   // 📥 開放給 Node 呼叫：選取某個檔案
   selectNode(value: string) {
+    if (
+      this.nodes()
+        .find((node) => node.value() === value)
+        ?.isDisabled()
+    )
+      return;
     this.selectedValue.set(value);
   }
 
@@ -79,6 +119,10 @@ export class TreeComponent {
 
   focusNode(node: TreeNodeComponent): void {
     this.keyManager.focusItem(node);
+  }
+
+  childrenOf(node: TreeNodeComponent): TreeNodeComponent[] {
+    return this.childrenByParent().get(node) ?? [];
   }
 
   protected onKeydown(event: KeyboardEvent) {

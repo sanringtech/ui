@@ -19,8 +19,9 @@ export const selectTranslations = {
   'select.api.description': 'select primitives 支援的 inputs、models 與 class。',
   'select.api.value.description':
     '唯讀的目前選取值 getter；值更新請透過 ngModel/formControl 綁定。',
-  'select.api.id.description': '自動產生並套用到 trigger 的 id，也供 Field focus 整合使用。',
-  'select.api.contentId.description': '自動產生並套用到 listbox 的 id，開啟時由 aria-controls 參照。',
+  'select.api.id.description': '套用到 trigger、供 Field focus 整合使用的 id；未指定時會自動產生。',
+  'select.api.contentId.description':
+    '自動產生並套用到 listbox 的 id，開啟時由 aria-controls 參照。',
   'select.api.isOpen.description': '控制浮動 listbox 是否開啟。',
   'select.api.contentPosition.description':
     "控制 content 定位模式：'popper' 對齊 trigger 邊緣，'item-aligned' 讓已選項目貼齊 trigger。",
@@ -45,5 +46,5 @@ export const selectTranslations = {
   'select.keyboard.selectItem': '選取聚焦選項並關閉清單。',
   'select.keyboard.escape': '關閉清單而不變更選取值。',
   'select.stateModel.description':
-    "CVA（ControlValueAccessor）。使用 [(ngModel)]、[formControl] 或 [formControlName] 整合 Angular Forms。value getter 反映目前選取值（唯讀，寫入必須透過表單）。將 <sanring-select> 放入 <sanring-field> 可自動綁定標籤、提示與錯誤顯示。",
+    'CVA（ControlValueAccessor）。使用 [(ngModel)]、[formControl] 或 [formControlName] 整合 Angular Forms。value getter 反映目前選取值（唯讀，寫入必須透過表單）。將 <sanring-select> 放入 <sanring-field> 可自動綁定標籤、提示與錯誤顯示。',
 } as const;

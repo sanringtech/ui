@@ -21,7 +21,7 @@ import { ContextMenuItemVariant } from './context-menu.type';
     '[attr.data-variant]': 'variant()',
     '[attr.aria-disabled]': 'disabled() ? "true" : null',
     '[attr.data-disabled]': 'disabled() ? "" : null',
-    '[attr.tabindex]': 'disabled() ? "-1" : "0"',
+    tabindex: '-1',
     '[class]': 'itemClass()',
     '(click)': 'select()',
     '(keydown.enter)': 'handleKeyActivation($event)',

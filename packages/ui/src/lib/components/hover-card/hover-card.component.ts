@@ -1,4 +1,13 @@
-import { ChangeDetectionStrategy, Component, OnDestroy, input, numberAttribute, signal } from '@angular/core';
+import { _IdGenerator } from '@angular/cdk/a11y';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  OnDestroy,
+  inject,
+  input,
+  numberAttribute,
+  signal,
+} from '@angular/core';
 import { CdkOverlayOrigin } from '@angular/cdk/overlay';
 
 @Component({
@@ -9,6 +18,7 @@ import { CdkOverlayOrigin } from '@angular/cdk/overlay';
   host: { style: 'display: contents' },
 })
 export class HoverCardComponent implements OnDestroy {
+  readonly contentId = inject(_IdGenerator).getId('sanring-hover-card-', true);
   readonly openDelay = input(700, { transform: numberAttribute });
   readonly closeDelay = input(300, { transform: numberAttribute });
 

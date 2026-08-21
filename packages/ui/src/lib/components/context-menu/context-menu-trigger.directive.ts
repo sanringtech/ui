@@ -1,4 +1,4 @@
-import { Directive, inject } from '@angular/core';
+import { DestroyRef, Directive, ElementRef, inject } from '@angular/core';
 import { ContextMenuComponent } from './context-menu.component';
 
 @Directive({
@@ -25,6 +25,13 @@ import { ContextMenuComponent } from './context-menu.component';
 })
 export class ContextMenuTriggerDirective {
   protected readonly contextMenu = inject(ContextMenuComponent);
+  private readonly elementRef = inject<ElementRef<HTMLElement>>(ElementRef);
+
+  constructor() {
+    const element = this.elementRef.nativeElement;
+    this.contextMenu.registerTrigger(element);
+    inject(DestroyRef).onDestroy(() => this.contextMenu.unregisterTrigger(element));
+  }
 
   protected onContextMenu(event: MouseEvent): void {
     event.preventDefault();

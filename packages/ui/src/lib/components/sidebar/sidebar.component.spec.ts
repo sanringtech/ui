@@ -83,7 +83,9 @@ import { SidebarComponent } from './sidebar.component';
                     Inbox
                     <sanring-sidebar-menu-badge>3</sanring-sidebar-menu-badge>
                   </a>
-                  <button type="button" sanringSidebarMenuAction aria-label="Inbox actions">…</button>
+                  <button type="button" sanringSidebarMenuAction aria-label="Inbox actions">
+                    …
+                  </button>
                 </sanring-sidebar-menu-item>
               </sanring-sidebar-menu>
             </sanring-sidebar-group-content>
@@ -95,6 +97,12 @@ import { SidebarComponent } from './sidebar.component';
         </sanring-sidebar-footer>
 
         <button type="button" sanringSidebarRail aria-label="Toggle sidebar"></button>
+        <div sanringSidebarMenuButton class="non-native-menu-button">Custom menu button</div>
+        <a sanringSidebarMenuButton class="href-less-menu-button">Anchor action</a>
+        <span sanringSidebarMenuAction class="enabled-menu-action">Custom action</span>
+        <div sanringSidebarMenuAction disabled class="non-native-menu-action">
+          Disabled custom action
+        </div>
       </sanring-sidebar>
 
       <main sanringSidebarInset>
@@ -125,6 +133,49 @@ describe('SidebarComponent', () => {
     const fixture = createFixture();
     const sidebar = fixture.nativeElement.querySelector('sanring-sidebar');
     expect(sidebar?.classList.contains('custom-sidebar-class')).toBe(true);
+    expect(sidebar?.getAttribute('role')).toBe('complementary');
+    expect(sidebar?.getAttribute('aria-label')).toBe('Sidebar');
+  });
+
+  it('gives non-native menu controls complete button semantics and keyboard activation', () => {
+    const fixture = createFixture();
+    const root = fixture.nativeElement as HTMLElement;
+    const menuButton = root.querySelector('.non-native-menu-button') as HTMLElement;
+    const hrefLessButton = root.querySelector('.href-less-menu-button') as HTMLElement;
+    const enabledMenuAction = root.querySelector('.enabled-menu-action') as HTMLElement;
+    const menuAction = root.querySelector('.non-native-menu-action') as HTMLElement;
+    let clicks = 0;
+    menuButton.addEventListener('click', () => clicks++);
+
+    expect(menuButton.getAttribute('role')).toBe('button');
+    expect(menuButton.getAttribute('tabindex')).toBe('0');
+    menuButton.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true }));
+    menuButton.dispatchEvent(new KeyboardEvent('keydown', { key: ' ', bubbles: true }));
+    menuButton.dispatchEvent(
+      new KeyboardEvent('keydown', { key: ' ', repeat: true, bubbles: true }),
+    );
+    expect(clicks).toBe(2);
+
+    let hrefLessClicks = 0;
+    hrefLessButton.addEventListener('click', () => hrefLessClicks++);
+    expect(hrefLessButton.getAttribute('role')).toBe('button');
+    expect(hrefLessButton.getAttribute('tabindex')).toBe('0');
+    hrefLessButton.dispatchEvent(new KeyboardEvent('keydown', { key: ' ', bubbles: true }));
+    expect(hrefLessClicks).toBe(1);
+
+    let actionClicks = 0;
+    enabledMenuAction.addEventListener('click', () => actionClicks++);
+    expect(enabledMenuAction.getAttribute('role')).toBe('button');
+    expect(enabledMenuAction.getAttribute('tabindex')).toBe('0');
+    enabledMenuAction.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true }));
+    enabledMenuAction.dispatchEvent(
+      new KeyboardEvent('keydown', { key: 'Enter', repeat: true, bubbles: true }),
+    );
+    expect(actionClicks).toBe(1);
+
+    expect(menuAction.getAttribute('role')).toBe('button');
+    expect(menuAction.getAttribute('aria-disabled')).toBe('true');
+    expect(menuAction.getAttribute('tabindex')).toBe('-1');
   });
 
   it('locks the sidebar open and ignores toggle attempts when collapsible="none"', () => {
@@ -182,9 +233,9 @@ describe('SidebarComponent', () => {
     const root = fixture.nativeElement as HTMLElement;
 
     expect(root.querySelector('sanring-sidebar-menu')?.getAttribute('role')).toBe('list');
-    expect(
-      root.querySelectorAll('sanring-sidebar-menu-item')[0]?.getAttribute('role'),
-    ).toBe('listitem');
+    expect(root.querySelectorAll('sanring-sidebar-menu-item')[0]?.getAttribute('role')).toBe(
+      'listitem',
+    );
     expect(root.querySelector('sanring-sidebar-group-label')?.textContent?.trim()).toBe('Platform');
   });
 

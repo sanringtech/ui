@@ -77,6 +77,12 @@ export const fieldPage = {
   ],
   apiRows: [
     {
+      property: 'id',
+      type: 'string',
+      defaultValue: 'generated',
+      descriptionKey: 'field.api.id.description',
+    },
+    {
       property: 'floating',
       type: 'boolean',
       defaultValue: 'false',
@@ -115,7 +121,7 @@ export const fieldPageExamples = {
   <p sanringDescription>We'll only use this for account notifications.</p>
 </sanring-field>`,
   usageImport: `import { DescriptionDirective, ErrorMessageComponent, FieldLabelDirective, SanringFieldComponent } from './components/ui/field';`,
-  usageMain: `<sanring-field>
+  usageMain: `<sanring-field id="account-email-field">
   <label sanringLabel>Email</label>
   <input sanringInput placeholder="name@sanring.dev" type="email" />
   <p sanringDescription>We'll only use this for account notifications.</p>

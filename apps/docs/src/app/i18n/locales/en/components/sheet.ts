@@ -33,8 +33,14 @@ export const sheetTranslations = {
   'sheet.demo.confirmDeleteDescription': 'This action cannot be undone.',
   'sheet.demo.delete': 'Delete',
   'sheet.api.class.description': 'Additional classes merged onto the panel or host element.',
+  'sheet.api.ariaLabel.description':
+    'Accessible-name fallback used when no sanring-sheet-title is projected.',
+  'sheet.api.ariaLabelledBy.description':
+    'Ids of external elements that label the panel. Takes precedence over SheetTitle and ariaLabel.',
+  'sheet.api.ariaDescribedBy.description':
+    'Ids of external elements that describe the panel. Takes precedence over SheetDescription.',
   'sheet.accessibility.description':
-    "The panel has role='dialog' and aria-modal='true'. sanringSheetTitle and sanringSheetDescription provide aria-labelledby and aria-describedby on the panel automatically. Background sibling elements get aria-hidden='true' while the sheet is open, preventing screen reader navigation outside the panel.",
+    "The panel has role='dialog' and aria-modal='true'. Title and description primitives are linked only when projected; ariaLabel provides a fallback name. Background siblings get aria-hidden='true' while open.",
   'sheet.keyboard.description': 'Focus is trapped inside the sheet panel while it is open.',
   'sheet.keyboard.tabShiftTab': 'Move focus within the sheet panel (focus is trapped inside).',
   'sheet.keyboard.escape': 'Close the sheet.',

@@ -166,8 +166,9 @@ describe('TransferComponent', () => {
     host.mode.set('one-way');
     fixture.detectChanges();
 
-    const targetCheckbox = checkboxFor(panel(root, 'target'), 'Two') as HTMLButtonElement;
-    expect(targetCheckbox.disabled).toBe(true);
+    const targetCheckbox = checkboxFor(panel(root, 'target'), 'Two');
+    expect(targetCheckbox.getAttribute('aria-disabled')).toBe('true');
+    expect(targetCheckbox.getAttribute('tabindex')).toBe('-1');
 
     targetCheckbox.click();
     fixture.detectChanges();
@@ -191,6 +192,35 @@ describe('TransferComponent', () => {
     fixture.detectChanges();
 
     expect(host.selectedKeys()).toEqual(['2', '1']);
+  });
+
+  it('uses one focusable checkbox row per item and supports roving arrow-key navigation', async () => {
+    const fixture = await createFixture();
+    const root = fixture.nativeElement as HTMLElement;
+    const host = fixture.componentInstance;
+
+    host.items.set([...host.items(), { key: '4', label: 'Four' }]);
+    fixture.detectChanges();
+
+    const source = panel(root, 'source');
+    const one = checkboxFor(source, 'One');
+    const four = checkboxFor(source, 'Four');
+
+    expect(one.querySelector('[role="checkbox"]')).toBeNull();
+    expect(one.getAttribute('tabindex')).toBe('0');
+    expect(four.getAttribute('tabindex')).toBe('-1');
+
+    one.focus();
+    one.dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowDown', bubbles: true }));
+    fixture.detectChanges();
+
+    expect(document.activeElement).toBe(four);
+    expect(four.getAttribute('tabindex')).toBe('0');
+
+    four.dispatchEvent(new KeyboardEvent('keydown', { key: ' ', bubbles: true }));
+    fixture.detectChanges();
+
+    expect(four.getAttribute('aria-checked')).toBe('true');
   });
 
   it('has no axe-detectable a11y violations', async () => {

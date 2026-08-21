@@ -15,10 +15,11 @@ import { SIDEBAR_CONTEXT } from './sidebar-context';
   standalone: true,
   host: {
     '[class]': 'buttonClass()',
+    '[attr.role]': 'isNativeInteractive ? null : "button"',
     '[attr.aria-current]': 'active() ? "page" : null',
     '[attr.aria-disabled]': 'disabled() ? "true" : null',
     '[attr.disabled]': 'disabled() && isButton ? true : null',
-    '[attr.tabindex]': 'disabled() && !isButton ? -1 : null',
+    '[attr.tabindex]': 'resolvedTabIndex',
     '[attr.data-active]': 'active() ? "" : null',
   },
 })
@@ -31,6 +32,14 @@ export class SidebarMenuButtonDirective {
   readonly disabled = input(false, { transform: booleanAttribute });
 
   protected readonly isButton = this.elementRef.nativeElement.tagName.toLowerCase() === 'button';
+  protected get isNativeInteractive(): boolean {
+    const element = this.elementRef.nativeElement;
+    return this.isButton || (element.tagName.toLowerCase() === 'a' && element.hasAttribute('href'));
+  }
+  protected get resolvedTabIndex(): number | null {
+    if (this.disabled()) return this.isButton ? null : -1;
+    return this.isNativeInteractive ? null : 0;
+  }
   private readonly isIconRail = computed(
     () => this.ctx?.collapsible() === 'icon' && !this.ctx.isOpen(),
   );
@@ -52,5 +61,13 @@ export class SidebarMenuButtonDirective {
 
     event.preventDefault();
     event.stopImmediatePropagation();
+  }
+
+  @HostListener('keydown.enter', ['$event'])
+  @HostListener('keydown.space', ['$event'])
+  protected handleKeyActivation(event: Event): void {
+    if (this.isNativeInteractive) return;
+    event.preventDefault();
+    if (!(event as KeyboardEvent).repeat && !this.disabled()) this.elementRef.nativeElement.click();
   }
 }

@@ -44,7 +44,7 @@ describe('TransferItemComponent', () => {
   }
 
   function checkboxFor(root: HTMLElement, label: string) {
-    const checkbox = root.querySelector<HTMLButtonElement>(`[role="checkbox"][aria-label="${label}"]`);
+    const checkbox = root.querySelector<HTMLElement>(`[role="checkbox"][aria-label="${label}"]`);
     if (!checkbox) throw new Error(`Expected a checkbox labelled "${label}"`);
     return checkbox;
   }
@@ -79,7 +79,8 @@ describe('TransferItemComponent', () => {
     const root = fixture.nativeElement as HTMLElement;
     const checkbox = checkboxFor(root, 'Two');
 
-    expect(checkbox.disabled).toBe(true);
+    expect(checkbox.getAttribute('aria-disabled')).toBe('true');
+    expect(checkbox.getAttribute('tabindex')).toBe('-1');
     expect(checkbox.getAttribute('aria-checked')).toBe('false');
 
     checkbox.click();
@@ -104,18 +105,18 @@ describe('TransferItemComponent', () => {
     const root = fixture.nativeElement as HTMLElement;
 
     // Three 本身沒有標 disabled，一開始（two-way）checkbox 是可用的
-    expect(checkboxFor(root, 'Three').disabled).toBe(false);
+    expect(checkboxFor(root, 'Three').getAttribute('aria-disabled')).toBeNull();
 
     host.mode.set('one-way');
     fixture.detectChanges();
 
     const threeCheckbox = checkboxFor(root, 'Three');
-    expect(threeCheckbox.disabled).toBe(true);
+    expect(threeCheckbox.getAttribute('aria-disabled')).toBe('true');
 
     const threeItem = root.querySelectorAll('sanring-transfer-item')[2] as HTMLElement;
     expect(threeItem.classList.contains('cursor-not-allowed')).toBe(true);
 
     // source 面板不受 one-way 影響，維持可互動
-    expect(checkboxFor(root, 'One').disabled).toBe(false);
+    expect(checkboxFor(root, 'One').getAttribute('aria-disabled')).toBeNull();
   });
 });

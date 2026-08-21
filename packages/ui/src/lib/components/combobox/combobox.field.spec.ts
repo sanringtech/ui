@@ -7,7 +7,13 @@ import { ComboboxComponent } from './combobox.component';
 import { ComboboxInputComponent } from './combobox-input.component';
 
 @Component({
-  imports: [SanringFieldComponent, ErrorMessageComponent, ComboboxComponent, ComboboxInputComponent, ReactiveFormsModule],
+  imports: [
+    SanringFieldComponent,
+    ErrorMessageComponent,
+    ComboboxComponent,
+    ComboboxInputComponent,
+    ReactiveFormsModule,
+  ],
   template: `
     <sanring-field>
       <sanring-combobox [formControl]="control">

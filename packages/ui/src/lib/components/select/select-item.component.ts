@@ -95,10 +95,7 @@ export class SelectItemComponent implements AfterViewInit, FocusableOption {
   );
 
   protected readonly labelClass = computed(() =>
-    cn(
-      'min-w-0 flex-1 truncate',
-      this.indicatorPosition() === 'end' ? 'order-1' : 'order-2',
-    ),
+    cn('min-w-0 flex-1 truncate', this.indicatorPosition() === 'end' ? 'order-1' : 'order-2'),
   );
 
   constructor() {

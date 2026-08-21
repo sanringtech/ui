@@ -13,12 +13,15 @@ export const breadcrumbTranslations = {
   'breadcrumb.demo.divider': '分隔符',
   'breadcrumb.demo.withEllipsis': '含 Ellipsis',
   'breadcrumb.demo.customDivider': '自訂分隔符',
+  'breadcrumb.demo.ariaLabel': '麵包屑導覽',
   'breadcrumb.api.description': 'breadcrumb primitives 支援的 inputs。',
+  'breadcrumb.api.ariaLabel.description': '麵包屑導覽的無障礙名稱，可依語系或頁面情境覆寫。',
   'breadcrumb.api.type.description':
     "分隔符圖示：'chevron'（預設，›）或 'dot'（·）。透過 ng-content 傳入自訂內容可完全覆寫。",
   'breadcrumb.api.routerLink.description': '傳遞給內部 anchor 元素的 Angular RouterLink 值。',
   'breadcrumb.api.class.description': '合併到 host 元素的額外 class。',
-  'breadcrumb.accessibility.description': "宿主元素具有 role='navigation' 與 aria-label='breadcrumb'。在 <sanring-breadcrumb-page> 元素上加 aria-current='page'，讓螢幕閱讀器播報使用者目前的位置。",
+  'breadcrumb.accessibility.description':
+    "宿主元素使用 role='navigation'；請透過 ariaLabel 提供在地化或符合頁面情境的無障礙名稱。在 <sanring-breadcrumb-page> 元素上加 aria-current='page'，讓螢幕閱讀器播報使用者目前的位置。",
   'breadcrumb.keyboard.description': '標準錨點鍵盤行為。',
   'breadcrumb.keyboard.tab': '向前導覽至各麵包屑連結。',
   'breadcrumb.keyboard.shiftTab': '向後導覽至各麵包屑連結。',

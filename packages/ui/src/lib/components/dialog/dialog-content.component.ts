@@ -1,16 +1,16 @@
 import {
   ChangeDetectionStrategy,
-  AfterContentInit,
+  Injector,
+  afterNextRender,
   booleanAttribute,
   Component,
-  ContentChild,
-  DestroyRef,
   computed,
+  contentChild,
+  effect,
   inject,
   input,
 } from '@angular/core';
 import { DialogRef } from '@angular/cdk/dialog';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 // 1. 引入 LucideAngularModule 與需要的 X icon
 import { LucideX } from '@lucide/angular';
 import { cn } from '../../utils';
@@ -18,6 +18,18 @@ import { OVERLAY_CLOSE_ICON_CLASS, OVERLAY_SURFACE_CLASS } from '../component-st
 import { DialogDescriptionDirective } from './dialog-description.directive';
 import { DialogTitleDirective } from './dialog-title.directive';
 import { DIALOG_SURFACE_CLASS, OVERLAY_ABSOLUTE_CLOSE_BUTTON_CLASS } from './dialog.styles';
+
+interface DialogAriaSnapshot {
+  label?: string;
+  labelledBy?: string;
+  describedBy?: string;
+  titleId?: string;
+  descriptionId?: string;
+}
+
+function firstAriaValue(...values: Array<string | null | undefined>): string | null {
+  return values.find((value): value is string => !!value?.trim()) ?? null;
+}
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -66,28 +78,45 @@ import { DIALOG_SURFACE_CLASS, OVERLAY_ABSOLUTE_CLOSE_BUTTON_CLASS } from './dia
     }
   `,
 })
-export class DialogContentComponent implements AfterContentInit {
+export class DialogContentComponent {
   protected readonly closeButtonClass = OVERLAY_ABSOLUTE_CLOSE_BUTTON_CLASS;
   protected readonly closeIconClass = OVERLAY_CLOSE_ICON_CLASS;
 
   readonly class = input<string | undefined>();
   readonly showClose = input(true, { transform: booleanAttribute });
   readonly closeAriaLabel = input('關閉對話框');
+  /** Accessible-name fallback used when no projected dialog title is present. */
+  readonly ariaLabel = input<string | undefined>();
+  /** Explicit labelling relationship; takes precedence over a projected title and ariaLabel. */
+  readonly ariaLabelledBy = input<string | undefined>();
+  /** Explicit description relationship; takes precedence over a projected description. */
+  readonly ariaDescribedBy = input<string | undefined>();
 
   private dialogRef = inject(DialogRef, { optional: true });
-  private destroyRef = inject(DestroyRef);
-
-  @ContentChild(DialogTitleDirective) private title?: DialogTitleDirective;
-  @ContentChild(DialogDescriptionDirective) private description?: DialogDescriptionDirective;
+  private readonly injector = inject(Injector);
+  private readonly title = contentChild(DialogTitleDirective, { descendants: true });
+  private readonly description = contentChild(DialogDescriptionDirective, { descendants: true });
+  private configAriaCaptured = false;
+  private configAriaLabel: string | null = null;
+  private configAriaLabelledBy: string | null = null;
+  private configAriaDescribedBy: string | null = null;
 
   protected readonly dialogContentClass = computed(() =>
-    cn(
-      OVERLAY_SURFACE_CLASS,
-      DIALOG_SURFACE_CLASS,
-      'bg-[var(--sanring-surface)]',
-      this.class(),
-    ),
+    cn(OVERLAY_SURFACE_CLASS, DIALOG_SURFACE_CLASS, 'bg-[var(--sanring-surface)]', this.class()),
   );
+
+  constructor() {
+    effect(() => {
+      const snapshot: DialogAriaSnapshot = {
+        label: this.ariaLabel(),
+        labelledBy: this.ariaLabelledBy(),
+        describedBy: this.ariaDescribedBy(),
+        titleId: this.title()?.id(),
+        descriptionId: this.description()?.id(),
+      };
+      afterNextRender(() => this.syncDialogAria(snapshot), { injector: this.injector });
+    });
+  }
 
   closeDialog() {
     if (this.dialogRef) {
@@ -95,32 +124,49 @@ export class DialogContentComponent implements AfterContentInit {
     }
   }
 
-  ngAfterContentInit() {
-    this.syncDialogAria();
-    this.dialogRef?.closed.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(() => {
-      this.clearDialogAria();
-    });
-  }
-
-  private syncDialogAria() {
+  private syncDialogAria(snapshot: DialogAriaSnapshot) {
     const container = this.getDialogContainer();
 
     if (!container) {
       return;
     }
 
-    if (this.title) {
-      container.setAttribute('aria-labelledby', this.title.id());
+    if (!this.configAriaCaptured) {
+      this.configAriaLabel = container.getAttribute('aria-label');
+      this.configAriaLabelledBy = container.getAttribute('aria-labelledby');
+      this.configAriaDescribedBy = container.getAttribute('aria-describedby');
+      this.configAriaCaptured = true;
     }
 
-    if (this.description) {
-      container.setAttribute('aria-describedby', this.description.id());
-    }
-  }
+    // Keep an accessible name supplied through DialogConfig unless the content
+    // explicitly opts into a different relationship.
+    const labelledBy = firstAriaValue(
+      snapshot.labelledBy,
+      this.configAriaLabelledBy,
+      snapshot.titleId,
+    );
+    const describedBy = firstAriaValue(
+      snapshot.describedBy,
+      this.configAriaDescribedBy,
+      snapshot.descriptionId,
+    );
 
-  private clearDialogAria() {
-    const container = this.getDialogContainer();
-    container?.removeAttribute('aria-describedby');
+    if (labelledBy) {
+      container.setAttribute('aria-labelledby', labelledBy);
+      container.removeAttribute('aria-label');
+    } else {
+      const label =
+        firstAriaValue(snapshot.label, this.configAriaLabel) ??
+        (container.getAttribute('role') === 'alertdialog' ? 'Alert dialog' : 'Dialog');
+      container.setAttribute('aria-label', label);
+      container.removeAttribute('aria-labelledby');
+    }
+
+    if (describedBy) {
+      container.setAttribute('aria-describedby', describedBy);
+    } else {
+      container.removeAttribute('aria-describedby');
+    }
   }
 
   private getDialogContainer() {

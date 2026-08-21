@@ -1,4 +1,11 @@
-import { ChangeDetectionStrategy, Component, computed, input, output } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  booleanAttribute,
+  computed,
+  input,
+  output,
+} from '@angular/core';
 import { coerceNumberProperty } from '@angular/cdk/coercion';
 import { cn } from '../../utils';
 import { AvatarSize } from './avatar.types';
@@ -18,7 +25,9 @@ const SIZE_CLASSES: Record<AvatarSize, string> = {
     '[class]': 'countClass()',
     '[attr.aria-label]': 'ariaLabel()',
     '[attr.role]': 'clickable() ? "button" : null',
-    '[attr.tabindex]': 'clickable() ? "0" : null',
+    '[attr.aria-disabled]': 'clickable() && disabled() ? "true" : null',
+    '[attr.tabindex]': 'clickable() ? (disabled() ? "-1" : "0") : null',
+    '[attr.data-disabled]': 'disabled() || null',
     '(click)': 'handleClick()',
     '(keydown.enter)': 'handleKeyActivation($event)',
     '(keydown.space)': 'handleKeyActivation($event)',
@@ -34,7 +43,8 @@ export class AvatarGroupCountComponent {
   });
   readonly size = input<AvatarSize>('md');
   readonly ariaLabel = input<string | undefined>();
-  readonly clickable = input<boolean>(false);
+  readonly clickable = input(false, { transform: booleanAttribute });
+  readonly disabled = input(false, { transform: booleanAttribute });
 
   readonly clicked = output<void>();
 
@@ -49,17 +59,18 @@ export class AvatarGroupCountComponent {
       'bg-[var(--sanring-surface-strong)] text-[var(--sanring-foreground)]',
       'ring-2 ring-[var(--sanring-background)]',
       SIZE_CLASSES[this.size()] ?? SIZE_CLASSES.md,
-      this.clickable() && 'cursor-pointer',
+      this.clickable() && !this.disabled() && 'cursor-pointer',
+      this.clickable() && this.disabled() && 'cursor-not-allowed opacity-50',
       this.class(),
     ),
   );
 
   protected handleClick(): void {
-    if (this.clickable()) this.clicked.emit();
+    if (this.clickable() && !this.disabled()) this.clicked.emit();
   }
 
   protected handleKeyActivation(event: Event): void {
-    if (!this.clickable()) return;
+    if (!this.clickable() || this.disabled()) return;
     event.preventDefault(); // Space 防捲頁，Enter 防 form submit
     this.clicked.emit();
   }

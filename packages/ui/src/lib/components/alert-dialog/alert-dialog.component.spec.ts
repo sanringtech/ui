@@ -46,11 +46,18 @@ import { DialogTitleDirective } from '../dialog/dialog-title.directive';
         <button type="button" [sanringAlertDialogAction]="'delete-42'">Delete</button>
       </sanring-alert-dialog-content>
     </ng-template>
+
+    <ng-template #untitledAlertDialog>
+      <sanring-alert-dialog-content>
+        <button type="button" sanringAlertDialogCancel>Cancel</button>
+      </sanring-alert-dialog-content>
+    </ng-template>
   `,
 })
 class AlertDialogTestHost {
   @ViewChild('alertDialog') readonly alertDialog!: TemplateRef<unknown>;
   @ViewChild('customResultAlertDialog') readonly customResultAlertDialog!: TemplateRef<unknown>;
+  @ViewChild('untitledAlertDialog') readonly untitledAlertDialog!: TemplateRef<unknown>;
 
   readonly alertDialogService = inject(AlertDialogService);
 }
@@ -88,6 +95,23 @@ describe('AlertDialog', () => {
     expect(overlayElement.querySelector('button[aria-label="關閉對話框"]')).toBeNull();
   });
 
+  it('gives an untitled alert dialog a default accessible name', () => {
+    const fixture = TestBed.createComponent(AlertDialogTestHost);
+    fixture.detectChanges();
+
+    fixture.componentInstance.alertDialogService.open(
+      fixture.componentInstance.untitledAlertDialog,
+    );
+    fixture.detectChanges();
+
+    const dialogContainer = overlayContainer
+      .getContainerElement()
+      .querySelector('cdk-dialog-container');
+
+    expect(dialogContainer?.getAttribute('aria-label')).toBe('Alert dialog');
+    expect(dialogContainer?.hasAttribute('aria-labelledby')).toBe(false);
+  });
+
   it('opens via sanringAlertDialogTrigger and locks disableClose even if the trigger config tries to unset it', () => {
     const fixture = TestBed.createComponent(AlertDialogTestHost);
     fixture.detectChanges();
@@ -105,7 +129,9 @@ describe('AlertDialog', () => {
     backdrop.click();
     fixture.detectChanges();
 
-    expect(overlayContainer.getContainerElement().querySelector('cdk-dialog-container')).not.toBeNull();
+    expect(
+      overlayContainer.getContainerElement().querySelector('cdk-dialog-container'),
+    ).not.toBeNull();
   });
 
   it('does not close on backdrop click or Escape', () => {
@@ -127,7 +153,9 @@ describe('AlertDialog', () => {
       ?.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape', bubbles: true }));
     fixture.detectChanges();
 
-    expect(overlayContainer.getContainerElement().querySelector('cdk-dialog-container')).not.toBeNull();
+    expect(
+      overlayContainer.getContainerElement().querySelector('cdk-dialog-container'),
+    ).not.toBeNull();
     expect(ref.disableClose).toBe(true);
   });
 
@@ -158,9 +186,7 @@ describe('AlertDialog', () => {
 
     // 這裡是 property binding（非 bare attribute），Angular 不會把它反映成 DOM
     // attribute，所以改用文字內容找按鈕，而不是 attribute selector。
-    const buttons = Array.from(
-      overlayContainer.getContainerElement().querySelectorAll('button'),
-    );
+    const buttons = Array.from(overlayContainer.getContainerElement().querySelectorAll('button'));
     buttons.find((button) => button.textContent?.includes('Delete'))?.click();
     fixture.detectChanges();
 
@@ -216,7 +242,9 @@ describe('AlertDialog', () => {
     fixture.componentInstance.alertDialogService.open(fixture.componentInstance.alertDialog);
     fixture.detectChanges();
 
-    const content = overlayContainer.getContainerElement().querySelector('sanring-alert-dialog-content');
+    const content = overlayContainer
+      .getContainerElement()
+      .querySelector('sanring-alert-dialog-content');
     expect(content?.classList.contains('custom-alert-class')).toBe(true);
   });
 
@@ -229,7 +257,9 @@ describe('AlertDialog', () => {
       const trigger = fixture.nativeElement.querySelector('button') as HTMLElement;
       trigger.focus();
 
-      const ref = fixture.componentInstance.alertDialogService.open(fixture.componentInstance.alertDialog);
+      const ref = fixture.componentInstance.alertDialogService.open(
+        fixture.componentInstance.alertDialog,
+      );
       fixture.detectChanges();
       await fixture.whenStable();
       fixture.detectChanges();

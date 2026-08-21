@@ -29,7 +29,8 @@ import { AvatarComponent } from './avatar.component';
       <sanring-avatar ariaLabel="Grace Hopper" />
       <sanring-avatar-group-count
         [count]="3"
-        [clickable]="true"
+        clickable
+        [disabled]="countDisabled"
         class="custom-count"
         (clicked)="clicks = clicks + 1"
       />
@@ -38,6 +39,7 @@ import { AvatarComponent } from './avatar.component';
 })
 class AvatarTestHost {
   clicks = 0;
+  countDisabled = false;
 }
 
 describe('AvatarComponent', () => {
@@ -78,6 +80,24 @@ describe('AvatarComponent', () => {
     fixture.detectChanges();
 
     expect(fixture.componentInstance.clicks).toBe(1);
+  });
+
+  it('exposes disabled semantics and blocks pointer and keyboard activation', () => {
+    const fixture = TestBed.createComponent(AvatarTestHost);
+    fixture.componentInstance.countDisabled = true;
+    fixture.detectChanges();
+
+    const count = fixture.nativeElement.querySelector('sanring-avatar-group-count') as HTMLElement;
+    expect(count.getAttribute('aria-disabled')).toBe('true');
+    expect(count.getAttribute('tabindex')).toBe('-1');
+    expect(count.getAttribute('data-disabled')).toBe('true');
+
+    count.click();
+    count.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true }));
+    count.dispatchEvent(new KeyboardEvent('keydown', { key: ' ', bubbles: true }));
+    fixture.detectChanges();
+
+    expect(fixture.componentInstance.clicks).toBe(0);
   });
 
   it('has no axe-detectable a11y violations', async () => {

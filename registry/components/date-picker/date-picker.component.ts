@@ -38,6 +38,13 @@ const DEFAULT_GRID_COLUMNS: Record<PickerGranularity, number> = {
   year: 3,
 };
 
+type DatePickerDisabled = DisabledInput | boolean | undefined;
+type DatePickerDisabledBinding = DatePickerDisabled | string;
+
+function transformDatePickerDisabled(value: DatePickerDisabledBinding): DatePickerDisabled {
+  return typeof value === 'string' ? booleanAttribute(value) : value;
+}
+
 function quarterIndexOf(date: Date, quarterStartMonth: QuarterStartMonth): number {
   return Math.floor(((date.getMonth() - quarterStartMonth + 12) % 12) / 3);
 }
@@ -58,12 +65,13 @@ function quarterIndexOf(date: Date, quarterStartMonth: QuarterStartMonth): numbe
     },
     {
       provide: SANRING_FIELD_CONTROL,
-      useFactory: (host: DatePickerComponent) => new SanringFieldControlAdapter(FieldType.datePicker, host),
+      useFactory: (host: DatePickerComponent) =>
+        new SanringFieldControlAdapter(FieldType.datePicker, host),
       deps: [forwardRef(() => DatePickerComponent)],
     },
   ],
   host: {
-    tabindex: '0',
+    '[attr.tabindex]': 'isDisabled() ? "-1" : "0"',
     // role="group": a bare div (role="generic") doesn't support aria-invalid/
     // aria-describedby, so this still needs a real role — "group" is a plain,
     // unopinionated container that both attributes are valid on (verified
@@ -80,8 +88,12 @@ function quarterIndexOf(date: Date, quarterStartMonth: QuarterStartMonth): numbe
     role: 'group',
     '[id]': 'id()',
     '[class]': 'datePickerClass()',
+    '[attr.aria-label]': 'ariaLabel()',
+    '[attr.aria-labelledby]': 'ariaLabelledBy()',
+    '[attr.aria-disabled]': 'isDisabled() ? "true" : null',
     '[attr.aria-invalid]': "errorState ? 'true' : null",
     '[attr.aria-describedby]': 'computedAriaDescribedBy()',
+    '[attr.inert]': 'isDisabled() ? "" : null',
     '(focus)': 'onFocus()',
     '(blur)': 'onBlur()',
   },
@@ -90,8 +102,8 @@ function quarterIndexOf(date: Date, quarterStartMonth: QuarterStartMonth): numbe
       [label]="headerLabel()"
       [prevMonthLabel]="prevYearLabel()"
       [nextMonthLabel]="nextYearLabel()"
-      (prev)="engine.prevYear()"
-      (next)="engine.nextYear()"
+      (prev)="navigateYear(-1)"
+      (next)="navigateYear(1)"
     />
 
     <div
@@ -142,9 +154,14 @@ export class DatePickerComponent extends SanringCvaBase<DatePickerValue> {
   ]);
   readonly yearsToDisplay = input<number>(12);
   readonly gridColumns = input<number | undefined>(undefined);
-  readonly disabled = input<DisabledInput | undefined>(undefined);
+  /** A matcher disables individual periods; a boolean disables the entire control. */
+  readonly disabled = input<DatePickerDisabled, DatePickerDisabledBinding>(undefined, {
+    transform: transformDatePickerDisabled,
+  });
   readonly allowDeselect = input<boolean>(true);
   readonly required = input(false, { transform: booleanAttribute });
+  readonly ariaLabel = input<string | undefined>();
+  readonly ariaLabelledBy = input<string | undefined>();
   readonly ariaDescribedBy = input<string | undefined>();
   readonly rangePeriodCountLimit = input<RangePeriodCountLimit | undefined>(undefined);
   readonly prevYearLabel = input('上一年');
@@ -157,6 +174,7 @@ export class DatePickerComponent extends SanringCvaBase<DatePickerValue> {
   protected readonly datePickerClass = computed(() =>
     cn(
       'block outline-none focus-visible:ring-2 focus-visible:ring-[var(--sanring-border-strong)]',
+      this.isDisabled() && 'cursor-not-allowed opacity-50',
       this.class(),
     ),
   );
@@ -182,13 +200,21 @@ export class DatePickerComponent extends SanringCvaBase<DatePickerValue> {
     return rows;
   });
 
-  // 表單層級的「整個控制項停用」跟既有的 disabled（哪些週期不可選）是兩件事——停用時額外疊一個
-  // 永遠回傳 true 的 matcher，讓所有 cell 都不可選，而不是動到使用者自己傳入的 disabled matcher。
-  private readonly effectiveDisabled = computed<DisabledInput | undefined>(() =>
-    this.disabledState() ? () => true : this.disabled(),
-  );
+  readonly isDisabled = computed(() => this.disabledState() || this.disabled() === true);
 
-  protected readonly computedAriaDescribedBy = this.makeComputedAriaDescribedBy(this.ariaDescribedBy);
+  // Keep the established per-period matcher API compatible while also accepting the natural
+  // `[disabled]="true"` whole-control form. A boolean is consumed at the control layer; matcher
+  // values continue to flow to date-picker-core unchanged. Whole-control disabled deliberately
+  // does not become an "all dates" matcher: date-picker-core removes selections that newly
+  // violate a matcher, whereas disabling a form control must preserve its value.
+  private readonly effectiveDisabled = computed<DisabledInput | undefined>(() => {
+    const disabled = this.disabled();
+    return typeof disabled === 'boolean' ? undefined : disabled;
+  });
+
+  protected readonly computedAriaDescribedBy = this.makeComputedAriaDescribedBy(
+    this.ariaDescribedBy,
+  );
 
   get fieldValue(): DatePickerValue {
     switch (this.mode()) {
@@ -213,7 +239,7 @@ export class DatePickerComponent extends SanringCvaBase<DatePickerValue> {
   }
 
   get fieldDisabled(): boolean {
-    return this.disabledState();
+    return this.isDisabled();
   }
 
   protected override hasInputRequired(): boolean {
@@ -313,5 +339,11 @@ export class DatePickerComponent extends SanringCvaBase<DatePickerValue> {
       case 'year':
         return `${cell.date.getFullYear()}`;
     }
+  }
+
+  protected navigateYear(delta: -1 | 1): void {
+    if (this.isDisabled()) return;
+    if (delta === -1) this.engine.prevYear();
+    else this.engine.nextYear();
   }
 }

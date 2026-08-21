@@ -30,8 +30,12 @@ export const sheetTranslations = {
   'sheet.demo.confirmDeleteDescription': '此操作無法復原。',
   'sheet.demo.delete': '刪除',
   'sheet.api.class.description': '合併到面板或 host 元素的額外 class。',
+  'sheet.api.ariaLabel.description':
+    '未投影 sanring-sheet-title 時提供 accessible name 的 fallback。',
+  'sheet.api.ariaLabelledBy.description': '標示面板的外部元素 id，優先於 SheetTitle 與 ariaLabel。',
+  'sheet.api.ariaDescribedBy.description': '描述面板的外部元素 id，優先於 SheetDescription。',
   'sheet.accessibility.description':
-    "面板有 role='dialog' 與 aria-modal='true'。sanringSheetTitle 和 sanringSheetDescription 會自動綁定面板的 aria-labelledby 和 aria-describedby。Sheet 開啟期間，背景其他元素會被加上 aria-hidden='true'，防止螢幕閱讀器導覽到面板外的內容。",
+    "面板有 role='dialog' 與 aria-modal='true'。只有實際投影的 title 與 description 會被關聯，ariaLabel 提供 fallback name。Sheet 開啟期間背景元素會加上 aria-hidden='true'。",
   'sheet.keyboard.description': 'Sheet 開啟期間，焦點被鎖定在面板內。',
   'sheet.keyboard.tabShiftTab': '在 sheet 面板內移動焦點（焦點被鎖定在面板內）。',
   'sheet.keyboard.escape': '關閉 sheet。',

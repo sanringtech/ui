@@ -24,8 +24,12 @@ export const hoverCardTranslations = {
     '浮動面板偏好的顯示方向；CDK overlay 可能為了保持可見而翻轉位置。',
   'hoverCard.api.sideOffset.description': 'trigger 與浮動面板之間的距離，單位為 px。',
   'hoverCard.api.class.description': '合併到浮動 content panel 的額外 class。',
+  'hoverCard.api.ariaLabel.description':
+    '未設定 ariaLabelledBy 時，content region 使用的 accessible name。',
+  'hoverCard.api.ariaLabelledBy.description':
+    '標示 content region 的外部元素 id，優先於 ariaLabel。',
   'hoverCard.accessibility.description':
-    'Trigger 保留原生 focus 行為，面板可由鍵盤 focus 開啟並用 Escape 關閉。Hover Card 適合補充資訊，不應承載必須點擊才能完成的主要操作。',
+    'Trigger 保留原生 focus 行為，並以 aria-expanded/aria-controls 連結到具名 content region；Escape 可關閉。Hover Card 適合補充資訊，不應承載必須點擊的主要操作。',
   'hoverCard.keyboard.description': 'Hover Card 會由 pointer hover 與 trigger 的鍵盤 focus 開啟。',
   'hoverCard.keyboard.focus': '聚焦 trigger，並在 openDelay 後開啟浮動面板。',
   'hoverCard.keyboard.blur': '焦點離開後，在 closeDelay 後關閉面板。',

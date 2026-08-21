@@ -1,4 +1,4 @@
-import { Component, TemplateRef, ViewChild, inject } from '@angular/core';
+import { Component, TemplateRef, ViewChild, inject, signal } from '@angular/core';
 import { OverlayContainer } from '@angular/cdk/overlay';
 import { TestBed } from '@angular/core/testing';
 
@@ -6,6 +6,7 @@ import { expectNoA11yViolations } from '../../../testing/axe-a11y';
 import { DialogCloseDirective } from './dialog-close.directive';
 import { DialogContentComponent } from './dialog-content.component';
 import { DialogDescriptionDirective } from './dialog-description.directive';
+import { DialogHeaderComponent } from './dialog-header.component';
 import { DialogService } from './dialog.service';
 import { DialogTitleDirective } from './dialog-title.directive';
 import { DialogTriggerDirective } from './dialog-trigger.directive';
@@ -15,20 +16,48 @@ import { DialogTriggerDirective } from './dialog-trigger.directive';
     DialogCloseDirective,
     DialogContentComponent,
     DialogDescriptionDirective,
+    DialogHeaderComponent,
     DialogTitleDirective,
     DialogTriggerDirective,
   ],
   template: `
     <button type="button" [sanringDialogTrigger]="dialog">Open</button>
-    <button type="button" [sanringDialogTrigger]="dialog" [sanringDialogConfig]="{ disableClose: true }">
+    <button
+      type="button"
+      [sanringDialogTrigger]="dialog"
+      [sanringDialogConfig]="{ disableClose: true }"
+    >
       Open locked
     </button>
 
     <ng-template #dialog>
       <sanring-dialog-content class="custom-content-class">
-        <h2 sanringDialogTitle>Dialog title</h2>
-        <p sanringDialogDescription>Dialog description</p>
+        <sanring-dialog-header>
+          <h2 sanringDialogTitle>Dialog title</h2>
+          <p sanringDialogDescription>Dialog description</p>
+        </sanring-dialog-header>
         <button type="button" [sanringDialogClose]="'saved'">Save</button>
+        <button type="button" sanringDialogClose>Dismiss</button>
+      </sanring-dialog-content>
+    </ng-template>
+
+    <ng-template #untitledDialog>
+      <sanring-dialog-content ariaLabel="Account confirmation">
+        <button type="button" sanringDialogClose>Dismiss</button>
+      </sanring-dialog-content>
+    </ng-template>
+
+    <ng-template #configLabelDialog>
+      <sanring-dialog-content>
+        <button type="button" sanringDialogClose>Dismiss</button>
+      </sanring-dialog-content>
+    </ng-template>
+
+    <ng-template #dynamicDialog>
+      <sanring-dialog-content [ariaLabel]="dynamicLabel()">
+        @if (showDynamicTitle()) {
+          <h2 sanringDialogTitle>Dynamic title</h2>
+        }
         <button type="button" sanringDialogClose>Dismiss</button>
       </sanring-dialog-content>
     </ng-template>
@@ -36,6 +65,12 @@ import { DialogTriggerDirective } from './dialog-trigger.directive';
 })
 class DialogTestHost {
   @ViewChild('dialog') readonly dialog!: TemplateRef<unknown>;
+  @ViewChild('untitledDialog') readonly untitledDialog!: TemplateRef<unknown>;
+  @ViewChild('configLabelDialog') readonly configLabelDialog!: TemplateRef<unknown>;
+  @ViewChild('dynamicDialog') readonly dynamicDialog!: TemplateRef<unknown>;
+
+  readonly dynamicLabel = signal('Initial dynamic label');
+  readonly showDynamicTitle = signal(false);
 
   readonly dialogService = inject(DialogService);
 }
@@ -71,6 +106,68 @@ describe('DialogComponent', () => {
     expect(dialogContainer?.getAttribute('aria-labelledby')).toBe(title?.id);
     expect(dialogContainer?.getAttribute('aria-describedby')).toBe(description?.id);
     expect(dialogContainer?.getAttribute('aria-modal')).toBe('true');
+    expect(dialogContainer?.hasAttribute('aria-label')).toBe(false);
+  });
+
+  it('uses ariaLabel as an accessible-name fallback when no title is projected', () => {
+    const fixture = TestBed.createComponent(DialogTestHost);
+    fixture.detectChanges();
+
+    fixture.componentInstance.dialogService.open(fixture.componentInstance.untitledDialog);
+    fixture.detectChanges();
+
+    const dialogContainer = overlayContainer
+      .getContainerElement()
+      .querySelector('cdk-dialog-container');
+
+    expect(dialogContainer?.getAttribute('aria-label')).toBe('Account confirmation');
+    expect(dialogContainer?.hasAttribute('aria-labelledby')).toBe(false);
+  });
+
+  it('preserves an accessible name provided through DialogConfig', () => {
+    const fixture = TestBed.createComponent(DialogTestHost);
+    fixture.detectChanges();
+
+    fixture.componentInstance.dialogService.open(fixture.componentInstance.configLabelDialog, {
+      ariaLabel: 'Billing settings',
+    });
+    fixture.detectChanges();
+
+    const dialogContainer = overlayContainer
+      .getContainerElement()
+      .querySelector('cdk-dialog-container');
+
+    expect(dialogContainer?.getAttribute('aria-label')).toBe('Billing settings');
+  });
+
+  it('keeps the container ARIA relationship in sync with changing inputs and projected title', async () => {
+    const fixture = TestBed.createComponent(DialogTestHost);
+    fixture.detectChanges();
+
+    fixture.componentInstance.dialogService.open(fixture.componentInstance.dynamicDialog);
+    fixture.detectChanges();
+    const dialogContainer = overlayContainer
+      .getContainerElement()
+      .querySelector('cdk-dialog-container') as HTMLElement;
+    expect(dialogContainer.getAttribute('aria-label')).toBe('Initial dynamic label');
+
+    fixture.componentInstance.dynamicLabel.set('Updated dynamic label');
+    fixture.detectChanges();
+    await fixture.whenStable();
+    expect(dialogContainer.getAttribute('aria-label')).toBe('Updated dynamic label');
+
+    fixture.componentInstance.showDynamicTitle.set(true);
+    fixture.detectChanges();
+    await fixture.whenStable();
+    const title = overlayContainer.getContainerElement().querySelector('[sanringDialogTitle]');
+    expect(dialogContainer.getAttribute('aria-labelledby')).toBe(title?.id);
+    expect(dialogContainer.hasAttribute('aria-label')).toBe(false);
+
+    fixture.componentInstance.showDynamicTitle.set(false);
+    fixture.detectChanges();
+    await fixture.whenStable();
+    expect(dialogContainer.hasAttribute('aria-labelledby')).toBe(false);
+    expect(dialogContainer.getAttribute('aria-label')).toBe('Updated dynamic label');
   });
 
   it('passes trigger config to the CDK dialog', () => {
@@ -90,14 +187,18 @@ describe('DialogComponent', () => {
       ?.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape', bubbles: true }));
     fixture.detectChanges();
 
-    expect(overlayContainer.getContainerElement().querySelector('cdk-dialog-container')).not.toBeNull();
+    expect(
+      overlayContainer.getContainerElement().querySelector('cdk-dialog-container'),
+    ).not.toBeNull();
   });
 
   it('closes with the provided close result', () => {
     const fixture = TestBed.createComponent(DialogTestHost);
     fixture.detectChanges();
 
-    const ref = fixture.componentInstance.dialogService.open<string>(fixture.componentInstance.dialog);
+    const ref = fixture.componentInstance.dialogService.open<string>(
+      fixture.componentInstance.dialog,
+    );
     fixture.detectChanges();
 
     let result: string | undefined;
@@ -116,7 +217,9 @@ describe('DialogComponent', () => {
     const fixture = TestBed.createComponent(DialogTestHost);
     fixture.detectChanges();
 
-    const ref = fixture.componentInstance.dialogService.open<string>(fixture.componentInstance.dialog);
+    const ref = fixture.componentInstance.dialogService.open<string>(
+      fixture.componentInstance.dialog,
+    );
     fixture.detectChanges();
 
     let result: string | undefined = 'not-emitted' as unknown as string;

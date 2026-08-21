@@ -111,6 +111,24 @@ export const dialogPage = {
       descriptionKey: 'dialog.api.showClose.description',
     },
     {
+      property: 'ariaLabel',
+      type: 'string',
+      defaultValue: "'Dialog' fallback",
+      descriptionKey: 'dialog.api.ariaLabel.description',
+    },
+    {
+      property: 'ariaLabelledBy',
+      type: 'string',
+      defaultValue: 'undefined',
+      descriptionKey: 'dialog.api.ariaLabelledBy.description',
+    },
+    {
+      property: 'ariaDescribedBy',
+      type: 'string',
+      defaultValue: 'undefined',
+      descriptionKey: 'dialog.api.ariaDescribedBy.description',
+    },
+    {
       property: 'sanringDialogConfig',
       type: 'DialogConfig',
       defaultValue: 'undefined',

@@ -16,10 +16,6 @@ export class ComboboxSeparatorComponent {
   readonly class = input<string | undefined>();
 
   protected readonly separatorClass = computed(() =>
-    cn(
-      'block h-px bg-[var(--sanring-border)]',
-      'mx-1 my-1',
-      this.class(),
-    ),
+    cn('block h-px bg-[var(--sanring-border)]', 'mx-1 my-1', this.class()),
   );
 }

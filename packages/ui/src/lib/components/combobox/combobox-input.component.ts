@@ -1,4 +1,12 @@
-import { ChangeDetectionStrategy, Component, booleanAttribute, computed, ElementRef, inject, input } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  booleanAttribute,
+  computed,
+  ElementRef,
+  inject,
+  input,
+} from '@angular/core';
 import { LucideX } from '@lucide/angular';
 import { ComboboxComponent } from './combobox.component';
 import { ComboboxChipInputComponent } from './combobox-chip-input.component';
@@ -13,7 +21,7 @@ import { FIELD_SIZE_CLASS } from '../component-styles';
   template: `
     <input
       #inputEl
-      [id]="combobox.inputId"
+      [id]="combobox.inputId()"
       [class]="inputClass()"
       [placeholder]="placeholder()"
       [value]="combobox.inputValue()"
@@ -26,7 +34,7 @@ import { FIELD_SIZE_CLASS } from '../component-styles';
       autocomplete="off"
       role="combobox"
       [attr.aria-expanded]="combobox.isOpen()"
-      [attr.aria-controls]="combobox.listId"
+      [attr.aria-controls]="combobox.listId()"
       [attr.aria-activedescendant]="combobox.activeItemId()"
       [attr.aria-invalid]="combobox.errorState ? 'true' : null"
       [attr.aria-required]="combobox.fieldRequired ? 'true' : null"
@@ -34,12 +42,7 @@ import { FIELD_SIZE_CLASS } from '../component-styles';
       aria-autocomplete="list"
     />
     @if (showClearButton()) {
-      <button
-        type="button"
-        [class]="clearButtonClass()"
-        tabindex="-1"
-        (click)="onClear($event)"
-      >
+      <button type="button" [class]="clearButtonClass()" tabindex="-1" (click)="onClear($event)">
         <svg lucideX class="size-3.5"></svg>
         <span class="sr-only">Clear</span>
       </button>
@@ -114,7 +117,7 @@ export class ComboboxInputComponent {
     if (event.key === 'ArrowDown' || event.key === 'ArrowUp') {
       this.combobox.onKeydown(event);
     } else if (event.key === 'Escape') {
-      this.combobox.toggleOpen(false);
+      this.combobox.closeAndRestoreFocus();
     } else if (event.key === 'Enter') {
       this.combobox.onKeydown(event);
     }

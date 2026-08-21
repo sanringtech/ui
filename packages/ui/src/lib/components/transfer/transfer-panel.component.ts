@@ -74,6 +74,23 @@ export class TransferPanelComponent {
     return this.filteredItems().slice(start, start + size);
   });
 
+  private readonly activeKey = signal<string | null>(null);
+  readonly activeItemKey = computed(() => {
+    const items = this.items().filter((item) => !item.disabled && this.interactive());
+    const current = this.activeKey();
+    return items.some((item) => item.key === current) ? current : (items[0]?.key ?? null);
+  });
+
+  isActiveItem(key: string): boolean {
+    return this.activeItemKey() === key;
+  }
+
+  setActiveItem(key: string): void {
+    if (this.items().some((item) => item.key === key && !item.disabled)) {
+      this.activeKey.set(key);
+    }
+  }
+
   isSelected(key: string): boolean {
     return this.direction() === 'source'
       ? this.transfer.isSourceSelected(key)
@@ -87,13 +104,11 @@ export class TransferPanelComponent {
   }
 
   // 可被勾選的項目（非 disabled、對應 filteredItems 全集，跨分頁）
-  readonly selectableItems = computed(() =>
-    this.filteredItems().filter((item) => !item.disabled),
-  );
+  readonly selectableItems = computed(() => this.filteredItems().filter((item) => !item.disabled));
 
   // 目前已勾選（暫存中、尚未移動）的數量
-  readonly selectedCount = computed(() =>
-    this.selectableItems().filter((item) => this.isSelected(item.key)).length,
+  readonly selectedCount = computed(
+    () => this.selectableItems().filter((item) => this.isSelected(item.key)).length,
   );
 
   readonly allSelected = computed(() => {

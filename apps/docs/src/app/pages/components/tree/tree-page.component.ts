@@ -66,6 +66,7 @@ import { treePage, treePageExamples } from './tree.docs';
         <app-component-page-code-previewer [code]="examples.basic" language="angular-html">
           <div previewer class="w-[min(460px,100%)]">
             <sanring-tree
+              [ariaLabel]="i18n.t('tree.demo.filesLabel')"
               class="rounded-[var(--sanring-radius)] border border-[var(--docs-border)] bg-[var(--docs-surface)] p-2"
               [expandedValue]="expandedValue()"
               (expandedValueChange)="expandedValue.set($event)"
@@ -174,6 +175,7 @@ import { treePage, treePageExamples } from './tree.docs';
         <app-component-page-code-previewer [code]="examples.navigation" language="angular-html">
           <div previewer class="w-[min(360px,100%)]">
             <sanring-tree
+              [ariaLabel]="i18n.t('tree.demo.navigationLabel')"
               class="rounded-[var(--sanring-radius)] border border-[var(--docs-border)] bg-[var(--docs-surface)] p-2"
               [expandedValue]="navigationExpandedValue()"
               (expandedValueChange)="navigationExpandedValue.set($event)"
@@ -257,7 +259,7 @@ import { treePage, treePageExamples } from './tree.docs';
                       <span>Profile</span>
                     </button>
                   </sanring-tree-node>
-                  <sanring-tree-node value="settings/team" #teamNode="sanringTreeNode">
+                  <sanring-tree-node value="settings/team" disabled #teamNode="sanringTreeNode">
                     <button
                       type="button"
                       tabindex="-1"

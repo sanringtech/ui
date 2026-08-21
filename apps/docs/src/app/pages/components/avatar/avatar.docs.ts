@@ -134,6 +134,24 @@ export const avatarPage = {
       defaultValue: 'undefined',
       descriptionKey: 'avatar.api.count.description',
     },
+    {
+      property: 'clickable (AvatarGroupCountComponent)',
+      type: 'boolean',
+      defaultValue: 'false',
+      descriptionKey: 'avatar.api.clickable.description',
+    },
+    {
+      property: 'disabled (AvatarGroupCountComponent)',
+      type: 'boolean',
+      defaultValue: 'false',
+      descriptionKey: 'avatar.api.disabled.description',
+    },
+    {
+      property: '(clicked) (AvatarGroupCountComponent)',
+      type: 'void',
+      defaultValue: '—',
+      descriptionKey: 'avatar.api.clicked.description',
+    },
   ] satisfies readonly ComponentPageApiRow[],
 } as const satisfies ComponentPageDefinition;
 

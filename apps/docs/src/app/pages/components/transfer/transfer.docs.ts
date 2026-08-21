@@ -221,6 +221,8 @@ export const transferPage = {
   ] satisfies readonly ComponentPageApiRow[],
   keyboardRows: [
     { keys: 'Tab / Shift + Tab', descriptionKey: 'transfer.keyboard.tabShiftTab' },
+    { keys: '↓ / ↑', descriptionKey: 'transfer.keyboard.arrowKeys' },
+    { keys: 'Home / End', descriptionKey: 'transfer.keyboard.homeEnd' },
     { keys: 'Space', descriptionKey: 'transfer.keyboard.space' },
     { keys: 'Enter / Space', descriptionKey: 'transfer.keyboard.enterSpace' },
     { keys: 'Type', descriptionKey: 'transfer.keyboard.type' },

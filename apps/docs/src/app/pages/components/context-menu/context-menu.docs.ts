@@ -129,6 +129,7 @@ export const contextMenuPage = {
   keyboardRows: [
     { keys: '↑ / ↓', descriptionKey: 'contextMenu.keyboard.navigateItems' },
     { keys: 'Enter', descriptionKey: 'contextMenu.keyboard.enter' },
+    { keys: 'Tab / Shift+Tab', descriptionKey: 'contextMenu.keyboard.tab' },
     { keys: 'Escape', descriptionKey: 'contextMenu.keyboard.escape' },
   ] satisfies readonly ComponentPageKeyboardRow[],
 } as const satisfies ComponentPageDefinition;

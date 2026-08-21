@@ -13,7 +13,7 @@ import { LabelDirective } from './label.directive';
   standalone: true,
   imports: [SanringFieldComponent, LabelDirective, InputDirective],
   template: `
-    <sanring-field [floating]="floating">
+    <sanring-field id="account-field" [floating]="floating">
       <!-- sanringLabel 會在執行期把 for 動態綁到 sanring-field 對應 input 的 id，
            eslint 的靜態分析看不到這層 host binding，屬於已知的 false positive -->
       <!-- eslint-disable-next-line @angular-eslint/template/label-has-associated-control -->
@@ -32,6 +32,14 @@ describe('SanringFieldComponent projection', () => {
     fixture.detectChanges();
 
     expect(fixture.nativeElement).toBeTruthy();
+  });
+
+  it('allows consumers to provide a stable field id', () => {
+    const fixture = TestBed.createComponent(HostComponent);
+    fixture.detectChanges();
+
+    const fieldEl = fixture.nativeElement.querySelector('sanring-field') as HTMLElement;
+    expect(fieldEl.id).toBe('account-field');
   });
 
   it('merges host class with consumer class', () => {
@@ -75,7 +83,13 @@ describe('SanringFieldComponent projection', () => {
 
 @Component({
   standalone: true,
-  imports: [SanringFieldComponent, InputDirective, DescriptionDirective, ErrorMessageComponent, ReactiveFormsModule],
+  imports: [
+    SanringFieldComponent,
+    InputDirective,
+    DescriptionDirective,
+    ErrorMessageComponent,
+    ReactiveFormsModule,
+  ],
   template: `
     <sanring-field>
       <input sanringInput [formControl]="control" />
@@ -94,7 +108,9 @@ describe('SanringFieldComponent aria-describedby wiring', () => {
     fixture.detectChanges();
 
     const inputEl = fixture.nativeElement.querySelector('input') as HTMLInputElement;
-    const descriptionEl = fixture.nativeElement.querySelector('[sanringDescription]') as HTMLElement;
+    const descriptionEl = fixture.nativeElement.querySelector(
+      '[sanringDescription]',
+    ) as HTMLElement;
 
     // 尚未觸發驗證錯誤：只有 description 的 id 出現在 aria-describedby
     expect(inputEl.getAttribute('aria-describedby')).toBe(descriptionEl.id);
@@ -120,7 +136,9 @@ describe('SanringFieldComponent ambient background auto-detection', () => {
     await fixture.whenStable();
 
     const fieldEl = fixture.nativeElement.querySelector('sanring-field') as HTMLElement;
-    expect(fieldEl.style.getPropertyValue('--sanring-field-label-background')).toBe('rgb(24, 32, 33)');
+    expect(fieldEl.style.getPropertyValue('--sanring-field-label-background')).toBe(
+      'rgb(24, 32, 33)',
+    );
 
     fixture.nativeElement.remove();
   });

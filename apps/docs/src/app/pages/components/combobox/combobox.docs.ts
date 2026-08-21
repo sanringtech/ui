@@ -8,7 +8,13 @@ export const comboboxPage = {
   componentId: 'combobox',
   titleKey: 'component.combobox',
   descriptionKey: 'combobox.description',
-  registryDeps: ['collection-controller', 'collection-state', 'component-styles', 'cva-base', 'utils'],
+  registryDeps: [
+    'collection-controller',
+    'collection-state',
+    'component-styles',
+    'cva-base',
+    'utils',
+  ],
   ssrSafe: true,
   sections: [
     {
@@ -96,6 +102,18 @@ export const comboboxPage = {
       type: 'boolean',
       defaultValue: 'false',
       descriptionKey: 'combobox.api.disabled.description',
+    },
+    {
+      property: 'ComboboxComponent.inputId',
+      type: 'string',
+      defaultValue: 'auto-generated',
+      descriptionKey: 'combobox.api.inputId.description',
+    },
+    {
+      property: 'ComboboxComponent.listId',
+      type: 'string',
+      defaultValue: 'auto-generated',
+      descriptionKey: 'combobox.api.listId.description',
     },
     {
       property: 'ComboboxInputComponent.placeholder',

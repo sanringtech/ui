@@ -25,12 +25,18 @@ export const alertDialogTranslations = {
   'alertDialog.api.class.description': '與 `AlertDialogContent` 版面樣式合併的額外 class。',
   'alertDialog.api.showClose.description':
     '控制是否顯示內建關閉按鈕。預設為 `false`，與 Dialog 不同。',
+  'alertDialog.api.ariaLabel.description':
+    '未投影 sanringDialogTitle 時使用的 accessible name fallback；未指定時會使用「Alert dialog」。',
+  'alertDialog.api.ariaLabelledBy.description':
+    '標示 alert dialog 的外部元素 id，優先於投影的 title 與 ariaLabel。',
+  'alertDialog.api.ariaDescribedBy.description':
+    '描述 alert dialog 的外部元素 id，優先於 sanringDialogDescription。',
   'alertDialog.api.action.description':
     '點擊時傳給 `DialogRef.close()` 的選用結果值，預設為 `true`。',
   'alertDialog.api.cancel.description':
     '點擊時傳給 `DialogRef.close()` 的選用結果值，預設為 `false`。',
   'alertDialog.accessibility.description':
-    "dialog 容器會強制加上 role='alertdialog' 與 aria-modal='true'（由 AlertDialogService 鎖定，呼叫端無法覆寫）。背景點擊與 Escape 均停用，使用者必須明確點選確認或取消按鈕才能關閉。",
+    "dialog 容器會強制加上 role='alertdialog' 與 aria-modal='true'，並由 title、ariaLabel 或「Alert dialog」fallback 提供 accessible name。背景點擊與 Escape 均停用，使用者必須明確作出選擇。",
   'alertDialog.keyboard.description': 'Alert dialog 開啟期間，焦點被鎖定在面板內。',
   'alertDialog.keyboard.tab': '移動焦點到 dialog 內的下一個可聚焦元素。',
   'alertDialog.keyboard.shiftTab': '移動焦點到 dialog 內的上一個可聚焦元素。',

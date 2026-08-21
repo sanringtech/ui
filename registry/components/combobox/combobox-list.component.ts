@@ -9,7 +9,7 @@ import { ComboboxComponent } from './combobox.component';
   standalone: true,
   template: `<ng-content></ng-content>`,
   host: {
-    '[id]': 'combobox.listId',
+    '[id]': 'combobox.listId()',
     '[class]': 'listClass()',
     role: 'listbox',
     '[attr.aria-multiselectable]': "combobox.multiple() ? 'true' : null",

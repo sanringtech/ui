@@ -143,7 +143,7 @@ export const datePickerPage = {
     },
     {
       property: 'disabled',
-      type: 'DisabledInput | undefined',
+      type: 'DisabledInput | boolean | undefined',
       defaultValue: 'undefined',
       descriptionKey: 'datePicker.api.disabled.description',
     },
@@ -158,6 +158,18 @@ export const datePickerPage = {
       type: 'boolean',
       defaultValue: 'false',
       descriptionKey: 'datePicker.api.required.description',
+    },
+    {
+      property: 'ariaLabel',
+      type: 'string | undefined',
+      defaultValue: 'undefined',
+      descriptionKey: 'datePicker.api.ariaLabel.description',
+    },
+    {
+      property: 'ariaLabelledBy',
+      type: 'string | undefined',
+      defaultValue: 'undefined',
+      descriptionKey: 'datePicker.api.ariaLabelledBy.description',
     },
     {
       property: 'ariaDescribedBy',

@@ -35,6 +35,10 @@ export const comboboxTranslations = {
     '由 root 控制的選取值。單選使用 string，多選使用 string array。',
   'combobox.api.multiple.description': '允許選取多個項目，並可搭配 chips 呈現。',
   'combobox.api.disabled.description': '停用 combobox input，並阻止選取狀態變更。',
+  'combobox.api.inputId.description':
+    'input 或自訂 trigger 與其 label 共用的 ID；未提供時自動產生，也可覆寫以串接應用程式內的關聯。',
+  'combobox.api.listId.description':
+    '由 aria-controls 指向的 listbox ID；未提供時自動產生，也可覆寫以整合外部 ARIA 關聯。',
   'combobox.api.placeholder.description':
     'combobox input 的 placeholder 文字，正式應用中建議由 i18n 傳入。',
   'combobox.api.showClear.description':
@@ -53,5 +57,5 @@ export const comboboxTranslations = {
   'combobox.keyboard.selectItem': '選取聚焦選項並關閉清單。',
   'combobox.keyboard.escape': '關閉選項清單而不變更選取值。',
   'combobox.stateModel.description':
-    "CVA（ControlValueAccessor）。使用 [(ngModel)] 或 [formControl] 整合 Angular Forms。在 <sanring-combobox-input> 輸入的文字驅動篩選，父元件負責控制實際渲染的選項。多選時使用 <sanring-combobox-chips> 將已選值顯示為可移除的 chip。",
+    'CVA（ControlValueAccessor）。使用 [(ngModel)] 或 [formControl] 整合 Angular Forms。在 <sanring-combobox-input> 輸入的文字驅動篩選，父元件負責控制實際渲染的選項。多選時使用 <sanring-combobox-chips> 將已選值顯示為可移除的 chip。',
 } as const;

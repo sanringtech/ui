@@ -64,11 +64,16 @@ export const datePickerTranslations = {
     'Number of cells in the year-granularity sliding window.',
   'datePicker.api.gridColumns.description':
     'Grid column count used for arrow-key focus math; defaults to 3 for month/year and 4 for quarter.',
-  'datePicker.api.disabled.description': 'Date matcher(s) marking periods as unselectable.',
+  'datePicker.api.disabled.description':
+    'Pass a date matcher (or matcher array) to disable individual periods, or a boolean to disable the entire picker without clearing its value.',
   'datePicker.api.allowDeselect.description':
     'Whether re-picking a selected value in single mode clears it.',
   'datePicker.api.required.description':
     'Marks the picker as required for field integration and aria-required.',
+  'datePicker.api.ariaLabel.description':
+    'Accessible name for the picker host when no visible label names it.',
+  'datePicker.api.ariaLabelledBy.description':
+    'ID of visible text that provides the accessible name for the picker host.',
   'datePicker.api.ariaDescribedBy.description':
     'ID of helper text that describes the picker; merged with Field-provided description ids.',
   'datePicker.api.rangePeriodCountLimit.description':
@@ -91,12 +96,16 @@ export const datePickerTranslations = {
   'datePicker.api.removeDate.description':
     'Removes a single date from the selection (multi mode only).',
   'datePicker.api.focus.description': 'Moves focus to the date-picker host element.',
-  'datePicker.accessibility.description': "role='grid' on the calendar panel, aria-label on the grid from the month/year header, role='gridcell' on each cell. The host element receives aria-required, aria-invalid, and aria-describedby, which auto-wire to the surrounding sanring-field.",
-  'datePicker.keyboard.description': 'Calendar grid navigation is handled by @sanring/date-picker-core.',
+  'datePicker.accessibility.description':
+    "The host group accepts aria-label or aria-labelledby and receives aria-invalid, aria-disabled, and aria-describedby. The calendar panel has role='grid' with an aria-label derived from its header; each role='gridcell' receives its selection, disabled, and required states. Field descriptions are wired automatically.",
+  'datePicker.keyboard.description':
+    'Calendar grid navigation is handled by @sanring/date-picker-core.',
   'datePicker.keyboard.arrowKeys': 'Navigate between cells in the calendar grid.',
-  'datePicker.keyboard.pageUpDown': 'Previous / next page (month, quarter, or year depending on granularity).',
+  'datePicker.keyboard.pageUpDown':
+    'Previous / next page (month, quarter, or year depending on granularity).',
   'datePicker.keyboard.homeEnd': 'Jump to the first / last cell in the current view.',
   'datePicker.keyboard.enter': 'Select the focused cell.',
   'datePicker.keyboard.escape': 'Close the date-picker popover without committing a selection.',
-  'datePicker.stateModel.description': 'Implements ControlValueAccessor. Use [(ngModel)] or formControl. Value type: DatePickerValue (single date, a range pair, or an array of dates depending on mode). mode and granularity can be changed at runtime.',
+  'datePicker.stateModel.description':
+    'Implements ControlValueAccessor. Use [(ngModel)] or formControl. Value type: DatePickerValue (single date, a range pair, or an array of dates depending on mode). mode and granularity can be changed at runtime.',
 } as const;

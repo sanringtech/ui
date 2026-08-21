@@ -1,10 +1,7 @@
 import {
   ChangeDetectionStrategy,
   Component,
-  DestroyRef,
   ElementRef,
-  Injector,
-  OnInit,
   booleanAttribute,
   computed,
   effect,
@@ -12,11 +9,9 @@ import {
   inject,
   input,
   output,
-  signal,
 } from '@angular/core';
 import { _IdGenerator } from '@angular/cdk/a11y';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { ControlValueAccessor, NG_VALUE_ACCESSOR, NgControl, Validators } from '@angular/forms';
+import { NG_VALUE_ACCESSOR } from '@angular/forms';
 import {
   CALENDAR_LOCALE,
   CALENDAR_QUARTER_STARTS_ON,
@@ -30,10 +25,10 @@ import {
   QuarterStartMonth,
   RangePeriodCountLimit,
 } from '@sanring/date-picker-core';
-import { Observable, Subject } from 'rxjs';
 import { CalendarHeaderComponent } from '../calendar/calendar-header.component';
 import { cn } from '../../utils';
-import { FieldType, SanringFieldControl, SANRING_FIELD_CONTROL } from '../field/field.type';
+import { FieldType, SANRING_FIELD_CONTROL } from '../field/field.type';
+import { SanringCvaBase, SanringFieldControlAdapter } from '../shared/cva-base';
 import { DatePickerCellDirective } from './date-picker-cell.directive';
 import { DatePickerSize, DatePickerValue } from './date-picker.type';
 
@@ -42,6 +37,13 @@ const DEFAULT_GRID_COLUMNS: Record<PickerGranularity, number> = {
   quarter: 4,
   year: 3,
 };
+
+type DatePickerDisabled = DisabledInput | boolean | undefined;
+type DatePickerDisabledBinding = DatePickerDisabled | string;
+
+function transformDatePickerDisabled(value: DatePickerDisabledBinding): DatePickerDisabled {
+  return typeof value === 'string' ? booleanAttribute(value) : value;
+}
 
 function quarterIndexOf(date: Date, quarterStartMonth: QuarterStartMonth): number {
   return Math.floor(((date.getMonth() - quarterStartMonth + 12) % 12) / 3);
@@ -66,12 +68,13 @@ function quarterIndexOf(date: Date, quarterStartMonth: QuarterStartMonth): numbe
     // small adapter class translates between the two instead of implementing it directly.
     {
       provide: SANRING_FIELD_CONTROL,
-      useFactory: (host: DatePickerComponent) => new DatePickerFieldControlAdapter(host),
+      useFactory: (host: DatePickerComponent) =>
+        new SanringFieldControlAdapter(FieldType.datePicker, host),
       deps: [forwardRef(() => DatePickerComponent)],
     },
   ],
   host: {
-    tabindex: '0',
+    '[attr.tabindex]': 'isDisabled() ? "-1" : "0"',
     // role="group": a bare div (role="generic") doesn't support aria-invalid/
     // aria-describedby, so this still needs a real role — "group" is a plain,
     // unopinionated container that both attributes are valid on (verified
@@ -88,8 +91,12 @@ function quarterIndexOf(date: Date, quarterStartMonth: QuarterStartMonth): numbe
     role: 'group',
     '[id]': 'id()',
     '[class]': 'datePickerClass()',
+    '[attr.aria-label]': 'ariaLabel()',
+    '[attr.aria-labelledby]': 'ariaLabelledBy()',
+    '[attr.aria-disabled]': 'isDisabled() ? "true" : null',
     '[attr.aria-invalid]': "errorState ? 'true' : null",
     '[attr.aria-describedby]': 'computedAriaDescribedBy()',
+    '[attr.inert]': 'isDisabled() ? "" : null',
     '(focus)': 'onFocus()',
     '(blur)': 'onBlur()',
   },
@@ -98,8 +105,8 @@ function quarterIndexOf(date: Date, quarterStartMonth: QuarterStartMonth): numbe
       [label]="headerLabel()"
       [prevMonthLabel]="prevYearLabel()"
       [nextMonthLabel]="nextYearLabel()"
-      (prev)="engine.prevYear()"
-      (next)="engine.nextYear()"
+      (prev)="navigateYear(-1)"
+      (next)="navigateYear(1)"
     />
 
     <div
@@ -130,10 +137,11 @@ function quarterIndexOf(date: Date, quarterStartMonth: QuarterStartMonth): numbe
     </div>
   `,
 })
-export class DatePickerComponent implements ControlValueAccessor, OnInit {
+export class DatePickerComponent extends SanringCvaBase<DatePickerValue> {
   protected readonly engine = inject(GranularityPickerEngine);
   private readonly injectedLocale = inject(CALENDAR_LOCALE, { optional: true });
   private readonly injectedQuarterStartsOn = inject(CALENDAR_QUARTER_STARTS_ON, { optional: true });
+  private readonly elementRef = inject(ElementRef<HTMLElement>);
 
   readonly class = input<string | undefined>();
   readonly id = input(inject(_IdGenerator).getId('sanring-date-picker-', true));
@@ -149,9 +157,14 @@ export class DatePickerComponent implements ControlValueAccessor, OnInit {
   ]);
   readonly yearsToDisplay = input<number>(12);
   readonly gridColumns = input<number | undefined>(undefined);
-  readonly disabled = input<DisabledInput | undefined>(undefined);
+  /** A matcher disables individual periods; a boolean disables the entire control. */
+  readonly disabled = input<DatePickerDisabled, DatePickerDisabledBinding>(undefined, {
+    transform: transformDatePickerDisabled,
+  });
   readonly allowDeselect = input<boolean>(true);
   readonly required = input(false, { transform: booleanAttribute });
+  readonly ariaLabel = input<string | undefined>();
+  readonly ariaLabelledBy = input<string | undefined>();
   readonly ariaDescribedBy = input<string | undefined>();
   readonly rangePeriodCountLimit = input<RangePeriodCountLimit | undefined>(undefined);
   readonly prevYearLabel = input('上一年');
@@ -164,6 +177,7 @@ export class DatePickerComponent implements ControlValueAccessor, OnInit {
   protected readonly datePickerClass = computed(() =>
     cn(
       'block outline-none focus-visible:ring-2 focus-visible:ring-[var(--sanring-border-strong)]',
+      this.isDisabled() && 'cursor-not-allowed opacity-50',
       this.class(),
     ),
   );
@@ -189,41 +203,21 @@ export class DatePickerComponent implements ControlValueAccessor, OnInit {
     return rows;
   });
 
-  // ==========================================
-  // Field 整合：id/disabled/required 會跟上面同名的 @Input 撞名，走下面的 fieldXxx getter，
-  // 由 DatePickerFieldControlAdapter 轉接成 SanringFieldControl 介面（見檔案底部）。
-  // ==========================================
-  focused = false;
-  ngControl: NgControl | null = null;
+  readonly isDisabled = computed(() => this.disabledState() || this.disabled() === true);
 
-  private readonly injector = inject(Injector);
-  private readonly destroyRef = inject(DestroyRef);
-  private readonly elementRef = inject(ElementRef<HTMLElement>);
-
-  private readonly stateChangesSubject = new Subject<void>();
-  readonly stateChanges = this.stateChangesSubject.asObservable();
-
-  private readonly stateVersion = signal(0);
-  private readonly fieldDescribedByIds = signal<string[]>([]);
-  private readonly disabledState = signal(false);
-
-  protected readonly computedAriaDescribedBy = computed(() => {
-    const ids = [this.ariaDescribedBy(), ...this.fieldDescribedByIds()].filter(
-      (v): v is string => !!v,
-    );
-    return ids.length ? ids.join(' ') : undefined;
+  // Keep the established per-period matcher API compatible while also accepting the natural
+  // `[disabled]="true"` whole-control form. A boolean is consumed at the control layer; matcher
+  // values continue to flow to date-picker-core unchanged. Whole-control disabled deliberately
+  // does not become an "all dates" matcher: date-picker-core removes selections that newly
+  // violate a matcher, whereas disabling a form control must preserve its value.
+  private readonly effectiveDisabled = computed<DisabledInput | undefined>(() => {
+    const disabled = this.disabled();
+    return typeof disabled === 'boolean' ? undefined : disabled;
   });
 
-  // 表單層級的「整個控制項停用」跟既有的 disabled（哪些週期不可選）是兩件事——停用時額外疊一個
-  // 永遠回傳 true 的 matcher，讓所有 cell 都不可選，而不是動到使用者自己傳入的 disabled matcher。
-  private readonly effectiveDisabled = computed<DisabledInput | undefined>(() =>
-    this.disabledState() ? () => true : this.disabled(),
+  protected readonly computedAriaDescribedBy = this.makeComputedAriaDescribedBy(
+    this.ariaDescribedBy,
   );
-
-  get errorState(): boolean {
-    this.stateVersion();
-    return !!(this.ngControl?.invalid && this.ngControl?.touched);
-  }
 
   get fieldValue(): DatePickerValue {
     switch (this.mode()) {
@@ -248,18 +242,15 @@ export class DatePickerComponent implements ControlValueAccessor, OnInit {
   }
 
   get fieldDisabled(): boolean {
-    return this.disabledState();
+    return this.isDisabled();
   }
 
-  get fieldRequired(): boolean {
-    this.stateVersion();
-    return this.required() || !!this.ngControl?.control?.hasValidator(Validators.required);
+  protected override hasInputRequired(): boolean {
+    return this.required();
   }
-
-  private onChange: (value: DatePickerValue) => void = () => {};
-  private onTouched: () => void = () => {};
 
   constructor() {
+    super();
     effect(() => this.engine.setSelectionGranularity(this.granularity()));
     effect(() => this.engine.setSelectionMode(this.mode()));
     effect(() => this.engine.setYearsToDisplay(this.yearsToDisplay()));
@@ -291,17 +282,6 @@ export class DatePickerComponent implements ControlValueAccessor, OnInit {
         this.emitStateChanges();
       }
     });
-
-    this.destroyRef.onDestroy(() => this.stateChangesSubject.complete());
-  }
-
-  ngOnInit(): void {
-    // 跟 calendar/checkbox/select 一樣的原因：constructor 階段 self-inject NgControl 會跟
-    // NgModel 搭配時觸發 NG0200 循環依賴，延後到 ngOnInit 才拿。
-    this.ngControl = this.injector.get(NgControl, null, { optional: true, self: true });
-    this.ngControl?.control?.events
-      ?.pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe(() => this.emitStateChanges());
   }
 
   readonly isDraftActive = computed(() => this.engine.isDraftActive());
@@ -342,26 +322,17 @@ export class DatePickerComponent implements ControlValueAccessor, OnInit {
     }
   }
 
-  protected onFocus(): void {
-    this.focused = true;
-    this.emitStateChanges();
-  }
-
-  protected onBlur(): void {
-    this.focused = false;
-    this.onTouched();
-    this.emitStateChanges();
+  protected navigateYear(delta: -1 | 1): void {
+    if (this.isDisabled()) return;
+    if (delta === -1) this.engine.prevYear();
+    else this.engine.nextYear();
   }
 
   focus(options?: FocusOptions): void {
     this.elementRef.nativeElement.focus(options);
   }
 
-  setDescribedByIds(ids: string[]): void {
-    this.fieldDescribedByIds.set(ids);
-  }
-
-  writeValue(value: DatePickerValue): void {
+  override writeValue(value: DatePickerValue): void {
     switch (this.mode()) {
       case 'range':
         if (value && typeof value === 'object' && 'start' in value) {
@@ -377,73 +348,5 @@ export class DatePickerComponent implements ControlValueAccessor, OnInit {
         if (value instanceof Date) this.engine.setSelectedDate(value);
         else this.engine.clearSelection();
     }
-  }
-
-  registerOnChange(fn: (value: DatePickerValue) => void): void {
-    this.onChange = fn;
-  }
-
-  registerOnTouched(fn: () => void): void {
-    this.onTouched = fn;
-  }
-
-  setDisabledState(isDisabled: boolean): void {
-    this.disabledState.set(isDisabled);
-    this.emitStateChanges();
-  }
-
-  private emitStateChanges(): void {
-    this.stateVersion.update((v) => v + 1);
-    this.stateChangesSubject.next();
-  }
-}
-
-class DatePickerFieldControlAdapter implements SanringFieldControl<DatePickerValue> {
-  readonly controlType = FieldType.datePicker;
-
-  constructor(private readonly host: DatePickerComponent) {}
-
-  get id(): string {
-    return this.host.id();
-  }
-
-  get value(): DatePickerValue {
-    return this.host.fieldValue;
-  }
-
-  get empty(): boolean {
-    return this.host.fieldEmpty;
-  }
-
-  get focused(): boolean {
-    return this.host.focused;
-  }
-
-  get errorState(): boolean {
-    return this.host.errorState;
-  }
-
-  get disabled(): boolean {
-    return this.host.fieldDisabled;
-  }
-
-  get required(): boolean {
-    return this.host.fieldRequired;
-  }
-
-  get ngControl(): NgControl | null {
-    return this.host.ngControl;
-  }
-
-  get stateChanges(): Observable<void> {
-    return this.host.stateChanges;
-  }
-
-  focus(options?: FocusOptions): void {
-    this.host.focus(options);
-  }
-
-  setDescribedByIds(ids: string[]): void {
-    this.host.setDescribedByIds(ids);
   }
 }

@@ -10,7 +10,5 @@ import { cn } from '../shared/utils';
 })
 export class SheetHeaderComponent {
   readonly class = input<string | undefined>();
-  protected readonly hostClass = computed(() =>
-    cn('flex flex-col gap-1.5', this.class()),
-  );
+  protected readonly hostClass = computed(() => cn('flex flex-col gap-1.5', this.class()));
 }

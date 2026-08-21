@@ -67,12 +67,16 @@ describe('SelectComponent + SanringFieldComponent integration', () => {
     fixture.detectChanges();
 
     expect(errorEl.classList.contains('hidden')).toBe(false);
-    const trigger = fixture.nativeElement.querySelector('button[sanringSelectTrigger]') as HTMLElement;
+    const trigger = fixture.nativeElement.querySelector(
+      'button[sanringSelectTrigger]',
+    ) as HTMLElement;
     expect(trigger.getAttribute('aria-invalid')).toBe('true');
 
     trigger.click();
     fixture.detectChanges();
-    const option = overlayContainer.getContainerElement().querySelector('[role="option"]') as HTMLElement;
+    const option = overlayContainer
+      .getContainerElement()
+      .querySelector('[role="option"]') as HTMLElement;
     option.click();
     fixture.detectChanges();
 

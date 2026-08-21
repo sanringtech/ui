@@ -33,7 +33,9 @@ export class TransferComponent {
     this.items().filter((item) => this.selectedKeys().includes(item.key)),
   );
 
-  private readonly itemsByKey = computed(() => new Map(this.items().map((item) => [item.key, item])));
+  private readonly itemsByKey = computed(
+    () => new Map(this.items().map((item) => [item.key, item])),
+  );
 
   isSourceSelected(key: string): boolean {
     return this.sourceSelectedKeys().includes(key);

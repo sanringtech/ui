@@ -24,7 +24,7 @@ const RADIO_ITEM_INDICATOR_ICON_CLASS = cn(RADIO_INDICATOR_ICON_CLASS, 'animate-
     '[attr.aria-disabled]': 'disabled() ? "true" : null',
     '[attr.data-state]': 'isChecked() ? "checked" : "unchecked"',
     '[attr.data-disabled]': 'disabled() ? "" : null',
-    '[attr.tabindex]': 'disabled() ? "-1" : "0"',
+    tabindex: '-1',
     '[class]': 'itemClass()',
     '(click)': 'select()',
     '(keydown.enter)': 'handleKeyActivation($event)',

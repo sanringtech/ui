@@ -65,6 +65,12 @@ export const breadcrumbPage = {
   ],
   apiRows: [
     {
+      property: 'ariaLabel (BreadcrumbComponent)',
+      type: 'string',
+      defaultValue: "'breadcrumb'",
+      descriptionKey: 'breadcrumb.api.ariaLabel.description',
+    },
+    {
       property: 'type (BreadcrumbDividerComponent)',
       type: "'chevron' | 'dot'",
       defaultValue: "'chevron'",
@@ -86,7 +92,7 @@ export const breadcrumbPage = {
 } as const satisfies ComponentPageDefinition;
 
 export const breadcrumbPageExamples = {
-  basic: `<sanring-breadcrumb>
+  basic: `<sanring-breadcrumb ariaLabel="Page path">
   <sanring-breadcrumb-list>
     <sanring-breadcrumb-item>
       <sanring-breadcrumb-link routerLink="/">Home</sanring-breadcrumb-link>
@@ -113,7 +119,7 @@ import { SANRING_BREADCRUMB_IMPORTS } from './components/ui/breadcrumb';
   imports: [SANRING_BREADCRUMB_IMPORTS],
 })
 export class ExampleComponent {}`,
-  usageMain: `<sanring-breadcrumb>
+  usageMain: `<sanring-breadcrumb ariaLabel="Page path">
   <sanring-breadcrumb-list>
     <sanring-breadcrumb-item>
       <sanring-breadcrumb-link routerLink="/">Home</sanring-breadcrumb-link>

@@ -47,13 +47,20 @@ export const sidebarTranslations = {
   'sidebar.api.collapsible.description':
     '定義 closed 行為：none 保持開啟、offcanvas 收合到零寬度、icon 保留壓縮 icon 欄。',
   'sidebar.api.class.description': '合併到 sidebar 或 slot host element 的額外 class。',
+  'sidebar.api.role.description':
+    'Sidebar root 的 landmark role；整個區域都是導覽時可改用 navigation。',
+  'sidebar.api.ariaLabel.description':
+    '未設定 ariaLabelledBy 時，sidebar landmark 使用的 accessible name。',
+  'sidebar.api.ariaLabelledBy.description':
+    '標示 sidebar landmark 的外部元素 id，優先於 ariaLabel。',
   'sidebar.api.active.description':
     '將 sanringSidebarMenuButton 標記為目前頁面，並套用 active 樣式。',
   'sidebar.api.disabled.description':
     '停用 sanringSidebarMenuButton，阻止點擊啟用並加上 disabled 語意。',
   'sidebar.accessibility.description':
-    'Sidebar 呈現的是持續存在的 layout 內容。它不會 trap focus、隱藏背景內容，也不會像 dialog 一樣運作。需要手機版 modal overlay 時，請搭配 Sheet 使用。',
-  'sidebar.keyboard.description': '鍵盤行為跟套用 directive 的原生元素一致。',
+    'Sidebar 預設是具名的 complementary landmark。Menu button 與 action directive 會保留原生 button/link 行為；套在非原生元素時則補上 button role、焦點與鍵盤操作。需要手機版 modal overlay 時請改用 Sheet。',
+  'sidebar.keyboard.description':
+    '原生控制項保留瀏覽器行為；非原生 menu control 支援按鈕鍵盤操作。',
   'sidebar.keyboard.tab': '依照文件順序移動到可 focus 的控制項與連結。',
   'sidebar.keyboard.enterSpace': '啟用 button。anchor 依照瀏覽器原生行為以 Enter 啟用。',
   'sidebar.stateModel.description':

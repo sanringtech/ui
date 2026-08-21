@@ -6,6 +6,8 @@ import { TestBed } from '@angular/core/testing';
 import { expectNoA11yViolations } from '../../../testing/axe-a11y';
 import { SheetCloseDirective } from './sheet-close.directive';
 import { SheetContentComponent } from './sheet-content.component';
+import { SheetDescriptionComponent } from './sheet-description.component';
+import { SheetHeaderComponent } from './sheet-header.component';
 import { SheetTitleComponent } from './sheet-title.component';
 import { SheetTriggerDirective } from './sheet-trigger.directive';
 import { SheetComponent } from './sheet.component';
@@ -18,6 +20,8 @@ function wait(ms: number): Promise<void> {
   imports: [
     SheetCloseDirective,
     SheetContentComponent,
+    SheetDescriptionComponent,
+    SheetHeaderComponent,
     SheetTitleComponent,
     SheetTriggerDirective,
     SheetComponent,
@@ -26,13 +30,29 @@ function wait(ms: number): Promise<void> {
     <sanring-sheet>
       <button type="button" sanringSheetTrigger>Open</button>
       <sanring-sheet-content class="custom-sheet-class">
-        <sanring-sheet-title>Settings</sanring-sheet-title>
+        <sanring-sheet-header>
+          <sanring-sheet-title>Settings</sanring-sheet-title>
+          <sanring-sheet-description>Update panel settings.</sanring-sheet-description>
+        </sanring-sheet-header>
         <button type="button" sanringSheetClose>Close</button>
       </sanring-sheet-content>
     </sanring-sheet>
   `,
 })
 class SheetTestHost {}
+
+@Component({
+  imports: [SheetContentComponent, SheetTriggerDirective, SheetComponent],
+  template: `
+    <sanring-sheet>
+      <button type="button" sanringSheetTrigger>Open fallback</button>
+      <sanring-sheet-content ariaLabel="Filters" ariaDescribedBy="external-help">
+        <p id="external-help">Choose filters</p>
+      </sanring-sheet-content>
+    </sanring-sheet>
+  `,
+})
+class UntitledSheetTestHost {}
 
 describe('SheetComponent', () => {
   let overlayContainer: OverlayContainer;
@@ -58,11 +78,13 @@ describe('SheetComponent', () => {
     expect(overlayContainer.getContainerElement().querySelector('[role="dialog"]')).toBeNull();
   });
 
-  it('opens on trigger click, linking the panel to its title and locking scroll', () => {
+  it('opens on trigger click, focusing and linking the panel to its title', async () => {
     const fixture = TestBed.createComponent(SheetTestHost);
     fixture.detectChanges();
 
-    const trigger = fixture.nativeElement.querySelector('button[sanringSheetTrigger]') as HTMLElement;
+    const trigger = fixture.nativeElement.querySelector(
+      'button[sanringSheetTrigger]',
+    ) as HTMLElement;
     trigger.click();
     fixture.detectChanges();
 
@@ -71,11 +93,33 @@ describe('SheetComponent', () => {
     const overlayElement = overlayContainer.getContainerElement();
     const panel = overlayElement.querySelector('[role="dialog"]') as HTMLElement;
     const title = overlayElement.querySelector('sanring-sheet-title') as HTMLElement;
+    const description = overlayElement.querySelector('sanring-sheet-description') as HTMLElement;
+
+    await fixture.whenStable();
 
     expect(panel).toBeTruthy();
+    expect(document.activeElement).toBe(panel);
     expect(panel.getAttribute('aria-modal')).toBe('true');
     expect(panel.getAttribute('aria-labelledby')).toBe(title.id);
+    expect(panel.hasAttribute('aria-label')).toBe(false);
+    expect(panel.getAttribute('aria-describedby')).toBe(description.id);
     expect(document.body.style.overflow).toBe('hidden');
+  });
+
+  it('uses explicit aria inputs when no title is projected', () => {
+    const fixture = TestBed.createComponent(UntitledSheetTestHost);
+    fixture.detectChanges();
+
+    (fixture.nativeElement.querySelector('button') as HTMLElement).click();
+    fixture.detectChanges();
+
+    const panel = overlayContainer
+      .getContainerElement()
+      .querySelector('[role="dialog"]') as HTMLElement;
+
+    expect(panel.getAttribute('aria-label')).toBe('Filters');
+    expect(panel.hasAttribute('aria-labelledby')).toBe(false);
+    expect(panel.getAttribute('aria-describedby')).toBe('external-help');
   });
 
   it('opens without touching document.activeElement/body.children when Platform reports non-browser (SSR safety)', () => {
@@ -87,7 +131,9 @@ describe('SheetComponent', () => {
     const fixture = TestBed.createComponent(SheetTestHost);
     fixture.detectChanges();
 
-    const trigger = fixture.nativeElement.querySelector('button[sanringSheetTrigger]') as HTMLElement;
+    const trigger = fixture.nativeElement.querySelector(
+      'button[sanringSheetTrigger]',
+    ) as HTMLElement;
     expect(() => {
       trigger.click();
       fixture.detectChanges();
@@ -106,7 +152,9 @@ describe('SheetComponent', () => {
     const fixture = TestBed.createComponent(SheetTestHost);
     fixture.detectChanges();
 
-    const trigger = fixture.nativeElement.querySelector('button[sanringSheetTrigger]') as HTMLElement;
+    const trigger = fixture.nativeElement.querySelector(
+      'button[sanringSheetTrigger]',
+    ) as HTMLElement;
     trigger.click();
     fixture.detectChanges();
 
@@ -122,7 +170,9 @@ describe('SheetComponent', () => {
       const fixture = TestBed.createComponent(SheetTestHost);
       fixture.detectChanges();
 
-      const trigger = fixture.nativeElement.querySelector('button[sanringSheetTrigger]') as HTMLElement;
+      const trigger = fixture.nativeElement.querySelector(
+        'button[sanringSheetTrigger]',
+      ) as HTMLElement;
       trigger.click();
       fixture.detectChanges();
 
@@ -146,7 +196,9 @@ describe('SheetComponent', () => {
     const fixture = TestBed.createComponent(SheetTestHost);
     fixture.detectChanges();
 
-    const trigger = fixture.nativeElement.querySelector('button[sanringSheetTrigger]') as HTMLElement;
+    const trigger = fixture.nativeElement.querySelector(
+      'button[sanringSheetTrigger]',
+    ) as HTMLElement;
     trigger.focus();
     trigger.click();
     fixture.detectChanges();
@@ -168,7 +220,9 @@ describe('SheetComponent', () => {
     const fixture = TestBed.createComponent(SheetTestHost);
     fixture.detectChanges();
 
-    const trigger = fixture.nativeElement.querySelector('button[sanringSheetTrigger]') as HTMLElement;
+    const trigger = fixture.nativeElement.querySelector(
+      'button[sanringSheetTrigger]',
+    ) as HTMLElement;
     trigger.click();
     fixture.detectChanges();
 
@@ -194,7 +248,9 @@ describe('SheetComponent', () => {
     const fixture = TestBed.createComponent(SheetTestHost);
     fixture.detectChanges();
 
-    const trigger = fixture.nativeElement.querySelector('button[sanringSheetTrigger]') as HTMLElement;
+    const trigger = fixture.nativeElement.querySelector(
+      'button[sanringSheetTrigger]',
+    ) as HTMLElement;
     trigger.click();
     fixture.detectChanges();
 
@@ -217,7 +273,9 @@ describe('SheetComponent', () => {
     const fixture = TestBed.createComponent(SheetTestHost);
     fixture.detectChanges();
 
-    const trigger = fixture.nativeElement.querySelector('button[sanringSheetTrigger]') as HTMLElement;
+    const trigger = fixture.nativeElement.querySelector(
+      'button[sanringSheetTrigger]',
+    ) as HTMLElement;
     trigger.click();
     fixture.detectChanges();
 
@@ -231,7 +289,9 @@ describe('SheetComponent', () => {
     const fixture = TestBed.createComponent(SheetTestHost);
     fixture.detectChanges();
 
-    const trigger = fixture.nativeElement.querySelector('button[sanringSheetTrigger]') as HTMLElement;
+    const trigger = fixture.nativeElement.querySelector(
+      'button[sanringSheetTrigger]',
+    ) as HTMLElement;
     trigger.click();
     fixture.detectChanges();
 
@@ -250,7 +310,9 @@ describe('SheetComponent', () => {
     fixture.detectChanges();
 
     try {
-      const trigger = fixture.nativeElement.querySelector('button[sanringSheetTrigger]') as HTMLElement;
+      const trigger = fixture.nativeElement.querySelector(
+        'button[sanringSheetTrigger]',
+      ) as HTMLElement;
       trigger.click();
       fixture.detectChanges();
 
