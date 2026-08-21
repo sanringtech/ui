@@ -8,6 +8,7 @@ import {
   fetchRegistry,
   installCommand,
   installCommandParts,
+  RegistryFetchError,
   validateRegistry,
 } from './registry.js';
 
@@ -149,13 +150,10 @@ describe('fetchRegistry source resolution', () => {
     expect(fetchMock).not.toHaveBeenCalled();
   });
 
-  it('exits when the explicit local directory has no registry.json', async () => {
-    const exitSpy = vi.spyOn(process, 'exit').mockImplementation((() => {
-      throw new Error('process.exit called');
-    }) as never);
+  it('rejects with a RegistryFetchError when the explicit local directory has no registry.json', async () => {
     const dir = mkdtempSync(join(tmpdir(), 'sanring-cli-test-'));
-    await expect(fetchRegistry(dir)).rejects.toThrow('process.exit called');
-    exitSpy.mockRestore();
+    await expect(fetchRegistry(dir)).rejects.toThrow(RegistryFetchError);
+    await expect(fetchRegistry(dir)).rejects.toThrow(/Cannot read registry at/);
     rmSync(dir, { recursive: true, force: true });
   });
 
@@ -173,29 +171,25 @@ describe('fetchRegistry source resolution', () => {
     expect(fetchMock).toHaveBeenCalledWith('https://example.com/registry/registry.json');
   });
 
-  it('exits when the explicit URL request fails', async () => {
+  it('rejects with a RegistryFetchError when the explicit URL request fails', async () => {
     fetchMock.mockResolvedValueOnce({ ok: false, status: 404 });
-    const exitSpy = vi.spyOn(process, 'exit').mockImplementation((() => {
-      throw new Error('process.exit called');
-    }) as never);
     await expect(fetchRegistry('https://example.com/registry/registry.json')).rejects.toThrow(
-      'process.exit called',
+      RegistryFetchError,
     );
-    exitSpy.mockRestore();
+    fetchMock.mockResolvedValueOnce({ ok: false, status: 404 });
+    await expect(fetchRegistry('https://example.com/registry/registry.json')).rejects.toThrow(
+      /Cannot fetch registry/,
+    );
   });
 
-  it('exits when the explicit URL returns an invalid registry', async () => {
+  it('rejects with a RegistryFetchError when the explicit URL returns an invalid registry', async () => {
     fetchMock.mockResolvedValueOnce({
       ok: true,
       json: async () => ({ name: 'bad', shared: [], components: [{ name: 'button' }] }),
     });
-    const exitSpy = vi.spyOn(process, 'exit').mockImplementation((() => {
-      throw new Error('process.exit called');
-    }) as never);
     await expect(fetchRegistry('https://example.com/registry/registry.json')).rejects.toThrow(
-      'process.exit called',
+      RegistryFetchError,
     );
-    exitSpy.mockRestore();
   });
 
   it('priority 3: falls back to the bundled local registry when no source is given', async () => {

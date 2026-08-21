@@ -88,6 +88,42 @@ describe('doctorCommand (integration)', () => {
     exitSpy.mockRestore();
   });
 
+  it('reports an unreachable registry as a failed check instead of crashing (regression: registry.ts used to process.exit directly)', async () => {
+    const exitSpy = vi.spyOn(process, 'exit').mockImplementation((() => {}) as () => never);
+    const brokenRegistryDir = mkdtempSync(join(tmpdir(), 'sanring-cli-doctor-broken-registry-'));
+
+    doctorCommand.setOptionValue('offline', false);
+    // Resolving does not throw/reject — this is the actual regression: before
+    // registry.ts threw a typed error instead of calling process.exit(1)
+    // itself, this awaited call never returned control to doctor.ts at all,
+    // so the `catch { fail('Unreachable...') }` below could never run.
+    await doctorCommand.parseAsync(['--registry', brokenRegistryDir], { from: 'user' });
+
+    const output = logs.join('\n');
+    expect(output).toMatch(/Unreachable/);
+    expect(exitSpy).toHaveBeenCalledWith(1);
+
+    rmSync(brokenRegistryDir, { recursive: true, force: true });
+    exitSpy.mockRestore();
+  });
+
+  it('reports a dangling componentDep in the registry itself as a warning', async () => {
+    const registryPath = join(registryDir, 'registry.json');
+    const registry = JSON.parse(readFileSync(registryPath, 'utf-8')) as {
+      components: Array<{ name: string; componentDeps?: string[] }>;
+    };
+    registry.components.find((c) => c.name === 'widget')!.componentDeps = ['does-not-exist'];
+    writeFileSync(registryPath, JSON.stringify(registry, null, 2), 'utf-8');
+
+    doctorCommand.setOptionValue('offline', false);
+    doctorCommand.setOptionValue('json', false);
+    await doctorCommand.parseAsync(['--registry', registryDir], { from: 'user' });
+
+    const output = logs.join('\n');
+    expect(output).toMatch(/Registry integrity/);
+    expect(output).toMatch(/does-not-exist/);
+  });
+
   it('reports JSON checks and backfills missing hashes with --fix', async () => {
     const configPath = join(projectDir, 'sanring.config.json');
     const config = JSON.parse(readFileSync(configPath, 'utf-8')) as {

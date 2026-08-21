@@ -35,22 +35,31 @@ ${pc.bold('Quick start')}
   $ npx @sanring/cli@latest init
   $ npx @sanring/cli@latest add button
 
+${pc.bold('Command groups')}
+  ${pc.dim('Install    ')} init, add, remove
+  ${pc.dim('Explore    ')} info, list, search
+  ${pc.dim('Maintain   ')} diff, migrate, update, doctor
+  ${pc.dim('Publish    ')} build   ${pc.dim('(for registry authors)')}
+  ${pc.dim('Agent      ')} mcp     ${pc.dim('(for AI coding agents)')}
+
 ${pc.dim('No installation required — components are copied into your project as source,')}
 ${pc.dim('not installed as an npm package. Docs: https://ui.sanring.dev')}
 `,
   );
 
+// Registration order matches the "Command groups" summary above and drives
+// the order commands are listed in the auto-generated help output.
 program.addCommand(initCommand);
-program.addCommand(listCommand);
-program.addCommand(searchCommand);
-program.addCommand(infoCommand);
 program.addCommand(addCommand);
 program.addCommand(removeCommand);
+program.addCommand(infoCommand);
+program.addCommand(listCommand);
+program.addCommand(searchCommand);
 program.addCommand(diffCommand);
+program.addCommand(migrateCommand);
 program.addCommand(updateCommand);
 program.addCommand(doctorCommand);
-program.addCommand(mcpCommand);
-program.addCommand(migrateCommand);
 program.addCommand(buildCommand);
+program.addCommand(mcpCommand);
 
 program.parse();

@@ -7,7 +7,7 @@
 // Root cause this replaces: `packages/cli/registry` used to be populated
 // by hand and had no build step keeping it in sync with root `registry/`,
 // so published CLI versions could silently ship stale component code.
-import { existsSync, mkdirSync, readFileSync, rmSync } from 'node:fs';
+import { existsSync, mkdirSync, readFileSync, renameSync, rmSync } from 'node:fs';
 import { cp } from 'node:fs/promises';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -15,16 +15,27 @@ import { fileURLToPath } from 'node:url';
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const SOURCE_DIR = join(__dirname, '../../../registry');
 const DEST_DIR = join(__dirname, '../registry');
+const TMP_DIR = join(__dirname, '../registry.sync-tmp');
 
+// Copies into a sibling temp dir, then swaps it into place with a single
+// rm+rename — `packages/cli/src/registry.test.ts` (and anything else that
+// reads the bundled local registry at DEST_DIR) can otherwise observe a
+// window where DEST_DIR has just been rm'd but the multi-file async `cp`
+// hasn't finished yet if this script runs concurrently with the test suite
+// (e.g. `mcp.e2e.test.ts` shells out to `npm run build`, which calls this).
+// rm+rename is not atomic as a pair, but shrinks that window from "however
+// long the copy takes" to a single synchronous syscall each.
 async function sync() {
   if (!existsSync(SOURCE_DIR)) {
     console.error(`✖ Source registry not found at ${SOURCE_DIR}`);
     process.exit(1);
   }
 
+  rmSync(TMP_DIR, { recursive: true, force: true });
+  mkdirSync(TMP_DIR, { recursive: true });
+  await cp(SOURCE_DIR, TMP_DIR, { recursive: true });
   rmSync(DEST_DIR, { recursive: true, force: true });
-  mkdirSync(DEST_DIR, { recursive: true });
-  await cp(SOURCE_DIR, DEST_DIR, { recursive: true });
+  renameSync(TMP_DIR, DEST_DIR);
 
   console.log(`✔ Synced registry: ${SOURCE_DIR} -> ${DEST_DIR}`);
 }

@@ -1,6 +1,6 @@
 import { Client } from '@modelcontextprotocol/sdk/client/index.js';
 import { InMemoryTransport } from '@modelcontextprotocol/sdk/inMemory.js';
-import { existsSync, mkdirSync, mkdtempSync, rmSync, writeFileSync } from 'node:fs';
+import { existsSync, mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
@@ -104,6 +104,55 @@ describe('mcp server', () => {
     expect(textContent(detailResult)).toContain('widget/index.ts');
     expect(textContent(detailResult)).toContain('Shared utilities: utils');
     expect(textContent(detailResult)).toContain('clsx@^2.0.0');
+  });
+
+  it('returns a tool error instead of killing the server when the registry is unreachable (regression: registry.ts used to process.exit directly)', async () => {
+    const brokenRegistryDir = mkdtempSync(join(tmpdir(), 'sanring-cli-mcp-broken-registry-'));
+    const server = createMcpServer({ registryUrl: brokenRegistryDir });
+    client = new Client({ name: 'sanring-cli-mcp-test', version: '0.0.0' }, { capabilities: {} });
+    [clientTransport, serverTransport] = InMemoryTransport.createLinkedPair();
+    await Promise.all([server.connect(serverTransport), client.connect(clientTransport)]);
+
+    // Before this fix, fetchRegistry() called process.exit(1) directly on
+    // failure, killing this whole long-running MCP server process. Now the
+    // thrown RegistryFetchError propagates through the SDK's own request
+    // handler, which converts it into a normal JSON-RPC error response (the
+    // client surfaces that as a rejected callTool()) instead of the
+    // connection simply dying with no response at all.
+    await expect(client.callTool({ name: 'list_components', arguments: {} })).rejects.toThrow(
+      /Cannot read registry at/,
+    );
+
+    // The server process is still alive and can serve a subsequent call —
+    // the registry fetch failure didn't take the whole process down with it.
+    // (This second call fails the same way since the registry is still
+    // broken; what matters is that it gets a clean response at all instead
+    // of the connection dying with no response, which is what a killed
+    // server process would look like.)
+    await expect(client.callTool({ name: 'search_components', arguments: { query: 'x' } })).rejects.toThrow(
+      /Cannot read registry at/,
+    );
+
+    rmSync(brokenRegistryDir, { recursive: true, force: true });
+  });
+
+  it('doctor_project surfaces a dangling componentDep in the registry itself', async () => {
+    const registryPath = join(registryDir, 'registry.json');
+    const registry = JSON.parse(readFileSync(registryPath, 'utf-8')) as {
+      components: Array<{ name: string; componentDeps?: string[] }>;
+    };
+    registry.components.find((c) => c.name === 'widget')!.componentDeps = ['does-not-exist'];
+    writeFileSync(registryPath, JSON.stringify(registry, null, 2), 'utf-8');
+
+    const testClient = await connect();
+    const result = await testClient.callTool({
+      name: 'doctor_project',
+      arguments: { cwd: projectDir },
+    });
+
+    const text = textContent(result);
+    expect(text).toContain('Registry integrity: 1 issue');
+    expect(text).toContain('does-not-exist');
   });
 
   it('plan_component_install returns files and peer deps without modifying project', async () => {

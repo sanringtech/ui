@@ -9,6 +9,7 @@ import {
   isAngularProject,
   getCliVersion,
   readConfig,
+  reportRegistryFetchError,
   resolveComponentBasePath,
   resolveRegistrySource,
 } from '../utils.js';
@@ -120,7 +121,13 @@ export const infoCommand = new Command('info')
       const parsedRef = parseComponentRef(componentName);
       const bareComponentName = parsedRef.name;
       const registrySpinner = ora('Loading registry...').start();
-      const registry = await fetchRegistry(resolveRegistrySource(parsedRef.alias, config, options.registry));
+      let registry;
+      try {
+        registry = await fetchRegistry(resolveRegistrySource(parsedRef.alias, config, options.registry));
+      } catch (e) {
+        registrySpinner.stop();
+        reportRegistryFetchError(e, { json: options.json });
+      }
       const registryIndex = createRegistryIndex(registry);
       registrySpinner.stop();
 

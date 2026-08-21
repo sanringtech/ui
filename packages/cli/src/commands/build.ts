@@ -8,6 +8,7 @@ import {
   type RegistryShared,
   validateRegistry,
 } from '../registry.js';
+import { findRegistryReferenceIssues } from '../registry-integrity.js';
 import {
   canonicalizePeerDependencies,
   classifyModuleSpecifiers,
@@ -115,23 +116,38 @@ export const buildCommand = new Command('build')
   .option('--manifest <path>', 'optional metadata manifest (default: registry.manifest.json)')
   .option('--dry-run', 'preview without writing files', false)
   .option('--check', 'scan and validate without writing files (CI mode)', false)
-  .action(async (options: { source: string; out: string; name?: string; manifest?: string; dryRun: boolean; check: boolean }) => {
+  .option('--json', 'output machine-readable build results (useful for CI and coding agents)', false)
+  .action(async (options: { source: string; out: string; name?: string; manifest?: string; dryRun: boolean; check: boolean; json: boolean }) => {
     const cwd = process.cwd();
     const sourceDir = resolve(cwd, options.source);
     const outDir = resolve(cwd, options.out);
     const cwdPackageJson = readCwdPackageJson(cwd);
 
     if (!existsSync(sourceDir)) {
-      console.error(pc.red(`✖ Source directory not found: ${sourceDir}`));
+      if (options.json) {
+        console.log(JSON.stringify({ ok: false, error: `Source directory not found: ${sourceDir}` }, null, 2));
+      } else {
+        console.error(pc.red(`✖ Source directory not found: ${sourceDir}`));
+      }
       process.exit(1);
       return;
     }
 
     const registryName = options.name ?? cwdPackageJson?.name;
     if (!registryName) {
-      console.error(
-        pc.red('✖ No registry name. Pass --name <name>, or add a "name" field to package.json.'),
-      );
+      if (options.json) {
+        console.log(
+          JSON.stringify(
+            { ok: false, error: 'No registry name. Pass --name <name>, or add a "name" field to package.json.' },
+            null,
+            2,
+          ),
+        );
+      } else {
+        console.error(
+          pc.red('✖ No registry name. Pass --name <name>, or add a "name" field to package.json.'),
+        );
+      }
       process.exit(1);
       return;
     }
@@ -159,16 +175,24 @@ export const buildCommand = new Command('build')
       ]),
     );
 
+    const warnings: Array<{ component: string; message: string }> = [];
+
     for (const raw of rawComponents) {
       const v = validated.get(raw.name)!;
       for (const dropped of v.droppedComponentDeps) {
-        console.warn(pc.yellow(`⚠ ${raw.name}: dropping componentDep "${dropped}" — no matching component found`));
+        const message = `dropping componentDep "${dropped}" — no matching component found`;
+        warnings.push({ component: raw.name, message });
+        if (!options.json) console.warn(pc.yellow(`⚠ ${raw.name}: ${message}`));
       }
       for (const dropped of v.droppedSharedDeps) {
-        console.warn(pc.yellow(`⚠ ${raw.name}: dropping sharedDep "${dropped}" — no matching shared file found`));
+        const message = `dropping sharedDep "${dropped}" — no matching shared file found`;
+        warnings.push({ component: raw.name, message });
+        if (!options.json) console.warn(pc.yellow(`⚠ ${raw.name}: ${message}`));
       }
       if (!raw.description) {
-        console.warn(pc.yellow(`⚠ ${raw.name}: no description found, edit registry.json manually`));
+        const message = 'no description found, edit registry.json manually';
+        warnings.push({ component: raw.name, message });
+        if (!options.json) console.warn(pc.yellow(`⚠ ${raw.name}: ${message}`));
       }
     }
 
@@ -204,15 +228,25 @@ export const buildCommand = new Command('build')
     });
 
     if (unresolved.size > 0) {
-      console.error(
-        pc.red(
-          `✖ Could not resolve a version for ${unresolved.size} peer dependenc${unresolved.size > 1 ? 'ies' : 'y'}:`,
-        ),
-      );
-      for (const name of [...unresolved].sort()) console.error(pc.dim(`  - ${name}`));
-      console.error(
-        pc.dim('  Add them to dependencies/devDependencies/peerDependencies in package.json and re-run.'),
-      );
+      if (options.json) {
+        console.log(
+          JSON.stringify(
+            { ok: false, error: 'unresolved-peer-dependencies', unresolvedPeerDependencies: [...unresolved].sort() },
+            null,
+            2,
+          ),
+        );
+      } else {
+        console.error(
+          pc.red(
+            `✖ Could not resolve a version for ${unresolved.size} peer dependenc${unresolved.size > 1 ? 'ies' : 'y'}:`,
+          ),
+        );
+        for (const name of [...unresolved].sort()) console.error(pc.dim(`  - ${name}`));
+        console.error(
+          pc.dim('  Add them to dependencies/devDependencies/peerDependencies in package.json and re-run.'),
+        );
+      }
       process.exit(1);
       return;
     }
@@ -227,25 +261,66 @@ export const buildCommand = new Command('build')
     try {
       validatedRegistry = validateRegistry(registry);
     } catch (e) {
-      console.error(pc.red('✖ Generated registry failed validation:'));
-      console.error(pc.dim(`  ${e instanceof Error ? e.message : String(e)}`));
+      const message = e instanceof Error ? e.message : String(e);
+      if (options.json) {
+        console.log(JSON.stringify({ ok: false, error: 'validation-failed', message }, null, 2));
+      } else {
+        console.error(pc.red('✖ Generated registry failed validation:'));
+        console.error(pc.dim(`  ${message}`));
+      }
       process.exit(1);
       return;
     }
 
-    console.log(pc.cyan(`\n${pc.bold(registryName)}`) + pc.dim(` — ${components.length} component(s), ${shared.length} shared file(s)\n`));
-    for (const component of components) {
-      const deps: string[] = [];
-      if (component.componentDeps?.length) deps.push(`componentDeps: ${component.componentDeps.join(', ')}`);
-      if (component.sharedDeps?.length) deps.push(`sharedDeps: ${component.sharedDeps.join(', ')}`);
-      if (component.peerDependencies && Object.keys(component.peerDependencies).length) {
-        deps.push(`peerDependencies: ${Object.keys(component.peerDependencies).join(', ')}`);
+    // Component/sharedDep candidates were already validated against
+    // discovered names during scanning (see `validated` above), so this
+    // mainly catches what scanning can't: a manifest-supplied `groups` entry
+    // referencing an unknown component, or a garbage peer dependency version
+    // string pulled verbatim from package.json.
+    for (const issue of findRegistryReferenceIssues(validatedRegistry)) {
+      warnings.push({ component: '(registry)', message: issue.message });
+      if (!options.json) console.warn(pc.yellow(`⚠ ${issue.message}`));
+    }
+
+    const componentSummaries = components.map((component) => ({
+      name: component.name,
+      componentDeps: component.componentDeps ?? [],
+      sharedDeps: component.sharedDeps ?? [],
+      peerDependencies: component.peerDependencies ? Object.keys(component.peerDependencies) : [],
+    }));
+
+    if (!options.json) {
+      console.log(pc.cyan(`\n${pc.bold(registryName)}`) + pc.dim(` — ${components.length} component(s), ${shared.length} shared file(s)\n`));
+      for (const component of components) {
+        const deps: string[] = [];
+        if (component.componentDeps?.length) deps.push(`componentDeps: ${component.componentDeps.join(', ')}`);
+        if (component.sharedDeps?.length) deps.push(`sharedDeps: ${component.sharedDeps.join(', ')}`);
+        if (component.peerDependencies && Object.keys(component.peerDependencies).length) {
+          deps.push(`peerDependencies: ${Object.keys(component.peerDependencies).join(', ')}`);
+        }
+        console.log(`  ${pc.bold(component.name)}${deps.length ? pc.dim(`  (${deps.join('; ')})`) : ''}`);
       }
-      console.log(`  ${pc.bold(component.name)}${deps.length ? pc.dim(`  (${deps.join('; ')})`) : ''}`);
     }
 
     if (options.dryRun || options.check) {
-      console.log(pc.dim(`\n  ${options.check ? 'Check' : 'Dry run'} — nothing written${options.check ? '.' : `; run without --dry-run to write to ${outDir}.`}\n`));
+      if (options.json) {
+        console.log(
+          JSON.stringify(
+            {
+              ok: true,
+              registryName,
+              components: componentSummaries,
+              sharedCount: shared.length,
+              warnings,
+              written: false,
+            },
+            null,
+            2,
+          ),
+        );
+      } else {
+        console.log(pc.dim(`\n  ${options.check ? 'Check' : 'Dry run'} — nothing written${options.check ? '.' : `; run without --dry-run to write to ${outDir}.`}\n`));
+      }
       return;
     }
 
@@ -273,5 +348,23 @@ export const buildCommand = new Command('build')
       }
     }
 
-    console.log(pc.green(`\n✔ Wrote ${outDir}\n`));
+    if (options.json) {
+      console.log(
+        JSON.stringify(
+          {
+            ok: true,
+            registryName,
+            components: componentSummaries,
+            sharedCount: shared.length,
+            warnings,
+            written: true,
+            outDir,
+          },
+          null,
+          2,
+        ),
+      );
+    } else {
+      console.log(pc.green(`\n✔ Wrote ${outDir}\n`));
+    }
   });

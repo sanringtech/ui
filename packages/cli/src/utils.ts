@@ -99,6 +99,27 @@ export function resolveRegistrySource(
   return config?.registries?.[targetAlias];
 }
 
+// `fetchRegistry`/`fetchFile` throw (RegistryFetchError or a plain fs/fetch
+// Error) instead of exiting the process themselves — this is the shared
+// command-layer landing spot that turns that into the same "red message +
+// exit 1" behavior every command already used to get for free. Only for
+// one-shot CLI commands: the MCP server must not exit the whole process on
+// one failed fetch, so it lets the SDK convert the thrown error into a
+// normal tool-call error response instead of calling this.
+export function reportRegistryFetchError(error: unknown, options: { json?: boolean } = {}): never {
+  const message = error instanceof Error ? error.message : String(error);
+  if (options.json) {
+    console.log(JSON.stringify({ ok: false, error: message }, null, 2));
+  } else {
+    console.error(pc.red(`✖ ${message}`));
+    const cause = error instanceof Error ? error.cause : undefined;
+    if (cause !== undefined) {
+      console.error(pc.dim(`  ${cause instanceof Error ? cause.message : String(cause)}`));
+    }
+  }
+  process.exit(1);
+}
+
 // Upgrades legacy `installedVersions` keys (bare component name, from before
 // multi-registry support) to the `alias:componentName` format, prefixing
 // with `defaultRegistry`. Not called automatically on every config read —

@@ -12,6 +12,7 @@ import {
   confirmPrompt,
   DEFAULT_COMPONENT_PATH,
   readConfig,
+  reportRegistryFetchError,
   requireAngularProject,
   resolveComponentBasePath,
   resolveRegistrySource,
@@ -122,7 +123,12 @@ export const removeCommand = new Command('remove')
       const registrySource = resolveRegistrySource(undefined, config, options.registry);
       const componentBasePath = resolveComponentBasePath(cwd, options.path, config);
 
-      const registry = await fetchRegistry(registrySource);
+      let registry;
+      try {
+        registry = await fetchRegistry(registrySource);
+      } catch (e) {
+        reportRegistryFetchError(e);
+      }
       const registryIndex = createRegistryIndex(registry);
       const installed = listInstalledComponentNames(componentBasePath, registryIndex);
       const parsed = componentNames.map(parseComponentRef);

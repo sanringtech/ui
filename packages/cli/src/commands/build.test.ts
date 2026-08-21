@@ -17,13 +17,17 @@ describe('buildCommand (integration)', () => {
   let outDir: string;
   let originalCwd: string;
   let exitSpy: ReturnType<typeof vi.spyOn>;
+  let logs: string[];
 
   beforeEach(() => {
     originalCwd = process.cwd();
     cwd = mkdtempSync(join(tmpdir(), 'sanring-build-cwd-'));
     outDir = join(cwd, 'dist-registry');
     process.chdir(cwd);
-    vi.spyOn(console, 'log').mockImplementation(() => {});
+    logs = [];
+    vi.spyOn(console, 'log').mockImplementation((...args: unknown[]) => {
+      logs.push(args.join(' '));
+    });
     vi.spyOn(console, 'warn').mockImplementation(() => {});
     vi.spyOn(console, 'error').mockImplementation(() => {});
     exitSpy = vi.spyOn(process, 'exit').mockImplementation(() => undefined as never);
@@ -39,6 +43,8 @@ describe('buildCommand (integration)', () => {
     buildCommand.setOptionValue('out', './dist-registry');
     buildCommand.setOptionValue('name', undefined);
     buildCommand.setOptionValue('dryRun', false);
+    buildCommand.setOptionValue('check', false);
+    buildCommand.setOptionValue('json', false);
   });
 
   afterEach(() => {
@@ -111,6 +117,88 @@ describe('buildCommand (integration)', () => {
 
     expect(exitSpy).not.toHaveBeenCalled();
     expect(existsSync(outDir)).toBe(false);
+  });
+
+  it('flags a manifest group referencing an unknown component as a warning, not a build failure', async () => {
+    const sourceDir = writeMinimalSource();
+    writeFileSync(
+      join(cwd, 'package.json'),
+      JSON.stringify({ name: 'test-registry', dependencies: { '@lucide/angular': '^1.18.0' } }),
+      'utf-8',
+    );
+    writeFileSync(
+      join(cwd, 'registry.manifest.json'),
+      JSON.stringify({ groups: [{ id: 'forms', title: 'Forms', components: ['widget', 'does-not-exist'] }] }),
+      'utf-8',
+    );
+
+    await buildCommand.parseAsync(['--source', sourceDir, '--out', outDir, '--check', '--json'], {
+      from: 'user',
+    });
+
+    expect(exitSpy).not.toHaveBeenCalled();
+    const report = JSON.parse(logs.join('')) as { ok: boolean; warnings: Array<{ message: string }> };
+    expect(report.ok).toBe(true);
+    expect(report.warnings.some((w) => w.message.includes('does-not-exist'))).toBe(true);
+  });
+
+  it('--check --json prints a machine-readable summary and writes nothing', async () => {
+    const sourceDir = writeMinimalSource();
+    writeFileSync(
+      join(cwd, 'package.json'),
+      JSON.stringify({ name: 'test-registry', dependencies: { '@lucide/angular': '^1.18.0' } }),
+      'utf-8',
+    );
+
+    await buildCommand.parseAsync(['--source', sourceDir, '--out', outDir, '--check', '--json'], {
+      from: 'user',
+    });
+
+    expect(exitSpy).not.toHaveBeenCalled();
+    expect(existsSync(outDir)).toBe(false);
+    const report = JSON.parse(logs.join('')) as {
+      ok: boolean;
+      registryName: string;
+      written: boolean;
+      components: Array<{ name: string; componentDeps: string[]; sharedDeps: string[]; peerDependencies: string[] }>;
+    };
+    expect(report.ok).toBe(true);
+    expect(report.registryName).toBe('test-registry');
+    expect(report.written).toBe(false);
+    expect(report.components).toEqual([
+      { name: 'widget', componentDeps: [], sharedDeps: ['utils'], peerDependencies: ['@lucide/angular'] },
+    ]);
+  });
+
+  it('--json (without --check) reports written:true and outDir after actually writing', async () => {
+    const sourceDir = writeMinimalSource();
+    writeFileSync(
+      join(cwd, 'package.json'),
+      JSON.stringify({ name: 'test-registry', dependencies: { '@lucide/angular': '^1.18.0' } }),
+      'utf-8',
+    );
+
+    await buildCommand.parseAsync(['--source', sourceDir, '--out', outDir, '--json'], { from: 'user' });
+
+    expect(exitSpy).not.toHaveBeenCalled();
+    expect(existsSync(join(outDir, 'registry.json'))).toBe(true);
+    const report = JSON.parse(logs.join('')) as { written: boolean; outDir: string };
+    expect(report.written).toBe(true);
+    expect(report.outDir).toBe(outDir);
+  });
+
+  it('--json reports unresolved peer dependencies as structured output, not colored text', async () => {
+    const sourceDir = writeMinimalSource();
+    // No package.json at all -> nothing can resolve @lucide/angular's version.
+
+    await buildCommand.parseAsync(['--source', sourceDir, '--out', outDir, '--name', 'test-registry', '--json'], {
+      from: 'user',
+    });
+
+    expect(exitSpy).toHaveBeenCalledWith(1);
+    const report = JSON.parse(logs.join('')) as { ok: boolean; unresolvedPeerDependencies: string[] };
+    expect(report.ok).toBe(false);
+    expect(report.unresolvedPeerDependencies).toEqual(['@lucide/angular']);
   });
 
   it('fails without writing when a peerDependency version cannot be resolved', async () => {

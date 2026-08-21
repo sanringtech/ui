@@ -26,6 +26,16 @@ describe('listCommand --outdated', () => {
 
     await addCommand.parseAsync(['widget', '--registry', registryDir], { from: 'user' });
 
+    // Commander reuses this module-level Command instance across every
+    // parseAsync() call in this file and never resets boolean/string option
+    // state back to its default between calls (see doctor.test.ts for the
+    // same pattern) — without this, e.g. a prior test's `--outdated` or
+    // `--json` would leak into a later call that doesn't pass those flags.
+    listCommand.setOptionValue('installed', false);
+    listCommand.setOptionValue('outdated', false);
+    listCommand.setOptionValue('json', false);
+    listCommand.setOptionValue('path', undefined);
+
     logs = [];
     vi.mocked(console.log).mockImplementation((...args: unknown[]) => {
       logs.push(args.join(' '));
@@ -85,5 +95,30 @@ describe('listCommand --outdated', () => {
     expect(logs.some((line) => line.includes('0 up-to-date, 0 outdated, 1 with conflicts'))).toBe(
       true,
     );
+  });
+
+  it('--outdated --json reports the same status as structured output', async () => {
+    writeRegistryFixture(registryDir, {
+      utils: 'export function cn() {}\n',
+      widget: 'export const widget = 2;\n',
+    });
+
+    await listCommand.parseAsync(['--outdated', '--json', '--registry', registryDir], { from: 'user' });
+
+    const report = JSON.parse(logs.join('')) as {
+      components: Array<{ name: string; status: string }>;
+      upToDate: number;
+      outdated: number;
+      conflicts: number;
+    };
+    expect(report.components).toEqual([expect.objectContaining({ name: 'widget', status: 'outdated' })]);
+    expect(report).toMatchObject({ upToDate: 0, outdated: 1, conflicts: 0 });
+  });
+
+  it('plain --json listing (no --outdated) reports the available components', async () => {
+    await listCommand.parseAsync(['--json', '--registry', registryDir], { from: 'user' });
+
+    const report = JSON.parse(logs.join('')) as { components: Array<{ name: string }> };
+    expect(report.components.map((c) => c.name)).toEqual(['widget']);
   });
 });

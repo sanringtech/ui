@@ -169,7 +169,8 @@ describe('migrateCommand (integration)', () => {
 
   it('reports a no-baseline component distinctly from a needs-migration one', async () => {
     const config = readConfig(projectDir)!;
-    const { widget: _widget, ...restVersions } = config.installedVersions ?? {};
+    const restVersions = { ...config.installedVersions };
+    delete restVersions.widget;
     writeConfig(projectDir, { ...config, installedVersions: restVersions });
 
     await migrateCommand.parseAsync(['--registry', registryDir], { from: 'user' });
