@@ -59,7 +59,9 @@ describe('RadioGroupComponent', () => {
     const fixture = TestBed.createComponent(RadioGroupTestHost);
     fixture.detectChanges();
 
-    const items = fixture.nativeElement.querySelectorAll('sanring-radio-group')[0].querySelectorAll('[role="radio"]');
+    const items = fixture.nativeElement
+      .querySelectorAll('sanring-radio-group')[0]
+      .querySelectorAll('[role="radio"]');
     (items[1] as HTMLElement).click();
     fixture.detectChanges();
 
@@ -74,7 +76,9 @@ describe('RadioGroupComponent', () => {
     const fixture = TestBed.createComponent(RadioGroupTestHost);
     fixture.detectChanges();
 
-    const items = fixture.nativeElement.querySelectorAll('sanring-radio-group')[0].querySelectorAll('[role="radio"]');
+    const items = fixture.nativeElement
+      .querySelectorAll('sanring-radio-group')[0]
+      .querySelectorAll('[role="radio"]');
     expect(items[0].getAttribute('tabindex')).toBe('0');
 
     (items[2] as HTMLElement).click();
@@ -95,9 +99,9 @@ describe('RadioGroupComponent', () => {
     (items[0] as HTMLElement).dispatchEvent(new FocusEvent('focus'));
     fixture.detectChanges();
 
-    group.querySelector('[role="radiogroup"]').dispatchEvent(
-      new KeyboardEvent('keydown', { key: 'ArrowDown', bubbles: true }),
-    );
+    group
+      .querySelector('[role="radiogroup"]')
+      .dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowDown', bubbles: true }));
     fixture.detectChanges();
 
     expect(items[1].getAttribute('aria-checked')).toBe('true');

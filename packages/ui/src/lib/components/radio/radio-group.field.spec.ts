@@ -7,7 +7,13 @@ import { RadioGroupComponent } from './radio-group.component';
 import { RadioItemComponent } from './radio-item.component';
 
 @Component({
-  imports: [SanringFieldComponent, ErrorMessageComponent, RadioGroupComponent, RadioItemComponent, ReactiveFormsModule],
+  imports: [
+    SanringFieldComponent,
+    ErrorMessageComponent,
+    RadioGroupComponent,
+    RadioItemComponent,
+    ReactiveFormsModule,
+  ],
   template: `
     <sanring-field>
       <sanring-radio-group [formControl]="control">

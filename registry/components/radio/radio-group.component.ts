@@ -33,7 +33,8 @@ import { RadioItemComponent } from './radio-item.component';
     // eslint 規則禁止用 alias 改名，所以改用 useFactory 產生轉接的 adapter 物件。
     {
       provide: SANRING_FIELD_CONTROL,
-      useFactory: (host: RadioGroupComponent) => new SanringFieldControlAdapter(FieldType.radioGroup, host),
+      useFactory: (host: RadioGroupComponent) =>
+        new SanringFieldControlAdapter(FieldType.radioGroup, host),
       deps: [forwardRef(() => RadioGroupComponent)],
     },
   ],
@@ -90,7 +91,9 @@ export class RadioGroupComponent extends SanringCvaBase<RadioValue | null> {
     return items.find((i) => i.value() === this.valueSignal()) ?? items[0] ?? null;
   });
 
-  protected readonly computedAriaDescribedBy = this.makeComputedAriaDescribedBy(this.ariaDescribedBy);
+  protected readonly computedAriaDescribedBy = this.makeComputedAriaDescribedBy(
+    this.ariaDescribedBy,
+  );
 
   get fieldValue(): RadioValue | null {
     return this.valueSignal();
