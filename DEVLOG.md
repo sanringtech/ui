@@ -823,3 +823,63 @@ readonly isDisabled = computed(() => this.disabledInput() || this.disabledState(
 **驗證**：`pnpm --filter @sanring/cli exec vitest run` 加上 `pool: 'forks'` 後連續跑 8 次、`pnpm --filter @sanring/cli exec vitest run --pool=forks` 也連續跑 8 次,共 16 次 0 次失敗(相同條件下拿掉這個設定會在 5 次內大概率重現);18 個測試檔、**200** 個測試全過(原 178 + 新增 22:`info` 7 + `search` 6 + `migrate` 9);`pnpm --filter @sanring/cli exec tsc --noEmit` 通過。
 
 **TODOLIST.md P27 現況**：整體流程 4 項（CLI 主流程文件同步、`--json` 補齊、registry 完整性檢查抽共用工具、`fetchRegistry`/`fetchFile` typed error)仍待處理,`info`/`migrate`/`search` 缺測試與 `remove` exit code 兩項已完成。
+
+---
+
+## P28 — `packages/ui` 表單元件收斂至共用 `SanringCvaBase`
+
+**執行**：把 P14 只落在 registry 的 CVA 第二批重構完整移植到 `packages/ui`。新增 `packages/ui/src/lib/components/shared/cva-base.ts`，集中 `ControlValueAccessor` callback、disabled state、延後至 `ngOnInit()` 的 `NgControl` 解析、`control.events` 狀態橋接、Field described-by ids、focus/touched 與 `stateChanges`。`checkbox`、`switch`、`radio-group`、`slider`、`otp-input`、`calendar`、`date-picker`、`file-upload`、`combobox` 九個元件全部改成 `extends SanringCvaBase`，移除各檔重複的 lifecycle、signals、callbacks 與大型 `XxxFieldControlAdapter`。其中 `file-upload` 與 `combobox` 因前者用 `isDisabled`、後者用 plain-string `inputId` 作為 Field id，依 registry 設計保留薄型專用 adapter；其餘七個使用共用 `SanringFieldControlAdapter`。
+
+**過程中補出的 registry 基底缺口**：第一次執行真正的 Angular library compile 時，`SanringCvaBase` 因使用 `inject()` 與 `OnInit`、但本身沒有 Angular decorator 而觸發 `NG2007`。在 `packages/ui` 與 `registry` 兩側 base 同步補上無 selector 的 `@Directive()`；這讓 base 能合法承載 Angular DI/lifecycle metadata，也讓兩份 `cva-base.ts` 維持完全相同。原先 registry source 沒有被 package TestBed 直接編譯，因此此前的靜態 parity check 不會抓到這類錯誤。
+
+**驗證**：三批局部測試分別為 25、34、27 項，全數通過；完整 `pnpm ng test @sanring/ui --watch=false` 為 70 個 spec 檔、**404** 個測試全過；`pnpm ng build @sanring/ui` 成功；修改檔案 ESLint、Prettier、`git diff --check` 通過；`check-registry-sync.mjs`（52/52）與 `check-registry-parity.mjs`（52 個 shared component directories）皆綠燈。P28 已從 `TODOLIST.md` 移除。
+
+---
+
+## P27 — 整體流程 4 項收尾（`--json` 補齊、registry 完整性共用工具、typed error、help/README/docs 同步）
+
+P27 上一輪（見前面兩則條目）已修完 `remove` exit code 與 `info`/`migrate`/`search` 缺測試。這輪收掉「整體流程」剩下的 4 項，P27 在 `TODOLIST.md` 全部清空，整節移除。
+
+**1. `build`/`list --outdated` 補 `--json`**：兩個 command 補 `--json` flag，全部既有 `console.log`/`console.error` 人類可讀輸出路徑改成 `if (!options.json)` 包住，成功/失敗都改印一份結構化 JSON（`build` 涵蓋 `ok`/`registryName`/`components`/`warnings`/`written`/`outDir`；`list --outdated` 涵蓋 `components`/`upToDate`/`outdated`/`conflicts`）。至此 `doctor`/`diff`/`search`/`info`/`build`/`list` 六個 CI/agent 常用 command 全部支援 `--json`。新增 `build.test.ts` 3 個、`list.test.ts` 2 個測試。
+
+**2. registry 完整性檢查抽成共用工具**：新增 `packages/cli/src/registry-integrity.ts`——`findRegistryReferenceIssues(registry)`（同步：componentDeps/sharedDeps dangling reference、`groups[].components` dangling reference、peerDependencies 版本字串是否可解析)、`checkRegistryFilesFetchable(registry, source)`（非同步：逐檔 `fetchFile` 驗證 registry.json 宣告的每個檔案真的抓得到）、`checkRegistryIntegrity()`（整合兩者）。`isParseableVersionRange()` 是刻意輕量的 heuristic（不是完整 semver-range parser，這個 repo 沒有 bundle semver 套件),用「hyphen range 前後一定有空白、pre-release 的 hyphen 前後不會有空白」這個 npm 既有慣例區分兩者。
+
+三個呼叫端各自按用途接線,不是每處都跑全部檢查：`doctor.ts` 在既有 registry fetch 成功後加一段（同步、零額外網路成本),把每個 dangling reference 各自轉成一筆獨立 `warn()`（不是彙總一行,讓 `--json` 模式也能拿到完整明細,而不是像既有 `orphaned`/`customized` 那組舊邏輯只有人類可讀模式看得到明細——這是新程式碼順手做對,沒有回頭改舊邏輯)；`build.ts` 在 `validateRegistry` 成功、組完最終 `registry` 物件後跑同步檢查,主要抓 `registry.manifest.json` 手寫的 `groups` 引用到不存在的元件（`build.ts` 自己的 `validateReferencedTargets` 只驗證掃描到的 componentDeps/sharedDeps,從來沒驗證過 manifest 注入的 groups)；`mcp.ts` 的 `doctor_project` tool 加一段,呼叫同步檢查並列出明細,不額外呼叫非同步的 file-fetchability 檢查（避免每次 agent 呼叫這個工具都多背一輪全量網路請求)。新增 `registry-integrity.test.ts`（29 測試)、`doctor.test.ts`/`build.test.ts`/`mcp.test.ts` 各補一個對應的整合回歸測試。
+
+**3. `fetchRegistry`/`fetchFile` 改 throw typed error（過程中發現並修掉兩個真實的嚴重 bug）**：`registry.ts` 的 `die()`（`console.error` + `process.exit(1)`)換成 `export class RegistryFetchError extends Error`,兩個呼叫點（`fetchRegistry` 本地路徑分支、`fetchRegistryFromUrl`)改成 `throw new RegistryFetchError(message, { cause: e })`。`utils.ts` 新增 `reportRegistryFetchError(error, { json? })`,是「command 層決定怎麼印訊息與 exit」的共用落地點,9 個原本沒有包 try/catch 的呼叫端（`migrate`/`info`/`search`/`diff`/`remove`/`list`/`update`/`add`,`doctor` 已有既有 try/catch)全部補上。
+
+過程中確認並修掉這個重構動機所指出的兩個真實、嚴重的既有 bug,而不只是理論上的程式碼異味：
+- **`doctor.ts` 的 `catch { fail('Unreachable...') }` 之前是死碼**：`die()` 的 `process.exit(1)` 是同步、無條件終止整個 process,呼叫端任何 try/catch 都攔不到——`doctor --registry <壞掉的路徑>` 之前是直接印紅字終止,完全繞過 doctor 自己的 checks 陣列與 `--json` 輸出,`--json` 模式下會印出非法 JSON（其實是純文字錯誤訊息)而不是結構化錯誤。新增的回歸測試（`doctor.test.ts`)先確認這個情境下 `doctorCommand.parseAsync()` 真的能正常 resolve、`fail()` 真的執行到,而不是進程被殺掉。
+- **MCP server 之前會被單次 registry fetch 失敗整個殺掉**：`mcp.ts` 的 7 個 `getRegistry()` 呼叫點裡,只有 `doctor_project` 自己包了 try/catch,其餘 6 個（`list_components`/`search_components`/`get_component_info`/`plan_component_install`/`add_component`/`refresh_registry`)完全沒有——只要 registry 一次抓取失敗（typo 的 `--registry`、VPN 斷線、registry 端下線),`die()` 會直接砍掉這個長時間運行的 MCP server process,agent 整個 session 都會斷線,不只是這次工具呼叫失敗。查了 `@modelcontextprotocol/sdk` 原始碼確認 `Server.setRequestHandler` 本來就會把 handler 拋出的例外轉成正常的 JSON-RPC error response（`error.message` 直接變成回傳訊息),所以只要移除 `die()` 本身,不需要在每個呼叫點額外包 try/catch,SDK 自己的既有機制就會接住,不砍 process。新增的回歸測試（`mcp.test.ts`)驗證 `list_components` 對著壞掉的 registry 呼叫時,client 端拿到的是乾淨的 `McpError`（訊息就是 `Cannot read registry at: ...`),然後緊接著再呼叫一次 `search_components` 確認 server 還活著、還能回應（即使還是同一種失敗,重點是它有回應,不是連線直接斷掉)。
+
+`registry.test.ts` 原本測 `die()` 行為的三個測試,用的是「spy `process.exit` 讓它拋一個假錯誤」這種間接手法（正是這次重構動機裡點名的「對測試不理想」)；改成直接 `await expect(fetchRegistry(...)).rejects.toThrow(RegistryFetchError)`,不需要碰 `process.exit` 了。`add.test.ts` 也補了一個對應的端到端回歸（registry 不可達時 exit 1、印出乾淨錯誤訊息、不是 unhandled rejection)。
+
+**過程中順手修掉的測試基礎設施 flaky race（跟本項無直接關係,但擋在驗證路上）**：改完 `fetchRegistry` 後連續跑 `vitest run` 出現間歇性、跟這次程式碼改動看似無關的 `registry.test.ts` 失敗。追查後發現：`mcp.e2e.test.ts` 會 `execSync('npm run build', ...)`,而 `packages/cli` 的 `build` script 含 `sync-registry`（`scripts/sync-registry.mjs`),這支腳本原本是 `rmSync(DEST_DIR)` → `mkdirSync` → 非同步 `cp(...)`——如果這支腳本跟 `registry.test.ts` 依賴同一個 `packages/cli/registry` 本地 bundle 目錄的測試同時跑,會有一個「目錄剛被刪、還沒複製完」的窗口,窗口大小等於整個非同步複製 52 個元件的時間。改成先複製進一個暫存的 sibling 目錄,複製完成後才用同步的 `rmSync` + `renameSync` 原地替換,把窗口從「複製所需時間」縮到「兩個同步 syscall 之間」,連續跑 10 次 `vitest run`（含觸發真正 `npm run build` 的 `mcp.e2e.test.ts`)全部通過,修復前同樣條件下 5 次內大概率重現。
+
+**4. 重新定義 CLI 對外主流程並同步 help/README/docs**：`packages/cli/src/index.ts` 的 `program.addCommand()` 註冊順序改成對齊五個分組（Install: `init`/`add`/`remove`；Explore: `info`/`list`/`search`；Maintain: `diff`/`migrate`/`update`/`doctor`；Publish: `build`；Agent: `mcp`),讓 auto-generated `--help` 的 Commands 清單自然照這個順序列出,並在 `addHelpText('after', ...)` 補一段「Command groups」摘要。`packages/cli/README.md` 的 Common commands 區塊改成用同一組五分類呈現,補回原本完全沒列出的 `search`/`doctor`/`migrate`,結尾加一句指向 docs 站的完整文件連結（README 本來就刻意只列主流程,這點沒變)。
+
+`apps/docs` CLI 頁面（`cli.overview.body`,en/zh 都改)原本寫「exposes nine commands」但實際 12 個,且完全沒提過 `migrate`；改成描述五分組敘事,並指向 Registry/MCP 頁面涵蓋 `build`/`mcp`。新增完整的 `migrate` section（title/body/code sample/flags list,en/zh 都補),補上原查證抓到的五個 flag 落差：`add` 補 `--check`、`remove` 補 `--dry-run`、`list` 補 `--outdated`/`--json`、`doctor` 補 `--fix`/`--json`、`diff` 補 `--summary`/`--json`；順手一併補了查證清單沒列出、但同樣過時的兩處：`search` 缺 `--group`/`--tag`/`--json`,以及 `search` 的 `--registry <url>` 沒跟上 `list` 已經做過的「URL or local path」措辭統一（`list --registry help` 那條 P27 舊項當時只改了 `list`,沒注意到 `search` 有一樣的落差)。`sections`/`commands` 陣列與模板裡的 section index 手動同步更新（新增 `migrate` section 讓後面的 `Requirements` section index 位移),`ng build docs --configuration=production` 成功驗證模板正確。
+
+**驗證**：`pnpm --filter @sanring/cli exec vitest run` 連續 10 次、每次 18→19 個測試檔（新增 `registry-integrity.test.ts`)、**240** 個測試全過（原 200 + 本輪新增 40：`build` +3、`list` +2、`registry-integrity` 29、`doctor` +2、`add` +1、`mcp` +2、`migrate.test.ts` 拆分計數不變只是同一批已有的 22 個)；`pnpm --filter @sanring/cli exec tsc --noEmit` 通過；`pnpm exec tsc --noEmit -p apps/docs/tsconfig.app.json` 通過；`pnpm exec ng build docs --configuration=production` 成功；`pnpm lint`（repo 全域)通過（含一個順手修掉的 `migrate.test.ts` 解構賦值 unused-var lint 錯誤,改用 `delete` 而非解構丟棄);`check-registry-sync.mjs`/`check-registry-parity.mjs` 皆綠燈。
+
+**TODOLIST.md P27 現況**：整節（整體流程 4 項 + 各 command 弱點 26 項)全部完成,已從 `TODOLIST.md` 移除。
+
+---
+
+## P30 — 52 個元件 headless 掃描「建議修正」全數收斂
+
+P30 先前已收完 15 個必修缺口；這輪把剩下 15 組建議項目逐一實作或查證排除，並同步修改 `packages/ui`、可安裝的 `registry` source、元件測試與中英文 Docs。P30 至此沒有未完成項目，整節已從 `TODOLIST.md` 移除。
+
+**公開 API 與 Angular 結構**：`avatar-group-count` 補 `disabled` boolean coercion、停用語意與 click/keyboard guard；`breadcrumb` 補可在地化的 `ariaLabel`；`field` 與 `select` 的 `id` 改為可由消費者指定，同時保留自動產生 fallback 與 `SanringFieldControl` 相容性；`select-content`、`radio-item`、`sheet-content` 改用 signal query。所有新增 public input 與行為都同步進 Docs API table／範例／a11y 說明。
+
+**Dialog、Sheet、Hover Card、Sidebar 語意**：`dialog`／`alert-dialog` 新增 `ariaLabel`、`ariaLabelledBy`、`ariaDescribedBy`，依「明確 input → DialogConfig → projected title/description → 元件 fallback」決定關聯，並用 signal `contentChild` + effect 處理動態加入／移除 title，避免殘留舊 attribute；沒有 title 的 `alertdialog` 也一定有 accessible name。`sheet` 使用同一套 explicit relationship／projected title／fallback 邏輯，且 nested `sheet-header` 已有回歸測試。`hover-card` 讓 trigger 與 content 透過 `aria-controls`／`aria-expanded`／穩定 id 建立關聯，有名稱時 content 具 `region` 語意。`sidebar` root 預設 `complementary` 與可覆寫 label；menu button/action 保留寬 selector相容性，同時讓非原生元素取得 `role="button"`、tab stop、Enter/Space activation、disabled guard，並忽略 key-repeat，無 `href` 的 anchor 也不再被誤認成原生互動元素。
+
+**Combobox、Date Picker、Context Menu 焦點與鍵盤操作**：`combobox` 的 `inputId`／`listId` 可覆寫；Escape 與單選完成會在 panel 移除後回到 trigger／input，但 outside pointer close 不再排程回焦，因此不會搶走使用者剛點擊的外部 control。`date-picker` 補 `ariaLabel`／`ariaLabelledBy`，`disabled` 同時接受既有 matcher／matcher array 與整體 boolean（含裸 `disabled` attribute、`"false"` coercion），整體停用時 selection guard 與 ARIA 狀態一致。`context-menu` 改為每層 menu 只有一個 roving tab stop，方向鍵跳過 disabled item；Tab／Shift+Tab 會關閉完整 menu tree，並以 logical trigger 為基準移到文件中前／後相鄰的 control，不受 CDK overlay 被 portal 到 `<body>` 尾端影響，root 與 submenu path 都有 activeElement 回歸測試。
+
+**Transfer 與 Tree**：`transfer-item` 移除「整列 click + 巢狀 checkbox」的雙重 toggle source，改由整列本身承擔 `role="checkbox"`、`aria-checked`、`aria-disabled`、roving tabindex、click／Space；panel 支援 ArrowUp／ArrowDown／Home／End 且跳過 disabled item。`tree` root 補 `ariaLabel`／`ariaLabelledBy`，node 補 `disabled`、ARIA/data state 與 expand/select guard；children lookup 改為一次建立 parent map，避免每個 node 都掃全部 descendants 的 O(n²) 路徑。兩者 Docs keyboard/a11y/API 與 live examples 同步更新。
+
+**刻意保留的 Dropdown Menu 分岔**：沒有為了表面共用而改寫。它使用 `@angular/aria/menu` 的永久 `DomPortal` attach-once 模型；`MenuOverlayController` 則負責自行 create／attach／detach overlay，直接重用會造成生命週期責任衝突。現況已有檔內說明且不是 correctness 缺口，結論是保留此 deliberate divergence。
+
+**交叉 review 額外收掉的邊界**：修正 `hover-card-content` package／registry 四個 template handler 的 `protected` 可見性 drift；刪除 registry combobox 與 `SanringCvaBase` 完全重複的 `onFocus`／`onBlur`；補 Dialog title/description 放在 nested `DialogHeader` 時的 ARIA 測試，以及 Sheet 開啟後 panel focus 測試。Transfer 使用錯誤的 `--sanring-primary-foreground` token 也改回既有 `--sanring-primary-fg`。
+
+**驗證**：`pnpm exec ng test "@sanring/ui" --watch=false` 為 70 個 spec 檔、**421 個測試全過**；`pnpm exec ng build "@sanring/ui"` 成功；P30 修改範圍 ESLint、Prettier、`git diff --check` 通過；`pnpm exec ngc -p apps/docs/tsconfig.app.json --noEmit` 通過；`check-registry-sync.mjs`（52/52）與 `check-registry-parity.mjs`（52 個 shared component directories）皆綠燈；Docs production build 成功，initial bundle 435.37 kB。首次 Docs build 的 `SIGABRT` 由 macOS crash report 定位到 Angular 22 local build cache 的 native LMDB `ExtendedEnv`（不是編譯診斷）；清除 `.angular/cache` 後仍可重現，該次驗證以 `CI=true` 停用 local persistent cache，並在允許 Google Fonts inline request 後完整通過。
