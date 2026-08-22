@@ -661,6 +661,20 @@ P9 golden fixture 掃完 53 元件後發現一批長期存在的 registry 宣告
 
 **範圍限制**:Component Docs 全面掃描效率與工程證據尚未完成,所以本輪只用 `/components/button` 作為 representative component page;其餘 component docs 完成後,應用同一套驗證重新覆蓋。
 
+## P29 Phase 4 — Component Docs 掃描效率與工程證據收斂(2026-08-22)
+
+**已完成**:本輪將先前已建立的 metadata/evidence 資料層收斂成一套明確的 component reference surface,改動全部落在共用 `component-page-*` primitives,因此一次覆蓋 52 個 component pages:
+
+- Header 把 install command 與 package path 提升成主要 manifest panel;registry name、shipped status、shared deps、SSR/browser boundary、a11y、keyboard、state model 與 latest version 收斂成第二層 evidence chips,並新增 Installation/API/Recent changes 快速 anchor。Radio 因 API 拆成 group/item 兩張表,專用 anchor 指到 `#api-group`。
+- Previewer 採 `01 Preview` / `02 Source` 兩區清楚標頭與 rendered/copy-ready 狀態,並把預覽高度壓到 desktop 320px、mobile 280px。沒有重新引入 Preview/Code tabs:先前使用者已要求撤回會隱藏 code 的 tabs,所以這次保留 demo/source 同時可見,用層級而非隱藏來提升掃描效率。
+- API reference 新增 row count/reference header、編號、type code pill 與更緊湊的 desktop columns;mobile 維持 cards,但將 type/default 改成雙欄、description 獨立收尾,長型別與預設值仍可斷行。
+- Recent changes 從一般頁尾面板改成最多 3 筆的 compact release strip,保留 version/date/type/breaking/text 與完整 changelog 入口。
+- 安裝指令在手機版改用 surface 內橫向捲動,避免 CLI token 在單字中間斷行;頁面本身仍維持零水平 overflow。
+
+**視覺觀察**:Button 作為簡單基準時,manifest 與 Preview/Source 層級可在第一屏辨識;Dialog 的 keyboard/a11y/state evidence 可正常換行;Table 的寬 demo 與高密度 API 沒有撐破 content rail。Light/dark 的 command surface 均保持深色 code 語彙,mint 只用在 status/index/active signal。Mobile header 會把 command/path 疊成單欄,evidence chips 與 jump links 自然換行;API cards 在 360px/390px 仍可掃描。
+
+**驗證**:`pnpm exec tsc --noEmit`、scoped ESLint、`git diff --check` 通過;Angular development bundle 冷啟動成功。Playwright 更新 component-page assertions 來覆蓋 install command、Installation/API anchors、Preview/Source 同時可見、API reference surface、recent changes 與 Radio 的 `#api-group`;Phase 4 視覺矩陣擴充為 Button/Dialog/Table 的 desktop light、desktop dark、360px、390px,並對 header/previewer/API/release strip 另拍局部截圖。Desktop Chromium **11 passed**、mobile Chromium **11 passed**。
+
 ---
 
 ## P30 — `checkbox` Enter 鍵「無法切換」查證後確認不是缺口

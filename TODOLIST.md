@@ -44,18 +44,18 @@ Phase 4 已解封:Playwright 截圖 + `Read` 工具可以實際檢視 home(light
 
 #### Component Docs — 掃描效率與工程證據
 
-- [ ] 翻新 component docs:component page header、examples、installation、API table、recent changes 超出「符合規範」以外的視覺層次與掃描效率提升
-- [ ] Component header 補強工程 metadata 呈現:registry name、install command、package path、stability/status、updated/recent changes affordance
-- [ ] Example previewer 強化 Preview / Code / Install / API 的切換與視覺階層,讓使用者更快定位可複製資訊
-- [ ] API table 朝 dense reference surface 調整:提高欄位掃描效率,但保留 mobile card layout 的可讀性
-- [ ] Recent changes 改成 compact release strip,避免像頁尾附錄
-- [ ] 補一致的 evidence chips:a11y、keyboard support、controlled/uncontrolled、SSR/browser-only、registry deps 等,把 Sanring 的工程品質變成可見資產
+- [x] 翻新 component docs:component page header、examples、installation、API table、recent changes 超出「符合規範」以外的視覺層次與掃描效率提升
+- [x] Component header 補強工程 metadata 呈現:registry name、install command、package path、stability/status、updated/recent changes affordance
+- [x] Example previewer 強化 Preview / Code / Install / API 的切換與視覺階層,讓使用者更快定位可複製資訊
+- [x] API table 朝 dense reference surface 調整:提高欄位掃描效率,但保留 mobile card layout 的可讀性
+- [x] Recent changes 改成 compact release strip,避免像頁尾附錄
+- [x] 補一致的 evidence chips:a11y、keyboard support、controlled/uncontrolled、SSR/browser-only、registry deps 等,把 Sanring 的工程品質變成可見資產
 
 #### Verification — 視覺驗證
 
-- [ ] 每次 Phase 4 改動後用 Playwright 重拍 home light/dark/mobile、代表性 long-form page、代表性 component page
-- [ ] 檢查 `360px` / `390px` 無水平 overflow,長 command/code line 不撐破版面,中英文文案長度不互相遮擋
-- [ ] 完成後將具體設計決策、截圖觀察與驗證結果同步到 `DEVLOG.md`
+- [x] 每次 Phase 4 改動後用 Playwright 重拍 home light/dark/mobile、代表性 long-form page、代表性 component page
+- [x] 檢查 `360px` / `390px` 無水平 overflow,長 command/code line 不撐破版面,中英文文案長度不互相遮擋
+- [x] 完成後將具體設計決策、截圖觀察與驗證結果同步到 `DEVLOG.md`
 
 ---
 
