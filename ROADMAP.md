@@ -18,17 +18,13 @@ This is a snapshot, not a commitment or a timeline. Items move, get reprioritize
 
 ## Quality infrastructure (ongoing, lower urgency)
 
-- Automated accessibility regression testing (axe-core or similar)
-- Visual regression testing for CSS changes (screenshot diffing against an approved baseline) — the
-  docs site now has Playwright e2e smoke coverage (see Recently shipped), which is the runner this
-  would build on, but there's no baseline/diffing set up yet
 - Real end-to-end CLI tests against a freshly scaffolded Angular project
 
 ## Recently shipped
 
-- Docs site Playwright e2e coverage — structural smoke tests (renders, no console errors, no
-  horizontal overflow, mobile nav, theme switching) across home, a component page, and a long-form
-  page; `pnpm test:e2e:docs` to run
+- Docs site Playwright quality gate — structural smoke tests, axe-core accessibility coverage, and
+  approved visual baselines for representative home/component/CLI surfaces in both themes; CI runs
+  the full suite through `pnpm test:e2e:docs`
 - Docs site visual system pass — consistent `--docs-*` tokens, WCAG-verified color contrast in both
   themes, and a documented type scale/spacing contract (`apps/docs/DOCS_VISUAL_SYSTEM.md`)
 - `sanring build` — auto-generate a third-party registry's `registry.json` (component deps, shared deps, peer dependencies) from a source directory, instead of hand-writing it against the schema
