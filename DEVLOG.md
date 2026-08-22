@@ -915,3 +915,29 @@ P30 先前已收完 15 個必修缺口；這輪把剩下 15 組建議項目逐�
 **額外的流程修正（跟這兩個 CI bug 無關，是同一輪順手發現並修正的操作失誤）**：原本手動跑了 `pnpm changeset version` 把兩份 changeset 直接消耗掉、產生 0.24.0 並連同版號改動一起開 PR，結果讓 `.github/workflows/require-changeset.yml` 判定「這個 PR 沒有待處理的 changeset」而失敗。查 `gh pr list` 撈出的完整歷史（#1–#26）後確認：這個 repo 27 次版本紀錄裡有 26 次都是 `changesets/action` bot 自動開的 `chore: version packages` PR（分支 `changeset-release/main`）在做真正的 bump，只有一次（0.23.2→0.23.3）是例外手動直接推到 `main`（沒經過 PR，所以沒撞到這個檢查）。修正方式是把 `packages/cli/package.json`／`CHANGELOG.md` 改回 0.23.3、把兩份 changeset 檔案原樣留著（不消耗），讓 bot 在這個 PR 合併進 `main` 後自己開版號 PR。**教訓**：`packages/cli`／`registry` 的版本發布一律讓 changeset 檔案跟著功能改動落地就好，不要手動跑 `changeset version`——那是 bot 的工作，手動搶著做只會跟 `require-changeset.yml` 打架。
 
 **驗證**：Docker 重現（`node:24-bookworm`、`CI=true`、`GITHUB_ACTIONS=true`、`--frozen-lockfile`、`sync-registry`、`vitest run`）240/240 通過；`pnpm changeset status --since=origin/main` 通過；PR #27 的六個 GitHub Actions check（Lint、Test (@sanring/cli)、Test (@sanring/ui)、Type check、Registry Sync Check、Require Changeset）全綠。
+
+---
+
+## P11 — Docs component page light/dark accessibility smoke test(2026-08-22)
+
+**已完成**:新增 `apps/docs/e2e/component-page-accessibility.spec.ts`,以 Button component page 作為代表 reference surface,在 desktop/mobile Chromium 各跑 light/dark 兩種主題。每輪會用既有 `axe-core` 對完整 `main article` 執行 WCAG 2 A/AA 掃描,並另外明確驗證 page title、description、installation、preview source、Command/Manual tabs、兩處 copy-code control 與 header install-copy control。Keyboard assertions 會實際用 ArrowRight/ArrowLeft 切換 installation tabs,並以 Shift+Tab/Tab 回到目標 control,確認 active element、`:focus-visible` 以及 outline/box-shadow focus indicator 同時存在,不是只檢查 DOM 上有 class。
+
+**測試抓到並修正的真實問題**:
+
+- Mobile code blocks 的 `overflow-auto` region 原本沒有 tab stop,鍵盤使用者無法進入後用方向鍵水平捲動。共享 `ComponentPageCodeBlock` 的 scroll surface 補 `tabindex="0"` 與 inset focus ring,一次修正 component docs 與 long-form pages 的同一種 code surface。
+- Light theme 的 `--docs-accent-strong` 使用 `primary-70`,在 eyebrow 與 latest-version 小字上低於 axe 的 AA 門檻;改用 `primary-80`。Installation 的非作用中 package manager 與 code line number 原本把一般頁面的 `--docs-muted` 放在固定深色 code surface 上,改用專屬 `--docs-code-muted`/`--docs-code-fg`。
+- Button `destructive` variant 原本是 `error-50` 白字,light/dark 都無法達到一般文字 4.5:1。`packages/ui` 與可安裝的 `registry` source 同步改為 `error-70` 白字、`error-80` hover、`error-60` focus ring,保留 destructive 語意但提高對比。
+
+**驗證**:新增 accessibility smoke desktop/mobile × light/dark **4/4 passed**;連同既有 component-page 與 Phase 4 matrix 共 **26/26 passed**。`pnpm exec tsc --noEmit`、repo 全域 `pnpm lint`、`git diff --check` 通過;Button directive targeted unit tests **8/8 passed**;registry sync(52/52)與 registry parity(52 directories)皆通過。
+
+---
+
+## P11 — Docs 自動化視覺回歸 baseline + CI quality gate(2026-08-22)
+
+**已完成**:新增 `apps/docs/e2e/visual-regression.spec.ts` 與 6 張核准 baseline,固定以 `1440x900` desktop Chromium 覆蓋 home、Button component page、CLI overview 的 light/dark 畫面。Home/CLI 比對第一個 viewport,Button 則直接比對完整 Basic section,確保真正的 preview 與 source code 都進入 baseline。這三個 surface 分別代表品牌首頁、共用 component docs layout/preview 與 long-form docs/深色 workflow panel;mobile/breakpoint 正確性仍由既有 structural E2E matrix 負責,避免把大量高度不一的 full-page PNG 當成難維護的測試資產。
+
+**穩定性設計**:`visual-chromium` 是獨立 Playwright project,不會在 desktop/mobile structural projects 重複執行;固定 viewport、locale、timezone、reduced motion,每個案例在 screenshot 前鎖定 `sanring-docs-theme`、等待 route landmark/network idle/`document.fonts.ready`,並停用 animation、transition、caret 與 smooth scroll。pixel comparison 保留 3% diff-ratio 與 0.3 color threshold,容忍 macOS/Linux Chromium 的字型 anti-aliasing 差異,但版面位移、surface/token 色彩與元件外觀變化仍會超過門檻。baseline 路徑不含 host OS,讓本機與 GitHub Actions 共用同一組 approved PNG。
+
+**CI 與維護流程**:`ci.yml` 新增 `Docs E2E + visual regression` job,乾淨 checkout 會安裝 Chromium、執行完整 `pnpm test:e2e:docs`;失敗時上傳 7 天保存的 Playwright HTML report、actual/expected/diff 圖。`DOCS_VISUAL_SYSTEM.md` 已改寫 automation 邊界,並記錄視覺 subset 與 `--update-snapshots` 指令;只有人工檢查 actual/diff、確認是刻意改版後才能更新 baseline。`ROADMAP.md` 同步把 accessibility 與 visual regression 從未完成 quality infrastructure 移到 Recently shipped,TODOLIST 的 P11 現在只剩真正 CLI e2e。
+
+**驗證**:Home/CLI 4 張 viewport baseline 均人工抽查完成載入且尺寸為 `1440x900`;審圖時發現 Button 第一屏只露出 preview 外框,隨即把另 2 張改成直接擷取完整 Basic section,確保實際 variants 受保護。baseline 產生後以無 `--update-snapshots` 模式重跑 visual diff **6/6 passed**;完整 `pnpm test:e2e:docs` **46/46 passed**。Playwright `--list` 確認 suite 為 structural/a11y desktop+mobile 40 個案例加 visual-only 6 個案例,沒有重複執行 screenshot spec;repo 全域 lint、`tsc --noEmit`、`git diff --check` 皆通過。
