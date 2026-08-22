@@ -36,6 +36,93 @@ function isPatch(version: string): boolean {
  */
 export const cliVersionChangelog: readonly CliVersionEntry[] = [
   {
+    version: '0.24.0',
+    date: '2026-08-22',
+    changes: [
+      {
+        type: 'added',
+        notable: true,
+        text: '`build` and `list --outdated` gain `--json` output.',
+      },
+      {
+        type: 'added',
+        text: 'New registry-integrity checks (dangling `componentDeps`/`sharedDeps`/group references, unparseable peer versions, optional file-fetchability) shared across `doctor`, `build`, and the MCP `doctor_project` tool.',
+      },
+      {
+        type: 'fixed',
+        text: '`fetchRegistry`/`fetchFile` now throw a typed `RegistryFetchError` instead of exiting the process directly — fixes `doctor`’s dead "Unreachable" catch block and 6 of 7 MCP tool handlers that had no `try`/`catch` around `getRegistry()`, where a single failed fetch could kill the whole long-running MCP server.',
+      },
+      {
+        type: 'fixed',
+        text: '`remove` now distinguishes unknown targets (hard exit 1, matching `diff`/`update`) from known-but-not-installed ones (soft skip), instead of silently exiting 0 whenever any target succeeded.',
+      },
+      {
+        type: 'fixed',
+        text: '`info`’s `alias:component` lookup crashed; fixed and covered by new `info`/`migrate`/`search` test suites.',
+      },
+      {
+        type: 'fixed',
+        componentIds: ['otp-input'],
+        text: 'Slots now shrink to fit their container instead of triggering a horizontal scrollbar, and the hidden native input covers the full control so password managers/autofill see a properly sized target instead of a 1px hit area.',
+      },
+      {
+        type: 'fixed',
+        componentIds: ['avatar'],
+        text: '`avatar-group-count`’s `disabled` now coerces to a boolean, with a matching click/keyboard guard.',
+      },
+      {
+        type: 'fixed',
+        componentIds: ['breadcrumb'],
+        text: '`ariaLabel` is now localizable.',
+      },
+      {
+        type: 'fixed',
+        componentIds: ['field', 'select'],
+        text: 'Consumers can now set an explicit `id`, with fallback generation preserved when omitted.',
+      },
+      {
+        type: 'fixed',
+        componentIds: ['dialog', 'alert-dialog', 'sheet'],
+        text: 'Accessible name now resolves through explicit-input → config → projected-title → fallback, so a title-less alert dialog still gets an accessible name and stays consistent as a title is added or removed dynamically.',
+      },
+      {
+        type: 'fixed',
+        componentIds: ['hover-card'],
+        text: 'Trigger and content are now linked via `aria-controls`/`aria-expanded`.',
+      },
+      {
+        type: 'fixed',
+        componentIds: ['sidebar'],
+        text: 'Default `complementary` role with an overridable label; menu button/action now get `role="button"`, a tab stop, Enter/Space activation, a disabled guard, and ignore key-repeat.',
+      },
+      {
+        type: 'fixed',
+        componentIds: ['combobox'],
+        text: 'Overridable `inputId`/`listId`; focus now returns to the trigger/input after Escape or a single-select completion, but not after an outside pointerdown close.',
+      },
+      {
+        type: 'fixed',
+        componentIds: ['date-picker'],
+        text: '`ariaLabel`/`ariaLabelledBy` added; `disabled` now also accepts a plain boolean alongside the existing day-matcher API, with selection guards and ARIA state kept consistent either way.',
+      },
+      {
+        type: 'fixed',
+        componentIds: ['context-menu'],
+        text: 'Only one item per menu level is now a tab stop instead of every item; Tab/Shift+Tab closes the whole menu tree and moves focus to the logical next/previous control in document order.',
+      },
+      {
+        type: 'fixed',
+        componentIds: ['transfer'],
+        text: 'Each row now owns `role="checkbox"`/`aria-checked`/`aria-disabled`/roving tabindex directly instead of a row-click and a nested checkbox both trying to toggle state; panel supports ArrowUp/Down/Home/End, skipping disabled items.',
+      },
+      {
+        type: 'fixed',
+        componentIds: ['tree'],
+        text: '`ariaLabel`/`ariaLabelledBy` on the root, per-node `disabled`; child lookup now builds one parent map instead of rescanning all descendants per node.',
+      },
+    ],
+  },
+  {
     version: '0.23.3',
     date: '2026-08-19',
     changes: [
