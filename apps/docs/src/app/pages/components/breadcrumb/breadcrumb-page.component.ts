@@ -44,7 +44,7 @@ import { breadcrumbPage, breadcrumbPageExamples } from './breadcrumb.docs';
       <app-component-page-section [section]="section('basic')">
         <app-component-page-code-previewer [code]="examples.basic" language="angular-html">
           <div previewer class="flex min-h-[80px] items-center justify-center p-6">
-            <sanring-breadcrumb>
+            <sanring-breadcrumb [ariaLabel]="i18n.t('breadcrumb.demo.ariaLabel')">
               <sanring-breadcrumb-list>
                 <sanring-breadcrumb-item>
                   <sanring-breadcrumb-link routerLink="/">Home</sanring-breadcrumb-link>
@@ -100,7 +100,7 @@ import { breadcrumbPage, breadcrumbPageExamples } from './breadcrumb.docs';
                 class="flex min-h-[120px] flex-col items-center justify-center gap-4 p-6"
               >
                 <!-- Chevron -->
-                <sanring-breadcrumb>
+                <sanring-breadcrumb [ariaLabel]="i18n.t('breadcrumb.demo.ariaLabel')">
                   <sanring-breadcrumb-list>
                     <sanring-breadcrumb-item>
                       <sanring-breadcrumb-link routerLink="/">Home</sanring-breadcrumb-link>
@@ -113,7 +113,7 @@ import { breadcrumbPage, breadcrumbPageExamples } from './breadcrumb.docs';
                 </sanring-breadcrumb>
 
                 <!-- Dot -->
-                <sanring-breadcrumb>
+                <sanring-breadcrumb [ariaLabel]="i18n.t('breadcrumb.demo.ariaLabel')">
                   <sanring-breadcrumb-list>
                     <sanring-breadcrumb-item>
                       <sanring-breadcrumb-link routerLink="/">Home</sanring-breadcrumb-link>
@@ -132,7 +132,7 @@ import { breadcrumbPage, breadcrumbPageExamples } from './breadcrumb.docs';
           <app-component-page-section [section]="section('example-ellipsis')">
             <app-component-page-code-previewer [code]="examples.ellipsis" language="angular-html">
               <div previewer class="flex min-h-[80px] items-center justify-center p-6">
-                <sanring-breadcrumb>
+                <sanring-breadcrumb [ariaLabel]="i18n.t('breadcrumb.demo.ariaLabel')">
                   <sanring-breadcrumb-list>
                     <sanring-breadcrumb-item>
                       <sanring-breadcrumb-link routerLink="/">Home</sanring-breadcrumb-link>
@@ -161,7 +161,7 @@ import { breadcrumbPage, breadcrumbPageExamples } from './breadcrumb.docs';
           <app-component-page-section [section]="section('example-custom')">
             <app-component-page-code-previewer [code]="examples.custom" language="angular-html">
               <div previewer class="flex min-h-[80px] items-center justify-center p-6">
-                <sanring-breadcrumb>
+                <sanring-breadcrumb [ariaLabel]="i18n.t('breadcrumb.demo.ariaLabel')">
                   <sanring-breadcrumb-list>
                     <sanring-breadcrumb-item>
                       <sanring-breadcrumb-link routerLink="/">Home</sanring-breadcrumb-link>

@@ -60,10 +60,12 @@ export const transferTranslations = {
   'transfer.api.selectAllMethods.description':
     '勾選 / 取消勾選 / 切換面板內所有非 disabled 項目。interactive() 為 false 時 selectAll / deselectAll 為 no-op。',
   'transfer.accessibility.description':
-    '由 checkbox、button 與可選搜尋 input 組成，保留各自原生語意。面板標題應描述可選與已選清單，移動按鈕需提供 aria-label。',
+    '每個項目都提供 checkbox 語意，以及對應的名稱、勾選與停用狀態。每個面板使用單一 roving tab stop，避免長清單塞滿頁面的 Tab 順序。面板標題應描述可選與已選清單，移動按鈕需提供 aria-label。',
   'transfer.keyboard.description':
-    'Transfer 由 checkbox、操作按鈕、搜尋輸入與選用 pagination 控制組成。',
-  'transfer.keyboard.tabShiftTab': '在面板項目、操作按鈕、搜尋欄與分頁控制間移動焦點。',
+    'Transfer 項目使用 roving focus，並搭配操作按鈕、搜尋輸入與選用 pagination 控制。',
+  'transfer.keyboard.tabShiftTab': '在各面板、操作按鈕、搜尋欄與分頁控制間移動焦點。',
+  'transfer.keyboard.arrowKeys': '在面板內將焦點移至上一個或下一個未停用項目。',
+  'transfer.keyboard.homeEnd': '在面板內將焦點移至第一個或最後一個未停用項目。',
   'transfer.keyboard.space': '切換目前聚焦的項目或全選 checkbox。',
   'transfer.keyboard.enterSpace': '啟用目前聚焦的移動操作或分頁控制。',
   'transfer.keyboard.type': '焦點在搜尋輸入中時，過濾目前面板項目。',

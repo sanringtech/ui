@@ -5,6 +5,7 @@ import { fetchRegistry } from '../registry.js';
 import {
   isAngularProject,
   readConfig,
+  reportRegistryFetchError,
   resolveComponentBasePath,
   resolveRegistrySource,
 } from '../utils.js';
@@ -31,7 +32,13 @@ export const searchCommand = new Command('search')
   .action(async (query: string, options: { path?: string; registry?: string; group?: string; tag?: string; json: boolean }) => {
     const config = readConfig(process.cwd());
     const spinner = ora('Loading components...').start();
-    const registry = await fetchRegistry(resolveRegistrySource(undefined, config, options.registry));
+    let registry;
+    try {
+      registry = await fetchRegistry(resolveRegistrySource(undefined, config, options.registry));
+    } catch (e) {
+      spinner.stop();
+      reportRegistryFetchError(e, { json: options.json });
+    }
     spinner.stop();
 
     const q = query.toLowerCase();

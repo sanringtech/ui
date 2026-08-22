@@ -21,7 +21,7 @@ import { MENU_ITEM_SIZE_CLASS } from '../shared/component-styles';
     '[attr.aria-disabled]': 'disabled() ? "true" : null',
     '[attr.data-state]': 'checked() ? "checked" : "unchecked"',
     '[attr.data-disabled]': 'disabled() ? "" : null',
-    '[attr.tabindex]': 'disabled() ? "-1" : "0"',
+    tabindex: '-1',
     '[class]': 'itemClass()',
     '(click)': 'toggle()',
     '(keydown.enter)': 'handleKeyActivation($event)',

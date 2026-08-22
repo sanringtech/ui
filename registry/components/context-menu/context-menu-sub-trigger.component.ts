@@ -24,7 +24,7 @@ import { ContextMenuSubComponent } from './context-menu-sub.component';
     '[attr.data-state]': 'sub.isOpen() ? "open" : "closed"',
     '[attr.aria-disabled]': 'disabled() ? "true" : null',
     '[attr.data-disabled]': 'disabled() ? "" : null',
-    '[attr.tabindex]': 'disabled() ? "-1" : "0"',
+    tabindex: '-1',
     '[class]': 'itemClass()',
     '(mouseenter)': 'onMouseEnter()',
     '(mouseleave)': 'sub.scheduleClose()',

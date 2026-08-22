@@ -93,6 +93,10 @@ describe('HoverCardComponent', () => {
 
     expect(content?.textContent).toContain('Details');
     expect(content?.getAttribute('data-side')).toBe('right');
+    expect(content?.getAttribute('role')).toBe('region');
+    expect(content?.getAttribute('aria-label')).toBe('Additional information');
+    expect(content?.id).toBeTruthy();
+    expect(trigger.getAttribute('aria-controls')).toBe(content?.id);
   });
 
   it('starts closing when Escape is pressed on the trigger', async () => {
@@ -115,6 +119,7 @@ describe('HoverCardComponent', () => {
 
     content = overlayContainer.getContainerElement().querySelector('.custom-hover-card');
     expect(content).toBeNull();
+    expect(trigger.hasAttribute('aria-controls')).toBe(false);
   });
 
   it('opens on trigger mouseenter and closes on mouseleave', async () => {

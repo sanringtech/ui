@@ -19,6 +19,9 @@ import type { SidebarCollapsible, SidebarState } from './sidebar.type';
   providers: [{ provide: SIDEBAR_CONTEXT, useExisting: SidebarComponent }],
   host: {
     '[id]': 'sidebarId()',
+    '[attr.role]': 'role()',
+    '[attr.aria-label]': 'ariaLabelledBy() ? null : ariaLabel()',
+    '[attr.aria-labelledby]': 'ariaLabelledBy()',
     '[class]': 'hostClass()',
     '[attr.data-open]': 'isOpen() ? "" : null',
     '[attr.data-state]': 'state()',
@@ -32,6 +35,9 @@ export class SidebarComponent implements SidebarContext {
   readonly id = input(generateSidebarId());
   readonly class = input<string | undefined>();
   readonly open = model(true);
+  readonly role = input<'complementary' | 'navigation'>('complementary');
+  readonly ariaLabel = input<string | undefined>('Sidebar');
+  readonly ariaLabelledBy = input<string | undefined>();
 
   // 底層 input 改名 _collapsible 避免跟下面的 computed `collapsible`（合併 parent provider
   // 後的有效值）撞名，再用 alias 讓範本上還是寫 `collapsible`。
@@ -44,8 +50,8 @@ export class SidebarComponent implements SidebarContext {
   readonly collapsible = computed<SidebarCollapsible>(
     () => this.parentCtx?.collapsible() ?? this._collapsible(),
   );
-  readonly isOpen = computed(() =>
-    this.collapsible() === 'none' || (this.parentCtx ? this.parentCtx.isOpen() : this.open()),
+  readonly isOpen = computed(
+    () => this.collapsible() === 'none' || (this.parentCtx ? this.parentCtx.isOpen() : this.open()),
   );
   readonly state = computed<SidebarState>(() => (this.isOpen() ? 'open' : 'closed'));
 

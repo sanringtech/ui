@@ -10,6 +10,7 @@ import {
   isUntouchedSinceInstall,
   fetchTextTargetsConcurrent,
   readConfig,
+  reportRegistryFetchError,
   requireAngularProject,
   resolveComponentPath,
   resolveRegistrySource,
@@ -93,7 +94,12 @@ export const updateCommand = new Command('update')
         ? resolve(cwd, config.sharedPath)
         : join(componentBasePath, 'shared');
 
-      const registry = await fetchRegistry(registrySource);
+      let registry;
+      try {
+        registry = await fetchRegistry(registrySource);
+      } catch (e) {
+        reportRegistryFetchError(e);
+      }
       const registryIndex = createRegistryIndex(registry);
       const { components, missing, notInstalled } = resolveDiffTargets(
         componentNames,

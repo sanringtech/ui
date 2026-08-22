@@ -47,7 +47,9 @@ describe('TransferHeaderComponent', () => {
     const fixture = TestBed.createComponent(TransferHeaderTestHost);
     fixture.detectChanges();
 
-    const headers = fixture.nativeElement.querySelectorAll('sanring-transfer-header') as NodeListOf<HTMLElement>;
+    const headers = fixture.nativeElement.querySelectorAll(
+      'sanring-transfer-header',
+    ) as NodeListOf<HTMLElement>;
     expect(headers[0].classList.contains('border-b')).toBe(true);
     expect(headers[1].classList.contains('border-b')).toBe(true);
     expect(headers[1].classList.contains('custom-marker')).toBe(true);
@@ -57,7 +59,9 @@ describe('TransferHeaderComponent', () => {
     const fixture = TestBed.createComponent(TransferHeaderTestHost);
     fixture.detectChanges();
 
-    const headers = fixture.nativeElement.querySelectorAll('sanring-transfer-header') as NodeListOf<HTMLElement>;
+    const headers = fixture.nativeElement.querySelectorAll(
+      'sanring-transfer-header',
+    ) as NodeListOf<HTMLElement>;
     // source panel has 2 selectable items (Two moved to target), 0 currently checked
     expect(headers[0].textContent?.trim()).toBe('Available 0/2');
     // isShow defaults to false on the target header

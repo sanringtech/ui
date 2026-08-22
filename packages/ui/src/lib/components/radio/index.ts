@@ -5,7 +5,4 @@ export * from './radio.types';
 import { RadioGroupComponent } from './radio-group.component';
 import { RadioItemComponent } from './radio-item.component';
 
-export const SANRING_RADIO_IMPORTS = [
-  RadioGroupComponent,
-  RadioItemComponent,
-];
+export const SANRING_RADIO_IMPORTS = [RadioGroupComponent, RadioItemComponent];

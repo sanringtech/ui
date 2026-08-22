@@ -38,6 +38,10 @@ export const comboboxTranslations = {
     'Allows selecting more than one item and pairing the field with chips.',
   'combobox.api.disabled.description':
     'Disables the combobox input and prevents selection changes.',
+  'combobox.api.inputId.description':
+    'ID shared by the input or custom trigger and its label. Generated when omitted and overridable for app-level associations.',
+  'combobox.api.listId.description':
+    'ID of the listbox referenced by aria-controls. Generated when omitted and overridable when integrating external ARIA relationships.',
   'combobox.api.placeholder.description':
     'Placeholder text for the combobox input. Pass this from i18n in app code.',
   'combobox.api.showClear.description':
@@ -52,11 +56,12 @@ export const comboboxTranslations = {
     'Additional classes merged with the corresponding combobox primitive.',
   'combobox.accessibility.description':
     "The input element has role='combobox', aria-expanded, aria-controls pointing to the list id, and aria-autocomplete='list'. The list container has role='listbox' and each visible item has role='option'. When inside <sanring-field>, aria-required, aria-invalid, and aria-describedby are forwarded automatically.",
-  'combobox.keyboard.description': 'Type in the input to filter; navigate the matching options with arrow keys.',
+  'combobox.keyboard.description':
+    'Type in the input to filter; navigate the matching options with arrow keys.',
   'combobox.keyboard.type': 'Filter the option list to matching entries.',
   'combobox.keyboard.navigateList': 'Move focus between matching options, skipping disabled items.',
   'combobox.keyboard.selectItem': 'Select the focused option and close the list.',
   'combobox.keyboard.escape': 'Close the option list without changing the selection.',
   'combobox.stateModel.description':
-    "CVA (ControlValueAccessor). Use [(ngModel)] or [formControl] for Angular Forms. The text typed in <sanring-combobox-input> drives filtering — the parent component controls which items are rendered. For multi-select, use <sanring-combobox-chips> to display selected values as removable chips.",
+    'CVA (ControlValueAccessor). Use [(ngModel)] or [formControl] for Angular Forms. The text typed in <sanring-combobox-input> drives filtering — the parent component controls which items are rendered. For multi-select, use <sanring-combobox-chips> to display selected values as removable chips.',
 } as const;

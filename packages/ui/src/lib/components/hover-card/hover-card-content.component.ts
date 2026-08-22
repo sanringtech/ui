@@ -42,6 +42,10 @@ import { HoverCardSide } from './hover-card.type';
         (detach)="onDetach()"
       >
         <div
+          [id]="hoverCard.contentId"
+          role="region"
+          [attr.aria-label]="ariaLabelledBy() ? null : ariaLabel()"
+          [attr.aria-labelledby]="ariaLabelledBy()"
           [class]="hoverCardContentClass()"
           [attr.data-side]="renderedSide()"
           (mouseenter)="hoverCard.open()"
@@ -60,6 +64,8 @@ export class HoverCardContentComponent {
   readonly side = input<HoverCardSide>('bottom');
   readonly sideOffset = input(8, { transform: numberAttribute });
   readonly class = input<string | undefined>();
+  readonly ariaLabel = input<string | undefined>('Additional information');
+  readonly ariaLabelledBy = input<string | undefined>();
 
   protected hoverCard = inject(HoverCardComponent);
   private readonly overlay = inject(Overlay);
@@ -110,11 +116,11 @@ export class HoverCardContentComponent {
     this.renderedSide.set(side);
   }
 
-  handlePositionChange(event: ConnectedOverlayPositionChange) {
+  protected handlePositionChange(event: ConnectedOverlayPositionChange) {
     this.renderedSide.set(this.getSideFromPosition(event.connectionPair));
   }
 
-  handleOverlayKeydown(event: KeyboardEvent) {
+  protected handleOverlayKeydown(event: KeyboardEvent) {
     if (event.key !== 'Escape') return;
 
     event.preventDefault();
@@ -122,12 +128,12 @@ export class HoverCardContentComponent {
     this.hoverCard.closeImmediately();
   }
 
-  onDetach(): void {
+  protected onDetach(): void {
     this._endLeave();
   }
 
   /** 退場 CSS 動畫（animate-popover-out）真的播完時觸發，是結束 leaving 狀態的主要途徑 */
-  onLeaveAnimationEnd(event: AnimationEvent): void {
+  protected onLeaveAnimationEnd(event: AnimationEvent): void {
     if (event.target !== event.currentTarget || !this._leaving()) return;
     this._endLeave();
   }

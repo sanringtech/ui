@@ -11,10 +11,7 @@ import { cn } from '../shared/utils';
     '[class]': 'breadcrumbLinkClass()',
   },
   template: `
-    <a
-      [routerLink]="routerLink()"
-      class="transition-colors hover:text-[var(--sanring-foreground)]"
-    >
+    <a [routerLink]="routerLink()" class="transition-colors hover:text-[var(--sanring-foreground)]">
       <ng-content></ng-content>
     </a>
   `,

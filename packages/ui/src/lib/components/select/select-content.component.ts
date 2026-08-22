@@ -3,16 +3,21 @@ import {
   Component,
   ElementRef,
   Injector,
-  ViewChild,
   booleanAttribute,
   computed,
   contentChildren,
   inject,
   input,
   signal,
+  viewChild,
 } from '@angular/core';
 import { FocusKeyManager } from '@angular/cdk/a11y';
-import { CdkConnectedOverlay, ConnectionPositionPair, Overlay, OverlayModule } from '@angular/cdk/overlay';
+import {
+  CdkConnectedOverlay,
+  ConnectionPositionPair,
+  Overlay,
+  OverlayModule,
+} from '@angular/cdk/overlay';
 import { SelectComponent } from './select.component';
 import { SelectContentPosition } from './select.type';
 import { SelectItemComponent } from './select-item.component';
@@ -100,8 +105,8 @@ export class SelectContentComponent {
   private readonly overlay = inject(Overlay);
   private readonly injector = inject(Injector);
 
-  @ViewChild(CdkConnectedOverlay) private connectedOverlay?: CdkConnectedOverlay;
-  @ViewChild('content') private contentRef?: ElementRef<HTMLElement>;
+  private readonly connectedOverlay = viewChild(CdkConnectedOverlay);
+  private readonly contentRef = viewChild<ElementRef<HTMLElement>>('content');
 
   readonly class = input<string | undefined>();
   readonly position = input<SelectContentPosition>('popper');
@@ -144,9 +149,10 @@ export class SelectContentComponent {
   protected handleAttach(): void {
     queueMicrotask(() => {
       if (this.position() === 'item-aligned') {
-        const selectedItem = this.contentRef?.nativeElement.querySelector<HTMLElement>('[data-state="checked"]');
+        const selectedItem =
+          this.contentRef()?.nativeElement.querySelector<HTMLElement>('[data-state="checked"]');
         this.itemAlignedOffsetY.set(selectedItem?.offsetTop ?? 0);
-        this.connectedOverlay?.overlayRef.updatePosition();
+        this.connectedOverlay()?.overlayRef.updatePosition();
       }
 
       this.focusInitialItem();

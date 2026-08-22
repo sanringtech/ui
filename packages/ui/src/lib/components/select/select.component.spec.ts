@@ -54,9 +54,15 @@ class SelectTestHost {
 // fixed alongside this test, in packages/ui + registry). This host shows the
 // trigger used the way that new input is meant to be used.
 @Component({
-  imports: [SelectComponent, SelectContentComponent, SelectItemComponent, SelectTriggerDirective, SelectValueComponent],
+  imports: [
+    SelectComponent,
+    SelectContentComponent,
+    SelectItemComponent,
+    SelectTriggerDirective,
+    SelectValueComponent,
+  ],
   template: `
-    <sanring-select>
+    <sanring-select id="fruit-select">
       <button type="button" sanringSelectTrigger ariaLabel="Fruit">
         <sanring-select-value placeholder="Pick one" />
       </button>
@@ -69,7 +75,13 @@ class SelectTestHost {
 class SelectA11yHost {}
 
 @Component({
-  imports: [SelectComponent, SelectContentComponent, SelectItemComponent, SelectTriggerDirective, SelectValueComponent],
+  imports: [
+    SelectComponent,
+    SelectContentComponent,
+    SelectItemComponent,
+    SelectTriggerDirective,
+    SelectValueComponent,
+  ],
   template: `
     <sanring-select>
       <button type="button" sanringSelectTrigger class="custom-trigger-class" ariaLabel="Fruit">
@@ -87,7 +99,13 @@ class SelectClassTestHost {}
 // setDisabledState() path (via [formControl]/[ngModel]) — a consumer using
 // [value]/(valueChange) directly had no way to disable the control at all.
 @Component({
-  imports: [SelectComponent, SelectContentComponent, SelectItemComponent, SelectTriggerDirective, SelectValueComponent],
+  imports: [
+    SelectComponent,
+    SelectContentComponent,
+    SelectItemComponent,
+    SelectTriggerDirective,
+    SelectValueComponent,
+  ],
   template: `
     <sanring-select disabled>
       <button type="button" sanringSelectTrigger ariaLabel="Fruit">
@@ -141,6 +159,16 @@ describe('SelectComponent', () => {
     expect(triggers(fixture)[0].textContent?.trim()).toBe('Pick one');
   });
 
+  it('uses a consumer-provided id on the trigger', () => {
+    const fixture = TestBed.createComponent(SelectA11yHost);
+    fixture.detectChanges();
+
+    const trigger = fixture.nativeElement.querySelector(
+      'button[sanringSelectTrigger]',
+    ) as HTMLButtonElement;
+    expect(trigger.id).toBe('fruit-select');
+  });
+
   it('opens the listbox on trigger click', () => {
     const fixture = TestBed.createComponent(SelectTestHost);
     fixture.detectChanges();
@@ -165,7 +193,9 @@ describe('SelectComponent', () => {
     trigger.click();
     fixture.detectChanges();
 
-    const option = overlayContainer.getContainerElement().querySelector('[role="option"]') as HTMLElement;
+    const option = overlayContainer
+      .getContainerElement()
+      .querySelector('[role="option"]') as HTMLElement;
     option.click();
     fixture.detectChanges();
 
@@ -244,7 +274,9 @@ describe('SelectComponent', () => {
     fixture.detectChanges();
     await fixture.whenStable();
 
-    document.activeElement?.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true }));
+    document.activeElement?.dispatchEvent(
+      new KeyboardEvent('keydown', { key: 'Enter', bubbles: true }),
+    );
     fixture.detectChanges();
 
     expect(trigger.getAttribute('aria-expanded')).toBe('false');
@@ -279,7 +311,9 @@ describe('SelectComponent', () => {
     const fixture = TestBed.createComponent(SelectPlainDisabledHost);
     fixture.detectChanges();
 
-    const trigger = fixture.nativeElement.querySelector('button[sanringSelectTrigger]') as HTMLButtonElement;
+    const trigger = fixture.nativeElement.querySelector(
+      'button[sanringSelectTrigger]',
+    ) as HTMLButtonElement;
     expect(trigger.disabled).toBe(true);
     expect(trigger.getAttribute('aria-disabled')).toBe('true');
 
@@ -300,7 +334,9 @@ describe('SelectComponent', () => {
       fixture.detectChanges();
       await fixture.whenStable();
 
-      const option = overlayContainer.getContainerElement().querySelector('[role="option"]') as HTMLElement;
+      const option = overlayContainer
+        .getContainerElement()
+        .querySelector('[role="option"]') as HTMLElement;
       option.click();
       fixture.detectChanges();
 
@@ -321,7 +357,9 @@ describe('SelectComponent', () => {
       fixture.detectChanges();
       await fixture.whenStable();
 
-      document.activeElement?.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape', bubbles: true }));
+      document.activeElement?.dispatchEvent(
+        new KeyboardEvent('keydown', { key: 'Escape', bubbles: true }),
+      );
       fixture.detectChanges();
 
       expect(trigger.getAttribute('aria-expanded')).toBe('false');
@@ -356,7 +394,9 @@ describe('SelectComponent', () => {
     const fixture = TestBed.createComponent(SelectClassTestHost);
     fixture.detectChanges();
 
-    const trigger = fixture.nativeElement.querySelector('button[sanringSelectTrigger]') as HTMLElement;
+    const trigger = fixture.nativeElement.querySelector(
+      'button[sanringSelectTrigger]',
+    ) as HTMLElement;
     expect(trigger.classList.contains('custom-trigger-class')).toBe(true);
 
     trigger.click();

@@ -60,19 +60,24 @@ export class ComboboxContentComponent {
     effect(() => {
       if (!this.combobox.isOpen()) return;
       afterNextRender(
-        () => this.elementRef.nativeElement.querySelector<HTMLElement>('input[role="combobox"]')?.focus(),
+        () =>
+          this.elementRef.nativeElement
+            .querySelector<HTMLElement>('input[role="combobox"]')
+            ?.focus(),
         { injector: this.injector },
       );
     });
   }
 
   protected close(): void {
-    this.combobox.toggleOpen(false);
+    this.combobox.closeAndRestoreFocus();
   }
 
   @HostListener('document:pointerdown', ['$event'])
   protected handleDocumentPointerDown(event: PointerEvent): void {
     if (!this.combobox.isOpen() || this.combobox.containsElement(event.target)) return;
-    this.close();
+    // A pointer interaction is choosing a new focus target. Close without scheduling a focus
+    // restore, otherwise the post-render callback would steal focus back from that target.
+    this.combobox.toggleOpen(false);
   }
 }

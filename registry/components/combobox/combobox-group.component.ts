@@ -28,7 +28,5 @@ export class ComboboxGroupComponent {
   protected readonly headingId = uniqueId('sanring-combobox-group-heading');
   protected readonly headingClass = cn(COLLECTION_GROUP_HEADING_CLASS, 'py-1.5');
 
-  protected readonly groupClass = computed(() =>
-    cn(COLLECTION_GROUP_CLASS, 'py-1', this.class()),
-  );
+  protected readonly groupClass = computed(() => cn(COLLECTION_GROUP_CLASS, 'py-1', this.class()));
 }

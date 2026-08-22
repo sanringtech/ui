@@ -12,7 +12,11 @@ import {
 } from '@angular/core';
 import { cn } from '../shared/utils';
 import { OVERLAY_SURFACE_CLASS } from '../shared/component-styles';
-import { focusAdjacentMenuItem } from '../shared/menu-navigation';
+import {
+  focusAdjacentMenuItem,
+  initializeMenuTabStop,
+  syncFocusedMenuItemTabStop,
+} from '../shared/menu-navigation';
 import { MenuOverlayController } from '../shared/menu-overlay-controller';
 import { ContextMenuComponent } from './context-menu.component';
 
@@ -36,6 +40,7 @@ const CONTEXT_MENU_POSITIONS: ConnectionPositionPair[] = [
   host: {
     role: 'menu',
     '[class]': 'contentClass()',
+    '(focusin)': 'onFocusIn($event)',
   },
 })
 export class ContextMenuContentComponent {
@@ -77,6 +82,15 @@ export class ContextMenuContentComponent {
         scrollStrategy: 'close',
         onOutsideClick: () => this.contextMenu.close(),
         onKeydown: (event) => {
+          if (event.key === 'Tab') {
+            // The menu is portaled to the end of <body>, so native traversal from an overlay
+            // item would not continue beside the logical trigger. Close and move explicitly.
+            event.preventDefault();
+            event.stopPropagation();
+            this.contextMenu.closeAndFocusAdjacentTabStop(event.shiftKey ? -1 : 1);
+            return;
+          }
+
           if (event.key === 'Escape') {
             event.stopPropagation();
             this.contextMenu.close();
@@ -86,10 +100,18 @@ export class ContextMenuContentComponent {
           if (event.key === 'ArrowDown' || event.key === 'ArrowUp') {
             event.preventDefault();
             event.stopPropagation();
-            focusAdjacentMenuItem(this.elementRef.nativeElement, event.key === 'ArrowDown' ? 1 : -1);
+            focusAdjacentMenuItem(
+              this.elementRef.nativeElement,
+              event.key === 'ArrowDown' ? 1 : -1,
+            );
           }
         },
       });
+      initializeMenuTabStop(this.elementRef.nativeElement);
     });
+  }
+
+  protected onFocusIn(event: FocusEvent): void {
+    syncFocusedMenuItemTabStop(this.elementRef.nativeElement, event.target);
   }
 }

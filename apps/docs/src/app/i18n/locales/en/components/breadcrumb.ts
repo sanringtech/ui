@@ -14,15 +14,20 @@ export const breadcrumbTranslations = {
   'breadcrumb.demo.divider': 'Divider',
   'breadcrumb.demo.withEllipsis': 'With Ellipsis',
   'breadcrumb.demo.customDivider': 'Custom Divider',
+  'breadcrumb.demo.ariaLabel': 'Breadcrumb',
   'breadcrumb.api.description': 'Inputs supported by the breadcrumb primitives.',
+  'breadcrumb.api.ariaLabel.description':
+    'Accessible name for the breadcrumb navigation; override it for localization or page-specific context.',
   'breadcrumb.api.type.description':
     "Divider icon: 'chevron' (default, ›) or 'dot' (·). Pass custom content via ng-content to override entirely.",
   'breadcrumb.api.routerLink.description':
     'Angular RouterLink value passed to the inner anchor element.',
   'breadcrumb.api.class.description': 'Additional classes merged onto the host element.',
-  'breadcrumb.accessibility.description': "role='navigation' and aria-label='breadcrumb' on the host element. Mark the current page with aria-current='page' on the <sanring-breadcrumb-page> element so screen readers announce the user's current location.",
+  'breadcrumb.accessibility.description':
+    "The host uses role='navigation'; set ariaLabel to a localized or context-specific accessible name. Mark the current page with aria-current='page' on <sanring-breadcrumb-page> so screen readers announce the user's current location.",
   'breadcrumb.keyboard.description': 'Standard anchor keyboard behavior.',
   'breadcrumb.keyboard.tab': 'Navigate forward through breadcrumb links.',
   'breadcrumb.keyboard.shiftTab': 'Navigate backward through breadcrumb links.',
-  'breadcrumb.stateModel.description': 'Stateless — items are rendered via template projection. No internal selection state.',
+  'breadcrumb.stateModel.description':
+    'Stateless — items are rendered via template projection. No internal selection state.',
 } as const;

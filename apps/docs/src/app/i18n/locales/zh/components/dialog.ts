@@ -21,12 +21,18 @@ export const dialogTranslations = {
   'dialog.api.description': 'Dialog primitives 支援的 Inputs。',
   'dialog.api.class.description': '與 DialogContent 版面樣式合併的額外 class。',
   'dialog.api.showClose.description': '控制是否渲染內建關閉按鈕。',
+  'dialog.api.ariaLabel.description':
+    '未投影 sanringDialogTitle 時使用的 accessible name fallback，也保留 DialogConfig ariaLabel 支援。',
+  'dialog.api.ariaLabelledBy.description':
+    '標示 dialog 的外部元素 id，優先於投影的 title 與 ariaLabel。',
+  'dialog.api.ariaDescribedBy.description':
+    '描述 dialog 的外部元素 id，優先於 sanringDialogDescription。',
   'dialog.api.triggerConfig.description':
     'sanringDialogTrigger 開啟 template 時傳入的 CDK DialogConfig。',
   'dialog.api.closeResult.description': 'sanringDialogClose 關閉 dialog 時送出的選填結果值。',
   'dialog.api.mediaClass.description': '與 dialog media 容器合併的額外 class。',
   'dialog.accessibility.description':
-    "CDK Dialog 容器會自動加上 role='dialog' 與 aria-modal='true'。若有 sanringDialogTitle 或 sanringDialogDescription，其 id 會自動綁到容器的 aria-labelledby 和 aria-describedby。Angular CDK 的 FocusTrap 會在 dialog 開啟期間將 Tab 焦點限制在面板內。",
+    "CDK Dialog 容器會自動加上 role='dialog' 與 aria-modal='true'。投影的 title 與 description 會自動關聯；無 title 時由 ariaLabel 提供 fallback name。Angular CDK 的 FocusTrap 會在 dialog 開啟期間將 Tab 焦點限制在面板內。",
   'dialog.keyboard.description': 'Dialog 開啟期間，焦點被鎖定在面板內。',
   'dialog.keyboard.tab': '移動焦點到 dialog 內的下一個可聚焦元素。',
   'dialog.keyboard.shiftTab': '移動焦點到 dialog 內的上一個可聚焦元素。',

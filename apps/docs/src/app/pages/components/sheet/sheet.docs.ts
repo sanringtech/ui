@@ -41,9 +41,24 @@ export const sheetPage = {
       ],
     },
     { id: 'api', titleKey: 'toc.apiReference', descriptionKey: 'sheet.api.description', level: 2 },
-    { id: 'accessibility', titleKey: 'toc.accessibility', descriptionKey: 'sheet.accessibility.description', level: 2 },
-    { id: 'keyboard', titleKey: 'toc.keyboard', descriptionKey: 'sheet.keyboard.description', level: 2 },
-    { id: 'stateModel', titleKey: 'toc.stateModel', descriptionKey: 'sheet.stateModel.description', level: 2 },
+    {
+      id: 'accessibility',
+      titleKey: 'toc.accessibility',
+      descriptionKey: 'sheet.accessibility.description',
+      level: 2,
+    },
+    {
+      id: 'keyboard',
+      titleKey: 'toc.keyboard',
+      descriptionKey: 'sheet.keyboard.description',
+      level: 2,
+    },
+    {
+      id: 'stateModel',
+      titleKey: 'toc.stateModel',
+      descriptionKey: 'sheet.stateModel.description',
+      level: 2,
+    },
   ],
   apiRows: [
     {
@@ -63,6 +78,24 @@ export const sheetPage = {
       type: 'string',
       defaultValue: "''",
       descriptionKey: 'sheet.api.class.description',
+    },
+    {
+      property: 'ariaLabel',
+      type: 'string',
+      defaultValue: "'Sheet'",
+      descriptionKey: 'sheet.api.ariaLabel.description',
+    },
+    {
+      property: 'ariaLabelledBy',
+      type: 'string',
+      defaultValue: 'undefined',
+      descriptionKey: 'sheet.api.ariaLabelledBy.description',
+    },
+    {
+      property: 'ariaDescribedBy',
+      type: 'string',
+      defaultValue: 'undefined',
+      descriptionKey: 'sheet.api.ariaDescribedBy.description',
     },
   ] satisfies readonly ComponentPageApiRow[],
   keyboardRows: [

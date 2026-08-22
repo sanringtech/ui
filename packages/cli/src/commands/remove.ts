@@ -12,6 +12,7 @@ import {
   confirmPrompt,
   DEFAULT_COMPONENT_PATH,
   readConfig,
+  reportRegistryFetchError,
   requireAngularProject,
   resolveComponentBasePath,
   resolveRegistrySource,
@@ -22,7 +23,10 @@ import { parseComponentRef } from './add.js';
 
 export interface RemovalPlan {
   toRemove: string[];
+  /** known in the registry, but not currently installed — soft skip */
   notInstalled: string[];
+  /** not present in the registry at all — hard input error */
+  unknown: string[];
   /** name being removed -> still-installed component names that depend on it */
   blockedBy: Map<string, string[]>;
   /** shared dep names used only by the components being removed */
@@ -56,7 +60,9 @@ export function planRemoval(
       : createRegistryIndex(registry).componentsByName;
 
   const toRemove = requestedNames.filter((n) => installedSet.has(n));
-  const notInstalled = requestedNames.filter((n) => !installedSet.has(n));
+  const notRequestedInstalled = requestedNames.filter((n) => !installedSet.has(n));
+  const notInstalled = notRequestedInstalled.filter((n) => byName.has(n));
+  const unknown = notRequestedInstalled.filter((n) => !byName.has(n));
   const remaining = installedNames.filter((n) => !toRemove.includes(n));
 
   const blockedBy = new Map<string, string[]>();
@@ -81,7 +87,7 @@ export function planRemoval(
     (dep) => !sharedStillNeeded.has(dep),
   );
 
-  return { toRemove, notInstalled, blockedBy, possiblyUnusedShared };
+  return { toRemove, notInstalled, unknown, blockedBy, possiblyUnusedShared };
 }
 
 function confirmRemoval(names: string[], yes: boolean): Promise<boolean> {
@@ -117,21 +123,33 @@ export const removeCommand = new Command('remove')
       const registrySource = resolveRegistrySource(undefined, config, options.registry);
       const componentBasePath = resolveComponentBasePath(cwd, options.path, config);
 
-      const registry = await fetchRegistry(registrySource);
+      let registry;
+      try {
+        registry = await fetchRegistry(registrySource);
+      } catch (e) {
+        reportRegistryFetchError(e);
+      }
       const registryIndex = createRegistryIndex(registry);
       const installed = listInstalledComponentNames(componentBasePath, registryIndex);
       const parsed = componentNames.map(parseComponentRef);
       const requestedNames = parsed.map((ref) => ref.name);
       const plan = planRemoval(requestedNames, installed, registryIndex);
 
-      if (plan.notInstalled.length > 0) {
+      if (plan.unknown.length > 0) {
         console.error(
-          pc.red(`✖ Not installed, nothing to remove: ${plan.notInstalled.join(', ')}`),
+          pc.red(`✖ Unknown component${plan.unknown.length > 1 ? 's' : ''}: ${plan.unknown.join(', ')}`),
         );
+        // Unknown targets are input errors, independent of how the rest of the
+        // batch turns out — matches diff/update's "unknown target always fails".
+        process.exit(1);
+        return;
+      }
+
+      if (plan.notInstalled.length > 0) {
+        console.log(pc.dim(`  Not installed, nothing to remove: ${plan.notInstalled.join(', ')}`));
       }
 
       if (plan.toRemove.length === 0) {
-        process.exit(plan.notInstalled.length > 0 ? 1 : 0);
         return;
       }
 

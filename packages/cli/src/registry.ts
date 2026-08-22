@@ -75,12 +75,16 @@ function isUrl(s: string): boolean {
   return s.startsWith('http://') || s.startsWith('https://');
 }
 
-function die(message: string, detail?: unknown): never {
-  console.error(pc.red(`✖ ${message}`));
-  if (detail !== undefined) {
-    console.error(pc.dim(`  ${detail instanceof Error ? detail.message : String(detail)}`));
+// Thrown instead of printing + `process.exit(1)` directly, so callers (CLI
+// commands, the MCP server) decide how to surface the failure — a one-shot
+// CLI command prints and exits, but the long-running MCP server must not be
+// killed by a single failed registry fetch, and tests should be able to
+// assert against a rejected promise instead of spying on `process.exit`.
+export class RegistryFetchError extends Error {
+  constructor(message: string, options?: { cause?: unknown }) {
+    super(message, options);
+    this.name = 'RegistryFetchError';
   }
-  process.exit(1);
 }
 
 // ---------------------------------------------------------------------------
@@ -288,7 +292,7 @@ export async function fetchRegistry(source?: string): Promise<Registry> {
     try {
       return validateRegistry(JSON.parse(readFileSync(localJson, 'utf-8')));
     } catch (e) {
-      die(`Cannot read registry at: ${localJson}`, e);
+      throw new RegistryFetchError(`Cannot read registry at: ${localJson}`, { cause: e });
     }
   }
 
@@ -321,7 +325,7 @@ async function fetchRegistryFromUrl(url: string): Promise<Registry> {
     if (!res.ok) throw new Error(`HTTP ${res.status}`);
     return validateRegistry(await res.json());
   } catch (e) {
-    die(`Cannot fetch registry: ${url}`, e);
+    throw new RegistryFetchError(`Cannot fetch registry: ${url}`, { cause: e });
   }
 }
 

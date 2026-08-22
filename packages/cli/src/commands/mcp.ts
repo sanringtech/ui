@@ -17,6 +17,7 @@ import {
   type Registry,
   type RegistryComponent,
 } from '../registry.js';
+import { findRegistryReferenceIssues } from '../registry-integrity.js';
 import { isAngularProject, readConfig, resolveComponentBasePath, resolveRegistrySource, semverLte } from '../utils.js';
 import { resolveInstallSet, collectPeerDeps } from './add.js';
 import { registryRelativePath } from './diff.js';
@@ -342,6 +343,13 @@ export function createMcpServer(options: CreateMcpServerOptions = {}): Server {
         try {
           const registry = await getRegistry();
           lines.push(`Registry: reachable (${registry.components.length} components)`);
+          const integrityIssues = findRegistryReferenceIssues(registry);
+          if (integrityIssues.length > 0) {
+            lines.push(`Registry integrity: ${integrityIssues.length} issue${integrityIssues.length > 1 ? 's' : ''}:`);
+            for (const issue of integrityIssues) lines.push(`  - ${issue.message}`);
+          } else {
+            lines.push('Registry integrity: no dangling references or unparseable peer versions found');
+          }
         } catch (error) {
           lines.push(`Registry: unreachable (${error instanceof Error ? error.message : String(error)})`);
         }

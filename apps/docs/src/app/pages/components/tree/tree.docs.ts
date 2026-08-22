@@ -80,10 +80,28 @@ export const treePage = {
       descriptionKey: 'tree.api.selectedValue.description',
     },
     {
+      property: 'ariaLabel',
+      type: 'string | undefined',
+      defaultValue: 'undefined',
+      descriptionKey: 'tree.api.ariaLabel.description',
+    },
+    {
+      property: 'ariaLabelledBy',
+      type: 'string | undefined',
+      defaultValue: 'undefined',
+      descriptionKey: 'tree.api.ariaLabelledBy.description',
+    },
+    {
       property: 'value',
       type: 'string',
       defaultValue: 'required',
       descriptionKey: 'tree.api.value.description',
+    },
+    {
+      property: 'disabled',
+      type: 'boolean',
+      defaultValue: 'false',
+      descriptionKey: 'tree.api.disabled.description',
     },
     {
       property: 'exportAs="sanringTreeNode"',
@@ -116,6 +134,7 @@ export const treePage = {
 
 export const treePageExamples = {
   basic: `<sanring-tree
+  ariaLabel="Project files"
   [expandedValue]="expandedValue()"
   (expandedValueChange)="expandedValue.set($event)"
   [selectedValue]="selectedValue()"
@@ -148,6 +167,7 @@ export const treePageExamples = {
 </sanring-tree>`,
 
   navigation: `<sanring-tree
+  ariaLabel="Application navigation"
   [expandedValue]="expandedValue()"
   (expandedValueChange)="expandedValue.set($event)"
   [selectedValue]="selectedValue()"
@@ -190,7 +210,7 @@ export const treePageExamples = {
           Profile
         </button>
       </sanring-tree-node>
-      <sanring-tree-node value="settings/team">
+      <sanring-tree-node value="settings/team" disabled>
         <button type="button" tabindex="-1" (click)="tree.selectNode('settings/team')">
           Team
         </button>
@@ -224,6 +244,7 @@ import { TreeComponent, TreeNodeComponent, TreeGroupComponent, TreeTriggerDirect
 export class ExampleComponent {}`,
 
   usageMain: `<sanring-tree
+  ariaLabel="Component files"
   [expandedValue]="expandedValue()"
   (expandedValueChange)="expandedValue.set($event)"
   [selectedValue]="selectedValue()"

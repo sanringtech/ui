@@ -52,10 +52,14 @@ export const datePickerTranslations = {
   'datePicker.api.quarterLabels.description': '四個季度 cell 的顯示文字，依財務季度順序排列。',
   'datePicker.api.yearsToDisplay.description': '年粒度滑動視窗顯示的 cell 數量。',
   'datePicker.api.gridColumns.description': '用於方向鍵焦點運算的網格欄數；月/年預設 3，季預設 4。',
-  'datePicker.api.disabled.description': '標記為不可選取的日期比對器。',
+  'datePicker.api.disabled.description':
+    '傳入日期比對器（或比對器陣列）以停用個別週期；傳入 boolean 則停用整個 picker，且不會清除既有值。',
   'datePicker.api.allowDeselect.description': '單選模式下，重新點選已選取的值是否會清空。',
   'datePicker.api.required.description':
     '將 picker 標記為必填，供 field 整合與 aria-required 使用。',
+  'datePicker.api.ariaLabel.description':
+    '當沒有可見標籤命名 picker 時，提供給 host 的無障礙名稱。',
+  'datePicker.api.ariaLabelledBy.description': '提供 picker host 無障礙名稱之可見文字元素 ID。',
   'datePicker.api.ariaDescribedBy.description':
     '描述 picker 的 helper text id；會與 Field 提供的描述 id 合併。',
   'datePicker.api.rangePeriodCountLimit.description': '區間選取的最小/最大週期數限制（選填）。',
@@ -69,12 +73,14 @@ export const datePickerTranslations = {
   'datePicker.api.abortRangeDraft.description': '捨棄進行中的區間選取草稿，不提交它。',
   'datePicker.api.removeDate.description': '從選取集合中移除單一日期（僅限多選模式）。',
   'datePicker.api.focus.description': '將焦點移到 date-picker host 元素。',
-  'datePicker.accessibility.description': "日曆面板具有 role='grid'，網格的 aria-label 來自月份/年份標題，每個儲存格具有 role='gridcell'。宿主元素會接收 aria-required、aria-invalid 與 aria-describedby，並自動串接到外層的 sanring-field。",
+  'datePicker.accessibility.description':
+    "host group 可使用 aria-label 或 aria-labelledby，並接收 aria-invalid、aria-disabled 與 aria-describedby。日曆面板具有 role='grid'，aria-label 來自標題；每個 role='gridcell' 會帶上選取、停用與必填狀態。Field 描述會自動串接。",
   'datePicker.keyboard.description': '日曆網格的鍵盤導覽由 @sanring/date-picker-core 處理。',
   'datePicker.keyboard.arrowKeys': '在日曆網格中移動焦點。',
   'datePicker.keyboard.pageUpDown': '上一頁 / 下一頁（依 granularity 切換月份、季度或年份）。',
   'datePicker.keyboard.homeEnd': '跳至目前檢視中的第一個 / 最後一個儲存格。',
   'datePicker.keyboard.enter': '選取目前有焦點的儲存格。',
   'datePicker.keyboard.escape': '關閉日期選擇器彈出視窗且不提交選取。',
-  'datePicker.stateModel.description': '實作 ControlValueAccessor。使用 [(ngModel)] 或 formControl。值型別：DatePickerValue（依 mode 可為單一日期、範圍對組或日期陣列）。mode 與 granularity 可在執行期動態更改。',
+  'datePicker.stateModel.description':
+    '實作 ControlValueAccessor。使用 [(ngModel)] 或 formControl。值型別：DatePickerValue（依 mode 可為單一日期、範圍對組或日期陣列）。mode 與 granularity 可在執行期動態更改。',
 } as const;

@@ -10,7 +10,12 @@ import { TransferItem, TransferMode } from './transfer.type';
   imports: [TransferComponent, TransferPanelComponent],
   template: `
     <sanring-transfer [items]="items()" [selectedKeys]="selectedKeys()" [mode]="mode()">
-      <sanring-transfer-panel direction="source" class="custom-marker" [pageSize]="sourcePageSize()" #sourcePanel="sanringTransferPanel" />
+      <sanring-transfer-panel
+        direction="source"
+        class="custom-marker"
+        [pageSize]="sourcePageSize()"
+        #sourcePanel="sanringTransferPanel"
+      />
       <sanring-transfer-panel direction="target" />
     </sanring-transfer>
   `,

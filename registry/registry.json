@@ -1126,6 +1126,9 @@
       "componentDeps": [
         "checkbox"
       ],
+      "peerDependencies": {
+        "@lucide/angular": "^1.18.0"
+      },
       "files": [
         "transfer/transfer.component.ts",
         "transfer/transfer-panel.component.ts",

@@ -1,4 +1,5 @@
 import { ChangeDetectionStrategy, Component, model, output, signal } from '@angular/core';
+import { focusAdjacentDocumentTabStop } from '../../shared/menu-navigation';
 
 export interface ContextMenuPosition {
   x: number;
@@ -18,6 +19,7 @@ export interface ContextMenuPosition {
 })
 export class ContextMenuComponent {
   readonly isOpen = model(false);
+  private triggerElement: HTMLElement | null = null;
 
   /*
     掛在這裡而不是各層 content 上：item 可能深埋在巢狀 sub-content 裡（各自是獨立
@@ -37,5 +39,18 @@ export class ContextMenuComponent {
 
   close(): void {
     this.isOpen.set(false);
+  }
+
+  registerTrigger(element: HTMLElement): void {
+    this.triggerElement = element;
+  }
+
+  unregisterTrigger(element: HTMLElement): void {
+    if (this.triggerElement === element) this.triggerElement = null;
+  }
+
+  closeAndFocusAdjacentTabStop(delta: 1 | -1): void {
+    this.close();
+    if (this.triggerElement) focusAdjacentDocumentTabStop(this.triggerElement, delta);
   }
 }

@@ -208,6 +208,27 @@ describe('addCommand (integration)', () => {
     );
   });
 
+  it('exits 1 with a clean error instead of an unhandled rejection when the registry is unreachable', async () => {
+    const errors: string[] = [];
+    vi.spyOn(console, 'error').mockImplementation((...args: unknown[]) => {
+      errors.push(args.join(' '));
+    });
+    const exitSpy = vi.spyOn(process, 'exit').mockImplementation(() => {
+      throw new Error('process.exit');
+    });
+    const brokenRegistryDir = mkdtempSync(join(tmpdir(), 'sanring-cli-add-broken-registry-'));
+
+    await expect(
+      addCommand.parseAsync(['widget', '--registry', brokenRegistryDir], { from: 'user' }),
+    ).rejects.toThrow('process.exit');
+
+    expect(exitSpy).toHaveBeenCalledWith(1);
+    expect(errors.some((e) => e.includes('Cannot read registry at'))).toBe(true);
+
+    rmSync(brokenRegistryDir, { recursive: true, force: true });
+    exitSpy.mockRestore();
+  });
+
   it('preserves registries/defaultRegistry from the existing config on write', async () => {
     writeConfig(projectDir, {
       componentPath: 'src/app/components/ui',

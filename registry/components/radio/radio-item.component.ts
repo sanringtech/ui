@@ -2,11 +2,11 @@ import {
   ChangeDetectionStrategy,
   Component,
   ElementRef,
-  ViewChild,
   booleanAttribute,
   computed,
   inject,
   input,
+  viewChild,
 } from '@angular/core';
 import { _IdGenerator } from '@angular/cdk/a11y';
 import { LucideCircle } from '@lucide/angular';
@@ -65,7 +65,7 @@ export class RadioItemComponent {
   readonly ariaLabelledBy = input<string | undefined>();
   readonly ariaDescribedBy = input<string | undefined>();
 
-  @ViewChild('btn') private btnRef!: ElementRef<HTMLButtonElement>;
+  private readonly btnRef = viewChild.required<ElementRef<HTMLButtonElement>>('btn');
 
   protected readonly group = inject(RadioGroupComponent, { optional: true });
 
@@ -92,12 +92,12 @@ export class RadioItemComponent {
   }
 
   focusAndSelect(): void {
-    this.btnRef?.nativeElement.focus();
+    this.btnRef().nativeElement.focus();
     this.select();
   }
 
   focusOnly(options?: FocusOptions): void {
-    this.btnRef?.nativeElement.focus(options);
+    this.btnRef().nativeElement.focus(options);
   }
 
   onFocus(): void {

@@ -50,14 +50,20 @@ export const sidebarTranslations = {
   'sidebar.api.collapsible.description':
     'Defines the closed behavior: none stays open, offcanvas collapses to zero width, and icon keeps a compact rail.',
   'sidebar.api.class.description': 'Merges extra classes into the sidebar or slot host element.',
+  'sidebar.api.role.description':
+    'Landmark role for the sidebar root. Use navigation when the whole region is navigation.',
+  'sidebar.api.ariaLabel.description':
+    'Accessible name for the sidebar landmark when ariaLabelledBy is not set.',
+  'sidebar.api.ariaLabelledBy.description':
+    'Ids of external elements that label the sidebar landmark. Takes precedence over ariaLabel.',
   'sidebar.api.active.description':
     'Marks a sanringSidebarMenuButton as the current page and applies active styling.',
   'sidebar.api.disabled.description':
     'Disables a sanringSidebarMenuButton, preventing click activation and adding disabled semantics.',
   'sidebar.accessibility.description':
-    'Sidebar renders persistent layout content. It does not trap focus, hide background content, or behave like a dialog. Use Sheet when the sidebar must appear as a modal mobile overlay.',
+    'Sidebar renders a named complementary landmark by default. Menu button and action directives preserve native button/link behavior and give non-native hosts button role, focus, and keyboard activation. Use Sheet when the sidebar must appear as a modal mobile overlay.',
   'sidebar.keyboard.description':
-    'Keyboard behavior follows the native element used with each directive.',
+    'Native controls keep their browser behavior; non-native menu controls support button keyboard behavior.',
   'sidebar.keyboard.tab': 'Moves through focusable controls and links in document order.',
   'sidebar.keyboard.enterSpace':
     'Activates buttons. Anchors activate with Enter according to native browser behavior.',

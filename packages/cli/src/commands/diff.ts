@@ -15,6 +15,7 @@ import {
   fetchTextTargetsConcurrent,
   isUntouchedSinceInstall,
   readConfig,
+  reportRegistryFetchError,
   requireAngularProject,
   resolveComponentBasePath,
   resolveRegistrySource,
@@ -181,7 +182,12 @@ export const diffCommand = new Command('diff')
         ? resolve(cwd, config.sharedPath)
         : join(componentBasePath, 'shared');
 
-      const registry = await fetchRegistry(registrySource);
+      let registry;
+      try {
+        registry = await fetchRegistry(registrySource);
+      } catch (e) {
+        reportRegistryFetchError(e, { json: options.json });
+      }
       const registryIndex = createRegistryIndex(registry);
       const { components, missing, notInstalled } = resolveDiffTargets(
         componentNames,

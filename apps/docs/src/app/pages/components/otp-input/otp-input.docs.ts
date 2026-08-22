@@ -231,7 +231,7 @@ export const otpInputPageExamples = {
   basic: `<sanring-otp-input
   [length]="6"
   size="lg"
-  autocomplete="one-time-code"
+  autocomplete="off"
   ariaLabel="Verification code"
 />`,
   usageImport: `import {
@@ -250,14 +250,14 @@ export const otpInputPageExamples = {
   [length]="6"
   [pattern]="digitsOnlyPattern"
   size="lg"
-  autocomplete="one-time-code"
+  autocomplete="off"
   ariaLabel="Digits only"
 />`,
   separator: `<sanring-otp-input
   [length]="6"
   [value]="'123456'"
   size="lg"
-  autocomplete="one-time-code"
+  autocomplete="off"
   ariaLabel="Verification code"
 >
   <sanring-otp-input-slot [index]="0" />
@@ -271,14 +271,14 @@ export const otpInputPageExamples = {
   disabled: `<sanring-otp-input
   [value]="'123456'"
   size="lg"
-  autocomplete="one-time-code"
+  autocomplete="off"
   disabled
   ariaLabel="Verification code"
 />`,
   controlled: `<sanring-otp-input
   [value]="controlledCode"
   size="lg"
-  autocomplete="one-time-code"
+  autocomplete="off"
   ariaLabel="Verification code"
   (valueChange)="controlledCode = $event"
 />`,
@@ -288,7 +288,7 @@ export const otpInputPageExamples = {
     id="invalid-otp-code"
     [formControl]="invalidCodeControl"
     size="lg"
-    autocomplete="one-time-code"
+    autocomplete="off"
     ariaLabel="Verification code"
   />
   <sanring-error-message>Invalid verification code.</sanring-error-message>
@@ -297,7 +297,7 @@ export const otpInputPageExamples = {
   [length]="4"
   [pattern]="digitsOnlyPattern"
   size="lg"
-  autocomplete="one-time-code"
+  autocomplete="off"
   ariaLabel="PIN code"
 />`,
   alphanumeric: `<sanring-otp-input
@@ -305,7 +305,7 @@ export const otpInputPageExamples = {
   [length]="5"
   [value]="'A1B2C'"
   size="lg"
-  autocomplete="one-time-code"
+  autocomplete="off"
   ariaLabel="Recovery code"
 />`,
   form: `<form class="grid gap-4" (ngSubmit)="verify()">
@@ -315,7 +315,7 @@ export const otpInputPageExamples = {
       id="otp-code-field"
       [formControl]="codeControl"
       size="lg"
-      autocomplete="one-time-code"
+      autocomplete="off"
       ariaLabel="Verification code"
     />
     <sanring-error-message>Enter the 6-digit code.</sanring-error-message>

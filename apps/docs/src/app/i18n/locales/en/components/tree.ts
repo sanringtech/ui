@@ -4,6 +4,8 @@ export const treeTranslations = {
   'tree.examples.basic.description':
     'Compose tree, node, trigger, and group primitives to build an expandable hierarchy.',
   'tree.demo.navigation': 'Nested navigation',
+  'tree.demo.filesLabel': 'Project files',
+  'tree.demo.navigationLabel': 'Application navigation',
   'tree.examples.navigation.description':
     'Use the tree primitives for sidebar navigation, with group expansion and the current page selection controlled by external signals.',
   'tree.usage.description':
@@ -16,14 +18,20 @@ export const treeTranslations = {
   'tree.api.expandedValue.description': 'Expanded node values controlled by the tree root.',
   'tree.api.selectedValue.description':
     'Currently selected node value controlled by the tree root.',
+  'tree.api.ariaLabel.description':
+    'Accessible name for the tree when no visible element labels it.',
+  'tree.api.ariaLabelledBy.description':
+    'ID of a visible element that provides the accessible name for the tree.',
   'tree.api.value.description': 'Unique value for a tree node.',
+  'tree.api.disabled.description':
+    'Marks a node unavailable and prevents pointer or keyboard selection and expansion.',
   'tree.api.exportAs.description':
     'Exposes the node instance in a template reference variable — read `isExpanded()`/`isSelected()` directly instead of comparing value strings in the component class.',
   'tree.api.trigger.description':
     'Directive applied to the interactive element that toggles a node group.',
   'tree.api.class.description': 'Additional classes merged with the corresponding tree primitive.',
   'tree.accessibility.description':
-    "role='tree' on the host, role='treeitem' on each sanring-tree-node. aria-selected reflects the selected state. aria-expanded is set only on branch nodes that have children — leaf nodes correctly omit this attribute. Roving tabindex: only the focused node is in the tab sequence at any time.",
+    "Provide ariaLabel or ariaLabelledBy to name the role='tree' host. Each sanring-tree-node uses role='treeitem'; aria-selected, aria-expanded, and aria-disabled reflect its state. Leaf nodes omit aria-expanded. Roving tabindex keeps only the focused node in the tab sequence.",
   'tree.keyboard.description': 'Full keyboard navigation via CDK TreeKeyManager.',
   'tree.keyboard.arrowDown': 'Move focus to the next visible node.',
   'tree.keyboard.arrowUp': 'Move focus to the previous visible node.',

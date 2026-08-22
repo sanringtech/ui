@@ -62,12 +62,12 @@ import { otpInputPage, otpInputPageExamples } from './otp-input.docs';
         <app-component-page-code-previewer [code]="examples.basic" language="angular-html">
           <div
             previewer
-            class="flex min-h-24 w-full items-center justify-start overflow-x-auto px-1 sm:justify-center sm:px-4"
+            class="flex min-h-24 w-full min-w-0 items-center justify-center px-1 sm:px-4"
           >
             <sanring-otp-input
               [length]="6"
               size="lg"
-              autocomplete="one-time-code"
+              autocomplete="off"
               [ariaLabel]="i18n.t('otpInput.demo.verificationCode')"
             />
           </div>
@@ -94,13 +94,13 @@ import { otpInputPage, otpInputPageExamples } from './otp-input.docs';
             <app-component-page-code-previewer [code]="examples.pattern" language="angular-html">
               <div
                 previewer
-                class="flex min-h-24 w-full items-center justify-start overflow-x-auto px-1 sm:justify-center sm:px-4"
+                class="flex min-h-24 w-full min-w-0 items-center justify-center px-1 sm:px-4"
               >
                 <sanring-otp-input
                   [length]="6"
                   [pattern]="digitsOnlyPattern"
                   size="lg"
-                  autocomplete="one-time-code"
+                  autocomplete="off"
                   [ariaLabel]="i18n.t('otpInput.demo.digitsOnly')"
                 />
               </div>
@@ -111,13 +111,13 @@ import { otpInputPage, otpInputPageExamples } from './otp-input.docs';
             <app-component-page-code-previewer [code]="examples.separator" language="angular-html">
               <div
                 previewer
-                class="flex min-h-24 w-full items-center justify-start overflow-x-auto px-1 sm:justify-center sm:px-4"
+                class="flex min-h-24 w-full min-w-0 items-center justify-center px-1 sm:px-4"
               >
                 <sanring-otp-input
                   [length]="6"
                   [value]="separatorValue"
                   size="lg"
-                  autocomplete="one-time-code"
+                  autocomplete="off"
                   [ariaLabel]="i18n.t('otpInput.demo.verificationCode')"
                 >
                   <sanring-otp-input-slot [index]="0" />
@@ -136,12 +136,12 @@ import { otpInputPage, otpInputPageExamples } from './otp-input.docs';
             <app-component-page-code-previewer [code]="examples.disabled" language="angular-html">
               <div
                 previewer
-                class="flex min-h-24 w-full items-center justify-start overflow-x-auto px-1 sm:justify-center sm:px-4"
+                class="flex min-h-24 w-full min-w-0 items-center justify-center px-1 sm:px-4"
               >
                 <sanring-otp-input
                   [value]="'123456'"
                   size="lg"
-                  autocomplete="one-time-code"
+                  autocomplete="off"
                   disabled
                   [ariaLabel]="i18n.t('otpInput.demo.verificationCode')"
                 />
@@ -153,12 +153,12 @@ import { otpInputPage, otpInputPageExamples } from './otp-input.docs';
             <app-component-page-code-previewer [code]="examples.controlled" language="angular-html">
               <div
                 previewer
-                class="flex min-h-24 w-full items-center justify-start overflow-x-auto px-1 sm:justify-center sm:px-4"
+                class="flex min-h-24 w-full min-w-0 items-center justify-center px-1 sm:px-4"
               >
                 <sanring-otp-input
                   [value]="controlledValue()"
                   size="lg"
-                  autocomplete="one-time-code"
+                  autocomplete="off"
                   [ariaLabel]="i18n.t('otpInput.demo.verificationCode')"
                   (valueChange)="controlledValue.set($event)"
                 />
@@ -170,7 +170,7 @@ import { otpInputPage, otpInputPageExamples } from './otp-input.docs';
             <app-component-page-code-previewer [code]="examples.invalid" language="angular-html">
               <div
                 previewer
-                class="grid min-h-32 w-full max-w-sm content-center gap-3 overflow-x-auto px-1 sm:px-4"
+                class="grid min-h-32 w-full min-w-0 max-w-sm content-center gap-3 px-1 sm:px-4"
               >
                 <sanring-field>
                   <label sanringLabel for="invalid-otp-code">
@@ -180,7 +180,7 @@ import { otpInputPage, otpInputPageExamples } from './otp-input.docs';
                     id="invalid-otp-code"
                     [formControl]="invalidCodeControl"
                     size="lg"
-                    autocomplete="one-time-code"
+                    autocomplete="off"
                     [ariaLabel]="i18n.t('otpInput.demo.verificationCode')"
                   />
                   <sanring-error-message>{{
@@ -195,13 +195,13 @@ import { otpInputPage, otpInputPageExamples } from './otp-input.docs';
             <app-component-page-code-previewer [code]="examples.fourDigits" language="angular-html">
               <div
                 previewer
-                class="flex min-h-24 w-full items-center justify-start overflow-x-auto px-1 sm:justify-center sm:px-4"
+                class="flex min-h-24 w-full min-w-0 items-center justify-center px-1 sm:px-4"
               >
                 <sanring-otp-input
                   [length]="4"
                   [pattern]="digitsOnlyPattern"
                   size="lg"
-                  autocomplete="one-time-code"
+                  autocomplete="off"
                   [ariaLabel]="i18n.t('otpInput.demo.pinCode')"
                 />
               </div>
@@ -215,14 +215,14 @@ import { otpInputPage, otpInputPageExamples } from './otp-input.docs';
             >
               <div
                 previewer
-                class="flex min-h-24 w-full items-center justify-start overflow-x-auto px-1 sm:justify-center sm:px-4"
+                class="flex min-h-24 w-full min-w-0 items-center justify-center px-1 sm:px-4"
               >
                 <sanring-otp-input
                   type="alphanumeric"
                   [length]="5"
                   [value]="'A1B2C'"
                   size="lg"
-                  autocomplete="one-time-code"
+                  autocomplete="off"
                   [ariaLabel]="i18n.t('otpInput.demo.recoveryCode')"
                 />
               </div>
@@ -249,7 +249,7 @@ import { otpInputPage, otpInputPageExamples } from './otp-input.docs';
                     id="otp-code-field"
                     [formControl]="codeControl"
                     size="lg"
-                    autocomplete="one-time-code"
+                    autocomplete="off"
                     [ariaLabel]="i18n.t('otpInput.demo.verificationCode')"
                   />
                   <sanring-error-message>{{

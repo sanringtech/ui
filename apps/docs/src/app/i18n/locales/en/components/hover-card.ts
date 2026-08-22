@@ -28,8 +28,12 @@ export const hoverCardTranslations = {
   'hoverCard.api.sideOffset.description':
     'Distance in pixels between the trigger and floating panel.',
   'hoverCard.api.class.description': 'Additional classes merged onto the floating content panel.',
+  'hoverCard.api.ariaLabel.description':
+    'Accessible name for the content region when ariaLabelledBy is not set.',
+  'hoverCard.api.ariaLabelledBy.description':
+    'Ids of external elements that label the content region. Takes precedence over ariaLabel.',
   'hoverCard.accessibility.description':
-    'The trigger keeps native focus behavior, the panel can open from keyboard focus, and Escape closes it. Hover Card is best for supplemental context, not required click targets.',
+    'The trigger keeps native focus behavior and links aria-expanded/aria-controls to a named content region. Escape closes it. Hover Card is best for supplemental context, not required click targets.',
   'hoverCard.keyboard.description':
     'Hover Card opens from pointer hover and keyboard focus on the trigger.',
   'hoverCard.keyboard.focus': 'Focuses the trigger and opens the floating panel after openDelay.',

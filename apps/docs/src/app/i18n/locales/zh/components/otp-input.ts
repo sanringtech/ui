@@ -47,7 +47,8 @@ export const otpInputTranslations = {
     '轉發到隱藏原生 input 的 autocomplete 提示，預設為 one-time-code。',
   'otpInput.api.disabled.description': '停用所有 slot 並阻止使用者互動。',
   'otpInput.api.readOnly.description': '顯示目前值，但禁止編輯。',
-  'otpInput.api.required.description': '將 OTP input 標記為必填，供 field 整合與 aria-required 使用。',
+  'otpInput.api.required.description':
+    '將 OTP input 標記為必填，供 field 整合與 aria-required 使用。',
   'otpInput.api.ariaLabel.description': '沒有可見 label 時，提供給群組與隱藏 input 的無障礙標籤。',
   'otpInput.api.ariaLabelledBy.description': '用來命名 OTP input 的可見 label 元素 id。',
   'otpInput.api.ariaDescribedBy.description':
@@ -56,12 +57,15 @@ export const otpInputTranslations = {
   'otpInput.api.stateChange.description': '送出下一個驗證碼字串、slot metadata 與完成狀態。',
   'otpInput.api.complete.description': '每個 slot 都有值時觸發。',
   'otpInput.api.pasted.description': '貼上事件處理後，送出正規化後的貼上資訊。',
-  'otpInput.api.slotKeydown.description': '送出單一 slot 的鍵盤 metadata，供進階自訂 slot 行為使用。',
-  'otpInput.accessibility.description': "宿主具有 role='group'，aria-label / aria-labelledby、aria-describedby、aria-invalid、aria-required 與 aria-disabled 會自動同步。每個插槽是原生的 <input type='text' inputmode='numeric'>。一個隱藏的原生 input 會保持同步，讓密碼管理器與自動填入可以提議一次性驗證碼。",
-  'otpInput.keyboard.description': '每個插槽都是原生 text input，插槽之間具有導覽連結。',
+  'otpInput.api.slotKeydown.description':
+    '送出單一 slot 的鍵盤 metadata，供進階自訂 slot 行為使用。',
+  'otpInput.accessibility.description':
+    "宿主具有 role='group'，aria-label / aria-labelledby、aria-describedby、aria-invalid、aria-required 與 aria-disabled 會自動同步。視覺插槽不會重複暴露給輔助科技；單一透明的原生 input 負責接收完整驗證碼，並支援密碼管理器與 one-time-code 自動填入。",
+  'otpInput.keyboard.description': '原生 input 提供視覺插槽之間的鍵盤導覽。',
   'otpInput.keyboard.type': '輸入字元以填入目前插槽並自動跳至下一個。',
   'otpInput.keyboard.arrowLeftRight': '移動焦點至相鄰插槽。',
   'otpInput.keyboard.backspace': '清除目前插槽並將焦點移至前一個插槽。',
   'otpInput.keyboard.delete': '清除目前插槽且不移動焦點。',
-  'otpInput.stateModel.description': '實作 ControlValueAccessor。使用 [(ngModel)] 或 formControl。值型別：string。complete 事件會在所有插槽都有字元時觸發，方便自動送出驗證表單。',
+  'otpInput.stateModel.description':
+    '實作 ControlValueAccessor。使用 [(ngModel)] 或 formControl。值型別：string。complete 事件會在所有插槽都有字元時觸發，方便自動送出驗證表單。',
 } as const;

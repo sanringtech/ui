@@ -14,6 +14,7 @@ import {
 import {
   fetchTextTargetsConcurrent,
   readConfig,
+  reportRegistryFetchError,
   requireAngularProject,
   resolveComponentBasePath,
   resolveRegistrySource,
@@ -188,11 +189,18 @@ export const listCommand = new Command('list')
   .option('--outdated', 'show installed component update status against the current registry', false)
   .option('-p, --path <path>', 'component path relative to cwd (used with --installed)')
   .option('--registry <source>', 'custom registry (URL or local path)')
-  .action(async (options: { installed: boolean; outdated: boolean; path?: string; registry?: string }) => {
+  .option('--json', 'output machine-readable results (useful for CI and coding agents)', false)
+  .action(async (options: { installed: boolean; outdated: boolean; path?: string; registry?: string; json: boolean }) => {
     const config = readConfig(process.cwd());
     const registrySource = resolveRegistrySource(undefined, config, options.registry);
     const spinner = ora('Loading components...').start();
-    const registry = await fetchRegistry(registrySource);
+    let registry;
+    try {
+      registry = await fetchRegistry(registrySource);
+    } catch (e) {
+      spinner.stop();
+      reportRegistryFetchError(e, { json: options.json });
+    }
     const registryIndex = createRegistryIndex(registry);
     spinner.stop();
 
@@ -213,10 +221,14 @@ export const listCommand = new Command('list')
           ? resolve(process.cwd(), config.sharedPath)
           : join(componentBasePath, 'shared');
 
-        console.log(pc.cyan(`\nInstalled component status`) + pc.dim(` (${components.length})\n`));
+        if (!options.json) console.log(pc.cyan(`\nInstalled component status`) + pc.dim(` (${components.length})\n`));
 
         if (components.length === 0) {
-          console.log(pc.dim('  None installed yet. Run `sanring add <component>` to get started.\n'));
+          if (options.json) {
+            console.log(JSON.stringify({ components: [], upToDate: 0, outdated: 0, conflicts: 0 }, null, 2));
+          } else {
+            console.log(pc.dim('  None installed yet. Run `sanring add <component>` to get started.\n'));
+          }
           return;
         }
 
@@ -228,11 +240,16 @@ export const listCommand = new Command('list')
           installedHashes: config?.installedHashes,
         });
 
-        printOutdatedSummaries(summaries);
-
         const upToDate = summaries.filter((summary) => summary.status === 'up-to-date').length;
         const outdated = summaries.filter((summary) => summary.status === 'outdated').length;
         const conflicts = summaries.filter((summary) => summary.status === 'has-conflicts').length;
+
+        if (options.json) {
+          console.log(JSON.stringify({ components: summaries, upToDate, outdated, conflicts }, null, 2));
+          return;
+        }
+
+        printOutdatedSummaries(summaries);
         console.log(
           pc.dim(
             `\n  ${upToDate} up-to-date, ${outdated} outdated, ${conflicts} with conflicts.`,
@@ -241,6 +258,11 @@ export const listCommand = new Command('list')
         console.log(pc.dim(`  Run ${pc.white('sanring update')} to apply safe updates.\n`));
         return;
       }
+    }
+
+    if (options.json) {
+      console.log(JSON.stringify({ components }, null, 2));
+      return;
     }
 
     const title = options.installed ? 'Installed components' : 'Available components';

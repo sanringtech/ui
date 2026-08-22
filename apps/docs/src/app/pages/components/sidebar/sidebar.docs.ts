@@ -96,6 +96,24 @@ export const sidebarPage = {
       descriptionKey: 'sidebar.api.class.description',
     },
     {
+      property: 'role',
+      type: "'complementary' | 'navigation'",
+      defaultValue: "'complementary'",
+      descriptionKey: 'sidebar.api.role.description',
+    },
+    {
+      property: 'ariaLabel',
+      type: 'string',
+      defaultValue: "'Sidebar'",
+      descriptionKey: 'sidebar.api.ariaLabel.description',
+    },
+    {
+      property: 'ariaLabelledBy',
+      type: 'string',
+      defaultValue: 'undefined',
+      descriptionKey: 'sidebar.api.ariaLabelledBy.description',
+    },
+    {
       property: 'active',
       type: 'boolean',
       defaultValue: 'false',

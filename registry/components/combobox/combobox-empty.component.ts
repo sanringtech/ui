@@ -21,7 +21,5 @@ export class ComboboxEmptyComponent {
   protected readonly combobox = inject(ComboboxComponent);
 
   protected readonly isVisible = computed(() => isCollectionEmpty(this.combobox.visibleCount()));
-  protected readonly emptyClass = computed(() =>
-    cn(COLLECTION_EMPTY_CLASS, this.class()),
-  );
+  protected readonly emptyClass = computed(() => cn(COLLECTION_EMPTY_CLASS, this.class()));
 }

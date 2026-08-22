@@ -23,6 +23,7 @@ import {
   hashContent,
   fetchTextTargetsConcurrent,
   readConfig,
+  reportRegistryFetchError,
   requireAngularProject,
   resolveComponentPath,
   resolveRegistrySource,
@@ -258,7 +259,13 @@ export const addCommand = new Command('add')
 
       // Fetch registry
       const registrySpinner = ora('Loading registry...').start();
-      const registry = await fetchRegistry(registrySource);
+      let registry;
+      try {
+        registry = await fetchRegistry(registrySource);
+      } catch (e) {
+        registrySpinner.stop();
+        reportRegistryFetchError(e);
+      }
       const registryIndex = createRegistryIndex(registry);
       registrySpinner.stop();
 

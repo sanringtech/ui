@@ -12,7 +12,11 @@ import {
 } from '@angular/core';
 import { cn } from '../../utils';
 import { OVERLAY_SURFACE_CLASS } from '../component-styles';
-import { focusAdjacentMenuItem } from '../shared/menu-navigation';
+import {
+  focusAdjacentMenuItem,
+  initializeMenuTabStop,
+  syncFocusedMenuItemTabStop,
+} from '../shared/menu-navigation';
 import { MenuOverlayController } from '../shared/menu-overlay-controller';
 import { ContextMenuComponent } from './context-menu.component';
 import { ContextMenuSubComponent } from './context-menu-sub.component';
@@ -38,6 +42,7 @@ const SUB_CONTENT_POSITIONS: ConnectionPositionPair[] = [
     '[class]': 'contentClass()',
     '(mouseenter)': 'sub.clearCloseTimer()',
     '(mouseleave)': 'sub.scheduleClose()',
+    '(focusin)': 'onFocusIn($event)',
   },
 })
 export class ContextMenuSubContentComponent {
@@ -76,6 +81,16 @@ export class ContextMenuSubContentComponent {
         scrollStrategy: 'close',
         onOutsideClick: () => this.sub.close(),
         onKeydown: (event) => {
+          if (event.key === 'Tab') {
+            this.sub.close();
+            if (this.rootMenu) {
+              event.preventDefault();
+              event.stopPropagation();
+              this.rootMenu.closeAndFocusAdjacentTabStop(event.shiftKey ? -1 : 1);
+            }
+            return;
+          }
+
           if (event.key === 'Escape' || event.key === 'ArrowLeft') {
             event.stopPropagation();
             this.sub.close();
@@ -86,14 +101,22 @@ export class ContextMenuSubContentComponent {
           if (event.key === 'ArrowDown' || event.key === 'ArrowUp') {
             event.preventDefault();
             event.stopPropagation();
-            focusAdjacentMenuItem(this.elementRef.nativeElement, event.key === 'ArrowDown' ? 1 : -1);
+            focusAdjacentMenuItem(
+              this.elementRef.nativeElement,
+              event.key === 'ArrowDown' ? 1 : -1,
+            );
           }
         },
       });
+      initializeMenuTabStop(this.elementRef.nativeElement);
 
       if (this.sub.consumeFocusFirstItemOnOpen()) {
         focusAdjacentMenuItem(this.elementRef.nativeElement, 1);
       }
     });
+  }
+
+  protected onFocusIn(event: FocusEvent): void {
+    syncFocusedMenuItemTabStop(this.elementRef.nativeElement, event.target);
   }
 }

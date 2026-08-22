@@ -1,16 +1,12 @@
 import {
   ChangeDetectionStrategy,
   Component,
-  DestroyRef,
   ElementRef,
-  Injector,
-  OnInit,
   booleanAttribute,
   computed,
   contentChildren,
   effect,
   forwardRef,
-  inject,
   input,
   numberAttribute,
   output,
@@ -18,12 +14,11 @@ import {
   untracked,
   viewChild,
 } from '@angular/core';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { ControlValueAccessor, NG_VALUE_ACCESSOR, NgControl, Validators } from '@angular/forms';
-import { Observable, Subject } from 'rxjs';
+import { NG_VALUE_ACCESSOR } from '@angular/forms';
 import { cn, uniqueId } from '../../utils';
 import { FIELD_SIZE_CLASS } from '../component-styles';
-import { FieldType, SANRING_FIELD_CONTROL, SanringFieldControl } from '../field/field.type';
+import { FieldType, SANRING_FIELD_CONTROL } from '../field/field.type';
+import { SanringCvaBase, SanringFieldControlAdapter } from '../shared/cva-base';
 import { OTP_INPUT_ROOT, OtpInputRootContext } from './otp-input.context';
 import { OtpInputSeparatorComponent } from './otp-input-separator.component';
 import { OtpInputSlotComponent } from './otp-input-slot.component';
@@ -69,7 +64,8 @@ const OTP_INPUT_TEXT_ALIGN_CLASSES: Record<OtpInputTextAlign, string> = {
     // 產生一個轉接的 adapter 物件。
     {
       provide: SANRING_FIELD_CONTROL,
-      useFactory: (host: OtpInputComponent) => new OtpInputFieldControlAdapter(host),
+      useFactory: (host: OtpInputComponent) =>
+        new SanringFieldControlAdapter(FieldType.otpInput, host),
       deps: [forwardRef(() => OtpInputComponent)],
     },
     {
@@ -96,7 +92,7 @@ const OTP_INPUT_TEXT_ALIGN_CLASSES: Record<OtpInputTextAlign, string> = {
       [class]="inputClass()"
       [id]="id()"
       [attr.name]="name()"
-      type="search"
+      type="text"
       [attr.inputmode]="inputMode()"
       [attr.autocomplete]="autocomplete()"
       autocapitalize="off"
@@ -135,7 +131,10 @@ const OTP_INPUT_TEXT_ALIGN_CLASSES: Record<OtpInputTextAlign, string> = {
     }
   `,
 })
-export class OtpInputComponent implements ControlValueAccessor, OnInit, OtpInputRootContext {
+export class OtpInputComponent
+  extends SanringCvaBase<OtpInputValue>
+  implements OtpInputRootContext
+{
   readonly class = input<string | undefined>();
   readonly id = input(uniqueId('sanring-otp-input'));
   readonly name = input<string | undefined>();
@@ -166,21 +165,7 @@ export class OtpInputComponent implements ControlValueAccessor, OnInit, OtpInput
   protected readonly slotValues = signal<string[]>([]);
   protected readonly valueSignal = computed<OtpInputValue>(() => this.slotValues().join(''));
   protected readonly focusedIndex = signal<number | null>(null);
-  private readonly disabledState = signal(false);
-  private readonly fieldDescribedByIds = signal<string[]>([]);
-  // 橋接用：ngControl 的 invalid/touched 是 RxJS 驅動、不是 signal，靠這個計數器把它們
-  // 接進 signal graph，讓 errorState/fieldRequired 在 OnPush 下也能正確重算
-  private readonly stateVersion = signal(0);
   protected readonly hasProjectedSlots = computed(() => this.projectedSlots().length > 0);
-
-  // ==========================================
-  // Field 整合：底下這些成員都不會跟上面的 @Input 撞名，可以直接放在元件本身；
-  // 真正會撞名的 (id/disabled/value/required) 走下面的 fieldXxx getter，由
-  // OtpInputFieldControlAdapter 轉接成 SanringFieldControl 介面。
-  // ==========================================
-  readonly controlType = FieldType.otpInput;
-  focused = false;
-  ngControl: NgControl | null = null;
 
   protected readonly slotCount = computed(() => {
     const length = this.length();
@@ -209,7 +194,7 @@ export class OtpInputComponent implements ControlValueAccessor, OnInit, OtpInput
 
   protected readonly hostClass = computed(() =>
     cn(
-      'relative inline-flex max-w-full overflow-x-auto',
+      'relative inline-flex max-w-full',
       this.orientation() === 'vertical' ? 'flex-col' : 'flex-row items-center',
       this.isDisabled() && 'cursor-not-allowed opacity-50',
       this.class(),
@@ -218,58 +203,28 @@ export class OtpInputComponent implements ControlValueAccessor, OnInit, OtpInput
 
   protected readonly inputClass = computed(() =>
     cn(
-      'pointer-events-none absolute left-1/2 top-1/2 size-px -translate-x-1/2 -translate-y-1/2 opacity-0',
-      'border-0 bg-transparent p-0 text-transparent outline-none',
+      'pointer-events-none absolute inset-0 size-full opacity-0',
+      'border-0 bg-transparent p-0 text-base text-transparent outline-none caret-transparent',
     ),
   );
 
-  protected readonly computedAriaDescribedBy = computed(() => {
-    const ids = [this.ariaDescribedBy(), ...this.fieldDescribedByIds()].filter(
-      (v): v is string => !!v,
-    );
-    return ids.length ? ids.join(' ') : undefined;
-  });
+  protected readonly computedAriaDescribedBy = this.makeComputedAriaDescribedBy(
+    this.ariaDescribedBy,
+  );
 
-  private readonly injector = inject(Injector);
-  private readonly destroyRef = inject(DestroyRef);
-  private readonly stateChangesSubject = new Subject<void>();
-  readonly stateChanges: Observable<void> = this.stateChangesSubject.asObservable();
   private readonly otpInput = viewChild<ElementRef<HTMLInputElement>>('otpInput');
-
-  private onChange: (value: OtpInputValue) => void = () => {};
-  private onTouched: () => void = () => {};
   // 手機虛擬鍵盤常常不理會 keydown 的 preventDefault()，字元還是會被瀏覽器插入
   // 原生 input，導致 keydown 跟隨後補發的 input 事件各寫入一次、畫面顯示兩次。
   // 用這個旗標讓 onInput 偵測到「已經由 keydown 處理過」時直接略過、只把畫面同步回目前的值。
   private suppressNextInput = false;
 
   constructor() {
+    super();
     effect(() => {
       const value = this.value();
       this.slotCount();
       untracked(() => this.setValue(value, false));
     });
-
-    this.destroyRef.onDestroy(() => this.stateChangesSubject.complete());
-  }
-
-  ngOnInit(): void {
-    // 不能在 constructor 做 self-inject NgControl：本元件同時透過 NG_VALUE_ACCESSOR
-    // (forwardRef) 註冊自己，若在 constructor 階段就 self-inject，跟 NgModel 搭配時
-    // 會觸發 NG0200 循環依賴。延後到 ngOnInit，Angular 保證同節點 directive 都建構完後
-    // 才跑 lifecycle hook，循環依賴就消失了。
-    this.ngControl = this.injector.get(NgControl, null, { optional: true, self: true });
-    // 不能只聽 statusChanges——markAsTouched() 只改 touched flag，不觸發它，
-    // 導致 markAllAsTouched() 後錯誤狀態不更新。改聽 control.events（Angular v18+），
-    // touched / pristine / status / value 任何變化都會通過這裡。
-    this.ngControl?.control?.events
-      ?.pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe(() => this.emitStateChanges());
-  }
-
-  get errorState(): boolean {
-    this.stateVersion();
-    return !!(this.ngControl?.invalid && this.ngControl?.touched);
   }
 
   get fieldValue(): OtpInputValue {
@@ -284,9 +239,8 @@ export class OtpInputComponent implements ControlValueAccessor, OnInit, OtpInput
     return this.isDisabled();
   }
 
-  get fieldRequired(): boolean {
-    this.stateVersion();
-    return this.required() || !!this.ngControl?.control?.hasValidator(Validators.required);
+  protected override hasInputRequired(): boolean {
+    return this.required();
   }
 
   focus(options?: FocusOptions): void {
@@ -294,25 +248,8 @@ export class OtpInputComponent implements ControlValueAccessor, OnInit, OtpInput
     this.focusSlot(nextIndex === -1 ? 0 : nextIndex, options);
   }
 
-  setDescribedByIds(ids: string[]): void {
-    this.fieldDescribedByIds.set(ids);
-  }
-
-  writeValue(value: OtpInputValue | null | undefined): void {
+  override writeValue(value: OtpInputValue | null | undefined): void {
     this.setValue(value ?? '', false);
-  }
-
-  registerOnChange(fn: (value: OtpInputValue) => void): void {
-    this.onChange = fn;
-  }
-
-  registerOnTouched(fn: () => void): void {
-    this.onTouched = fn;
-  }
-
-  setDisabledState(isDisabled: boolean): void {
-    this.disabledState.set(isDisabled);
-    this.emitStateChanges();
   }
 
   getOrientation(): OtpInputOrientation {
@@ -335,7 +272,7 @@ export class OtpInputComponent implements ControlValueAccessor, OnInit, OtpInput
     const isLast = slot.index === this.slotCount() - 1;
 
     return cn(
-      'relative inline-flex shrink-0 cursor-text select-none items-center justify-center border border-[var(--sanring-border-strong)]',
+      'relative inline-flex min-w-0 shrink cursor-text select-none items-center justify-center border border-[var(--sanring-border-strong)]',
       'bg-[var(--sanring-surface)] text-[var(--sanring-foreground)]',
       FIELD_SIZE_CLASS,
       OTP_INPUT_SIZE_CLASSES[this.size()] ?? OTP_INPUT_SIZE_CLASSES.md,
@@ -351,7 +288,7 @@ export class OtpInputComponent implements ControlValueAccessor, OnInit, OtpInput
       !isFirst && !isLast && 'rounded-none',
       this.readOnly() && 'cursor-default',
       slot.state === 'active' &&
-        'z-10 border-[var(--sanring-border-strong)] shadow-md ring-2 ring-[var(--sanring-border-strong)] ring-offset-2 ring-offset-[var(--sanring-background)]',
+        'z-10 border-[var(--sanring-border-strong)] ring-1 ring-inset ring-[var(--sanring-border-strong)]',
       slot.state === 'filled' && 'text-[var(--sanring-foreground)]',
       slot.state === 'invalid' && 'z-10 border-[var(--sanring-error-50)]',
       className,
@@ -674,60 +611,5 @@ export class OtpInputComponent implements ControlValueAccessor, OnInit, OtpInput
       index,
       originalEvent: event,
     };
-  }
-
-  private emitStateChanges(): void {
-    this.stateVersion.update((v) => v + 1);
-    this.stateChangesSubject.next();
-  }
-}
-
-class OtpInputFieldControlAdapter implements SanringFieldControl<OtpInputValue> {
-  readonly controlType = FieldType.otpInput;
-
-  constructor(private readonly host: OtpInputComponent) {}
-
-  get id(): string {
-    return this.host.id();
-  }
-
-  get value(): OtpInputValue {
-    return this.host.fieldValue;
-  }
-
-  get empty(): boolean {
-    return this.host.fieldEmpty;
-  }
-
-  get focused(): boolean {
-    return this.host.focused;
-  }
-
-  get errorState(): boolean {
-    return this.host.errorState;
-  }
-
-  get disabled(): boolean {
-    return this.host.fieldDisabled;
-  }
-
-  get required(): boolean {
-    return this.host.fieldRequired;
-  }
-
-  get ngControl(): NgControl | null {
-    return this.host.ngControl;
-  }
-
-  get stateChanges(): Observable<void> {
-    return this.host.stateChanges;
-  }
-
-  focus(options?: FocusOptions): void {
-    this.host.focus(options);
-  }
-
-  setDescribedByIds(ids: string[]): void {
-    this.host.setDescribedByIds(ids);
   }
 }

@@ -5,6 +5,7 @@ import { parseComponentRef } from './add.js';
 import {
   getCliVersion,
   readConfig,
+  reportRegistryFetchError,
   requireAngularProject,
   resolveRegistrySource,
   semverLte,
@@ -39,7 +40,12 @@ export const migrateCommand = new Command('migrate')
         return;
       }
 
-      const registry = await fetchRegistry(resolveRegistrySource(undefined, config, options.registry));
+      let registry;
+      try {
+        registry = await fetchRegistry(resolveRegistrySource(undefined, config, options.registry));
+      } catch (e) {
+        reportRegistryFetchError(e);
+      }
       const registryIndex = createRegistryIndex(registry);
       const currentCliVersion = getCliVersion();
 

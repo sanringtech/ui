@@ -85,7 +85,11 @@ const INLINE_CODE_CLASS =
           </li>
           <li>
             <code [class]="inlineCodeClass">-f, --force</code>
-            &mdash; overwrite an existing theme file with the defaults
+            &mdash; overwrite an existing config and theme files without prompting
+          </li>
+          <li>
+            <code [class]="inlineCodeClass">--theme &lt;preset&gt;</code>
+            &mdash; named theme preset
           </li>
           <li>
             <code [class]="inlineCodeClass">--registry &lt;source&gt;</code>
@@ -128,6 +132,10 @@ const INLINE_CODE_CLASS =
             &mdash; preview changes without writing files
           </li>
           <li>
+            <code [class]="inlineCodeClass">--check</code>
+            &mdash; validate every registry file the install needs can be fetched, without writing files
+          </li>
+          <li>
             <code [class]="inlineCodeClass">--diff</code>
             &mdash; show line-by-line diff against local files without installing
           </li>
@@ -156,6 +164,10 @@ const INLINE_CODE_CLASS =
           <li>
             <code [class]="inlineCodeClass">-f, --force</code>
             &mdash; remove even if another installed component still depends on it
+          </li>
+          <li>
+            <code [class]="inlineCodeClass">--dry-run</code>
+            &mdash; show tracked files, preserved files, and dependency blockers without deleting
           </li>
           <li>
             <code [class]="inlineCodeClass">--registry &lt;source&gt;</code>
@@ -200,6 +212,14 @@ const INLINE_CODE_CLASS =
           <li>
             <code [class]="inlineCodeClass">--exit-code</code>
             &mdash; exit 1 when any file differs from the registry (CI gate)
+          </li>
+          <li>
+            <code [class]="inlineCodeClass">--summary</code>
+            &mdash; print counts only, without line-by-line diff output
+          </li>
+          <li>
+            <code [class]="inlineCodeClass">--json</code>
+            &mdash; output a machine-readable summary
           </li>
           <li>
             <code [class]="inlineCodeClass">--registry &lt;source&gt;</code>
@@ -251,6 +271,14 @@ const INLINE_CODE_CLASS =
             &mdash; only show components already installed in the current project
           </li>
           <li>
+            <code [class]="inlineCodeClass">--outdated</code>
+            &mdash; show installed component update status against the current registry
+          </li>
+          <li>
+            <code [class]="inlineCodeClass">--json</code>
+            &mdash; output machine-readable results
+          </li>
+          <li>
             <code [class]="inlineCodeClass">--registry &lt;source&gt;</code>
             &mdash; custom registry (URL or local path)
           </li>
@@ -269,8 +297,20 @@ const INLINE_CODE_CLASS =
             &mdash; component path used to detect install status
           </li>
           <li>
-            <code [class]="inlineCodeClass">--registry &lt;url&gt;</code>
-            &mdash; custom registry URL
+            <code [class]="inlineCodeClass">--group &lt;id&gt;</code>
+            &mdash; filter by registry group
+          </li>
+          <li>
+            <code [class]="inlineCodeClass">--tag &lt;tag&gt;</code>
+            &mdash; filter by component tag
+          </li>
+          <li>
+            <code [class]="inlineCodeClass">--json</code>
+            &mdash; output machine-readable results
+          </li>
+          <li>
+            <code [class]="inlineCodeClass">--registry &lt;source&gt;</code>
+            &mdash; custom registry (URL or local path)
           </li>
         </ul>
       </app-component-page-section>
@@ -291,14 +331,40 @@ const INLINE_CODE_CLASS =
             &mdash; component path relative to cwd
           </li>
           <li>
+            <code [class]="inlineCodeClass">--json</code>
+            &mdash; output machine-readable check results
+          </li>
+          <li>
+            <code [class]="inlineCodeClass">--fix</code>
+            &mdash; apply safe repairs such as hash cleanup and alias migration
+          </li>
+          <li>
             <code [class]="inlineCodeClass">--registry &lt;source&gt;</code>
             &mdash; custom registry (URL or local path)
           </li>
         </ul>
       </app-component-page-section>
 
-      <!-- 11. Requirements -->
+      <!-- 11. migrate -->
       <app-component-page-section [section]="sections[10]">
+        <p class="mt-0 text-base leading-[1.7] text-[var(--docs-muted)]">
+          {{ i18n.t('cli.migrate.body') }}
+        </p>
+        <app-component-page-code-block class="mt-6" [code]="commands.migrate" language="bash" />
+        <ul class="mt-4 list-none space-y-2 p-0 text-sm text-[var(--docs-muted)]">
+          <li>
+            <code [class]="inlineCodeClass">--check</code>
+            &mdash; exit 1 if any migration is needed (CI gate), without printing steps
+          </li>
+          <li>
+            <code [class]="inlineCodeClass">--registry &lt;source&gt;</code>
+            &mdash; custom registry (URL or local path)
+          </li>
+        </ul>
+      </app-component-page-section>
+
+      <!-- 12. Requirements -->
+      <app-component-page-section [section]="sections[11]">
         <p class="mt-0 text-base leading-[1.7] text-[var(--docs-muted)]">
           {{ i18n.t('cli.requirements.body') }}
         </p>
@@ -356,6 +422,7 @@ export class CliPageComponent {
     { id: 'list', titleKey: 'cli.list.title' },
     { id: 'search', titleKey: 'cli.search.title' },
     { id: 'doctor', titleKey: 'cli.doctor.title' },
+    { id: 'migrate', titleKey: 'cli.migrate.title' },
     { id: 'requirements', titleKey: 'cli.requirements.title' },
   ];
 
@@ -377,11 +444,17 @@ npx @sanring/cli@latest add button --dry-run
 npx @sanring/cli@latest add button --diff
 
 # print raw registry content without writing anything
-npx @sanring/cli@latest add button --view`,
+npx @sanring/cli@latest add button --view
+
+# verify every registry file can be fetched, without writing anything (CI)
+npx @sanring/cli@latest add button --check`,
     remove: `npx @sanring/cli@latest remove button
 
 # remove multiple components at once
-npx @sanring/cli@latest remove tag badge`,
+npx @sanring/cli@latest remove tag badge
+
+# preview what would be deleted, without deleting anything
+npx @sanring/cli@latest remove button --dry-run`,
     info: `# project context — no network call
 npx @sanring/cli@latest info
 
@@ -397,7 +470,11 @@ npx @sanring/cli@latest diff
 npx @sanring/cli@latest diff button
 
 # exit 1 when any file differs (CI gate)
-npx @sanring/cli@latest diff --exit-code`,
+npx @sanring/cli@latest diff --exit-code
+
+# counts only, or machine-readable output
+npx @sanring/cli@latest diff --summary
+npx @sanring/cli@latest diff --json`,
     update: `# check + prompt for everything installed
 npx @sanring/cli@latest update
 
@@ -413,14 +490,31 @@ npx @sanring/cli@latest update --trust`,
 npx @sanring/cli@latest ls
 
 # only show installed components
-npx @sanring/cli@latest list --installed`,
+npx @sanring/cli@latest list --installed
+
+# compare installed components against the current registry
+npx @sanring/cli@latest list --outdated`,
     search: `npx @sanring/cli@latest search button
 
 # search by description keyword
-npx @sanring/cli@latest search "date"`,
+npx @sanring/cli@latest search "date"
+
+# filter by group or tag
+npx @sanring/cli@latest search "" --group forms`,
     doctor: `npx @sanring/cli@latest doctor
 
 # skip registry network check
-npx @sanring/cli@latest doctor --offline`,
+npx @sanring/cli@latest doctor --offline
+
+# apply safe repairs (hash backfill, orphan cleanup, key migration)
+npx @sanring/cli@latest doctor --fix`,
+    migrate: `# check everything installed
+npx @sanring/cli@latest migrate
+
+# check just one component
+npx @sanring/cli@latest migrate button
+
+# exit 1 if any migration is needed, without printing steps (CI gate)
+npx @sanring/cli@latest migrate --check`,
   };
 }

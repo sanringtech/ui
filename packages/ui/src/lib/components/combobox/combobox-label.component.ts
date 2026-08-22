@@ -7,7 +7,7 @@ import { cn } from '../../utils';
   selector: 'sanring-combobox-label',
   standalone: true,
   template: `
-    <label [for]="combobox.inputId" [class]="labelClass()">
+    <label [for]="combobox.inputId()" [class]="labelClass()">
       <ng-content></ng-content>
     </label>
   `,

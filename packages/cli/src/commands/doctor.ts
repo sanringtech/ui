@@ -3,6 +3,7 @@ import { existsSync, readFileSync } from 'node:fs';
 import { join, resolve } from 'node:path';
 import pc from 'picocolors';
 import { createRegistryIndex, fetchRegistry } from '../registry.js';
+import { findRegistryReferenceIssues } from '../registry-integrity.js';
 import {
   getInstalledPackageSpecs,
   hashContent,
@@ -132,6 +133,12 @@ export const doctorCommand = new Command('doctor')
         const registry = await fetchRegistry(resolveRegistrySource(undefined, config, options.registry));
         const index = createRegistryIndex(registry);
         ok('Reachable');
+        // Internal referential integrity of the fetched registry.json itself
+        // (dangling componentDeps/sharedDeps/group references, unparseable
+        // peer dependency versions) — distinct from the checks below, which
+        // compare this project's installed state against the registry.
+        const integrityIssues = findRegistryReferenceIssues(registry);
+        for (const issue of integrityIssues) warn(`Registry integrity: ${issue.message}`);
         if (config?.defaultRegistry && !config.registries?.[config.defaultRegistry]) {
           warn(`defaultRegistry "${config.defaultRegistry}" is missing from registries`);
         }

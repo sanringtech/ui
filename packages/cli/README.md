@@ -21,18 +21,29 @@ Angular CLI users can bootstrap with:
 ng add @sanring/cli
 ```
 
-Common commands:
+Commands are grouped by what stage of your workflow they belong to:
 
 ```bash
-npx @sanring/cli@latest list                   # browse available components
-npx @sanring/cli@latest info date-picker       # preview what would be installed
-npx @sanring/cli@latest add date-picker        # copy component into your project
-npx @sanring/cli@latest diff date-picker       # compare local files against registry
-npx @sanring/cli@latest update date-picker     # apply registry changes
-npx @sanring/cli@latest remove date-picker     # remove a component
+# Install
+npx @sanring/cli@latest init                    # set up sanring.config.json + theme
+npx @sanring/cli@latest add date-picker          # copy a component into your project
+npx @sanring/cli@latest remove date-picker       # remove an installed component
+
+# Explore
+npx @sanring/cli@latest list                     # browse available components
+npx @sanring/cli@latest search date              # search by name or description
+npx @sanring/cli@latest info date-picker         # preview what would be installed
+
+# Maintain
+npx @sanring/cli@latest diff date-picker         # compare local files against registry
+npx @sanring/cli@latest migrate date-picker      # check for breaking-change migration steps
+npx @sanring/cli@latest update date-picker       # apply registry changes
+npx @sanring/cli@latest doctor                   # check environment + project health
 ```
 
-Every command accepts `--registry <url-or-path>` to point at a custom registry. `sanring.config.json` also supports `registries` and `defaultRegistry` for permanent alias configuration. Run any command with `--help` for the full flag list.
+`build` generates a `registry.json` for publishing your own registry, and `mcp` starts an MCP server for AI coding agents — see below.
+
+Every command accepts `--registry <url-or-path>` to point at a custom registry. `sanring.config.json` also supports `registries` and `defaultRegistry` for permanent alias configuration. Run any command with `--help` for the full flag list, or see [ui.sanring.dev/cli](https://ui.sanring.dev/cli) for complete documentation.
 
 ## Notes
 

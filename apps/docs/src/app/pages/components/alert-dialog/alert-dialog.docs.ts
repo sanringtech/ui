@@ -103,6 +103,24 @@ export const alertDialogPage = {
       descriptionKey: 'alertDialog.api.showClose.description',
     },
     {
+      property: 'ariaLabel',
+      type: 'string',
+      defaultValue: "'Alert dialog' fallback",
+      descriptionKey: 'alertDialog.api.ariaLabel.description',
+    },
+    {
+      property: 'ariaLabelledBy',
+      type: 'string',
+      defaultValue: 'undefined',
+      descriptionKey: 'alertDialog.api.ariaLabelledBy.description',
+    },
+    {
+      property: 'ariaDescribedBy',
+      type: 'string',
+      defaultValue: 'undefined',
+      descriptionKey: 'alertDialog.api.ariaDescribedBy.description',
+    },
+    {
       property: 'sanringAlertDialogAction',
       type: 'unknown',
       defaultValue: 'true',

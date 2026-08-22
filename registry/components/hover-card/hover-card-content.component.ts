@@ -42,6 +42,10 @@ import { HoverCardSide } from './hover-card.type';
         (detach)="onDetach()"
       >
         <div
+          [id]="hoverCard.contentId"
+          role="region"
+          [attr.aria-label]="ariaLabelledBy() ? null : ariaLabel()"
+          [attr.aria-labelledby]="ariaLabelledBy()"
           [class]="hoverCardContentClass()"
           [attr.data-side]="renderedSide()"
           (mouseenter)="hoverCard.open()"
@@ -60,6 +64,8 @@ export class HoverCardContentComponent {
   readonly side = input<HoverCardSide>('bottom');
   readonly sideOffset = input(8, { transform: numberAttribute });
   readonly class = input<string | undefined>();
+  readonly ariaLabel = input<string | undefined>('Additional information');
+  readonly ariaLabelledBy = input<string | undefined>();
 
   protected hoverCard = inject(HoverCardComponent);
   private readonly overlay = inject(Overlay);

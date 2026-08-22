@@ -20,6 +20,7 @@ export class TreeTriggerDirective {
   protected toggle(event?: Event) {
     event?.stopPropagation();
     event?.preventDefault();
+    if (this.node.isDisabled()) return;
     this.tree.toggleExpand(this.node.value());
   }
 }

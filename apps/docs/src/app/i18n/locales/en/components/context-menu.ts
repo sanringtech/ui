@@ -17,7 +17,7 @@ export const contextMenuTranslations = {
   'contextMenu.api.description':
     'Inputs, outputs, and classes supported by the context menu primitives.',
   'contextMenu.api.itemSelected.description':
-    "Emits the value of whichever item was activated (click, Enter, or Space), right before the whole menu — including any open submenu — closes. Declared on sanring-context-menu (the root), so it fires no matter how deep the selected item is nested.",
+    'Emits the value of whichever item was activated (click, Enter, or Space), right before the whole menu — including any open submenu — closes. Declared on sanring-context-menu (the root), so it fires no matter how deep the selected item is nested.',
   'contextMenu.api.value.description':
     'The value reported to itemSelected when this item is activated. Required.',
   'contextMenu.api.disabled.description':
@@ -32,10 +32,14 @@ export const contextMenuTranslations = {
     'Additional classes merged with the corresponding context menu primitive.',
   'contextMenu.accessibility.description':
     "The panel has role='menu'. Items receive role='menuitem', role='menuitemcheckbox', or role='menuitemradio'. The trigger zone ([sanringContextMenuTrigger]) does not expose ARIA state — consider pairing it with a visible affordance or keyboard shortcut hint for accessibility.",
-  'contextMenu.keyboard.description': 'The context menu can also be opened from a keyboard trigger.',
-  'contextMenu.keyboard.navigateItems': 'Move focus between menu items, skipping disabled items (wraps).',
+  'contextMenu.keyboard.description':
+    'The context menu can also be opened from a keyboard trigger.',
+  'contextMenu.keyboard.navigateItems':
+    'Move focus between menu items, skipping disabled items (wraps).',
   'contextMenu.keyboard.enter': 'Activate the focused menu item.',
+  'contextMenu.keyboard.tab':
+    'Close the menu and move to the previous or next control beside its trigger.',
   'contextMenu.keyboard.escape': 'Close the context menu.',
   'contextMenu.stateModel.description':
-    "Stateless. Items emit events on activation. The trigger context is set by the [sanringContextMenuTrigger] directive on any host element. Open/close is driven by right-click events or programmatically via the open(x, y) method on the ContextMenuComponent.",
+    'Stateless. Items emit events on activation. The trigger context is set by the [sanringContextMenuTrigger] directive on any host element. Open/close is driven by right-click events or programmatically via the open(x, y) method on the ContextMenuComponent.',
 } as const;

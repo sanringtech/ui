@@ -73,6 +73,13 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
+      # packages/cli/registry/ is gitignored, generated from the top-level
+      # registry/ by sync-registry.mjs — normally populated as part of `build`.
+      # Several tests (e.g. registry.test.ts's bundled-registry fallback) read
+      # it directly, so a clean checkout needs it synced before `test` runs.
+      - name: Sync registry fixtures
+        run: pnpm --filter @sanring/cli run sync-registry
+
       - name: Test
         run: pnpm --filter @sanring/cli test
 

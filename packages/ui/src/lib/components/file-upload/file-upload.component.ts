@@ -1,11 +1,7 @@
 import {
   ChangeDetectionStrategy,
   Component,
-  DestroyRef,
-  Injector,
-  OnInit,
   booleanAttribute,
-  computed,
   forwardRef,
   inject,
   input,
@@ -14,9 +10,9 @@ import {
   signal,
 } from '@angular/core';
 import { _IdGenerator } from '@angular/cdk/a11y';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { ControlValueAccessor, NG_VALUE_ACCESSOR, NgControl, Validators } from '@angular/forms';
-import { Observable, Subject } from 'rxjs';
+import { NG_VALUE_ACCESSOR } from '@angular/forms';
+import { Observable } from 'rxjs';
+import { SanringCvaBase } from '../shared/cva-base';
 import { FieldType, SANRING_FIELD_CONTROL, SanringFieldControl } from '../field/field.type';
 import { FileRejection, FileUploadErrorCode } from './file-upload.type';
 
@@ -46,10 +42,11 @@ import { FileRejection, FileUploadErrorCode } from './file-upload.type';
     '[attr.aria-describedby]': 'describedByAttr()',
   },
 })
-export class FileUploadComponent implements ControlValueAccessor, OnInit {
+export class FileUploadComponent extends SanringCvaBase<File[]> {
   // ==========================================
   // 1. 外部設定 (Inputs)
   // ==========================================
+  readonly id = input(inject(_IdGenerator).getId('sanring-file-upload-', true));
   readonly accept = input<string>('*');
   readonly multiple = input(false, { transform: booleanAttribute });
   readonly disabled = input(false, { transform: booleanAttribute });
@@ -63,25 +60,18 @@ export class FileUploadComponent implements ControlValueAccessor, OnInit {
   readonly files = model<File[]>([]);
   readonly rejectedFiles = signal<FileRejection[]>([]);
 
-  // ==========================================
-  // 3. 給子元件 (Dropzone/Trigger) 呼叫的 API
-  // ==========================================
+  readonly describedByAttr = this.makeComputedAriaDescribedBy();
 
-  readonly id = input(inject(_IdGenerator).getId('sanring-file-upload-', true));
-  focused = false;
-  ngControl: NgControl | null = null;
+  get isDisabled(): boolean {
+    return this.disabled() || this.disabledState();
+  }
 
-  private readonly injector = inject(Injector);
-  private readonly destroyRef = inject(DestroyRef);
-  private readonly describedByIds = signal<string[]>([]);
-  private readonly disabledState = signal(false);
-  private readonly stateVersion = signal(0);
-  private readonly stateChangesSubject = new Subject<void>();
-  readonly stateChanges = this.stateChangesSubject.asObservable();
-
-  private triggerInput: HTMLInputElement | null = null;
-  private onChange: (value: File[]) => void = () => {};
-  private onTouched: () => void = () => {};
+  override get errorState(): boolean {
+    this._stateVersion();
+    return (
+      this.rejectedFiles().length > 0 || !!(this.ngControl?.invalid && this.ngControl?.touched)
+    );
+  }
 
   get fieldValue(): File[] {
     return this.files();
@@ -91,39 +81,15 @@ export class FileUploadComponent implements ControlValueAccessor, OnInit {
     return this.files().length === 0;
   }
 
-  get errorState(): boolean {
-    this.stateVersion();
-    return (
-      this.rejectedFiles().length > 0 || !!(this.ngControl?.invalid && this.ngControl?.touched)
-    );
+  get fieldDisabled(): boolean {
+    return this.isDisabled;
   }
 
-  get isDisabled(): boolean {
-    return this.disabled() || this.disabledState();
+  protected override hasInputRequired(): boolean {
+    return this.required();
   }
 
-  get fieldRequired(): boolean {
-    this.stateVersion();
-    return this.required() || !!this.ngControl?.control?.hasValidator(Validators.required);
-  }
-
-  readonly describedByAttr = computed(() => {
-    const ids = this.describedByIds();
-    return ids.length ? ids.join(' ') : null;
-  });
-
-  constructor() {
-    this.destroyRef.onDestroy(() => this.stateChangesSubject.complete());
-  }
-
-  ngOnInit(): void {
-    this.ngControl = this.injector.get(NgControl, null, { optional: true, self: true });
-    // 不能只聽 statusChanges——markAsTouched() 不會觸發它，改聽 control.events（Angular
-    // v18+ 公開 API）才能在 markAllAsTouched() 這類外部呼叫時正確更新 errorState。
-    this.ngControl?.control?.events
-      ?.pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe(() => this.emitStateChanges());
-  }
+  private triggerInput: HTMLInputElement | null = null;
 
   /** 接收來自外部的檔案、驗證後更新狀態 */
   handleFiles(newFiles: FileList | File[] | null) {
@@ -185,31 +151,14 @@ export class FileUploadComponent implements ControlValueAccessor, OnInit {
     }
   }
 
-  writeValue(value: File[] | null): void {
+  override writeValue(value: File[] | null): void {
     this.files.set(value ?? []);
     this.rejectedFiles.set([]);
     this.emitStateChanges();
   }
 
-  registerOnChange(fn: (value: File[]) => void): void {
-    this.onChange = fn;
-  }
-
-  registerOnTouched(fn: () => void): void {
-    this.onTouched = fn;
-  }
-
-  setDisabledState(isDisabled: boolean): void {
-    this.disabledState.set(isDisabled);
-    this.emitStateChanges();
-  }
-
   focus(options?: FocusOptions): void {
     this.triggerInput?.focus(options);
-  }
-
-  setDescribedByIds(ids: string[]): void {
-    this.describedByIds.set(ids);
   }
 
   markTouched(): void {
@@ -260,11 +209,6 @@ export class FileUploadComponent implements ControlValueAccessor, OnInit {
     this.onTouched();
     this.emitStateChanges();
   }
-
-  private emitStateChanges(): void {
-    this.stateVersion.update((v) => v + 1);
-    this.stateChangesSubject.next();
-  }
 }
 
 class FileUploadFieldControlAdapter implements SanringFieldControl<File[]> {
@@ -300,7 +244,7 @@ class FileUploadFieldControlAdapter implements SanringFieldControl<File[]> {
     return this.host.fieldRequired;
   }
 
-  get ngControl(): NgControl | null {
+  get ngControl() {
     return this.host.ngControl;
   }
 
