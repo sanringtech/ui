@@ -139,7 +139,7 @@ export class ComponentPageInstallationComponent {
       'rounded-[var(--sanring-radius-sm)] px-2 py-1 font-mono text-sm transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--docs-border-strong)]',
       this.selectedPackageManager() === manager
         ? 'bg-[var(--docs-bg)] text-[var(--docs-fg)] shadow-sm'
-        : 'text-[var(--docs-muted)] hover:text-[var(--docs-fg)]',
+        : 'text-[var(--docs-code-muted)] hover:text-[var(--docs-code-fg)]',
     ].join(' ');
   }
 

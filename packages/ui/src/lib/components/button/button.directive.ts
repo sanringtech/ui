@@ -47,7 +47,7 @@ export class ButtonDirective {
       ghost:
         'border-transparent bg-transparent text-[var(--sanring-foreground)] hover:bg-[var(--sanring-surface-strong)]',
       destructive:
-        'border-transparent bg-[var(--sanring-error-50)] text-white hover:bg-[var(--sanring-error-60)] focus-visible:ring-[var(--sanring-error-40)]',
+        'border-transparent bg-[var(--sanring-error-70)] text-white hover:bg-[var(--sanring-error-80)] focus-visible:ring-[var(--sanring-error-60)]',
       link: 'border-transparent bg-transparent px-0 text-[var(--sanring-foreground)] underline-offset-4 hover:underline',
     };
     return cn(
