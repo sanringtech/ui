@@ -53,6 +53,7 @@ import { radioGroupApiRows, radioItemApiRows, radioPage, radioPageExamples } fro
         [hasAccessibilityNotes]="true"
         [hasKeyboardSupport]="true"
         [stateModelLabel]="i18n.t('component.header.cva')"
+        apiAnchor="#api-group"
       />
 
       <app-component-page-section [section]="section('basic')">

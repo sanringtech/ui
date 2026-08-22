@@ -292,6 +292,10 @@ Rules:
 
 - Major preview container uses `--sanring-radius-lg`.
 - Stage must have stable min height and responsive padding.
+- Preview and source stay simultaneously visible. Do not hide either zone behind tabs; side-by-side
+  comparison while scrolling is more useful than reducing vertical space.
+- Label the zones as `01 Preview` and `02 Source`; installation and API remain one-hop anchor targets
+  from the component header.
 - Code block scrolls horizontally internally; it must not widen the page.
 - Copy code action is always visible and keyboard accessible.
 
@@ -312,6 +316,7 @@ Mobile:
 ### Recent Changes
 
 Recent changes are a supporting surface, not the main page ending.
+Render at most three entries in a compact release strip; link to the changelog for full history.
 
 - Limit to current component.
 - Keep compact rows.
