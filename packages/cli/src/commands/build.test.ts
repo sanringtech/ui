@@ -279,6 +279,7 @@ describe('buildCommand (integration)', () => {
     const generated = JSON.parse(readFileSync(join(outDir, 'registry.json'), 'utf-8')) as Registry;
     const handWritten = JSON.parse(readFileSync(REGISTRY_JSON_PATH, 'utf-8')) as Registry;
     const handByName = new Map(handWritten.components.map((c) => [c.name, c]));
+    const handSharedByName = new Map(handWritten.shared.map((entry) => [entry.name, entry]));
 
     const KNOWN_MISMATCHES: Record<string, { componentDeps?: true; sharedDeps?: true; peerDependencies?: true }> = {};
 
@@ -313,6 +314,22 @@ describe('buildCommand (integration)', () => {
       if (!allowed.peerDependencies && JSON.stringify(genPeerDeps) !== JSON.stringify(handPeerDeps)) {
         unexpectedDiffs.push(
           `${generatedComponent.name}.peerDependencies: generated=${JSON.stringify(genPeerDeps)} hand=${JSON.stringify(handPeerDeps)}`,
+        );
+      }
+    }
+
+    for (const generatedShared of generated.shared) {
+      const handShared = handSharedByName.get(generatedShared.name);
+      if (!handShared) {
+        unexpectedDiffs.push(`shared/${generatedShared.name}: not in hand-written registry.json`);
+        continue;
+      }
+
+      const generatedPeerDeps = Object.keys(generatedShared.peerDependencies ?? {}).sort();
+      const handPeerDeps = Object.keys(handShared.peerDependencies ?? {}).sort();
+      if (JSON.stringify(generatedPeerDeps) !== JSON.stringify(handPeerDeps)) {
+        unexpectedDiffs.push(
+          `shared/${generatedShared.name}.peerDependencies: generated=${JSON.stringify(generatedPeerDeps)} hand=${JSON.stringify(handPeerDeps)}`,
         );
       }
     }

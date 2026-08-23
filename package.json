@@ -8,6 +8,7 @@
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
     "test:e2e:docs": "playwright test --config=apps/docs/playwright.config.ts",
+    "test:e2e:cli": "pnpm --filter @sanring/cli test:e2e",
     "lint": "eslint .",
     "lint:ng": "ng lint",
     "generate:stackblitz-registry": "node scripts/generate-stackblitz-registry.mjs",
