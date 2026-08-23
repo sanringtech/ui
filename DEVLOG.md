@@ -941,3 +941,15 @@ P30 先前已收完 15 個必修缺口；這輪把剩下 15 組建議項目逐�
 **CI 與維護流程**:`ci.yml` 新增 `Docs E2E + visual regression` job,乾淨 checkout 會安裝 Chromium、執行完整 `pnpm test:e2e:docs`;失敗時上傳 7 天保存的 Playwright HTML report、actual/expected/diff 圖。`DOCS_VISUAL_SYSTEM.md` 已改寫 automation 邊界,並記錄視覺 subset 與 `--update-snapshots` 指令;只有人工檢查 actual/diff、確認是刻意改版後才能更新 baseline。`ROADMAP.md` 同步把 accessibility 與 visual regression 從未完成 quality infrastructure 移到 Recently shipped,TODOLIST 的 P11 現在只剩真正 CLI e2e。
 
 **驗證**:Home/CLI 4 張 viewport baseline 均人工抽查完成載入且尺寸為 `1440x900`;審圖時發現 Button 第一屏只露出 preview 外框,隨即把另 2 張改成直接擷取完整 Basic section,確保實際 variants 受保護。baseline 產生後以無 `--update-snapshots` 模式重跑 visual diff **6/6 passed**;完整 `pnpm test:e2e:docs` **46/46 passed**。Playwright `--list` 確認 suite 為 structural/a11y desktop+mobile 40 個案例加 visual-only 6 個案例,沒有重複執行 screenshot spec;repo 全域 lint、`tsc --noEmit`、`git diff --check` 皆通過。
+
+---
+
+## P11 — Packaged CLI × fresh Angular 真正 E2E quality gate(2026-08-23)
+
+**已完成**:新增 `packages/cli/e2e/fresh-angular.mjs` 與 root/package-level `test:e2e:cli`/`test:e2e` scripts。測試每次都在 OS temp 建立隔離環境:先執行 CLI production build 與 `pnpm pack`,再透過隔離的 Angular CLI 22.0.1 scaffold 一個全新 npm application、安裝該本地 tarball、實際執行 `sanring init --yes` 與 `sanring add button --yes`。測試會斷言 config/theme/Button/shared source 都存在、installed version 已記錄、CDK dependency 真的寫入新專案。最後把 registry 安裝出的 `ButtonDirective` 匯入 root `App` 並在 template 使用後跑 production `ng build`;不是只確認檔案複製成功,也不會因為未引用的 source 沒被 Angular compiler 納入而假綠。成功時清除 temp,失敗時保留完整專案路徑;可用 `SANRING_E2E_KEEP_TEMP=1` 主動保留。CI 的 `Test (@sanring/cli)` job 已加同一條流程與 15 分鐘 timeout。
+
+**package-manager 決策**:最初用 pnpm 建 fresh app,但 pnpm 10 在全新、沒有 `onlyBuiltDependencies` 核准清單的專案會因 Angular build toolchain 的 `esbuild`/`lmdb`/`@parcel/watcher` install scripts 回報 `ERR_PNPM_IGNORED_BUILDS`;這是在 Sanring 執行前就發生的 package-manager policy,不是產品缺陷。最終改用 Angular CLI 預設 npm,同時讓 E2E 覆蓋 CLI 內 `detectPackageManager → npm install` 的真實依賴安裝路徑。
+
+**測試抓到並修正的真實發布缺陷**:第一次走到 production build 時,乾淨專案無法 resolve `@angular/cdk/a11y`。根因是所有使用 `shared/utils.ts` 的元件都會間接需要 CDK（`uniqueId()` 使用 `_IdGenerator`）,但 `registry.json` 的 `utils.peerDependencies` 只列 `clsx`/`tailwind-merge`;repo 與既有 mock tests 本身早已有 CDK,所以缺口一直被遮住。已補 `@angular/cdk: ^22.0.0`,因此 `sanring add button` 現在會自動安裝它。進一步把 `build.test.ts` golden fixture 從只比較 52 個 component metadata 擴大到所有 shared entries 後,又抓出 `collection-controller.ts` 同樣直接 import CDK 卻沒宣告,一併校正;新的 shared peer-dependency comparison 會阻止這一類 drift 再發生。CLI patch changeset 已加入。
+
+**驗證**:本機 fresh run 實際安裝 Angular 22.1.3/CLI 22.1.5,完整 `packed CLI → npm install → sanring init → sanring add button → import installed source → production ng build` 連續通過,production bundle 142.33 kB。`build.test.ts` targeted golden fixture **11/11 passed**,shared/component metadata 零已知落差;完整 CLI suite **19 files / 240 tests passed**。repo 全域 lint、CLI main/schematics TypeScript、registry sync/parity、Changesets status、CI YAML 與 `git diff --check` 皆通過。
