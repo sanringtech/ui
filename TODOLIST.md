@@ -6,12 +6,6 @@
 
 ---
 
-## P11 — 品質關卡類(優先度較低,長期補強)
-
-- [ ] CLI 補真正的 e2e 測試(拉一個全新 Angular 專案、真的跑 `sanring add`、真的 `ng build`)——現有的 `add.test.ts`/`doctor.test.ts` 等是對假的檔案系統 mock 驗證邏輯,不是「CLI 真的能在使用者機器上跑起來」的保證
-
----
-
 ## P19 — Blocks:可直接安裝的頁面級組合模板
 
 - [ ] 設計 `blocks/` registry 類別,讓 `sanring add block/dashboard-shell` 可以一次安裝完整頁面片段(login page、settings page、data table page、dashboard layout 等)

@@ -83,6 +83,7 @@
       "description": "cn() utility built on clsx + tailwind-merge",
       "file": "shared/utils.ts",
       "peerDependencies": {
+        "@angular/cdk": "^22.0.0",
         "clsx": "^2.0.0",
         "tailwind-merge": "^3.0.0"
       }
@@ -105,7 +106,10 @@
     {
       "name": "collection-controller",
       "description": "Keyboard active-descendant navigation helper shared by combobox and command",
-      "file": "shared/collection-controller.ts"
+      "file": "shared/collection-controller.ts",
+      "peerDependencies": {
+        "@angular/cdk": "^22.0.0"
+      }
     },
     {
       "name": "collection-state",

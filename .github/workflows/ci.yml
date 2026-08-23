@@ -83,6 +83,10 @@ jobs:
       - name: Test
         run: pnpm --filter @sanring/cli test
 
+      - name: Test packaged CLI in a fresh Angular app
+        run: pnpm test:e2e:cli
+        timeout-minutes: 15
+
   typecheck:
     name: Type check
     runs-on: ubuntu-latest

@@ -47,12 +47,15 @@ pnpm start        # docs dev server → http://localhost:4200
 | `pnpm lint` | ESLint |
 | `pnpm --filter @sanring/cli build` | Build CLI（含 `sync-registry` 步驟，見下） |
 | `pnpm --filter @sanring/cli test` | 執行 CLI 自己的 Vitest 測試 |
+| `pnpm test:e2e:cli` | 打包 CLI，在全新 Angular/npm 專案實際執行 `init`、`add button` 與 production build（需要網路） |
 
 ## `@sanring/cli` 的 registry 同步
 
 `packages/cli/registry/` 是 build 產物、不進 git（見 `.gitignore`），每次 `pnpm --filter @sanring/cli build` 都會先跑 `scripts/sync-registry.mjs`，把 repo 根目錄的 `registry/`（正本，有 tracked in git）整個複製過去，再驗證 `registry.json` 列的每個檔案都存在。
 
 **改動 `registry/` 底下的元件檔案後，一定要重新 build 一次 CLI 套件**（或至少跑 `pnpm --filter @sanring/cli sync-registry`），否則發布出去的 CLI 會裝到舊版程式碼——這正是 [.changeset/plenty-pumas-sync.md](.changeset/plenty-pumas-sync.md) 修的問題。
+
+`pnpm test:e2e:cli` 會使用 `packages/cli/e2e/fresh-angular.mjs` 建立獨立暫存專案，成功時自動清除；失敗時保留路徑供除錯。若要保留成功專案，也可使用 `SANRING_E2E_KEEP_TEMP=1 pnpm test:e2e:cli`。這項測試會從 npm 安裝 fresh project dependencies，CI 已在 `Test (@sanring/cli)` job 執行。
 
 ## `@sanring/cli` 版本相容性（Changesets）
 

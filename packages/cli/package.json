@@ -20,7 +20,8 @@
     "sync-registry": "node scripts/sync-registry.mjs",
     "build": "npm run sync-registry && tsc && tsc -p tsconfig.schematics.json && node scripts/copy-schematics-assets.mjs",
     "dev": "tsc --watch",
-    "test": "vitest run"
+    "test": "vitest run",
+    "test:e2e": "node e2e/fresh-angular.mjs"
   },
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.30.0",

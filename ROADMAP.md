@@ -16,12 +16,11 @@ This is a snapshot, not a commitment or a timeline. Items move, get reprioritize
 - **GitHub registries** — point the CLI at `github:<owner>/<repo>` directly, without hosting a raw `registry.json` yourself.
 - **Private registry authentication** — Bearer-token support for company-internal or private-repo registries.
 
-## Quality infrastructure (ongoing, lower urgency)
-
-- Real end-to-end CLI tests against a freshly scaffolded Angular project
-
 ## Recently shipped
 
+- Packaged CLI end-to-end quality gate — CI installs the local tarball into a freshly scaffolded
+  Angular app, runs `sanring init` and `sanring add button`, imports the installed source, and
+  requires a successful production build
 - Docs site Playwright quality gate — structural smoke tests, axe-core accessibility coverage, and
   approved visual baselines for representative home/component/CLI surfaces in both themes; CI runs
   the full suite through `pnpm test:e2e:docs`
