@@ -14,7 +14,7 @@ interface ComponentRecentChange {
   change: ComponentChange;
 }
 
-const RECENT_CHANGE_LIMIT = 5;
+const RECENT_CHANGE_LIMIT = 3;
 
 const TYPE_CLASS: Record<ComponentChangeType, string> = {
   added: 'bg-[var(--docs-success-bg)] text-[var(--docs-success-fg)]',
@@ -50,48 +50,69 @@ function renderInlineCode(text: string): string {
     @if (changes().length > 0) {
       <section
         id="recent-changes"
-        class="mt-16 rounded-[var(--sanring-radius-lg)] border border-[color-mix(in_srgb,var(--docs-border)_82%,transparent)] bg-[color-mix(in_srgb,var(--docs-panel)_72%,transparent)] p-4 shadow-[var(--docs-shadow-soft)]"
+        class="mt-16 overflow-hidden rounded-[var(--sanring-radius)] border border-[color-mix(in_srgb,var(--docs-border)_86%,transparent)] bg-[color-mix(in_srgb,var(--docs-panel)_76%,transparent)] shadow-[var(--docs-shadow-soft)]"
         [attr.aria-labelledby]="'recent-changes-title'"
       >
-        <div class="flex flex-wrap items-end justify-between gap-3">
-          <div>
-            <h2
-              id="recent-changes-title"
-              class="m-0 text-[22px] font-semibold leading-tight tracking-normal text-[var(--docs-fg)] max-[520px]:text-xl"
-            >
-              {{ i18n.t('component.recentChanges.title') }}
-            </h2>
-            <p class="mb-0 mt-2 text-sm leading-relaxed text-[var(--docs-muted)]">
-              {{ i18n.t('component.recentChanges.description') }}
-            </p>
+        <div
+          class="flex min-w-0 flex-wrap items-center justify-between gap-3 border-b border-[var(--docs-border)] bg-[color-mix(in_srgb,var(--docs-elevated)_72%,transparent)] px-3.5 py-3"
+        >
+          <div class="flex min-w-0 items-center gap-3">
+            <span
+              class="h-8 w-1 shrink-0 rounded-full bg-[linear-gradient(180deg,var(--docs-accent),var(--docs-accent-alt))]"
+              aria-hidden="true"
+            ></span>
+            <div class="min-w-0">
+              <p
+                class="m-0 font-mono text-[10px] font-semibold uppercase tracking-[0.08em] text-[var(--docs-accent-strong)]"
+              >
+                {{ i18n.t('component.recentChanges.signal') }}
+              </p>
+              <h2
+                id="recent-changes-title"
+                class="m-0 mt-0.5 text-base font-semibold leading-tight tracking-normal text-[var(--docs-fg)]"
+              >
+                {{ i18n.t('component.recentChanges.title') }}
+              </h2>
+            </div>
           </div>
           <a
-            class="text-sm font-medium text-[var(--docs-muted)] no-underline transition-colors hover:text-[var(--docs-fg)]"
+            class="shrink-0 font-mono text-xs font-medium text-[var(--docs-muted)] no-underline transition-colors hover:text-[var(--docs-fg)] focus-visible:rounded-[var(--sanring-radius-xs)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--docs-focus-ring)]"
             routerLink="/changelog"
           >
             {{ i18n.t('component.recentChanges.viewAll') }}
           </a>
         </div>
 
-        <ol class="mt-5 list-none divide-y divide-[color-mix(in_srgb,var(--docs-border)_82%,transparent)] p-0">
+        <ol
+          class="m-0 list-none divide-y divide-[color-mix(in_srgb,var(--docs-border)_82%,transparent)] p-0"
+        >
           @for (entry of changes(); track entry.version + '-' + $index) {
-            <li class="flex flex-wrap items-baseline gap-x-2.5 gap-y-1 py-2.5">
-              <span class="shrink-0 font-mono text-xs font-semibold text-[var(--docs-fg)]">
-                v{{ entry.version }}
+            <li
+              class="grid min-w-0 gap-x-3 gap-y-2 px-3.5 py-3 sm:grid-cols-[9rem_auto_minmax(0,1fr)] sm:items-baseline"
+            >
+              <span class="flex min-w-0 items-baseline gap-2">
+                <span class="shrink-0 font-mono text-xs font-semibold text-[var(--docs-fg)]"
+                  >v{{ entry.version }}</span
+                >
+                <time
+                  class="shrink-0 font-mono text-[10px] text-[var(--docs-muted)]"
+                  [attr.datetime]="entry.date"
+                  >{{ entry.date }}</time
+                >
               </span>
-              <time class="shrink-0 font-mono text-[11px] text-[var(--docs-muted)]" [attr.datetime]="entry.date">
-                {{ entry.date }}
-              </time>
-              <span [class]="chipClass + ' ' + typeClass[entry.change.type]">
-                {{ entry.change.type }}
+              <span class="flex flex-wrap items-center gap-1.5">
+                <span [class]="chipClass + ' ' + typeClass[entry.change.type]">{{
+                  entry.change.type
+                }}</span>
+                @if (entry.change.breaking) {
+                  <span
+                    [class]="chipClass + ' bg-[var(--docs-error-bg)] text-[var(--docs-error-fg)]'"
+                    >BREAKING</span
+                  >
+                }
               </span>
-              @if (entry.change.breaking) {
-                <span [class]="chipClass + ' bg-[var(--docs-error-bg)] text-[var(--docs-error-fg)]'">
-                  BREAKING
-                </span>
-              }
               <span
-                class="min-w-0 flex-1 basis-full text-sm leading-relaxed text-[var(--docs-fg)] sm:basis-0"
+                class="min-w-0 text-[13px] leading-5 text-[var(--docs-fg)]"
                 [innerHTML]="renderText(entry.change.text)"
               ></span>
             </li>

@@ -292,6 +292,10 @@ Rules:
 
 - Major preview container uses `--sanring-radius-lg`.
 - Stage must have stable min height and responsive padding.
+- Preview and source stay simultaneously visible. Do not hide either zone behind tabs; side-by-side
+  comparison while scrolling is more useful than reducing vertical space.
+- Label the zones as `01 Preview` and `02 Source`; installation and API remain one-hop anchor targets
+  from the component header.
 - Code block scrolls horizontally internally; it must not widen the page.
 - Copy code action is always visible and keyboard accessible.
 
@@ -312,6 +316,7 @@ Mobile:
 ### Recent Changes
 
 Recent changes are a supporting surface, not the main page ending.
+Render at most three entries in a compact release strip; link to the changelog for full history.
 
 - Limit to current component.
 - Keep compact rows.
@@ -546,8 +551,27 @@ doesn't apply. Pages to sample: home, a component page (e.g. `button`), a long-f
 
 `apps/docs/e2e/` (Playwright, see `apps/docs/playwright.config.ts`) covers: page renders without
 console errors, key landmarks/headings are present, no horizontal overflow at two viewports, the
-mobile sheet nav opens, and theme switching updates `data-theme` and persists. It does **not**
-cover subjective visual quality — spacing rhythm, color harmony, "does this look premium" — none of
-that is testable without a human (or a visual-diff tool with an approved baseline, which this repo
-doesn't have yet). Run `pnpm test:e2e:docs` before merging a visual change; still walk through this
-checklist by eye for anything the automated suite doesn't assert on.
+mobile sheet nav opens, theme switching updates `data-theme` and persists, and representative docs
+surfaces still match approved screenshots. `visual-regression.spec.ts` compares the first viewport
+of home and the CLI overview plus the complete Button Basic section at `1440x900` in both themes.
+The committed PNGs live under `apps/docs/e2e/visual-baselines/visual-chromium/`; the dedicated
+Playwright project fixes viewport, locale, timezone, reduced motion, animation, and caret behavior.
+CI runs the complete suite and uploads the Playwright report plus image diffs when it fails.
+
+Run the visual subset locally with:
+
+```bash
+pnpm exec playwright test --config=apps/docs/playwright.config.ts --project=visual-chromium
+```
+
+If an intentional visual change should become the new standard, first inspect every affected
+`actual`/`diff` image, then update and review the committed baselines explicitly:
+
+```bash
+pnpm exec playwright test --config=apps/docs/playwright.config.ts --project=visual-chromium --update-snapshots
+```
+
+Screenshot diffing detects pixel-level departures from the approved compositions; it still cannot
+decide whether a deliberate redesign improves spacing rhythm, color harmony, or perceived quality.
+Run `pnpm test:e2e:docs` before merging a visual change and use this checklist for the remaining
+human judgment.

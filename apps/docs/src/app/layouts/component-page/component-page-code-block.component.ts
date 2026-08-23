@@ -62,12 +62,13 @@ const codeTheme = 'vitesse-dark';
     </button>
 
     <div
-      class="overflow-auto py-5 pl-4 pr-14 font-mono text-[13px] leading-6 text-[var(--docs-code-fg)] sm:py-7 sm:pl-6 sm:pr-16 sm:text-[14px] sm:leading-[1.65]"
+      class="overflow-auto py-5 pl-4 pr-14 font-mono text-[13px] leading-6 text-[var(--docs-code-fg)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-[var(--docs-focus-ring)] sm:py-7 sm:pl-6 sm:pr-16 sm:text-[14px] sm:leading-[1.65]"
+      tabindex="0"
     >
       <code class="block min-w-max">
         @for (line of highlightedLines(); track line.number) {
           <span class="grid grid-cols-[2.25rem_minmax(0,1fr)] sm:grid-cols-[3rem_minmax(0,1fr)]">
-            <span class="select-none pr-3 text-right text-[var(--docs-muted)] sm:pr-5">
+            <span class="select-none pr-3 text-right text-[var(--docs-code-muted)] sm:pr-5">
               {{ line.number }}
             </span>
             <span class="min-w-0 whitespace-pre">
