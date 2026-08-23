@@ -1,5 +1,12 @@
 # @sanring/cli
 
+## 0.24.1
+
+### Patch Changes
+
+- ce4373c: Improve the installed Button component's destructive variant contrast for WCAG AA readability.
+- 4882a5b: Install the Angular CDK dependency required by the shared utilities bundled with registry components.
+
 ## 0.24.0
 
 ### Minor Changes
