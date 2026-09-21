@@ -72,6 +72,27 @@ describe('findRegistryReferenceIssues', () => {
     ]);
   });
 
+  it('accepts a block that depends on a known component', () => {
+    expect(
+      findRegistryReferenceIssues(
+        baseRegistry({
+          blocks: [{ name: 'login', description: '', files: ['login/index.ts'], componentDeps: ['badge'] }],
+        }),
+      ),
+    ).toEqual([]);
+  });
+
+  it('flags a group referencing a block name as valid', () => {
+    expect(
+      findRegistryReferenceIssues(
+        baseRegistry({
+          blocks: [{ name: 'login', description: '', files: ['login/index.ts'] }],
+          groups: [{ id: 'blocks', title: 'Blocks', components: ['login'] }],
+        }),
+      ),
+    ).toEqual([]);
+  });
+
   it('flags a group referencing an unknown component', () => {
     const registry = baseRegistry({
       groups: [{ id: 'forms', title: 'Forms', components: ['badge', 'not-real'] }],

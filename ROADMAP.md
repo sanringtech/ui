@@ -6,18 +6,20 @@ This is a snapshot, not a commitment or a timeline. Items move, get reprioritize
 
 ## Adoption experience
 
-- **Blocks** — installable page-level templates (login page, dashboard shell, settings page) via `sanring add block/dashboard-shell`, so you're not always assembling pages from individual components. This is the biggest adoption-experience gap compared to shadcn today.
-- **Interactive theme builder** — a live color/radius preview on the docs site with copy-to-clipboard CSS. (The named starting points this was paired with — Slate, Warm, High-Contrast — already shipped via `sanring init --theme <preset>`.)
-- **Try without installing** — an "Open in StackBlitz" shortcut on each component's docs page.
+- **More blocks** — remaining page templates (`register`, `forgot-password`, `settings-page`, `detail-page`, `wizard`, `pricing-page`) on top of the starter three.
 
 ## Ecosystem / team use
 
 - **Registry Directory** — a docs page listing community/third-party registries, so teams can discover each other's component sets.
-- **GitHub registries** — point the CLI at `github:<owner>/<repo>` directly, without hosting a raw `registry.json` yourself.
 - **Private registry authentication** — Bearer-token support for company-internal or private-repo registries.
 
 ## Recently shipped
 
+- Blocks starter set — `sanring add block/login` (and `dashboard-shell`, `table-page`) installs a page-level template plus its component dependencies
+- Open in StackBlitz — each component docs previewer can open a minimal Angular 22 + Tailwind project with that example
+- GitHub registries — `--registry github:owner/repo` (optional `#ref` / `@ref`) expands to the raw `registry.json` at the repo root
+- `registry.json` API reference — field, type, and required/optional docs on the Registry page
+- Interactive theme builder — a live color/radius preview on the docs site with copy-to-clipboard CSS
 - Packaged CLI end-to-end quality gate — CI installs the local tarball into a freshly scaffolded
   Angular app, runs `sanring init` and `sanring add button`, imports the installed source, and
   requires a successful production build

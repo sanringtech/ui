@@ -13,10 +13,14 @@ import { cn } from '../shared/utils';
 export class DialogHeaderComponent {
   readonly class = input<string | undefined>();
 
+  readonly align = input<'start' | 'center' | undefined>(undefined);
+
   protected readonly dialogHeaderClass = computed(() =>
     cn(
-      // 垂直排列、預設置中 (手機版常見)、桌機版靠左對齊
-      'flex flex-col space-y-1.5 text-center sm:text-left',
+      'flex flex-col space-y-1.5',
+      this.align() === 'center' && 'items-center text-center',
+      this.align() === 'start' && 'items-start text-left',
+      !this.align() && 'text-center sm:text-left',
       this.class(),
     ),
   );

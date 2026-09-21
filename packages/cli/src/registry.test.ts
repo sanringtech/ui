@@ -9,6 +9,8 @@ import {
   installCommand,
   installCommandParts,
   RegistryFetchError,
+  expandGithubRegistrySource,
+  parseBlockRef,
   validateRegistry,
 } from './registry.js';
 
@@ -82,6 +84,38 @@ describe('installCommandParts', () => {
   });
 });
 
+describe('parseBlockRef', () => {
+  it('strips the block/ prefix', () => {
+    expect(parseBlockRef('block/login')).toEqual({ preferBlock: true, name: 'login' });
+  });
+
+  it('leaves a bare component name unchanged', () => {
+    expect(parseBlockRef('button')).toEqual({ preferBlock: false, name: 'button' });
+  });
+});
+
+describe('expandGithubRegistrySource', () => {
+  it('maps github:owner/repo to the main-branch raw registry.json URL', () => {
+    expect(expandGithubRegistrySource('github:acme/ui')).toBe(
+      'https://raw.githubusercontent.com/acme/ui/main/registry.json',
+    );
+  });
+
+  it('accepts a #ref or @ref override', () => {
+    expect(expandGithubRegistrySource('github:acme/ui#v1')).toBe(
+      'https://raw.githubusercontent.com/acme/ui/v1/registry.json',
+    );
+    expect(expandGithubRegistrySource('github:acme/ui@release')).toBe(
+      'https://raw.githubusercontent.com/acme/ui/release/registry.json',
+    );
+  });
+
+  it('returns undefined for ordinary paths and URLs', () => {
+    expect(expandGithubRegistrySource('./registry')).toBeUndefined();
+    expect(expandGithubRegistrySource('https://example.com/registry.json')).toBeUndefined();
+  });
+});
+
 describe('validateRegistry', () => {
   it('accepts a minimal valid registry', () => {
     expect(
@@ -120,6 +154,28 @@ describe('validateRegistry', () => {
         components: ['button'],
       },
     ]);
+  });
+
+  it('accepts an optional blocks array', () => {
+    expect(
+      validateRegistry({
+        name: 'test',
+        shared: [],
+        components: [{ name: 'button', description: 'Button', files: ['button/index.ts'] }],
+        blocks: [{ name: 'login', description: 'Login page', files: ['login/index.ts'] }],
+      }).blocks,
+    ).toEqual([{ name: 'login', description: 'Login page', files: ['login/index.ts'] }]);
+  });
+
+  it('rejects a block whose name collides with a component', () => {
+    expect(() =>
+      validateRegistry({
+        name: 'test',
+        shared: [],
+        components: [{ name: 'login', description: 'Login input', files: ['login/index.ts'] }],
+        blocks: [{ name: 'login', description: 'Login page', files: ['login/index.ts'] }],
+      }),
+    ).toThrow('blocks[0].name "login" collides with a component');
   });
 
   it('reports invalid registry fields with paths', () => {
@@ -169,6 +225,16 @@ describe('fetchRegistry source resolution', () => {
     const registry = await fetchRegistry('https://example.com/registry/registry.json');
     expect(registry.name).toBe('remote-registry');
     expect(fetchMock).toHaveBeenCalledWith('https://example.com/registry/registry.json');
+  });
+
+  it('expands github:owner/repo before fetching', async () => {
+    fetchMock.mockResolvedValueOnce({
+      ok: true,
+      json: async () => ({ name: 'github-registry', shared: [], components: [] }),
+    });
+    const registry = await fetchRegistry('github:acme/ui');
+    expect(registry.name).toBe('github-registry');
+    expect(fetchMock).toHaveBeenCalledWith('https://raw.githubusercontent.com/acme/ui/main/registry.json');
   });
 
   it('rejects with a RegistryFetchError when the explicit URL request fails', async () => {

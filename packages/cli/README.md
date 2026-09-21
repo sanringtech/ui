@@ -27,6 +27,7 @@ Commands are grouped by what stage of your workflow they belong to:
 # Install
 npx @sanring/cli@latest init                    # set up sanring.config.json + theme
 npx @sanring/cli@latest add date-picker          # copy a component into your project
+npx @sanring/cli@latest add block/login          # copy a page-level block + its components
 npx @sanring/cli@latest remove date-picker       # remove an installed component
 
 # Explore
@@ -43,7 +44,7 @@ npx @sanring/cli@latest doctor                   # check environment + project h
 
 `build` generates a `registry.json` for publishing your own registry, and `mcp` starts an MCP server for AI coding agents — see below.
 
-Every command accepts `--registry <url-or-path>` to point at a custom registry. `sanring.config.json` also supports `registries` and `defaultRegistry` for permanent alias configuration. Run any command with `--help` for the full flag list, or see [ui.sanring.dev/cli](https://ui.sanring.dev/cli) for complete documentation.
+Every command accepts `--registry <url-or-path>` to point at a custom registry. A public GitHub repo with `registry.json` at the root can be passed as `github:owner/repo` (optional `#ref` or `@ref`). `sanring.config.json` also supports `registries` and `defaultRegistry` for permanent alias configuration. Run any command with `--help` for the full flag list, or see [ui.sanring.dev/cli](https://ui.sanring.dev/cli) for complete documentation.
 
 ## Notes
 

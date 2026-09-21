@@ -51,7 +51,7 @@ function findAmbientBackground(el: HTMLElement): string | null {
          所以 label 寫在前面即可同時滿足「非 floating 時 label 要先出現」跟「floating 時疊在 input 上」 -->
     <div [class]="controlWrapperClass()">
       <ng-content select="[sanringLabel]"></ng-content>
-      <ng-content select="[sanringInput]"></ng-content>
+      <ng-content select="[sanringInput], [sanringTextarea]"></ng-content>
     </div>
     <ng-content select="[sanringDescription], sanring-error-message"></ng-content>
     <!-- 其餘沒有對到上面 selector 的內容，維持原本最單純的投影 -->

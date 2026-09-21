@@ -45,6 +45,11 @@ export const routes: Routes = [
               ),
           },
           {
+            path: 'blocks',
+            loadComponent: () =>
+              import('./pages/blocks/blocks-page.component').then((m) => m.BlocksPageComponent),
+          },
+          {
             path: 'changelog',
             redirectTo: 'version-notes',
             pathMatch: 'full',

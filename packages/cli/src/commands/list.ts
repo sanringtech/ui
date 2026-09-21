@@ -8,6 +8,8 @@ import {
   createRegistryIndex,
   fetchFile,
   fetchRegistry,
+  registryInstallables,
+  registryItemRemotePath,
   type RegistryComponent,
   type RegistryIndex,
 } from '../registry.js';
@@ -90,7 +92,7 @@ export async function getComponentOutdatedSummaries(
         componentName: component.name,
         label,
         dest: join(destDir, fileName),
-        remotePath: `components/${file}`,
+        remotePath: registryItemRemotePath(file, component.name, registryIndex),
         recordedHash: options.installedHashes?.[label],
       });
     }
@@ -204,7 +206,7 @@ export const listCommand = new Command('list')
     const registryIndex = createRegistryIndex(registry);
     spinner.stop();
 
-    let { components } = registry;
+    let components = registryInstallables(registry);
 
     if (options.installed || options.outdated) {
       requireAngularProject(process.cwd());

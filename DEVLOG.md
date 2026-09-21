@@ -953,3 +953,36 @@ P30 先前已收完 15 個必修缺口；這輪把剩下 15 組建議項目逐�
 **測試抓到並修正的真實發布缺陷**:第一次走到 production build 時,乾淨專案無法 resolve `@angular/cdk/a11y`。根因是所有使用 `shared/utils.ts` 的元件都會間接需要 CDK（`uniqueId()` 使用 `_IdGenerator`）,但 `registry.json` 的 `utils.peerDependencies` 只列 `clsx`/`tailwind-merge`;repo 與既有 mock tests 本身早已有 CDK,所以缺口一直被遮住。已補 `@angular/cdk: ^22.0.0`,因此 `sanring add button` 現在會自動安裝它。進一步把 `build.test.ts` golden fixture 從只比較 52 個 component metadata 擴大到所有 shared entries 後,又抓出 `collection-controller.ts` 同樣直接 import CDK 卻沒宣告,一併校正;新的 shared peer-dependency comparison 會阻止這一類 drift 再發生。CLI patch changeset 已加入。
 
 **驗證**:本機 fresh run 實際安裝 Angular 22.1.3/CLI 22.1.5,完整 `packed CLI → npm install → sanring init → sanring add button → import installed source → production ng build` 連續通過,production bundle 142.33 kB。`build.test.ts` targeted golden fixture **11/11 passed**,shared/component metadata 零已知落差;完整 CLI suite **19 files / 240 tests passed**。repo 全域 lint、CLI main/schematics TypeScript、registry sync/parity、Changesets status、CI YAML 與 `git diff --check` 皆通過。
+
+---
+
+## P19 — Blocks 起手三個(`dashboard-shell` / `login` / `table-page`)
+
+- [x] `registry/blocks/` + `registry.json` `blocks[]` + CLI `block/` prefix
+- [x] 起手三個:`dashboard-shell`(shell)、`login`(page)、`table-page`(page)
+- [x] Docs `/blocks` 頁與 `sanring add block/login` 說明
+
+**已完成**:blocks 是獨立的 registry 類別,不進 `packages/ui`(否則會被 8-way `check-registry-sync` 當正式元件抓漏)。名稱扁平(`dashboard-shell` / `login` / `table-page`),CLI 用 `block/` prefix 跟 alias 的 `:` 分開。安裝後落到跟元件一樣的 `src/app/components/ui/<name>/`,互相用 `../card` 這種相對路徑。docs preview 用 `@sanring/ui` 重畫,不能直接 compile registry blocks(因為 `../card` 對不到 `registry/components/card`)。
+
+**踩過的坑**:`login` 不能同時 import `FieldLabelDirective` 與獨立的 `LabelDirective`(同一個 selector)。`add.test.ts` 的 commander singleton 會把前一個測試的 `--dry-run` 留到下一個,block 安裝看起來成功但其實沒寫檔——`beforeEach` 現在會重設 `dryRun`/`check`/`diff`/`view`/`force`/`yes`/`registry`。
+
+**未做**:其餘六個 page block 仍在 TODOLIST。
+
+---
+
+## P22 — Docs component 頁面 Open in StackBlitz
+
+- [x] 每個 component 頁面的 code previewer 旁加「Open in StackBlitz」
+
+**已完成**:共用 `ComponentPageCodePreviewer` 在 URL 是 `/components/:id` 時顯示按鈕,runtime fetch `/registry/registry.json` 與對應 source(`angular.json` 把 `registry/` 當 docs assets),再用 `@stackblitz/sdk` 的 `sdk.openProject({ template: 'node' })` 開一份最小 Angular 22 + Tailwind 專案。不用 EngineBlock 的 `angular-cli` template,那個太舊。原本規劃的 `generate:stackblitz-registry` 預產生腳本沒寫也沒需要,已從 `package.json` 拿掉。
+
+**刻意不做**:docs 頁內嵌可編輯 editor(跟 shadcn 一樣打平);blocks 頁的 previewer 不顯示按鈕(URL 不是 `/components/:id`)。
+
+---
+
+## P25 — GitHub Registries + registry.json API Reference
+
+- [x] CLI `github:owner/repo`(`#ref` / `@ref`)展開成 raw `registry.json`
+- [x] Docs Registry 頁補完整欄位定義(型別、必要/選用)
+
+**已完成**:`expandGithubRegistrySource` 在 `fetchRegistry` / `fetchFile` 進路徑判斷前先 normalize,避免 `github:` 被當成本地路徑。Docs 加了 GitHub 範例、root / item / shared / group / migration 五張 API 表。Directory、namespaces、auth、search API、docs 多頁拆分仍在 TODOLIST,這輪不做。

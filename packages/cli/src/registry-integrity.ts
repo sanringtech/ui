@@ -46,10 +46,13 @@ export function isParseableVersionRange(spec: string): boolean {
 // file-fetchability check below.
 export function findRegistryReferenceIssues(registry: Registry): RegistryIntegrityIssue[] {
   const issues: RegistryIntegrityIssue[] = [];
-  const knownComponentNames = new Set(registry.components.map((c) => c.name));
+  const knownComponentNames = new Set([
+    ...registry.components.map((c) => c.name),
+    ...(registry.blocks ?? []).map((c) => c.name),
+  ]);
   const knownSharedNames = new Set(registry.shared.map((s) => s.name));
 
-  for (const component of registry.components) {
+  for (const component of [...registry.components, ...(registry.blocks ?? [])]) {
     for (const dep of component.componentDeps ?? []) {
       if (!knownComponentNames.has(dep)) {
         issues.push({
@@ -108,9 +111,13 @@ export async function checkRegistryFilesFetchable(
   registry: Registry,
   source?: string,
 ): Promise<RegistryIntegrityIssue[]> {
+  const blockNames = new Set((registry.blocks ?? []).map((block) => block.name));
   const targets = [
-    ...registry.components.flatMap((component) =>
-      component.files.map((file) => ({ label: `${component.name}/${file}`, remotePath: `components/${file}` })),
+    ...[...registry.components, ...(registry.blocks ?? [])].flatMap((component) =>
+      component.files.map((file) => ({
+        label: `${component.name}/${file}`,
+        remotePath: `${blockNames.has(component.name) ? 'blocks' : 'components'}/${file}`,
+      })),
     ),
     ...registry.shared.map((shared) => ({ label: `shared/${shared.name}`, remotePath: shared.file })),
   ];

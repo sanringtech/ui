@@ -1,5 +1,11 @@
 import { Component, inject } from '@angular/core';
-import { TextareaDirective } from '@sanring/ui';
+import { FormsModule } from '@angular/forms';
+import {
+  DescriptionDirective,
+  FieldLabelDirective,
+  SanringFieldComponent,
+  TextareaDirective,
+} from '@sanring/ui';
 import { getComponentPageSection } from '../../../docs-schema/component-page.utils';
 import { I18nService } from '../../../i18n/i18n.service';
 import {
@@ -27,6 +33,10 @@ import { textareaPage, textareaPageExamples } from './textarea.docs';
     ComponentPageKeyboardTableComponent,
     ComponentPageUsageImportsComponent,
     ComponentPageSectionComponent,
+    DescriptionDirective,
+    FieldLabelDirective,
+    FormsModule,
+    SanringFieldComponent,
     TextareaDirective,
   ],
   template: `
@@ -85,6 +95,24 @@ import { textareaPage, textareaPageExamples } from './textarea.docs';
               </div>
             </app-component-page-code-previewer>
           </app-component-page-section>
+
+          <app-component-page-section [section]="section('example-character-count')">
+            <app-component-page-code-previewer
+              [code]="examples.characterCount"
+              language="angular-html"
+            >
+              <div previewer class="w-[min(420px,100%)]">
+                <sanring-field>
+                  <!-- eslint-disable-next-line @angular-eslint/template/label-has-associated-control -->
+                  <label sanringLabel>Bio</label>
+                  <textarea sanringTextarea maxlength="500" [(ngModel)]="bio"></textarea>
+                  <p sanringDescription class="text-end tabular-nums" aria-live="polite">
+                    {{ bio.length }}/500
+                  </p>
+                </sanring-field>
+              </div>
+            </app-component-page-code-previewer>
+          </app-component-page-section>
         </div>
       </app-component-page-section>
 
@@ -106,6 +134,7 @@ export class TextareaPageComponent {
   protected readonly page = textareaPage;
   protected readonly examples = textareaPageExamples;
   protected readonly i18n = inject(I18nService);
+  protected bio = 'Sanring UI demo text';
 
   protected section(id: string) {
     return getComponentPageSection(this.page, id);

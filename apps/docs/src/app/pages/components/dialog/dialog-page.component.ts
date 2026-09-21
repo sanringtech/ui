@@ -151,6 +151,16 @@ import { dialogPage, dialogPageExamples } from './dialog.docs';
               </div>
             </app-component-page-code-previewer>
           </app-component-page-section>
+
+          <app-component-page-section [section]="section('example-header')">
+            <app-component-page-code-previewer [code]="examples.header" language="angular-html">
+              <div previewer class="flex justify-center">
+                <button sanringBtn [sanringDialogTrigger]="headerDialog" type="button">
+                  {{ i18n.t('dialog.demo.header') }}
+                </button>
+              </div>
+            </app-component-page-code-previewer>
+          </app-component-page-section>
         </div>
       </app-component-page-section>
 
@@ -257,6 +267,17 @@ import { dialogPage, dialogPageExamples } from './dialog.docs';
               <p class="m-0">{{ item }}</p>
             }
           </div>
+        </sanring-dialog-content>
+      </ng-template>
+
+      <ng-template #headerDialog>
+        <sanring-dialog-content>
+          <sanring-dialog-header align="center">
+            <h2 sanringDialogTitle class="text-[var(--sanring-primary-70)]">Centered title</h2>
+            <p sanringDialogDescription>
+              Header alignment and title color are inputs, not one-off CSS.
+            </p>
+          </sanring-dialog-header>
         </sanring-dialog-content>
       </ng-template>
     </app-component-page>

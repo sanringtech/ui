@@ -36,6 +36,52 @@ function isPatch(version: string): boolean {
  */
 export const cliVersionChangelog: readonly CliVersionEntry[] = [
   {
+    version: '0.25.0',
+    date: '2026-09-21',
+    changes: [
+      {
+        type: 'added',
+        notable: true,
+        text: 'Registry gains a `blocks` category (`sanring add block/login`) and accepts `github:owner/repo` as a registry source.',
+      },
+      {
+        type: 'added',
+        componentIds: ['dialog'],
+        text: '`sanring-dialog-header` accepts `align` (`start` | `center`) so title alignment is not only the responsive default. Title color still goes through `sanringDialogTitle` `class`.',
+      },
+      {
+        type: 'added',
+        componentIds: ['input', 'textarea'],
+        text: 'Docs examples show a live character count (`20/500`) using native `maxlength` and `sanringDescription`.',
+      },
+      {
+        type: 'added',
+        componentIds: ['combobox'],
+        text: 'The multiple-select example shows selected/total count, for example `2/5`.',
+      },
+      {
+        type: 'changed',
+        componentIds: ['field'],
+        text: '`sanring-field` now projects `textarea[sanringTextarea]` into the control slot, so a character-count description renders below the textarea instead of above it.',
+      },
+    ],
+  },
+  {
+    version: '0.24.1',
+    date: '2026-08-23',
+    changes: [
+      {
+        type: 'fixed',
+        componentIds: ['button'],
+        text: 'Installed Button `destructive` variant contrast meets WCAG AA.',
+      },
+      {
+        type: 'fixed',
+        text: 'CLI installs the Angular CDK dependency required by shared utilities bundled with registry components.',
+      },
+    ],
+  },
+  {
     version: '0.24.0',
     date: '2026-08-22',
     changes: [

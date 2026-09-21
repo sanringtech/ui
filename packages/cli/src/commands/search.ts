@@ -1,7 +1,7 @@
 import { Command } from 'commander';
 import ora from 'ora';
 import pc from 'picocolors';
-import { fetchRegistry } from '../registry.js';
+import { fetchRegistry, registryInstallables } from '../registry.js';
 import {
   isAngularProject,
   readConfig,
@@ -47,7 +47,7 @@ export const searchCommand = new Command('search')
     const groupNames = options.group
       ? new Set(registry.groups?.find((group) => group.id === options.group || group.title.toLowerCase() === options.group?.toLowerCase())?.components ?? [])
       : null;
-    const scored = registry.components
+    const scored = registryInstallables(registry)
       .filter((component) => !groupNames || groupNames.has(component.name))
       .filter((component) => !options.tag || component.tags?.includes(options.tag))
       .map((component) => {

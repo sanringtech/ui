@@ -4,6 +4,7 @@ export const inputTranslations = {
   'input.demo.disabled': 'Disabled',
   'input.demo.file': 'File',
   'input.demo.validation': 'Validation state',
+  'input.demo.characterCount': 'Character count',
   'input.examples.description':
     'Common input patterns for editable text, disabled fields, and file uploads.',
   'input.examples.basic.description':

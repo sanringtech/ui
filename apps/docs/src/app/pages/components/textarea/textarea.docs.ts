@@ -44,6 +44,11 @@ export const textareaPage = {
           titleKey: 'textarea.demo.resize',
           level: 3,
         },
+        {
+          id: 'example-character-count',
+          titleKey: 'textarea.demo.characterCount',
+          level: 3,
+        },
       ],
     },
     {
@@ -90,4 +95,11 @@ export const textareaPageExamples = {
   usageMain: `<textarea sanringTextarea placeholder="Write a note"></textarea>`,
   disabled: `<textarea sanringTextarea disabled>Readonly message</textarea>`,
   resize: `<textarea sanringTextarea class="min-h-[140px] resize-y" placeholder="Longer message"></textarea>`,
+  characterCount: `<sanring-field>
+  <label sanringLabel>Bio</label>
+  <textarea sanringTextarea maxlength="500" [(ngModel)]="bio"></textarea>
+  <p sanringDescription class="text-end tabular-nums" aria-live="polite">
+    {{ bio.length }}/500
+  </p>
+</sanring-field>`,
 } as const;

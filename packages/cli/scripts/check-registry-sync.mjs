@@ -25,6 +25,7 @@ const DOCS_ROUTES_PATH = join(REPO_ROOT, 'apps/docs/src/app/app.routes.ts');
 const DOCS_PAGES_DIR = join(REPO_ROOT, 'apps/docs/src/app/pages/components');
 const REGISTRY_JSON_PATH = join(REPO_ROOT, 'registry/registry.json');
 const REGISTRY_COMPONENTS_DIR = join(REPO_ROOT, 'registry/components');
+const REGISTRY_BLOCKS_DIR = join(REPO_ROOT, 'registry/blocks');
 const UI_COMPONENTS_DIR = join(REPO_ROOT, 'packages/ui/src/lib/components');
 const PUBLIC_API_PATH = join(REPO_ROOT, 'packages/ui/src/public-api.ts');
 
@@ -61,6 +62,17 @@ function getRegistryComponentNames(registry) {
 
 function getRegistryDirNames() {
   return readdirSync(REGISTRY_COMPONENTS_DIR, { withFileTypes: true })
+    .filter((e) => e.isDirectory())
+    .map((e) => e.name);
+}
+
+function getRegistryBlockNames(registry) {
+  return (registry.blocks ?? []).map((block) => block.name);
+}
+
+function getRegistryBlockDirNames() {
+  if (!existsSync(REGISTRY_BLOCKS_DIR)) return [];
+  return readdirSync(REGISTRY_BLOCKS_DIR, { withFileTypes: true })
     .filter((e) => e.isDirectory())
     .map((e) => e.name);
 }
@@ -156,6 +168,8 @@ function diffSurfaces({ a, aLabel, b, bLabel, onlyInAFails, onlyInBFails, gapKey
 const registry = getRegistry();
 const registryNames = getRegistryComponentNames(registry);
 const registryDirs = getRegistryDirNames();
+const registryBlockNames = getRegistryBlockNames(registry);
+const registryBlockDirs = getRegistryBlockDirNames();
 const uiDirs = getUiComponentDirNames();
 const publicApiNames = getPublicApiExportedNames();
 const docsIds = getDocsComponentIds();
@@ -175,6 +189,28 @@ for (const component of registry.components) {
     );
   }
 }
+
+for (const block of registry.blocks ?? []) {
+  const missingFiles = (block.files ?? []).filter(
+    (relativePath) => !existsSync(join(REGISTRY_BLOCKS_DIR, relativePath)),
+  );
+  if (missingFiles.length > 0) {
+    fail(
+      `registry.json block "${block.name}" lists file(s) that don't exist under registry/blocks/`,
+      missingFiles,
+    );
+  }
+}
+
+diffSurfaces({
+  a: registryBlockNames,
+  aLabel: 'registry.json blocks[]',
+  b: registryBlockDirs,
+  bLabel: 'registry/blocks/',
+  onlyInAFails: true,
+  onlyInBFails: false,
+  gapKey: 'registryJsonVsBlocksDir',
+});
 
 // 2. registry.json name ↔ registry/components/<name>/ directory.
 diffSurfaces({

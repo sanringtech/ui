@@ -11,7 +11,6 @@
     "test:e2e:cli": "pnpm --filter @sanring/cli test:e2e",
     "lint": "eslint .",
     "lint:ng": "ng lint",
-    "generate:stackblitz-registry": "node scripts/generate-stackblitz-registry.mjs",
     "changeset": "changeset",
     "version-packages": "changeset version",
     "release": "pnpm --filter @sanring/cli build && pnpm --filter @sanring/cli publish --access public"

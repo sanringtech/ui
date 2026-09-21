@@ -8,6 +8,7 @@ export const dialogTranslations = {
   'dialog.demo.noClose': 'No Close Button',
   'dialog.demo.stickyFooter': 'Sticky Footer',
   'dialog.demo.scrollable': 'Scrollable Content',
+  'dialog.demo.header': 'Header alignment',
   'dialog.examples.description':
     'Common dialog patterns for custom actions, hidden close controls, sticky actions, and dense scrollable content.',
   'dialog.examples.basic.description':
@@ -32,6 +33,10 @@ export const dialogTranslations = {
   'dialog.api.closeResult.description':
     'Optional result value emitted when sanringDialogClose closes the dialog.',
   'dialog.api.mediaClass.description': 'Additional classes merged with the dialog media container.',
+  'dialog.api.headerAlign.description':
+    'Header text alignment. start is left, center is centered at every breakpoint. The default stays centered on small screens and left-aligned from sm up.',
+  'dialog.api.titleClass.description':
+    'Additional classes merged with the title styles. Use this to change title color, for example text-[var(--sanring-primary-70)].',
   'dialog.accessibility.description':
     "The CDK Dialog container receives role='dialog' and aria-modal='true'. Projected titles and descriptions are wired automatically; ariaLabel provides a fallback name for untitled content. Angular CDK's FocusTrap keeps Tab and Shift+Tab cycling within the open dialog.",
   'dialog.keyboard.description': 'Focus is trapped inside the dialog while it is open.',

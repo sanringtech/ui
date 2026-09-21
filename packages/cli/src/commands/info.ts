@@ -4,7 +4,7 @@ import { join } from 'node:path';
 import ora from 'ora';
 import pc from 'picocolors';
 import { collectPeerDeps, parseComponentRef, resolveInstallSet } from './add.js';
-import { createRegistryIndex, fetchRegistry } from '../registry.js';
+import { createRegistryIndex, fetchRegistry, parseBlockRef } from '../registry.js';
 import {
   isAngularProject,
   getCliVersion,
@@ -119,7 +119,7 @@ export const infoCommand = new Command('info')
       // ── Component info mode ───────────────────────────────────────────────
       const config = readConfig(cwd);
       const parsedRef = parseComponentRef(componentName);
-      const bareComponentName = parsedRef.name;
+      const bareComponentName = parseBlockRef(parsedRef.name).name;
       const registrySpinner = ora('Loading registry...').start();
       let registry;
       try {
@@ -134,7 +134,10 @@ export const infoCommand = new Command('info')
       const { toInstall, autoAdded, missing } = resolveInstallSet([bareComponentName], registryIndex);
 
       if (missing.length > 0) {
-        const available = registryIndex.componentNames.join(', ');
+        const available = [
+          ...registryIndex.componentNames,
+          ...registryIndex.blockNames.map((name) => `block/${name}`),
+        ].join(', ');
         console.error(pc.red(`✖ Component not found: ${componentName}`));
         console.error(pc.dim(`  Available: ${available}`));
         process.exit(1);

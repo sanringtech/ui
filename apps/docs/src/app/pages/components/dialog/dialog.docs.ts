@@ -70,6 +70,11 @@ export const dialogPage = {
           titleKey: 'dialog.demo.scrollable',
           level: 3,
         },
+        {
+          id: 'example-header',
+          titleKey: 'dialog.demo.header',
+          level: 3,
+        },
       ],
     },
     {
@@ -145,6 +150,18 @@ export const dialogPage = {
       type: 'string',
       defaultValue: 'undefined',
       descriptionKey: 'dialog.api.mediaClass.description',
+    },
+    {
+      property: 'DialogHeaderComponent.align',
+      type: "'start' | 'center'",
+      defaultValue: 'responsive',
+      descriptionKey: 'dialog.api.headerAlign.description',
+    },
+    {
+      property: 'DialogTitleDirective.class',
+      type: 'string',
+      defaultValue: "''",
+      descriptionKey: 'dialog.api.titleClass.description',
     },
   ] satisfies readonly ComponentPageApiRow[],
   keyboardRows: [
@@ -308,6 +325,18 @@ export class ExampleComponent {}`,
       <p>Dialog content...</p>
       <p>Dialog content...</p>
     </div>
+  </sanring-dialog-content>
+</ng-template>`,
+  header: `<button sanringBtn [sanringDialogTrigger]="dialog">Open dialog</button>
+
+<ng-template #dialog>
+  <sanring-dialog-content>
+    <sanring-dialog-header align="center">
+      <h2 sanringDialogTitle class="text-[var(--sanring-primary-70)]">
+        Centered title
+      </h2>
+      <p sanringDialogDescription>Header alignment and title color are inputs, not one-off CSS.</p>
+    </sanring-dialog-header>
   </sanring-dialog-content>
 </ng-template>`,
 } as const;

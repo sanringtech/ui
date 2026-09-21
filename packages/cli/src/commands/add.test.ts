@@ -180,6 +180,13 @@ describe('addCommand (integration)', () => {
     });
     process.chdir(projectDir);
     vi.spyOn(console, 'log').mockImplementation(() => {});
+    addCommand.setOptionValue('dryRun', false);
+    addCommand.setOptionValue('check', false);
+    addCommand.setOptionValue('diff', false);
+    addCommand.setOptionValue('view', false);
+    addCommand.setOptionValue('force', false);
+    addCommand.setOptionValue('yes', false);
+    addCommand.setOptionValue('registry', undefined);
   });
 
   afterEach(() => {
@@ -338,6 +345,46 @@ describe('addCommand (integration)', () => {
     expect(
       logs.some((line) => line.includes('Would install: npm install @lucide/angular@^1.18.0')),
     ).toBe(true);
+  });
+
+  it('installs a block via the block/ prefix and pulls componentDeps', async () => {
+    writeRegistryFixture(registryDir, {
+      utils: 'export function cn() {}\n',
+      widget: 'export const widget = 1;\n',
+      block: 'export const login = true;\n',
+    });
+
+    await addCommand.parseAsync(['block/login', '--registry', registryDir], { from: 'user' });
+
+    expect(readFileSync(join(projectDir, 'src/app/components/ui/login/index.ts'), 'utf-8')).toBe(
+      'export const login = true;\n',
+    );
+    expect(existsSync(join(projectDir, 'src/app/components/ui/widget/index.ts'))).toBe(true);
+  });
+
+  it('installs a block by bare name when no component shares that name', async () => {
+    writeRegistryFixture(registryDir, {
+      widget: 'export const widget = 1;\n',
+      block: 'export const login = true;\n',
+    });
+
+    await addCommand.parseAsync(['login', '--registry', registryDir], { from: 'user' });
+
+    expect(existsSync(join(projectDir, 'src/app/components/ui/login/index.ts'))).toBe(true);
+  });
+
+  it('refuses block/ prefix for a name that is only a component', async () => {
+    const errors: string[] = [];
+    vi.spyOn(console, 'error').mockImplementation((...args: unknown[]) => {
+      errors.push(args.join(' '));
+    });
+    const exitSpy = vi.spyOn(process, 'exit').mockImplementation(() => undefined as never);
+
+    await addCommand.parseAsync(['block/widget', '--registry', registryDir], { from: 'user' });
+
+    expect(exitSpy).toHaveBeenCalledWith(1);
+    expect(errors.some((line) => line.includes('block/widget'))).toBe(true);
+    expect(existsSync(join(projectDir, 'src/app/components/ui/widget/index.ts'))).toBe(false);
   });
 
   it('does not update peer dependencies when the installed version spec already satisfies the minimum', async () => {
