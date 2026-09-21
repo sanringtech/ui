@@ -1,5 +1,15 @@
 # @sanring/cli
 
+## 0.25.0
+
+### Minor Changes
+
+- ea44555: Add a `blocks` registry category so `sanring add block/login` can install page-level templates, and accept `github:owner/repo` as a registry source.
+
+### Patch Changes
+
+- ea44555: Let dialog headers opt into start/center alignment, and project textareas into the field control slot so character-count descriptions sit below the control.
+
 ## 0.24.1
 
 ### Patch Changes
