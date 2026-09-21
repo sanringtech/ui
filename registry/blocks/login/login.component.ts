@@ -75,6 +75,7 @@ import { LinkDirective } from '../link';
                   [checked]="rememberMe"
                   (checkedChange)="rememberMe = $event === true"
                 />
+                <!-- eslint-disable-next-line @angular-eslint/template/label-has-associated-control -->
                 <label sanringLabel class="text-sm">Remember me</label>
               </div>
               <a sanringLink href="#">Forgot password?</a>
