@@ -7,6 +7,7 @@ import {
   createRegistryIndex,
   fetchFile,
   fetchRegistry,
+  registryItemRemotePath,
   type Registry,
   type RegistryComponent,
   type RegistryIndex,
@@ -34,11 +35,8 @@ export function listInstalledComponentNames(
   registry: Registry | RegistryIndex,
 ): string[] {
   if (!existsSync(componentBasePath)) return [];
-  const known = new Set(
-    'componentNames' in registry
-      ? registry.componentNames
-      : createRegistryIndex(registry).componentNames,
-  );
+  const index = 'componentNames' in registry ? registry : createRegistryIndex(registry);
+  const known = new Set([...index.componentNames, ...index.blockNames]);
   return readdirSync(componentBasePath, { withFileTypes: true })
     .filter((entry) => entry.isDirectory() && known.has(entry.name))
     .map((entry) => entry.name);
@@ -115,7 +113,7 @@ export function buildDiffJobs(
     for (const file of component.files) {
       const fileName = registryRelativePath(file, component.name);
       const label = `${component.name}/${fileName}`;
-      jobs.push({ componentName: component.name, label, localPath: join(destDir, fileName), remotePath: `components/${file}`, recordedHash: options.installedHashes?.[label] });
+      jobs.push({ componentName: component.name, label, localPath: join(destDir, fileName), remotePath: registryItemRemotePath(file, component.name, registryIndex), recordedHash: options.installedHashes?.[label] });
     }
   }
   return jobs;

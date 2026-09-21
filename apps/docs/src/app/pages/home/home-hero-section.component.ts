@@ -3,6 +3,7 @@ import { RouterLink } from '@angular/router';
 import { LucideChevronRight, LucideRocket } from '@lucide/angular';
 import { ButtonDirective } from '@sanring/ui';
 import { I18nService } from '../../i18n/i18n.service';
+import { cliVersionChangelog } from '../changelog/component-changelog';
 import { HomeHeroDemoPanelComponent } from './home-hero-demo-panel.component';
 
 @Component({
@@ -76,5 +77,5 @@ import { HomeHeroDemoPanelComponent } from './home-hero-demo-panel.component';
 })
 export class HomeHeroSectionComponent {
   protected readonly i18n = inject(I18nService);
-  protected readonly releaseVersion = 'v0.24.0';
+  protected readonly releaseVersion = `v${cliVersionChangelog[0].version}`;
 }

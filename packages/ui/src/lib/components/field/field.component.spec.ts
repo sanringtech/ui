@@ -4,6 +4,7 @@ import { FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
 import { describe, expect, it } from 'vitest';
 import { expectNoA11yViolations } from '../../../testing/axe-a11y';
 import { InputDirective } from '../input/input.directive';
+import { TextareaDirective } from '../textarea/textarea.directive';
 import { DescriptionDirective } from './description.directive';
 import { ErrorMessageComponent } from './error-message.component';
 import { SanringFieldComponent } from './field.component';
@@ -78,6 +79,36 @@ describe('SanringFieldComponent projection', () => {
     fixture.detectChanges();
 
     await expectNoA11yViolations(fixture.nativeElement);
+  });
+});
+
+@Component({
+  standalone: true,
+  imports: [SanringFieldComponent, LabelDirective, TextareaDirective, DescriptionDirective],
+  template: `
+    <sanring-field>
+      <!-- eslint-disable-next-line @angular-eslint/template/label-has-associated-control -->
+      <label sanringLabel>Bio</label>
+      <textarea sanringTextarea maxlength="500"></textarea>
+      <p sanringDescription>0/500</p>
+    </sanring-field>
+  `,
+})
+class TextareaProjectionHost {}
+
+describe('SanringFieldComponent textarea projection', () => {
+  it('renders the textarea above the description', () => {
+    const fixture = TestBed.createComponent(TextareaProjectionHost);
+    fixture.detectChanges();
+
+    const field = fixture.nativeElement.querySelector('sanring-field') as HTMLElement;
+    const textarea = field.querySelector('textarea');
+    const description = field.querySelector('[sanringDescription]');
+    expect(textarea).toBeTruthy();
+    expect(description).toBeTruthy();
+
+    const position = textarea!.compareDocumentPosition(description!);
+    expect(position & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
   });
 });
 

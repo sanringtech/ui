@@ -14,6 +14,9 @@ import {
   createRegistryGroups,
   fetchFile,
   fetchRegistry,
+  findRegistryItem,
+  registryInstallables,
+  registryItemRemotePath,
   type Registry,
   type RegistryComponent,
 } from '../registry.js';
@@ -295,7 +298,7 @@ export function createMcpServer(options: CreateMcpServerOptions = {}): Server {
     switch (name) {
       case 'refresh_registry': {
         const registry = await getRegistry(true);
-        return { content: [{ type: 'text' as const, text: `Registry refreshed: ${registry.components.length} components available.` }] };
+        return { content: [{ type: 'text' as const, text: `Registry refreshed: ${registryInstallables(registry).length} installable items available.` }] };
       }
 
       case 'diff_component': {
@@ -306,10 +309,11 @@ export function createMcpServer(options: CreateMcpServerOptions = {}): Server {
           return { isError: true, content: [{ type: 'text' as const, text: '`cwd` must be an absolute Angular project root.' }] };
         }
         const registry = await getRegistry();
-        const component = registry.components.find((item) => item.name === componentName);
+        const component = findRegistryItem(registry, componentName);
         if (!component) return { isError: true, content: [{ type: 'text' as const, text: `Component "${componentName}" not found.` }] };
         const config = readConfig(cwd);
         const base = resolveComponentBasePath(cwd, undefined, config);
+        const registryIndex = createRegistryIndex(registry);
         const lines: string[] = [`Diff: ${componentName}`, ''];
         let changed = 0;
         for (const file of component.files) {
@@ -320,7 +324,7 @@ export function createMcpServer(options: CreateMcpServerOptions = {}): Server {
             changed++;
             continue;
           }
-          const remote = await fetchFile(`components/${file}`, registryUrl);
+          const remote = await fetchFile(registryItemRemotePath(file, component.name, registryIndex), registryUrl);
           const same = readFileSync(localPath, 'utf-8') === remote;
           lines.push(`${same ? '✓' : '●'} ${component.name}/${fileName}${same ? '' : ' (changed)'}`);
           if (!same) changed++;
@@ -342,7 +346,7 @@ export function createMcpServer(options: CreateMcpServerOptions = {}): Server {
         ];
         try {
           const registry = await getRegistry();
-          lines.push(`Registry: reachable (${registry.components.length} components)`);
+          lines.push(`Registry: reachable (${registryInstallables(registry).length} installable items)`);
           const integrityIssues = findRegistryReferenceIssues(registry);
           if (integrityIssues.length > 0) {
             lines.push(`Registry integrity: ${integrityIssues.length} issue${integrityIssues.length > 1 ? 's' : ''}:`);
@@ -366,7 +370,7 @@ export function createMcpServer(options: CreateMcpServerOptions = {}): Server {
         const lines: string[] = [];
         for (const [key, version] of Object.entries(config?.installedVersions ?? {})) {
           const name = key.includes(':') ? key.slice(key.indexOf(':') + 1) : key;
-          const component = registry.components.find((item) => item.name === name);
+          const component = findRegistryItem(registry, name);
           const needed = component?.migrations?.some((migration) => semverLte(version, migration.fromVersion)) ?? false;
           lines.push(`${needed ? '⚠' : '✓'} ${key}: ${version}${needed ? ' migration available' : ' up to date'}`);
         }
@@ -375,12 +379,13 @@ export function createMcpServer(options: CreateMcpServerOptions = {}): Server {
 
       case 'list_components': {
         const registry = await getRegistry();
-        const lines = formatGroupedComponents(registry, registry.components);
+        const items = registryInstallables(registry);
+        const lines = formatGroupedComponents(registry, items);
         return {
           content: [
             {
               type: 'text' as const,
-              text: `Sanring UI — ${registry.components.length} installable items available:\n\n${lines}`,
+              text: `Sanring UI — ${items.length} installable items available:\n\n${lines}`,
             },
           ],
         };
@@ -392,8 +397,9 @@ export function createMcpServer(options: CreateMcpServerOptions = {}): Server {
         const { query } = validated.values;
         const registry = await getRegistry();
         const q = query.toLowerCase();
-        const nameMatches = registry.components.filter((c) => c.name.toLowerCase().includes(q));
-        const descMatches = registry.components.filter(
+        const items = registryInstallables(registry);
+        const nameMatches = items.filter((c) => c.name.toLowerCase().includes(q));
+        const descMatches = items.filter(
           (c) =>
             !c.name.toLowerCase().includes(q) && c.description.toLowerCase().includes(q),
         );
@@ -428,10 +434,10 @@ export function createMcpServer(options: CreateMcpServerOptions = {}): Server {
         if ('isError' in validated) return validated;
         const { name: componentName } = validated.values;
         const registry = await getRegistry();
-        const component = registry.components.find((c) => c.name === componentName);
+        const component = findRegistryItem(registry, componentName);
 
         if (!component) {
-          const available = registry.components.map((c) => c.name).join(', ');
+          const available = registryInstallables(registry).map((c) => c.name).join(', ');
           return {
             isError: true,
             content: [
@@ -477,10 +483,10 @@ export function createMcpServer(options: CreateMcpServerOptions = {}): Server {
         }
 
         const registry = await getRegistry();
-        const component = registry.components.find((c) => c.name === componentName);
+        const component = findRegistryItem(registry, componentName);
 
         if (!component) {
-          const available = registry.components.map((c) => c.name).join(', ');
+          const available = registryInstallables(registry).map((c) => c.name).join(', ');
           return {
             isError: true,
             content: [{ type: 'text' as const, text: `Component "${componentName}" not found.\n\nAvailable: ${available}` }],
@@ -488,7 +494,7 @@ export function createMcpServer(options: CreateMcpServerOptions = {}): Server {
         }
 
         const registryIndex = createRegistryIndex(registry);
-        const { toInstall, autoAdded } = resolveInstallSet([componentName], registryIndex);
+        const { toInstall, autoAdded } = resolveInstallSet([component.name], registryIndex);
         const peerDeps = collectPeerDeps(toInstall, registryIndex);
 
         const lines: string[] = [`Plan for: sanring add ${componentName}`, ''];

@@ -61,6 +61,15 @@ function validate() {
     }
   }
 
+  for (const block of registry.blocks ?? []) {
+    for (const file of block.files ?? []) {
+      const filePath = join(DEST_DIR, 'blocks', file);
+      if (!existsSync(filePath)) {
+        errors.push(`block "${block.name}" references missing file: blocks/${file}`);
+      }
+    }
+  }
+
   if (errors.length > 0) {
     console.error(`✖ registry.json is out of sync with registry files:\n`);
     for (const err of errors) console.error(`  - ${err}`);
@@ -68,8 +77,9 @@ function validate() {
     process.exit(1);
   }
 
+  const blockCount = registry.blocks?.length ?? 0;
   console.log(
-    `✔ registry.json verified (${registry.components.length} components, ${registry.shared.length} shared files)`,
+    `✔ registry.json verified (${registry.components.length} components, ${blockCount} blocks, ${registry.shared.length} shared files)`,
   );
 }
 

@@ -75,6 +75,18 @@ function isUrl(s: string): boolean {
   return s.startsWith('http://') || s.startsWith('https://');
 }
 
+/** `github:owner/repo` or `github:owner/repo#ref` → raw registry.json URL. */
+export function expandGithubRegistrySource(source: string): string | undefined {
+  const match = /^github:([^/]+)\/([^#@]+)(?:[#@](.+))?$/.exec(source.trim());
+  if (!match) return undefined;
+  const [, owner, repo, ref = 'main'] = match;
+  return `https://raw.githubusercontent.com/${owner}/${repo}/${ref}/registry.json`;
+}
+
+function normalizeRegistrySource(source: string): string {
+  return expandGithubRegistrySource(source) ?? source;
+}
+
 // Thrown instead of printing + `process.exit(1)` directly, so callers (CLI
 // commands, the MCP server) decide how to surface the failure — a one-shot
 // CLI command prints and exits, but the long-running MCP server must not be
@@ -132,22 +144,56 @@ export interface Registry {
   groups?: RegistryGroup[];
   shared: RegistryShared[];
   components: RegistryComponent[];
+  /** Page-level templates. Same shape as components; files live under `blocks/`. */
+  blocks?: RegistryComponent[];
 }
 
 export interface RegistryIndex {
   registry: Registry;
   componentsByName: Map<string, RegistryComponent>;
+  blocksByName: Map<string, RegistryComponent>;
   sharedByName: Map<string, RegistryShared>;
   componentNames: string[];
+  blockNames: string[];
   groups: RegistryGroup[];
 }
 
+export const BLOCK_NAME_PREFIX = 'block/';
+
+export function parseBlockRef(name: string): { preferBlock: boolean; name: string } {
+  if (name.startsWith(BLOCK_NAME_PREFIX)) {
+    return { preferBlock: true, name: name.slice(BLOCK_NAME_PREFIX.length) };
+  }
+  return { preferBlock: false, name };
+}
+
+export function registryInstallables(registry: Registry): RegistryComponent[] {
+  return registry.blocks?.length ? [...registry.components, ...registry.blocks] : registry.components;
+}
+
+export function findRegistryItem(registry: Registry, rawName: string): RegistryComponent | undefined {
+  const { name } = parseBlockRef(rawName);
+  return (
+    registry.components.find((item) => item.name === name) ??
+    registry.blocks?.find((item) => item.name === name)
+  );
+}
+
+export function registryItemRemotePath(file: string, name: string, index: RegistryIndex): string {
+  return `${index.blocksByName.has(name) ? 'blocks' : 'components'}/${file}`;
+}
+
 export function createRegistryIndex(registry: Registry): RegistryIndex {
+  const blocks = registry.blocks ?? [];
+  const componentsByName = new Map(registry.components.map((component) => [component.name, component]));
+  for (const block of blocks) componentsByName.set(block.name, block);
   return {
     registry,
-    componentsByName: new Map(registry.components.map((component) => [component.name, component])),
+    componentsByName,
+    blocksByName: new Map(blocks.map((block) => [block.name, block])),
     sharedByName: new Map(registry.shared.map((shared) => [shared.name, shared])),
     componentNames: registry.components.map((component) => component.name),
+    blockNames: blocks.map((block) => block.name),
     groups: createRegistryGroups(registry),
   };
 }
@@ -195,6 +241,22 @@ function validateOptionalPeerDependencies(
   if (isStringRecord(value)) return true;
   errors.push(`${path} must be an object whose values are strings`);
   return false;
+}
+
+function validateRegistryItem(errors: string[], item: unknown, path: string): void {
+  if (!isRecord(item)) {
+    errors.push(`${path} must be an object`);
+    return;
+  }
+  if (typeof item.name !== 'string') errors.push(`${path}.name must be a string`);
+  if (typeof item.description !== 'string') {
+    errors.push(`${path}.description must be a string`);
+  }
+  if (!isStringArray(item.files)) errors.push(`${path}.files must be an array of strings`);
+  validateOptionalStringArray(errors, item.tags, `${path}.tags`);
+  validateOptionalStringArray(errors, item.sharedDeps, `${path}.sharedDeps`);
+  validateOptionalStringArray(errors, item.componentDeps, `${path}.componentDeps`);
+  validateOptionalPeerDependencies(errors, item.peerDependencies, `${path}.peerDependencies`);
 }
 
 export function validateRegistry(value: unknown): Registry {
@@ -248,20 +310,31 @@ export function validateRegistry(value: unknown): Registry {
 
   if (Array.isArray(value.components)) {
     value.components.forEach((item, index) => {
-      const path = `components[${index}]`;
-      if (!isRecord(item)) {
-        errors.push(`${path} must be an object`);
-        return;
+      validateRegistryItem(errors, item, `components[${index}]`);
+    });
+  }
+
+  if (value.blocks !== undefined) {
+    if (!Array.isArray(value.blocks)) {
+      errors.push('blocks must be an array');
+    } else {
+      value.blocks.forEach((item, index) => {
+        validateRegistryItem(errors, item, `blocks[${index}]`);
+      });
+    }
+  }
+
+  if (Array.isArray(value.components) && Array.isArray(value.blocks)) {
+    const componentNames = new Set(
+      value.components
+        .filter(isRecord)
+        .map((item) => item.name)
+        .filter((name): name is string => typeof name === 'string'),
+    );
+    value.blocks.forEach((item, index) => {
+      if (isRecord(item) && typeof item.name === 'string' && componentNames.has(item.name)) {
+        errors.push(`blocks[${index}].name "${item.name}" collides with a component`);
       }
-      if (typeof item.name !== 'string') errors.push(`${path}.name must be a string`);
-      if (typeof item.description !== 'string') {
-        errors.push(`${path}.description must be a string`);
-      }
-      if (!isStringArray(item.files)) errors.push(`${path}.files must be an array of strings`);
-      validateOptionalStringArray(errors, item.tags, `${path}.tags`);
-      validateOptionalStringArray(errors, item.sharedDeps, `${path}.sharedDeps`);
-      validateOptionalStringArray(errors, item.componentDeps, `${path}.componentDeps`);
-      validateOptionalPeerDependencies(errors, item.peerDependencies, `${path}.peerDependencies`);
     });
   }
 
@@ -275,17 +348,21 @@ export function validateRegistry(value: unknown): Registry {
     components: value.components as RegistryComponent[],
   };
   if (value.groups !== undefined) registry.groups = value.groups as RegistryGroup[];
+  if (value.blocks !== undefined) registry.blocks = value.blocks as RegistryComponent[];
   return registry;
 }
 
 // ---------------------------------------------------------------------------
 // fetchRegistry
-//   source = undefined          → local bundle → remote fallback
-//   source = '/path/to/dir'     → read <dir>/registry.json from disk
-//   source = 'https://...'      → HTTP fetch
+//   source = undefined            → local bundle → remote fallback
+//   source = '/path/to/dir'       → read <dir>/registry.json from disk
+//   source = 'https://...'        → HTTP fetch
+//   source = 'github:owner/repo'  → raw.githubusercontent.com .../registry.json
 // ---------------------------------------------------------------------------
 
 export async function fetchRegistry(source?: string): Promise<Registry> {
+  if (source) source = normalizeRegistrySource(source);
+
   // 1. Explicit local path
   if (source && !isUrl(source)) {
     const localJson = join(source, 'registry.json');
@@ -337,6 +414,8 @@ async function fetchRegistryFromUrl(url: string): Promise<Registry> {
 // ---------------------------------------------------------------------------
 
 export async function fetchFile(relativePath: string, source?: string): Promise<string> {
+  if (source) source = normalizeRegistrySource(source);
+
   // Explicit local path
   if (source && !isUrl(source)) {
     return readFileSync(join(source, relativePath), 'utf-8');

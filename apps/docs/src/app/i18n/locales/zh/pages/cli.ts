@@ -9,7 +9,7 @@ export const cliTranslations = {
     '每個專案只需執行一次。會確認目前是否在 Angular 專案中，寫入 sanring.config.json 記錄你選擇的元件路徑，產生 src/sanring-theme.css（所有元件都會讀取的 --sanring-* 設計 token，已存在則預設跳過以保護你的客製化），並安裝基礎的 peer dependencies（clsx、tailwind-merge）。',
   'cli.add.title': 'add',
   'cli.add.body':
-    '把一個或多個元件的原始碼複製進你的專案，並安裝缺少的 peer dependencies。想做最小的第一次安裝時，建議先從 button 開始；若元件需要額外套件，CLI 會自動一併安裝。加上 --dry-run 可以在不動任何檔案的情況下預覽哪些檔案會被新增或覆寫，或用 --check 驗證這次安裝需要的每個 registry 檔案都真的抓得到，同樣不寫入任何檔案。用 --diff 可以在安裝前看到逐行差異，或用 --view 直接印出 registry 的原始內容，都不會寫入任何檔案。',
+    '把一個或多個元件的原始碼複製進你的專案，並安裝缺少的 peer dependencies。想做最小的第一次安裝時，建議先從 button 開始；若元件需要額外套件，CLI 會自動一併安裝。頁面級模板用 block/ 前綴（例如 `sanring add block/login`），並會一併帶入它組合用到的元件。加上 --dry-run 可以在不動任何檔案的情況下預覽哪些檔案會被新增或覆寫，或用 --check 驗證這次安裝需要的每個 registry 檔案都真的抓得到，同樣不寫入任何檔案。用 --diff 可以在安裝前看到逐行差異，或用 --view 直接印出 registry 的原始內容，都不會寫入任何檔案。',
   'cli.remove.title': 'remove',
   'cli.remove.body':
     '移除一個或多個已安裝的元件。如果還有其他已安裝的元件依賴它（例如 tag 還裝著就移除 badge），預設會拒絕移除，除非加上 --force。共用檔案（例如 utils.ts）不會被自動刪除——如果剩下的元件都不再需要某個共用檔案，指令只會列出來提醒你，要刪要留由你自己決定。加上 --dry-run 可以預覽會刪除哪些追蹤中的檔案、會保留哪些檔案、哪些元件被依賴關係擋下，同樣不會實際刪除任何東西。指令別名為 rm。',

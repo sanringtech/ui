@@ -1,3 +1,4 @@
+import { blocksTranslations } from './blocks';
 import { changelogTranslations } from './changelog';
 import { cliTranslations } from './cli';
 import { homeTranslations } from './home';
@@ -8,6 +9,7 @@ import { roadmapTranslations } from './roadmap';
 import { themingTranslations } from './theming';
 
 export const pageTranslations = {
+  ...blocksTranslations,
   ...changelogTranslations,
   ...cliTranslations,
   ...homeTranslations,

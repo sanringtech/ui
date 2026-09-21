@@ -8,6 +8,7 @@ export const textareaTranslations = {
     'Use sanringTextarea on native textarea elements and keep value, disabled, rows, and form bindings native.',
   'textarea.demo.disabled': 'Disabled',
   'textarea.demo.resize': 'Resizable',
+  'textarea.demo.characterCount': 'Character count',
   'textarea.api.description': 'Inputs supported by the sanringTextarea directive.',
   'textarea.api.class.description': 'Additional classes merged with the base textarea styles.',
   'textarea.accessibility.description': 'A transparent styling directive that preserves native <textarea> semantics. Works with standard HTML attributes — aria-label, aria-labelledby, aria-describedby — applied directly to the textarea element. Pair with sanring-field for automatic label association and validation wiring.',

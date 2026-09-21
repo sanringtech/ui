@@ -138,6 +138,12 @@ import { comboboxPage, comboboxPageExamples } from './combobox.docs';
                       </sanring-combobox-list>
                     </sanring-combobox-content>
                   </sanring-combobox>
+                  <p
+                    class="m-0 text-end text-[0.8rem] tabular-nums text-[var(--docs-muted)]"
+                    aria-live="polite"
+                  >
+                    {{ selectedFrameworkValues().length }}/{{ frameworks.length }}
+                  </p>
                 </div>
               </div>
             </app-component-page-code-previewer>

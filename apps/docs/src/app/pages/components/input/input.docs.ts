@@ -54,6 +54,11 @@ export const inputPage = {
           titleKey: 'input.demo.file',
           level: 3,
         },
+        {
+          id: 'example-character-count',
+          titleKey: 'input.demo.characterCount',
+          level: 3,
+        },
       ],
     },
     {
@@ -122,4 +127,11 @@ import { InputDirective } from './components/ui/input';`,
   <sanring-error-message>Email is required.</sanring-error-message>
 </sanring-field>`,
   file: `<input sanringInput type="file" />`,
+  characterCount: `<sanring-field>
+  <label sanringLabel>Title</label>
+  <input sanringInput maxlength="500" [(ngModel)]="title" />
+  <p sanringDescription class="text-end tabular-nums" aria-live="polite">
+    {{ title.length }}/500
+  </p>
+</sanring-field>`,
 } as const;

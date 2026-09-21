@@ -11,6 +11,8 @@ export interface RegistryFixtureContent {
   widget?: string;
   /** Second file added to the widget component — simulates a registry adding a new file post-install. */
   widgetExtra?: string;
+  /** Page-level block installed from `blocks/`, with `widget` as a componentDep when present. */
+  block?: string;
 }
 
 // Writes a minimal, self-contained registry (registry.json + the files it
@@ -58,6 +60,19 @@ export function writeRegistryFixture(dir: string, content: RegistryFixtureConten
     });
   }
 
+  const blocks: Registry['blocks'] = [];
+  if (content.block !== undefined) {
+    mkdirSync(join(dir, 'blocks', 'login'), { recursive: true });
+    writeFileSync(join(dir, 'blocks', 'login', 'index.ts'), content.block, 'utf-8');
+    blocks.push({
+      name: 'login',
+      description: 'fixture login block',
+      files: ['login/index.ts'],
+      componentDeps: content.widget !== undefined ? ['widget'] : [],
+    });
+  }
+
   const registry: Registry = { name: 'fixture', shared, components };
+  if (blocks.length > 0) registry.blocks = blocks;
   writeFileSync(join(dir, 'registry.json'), JSON.stringify(registry, null, 2), 'utf-8');
 }

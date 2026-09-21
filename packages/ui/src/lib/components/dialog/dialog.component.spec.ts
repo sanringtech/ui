@@ -296,3 +296,46 @@ describe('DialogComponent', () => {
     }
   });
 });
+
+@Component({
+  imports: [DialogHeaderComponent],
+  template: `<sanring-dialog-header [align]="align">Title</sanring-dialog-header>`,
+})
+class DialogHeaderAlignHost {
+  align: 'start' | 'center' | undefined;
+}
+
+describe('DialogHeaderComponent', () => {
+  it('keeps the responsive default alignment when align is unset', async () => {
+    await TestBed.configureTestingModule({ imports: [DialogHeaderAlignHost] }).compileComponents();
+    const fixture = TestBed.createComponent(DialogHeaderAlignHost);
+    fixture.detectChanges();
+
+    const header = fixture.nativeElement.querySelector('sanring-dialog-header') as HTMLElement;
+    expect(header.classList.contains('text-center')).toBe(true);
+    expect(header.classList.contains('sm:text-left')).toBe(true);
+  });
+
+  it('centers header text when align is center', async () => {
+    await TestBed.configureTestingModule({ imports: [DialogHeaderAlignHost] }).compileComponents();
+    const fixture = TestBed.createComponent(DialogHeaderAlignHost);
+    fixture.componentInstance.align = 'center';
+    fixture.detectChanges();
+
+    const header = fixture.nativeElement.querySelector('sanring-dialog-header') as HTMLElement;
+    expect(header.classList.contains('text-center')).toBe(true);
+    expect(header.classList.contains('items-center')).toBe(true);
+    expect(header.classList.contains('sm:text-left')).toBe(false);
+  });
+
+  it('left-aligns header text when align is start', async () => {
+    await TestBed.configureTestingModule({ imports: [DialogHeaderAlignHost] }).compileComponents();
+    const fixture = TestBed.createComponent(DialogHeaderAlignHost);
+    fixture.componentInstance.align = 'start';
+    fixture.detectChanges();
+
+    const header = fixture.nativeElement.querySelector('sanring-dialog-header') as HTMLElement;
+    expect(header.classList.contains('text-left')).toBe(true);
+    expect(header.classList.contains('items-start')).toBe(true);
+  });
+});

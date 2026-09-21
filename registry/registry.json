@@ -75,6 +75,16 @@
         "transfer",
         "tree"
       ]
+    },
+    {
+      "id": "blocks",
+      "title": "Blocks",
+      "description": "Installable page-level templates assembled from existing components.",
+      "components": [
+        "dashboard-shell",
+        "login",
+        "table-page"
+      ]
     }
   ],
   "shared": [
@@ -1200,6 +1210,67 @@
         "navigation-menu/navigation-menu-separator.component.ts",
         "navigation-menu/navigation-menu.type.ts",
         "navigation-menu/index.ts"
+      ]
+    }
+  ],
+  "blocks": [
+    {
+      "name": "dashboard-shell",
+      "description": "App chrome with sidebar navigation, breadcrumbs, and a user menu. Wrap page content in ng-content.",
+      "tags": ["layout", "shell"],
+      "componentDeps": [
+        "sidebar",
+        "dropdown-menu",
+        "avatar",
+        "breadcrumb",
+        "badge"
+      ],
+      "files": [
+        "dashboard-shell/dashboard-shell.component.ts",
+        "dashboard-shell/index.ts"
+      ]
+    },
+    {
+      "name": "login",
+      "description": "Sign-in page with email, password, remember-me, and error alert.",
+      "tags": ["auth", "page"],
+      "componentDeps": [
+        "card",
+        "field",
+        "input",
+        "label",
+        "button",
+        "checkbox",
+        "link",
+        "divider",
+        "alert"
+      ],
+      "files": [
+        "login/login.component.ts",
+        "login/index.ts"
+      ]
+    },
+    {
+      "name": "table-page",
+      "description": "Data table page with search, status filter, row selection, sheet editor, skeleton, and toast.",
+      "tags": ["data", "page"],
+      "componentDeps": [
+        "table",
+        "pagination",
+        "input",
+        "select",
+        "dropdown-menu",
+        "checkbox",
+        "badge",
+        "sheet",
+        "skeleton",
+        "toast",
+        "field",
+        "button"
+      ],
+      "files": [
+        "table-page/table-page.component.ts",
+        "table-page/index.ts"
       ]
     }
   ]

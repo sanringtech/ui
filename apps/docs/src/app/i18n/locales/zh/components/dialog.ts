@@ -8,6 +8,7 @@ export const dialogTranslations = {
   'dialog.demo.noClose': '沒有關閉按鈕',
   'dialog.demo.stickyFooter': '固定頁尾',
   'dialog.demo.scrollable': '可捲動內容',
+  'dialog.demo.header': '標題對齊',
   'dialog.examples.description':
     '常見 Dialog 模式，包含自訂操作、隱藏關閉控制、固定操作區與大量可捲動內容。',
   'dialog.examples.basic.description':
@@ -31,6 +32,10 @@ export const dialogTranslations = {
     'sanringDialogTrigger 開啟 template 時傳入的 CDK DialogConfig。',
   'dialog.api.closeResult.description': 'sanringDialogClose 關閉 dialog 時送出的選填結果值。',
   'dialog.api.mediaClass.description': '與 dialog media 容器合併的額外 class。',
+  'dialog.api.headerAlign.description':
+    '標題列文字對齊。start 靠左，center 在所有斷點置中。預設維持小螢幕置中、sm 以上靠左。',
+  'dialog.api.titleClass.description':
+    '與標題樣式合併的額外 class。用來改標題顏色，例如 text-[var(--sanring-primary-70)]。',
   'dialog.accessibility.description':
     "CDK Dialog 容器會自動加上 role='dialog' 與 aria-modal='true'。投影的 title 與 description 會自動關聯；無 title 時由 ariaLabel 提供 fallback name。Angular CDK 的 FocusTrap 會在 dialog 開啟期間將 Tab 焦點限制在面板內。",
   'dialog.keyboard.description': 'Dialog 開啟期間，焦點被鎖定在面板內。',

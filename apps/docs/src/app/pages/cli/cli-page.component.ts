@@ -93,7 +93,7 @@ const INLINE_CODE_CLASS =
           </li>
           <li>
             <code [class]="inlineCodeClass">--registry &lt;source&gt;</code>
-            &mdash; custom registry (URL or local path)
+            &mdash; custom registry (URL, local path, or github:owner/repo)
           </li>
         </ul>
       </app-component-page-section>
@@ -125,7 +125,7 @@ const INLINE_CODE_CLASS =
           </li>
           <li>
             <code [class]="inlineCodeClass">--registry &lt;source&gt;</code>
-            &mdash; custom registry (URL or local path)
+            &mdash; custom registry (URL, local path, or github:owner/repo)
           </li>
           <li>
             <code [class]="inlineCodeClass">--dry-run</code>
@@ -171,7 +171,7 @@ const INLINE_CODE_CLASS =
           </li>
           <li>
             <code [class]="inlineCodeClass">--registry &lt;source&gt;</code>
-            &mdash; custom registry (URL or local path)
+            &mdash; custom registry (URL, local path, or github:owner/repo)
           </li>
         </ul>
       </app-component-page-section>
@@ -193,7 +193,7 @@ const INLINE_CODE_CLASS =
           </li>
           <li>
             <code [class]="inlineCodeClass">--registry &lt;source&gt;</code>
-            &mdash; custom registry (URL or local path; only used in component mode)
+            &mdash; custom registry (URL, local path, or github:owner/repo; only used in component mode)
           </li>
         </ul>
       </app-component-page-section>
@@ -223,7 +223,7 @@ const INLINE_CODE_CLASS =
           </li>
           <li>
             <code [class]="inlineCodeClass">--registry &lt;source&gt;</code>
-            &mdash; custom registry (URL or local path)
+            &mdash; custom registry (URL, local path, or github:owner/repo)
           </li>
         </ul>
       </app-component-page-section>
@@ -254,7 +254,7 @@ const INLINE_CODE_CLASS =
           </li>
           <li>
             <code [class]="inlineCodeClass">--registry &lt;source&gt;</code>
-            &mdash; custom registry (URL or local path)
+            &mdash; custom registry (URL, local path, or github:owner/repo)
           </li>
         </ul>
       </app-component-page-section>
@@ -280,7 +280,7 @@ const INLINE_CODE_CLASS =
           </li>
           <li>
             <code [class]="inlineCodeClass">--registry &lt;source&gt;</code>
-            &mdash; custom registry (URL or local path)
+            &mdash; custom registry (URL, local path, or github:owner/repo)
           </li>
         </ul>
       </app-component-page-section>
@@ -310,7 +310,7 @@ const INLINE_CODE_CLASS =
           </li>
           <li>
             <code [class]="inlineCodeClass">--registry &lt;source&gt;</code>
-            &mdash; custom registry (URL or local path)
+            &mdash; custom registry (URL, local path, or github:owner/repo)
           </li>
         </ul>
       </app-component-page-section>
@@ -340,7 +340,7 @@ const INLINE_CODE_CLASS =
           </li>
           <li>
             <code [class]="inlineCodeClass">--registry &lt;source&gt;</code>
-            &mdash; custom registry (URL or local path)
+            &mdash; custom registry (URL, local path, or github:owner/repo)
           </li>
         </ul>
       </app-component-page-section>
@@ -358,7 +358,7 @@ const INLINE_CODE_CLASS =
           </li>
           <li>
             <code [class]="inlineCodeClass">--registry &lt;source&gt;</code>
-            &mdash; custom registry (URL or local path)
+            &mdash; custom registry (URL, local path, or github:owner/repo)
           </li>
         </ul>
       </app-component-page-section>

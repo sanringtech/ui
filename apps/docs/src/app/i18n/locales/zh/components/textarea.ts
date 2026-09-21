@@ -7,6 +7,7 @@ export const textareaTranslations = {
     '在原生 textarea 上使用 sanringTextarea，並保留 value、disabled、rows 與表單綁定。',
   'textarea.demo.disabled': '停用',
   'textarea.demo.resize': '可調整大小',
+  'textarea.demo.characterCount': '字數計數',
   'textarea.api.description': 'sanringTextarea directive 支援的 Inputs。',
   'textarea.api.class.description': '與基礎多行文字樣式合併的額外 class。',
   'textarea.accessibility.description': '透明的樣式 directive，完整保留原生 <textarea> 的語意。直接在 textarea 上使用標準 HTML 屬性 aria-label、aria-labelledby、aria-describedby。搭配 sanring-field 可自動完成標籤關聯與驗證串接。',

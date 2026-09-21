@@ -1,5 +1,7 @@
-import { Component, EventEmitter, inject, input, Output } from '@angular/core';
+import { Component, EventEmitter, inject, input, Output, signal } from '@angular/core';
+import { Router } from '@angular/router';
 import { I18nService } from '../../i18n/i18n.service';
+import { openComponentInStackBlitz } from '../../stackblitz/open-stackblitz';
 import {
   ComponentPageCodeBlock,
   ComponentPageCodeCopyEvent,
@@ -63,8 +65,18 @@ import {
               i18n.t('component.previewer.source')
             }}</span>
           </span>
-          <span class="text-[11px] text-[var(--docs-muted)]">
-            {{ language() }} · {{ i18n.t('component.header.copyReady') }}
+          <span class="flex items-center gap-3 text-[11px] text-[var(--docs-muted)]">
+            <span>{{ language() }} · {{ i18n.t('component.header.copyReady') }}</span>
+            @if (componentId) {
+              <button
+                type="button"
+                class="rounded-[var(--sanring-radius-sm)] border border-[var(--docs-border)] px-2 py-1 font-medium text-[var(--docs-fg)] hover:bg-[var(--docs-elevated)]"
+                [disabled]="opening()"
+                (click)="openStackBlitz()"
+              >
+                {{ opening() ? i18n.t('actions.openingStackBlitz') : i18n.t('actions.openInStackBlitz') }}
+              </button>
+            }
           </span>
         </div>
 
@@ -85,4 +97,23 @@ export class ComponentPageCodePreviewer {
   @Output() codeCopy = new EventEmitter<ComponentPageCodeCopyEvent>();
 
   protected readonly i18n = inject(I18nService);
+  private readonly router = inject(Router);
+  protected readonly opening = signal(false);
+
+  protected get componentId(): string | null {
+    const match = /\/components\/([a-z0-9-]+)/.exec(this.router.url);
+    return match?.[1] ?? null;
+  }
+
+  protected async openStackBlitz(): Promise<void> {
+    const id = this.componentId;
+    if (!id || this.opening()) return;
+    this.opening.set(true);
+    try {
+      await openComponentInStackBlitz(id, this.code());
+    } catch {
+      this.opening.set(false);
+    }
+    this.opening.set(false);
+  }
 }

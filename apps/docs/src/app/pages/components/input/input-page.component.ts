@@ -1,5 +1,5 @@
 import { Component, inject } from '@angular/core';
-import { FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormControl, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import {
   DescriptionDirective,
   ErrorMessageComponent,
@@ -29,6 +29,7 @@ import { inputPage, inputPageExamples } from './input.docs';
     DescriptionDirective,
     ErrorMessageComponent,
     FieldLabelDirective,
+    FormsModule,
     InputDirective,
     ReactiveFormsModule,
     SanringFieldComponent,
@@ -130,6 +131,24 @@ import { InputDirective } from './components/ui/input';"
               </div>
             </app-component-page-code-previewer>
           </app-component-page-section>
+
+          <app-component-page-section [section]="section('example-character-count')">
+            <app-component-page-code-previewer
+              [code]="examples.characterCount"
+              language="angular-html"
+            >
+              <div previewer class="w-[min(360px,100%)]">
+                <sanring-field>
+                  <!-- eslint-disable-next-line @angular-eslint/template/label-has-associated-control -->
+                  <label sanringLabel>Title</label>
+                  <input sanringInput maxlength="500" [(ngModel)]="title" />
+                  <p sanringDescription class="text-end tabular-nums" aria-live="polite">
+                    {{ title.length }}/500
+                  </p>
+                </sanring-field>
+              </div>
+            </app-component-page-code-previewer>
+          </app-component-page-section>
         </div>
       </app-component-page-section>
 
@@ -155,6 +174,7 @@ export class InputPageComponent {
     nonNullable: true,
     validators: [Validators.required],
   });
+  protected title = 'Sanring UI demo text';
 
   constructor() {
     this.emailControl.markAsTouched();

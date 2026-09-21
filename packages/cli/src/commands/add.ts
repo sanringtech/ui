@@ -15,6 +15,9 @@ import {
   type RegistryComponent,
   type RegistryShared,
   createRegistryIndex,
+  BLOCK_NAME_PREFIX,
+  parseBlockRef,
+  registryItemRemotePath,
 } from '../registry.js';
 import {
   confirmPrompt,
@@ -191,8 +194,8 @@ interface ComponentFileJob {
 }
 
 export const addCommand = new Command('add')
-  .description('Add one or more components to your project')
-  .argument('<components...>', 'component name(s) (e.g. accordion button)')
+  .description('Add one or more components or blocks to your project')
+  .argument('<components...>', 'component or block name(s) (e.g. button, block/login)')
   .option('-p, --path <path>', 'destination path relative to cwd')
   .option('-s, --shared-path <path>', 'destination for shared utilities (default: <path>/shared)')
   .option('-f, --force', 'overwrite existing files', false)
@@ -242,7 +245,7 @@ export const addCommand = new Command('add')
         return;
       }
       const alias = explicitAliases.size === 1 ? [...explicitAliases][0] : undefined;
-      const strippedNames = parsedRefs.map((ref) => ref.name);
+      const parsedTargets = parsedRefs.map((ref) => parseBlockRef(ref.name));
 
       // Resolve component path: CLI option > sanring.config.json > default
       const config = readConfig(cwd);
@@ -269,10 +272,37 @@ export const addCommand = new Command('add')
       const registryIndex = createRegistryIndex(registry);
       registrySpinner.stop();
 
-      const { toInstall, autoAdded, missing } = resolveInstallSet(strippedNames, registryIndex);
+      const missingBlocks: string[] = [];
+      const resolvedNames: string[] = [];
+      for (const target of parsedTargets) {
+        if (target.preferBlock) {
+          if (!target.name || !registryIndex.blocksByName.has(target.name)) {
+            missingBlocks.push(`${BLOCK_NAME_PREFIX}${target.name}`);
+          } else {
+            resolvedNames.push(target.name);
+          }
+        } else {
+          resolvedNames.push(target.name);
+        }
+      }
+
+      if (missingBlocks.length > 0) {
+        const available = registryIndex.blockNames.map((name) => `${BLOCK_NAME_PREFIX}${name}`).join(', ');
+        console.error(
+          pc.red(`✖ Block${missingBlocks.length > 1 ? 's' : ''} not found: ${missingBlocks.join(', ')}`),
+        );
+        console.error(pc.dim(`  Available: ${available || '(none)'}`));
+        process.exit(1);
+        return;
+      }
+
+      const { toInstall, autoAdded, missing } = resolveInstallSet(resolvedNames, registryIndex);
 
       if (missing.length > 0) {
-        const available = registryIndex.componentNames.join(', ');
+        const available = [
+          ...registryIndex.componentNames,
+          ...registryIndex.blockNames.map((name) => `${BLOCK_NAME_PREFIX}${name}`),
+        ].join(', ');
         console.error(
           pc.red(`✖ Component${missing.length > 1 ? 's' : ''} not found: ${missing.join(', ')}`),
         );
@@ -324,7 +354,7 @@ export const addCommand = new Command('add')
           for (const file of component.files) {
             const fileName = registryRelativePath(file, component.name);
             console.log(pc.bold(`── ${label}/${fileName} ──\n`));
-            const content = await fetchFile(`components/${file}`, registrySource);
+            const content = await fetchFile(registryItemRemotePath(file, component.name, registryIndex), registrySource);
             console.log(content);
           }
         }
@@ -354,7 +384,7 @@ export const addCommand = new Command('add')
             .map((shared) => ({ remotePath: shared.file, label: `shared/${shared.name}` })),
           ...toInstall.flatMap((component) =>
             component.files.map((file) => ({
-              remotePath: `components/${file}`,
+              remotePath: registryItemRemotePath(file, component.name, registryIndex),
               label: `${component.name}/${file}`,
             })),
           ),
@@ -476,7 +506,7 @@ export const addCommand = new Command('add')
         const fileJobs: ComponentFileJob[] = component.files.map((file) => {
           const fileName = registryRelativePath(file, component.name);
           const dest = join(destDir, fileName);
-          return { file, fileName, dest, remotePath: `components/${file}` };
+          return { file, fileName, dest, remotePath: registryItemRemotePath(file, component.name, registryIndex) };
         });
 
         for (const { fileName, dest } of fileJobs) {

@@ -261,7 +261,10 @@ popup mode — swap the trigger for the input once open
       }
     </sanring-combobox-list>
   </sanring-combobox-content>
-</sanring-combobox>`,
+</sanring-combobox>
+<p class="text-end text-[0.8rem] tabular-nums text-[var(--sanring-muted)]">
+  {{ selectedFrameworks.length }}/{{ frameworks.length }}
+</p>`,
 
   groups: `<sanring-combobox [(value)]="library">
   <sanring-combobox-input placeholder="Search libraries" />
