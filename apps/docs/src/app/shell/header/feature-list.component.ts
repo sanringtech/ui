@@ -67,7 +67,7 @@ const MAX_SEARCH_RESULTS = 8;
               routerLink="/"
               sanringSheetClose
             >
-              <span class="grid size-10 shrink-0 place-items-center rounded-[var(--sanring-radius)] border border-[color-mix(in_srgb,var(--docs-accent)_36%,var(--docs-border))] bg-[color-mix(in_srgb,var(--docs-accent)_8%,var(--docs-surface))]">
+              <span class="docs-panel grid size-10 shrink-0 place-items-center">
                 <img class="size-6" src="sanring_ui.svg" alt="" />
               </span>
               <span class="min-w-0">
@@ -102,7 +102,7 @@ const MAX_SEARCH_RESULTS = 8;
       </sanring-sheet>
 
       <a
-        class="hidden min-w-0 items-center justify-self-start rounded-[var(--sanring-radius)] border border-[color-mix(in_srgb,var(--docs-accent)_36%,var(--docs-border))] bg-[color-mix(in_srgb,var(--docs-accent)_8%,var(--docs-surface))] px-3 py-2 no-underline transition-colors hover:bg-[color-mix(in_srgb,var(--docs-accent)_14%,var(--docs-elevated))] max-[860px]:order-2 max-[860px]:inline-flex"
+        class="docs-panel hidden min-w-0 items-center justify-self-start px-3 py-2 no-underline transition-colors hover:bg-[var(--docs-elevated)] max-[860px]:order-2 max-[860px]:inline-flex"
         routerLink="/"
         [attr.aria-label]="i18n.t('nav.home')"
       >
@@ -112,7 +112,7 @@ const MAX_SEARCH_RESULTS = 8;
       <div class="max-[860px]:order-4 max-[860px]:w-full max-[860px]:min-w-0">
         <button
           type="button"
-          class="flex h-10 w-[330px] items-center gap-2 rounded-[var(--sanring-radius)] border border-[color-mix(in_srgb,var(--docs-border)_86%,transparent)] bg-[color-mix(in_srgb,var(--docs-elevated)_82%,transparent)] px-3 text-sm text-[var(--docs-muted)] shadow-sm transition-colors hover:border-[color-mix(in_srgb,var(--docs-accent)_38%,var(--docs-border-strong))] hover:bg-[var(--docs-elevated)] max-[980px]:w-[min(46vw,300px)] max-[860px]:w-full"
+          class="docs-panel flex h-10 w-[330px] items-center gap-2 px-3 text-sm text-[var(--docs-muted)] transition-colors hover:bg-[var(--docs-elevated)] max-[980px]:w-[min(46vw,300px)] max-[860px]:w-full"
           (click)="commandDialog.open()"
         >
           <svg class="size-4 shrink-0" lucideSearch></svg>
@@ -175,12 +175,12 @@ const MAX_SEARCH_RESULTS = 8;
         </app-header-action-button>
 
         <div
-          class="relative inline-grid h-11 grid-cols-3 items-center gap-1.5 overflow-hidden rounded-[var(--sanring-radius)] border border-[color-mix(in_srgb,var(--docs-border)_86%,transparent)] bg-[color-mix(in_srgb,var(--docs-elevated)_82%,transparent)] p-1 shadow-sm"
+          class="docs-panel relative inline-grid h-11 grid-cols-3 items-center gap-1.5 overflow-hidden p-1"
           role="group"
           [attr.aria-label]="i18n.t('actions.selectTheme')"
         >
           <span
-            class="pointer-events-none absolute left-1 top-1 size-8 rounded-[var(--sanring-radius-sm)] bg-[var(--docs-panel)] shadow-sm ring-1 ring-[color-mix(in_srgb,var(--docs-border)_72%,transparent)] transition-transform duration-200 ease-out motion-reduce:transition-none"
+            class="pointer-events-none absolute left-1 top-1 size-8 rounded-[var(--sanring-radius-sm)] bg-[var(--docs-elevated)] transition-transform duration-200 ease-out motion-reduce:transition-none"
             [style.transform]="themeIndicatorTransform()"
             aria-hidden="true"
           ></span>

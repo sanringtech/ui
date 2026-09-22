@@ -28,7 +28,7 @@ const INLINE_CODE_CLASS =
         eyebrow="docs / cli"
       />
 
-      <section class="mb-4 overflow-hidden rounded-[var(--sanring-radius-lg)] border border-[var(--docs-border)] bg-[var(--docs-code)] text-[var(--docs-code-fg)] shadow-[var(--docs-shadow-soft)]" aria-label="CLI workflow overview">
+      <section class="docs-code-panel mb-4 overflow-hidden" aria-label="CLI workflow overview">
         <header class="flex flex-wrap items-center justify-between gap-3 border-b border-[color-mix(in_srgb,var(--docs-code-fg)_18%,transparent)] px-5 py-4">
           <div><p class="m-0 font-mono text-xs font-semibold uppercase tracking-[0.12em] text-[var(--docs-accent)]">CLI WORKFLOW</p><p class="m-0 mt-1 text-sm text-[color-mix(in_srgb,var(--docs-code-fg)_62%,transparent)]">Move from intent to a reviewed local change.</p></div>
           <span class="rounded-[var(--sanring-radius-sm)] border border-[color-mix(in_srgb,var(--docs-code-fg)_22%,transparent)] px-2 py-1 font-mono text-[11px] text-[color-mix(in_srgb,var(--docs-code-fg)_68%,transparent)]">dry-run safe</span>

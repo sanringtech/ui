@@ -11,13 +11,10 @@ const ACTIVE_VIEWPORT_RATIO = 0.32;
   selector: 'app-docs-toc',
   template: `
     <aside
-      class="sticky top-[76px] h-[calc(100dvh-76px)] overflow-auto bg-[color-mix(in_srgb,var(--docs-bg)_60%,transparent)] pb-12 pl-4 pr-8 pt-10 backdrop-blur-xl max-[1180px]:pr-5 max-[980px]:hidden"
+      class="sticky top-[76px] h-[calc(100dvh-76px)] overflow-auto bg-[var(--docs-bg)] pb-12 pl-4 pr-8 pt-10 max-[1180px]:pr-5 max-[980px]:hidden"
     >
-      <nav
-        class="mb-11 rounded-[var(--sanring-radius-lg)] border border-[color-mix(in_srgb,var(--docs-border)_72%,transparent)] bg-[color-mix(in_srgb,var(--docs-panel)_62%,transparent)] p-4 shadow-[var(--docs-shadow-soft)]"
-        [attr.aria-label]="i18n.t('toc.label')"
-      >
-        <p class="mb-4 text-xs font-semibold uppercase tracking-[0.08em] text-[var(--docs-muted)]">
+      <nav class="mb-11" [attr.aria-label]="i18n.t('toc.label')">
+        <p class="docs-eyebrow mb-3">
           {{ i18n.t('toc.label') }}
         </p>
         @for (item of items(); track item.id) {
@@ -73,20 +70,13 @@ export class DocsTocComponent {
   }
 
   protected itemClass(item: DocsTocItem) {
-    const active = this.activeId() === item.id;
     const indentClasses: Record<2 | 3 | 4, string> = {
-      2: 'px-2.5',
-      3: 'pl-5 pr-2.5',
-      4: 'pl-8 pr-2.5',
+      2: '',
+      3: 'level-3',
+      4: 'level-4',
     };
 
-    return [
-      'my-1 block rounded-[var(--sanring-radius)] border border-transparent py-1.5 text-sm no-underline transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--docs-focus-ring)]',
-      active
-        ? 'border-[color-mix(in_srgb,var(--docs-accent)_34%,var(--docs-border))] bg-[var(--docs-active)] text-[var(--docs-fg)] shadow-sm'
-        : 'text-[var(--docs-muted)] hover:bg-[color-mix(in_srgb,var(--docs-elevated)_62%,transparent)] hover:text-[var(--docs-fg)]',
-      indentClasses[item.level ?? 2],
-    ].join(' ');
+    return ['docs-toc-item', indentClasses[item.level ?? 2]].filter(Boolean).join(' ');
   }
 
   private activationLine(): number {

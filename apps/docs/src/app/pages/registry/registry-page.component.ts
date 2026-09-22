@@ -33,7 +33,7 @@ const INLINE_CODE_CLASS =
         eyebrow="docs / registry"
       />
 
-      <section class="mb-4 rounded-[var(--sanring-radius-lg)] border border-[var(--docs-border)] bg-[var(--docs-panel)] p-5 shadow-[var(--docs-shadow-soft)] sm:p-6" aria-label="Registry model overview">
+      <section class="docs-panel-lg mb-4 p-5 sm:p-6" aria-label="Registry model overview">
         <div class="flex flex-wrap items-end justify-between gap-4 border-b border-[var(--docs-border)] pb-5"><div><p class="m-0 font-mono text-xs font-semibold uppercase tracking-[0.12em] text-[var(--docs-accent-strong)]">REGISTRY MODEL</p><h2 class="m-0 mt-2 text-2xl font-semibold tracking-[-0.03em] text-[var(--docs-fg)]">One schema, three dependency layers.</h2></div><span class="font-mono text-xs text-[var(--docs-muted)]">registry.json</span></div>
         <div class="mt-5 grid gap-4 lg:grid-cols-[minmax(0,0.8fr)_minmax(300px,1.2fr)]">
           <div class="rounded-[var(--sanring-radius)] border border-[var(--docs-border)] bg-[var(--docs-code)] p-4 font-mono text-xs leading-7 text-[var(--docs-code-fg)]"><div class="text-[var(--docs-accent)]">registry.json</div><div class="pl-4 text-[color-mix(in_srgb,var(--docs-code-fg)_76%,transparent)]">├─ components[]</div><div class="pl-8 text-[color-mix(in_srgb,var(--docs-code-fg)_62%,transparent)]">├─ files[]</div><div class="pl-8 text-[color-mix(in_srgb,var(--docs-code-fg)_62%,transparent)]">├─ componentDeps[]</div><div class="pl-8 text-[color-mix(in_srgb,var(--docs-code-fg)_62%,transparent)]">└─ sharedDeps[]</div><div class="pl-4 text-[color-mix(in_srgb,var(--docs-code-fg)_76%,transparent)]">├─ blocks[]</div><div class="pl-4 text-[color-mix(in_srgb,var(--docs-code-fg)_76%,transparent)]">└─ shared[]</div></div>

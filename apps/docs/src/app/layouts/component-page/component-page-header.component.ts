@@ -38,16 +38,16 @@ import { DocsPageHeaderComponent } from './docs-page-header.component';
       @if (componentId) {
         <div page-meta class="grid w-full min-w-0 gap-3">
           <div
-            class="grid min-w-0 overflow-hidden rounded-[var(--sanring-radius)] border border-[color-mix(in_srgb,var(--docs-border)_88%,transparent)] bg-[var(--docs-border)] shadow-[var(--docs-shadow-soft)] sm:grid-cols-[minmax(0,1.35fr)_minmax(0,1fr)] sm:gap-px"
+            class="docs-panel grid min-w-0 overflow-hidden sm:grid-cols-[minmax(0,1.35fr)_minmax(0,1fr)]"
           >
             <button
               type="button"
-              class="group min-w-0 bg-[color-mix(in_srgb,var(--docs-code)_96%,transparent)] px-3.5 py-3 text-left transition-colors hover:bg-[var(--docs-code-header)] focus-visible:relative focus-visible:z-10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-[var(--docs-focus-ring)]"
+              class="group min-w-0 bg-[var(--docs-code)] px-3.5 py-3 text-left transition-colors hover:bg-[var(--docs-code-header)] focus-visible:relative focus-visible:z-10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-[var(--docs-focus-ring)]"
               [attr.aria-label]="i18n.t('component.header.copyInstall')"
               (click)="copyInstallCommand()"
             >
               <span
-                class="mb-2 flex items-center justify-between gap-3 font-mono text-[10px] font-semibold uppercase tracking-[0.08em] text-[var(--docs-code-muted)]"
+                class="docs-eyebrow mb-2 flex items-center justify-between gap-3 font-mono text-[var(--docs-code-muted)]"
               >
                 <span>{{ i18n.t('component.header.installCommand') }}</span>
                 <span class="inline-flex items-center gap-1.5 normal-case tracking-normal">
@@ -69,11 +69,9 @@ import { DocsPageHeaderComponent } from './docs-page-header.component';
             </button>
 
             <div
-              class="min-w-0 border-t border-[var(--docs-border)] bg-[color-mix(in_srgb,var(--docs-panel)_94%,transparent)] px-3.5 py-3 sm:border-l sm:border-t-0"
+              class="min-w-0 border-t border-[var(--docs-border)] bg-[var(--docs-panel)] px-3.5 py-3 sm:border-l sm:border-t-0"
             >
-              <span
-                class="mb-2 block font-mono text-[10px] font-semibold uppercase tracking-[0.08em] text-[var(--docs-muted)]"
-              >
+              <span class="docs-eyebrow mb-2 block font-mono">
                 {{ i18n.t('component.header.packagePath') }}
               </span>
               <span class="block break-all font-mono text-[13px] leading-5 text-[var(--docs-fg)]">
@@ -90,12 +88,7 @@ import { DocsPageHeaderComponent } from './docs-page-header.component';
               <span class="font-mono text-[var(--docs-fg)]">{{ componentId }}</span>
             </span>
 
-            <span
-              [class]="
-                metaChipClass +
-                ' border-[color-mix(in_srgb,var(--docs-accent)_38%,var(--docs-border))] bg-[color-mix(in_srgb,var(--docs-accent)_10%,var(--docs-surface))] font-mono uppercase tracking-[0.06em] text-[var(--docs-accent-strong)]'
-              "
-            >
+            <span [class]="metaChipClass + ' font-mono text-[var(--docs-fg)]'">
               <span class="size-1.5 rounded-full bg-[var(--docs-accent)]" aria-hidden="true"></span>
               {{ i18n.t('component.header.shipped') }}
             </span>
@@ -110,12 +103,7 @@ import { DocsPageHeaderComponent } from './docs-page-header.component';
             }
 
             @if (ssrSafe === true) {
-              <span
-                [class]="
-                  metaChipClass +
-                  ' border-[color-mix(in_srgb,var(--docs-success)_38%,var(--docs-border))] bg-[color-mix(in_srgb,var(--docs-success)_10%,var(--docs-surface))]'
-                "
-              >
+              <span [class]="metaChipClass">
                 {{ i18n.t('component.header.ssrSafe') }}
               </span>
             } @else if (ssrSafe === false) {
@@ -155,23 +143,20 @@ import { DocsPageHeaderComponent } from './docs-page-header.component';
           </div>
 
           <nav
-            class="flex min-w-0 flex-wrap items-center gap-x-3 gap-y-2 border-t border-[color-mix(in_srgb,var(--docs-border)_80%,transparent)] pt-3 font-mono text-xs"
+            class="flex min-w-0 flex-wrap items-center gap-x-3 gap-y-2 border-t border-[var(--docs-border)] pt-3 font-mono text-xs"
             [attr.aria-label]="i18n.t('component.header.quickAccess')"
           >
-            <span class="uppercase tracking-[0.08em] text-[var(--docs-muted)]">{{
+            <span class="text-[var(--docs-muted)]">{{
               i18n.t('component.header.quickAccess')
             }}</span>
             <a [class]="jumpLinkClass" href="#installation">
-              <span class="text-[var(--docs-accent-strong)]">01</span>
               {{ i18n.t('component.header.jumpInstall') }}
             </a>
             <a [class]="jumpLinkClass" [href]="apiAnchor">
-              <span class="text-[var(--docs-accent-strong)]">02</span>
               {{ i18n.t('component.header.jumpApi') }}
             </a>
             @if (latestChangeVersion) {
               <a [class]="jumpLinkClass" href="#recent-changes">
-                <span class="text-[var(--docs-accent-strong)]">03</span>
                 {{ i18n.t('component.recentChanges.title') }}
               </a>
             }
@@ -263,8 +248,7 @@ export class ComponentPageHeaderComponent implements OnChanges {
   @Input() apiAnchor = '#api';
 
   protected readonly i18n = inject(I18nService);
-  protected readonly metaChipClass =
-    'inline-flex items-center gap-1.5 rounded-[var(--sanring-radius-sm)] border border-[var(--docs-border)] bg-[var(--docs-surface)] px-2 py-1 text-xs font-medium text-[var(--docs-muted)]';
+  protected readonly metaChipClass = 'docs-chip';
   protected readonly jumpLinkClass =
     'inline-flex items-center gap-1.5 text-[var(--docs-fg)] no-underline transition-colors hover:text-[var(--docs-accent-strong)] focus-visible:rounded-[var(--sanring-radius-xs)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--docs-focus-ring)]';
   private readonly router = inject(Router);

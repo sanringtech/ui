@@ -29,7 +29,7 @@ import { HomeHeroDemoPanelComponent } from './home-hero-demo-panel.component';
 
         <div class="mt-20 max-[860px]:mt-16 max-[520px]:mt-14">
           <p
-            class="m-0 text-sm font-semibold uppercase tracking-[0.12em] text-[var(--docs-accent-strong)]"
+            class="docs-eyebrow"
           >
             {{ i18n.t('home.eyebrow') }}
           </p>
