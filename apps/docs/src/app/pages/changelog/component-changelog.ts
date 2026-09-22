@@ -47,17 +47,17 @@ export const cliVersionChangelog: readonly CliVersionEntry[] = [
       {
         type: 'added',
         componentIds: ['dialog'],
-        text: '`sanring-dialog-header` accepts `align` (`start` | `center`) so title alignment is not only the responsive default. Title color still goes through `sanringDialogTitle` `class`.',
+        text: '`sanring-dialog-header` accepts `align` (`start` | `center`). Header `class` can set a background that is not the dialog body surface.',
       },
       {
         type: 'added',
         componentIds: ['input', 'textarea'],
-        text: 'Docs examples show a live character count (`20/500`) using native `maxlength` and `sanringDescription`.',
+        text: 'Docs examples show a live character count inside the control on the right, so `sanring-error-message` can stay below.',
       },
       {
         type: 'added',
         componentIds: ['combobox'],
-        text: 'The multiple-select example shows selected/total count, for example `2/5`.',
+        text: '`sanring-combobox-chip-input` and `sanring-combobox-chips` accept `wrap`. Single-line multiple selection overflows with an ellipsis; the selected/total count sits on the right of the field.',
       },
       {
         type: 'changed',
