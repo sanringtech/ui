@@ -339,3 +339,20 @@ describe('DialogHeaderComponent', () => {
     expect(header.classList.contains('items-start')).toBe(true);
   });
 });
+
+@Component({
+  imports: [DialogHeaderComponent],
+  template: `<sanring-dialog-header class="bg-[var(--sanring-surface-strong)]">Title</sanring-dialog-header>`,
+})
+class DialogHeaderClassHost {}
+
+describe('DialogHeaderComponent class', () => {
+  it('merges a consumer class so the header can use a different background', async () => {
+    await TestBed.configureTestingModule({ imports: [DialogHeaderClassHost] }).compileComponents();
+    const fixture = TestBed.createComponent(DialogHeaderClassHost);
+    fixture.detectChanges();
+
+    const header = fixture.nativeElement.querySelector('sanring-dialog-header') as HTMLElement;
+    expect(header.classList.contains('bg-[var(--sanring-surface-strong)]')).toBe(true);
+  });
+});

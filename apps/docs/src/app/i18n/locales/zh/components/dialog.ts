@@ -1,3 +1,4 @@
+/** Dialog docs copy. */
 export const dialogTranslations = {
   'dialog.description':
     '建立在 Angular CDK Dialog 上的 overlay primitive，適合 modal 任務與聚焦決策。',
@@ -8,7 +9,7 @@ export const dialogTranslations = {
   'dialog.demo.noClose': '沒有關閉按鈕',
   'dialog.demo.stickyFooter': '固定頁尾',
   'dialog.demo.scrollable': '可捲動內容',
-  'dialog.demo.header': '標題對齊',
+  'dialog.demo.header': '標題對齊與背景',
   'dialog.examples.description':
     '常見 Dialog 模式，包含自訂操作、隱藏關閉控制、固定操作區與大量可捲動內容。',
   'dialog.examples.basic.description':
@@ -34,6 +35,8 @@ export const dialogTranslations = {
   'dialog.api.mediaClass.description': '與 dialog media 容器合併的額外 class。',
   'dialog.api.headerAlign.description':
     '標題列文字對齊。start 靠左，center 在所有斷點置中。預設維持小螢幕置中、sm 以上靠左。',
+  'dialog.api.headerClass.description':
+    '與 header 版面樣式合併的額外 class。用來讓標題列背景跟 sanring-dialog-content 不同，例如 bg-[var(--sanring-surface-strong)]。搭配 content 的 overflow-hidden p-0，底色才能貼齊面板邊緣。',
   'dialog.api.titleClass.description':
     '與標題樣式合併的額外 class。用來改標題顏色，例如 text-[var(--sanring-primary-70)]。',
   'dialog.accessibility.description':
