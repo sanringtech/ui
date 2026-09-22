@@ -7,9 +7,7 @@ import { Component, Input } from '@angular/core';
     class: 'block min-w-0',
   },
   template: `
-    <header
-      class="relative mb-12 overflow-hidden rounded-[var(--sanring-radius-lg)] border border-[color-mix(in_srgb,var(--docs-border)_82%,transparent)] bg-[color-mix(in_srgb,var(--docs-panel)_88%,transparent)] p-7 shadow-[var(--docs-shadow-strong)] max-[720px]:p-5"
-    >
+    <header class="docs-panel-lg relative mb-12 overflow-hidden p-6 max-[720px]:p-5">
       <div
         class="pointer-events-none absolute inset-x-0 top-0 h-1 bg-[linear-gradient(90deg,var(--docs-accent),var(--docs-accent-alt),var(--docs-accent-warm))]"
         aria-hidden="true"
@@ -21,9 +19,7 @@ import { Component, Input } from '@angular/core';
 
       <div class="relative z-10 min-w-0">
         @if (eyebrow) {
-          <p
-            class="mb-4 inline-flex max-w-full rounded-[var(--sanring-radius-sm)] border border-[color-mix(in_srgb,var(--docs-accent)_32%,var(--docs-border))] bg-[color-mix(in_srgb,var(--docs-accent)_10%,var(--docs-surface))] px-2.5 py-1 font-mono text-xs font-semibold text-[var(--docs-accent-strong)]"
-          >
+          <p class="docs-eyebrow mb-3 font-mono">
             <span class="min-w-0 truncate">{{ eyebrow }}</span>
           </p>
         }

@@ -1,5 +1,6 @@
 import { Component, computed, inject, input } from '@angular/core';
 import { RouterLink } from '@angular/router';
+import { ComponentPageSectionDefinition } from '../../docs-schema/component-page.types';
 import { DocsComponentId } from '../../navigation/docs-navigation';
 import { I18nService } from '../../i18n/i18n.service';
 import {
@@ -7,6 +8,7 @@ import {
   ComponentChangeType,
   cliVersionChangelog,
 } from '../../pages/changelog/component-changelog';
+import { ComponentPageSectionComponent } from './component-page-section.component';
 
 interface ComponentRecentChange {
   version: string;
@@ -45,46 +47,20 @@ function renderInlineCode(text: string): string {
 @Component({
   selector: 'app-component-page-recent-changes',
   standalone: true,
-  imports: [RouterLink],
+  imports: [RouterLink, ComponentPageSectionComponent],
   template: `
     @if (changes().length > 0) {
-      <section
-        id="recent-changes"
-        class="mt-16 overflow-hidden rounded-[var(--sanring-radius)] border border-[color-mix(in_srgb,var(--docs-border)_86%,transparent)] bg-[color-mix(in_srgb,var(--docs-panel)_76%,transparent)] shadow-[var(--docs-shadow-soft)]"
-        [attr.aria-labelledby]="'recent-changes-title'"
-      >
-        <div
-          class="flex min-w-0 flex-wrap items-center justify-between gap-3 border-b border-[var(--docs-border)] bg-[color-mix(in_srgb,var(--docs-elevated)_72%,transparent)] px-3.5 py-3"
+      <app-component-page-section [section]="section">
+        <a
+          section-action
+          class="mt-1.5 shrink-0 font-mono text-xs font-medium text-[var(--docs-muted)] no-underline transition-colors hover:text-[var(--docs-fg)] focus-visible:rounded-[var(--sanring-radius-xs)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--docs-focus-ring)]"
+          routerLink="/changelog"
         >
-          <div class="flex min-w-0 items-center gap-3">
-            <span
-              class="h-8 w-1 shrink-0 rounded-full bg-[linear-gradient(180deg,var(--docs-accent),var(--docs-accent-alt))]"
-              aria-hidden="true"
-            ></span>
-            <div class="min-w-0">
-              <p
-                class="m-0 font-mono text-[10px] font-semibold uppercase tracking-[0.08em] text-[var(--docs-accent-strong)]"
-              >
-                {{ i18n.t('component.recentChanges.signal') }}
-              </p>
-              <h2
-                id="recent-changes-title"
-                class="m-0 mt-0.5 text-base font-semibold leading-tight tracking-normal text-[var(--docs-fg)]"
-              >
-                {{ i18n.t('component.recentChanges.title') }}
-              </h2>
-            </div>
-          </div>
-          <a
-            class="shrink-0 font-mono text-xs font-medium text-[var(--docs-muted)] no-underline transition-colors hover:text-[var(--docs-fg)] focus-visible:rounded-[var(--sanring-radius-xs)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--docs-focus-ring)]"
-            routerLink="/changelog"
-          >
-            {{ i18n.t('component.recentChanges.viewAll') }}
-          </a>
-        </div>
+          {{ i18n.t('component.recentChanges.viewAll') }}
+        </a>
 
         <ol
-          class="m-0 list-none divide-y divide-[color-mix(in_srgb,var(--docs-border)_82%,transparent)] p-0"
+          class="docs-panel m-0 list-none divide-y divide-[color-mix(in_srgb,var(--docs-border)_82%,transparent)] overflow-hidden p-0"
         >
           @for (entry of changes(); track entry.version + '-' + $index) {
             <li
@@ -118,12 +94,18 @@ function renderInlineCode(text: string): string {
             </li>
           }
         </ol>
-      </section>
+      </app-component-page-section>
     }
   `,
 })
 export class ComponentPageRecentChangesComponent {
   readonly componentId = input<DocsComponentId | null>(null);
+
+  protected readonly section = {
+    id: 'recent-changes',
+    titleKey: 'component.recentChanges.title',
+    descriptionKey: 'component.recentChanges.description',
+  } as const satisfies ComponentPageSectionDefinition;
 
   protected readonly i18n = inject(I18nService);
   protected readonly chipClass = CHIP_CLASS;

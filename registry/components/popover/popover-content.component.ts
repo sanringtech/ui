@@ -11,9 +11,11 @@ import {
   ElementRef,
   Signal,
   computed,
+  contentChild,
   effect,
   inject,
   input,
+  numberAttribute,
   signal,
   untracked,
   viewChild,
@@ -22,37 +24,49 @@ import { cn } from '../shared/utils';
 import { OVERLAY_SURFACE_CLASS, POPOVER_SURFACE_CLASS } from '../shared/component-styles';
 import { POPOVER_LEAVE_DURATION_MS } from '../shared/component-timing';
 import { PopoverComponent } from './popover.component';
-import type { PopoverAlign } from './popover.type';
+import { PopoverTitleComponent } from './popover-title.component';
+import type { PopoverAlign, PopoverSide } from './popover.type';
 
-const GAP = 8;
+const DEFAULT_SIDE_OFFSET = 8;
 
-type PopoverPlacement = 'top' | 'bottom';
+function fallbackSides(side: PopoverSide): PopoverSide[] {
+  if (side === 'top') return ['top', 'bottom', 'right', 'left'];
+  if (side === 'right') return ['right', 'left', 'bottom', 'top'];
+  if (side === 'left') return ['left', 'right', 'bottom', 'top'];
+  return ['bottom', 'top', 'right', 'left'];
+}
 
-const FALLBACK_PLACEMENTS: readonly PopoverPlacement[] = ['bottom', 'top'];
-
-function positionFor(placement: PopoverPlacement, align: PopoverAlign): ConnectionPositionPair {
-  if (placement === 'top') {
+function positionFor(
+  side: PopoverSide,
+  align: PopoverAlign,
+  offset: number,
+): ConnectionPositionPair {
+  if (side === 'top' || side === 'bottom') {
     return {
       originX: align,
-      originY: 'top',
+      originY: side,
       overlayX: align,
-      overlayY: 'bottom',
-      offsetY: -GAP,
+      overlayY: side === 'bottom' ? 'top' : 'bottom',
+      offsetY: side === 'bottom' ? offset : -offset,
     };
   }
 
+  const verticalAlign = align === 'start' ? 'top' : align === 'end' ? 'bottom' : 'center';
+
   return {
-    originX: align,
-    originY: 'bottom',
-    overlayX: align,
-    overlayY: 'top',
-    offsetY: GAP,
+    originX: side === 'right' ? 'end' : 'start',
+    originY: verticalAlign,
+    overlayX: side === 'right' ? 'start' : 'end',
+    overlayY: verticalAlign,
+    offsetX: side === 'right' ? offset : -offset,
   };
 }
 
-function getPlacementFromPosition(position: ConnectionPositionPair): PopoverPlacement {
+function getSideFromPosition(position: ConnectionPositionPair): PopoverSide {
   if (position.originY === 'top' && position.overlayY === 'bottom') return 'top';
-  return 'bottom';
+  if (position.originY === 'bottom' && position.overlayY === 'top') return 'bottom';
+  if (position.originX === 'end' && position.overlayX === 'start') return 'right';
+  return 'left';
 }
 
 @Component({
@@ -81,9 +95,10 @@ function getPlacementFromPosition(position: ConnectionPositionPair): PopoverPlac
           tabindex="-1"
           role="dialog"
           [id]="popover.contentId"
-          [attr.aria-labelledby]="popover.titleId"
+          [attr.aria-label]="computedAriaLabel()"
+          [attr.aria-labelledby]="computedAriaLabelledBy()"
           [attr.aria-describedby]="popover.descId"
-          [attr.data-placement]="renderedPlacement()"
+          [attr.data-side]="renderedSide()"
           [class]="panelClass()"
           (animationend)="onLeaveAnimationEnd($event)"
         >
@@ -104,10 +119,22 @@ export class PopoverContentComponent {
   private readonly destroyRef = inject(DestroyRef);
 
   readonly class = input<string | undefined>();
+  readonly side = input<PopoverSide>('bottom');
+  readonly sideOffset = input(DEFAULT_SIDE_OFFSET, { transform: numberAttribute });
+  readonly ariaLabel = input<string | undefined>();
+  readonly ariaLabelledBy = input<string | undefined>();
 
   protected readonly scrollStrategy = this.overlay.scrollStrategies.close();
-  protected readonly renderedPlacement = signal<PopoverPlacement>('bottom');
+  protected readonly renderedSide = signal<PopoverSide>('bottom');
   private readonly panelEl = viewChild<ElementRef<HTMLElement>>('panelEl');
+  private readonly title = contentChild(PopoverTitleComponent);
+
+  protected readonly computedAriaLabelledBy = computed(
+    () => this.ariaLabelledBy() ?? (this.title() ? this.popover.titleId : null),
+  );
+  protected readonly computedAriaLabel = computed(() =>
+    this.computedAriaLabelledBy() ? null : (this.ariaLabel() ?? null),
+  );
 
   private readonly _leaving = signal(false);
   private _leaveTimer: ReturnType<typeof setTimeout> | undefined;
@@ -119,13 +146,13 @@ export class PopoverContentComponent {
 
   protected readonly positions: Signal<ConnectionPositionPair[]> = computed(() => {
     const align = this.popover.align();
-    return FALLBACK_PLACEMENTS.map(placement => positionFor(placement, align));
+    const offset = this.sideOffset();
+    return fallbackSides(this.side()).map((side) => positionFor(side, align, offset));
   });
 
   constructor() {
     effect(() => {
-      this.popover.align();
-      this.renderedPlacement.set('bottom');
+      this.renderedSide.set(this.side());
     });
 
     // Watch for external isOpen → false transitions and play leave animation
@@ -152,7 +179,7 @@ export class PopoverContentComponent {
     ),
   );
 
-  protected requestClose(): void {
+  requestClose(): void {
     if (this._leaving() || !this.popover.isOpen()) return;
     this.popover.setOpen(false);
     // isOpen change triggers the effect which calls _startLeave
@@ -164,11 +191,11 @@ export class PopoverContentComponent {
    * tabindex="-1" exists specifically as that fallback target since popover content
    * is often not just static text — see the docs "Dimensions" example).
    */
-  protected onAttach(): void {
+  onAttach(): void {
     this.panelEl()?.nativeElement.focus();
   }
 
-  protected onDetach(): void {
+  onDetach(): void {
     this._endLeave();
     if (this.popover.isOpen()) {
       this.popover.setOpen(false);
@@ -176,12 +203,12 @@ export class PopoverContentComponent {
   }
 
   /** 退場 CSS 動畫（animate-popover-out）真的播完時觸發，是結束 leaving 狀態的主要途徑 */
-  protected onLeaveAnimationEnd(event: AnimationEvent): void {
+  onLeaveAnimationEnd(event: AnimationEvent): void {
     if (event.target !== event.currentTarget || !this._leaving()) return;
     this._endLeave();
   }
 
-  protected handleOverlayKeydown(event: KeyboardEvent): void {
+  handleOverlayKeydown(event: KeyboardEvent): void {
     if (event.key !== 'Escape') return;
     event.preventDefault();
     event.stopPropagation();
@@ -192,8 +219,8 @@ export class PopoverContentComponent {
     this.popover.triggerOrigin?.elementRef.nativeElement.focus();
   }
 
-  protected handlePositionChange(event: ConnectedOverlayPositionChange): void {
-    this.renderedPlacement.set(getPlacementFromPosition(event.connectionPair));
+  handlePositionChange(event: ConnectedOverlayPositionChange): void {
+    this.renderedSide.set(getSideFromPosition(event.connectionPair));
   }
 
   private _startLeave(): void {

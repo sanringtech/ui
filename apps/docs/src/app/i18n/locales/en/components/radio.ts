@@ -9,6 +9,12 @@ export const radioTranslations = {
     'Common patterns including labeled items, horizontal layout, and disabled states.',
   'radio.demo.withLabel': 'With Labels',
   'radio.demo.horizontal': 'Horizontal',
+  'radio.demo.size': 'Size',
+  'radio.demo.size.sm': 'Small',
+  'radio.demo.size.md': 'Medium',
+  'radio.demo.size.lg': 'Large',
+  'radio.api.group.size':
+    'Control size inherited by every item in the group. Matches checkbox and switch: sm, md (default), or lg.',
   'radio.demo.disabled': 'Disabled',
   'radio.demo.field': 'With Field',
   'radio.demo.planFree': 'Free',

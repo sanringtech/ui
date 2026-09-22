@@ -32,6 +32,10 @@ export const dropdownMenuTranslations = {
     'Controls item tone. Use destructive for actions that remove data or have serious consequences.',
   'dropdownMenu.api.class.description':
     'Additional classes merged with the corresponding dropdown menu primitive.',
+  'dropdownMenu.api.submenu.description':
+    'The nested menu to open, bound to the sub-content export (#ref="sanringDropdownMenuSubContent", then [submenu]="ref.menu"). Arrow Right opens it; Arrow Left closes it.',
+  'dropdownMenu.api.subTriggerValue.description':
+    'Required by the underlying ARIA menu item. Use a distinct value from sibling items.',
   'dropdownMenu.accessibility.description':
     "Built on @angular/aria/menu. The panel has role='menu'; each item has role='menuitem', role='menuitemcheckbox', or role='menuitemradio' as appropriate. The trigger button has aria-haspopup='menu' and aria-expanded managed by the underlying MenuTrigger directive.",
   'dropdownMenu.keyboard.description': 'Keyboard navigation follows the WAI-ARIA menu pattern.',
@@ -41,5 +45,5 @@ export const dropdownMenuTranslations = {
   'dropdownMenu.keyboard.openSubmenu': 'Open the focused submenu.',
   'dropdownMenu.keyboard.closeSubmenu': 'Close the active submenu.',
   'dropdownMenu.stateModel.description':
-    "Stateless. DropdownMenuItemDirective emits (itemSelected) on activation. DropdownMenuCheckboxItemComponent and DropdownMenuRadioGroupComponent manage their own checked/selected state via the checked input and checkedChange output. Open/closed state is managed internally by @angular/aria/menu.",
+    'Stateless. DropdownMenuItemDirective emits (itemSelected) on activation. Nest sanring-dropdown-menu-sub with a sub-trigger and sub-content for a real submenu. Checkbox and radio examples compose icons onto ordinary items. Open/closed state is managed internally by @angular/aria/menu.',
 } as const;

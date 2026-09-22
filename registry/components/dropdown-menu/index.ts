@@ -3,6 +3,9 @@ export * from './dropdown-menu-group.component';
 export * from './dropdown-menu-item.directive';
 export * from './dropdown-menu-label.component';
 export * from './dropdown-menu-separator.component';
+export * from './dropdown-menu-sub.component';
+export * from './dropdown-menu-sub-content.component';
+export * from './dropdown-menu-sub-trigger.component';
 export * from './dropdown-menu.component';
 export * from './dropdown-menu-trigger.directive';
 export * from './dropdown-menu.type';
@@ -12,6 +15,9 @@ import { DropdownMenuGroupComponent } from './dropdown-menu-group.component';
 import { DropdownMenuItemDirective } from './dropdown-menu-item.directive';
 import { DropdownMenuLabelComponent } from './dropdown-menu-label.component';
 import { DropdownMenuSeparatorComponent } from './dropdown-menu-separator.component';
+import { DropdownMenuSubComponent } from './dropdown-menu-sub.component';
+import { DropdownMenuSubContentComponent } from './dropdown-menu-sub-content.component';
+import { DropdownMenuSubTriggerComponent } from './dropdown-menu-sub-trigger.component';
 import { DropdownMenuComponent } from './dropdown-menu.component';
 import { DropdownMenuTriggerDirective } from './dropdown-menu-trigger.directive';
 
@@ -23,4 +29,7 @@ export const SANRING_DROPDOWN_MENU_IMPORTS = [
   DropdownMenuLabelComponent,
   DropdownMenuItemDirective,
   DropdownMenuSeparatorComponent,
+  DropdownMenuSubComponent,
+  DropdownMenuSubTriggerComponent,
+  DropdownMenuSubContentComponent,
 ];

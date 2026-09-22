@@ -14,9 +14,9 @@ import {
 import { _IdGenerator } from '@angular/cdk/a11y';
 import { NG_VALUE_ACCESSOR } from '@angular/forms';
 import { cn } from '../shared/utils';
-import { SanringCvaBase, SanringFieldControlAdapter } from '../shared/cva-base';
 import { FieldType, SANRING_FIELD_CONTROL } from '../field/field.type';
-import { RadioOrientation, RadioValue } from './radio.types';
+import { SanringCvaBase, SanringFieldControlAdapter } from '../shared/cva-base';
+import { RadioOrientation, RadioSize, RadioValue } from './radio.types';
 import { RadioItemComponent } from './radio-item.component';
 
 @Component({
@@ -67,6 +67,7 @@ export class RadioGroupComponent extends SanringCvaBase<RadioValue | null> {
   readonly required = input(false, { transform: booleanAttribute });
   readonly disabled = input(false, { transform: booleanAttribute });
   readonly orientation = input<RadioOrientation>(RadioOrientation.Vertical);
+  readonly size = input<RadioSize>('md');
   readonly ariaLabel = input<string | undefined>();
   readonly ariaLabelledBy = input<string | undefined>();
   readonly ariaDescribedBy = input<string | undefined>();

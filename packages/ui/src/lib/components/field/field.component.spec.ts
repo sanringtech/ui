@@ -192,3 +192,50 @@ describe('SanringFieldComponent ambient background auto-detection', () => {
     fixture.nativeElement.remove();
   });
 });
+
+@Component({
+  standalone: true,
+  imports: [
+    SanringFieldComponent,
+    LabelDirective,
+    InputDirective,
+    ErrorMessageComponent,
+    ReactiveFormsModule,
+  ],
+  template: `
+    <sanring-field>
+      <!-- eslint-disable-next-line @angular-eslint/template/label-has-associated-control -->
+      <label sanringLabel>Title</label>
+      <div class="relative w-full" ngProjectAs="[sanringInput]">
+        <input sanringInput class="pr-12" [formControl]="control" />
+        <span class="count">{{ control.value.length }}/500</span>
+      </div>
+      <sanring-error-message>Title must be at least 50 characters.</sanring-error-message>
+    </sanring-field>
+  `,
+})
+class CountInsideInputHost {
+  readonly control = new FormControl('Hi', {
+    nonNullable: true,
+    validators: [Validators.minLength(50)],
+  });
+}
+
+describe('SanringFieldComponent in-control character count', () => {
+  it('keeps an overlay count with the input, above the error message', () => {
+    const fixture = TestBed.createComponent(CountInsideInputHost);
+    fixture.componentInstance.control.markAsTouched();
+    fixture.detectChanges();
+
+    const field = fixture.nativeElement.querySelector('sanring-field') as HTMLElement;
+    const input = field.querySelector('input');
+    const count = field.querySelector('.count');
+    const error = field.querySelector('sanring-error-message');
+    expect(input).toBeTruthy();
+    expect(count).toBeTruthy();
+    expect(error).toBeTruthy();
+    expect(input!.compareDocumentPosition(count!) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
+    expect(count!.compareDocumentPosition(error!) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
+    expect(error!.classList.contains('hidden')).toBe(false);
+  });
+});

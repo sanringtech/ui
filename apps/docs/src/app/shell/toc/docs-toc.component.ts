@@ -4,22 +4,26 @@ import { DocsTocItem, DocsTocService } from './docs-toc.service';
 
 const SCROLL_OFFSET = 76;
 const ACTIVE_OFFSET = SCROLL_OFFSET + 24;
+/** Reading line as a fraction of the viewport. Tall example blocks otherwise keep the previous TOC item active. */
+const ACTIVE_VIEWPORT_RATIO = 0.32;
 
 @Component({
   selector: 'app-docs-toc',
   template: `
     <aside
-      class="sticky top-[76px] h-[calc(100dvh-76px)] overflow-auto bg-[color-mix(in_srgb,var(--docs-bg)_60%,transparent)] pb-12 pl-4 pr-8 pt-10 backdrop-blur-xl max-[1180px]:pr-5 max-[980px]:hidden"
+      class="sticky top-[76px] h-[calc(100dvh-76px)] overflow-auto bg-[var(--docs-bg)] pb-12 pl-4 pr-8 pt-10 max-[1180px]:pr-5 max-[980px]:hidden"
     >
-      <nav
-        class="mb-11 rounded-[var(--sanring-radius-lg)] border border-[color-mix(in_srgb,var(--docs-border)_72%,transparent)] bg-[color-mix(in_srgb,var(--docs-panel)_62%,transparent)] p-4 shadow-[var(--docs-shadow-soft)]"
-        [attr.aria-label]="i18n.t('toc.label')"
-      >
-        <p class="mb-4 text-xs font-semibold uppercase tracking-[0.08em] text-[var(--docs-muted)]">
+      <nav class="mb-11" [attr.aria-label]="i18n.t('toc.label')">
+        <p class="docs-eyebrow mb-3">
           {{ i18n.t('toc.label') }}
         </p>
         @for (item of items(); track item.id) {
-          <a [class]="itemClass(item)" href="#" (click)="scrollTo(item.id, $event)">
+          <a
+            [class]="itemClass(item)"
+            [attr.aria-current]="activeId() === item.id ? 'location' : null"
+            [href]="'#' + item.id"
+            (click)="scrollTo(item.id, $event)"
+          >
             {{ item.label }}
           </a>
         }
@@ -54,6 +58,7 @@ export class DocsTocComponent {
     event.preventDefault();
     const el = document.getElementById(id);
     if (!el) return;
+    this.activeId.set(id);
     const marginTop = parseInt(getComputedStyle(el).marginTop) || 0;
     const top = el.getBoundingClientRect().top + window.scrollY - SCROLL_OFFSET - marginTop;
     window.scrollTo({ top, behavior: 'smooth' });
@@ -65,36 +70,41 @@ export class DocsTocComponent {
   }
 
   protected itemClass(item: DocsTocItem) {
-    const active = this.activeId() === item.id;
     const indentClasses: Record<2 | 3 | 4, string> = {
       2: '',
-      3: 'pl-[18px]',
-      4: 'pl-9',
+      3: 'level-3',
+      4: 'level-4',
     };
 
-    return [
-      'my-3 block border-l border-transparent py-0.5 text-sm no-underline transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--docs-focus-ring)]',
-      active
-        ? 'border-[var(--docs-accent)] text-[var(--docs-fg)]'
-        : 'text-[var(--docs-muted)] hover:text-[var(--docs-fg)]',
-      indentClasses[item.level ?? 2],
-    ]
-      .filter(Boolean)
-      .join(' ');
+    return ['docs-toc-item', indentClasses[item.level ?? 2]].filter(Boolean).join(' ');
+  }
+
+  private activationLine(): number {
+    return Math.max(ACTIVE_OFFSET, Math.round(window.innerHeight * ACTIVE_VIEWPORT_RATIO));
   }
 
   private updateActiveSection(): void {
     const items = this.toc.items();
-    let currentId = items[0]?.id ?? null;
+    if (items.length === 0) {
+      this.activeId.set(null);
+      return;
+    }
+
+    const line = this.activationLine();
+    let currentId = items[0].id;
 
     for (const item of items) {
       const el = document.getElementById(item.id);
       if (!el) continue;
-      if (el.getBoundingClientRect().top <= ACTIVE_OFFSET) {
+      if (el.getBoundingClientRect().top <= line) {
         currentId = item.id;
-      } else {
-        break;
       }
+    }
+
+    const nearBottom =
+      window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 8;
+    if (nearBottom) {
+      currentId = items[items.length - 1].id;
     }
 
     this.activeId.set(currentId);

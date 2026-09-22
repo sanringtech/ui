@@ -16,6 +16,11 @@ export const transferTranslations = {
   'transfer.demo.moveToTarget': 'Move to selected',
   'transfer.demo.moveToSource': 'Move to available',
   'transfer.demo.disabled': 'Disabled items',
+  'transfer.demo.disabledGroup': 'Disabled group',
+  'transfer.api.disabled.description':
+    'Disables the whole control: items cannot be checked and neither panel can move items.',
+  'transfer.api.ariaLabel.description':
+    'Accessible name for the role="group" root. Use this so the dual list is announced as one control.',
   'transfer.demo.headerCount': 'Header with live count',
   'transfer.demo.customActions': 'Custom action buttons',
   'transfer.demo.oneWay': 'One-way transfer',
@@ -57,7 +62,7 @@ export const transferTranslations = {
   'transfer.api.pageNav.description':
     'Move to the next/previous page. No-ops past either end of the range.',
   'transfer.api.interactive.description':
-    'False for a target panel in one-way mode; used internally to disable its checkboxes.',
+    'False when the root is disabled, or for a target panel in one-way mode; used to disable that panel’s checkboxes.',
   'transfer.api.selectableItems.description':
     'Non-disabled items across the full filtered list (not limited to the current page). Useful for displaying a count in the header.',
   'transfer.api.selectAllChecked.description':

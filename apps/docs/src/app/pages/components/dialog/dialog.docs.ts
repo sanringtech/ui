@@ -158,6 +158,12 @@ export const dialogPage = {
       descriptionKey: 'dialog.api.headerAlign.description',
     },
     {
+      property: 'DialogHeaderComponent.class',
+      type: 'string',
+      defaultValue: 'undefined',
+      descriptionKey: 'dialog.api.headerClass.description',
+    },
+    {
       property: 'DialogTitleDirective.class',
       type: 'string',
       defaultValue: "''",
@@ -170,6 +176,7 @@ export const dialogPage = {
     { keys: 'Escape', descriptionKey: 'dialog.keyboard.escape' },
   ] satisfies readonly ComponentPageKeyboardRow[],
 } as const satisfies ComponentPageDefinition;
+
 
 export const dialogPageExamples = {
   composition: `[sanringDialogTrigger]
@@ -330,13 +337,21 @@ export class ExampleComponent {}`,
   header: `<button sanringBtn [sanringDialogTrigger]="dialog">Open dialog</button>
 
 <ng-template #dialog>
-  <sanring-dialog-content>
-    <sanring-dialog-header align="center">
+  <sanring-dialog-content class="overflow-hidden p-0">
+    <sanring-dialog-header
+      align="start"
+      class="bg-[var(--sanring-surface-strong)] px-6 py-4 pr-12"
+    >
       <h2 sanringDialogTitle class="text-[var(--sanring-primary-70)]">
-        Centered title
+        Edit profile
       </h2>
-      <p sanringDialogDescription>Header alignment and title color are inputs, not one-off CSS.</p>
+      <p sanringDialogDescription>
+        Align the header independently, and give it a background that is not the body surface.
+      </p>
     </sanring-dialog-header>
+    <div class="px-6 py-4 text-sm text-[var(--sanring-muted)]">
+      Dialog body stays on the default content surface.
+    </div>
   </sanring-dialog-content>
 </ng-template>`,
 } as const;

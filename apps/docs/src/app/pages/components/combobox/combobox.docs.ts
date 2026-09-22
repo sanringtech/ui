@@ -46,7 +46,8 @@ export const comboboxPage = {
       titleKey: 'toc.examples',
       level: 2,
       children: [
-        { id: 'example-multiple', titleKey: 'toc.multiple', level: 3 },
+        { id: 'example-multiple-single-line', titleKey: 'combobox.demo.multipleSingleLine', level: 3 },
+        { id: 'example-multiple-multi-line', titleKey: 'combobox.demo.multipleMultiLine', level: 3 },
         { id: 'example-groups', titleKey: 'combobox.demo.groups', level: 3 },
         { id: 'example-popup', titleKey: 'combobox.demo.popup', level: 3 },
         { id: 'example-clear', titleKey: 'combobox.demo.clearButtonTitle', level: 3 },
@@ -152,6 +153,18 @@ export const comboboxPage = {
       descriptionKey: 'combobox.api.trigger.description',
     },
     {
+      property: 'ComboboxChipInputComponent.wrap',
+      type: 'boolean',
+      defaultValue: 'true',
+      descriptionKey: 'combobox.api.chipInputWrap.description',
+    },
+    {
+      property: 'ComboboxChipsComponent.wrap',
+      type: 'boolean',
+      defaultValue: 'true',
+      descriptionKey: 'combobox.api.chipsWrap.description',
+    },
+    {
       property: 'class',
       type: 'string',
       defaultValue: 'undefined',
@@ -236,20 +249,30 @@ export class ExampleComponent {}`,
 
 multiple mode — chips and the input share ONE bordered box
 └── sanring-combobox-chip-input
-    ├── sanring-combobox-chip (one per selected value)
-    └── sanring-combobox-input (renders chrome-less when nested here)
+    ├── sanring-combobox-chips
+    │   └── sanring-combobox-chip (one per selected value)
+    ├── sanring-combobox-input (renders chrome-less when nested here)
+    └── count (optional, sits on the right of the field)
 
 popup mode — swap the trigger for the input once open
 ├── button[sanringComboboxTrigger]   // shown while closed
 └── sanring-combobox-input            // shown while open, via #combo="sanringCombobox"`,
 
-  multiple: `<sanring-combobox [multiple]="true" [(value)]="selectedFrameworks">
+  multipleSingleLine: `<sanring-combobox [multiple]="true" [(value)]="selectedFrameworks">
   <sanring-combobox-label>Frameworks</sanring-combobox-label>
-  <sanring-combobox-chip-input>
-    @for (value of selectedFrameworks; track value) {
-      <sanring-combobox-chip [value]="value">{{ labelFor(value) }}</sanring-combobox-chip>
-    }
+  <sanring-combobox-chip-input [wrap]="false">
+    <sanring-combobox-chips [wrap]="false">
+      @for (value of selectedFrameworks; track value) {
+        <sanring-combobox-chip [value]="value">{{ labelFor(value) }}</sanring-combobox-chip>
+      }
+    </sanring-combobox-chips>
     <sanring-combobox-input />
+    <span
+      class="ml-auto shrink-0 self-center text-xs tabular-nums text-[var(--sanring-muted)]"
+      aria-live="polite"
+    >
+      {{ selectedFrameworks.length }}/{{ frameworks.length }}
+    </span>
   </sanring-combobox-chip-input>
   <sanring-combobox-content>
     <sanring-combobox-empty>No frameworks found.</sanring-combobox-empty>
@@ -261,10 +284,35 @@ popup mode — swap the trigger for the input once open
       }
     </sanring-combobox-list>
   </sanring-combobox-content>
-</sanring-combobox>
-<p class="text-end text-[0.8rem] tabular-nums text-[var(--sanring-muted)]">
-  {{ selectedFrameworks.length }}/{{ frameworks.length }}
-</p>`,
+</sanring-combobox>`,
+
+  multipleMultiLine: `<sanring-combobox [multiple]="true" [(value)]="selectedFrameworks">
+  <sanring-combobox-label>Frameworks</sanring-combobox-label>
+  <sanring-combobox-chip-input>
+    <sanring-combobox-chips>
+      @for (value of selectedFrameworks; track value) {
+        <sanring-combobox-chip [value]="value">{{ labelFor(value) }}</sanring-combobox-chip>
+      }
+    </sanring-combobox-chips>
+    <sanring-combobox-input />
+    <span
+      class="ml-auto shrink-0 self-center text-xs tabular-nums text-[var(--sanring-muted)]"
+      aria-live="polite"
+    >
+      {{ selectedFrameworks.length }}/{{ frameworks.length }}
+    </span>
+  </sanring-combobox-chip-input>
+  <sanring-combobox-content>
+    <sanring-combobox-empty>No frameworks found.</sanring-combobox-empty>
+    <sanring-combobox-list>
+      @for (item of frameworks; track item.value) {
+        <sanring-combobox-item [value]="item.value" [label]="item.label">
+          {{ item.label }}
+        </sanring-combobox-item>
+      }
+    </sanring-combobox-list>
+  </sanring-combobox-content>
+</sanring-combobox>`,
 
   groups: `<sanring-combobox [(value)]="library">
   <sanring-combobox-input placeholder="Search libraries" />

@@ -47,6 +47,11 @@ export const transferPage = {
           level: 3,
         },
         {
+          id: 'example-disabled-group',
+          titleKey: 'transfer.demo.disabledGroup',
+          level: 3,
+        },
+        {
           id: 'example-header-count',
           titleKey: 'transfer.demo.headerCount',
           level: 3,
@@ -109,6 +114,18 @@ export const transferPage = {
       type: 'TransferItem[]',
       defaultValue: '[]',
       descriptionKey: 'transfer.api.items.description',
+    },
+    {
+      property: 'TransferComponent.disabled',
+      type: 'boolean',
+      defaultValue: 'false',
+      descriptionKey: 'transfer.api.disabled.description',
+    },
+    {
+      property: 'TransferComponent.ariaLabel',
+      type: 'string',
+      defaultValue: 'undefined',
+      descriptionKey: 'transfer.api.ariaLabel.description',
     },
     {
       property: 'TransferComponent.selectedKeys',
@@ -332,6 +349,28 @@ export class ExampleComponent {}`,
       />
       <span>Selected</span>
     </sanring-transfer-header>
+    <sanring-transfer-list />
+  </sanring-transfer-panel>
+</sanring-transfer>`,
+  disabledGroup: `<sanring-transfer
+  #transfer
+  [items]="items"
+  [(selectedKeys)]="selectedKeys"
+  disabled
+  ariaLabel="Assign languages"
+>
+  <sanring-transfer-panel direction="source">
+    <sanring-transfer-header>Available</sanring-transfer-header>
+    <sanring-transfer-list />
+  </sanring-transfer-panel>
+
+  <div sanringTransferAction>
+    <button sanringBtn size="icon" disabled (click)="transfer.moveToTarget()">→</button>
+    <button sanringBtn size="icon" disabled (click)="transfer.moveToSource()">←</button>
+  </div>
+
+  <sanring-transfer-panel direction="target">
+    <sanring-transfer-header>Selected</sanring-transfer-header>
     <sanring-transfer-list />
   </sanring-transfer-panel>
 </sanring-transfer>`,

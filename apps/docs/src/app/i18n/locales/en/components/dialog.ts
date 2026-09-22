@@ -1,3 +1,4 @@
+/** Dialog docs copy. */
 export const dialogTranslations = {
   'dialog.description':
     'An overlay primitive built on Angular CDK Dialog for modal tasks and focused decisions.',
@@ -8,7 +9,7 @@ export const dialogTranslations = {
   'dialog.demo.noClose': 'No Close Button',
   'dialog.demo.stickyFooter': 'Sticky Footer',
   'dialog.demo.scrollable': 'Scrollable Content',
-  'dialog.demo.header': 'Header alignment',
+  'dialog.demo.header': 'Header alignment and background',
   'dialog.examples.description':
     'Common dialog patterns for custom actions, hidden close controls, sticky actions, and dense scrollable content.',
   'dialog.examples.basic.description':
@@ -35,6 +36,8 @@ export const dialogTranslations = {
   'dialog.api.mediaClass.description': 'Additional classes merged with the dialog media container.',
   'dialog.api.headerAlign.description':
     'Header text alignment. start is left, center is centered at every breakpoint. The default stays centered on small screens and left-aligned from sm up.',
+  'dialog.api.headerClass.description':
+    'Additional classes merged with the header layout. Use this to give the header a different background from sanring-dialog-content, for example bg-[var(--sanring-surface-strong)]. Pair with overflow-hidden p-0 on content so the fill reaches the panel edges.',
   'dialog.api.titleClass.description':
     'Additional classes merged with the title styles. Use this to change title color, for example text-[var(--sanring-primary-70)].',
   'dialog.accessibility.description':

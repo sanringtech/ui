@@ -11,13 +11,9 @@ import {
 import { _IdGenerator } from '@angular/cdk/a11y';
 import { LucideCircle } from '@lucide/angular';
 import { cn } from '../shared/utils';
-import {
-  RADIO_INDICATOR_ICON_CLASS,
-  SELECTION_CONTROL_BASE_CLASS,
-  SELECTION_CONTROL_FOCUS_CLASS,
-} from '../shared/component-styles';
+import { SELECTION_CONTROL_BASE_CLASS, SELECTION_CONTROL_FOCUS_CLASS } from '../shared/component-styles';
 import { RadioGroupComponent } from './radio-group.component';
-import { RADIO_SIZE_CLASS } from './radio.styles';
+import { RADIO_INDICATOR_ICON_SIZE_CLASSES, RADIO_SIZE_CLASSES } from './radio.styles';
 import { RadioValue } from './radio.types';
 
 @Component({
@@ -48,15 +44,13 @@ import { RadioValue } from './radio.types';
     >
       @if (isChecked()) {
         <span class="flex items-center justify-center text-current animate-in zoom-in-50">
-          <svg lucideCircle [class]="radioIndicatorIconClass"></svg>
+          <svg lucideCircle [class]="radioIndicatorIconClass()"></svg>
         </span>
       }
     </button>
   `,
 })
 export class RadioItemComponent {
-  protected readonly radioIndicatorIconClass = RADIO_INDICATOR_ICON_CLASS;
-
   readonly class = input<string | undefined>();
   readonly id = input(inject(_IdGenerator).getId('sanring-radio-', true));
   readonly value = input.required<RadioValue>();
@@ -71,6 +65,10 @@ export class RadioItemComponent {
 
   protected isChecked = computed(() => this.group?.valueSignal() === this.value());
   protected isDisabled = computed(() => this.disabled() || (this.group?.isDisabled() ?? false));
+  protected readonly size = computed(() => this.group?.size() ?? 'md');
+  protected readonly radioIndicatorIconClass = computed(
+    () => RADIO_INDICATOR_ICON_SIZE_CLASSES[this.size()],
+  );
   protected tabIndex = computed(() => {
     if (!this.group) return 0;
     return this.group.activeTabItem() === this ? 0 : -1;
@@ -79,7 +77,7 @@ export class RadioItemComponent {
     cn(
       SELECTION_CONTROL_BASE_CLASS,
       SELECTION_CONTROL_FOCUS_CLASS,
-      RADIO_SIZE_CLASS,
+      RADIO_SIZE_CLASSES[this.size()],
       'rounded-full border border-[var(--sanring-primary)] text-[var(--sanring-primary)]',
       'data-[state=checked]:border-[var(--sanring-primary)]',
       this.class(),

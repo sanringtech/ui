@@ -36,6 +36,62 @@ function isPatch(version: string): boolean {
  */
 export const cliVersionChangelog: readonly CliVersionEntry[] = [
   {
+    version: '0.25.1',
+    date: '2026-09-23',
+    changes: [
+      {
+        type: 'added',
+        componentIds: ['sheet'],
+        text: '`sanring-sheet-content` renders a built-in close button (`showClose`, `closeAriaLabel`). `sanring-sheet-header` accepts `align` (`start` | `center`).',
+      },
+      {
+        type: 'added',
+        componentIds: ['radio'],
+        text: '`sanring-radio-group` accepts `size` (`sm` | `md` | `lg`), matching checkbox and switch.',
+      },
+      {
+        type: 'added',
+        componentIds: ['dropdown-menu'],
+        text: '`sanring-dropdown-menu-sub`, `sanring-dropdown-menu-sub-trigger`, and `sanring-dropdown-menu-sub-content` open a nested menu with Arrow Right / Arrow Left.',
+      },
+      {
+        type: 'added',
+        componentIds: ['popover'],
+        text: '`sanring-popover-content` accepts four-way `side` and only sets `aria-labelledby` when a title is projected; `ariaLabel` is the fallback.',
+      },
+      {
+        type: 'added',
+        componentIds: ['transfer'],
+        text: '`sanring-transfer` accepts root `disabled` and `ariaLabel` on the `role="group"` host.',
+      },
+      {
+        type: 'changed',
+        componentIds: ['table'],
+        text: 'Sticky header, body, and footer cells use an opaque `--sanring-background` so scrolled text does not show through. Docs add loading skeleton and column-visibility recipes.',
+      },
+      {
+        type: 'added',
+        componentIds: ['dialog'],
+        text: '`sanring-dialog-header` `class` can set a background that is not the dialog body surface.',
+      },
+      {
+        type: 'added',
+        componentIds: ['input', 'textarea'],
+        text: 'Docs examples show a live character count inside the control on the right, so `sanring-error-message` can stay below.',
+      },
+      {
+        type: 'added',
+        componentIds: ['combobox'],
+        text: '`sanring-combobox-chip-input` and `sanring-combobox-chips` accept `wrap`. Single-line multiple selection overflows with an ellipsis; the selected/total count sits on the right of the field.',
+      },
+      {
+        type: 'fixed',
+        componentIds: ['field'],
+        text: 'Floating labels animate with `scale` instead of swapping font sizes, and keep the notch gradient in both floated states.',
+      },
+    ],
+  },
+  {
     version: '0.25.0',
     date: '2026-09-21',
     changes: [
@@ -47,17 +103,7 @@ export const cliVersionChangelog: readonly CliVersionEntry[] = [
       {
         type: 'added',
         componentIds: ['dialog'],
-        text: '`sanring-dialog-header` accepts `align` (`start` | `center`) so title alignment is not only the responsive default. Title color still goes through `sanringDialogTitle` `class`.',
-      },
-      {
-        type: 'added',
-        componentIds: ['input', 'textarea'],
-        text: 'Docs examples show a live character count (`20/500`) using native `maxlength` and `sanringDescription`.',
-      },
-      {
-        type: 'added',
-        componentIds: ['combobox'],
-        text: 'The multiple-select example shows selected/total count, for example `2/5`.',
+        text: '`sanring-dialog-header` accepts `align` (`start` | `center`).',
       },
       {
         type: 'changed',

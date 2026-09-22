@@ -108,6 +108,31 @@ import { radioGroupApiRows, radioItemApiRows, radioPage, radioPageExamples } fro
             </app-component-page-code-previewer>
           </app-component-page-section>
 
+          <app-component-page-section [section]="section('example-size')">
+            <app-component-page-code-previewer [code]="examples.size" language="angular-html">
+              <div previewer class="flex flex-wrap items-end justify-center gap-8">
+                <sanring-radio-group [(ngModel)]="sizeSmValue" size="sm">
+                  <div class="flex items-center gap-2">
+                    <sanring-radio-item id="size-sm" value="sm" />
+                    <label sanringLabel for="size-sm">{{ i18n.t('radio.demo.size.sm') }}</label>
+                  </div>
+                </sanring-radio-group>
+                <sanring-radio-group [(ngModel)]="sizeMdValue" size="md">
+                  <div class="flex items-center gap-2">
+                    <sanring-radio-item id="size-md" value="md" />
+                    <label sanringLabel for="size-md">{{ i18n.t('radio.demo.size.md') }}</label>
+                  </div>
+                </sanring-radio-group>
+                <sanring-radio-group [(ngModel)]="sizeLgValue" size="lg">
+                  <div class="flex items-center gap-2">
+                    <sanring-radio-item id="size-lg" value="lg" />
+                    <label sanringLabel for="size-lg">{{ i18n.t('radio.demo.size.lg') }}</label>
+                  </div>
+                </sanring-radio-group>
+              </div>
+            </app-component-page-code-previewer>
+          </app-component-page-section>
+
           <app-component-page-section [section]="section('example-horizontal')">
             <app-component-page-code-previewer [code]="examples.horizontal" language="angular-html">
               <div previewer class="flex items-center justify-center">
@@ -212,6 +237,9 @@ export class RadioPageComponent {
 
   basicValue: RadioValue = '';
   labeledValue: RadioValue = 'comfortable';
+  sizeSmValue: RadioValue = 'sm';
+  sizeMdValue: RadioValue = 'md';
+  sizeLgValue: RadioValue = 'lg';
   horizontalValue: RadioValue = 'center';
   disabledGroupValue: RadioValue = 'option1';
   disabledItemValue: RadioValue = 'option1';

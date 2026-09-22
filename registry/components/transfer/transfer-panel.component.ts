@@ -34,7 +34,9 @@ export class TransferPanelComponent {
 
   // target 面板在 one-way 模式下變成唯讀展示：不能勾選，也就無法被搬回 source
   readonly interactive = computed(
-    () => !(this.direction() === 'target' && this.transfer.mode() === 'one-way'),
+    () =>
+      !this.transfer.isDisabled() &&
+      !(this.direction() === 'target' && this.transfer.mode() === 'one-way'),
   );
 
   // List/Item 元件只認得「這個 panel 該顯示哪些 key、勾選狀態怎麼查/切換」，

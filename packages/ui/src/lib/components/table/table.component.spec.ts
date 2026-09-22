@@ -81,10 +81,43 @@ class TableTestHost {
   sort: SortState | null = null;
 }
 
+@Component({
+  imports: [
+    CdkTableModule,
+    TableContainerComponent,
+    TableDirective,
+    TableColumnDefDirective,
+    TableHeaderCellDefDirective,
+    TableCellDefDirective,
+    TableHeaderCellDirective,
+    TableCellDirective,
+    TableHeaderRowDefDirective,
+    TableRowDefDirective,
+    TableHeaderRowDirective,
+    TableRowDirective,
+  ],
+  template: `
+    <sanring-table-container>
+      <table cdk-table sanringTable [dataSource]="data">
+        <ng-container sanringColumnDef="name" sticky>
+          <th sanringHeaderCell *sanringHeaderCellDef>Name</th>
+          <td sanringCell *sanringCellDef="let person">{{ person.name }}</td>
+        </ng-container>
+        <tr cdk-header-row sanringRow *sanringHeaderRowDef="columns"></tr>
+        <tr cdk-row sanringRow *sanringRowDef="let row; columns: columns"></tr>
+      </table>
+    </sanring-table-container>
+  `,
+})
+class StickyTableHost {
+  columns = ['name'];
+  data = [{ name: 'Ada' }];
+}
+
 describe('TableComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [TableTestHost],
+      imports: [TableTestHost, StickyTableHost],
     }).compileComponents();
   });
 
@@ -127,6 +160,18 @@ describe('TableComponent', () => {
 
     expect(fixture.componentInstance.sort).toEqual({ active: 'name', direction: 'asc' });
     expect(sortHeader.getAttribute('aria-sort')).toBe('ascending');
+  });
+
+  it('gives sticky cells an opaque background so scrolled text does not show through', () => {
+    const fixture = TestBed.createComponent(StickyTableHost);
+    fixture.detectChanges();
+
+    const header = fixture.nativeElement.querySelector('th') as HTMLElement;
+    const cell = fixture.nativeElement.querySelector('td') as HTMLElement;
+    expect(header.className).toContain('cdk-table-sticky');
+    expect(cell.className).toContain('cdk-table-sticky');
+    expect(getComputedStyle(header).backgroundColor).toBe('var(--sanring-background)');
+    expect(getComputedStyle(cell).backgroundColor).toBe('var(--sanring-background)');
   });
 
   it('has no axe-detectable a11y violations', async () => {

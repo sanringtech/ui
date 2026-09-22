@@ -44,6 +44,11 @@ export const radioPage = {
           level: 3,
         },
         {
+          id: 'example-size',
+          titleKey: 'radio.demo.size',
+          level: 3,
+        },
+        {
           id: 'example-disabled',
           titleKey: 'radio.demo.disabled',
           level: 3,
@@ -130,6 +135,12 @@ export const radioGroupApiRows = [
     type: 'RadioOrientation',
     defaultValue: 'RadioOrientation.Vertical',
     descriptionKey: 'radio.api.group.orientation',
+  },
+  {
+    property: 'size',
+    type: "'sm' | 'md' | 'lg'",
+    defaultValue: "'md'",
+    descriptionKey: 'radio.api.group.size',
   },
   {
     property: 'value',
@@ -243,6 +254,27 @@ export class ExampleComponent {}`,
   <div class="flex items-center gap-2">
     <sanring-radio-item id="r-compact" value="compact" />
     <label sanringLabel for="r-compact">Compact</label>
+  </div>
+</sanring-radio-group>`,
+
+  size: `<sanring-radio-group [(ngModel)]="smValue" size="sm">
+  <div class="flex items-center gap-2">
+    <sanring-radio-item id="size-sm" value="sm" />
+    <label sanringLabel for="size-sm">Small</label>
+  </div>
+</sanring-radio-group>
+
+<sanring-radio-group [(ngModel)]="mdValue" size="md">
+  <div class="flex items-center gap-2">
+    <sanring-radio-item id="size-md" value="md" />
+    <label sanringLabel for="size-md">Medium</label>
+  </div>
+</sanring-radio-group>
+
+<sanring-radio-group [(ngModel)]="lgValue" size="lg">
+  <div class="flex items-center gap-2">
+    <sanring-radio-item id="size-lg" value="lg" />
+    <label sanringLabel for="size-lg">Large</label>
   </div>
 </sanring-radio-group>`,
 

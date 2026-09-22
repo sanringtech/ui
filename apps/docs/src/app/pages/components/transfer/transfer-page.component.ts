@@ -211,6 +211,61 @@ import { transferPage, transferPageExamples } from './transfer.docs';
             </app-component-page-code-previewer>
           </app-component-page-section>
 
+          <app-component-page-section [section]="section('example-disabled-group')">
+            <app-component-page-code-previewer
+              [code]="examples.disabledGroup"
+              language="angular-html"
+            >
+              <div previewer class="w-[min(480px,100%)]">
+                <sanring-transfer
+                  #disabledGroupTransfer
+                  [items]="items"
+                  [(selectedKeys)]="disabledGroupSelectedKeys"
+                  disabled
+                  ariaLabel="Assign languages"
+                  class="flex items-stretch gap-2"
+                >
+                  <sanring-transfer-panel direction="source" class="h-72 w-56">
+                    <sanring-transfer-header>{{
+                      i18n.t('transfer.demo.available')
+                    }}</sanring-transfer-header>
+                    <sanring-transfer-list />
+                  </sanring-transfer-panel>
+
+                  <div sanringTransferAction>
+                    <button
+                      sanringBtn
+                      variant="outline"
+                      size="icon"
+                      disabled
+                      [attr.aria-label]="i18n.t('transfer.demo.moveToTarget')"
+                      (click)="disabledGroupTransfer.moveToTarget()"
+                    >
+                      <svg lucideChevronRight class="size-4"></svg>
+                    </button>
+                    <button
+                      sanringBtn
+                      variant="outline"
+                      size="icon"
+                      disabled
+                      [attr.aria-label]="i18n.t('transfer.demo.moveToSource')"
+                      (click)="disabledGroupTransfer.moveToSource()"
+                    >
+                      <svg lucideChevronLeft class="size-4"></svg>
+                    </button>
+                  </div>
+
+                  <sanring-transfer-panel direction="target" class="h-72 w-56">
+                    <sanring-transfer-header>{{
+                      i18n.t('transfer.demo.selected')
+                    }}</sanring-transfer-header>
+                    <sanring-transfer-list />
+                  </sanring-transfer-panel>
+                </sanring-transfer>
+              </div>
+            </app-component-page-code-previewer>
+          </app-component-page-section>
+
           <app-component-page-section [section]="section('example-header-count')">
             <app-component-page-code-previewer
               [code]="examples.headerCount"
@@ -745,6 +800,7 @@ export class TransferPageComponent {
 
   protected basicSelectedKeys: string[] = ['angular', 'react'];
   protected disabledSelectedKeys: string[] = ['angular'];
+  protected disabledGroupSelectedKeys: string[] = ['angular', 'react'];
   protected countedSelectedKeys: string[] = ['angular', 'react'];
   protected customActionsSelectedKeys: string[] = ['angular', 'react'];
   protected oneWaySelectedKeys: string[] = ['angular'];

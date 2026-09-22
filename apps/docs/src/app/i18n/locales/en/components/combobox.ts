@@ -1,3 +1,4 @@
+/** Combobox docs copy. */
 export const comboboxTranslations = {
   'combobox.description': 'Autocomplete input with a list of suggestions.',
   'combobox.examples.basic.description':
@@ -36,6 +37,12 @@ export const comboboxTranslations = {
     'Selected value controlled by the root. Use a string for single select or string array for multiple select.',
   'combobox.api.multiple.description':
     'Allows selecting more than one item and pairing the field with chips.',
+  'combobox.demo.multipleSingleLine': 'Multiple, single line',
+  'combobox.demo.multipleMultiLine': 'Multiple, multi-line',
+  'combobox.api.chipInputWrap.description':
+    'When false, chips and the search input stay on one row instead of wrapping.',
+  'combobox.api.chipsWrap.description':
+    'When false, selected chips stay on one line and overflow with an ellipsis.',
   'combobox.api.disabled.description':
     'Disables the combobox input and prevents selection changes.',
   'combobox.api.inputId.description':

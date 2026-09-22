@@ -21,30 +21,30 @@ interface StructuredDescriptionItem {
   template: `
     <section [id]="sectionId" [class]="sectionClass">
       <div class="mb-3.5">
-        <div [class]="headingWrapClass">
-          @if (level === 2) {
-            <span
-              class="mt-1 h-8 w-1.5 rounded-full bg-[linear-gradient(180deg,var(--docs-accent),var(--docs-accent-alt))]"
-              aria-hidden="true"
-            ></span>
-          }
-          @switch (level) {
-            @case (4) {
-              <h4 [class]="headingClass">
-                {{ i18n.t(section.titleKey) }}
-              </h4>
+        <div class="flex min-w-0 items-start justify-between gap-3">
+          <div [class]="headingWrapClass">
+            @if (level === 2) {
+              <span class="mt-1.5 h-5 w-0.5 shrink-0 bg-[var(--docs-accent)]" aria-hidden="true"></span>
             }
-            @case (3) {
-              <h3 [class]="headingClass">
-                {{ i18n.t(section.titleKey) }}
-              </h3>
+            @switch (level) {
+              @case (4) {
+                <h4 [class]="headingClass">
+                  {{ i18n.t(section.titleKey) }}
+                </h4>
+              }
+              @case (3) {
+                <h3 [class]="headingClass">
+                  {{ i18n.t(section.titleKey) }}
+                </h3>
+              }
+              @default {
+                <h2 [class]="headingClass">
+                  {{ i18n.t(section.titleKey) }}
+                </h2>
+              }
             }
-            @default {
-              <h2 [class]="headingClass">
-                {{ i18n.t(section.titleKey) }}
-              </h2>
-            }
-          }
+          </div>
+          <ng-content select="[section-action]" />
         </div>
 
         @if (section.descriptionKey) {
@@ -54,7 +54,7 @@ interface StructuredDescriptionItem {
             >
               @for (item of structuredDescriptionItems; track item.body) {
                 <li
-                  class="grid gap-1 rounded-[var(--sanring-radius)] border border-[color-mix(in_srgb,var(--docs-border)_82%,transparent)] bg-[color-mix(in_srgb,var(--docs-elevated)_72%,transparent)] px-3 py-2.5 shadow-sm"
+                  class="docs-panel grid gap-1 px-3 py-2.5"
                 >
                   <strong
                     class="text-xs font-semibold uppercase tracking-normal text-[var(--docs-fg)]"

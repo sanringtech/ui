@@ -11,6 +11,7 @@ import {
   TemplateRef,
   ViewContainerRef,
   afterNextRender,
+  booleanAttribute,
   computed,
   effect,
   inject,
@@ -20,8 +21,13 @@ import {
   viewChild,
   contentChild,
 } from '@angular/core';
+import { LucideX } from '@lucide/angular';
 import { cn } from '../../utils';
-import { OVERLAY_SURFACE_CLASS } from '../component-styles';
+import {
+  OVERLAY_ABSOLUTE_CLOSE_BUTTON_CLASS,
+  OVERLAY_CLOSE_ICON_CLASS,
+  OVERLAY_SURFACE_CLASS,
+} from '../component-styles';
 import { SHEET_LEAVE_DURATION_MS } from '../component-timing';
 import { SheetComponent } from './sheet.component';
 import { SheetDescriptionComponent } from './sheet-description.component';
@@ -54,7 +60,7 @@ const SIDE_LEAVE: Record<SheetSide, string> = {
   selector: 'sanring-sheet-content',
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [CdkTrapFocus],
+  imports: [CdkTrapFocus, LucideX],
   host: {
     '(document:keydown.escape)': 'onEscape()',
   },
@@ -77,6 +83,18 @@ const SIDE_LEAVE: Record<SheetSide, string> = {
         (animationend)="onLeaveAnimationEnd($event)"
       >
         <ng-content></ng-content>
+
+        @if (showClose()) {
+          <button
+            type="button"
+            [attr.aria-label]="closeAriaLabel()"
+            (click)="requestClose()"
+            [class]="closeButtonClass"
+          >
+            <svg lucideX [class]="closeIconClass"></svg>
+            <span class="sr-only">關閉</span>
+          </button>
+        }
       </div>
     </ng-template>
   `,
@@ -95,8 +113,13 @@ export class SheetContentComponent {
   private readonly title = contentChild(SheetTitleComponent);
   private readonly description = contentChild(SheetDescriptionComponent);
 
+  protected readonly closeButtonClass = OVERLAY_ABSOLUTE_CLOSE_BUTTON_CLASS;
+  protected readonly closeIconClass = OVERLAY_CLOSE_ICON_CLASS;
+
   readonly side = input<SheetSide>('right');
   readonly class = input<string | undefined>();
+  readonly showClose = input(true, { transform: booleanAttribute });
+  readonly closeAriaLabel = input('關閉面板');
   /** Accessible-name fallback used when no SheetTitle is projected. */
   readonly ariaLabel = input<string | undefined>('Sheet');
   /** Explicit labelling relationship; takes precedence over SheetTitle and ariaLabel. */

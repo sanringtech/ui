@@ -61,14 +61,6 @@ import { sheetPage, sheetPageExamples } from './sheet.docs';
                 {{ i18n.t('sheet.demo.open') }}
               </button>
               <sanring-sheet-content>
-                <button
-                  type="button"
-                  sanringSheetClose
-                  aria-label="Close"
-                  class="absolute right-4 top-4 rounded-[var(--sanring-radius-xs)] p-0.5 opacity-70 transition-opacity hover:opacity-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--sanring-border-strong)]"
-                >
-                  <svg lucideX class="size-4"></svg>
-                </button>
                 <sanring-sheet-header>
                   <sanring-sheet-title>{{ i18n.t('sheet.demo.editProfile') }}</sanring-sheet-title>
                   <sanring-sheet-description>
@@ -126,14 +118,6 @@ import { sheetPage, sheetPageExamples } from './sheet.docs';
                     {{ i18n.t('sheet.demo.openTop') }}
                   </button>
                   <sanring-sheet-content side="top">
-                    <button
-                      type="button"
-                      sanringSheetClose
-                      aria-label="Close"
-                      class="absolute right-4 top-4 rounded-[var(--sanring-radius-xs)] p-0.5 opacity-70 transition-opacity hover:opacity-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--sanring-border-strong)]"
-                    >
-                      <svg lucideX class="size-4"></svg>
-                    </button>
                     <sanring-sheet-header>
                       <sanring-sheet-title>Top Sheet</sanring-sheet-title>
                       <sanring-sheet-description
@@ -169,14 +153,6 @@ import { sheetPage, sheetPageExamples } from './sheet.docs';
                     {{ i18n.t('sheet.demo.openRight') }}
                   </button>
                   <sanring-sheet-content side="right">
-                    <button
-                      type="button"
-                      sanringSheetClose
-                      aria-label="Close"
-                      class="absolute right-4 top-4 rounded-[var(--sanring-radius-xs)] p-0.5 opacity-70 transition-opacity hover:opacity-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--sanring-border-strong)]"
-                    >
-                      <svg lucideX class="size-4"></svg>
-                    </button>
                     <sanring-sheet-header>
                       <sanring-sheet-title>Right Sheet</sanring-sheet-title>
                       <sanring-sheet-description
@@ -219,14 +195,6 @@ import { sheetPage, sheetPageExamples } from './sheet.docs';
                     {{ i18n.t('sheet.demo.openBottom') }}
                   </button>
                   <sanring-sheet-content side="bottom">
-                    <button
-                      type="button"
-                      sanringSheetClose
-                      aria-label="Close"
-                      class="absolute right-4 top-4 rounded-[var(--sanring-radius-xs)] p-0.5 opacity-70 transition-opacity hover:opacity-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--sanring-border-strong)]"
-                    >
-                      <svg lucideX class="size-4"></svg>
-                    </button>
                     <sanring-sheet-header>
                       <sanring-sheet-title>Bottom Sheet</sanring-sheet-title>
                       <sanring-sheet-description
@@ -262,14 +230,6 @@ import { sheetPage, sheetPageExamples } from './sheet.docs';
                     {{ i18n.t('sheet.demo.openLeft') }}
                   </button>
                   <sanring-sheet-content side="left">
-                    <button
-                      type="button"
-                      sanringSheetClose
-                      aria-label="Close"
-                      class="absolute right-4 top-4 rounded-[var(--sanring-radius-xs)] p-0.5 opacity-70 transition-opacity hover:opacity-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--sanring-border-strong)]"
-                    >
-                      <svg lucideX class="size-4"></svg>
-                    </button>
                     <sanring-sheet-header>
                       <sanring-sheet-title>Left Sheet</sanring-sheet-title>
                       <sanring-sheet-description
@@ -319,14 +279,6 @@ import { sheetPage, sheetPageExamples } from './sheet.docs';
                     {{ i18n.t('sheet.demo.editProfile') }}
                   </button>
                   <sanring-sheet-content side="right">
-                    <button
-                      type="button"
-                      sanringSheetClose
-                      aria-label="Close"
-                      class="absolute right-4 top-4 rounded-[var(--sanring-radius-xs)] p-0.5 opacity-70 transition-opacity hover:opacity-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--sanring-border-strong)]"
-                    >
-                      <svg lucideX class="size-4"></svg>
-                    </button>
                     <sanring-sheet-header>
                       <sanring-sheet-title>{{
                         i18n.t('sheet.demo.editProfile')
@@ -372,7 +324,7 @@ import { sheetPage, sheetPageExamples } from './sheet.docs';
                   <button sanringBtn variant="destructive" sanringSheetTrigger>
                     {{ i18n.t('sheet.demo.delete') }}…
                   </button>
-                  <sanring-sheet-content>
+                  <sanring-sheet-content [showClose]="false">
                     <button
                       type="button"
                       sanringSheetClose

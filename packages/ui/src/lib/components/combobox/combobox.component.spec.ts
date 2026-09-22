@@ -4,6 +4,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { expectNoA11yViolations } from '../../../testing/axe-a11y';
 import { ComboboxChipComponent } from './combobox-chip.component';
 import { ComboboxChipInputComponent } from './combobox-chip-input.component';
+import { ComboboxChipsComponent } from './combobox-chips.component';
 import { ComboboxContentComponent } from './combobox-content.component';
 import { ComboboxInputComponent } from './combobox-input.component';
 import { ComboboxItemComponent } from './combobox-item.component';
@@ -370,5 +371,80 @@ describe('ComboboxComponent', () => {
         triggerFixture.nativeElement.remove();
       }
     });
+  });
+});
+
+@Component({
+  imports: [
+    ComboboxComponent,
+    ComboboxChipComponent,
+    ComboboxChipInputComponent,
+    ComboboxChipsComponent,
+    ComboboxInputComponent,
+  ],
+  template: `
+    <sanring-combobox multiple>
+      <sanring-combobox-chip-input [wrap]="false">
+        <sanring-combobox-chips [wrap]="false">
+          <sanring-combobox-chip value="angular">Angular</sanring-combobox-chip>
+        </sanring-combobox-chips>
+        <sanring-combobox-input />
+      </sanring-combobox-chip-input>
+    </sanring-combobox>
+  `,
+})
+class NowrapComboboxHost {}
+
+@Component({
+  imports: [
+    ComboboxComponent,
+    ComboboxChipComponent,
+    ComboboxChipInputComponent,
+    ComboboxChipsComponent,
+    ComboboxInputComponent,
+  ],
+  template: `
+    <sanring-combobox multiple>
+      <sanring-combobox-chip-input>
+        <sanring-combobox-chips>
+          <sanring-combobox-chip value="angular">Angular</sanring-combobox-chip>
+        </sanring-combobox-chips>
+        <sanring-combobox-input />
+      </sanring-combobox-chip-input>
+    </sanring-combobox>
+  `,
+})
+class WrapComboboxHost {}
+
+describe('ComboboxChipsComponent wrap', () => {
+  it('keeps chips on one line when wrap is false', async () => {
+    await TestBed.configureTestingModule({ imports: [NowrapComboboxHost] }).compileComponents();
+    const fixture = TestBed.createComponent(NowrapComboboxHost);
+    fixture.detectChanges();
+
+    const chipInput = fixture.nativeElement.querySelector(
+      'sanring-combobox-chip-input',
+    ) as HTMLElement;
+    const chips = fixture.nativeElement.querySelector('sanring-combobox-chips') as HTMLElement;
+    const input = fixture.nativeElement.querySelector('input') as HTMLInputElement;
+    expect(chipInput.classList.contains('flex-nowrap')).toBe(true);
+    expect(chips.classList.contains('flex-nowrap')).toBe(true);
+    expect(chips.classList.contains('shrink-0')).toBe(true);
+    expect(input.classList.contains('w-auto')).toBe(false);
+  });
+
+  it('lets chips wrap without stretching the search field onto its own row', async () => {
+    await TestBed.configureTestingModule({ imports: [WrapComboboxHost] }).compileComponents();
+    const fixture = TestBed.createComponent(WrapComboboxHost);
+    fixture.detectChanges();
+
+    const chipInput = fixture.nativeElement.querySelector(
+      'sanring-combobox-chip-input',
+    ) as HTMLElement;
+    const chips = fixture.nativeElement.querySelector('sanring-combobox-chips') as HTMLElement;
+    const input = fixture.nativeElement.querySelector('input') as HTMLInputElement;
+    expect(chipInput.classList.contains('flex-wrap')).toBe(true);
+    expect(chips.classList.contains('contents')).toBe(true);
+    expect(input.classList.contains('flex-1')).toBe(false);
   });
 });

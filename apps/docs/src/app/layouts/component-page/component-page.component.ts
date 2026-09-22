@@ -2,6 +2,7 @@ import { Component, effect, inject, Input, OnChanges, OnDestroy, input } from '@
 import { ComponentPageSectionDefinition } from '../../docs-schema/component-page.types';
 import { DocsComponentId } from '../../navigation/docs-navigation';
 import { I18nService } from '../../i18n/i18n.service';
+import { cliVersionChangelog } from '../../pages/changelog/component-changelog';
 import { DocsTocItem, DocsTocService } from '../../shell/toc/docs-toc.service';
 import { ComponentPageRecentChangesComponent } from './component-page-recent-changes.component';
 
@@ -46,7 +47,21 @@ export class ComponentPageComponent implements OnChanges, OnDestroy {
   }
 
   private updateToc() {
-    this.toc.setItems(this.flattenSections(this.sections));
+    const items = this.flattenSections(this.sections);
+    const componentId = this.componentId();
+    const hasChanges =
+      !!componentId &&
+      cliVersionChangelog.some((version) =>
+        version.changes.some((change) => change.componentIds?.includes(componentId)),
+      );
+    if (hasChanges) {
+      items.push({
+        id: 'recent-changes',
+        label: this.i18n.t('component.recentChanges.title'),
+        level: 2,
+      });
+    }
+    this.toc.setItems(items);
   }
 
   private flattenSections(sections: readonly ComponentPageSectionDefinition[]): DocsTocItem[] {

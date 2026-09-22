@@ -1,4 +1,12 @@
-import { ChangeDetectionStrategy, Component, computed, input, model, signal } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  booleanAttribute,
+  computed,
+  input,
+  model,
+  signal,
+} from '@angular/core';
 import { cn } from '../shared/utils';
 import { TransferItem, TransferMode } from './transfer.type';
 
@@ -9,13 +17,19 @@ import { TransferItem, TransferMode } from './transfer.type';
   template: `<ng-content></ng-content>`,
   host: {
     '[class]': 'rootClass()',
+    role: 'group',
+    '[attr.aria-label]': 'ariaLabel()',
+    '[attr.aria-disabled]': 'isDisabled() || null',
   },
 })
 export class TransferComponent {
   readonly items = input<TransferItem[]>([]);
   readonly class = input<string | undefined>();
+  readonly disabled = input(false, { transform: booleanAttribute });
+  readonly ariaLabel = input<string | undefined>();
 
   protected readonly rootClass = computed(() => cn(this.class()));
+  readonly isDisabled = computed(() => this.disabled());
   // 雙向綁定：目前在右側（target）的 key 清單，父層可用 [(selectedKeys)] 拿到結果
   readonly selectedKeys = model<string[]>([]);
   readonly mode = input<TransferMode>('two-way');
@@ -46,6 +60,7 @@ export class TransferComponent {
   }
 
   toggleSourceSelected(key: string): void {
+    if (this.isDisabled()) return;
     if (this.itemsByKey().get(key)?.disabled) return;
     this.sourceSelectedKeys.update((keys) =>
       keys.includes(key) ? keys.filter((k) => k !== key) : [...keys, key],
@@ -54,6 +69,7 @@ export class TransferComponent {
 
   toggleTargetSelected(key: string): void {
     // one-way 模式下 target 是唯讀展示，不接受勾選
+    if (this.isDisabled()) return;
     if (this.mode() === 'one-way') return;
     if (this.itemsByKey().get(key)?.disabled) return;
     this.targetSelectedKeys.update((keys) =>
@@ -62,6 +78,7 @@ export class TransferComponent {
   }
 
   moveToTarget(): void {
+    if (this.isDisabled()) return;
     // 用當下的 sourceItems 過濾一次，避免 items() 從外部變動後 sourceSelectedKeys 裡殘留已經不存在的 key
     const validKeys = new Set(this.sourceItems().map((item) => item.key));
     const moving = this.sourceSelectedKeys().filter((key) => validKeys.has(key));
@@ -72,6 +89,7 @@ export class TransferComponent {
   }
 
   moveToSource(): void {
+    if (this.isDisabled()) return;
     if (this.mode() === 'one-way') return;
     const moving = new Set(this.targetSelectedKeys().filter((key) => this.itemsByKey().has(key)));
     if (moving.size === 0) return;
@@ -81,10 +99,12 @@ export class TransferComponent {
   }
 
   setSourceSelectedKeys(keys: string[]): void {
+    if (this.isDisabled()) return;
     this.sourceSelectedKeys.set(keys);
   }
 
   setTargetSelectedKeys(keys: string[]): void {
+    if (this.isDisabled()) return;
     if (this.mode() === 'one-way') return;
     this.targetSelectedKeys.set(keys);
   }

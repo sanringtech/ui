@@ -44,12 +44,34 @@ class PopoverTestHost {}
 })
 class PopoverClassTestHost {}
 
+@Component({
+  imports: [PopoverComponent, PopoverContentComponent, PopoverTriggerDirective],
+  template: `
+    <sanring-popover>
+      <button type="button" sanringPopoverTrigger>Open</button>
+      <sanring-popover-content ariaLabel="Toolbar actions">Body</sanring-popover-content>
+    </sanring-popover>
+  `,
+})
+class UntitledPopoverHost {}
+
+@Component({
+  imports: [PopoverComponent, PopoverContentComponent, PopoverTriggerDirective],
+  template: `
+    <sanring-popover>
+      <button type="button" sanringPopoverTrigger>Open</button>
+      <sanring-popover-content side="right">Body</sanring-popover-content>
+    </sanring-popover>
+  `,
+})
+class SidePopoverHost {}
+
 describe('PopoverComponent', () => {
   let overlayContainer: OverlayContainer;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [PopoverTestHost, PopoverClassTestHost],
+      imports: [PopoverTestHost, PopoverClassTestHost, UntitledPopoverHost, SidePopoverHost],
     }).compileComponents();
 
     overlayContainer = TestBed.inject(OverlayContainer);
@@ -126,6 +148,33 @@ describe('PopoverComponent', () => {
 
     await wait(200);
     fixture.detectChanges();
+  });
+
+  it('omits aria-labelledby when no title is projected and uses ariaLabel as fallback', () => {
+    const fixture = TestBed.createComponent(UntitledPopoverHost);
+    fixture.detectChanges();
+
+    (fixture.nativeElement.querySelector('button') as HTMLElement).click();
+    fixture.detectChanges();
+
+    const panel = overlayContainer
+      .getContainerElement()
+      .querySelector('[role="dialog"]') as HTMLElement;
+    expect(panel.hasAttribute('aria-labelledby')).toBe(false);
+    expect(panel.getAttribute('aria-label')).toBe('Toolbar actions');
+  });
+
+  it('exposes the requested side on the panel', () => {
+    const fixture = TestBed.createComponent(SidePopoverHost);
+    fixture.detectChanges();
+
+    (fixture.nativeElement.querySelector('button') as HTMLElement).click();
+    fixture.detectChanges();
+
+    const panel = overlayContainer
+      .getContainerElement()
+      .querySelector('[role="dialog"]') as HTMLElement;
+    expect(panel.getAttribute('data-side')).toBe('right');
   });
 
   it('merges host class with consumer class on the content panel', () => {

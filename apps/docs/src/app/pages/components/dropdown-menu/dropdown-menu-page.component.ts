@@ -1,7 +1,6 @@
 import { Component, inject } from '@angular/core';
 import {
   LucideCheck,
-  LucideChevronRight,
   LucideCircle,
   LucideEllipsis,
   LucideFile,
@@ -30,7 +29,6 @@ import { dropdownMenuPage, dropdownMenuPageExamples } from './dropdown-menu.docs
     ButtonDirective,
     SANRING_DROPDOWN_MENU_IMPORTS,
     LucideCheck,
-    LucideChevronRight,
     LucideCircle,
     LucideEllipsis,
     LucideFile,
@@ -202,55 +200,46 @@ import { dropdownMenuPage, dropdownMenuPageExamples } from './dropdown-menu.docs
 
                   <sanring-dropdown-menu-content
                     #fileMenu="sanringDropdownMenuContent"
-                    class="grid w-[420px] grid-cols-[180px_1fr] gap-1"
+                    class="w-56"
                     (itemSelected)="onFileAction($event)"
                   >
-                    <div>
-                      <sanring-dropdown-menu-label>File</sanring-dropdown-menu-label>
-                      <button
-                        sanringDropdownMenuItem
-                        type="button"
-                        value="share"
-                        (mouseenter)="submenu = 'share'"
+                    <sanring-dropdown-menu-label>File</sanring-dropdown-menu-label>
+                    <sanring-dropdown-menu-sub>
+                      <sanring-dropdown-menu-sub-trigger value="share" [submenu]="shareMenu.menu">
+                        Share
+                      </sanring-dropdown-menu-sub-trigger>
+                      <sanring-dropdown-menu-sub-content
+                        #shareMenu="sanringDropdownMenuSubContent"
+                        class="w-48"
                       >
-                        <span class="flex-1 text-left">Share</span>
-                        <svg lucideChevronRight class="size-4"></svg>
-                      </button>
-                      <button
-                        sanringDropdownMenuItem
-                        type="button"
-                        value="export"
-                        (mouseenter)="submenu = 'export'"
-                      >
-                        <span class="flex-1 text-left">Export</span>
-                        <svg lucideChevronRight class="size-4"></svg>
-                      </button>
-                      <sanring-dropdown-menu-separator />
-                      <button sanringDropdownMenuItem type="button" value="close-file">
-                        Close file
-                      </button>
-                    </div>
-
-                    <div class="border-l border-[var(--sanring-border)] pl-1">
-                      <sanring-dropdown-menu-label>
-                        {{ submenu === 'share' ? 'Share' : 'Export' }}
-                      </sanring-dropdown-menu-label>
-                      @if (submenu === 'share') {
                         <button sanringDropdownMenuItem type="button" value="copy-link">
                           Copy link
                         </button>
                         <button sanringDropdownMenuItem type="button" value="invite-people">
                           Invite people
                         </button>
-                      } @else {
+                      </sanring-dropdown-menu-sub-content>
+                    </sanring-dropdown-menu-sub>
+                    <sanring-dropdown-menu-sub>
+                      <sanring-dropdown-menu-sub-trigger value="export" [submenu]="exportMenu.menu">
+                        Export
+                      </sanring-dropdown-menu-sub-trigger>
+                      <sanring-dropdown-menu-sub-content
+                        #exportMenu="sanringDropdownMenuSubContent"
+                        class="w-48"
+                      >
                         <button sanringDropdownMenuItem type="button" value="export-pdf">
                           PDF
                         </button>
                         <button sanringDropdownMenuItem type="button" value="export-markdown">
                           Markdown
                         </button>
-                      }
-                    </div>
+                      </sanring-dropdown-menu-sub-content>
+                    </sanring-dropdown-menu-sub>
+                    <sanring-dropdown-menu-separator />
+                    <button sanringDropdownMenuItem type="button" value="close-file">
+                      Close file
+                    </button>
                   </sanring-dropdown-menu-content>
                 </sanring-dropdown-menu>
               </div>
@@ -318,7 +307,6 @@ export class DropdownMenuPageComponent {
   protected showStatusBar = true;
   protected showActivityBar = false;
   protected density: 'compact' | 'comfortable' = 'comfortable';
-  protected submenu: 'share' | 'export' = 'share';
 
   protected section(id: string) {
     return getComponentPageSection(this.page, id);
@@ -337,7 +325,5 @@ export class DropdownMenuPageComponent {
     if (value === 'compact' || value === 'comfortable') this.density = value;
   }
 
-  protected onFileAction(value: unknown): void {
-    if (value === 'share' || value === 'export') this.submenu = value;
-  }
+  protected onFileAction(_value: unknown): void {}
 }

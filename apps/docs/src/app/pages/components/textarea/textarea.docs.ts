@@ -97,9 +97,15 @@ export const textareaPageExamples = {
   resize: `<textarea sanringTextarea class="min-h-[140px] resize-y" placeholder="Longer message"></textarea>`,
   characterCount: `<sanring-field>
   <label sanringLabel>Bio</label>
-  <textarea sanringTextarea maxlength="500" [(ngModel)]="bio"></textarea>
-  <p sanringDescription class="text-end tabular-nums" aria-live="polite">
-    {{ bio.length }}/500
-  </p>
+  <div class="relative w-full" ngProjectAs="[sanringTextarea]">
+    <textarea sanringTextarea class="pr-16" maxlength="500" [formControl]="bioControl"></textarea>
+    <span
+      class="pointer-events-none absolute right-3 bottom-2 bg-[var(--sanring-surface)] pl-1 text-xs tabular-nums text-[var(--sanring-muted)]"
+      aria-live="polite"
+    >
+      {{ bioControl.value.length }}/500
+    </span>
+  </div>
+  <sanring-error-message>Bio must be at least 50 characters.</sanring-error-message>
 </sanring-field>`,
 } as const;

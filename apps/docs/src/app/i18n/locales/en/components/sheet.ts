@@ -28,6 +28,11 @@ export const sheetTranslations = {
   'sheet.api.isOpen.description': 'Controls the open state. Supports [(isOpen)] two-way binding.',
   'sheet.api.side.description':
     "Edge from which the panel slides in: 'top', 'right' (default), 'bottom', or 'left'.",
+  'sheet.api.showClose.description': 'Controls whether the built-in close button is rendered.',
+  'sheet.api.closeAriaLabel.description':
+    'Accessible name for the built-in close button. Defaults to 關閉面板.',
+  'sheet.api.headerAlign.description':
+    'Header text alignment. start is left, center is centered at every breakpoint. The default stays centered on small screens and left-aligned from sm up.',
   'sheet.demo.customClose': 'Custom Close Button',
   'sheet.demo.confirmDelete': 'Confirm deletion',
   'sheet.demo.confirmDeleteDescription': 'This action cannot be undone.',

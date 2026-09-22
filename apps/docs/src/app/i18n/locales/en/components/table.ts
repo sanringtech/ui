@@ -10,6 +10,8 @@ export const tableTranslations = {
   'table.demo.sortable': 'Sortable headers',
   'table.demo.columnSizing': 'Column sizing',
   'table.demo.sticky': 'Sticky columns',
+  'table.demo.loading': 'Loading skeleton',
+  'table.demo.columnVisibility': 'Column visibility',
   'table.demo.empty': 'Empty state',
   'table.demo.selection': 'Row selection',
   'table.demo.actions': 'Actions menu',

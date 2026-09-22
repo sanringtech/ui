@@ -271,19 +271,26 @@ import { dialogPage, dialogPageExamples } from './dialog.docs';
       </ng-template>
 
       <ng-template #headerDialog>
-        <sanring-dialog-content>
-          <sanring-dialog-header align="center">
-            <h2 sanringDialogTitle class="text-[var(--sanring-primary-70)]">Centered title</h2>
+        <sanring-dialog-content class="overflow-hidden p-0">
+          <sanring-dialog-header
+            align="start"
+            class="bg-[var(--sanring-surface-strong)] px-6 py-4 pr-12"
+          >
+            <h2 sanringDialogTitle class="text-[var(--sanring-primary-70)]">Edit profile</h2>
             <p sanringDialogDescription>
-              Header alignment and title color are inputs, not one-off CSS.
+              Align the header independently, and give it a background that is not the body surface.
             </p>
           </sanring-dialog-header>
+          <div class="px-6 py-4 text-sm text-[var(--sanring-muted)]">
+            Dialog body stays on the default content surface.
+          </div>
         </sanring-dialog-content>
       </ng-template>
     </app-component-page>
   `,
 })
 export class DialogPageComponent {
+  // Header example: align + a header surface that is not the dialog body.
   protected readonly page = dialogPage;
   protected readonly examples = dialogPageExamples;
   protected readonly i18n = inject(I18nService);

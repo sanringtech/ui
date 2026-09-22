@@ -10,7 +10,7 @@ import { I18nService } from '../../i18n/i18n.service';
   imports: [ButtonDirective, SANRING_DIALOG_IMPORTS, LucideLayers3],
   template: `
     <div
-      class="min-w-0 rounded-[var(--sanring-radius-lg)] border border-[var(--docs-border)] bg-[var(--docs-code)] p-5 text-[var(--docs-code-fg)] shadow-[var(--docs-shadow-soft)] lg:mt-6 lg:p-6 max-[520px]:p-4"
+      class="docs-code-panel min-w-0 p-5 lg:mt-6 lg:p-6 max-[520px]:p-4"
     >
       <div
         class="flex min-w-0 items-center justify-between gap-4 border-b border-[color-mix(in_srgb,var(--docs-code-fg)_18%,transparent)] pb-4"

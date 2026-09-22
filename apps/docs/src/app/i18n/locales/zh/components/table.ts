@@ -10,6 +10,8 @@ export const tableTranslations = {
   'table.demo.sortable': '可排序表頭',
   'table.demo.columnSizing': '欄位比例',
   'table.demo.sticky': 'Sticky 欄位',
+  'table.demo.loading': '載入骨架列',
+  'table.demo.columnVisibility': '欄位顯隱',
   'table.demo.empty': '空資料狀態',
   'table.demo.selection': '列選取',
   'table.demo.actions': '操作選單',

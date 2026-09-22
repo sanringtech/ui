@@ -8,6 +8,10 @@ This is a snapshot, not a commitment or a timeline. Items move, get reprioritize
 
 - **More blocks** — remaining page templates (`register`, `forgot-password`, `settings-page`, `detail-page`, `wizard`, `pricing-page`) on top of the starter three.
 
+## Component completeness
+
+Optional leftover sibling gaps, still tracked as P32 in [`TODOLIST.md`](TODOLIST.md): combobox `ariaLabel`, select `required`, and toast `class` docs.
+
 ## Ecosystem / team use
 
 - **Registry Directory** — a docs page listing community/third-party registries, so teams can discover each other's component sets.
@@ -15,6 +19,7 @@ This is a snapshot, not a commitment or a timeline. Items move, get reprioritize
 
 ## Recently shipped
 
+- P32 sibling alignment — sheet built-in close and header `align`, radio `size`, a real dropdown-menu submenu, popover four-way `side` plus aria fallback, transfer root `disabled`/`ariaLabel`, and table sticky backgrounds plus loading/column-visibility recipes
 - Blocks starter set — `sanring add block/login` (and `dashboard-shell`, `table-page`) installs a page-level template plus its component dependencies
 - Open in StackBlitz — each component docs previewer can open a minimal Angular 22 + Tailwind project with that example
 - GitHub registries — `--registry github:owner/repo` (optional `#ref` / `@ref`) expands to the raw `registry.json` at the repo root

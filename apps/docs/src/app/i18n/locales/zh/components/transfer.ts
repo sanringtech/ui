@@ -15,6 +15,11 @@ export const transferTranslations = {
   'transfer.demo.moveToTarget': '移到已選項目',
   'transfer.demo.moveToSource': '移到可選項目',
   'transfer.demo.disabled': '停用項目',
+  'transfer.demo.disabledGroup': '整組停用',
+  'transfer.api.disabled.description':
+    '停用整個控制項：項目無法勾選，兩側也都不能移動。',
+  'transfer.api.ariaLabel.description':
+    '給 role="group" 根節點的 accessible name，讓雙列表被讀成同一個控制項。',
   'transfer.demo.headerCount': '標題列即時筆數',
   'transfer.demo.customActions': '自訂操作按鈕',
   'transfer.demo.oneWay': '單向穿梭',
@@ -52,7 +57,7 @@ export const transferTranslations = {
     '面板目前的頁碼（從 0 開始）與依 pageSize、目前篩選條件算出的總頁數。',
   'transfer.api.pageNav.description': '切換到下一頁／上一頁，超出範圍時不會有作用。',
   'transfer.api.interactive.description':
-    'one-way 模式下的 target 面板會是 false，內部用來停用它的 checkbox。',
+    '根層停用，或 one-way 模式下的 target 面板時為 false，用來停用該面板的 checkbox。',
   'transfer.api.selectableItems.description':
     '過濾後的完整清單中所有非 disabled 的項目（不受分頁限制）。適合在標題列顯示可選數量。',
   'transfer.api.selectAllChecked.description':

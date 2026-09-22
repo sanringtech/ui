@@ -10,6 +10,14 @@ export const popoverTranslations = {
     'Popover 由根節點、trigger 指令與內容面板組合，面板可選用 header、title、description 子元件。',
   'popover.examples.description': '常見 popover 模式：對齊方式、使用者資料卡片與表單控制項。',
   'popover.demo.align': '對齊',
+  'popover.demo.side': '方向',
+  'popover.api.side.description':
+    "偏好出現在 trigger 的哪一側：'top'、'right'、'bottom'（預設）或 'left'。會超出視窗時自動翻面。",
+  'popover.api.sideOffset.description': 'trigger 與面板之間的間距（像素）。',
+  'popover.api.ariaLabel.description':
+    '未投影 sanring-popover-title、也未設定 ariaLabelledBy 時的 accessible name fallback。',
+  'popover.api.ariaLabelledBy.description':
+    '標示面板的外部元素 id，優先於 PopoverTitle 與 ariaLabel。',
   'popover.demo.withHeader': '含 Header',
   'popover.demo.profile': '使用者資料',
   'popover.demo.profileEmail': 'jane@example.com',
@@ -20,7 +28,7 @@ export const popoverTranslations = {
   'popover.api.align.description': "相對於 trigger 的對齊方式：'start'、'center'（預設）或 'end'。",
   'popover.api.class.description': '合併到浮動面板的額外 class。',
   'popover.accessibility.description':
-    "trigger 按鈕有 aria-haspopup='dialog'、aria-expanded 及指向面板 id 的 aria-controls。面板本身帶有 role='dialog'。加入 sanringPopoverTitle 或 sanringPopoverDescription，即可自動綁定 aria-labelledby 和 aria-describedby。",
+    "trigger 按鈕有 aria-haspopup='dialog'、aria-expanded 及指向面板 id 的 aria-controls。面板本身帶有 role='dialog'。投影 sanring-popover-title 會綁上 aria-labelledby；沒有 title 時改設 ariaLabel 或 ariaLabelledBy。",
   'popover.keyboard.description': 'Popover 開啟時，焦點會移入面板。',
   'popover.keyboard.escape': '關閉 popover 面板，焦點返回 trigger。',
   'popover.keyboard.tab': '移動焦點到面板內的下一個可聚焦元素。',

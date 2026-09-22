@@ -7,12 +7,9 @@ import { I18nService } from '../../i18n/i18n.service';
   standalone: true,
   template: `
     <div
-      class="mb-2 flex min-w-0 flex-wrap items-center justify-between gap-2 rounded-[var(--sanring-radius-sm)] border border-[color-mix(in_srgb,var(--docs-border)_80%,transparent)] bg-[color-mix(in_srgb,var(--docs-elevated)_68%,transparent)] px-3 py-2 font-mono text-xs"
+      class="docs-panel mb-2 flex min-w-0 flex-wrap items-center justify-between gap-2 px-3 py-2 text-xs"
     >
-      <span
-        class="inline-flex items-center gap-2 font-semibold uppercase tracking-[0.08em] text-[var(--docs-fg)]"
-      >
-        <span class="size-1.5 rounded-full bg-[var(--docs-accent)]" aria-hidden="true"></span>
+      <span class="docs-eyebrow">
         {{ i18n.t('docs.api.surface') }}
       </span>
       <span class="text-[var(--docs-muted)]"
@@ -21,7 +18,7 @@ import { I18nService } from '../../i18n/i18n.service';
     </div>
 
     <div
-      class="hidden overflow-hidden rounded-[var(--sanring-radius)] border border-[color-mix(in_srgb,var(--docs-border)_86%,transparent)] bg-[color-mix(in_srgb,var(--docs-panel)_78%,transparent)] shadow-[var(--docs-shadow-soft)] md:block"
+      class="docs-panel hidden overflow-hidden md:block"
     >
       <table class="w-full table-fixed border-collapse text-left text-[13px]">
         <caption class="sr-only">
@@ -30,7 +27,7 @@ import { I18nService } from '../../i18n/i18n.service';
           }}
         </caption>
         <thead
-          class="bg-[color-mix(in_srgb,var(--docs-elevated)_86%,transparent)] text-[var(--docs-muted)]"
+          class="bg-[var(--docs-surface)] text-[var(--docs-muted)]"
         >
           <tr>
             <th class="w-[22%] border-b border-[var(--docs-border)] px-3 py-2 font-medium">
@@ -48,15 +45,12 @@ import { I18nService } from '../../i18n/i18n.service';
           </tr>
         </thead>
         <tbody>
-          @for (row of rows; track row.property; let last = $last; let index = $index) {
+          @for (row of rows; track row.property; let last = $last) {
             <tr
               [class.border-b]="!last"
-              class="group border-[var(--docs-border)] transition-colors hover:bg-[color-mix(in_srgb,var(--docs-elevated)_46%,transparent)]"
+              class="group border-[var(--docs-border)] transition-colors hover:bg-[var(--docs-surface)]"
             >
               <td class="break-words px-3 py-2.5 align-top font-mono text-[var(--docs-fg)]">
-                <span class="mr-2 text-[10px] text-[var(--docs-accent-strong)]">{{
-                  rowNumber(index)
-                }}</span>
                 <span class="font-semibold">{{ row.property }}</span>
               </td>
               <td class="break-words px-3 py-2.5 align-top">
@@ -80,16 +74,11 @@ import { I18nService } from '../../i18n/i18n.service';
     </div>
 
     <div class="grid gap-3 md:hidden">
-      @for (row of rows; track row.property; let index = $index) {
-        <article
-          class="overflow-hidden rounded-[var(--sanring-radius)] border border-[color-mix(in_srgb,var(--docs-border)_86%,transparent)] bg-[color-mix(in_srgb,var(--docs-panel)_86%,transparent)] shadow-sm"
-        >
+      @for (row of rows; track row.property) {
+        <article class="docs-panel overflow-hidden">
           <div
-            class="flex min-w-0 items-center gap-2 border-b border-[var(--docs-border)] bg-[color-mix(in_srgb,var(--docs-elevated)_66%,transparent)] px-3 py-2.5"
+            class="flex min-w-0 items-center gap-2 border-b border-[var(--docs-border)] bg-[var(--docs-surface)] px-3 py-2.5"
           >
-            <span class="font-mono text-[10px] text-[var(--docs-accent-strong)]">{{
-              rowNumber(index)
-            }}</span>
             <p
               class="m-0 min-w-0 break-words font-mono text-sm font-semibold text-[var(--docs-fg)]"
             >
@@ -137,8 +126,4 @@ import { I18nService } from '../../i18n/i18n.service';
 export class ComponentPageApiTableComponent {
   @Input({ required: true }) rows!: readonly ComponentPageApiRow[];
   protected readonly i18n = inject(I18nService);
-
-  protected rowNumber(index: number) {
-    return String(index + 1).padStart(2, '0');
-  }
 }

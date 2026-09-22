@@ -74,6 +74,24 @@ export const sheetPage = {
       descriptionKey: 'sheet.api.side.description',
     },
     {
+      property: 'showClose',
+      type: 'boolean',
+      defaultValue: 'true',
+      descriptionKey: 'sheet.api.showClose.description',
+    },
+    {
+      property: 'closeAriaLabel',
+      type: 'string',
+      defaultValue: "'關閉面板'",
+      descriptionKey: 'sheet.api.closeAriaLabel.description',
+    },
+    {
+      property: 'sanring-sheet-header.align',
+      type: "'start' | 'center'",
+      defaultValue: 'responsive',
+      descriptionKey: 'sheet.api.headerAlign.description',
+    },
+    {
       property: 'class',
       type: 'string',
       defaultValue: "''",
@@ -170,18 +188,12 @@ export class ExampleComponent {}`,
 │   └── sanring-sheet-footer
 └── [sanringSheetClose]`,
 
-  side: `<!-- Change [side] to move the sheet; the close pattern is the same for all four. -->
+  side: `<!-- Change [side] to move the sheet. A close control is built in. -->
 <sanring-sheet>
   <button sanringBtn sanringSheetTrigger>Top</button>
 
   <sanring-sheet-content side="top">
-    <!-- X close: use sanringSheetClose on any element -->
-    <button type="button" sanringSheetClose aria-label="Close"
-      class="absolute right-4 top-4 ...">
-      <svg lucideX class="size-4"></svg>
-    </button>
-
-    <sanring-sheet-header class="pr-10">
+    <sanring-sheet-header>
       <sanring-sheet-title>Top Sheet</sanring-sheet-title>
       <sanring-sheet-description>Slides in from the top edge.</sanring-sheet-description>
     </sanring-sheet-header>
@@ -220,12 +232,11 @@ export class ExampleComponent {}`,
     </sanring-sheet-footer>
   </sanring-sheet-content>
 </sanring-sheet>`,
-  customClose: `<!-- The sheet does not render a built-in close button.
-     Place sanringSheetClose on any button you want to use as a close control. -->
+  customClose: `<!-- Hide the built-in X and place sanringSheetClose on any button you want. -->
 <sanring-sheet>
   <button sanringBtn sanringSheetTrigger>Open</button>
 
-  <sanring-sheet-content>
+  <sanring-sheet-content [showClose]="false">
     <button type="button" sanringSheetClose aria-label="Close"
       class="absolute right-4 top-4 ...">
       <svg lucideX class="size-4"></svg>
