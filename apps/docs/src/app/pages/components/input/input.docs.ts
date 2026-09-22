@@ -129,9 +129,15 @@ import { InputDirective } from './components/ui/input';`,
   file: `<input sanringInput type="file" />`,
   characterCount: `<sanring-field>
   <label sanringLabel>Title</label>
-  <input sanringInput maxlength="500" [(ngModel)]="title" />
-  <p sanringDescription class="text-end tabular-nums" aria-live="polite">
-    {{ title.length }}/500
-  </p>
+  <div class="relative min-w-0 w-full" ngProjectAs="[sanringInput]">
+    <input sanringInput class="min-w-0 pr-14" maxlength="500" [formControl]="titleControl" />
+    <span
+      class="pointer-events-none absolute top-1/2 right-3 -translate-y-1/2 text-xs tabular-nums text-[var(--sanring-muted)]"
+      aria-live="polite"
+    >
+      {{ titleControl.value.length }}/500
+    </span>
+  </div>
+  <sanring-error-message>Title must be at least 50 characters.</sanring-error-message>
 </sanring-field>`,
 } as const;

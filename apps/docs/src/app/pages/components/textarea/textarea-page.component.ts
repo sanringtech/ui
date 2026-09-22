@@ -1,7 +1,7 @@
 import { Component, inject } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import { FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
 import {
-  DescriptionDirective,
+  ErrorMessageComponent,
   FieldLabelDirective,
   SanringFieldComponent,
   TextareaDirective,
@@ -33,9 +33,9 @@ import { textareaPage, textareaPageExamples } from './textarea.docs';
     ComponentPageKeyboardTableComponent,
     ComponentPageUsageImportsComponent,
     ComponentPageSectionComponent,
-    DescriptionDirective,
+    ErrorMessageComponent,
     FieldLabelDirective,
-    FormsModule,
+    ReactiveFormsModule,
     SanringFieldComponent,
     TextareaDirective,
   ],
@@ -105,10 +105,21 @@ import { textareaPage, textareaPageExamples } from './textarea.docs';
                 <sanring-field>
                   <!-- eslint-disable-next-line @angular-eslint/template/label-has-associated-control -->
                   <label sanringLabel>Bio</label>
-                  <textarea sanringTextarea maxlength="500" [(ngModel)]="bio"></textarea>
-                  <p sanringDescription class="text-end tabular-nums" aria-live="polite">
-                    {{ bio.length }}/500
-                  </p>
+                  <div class="relative w-full" ngProjectAs="[sanringTextarea]">
+                    <textarea
+                      sanringTextarea
+                      class="pr-16"
+                      maxlength="500"
+                      [formControl]="bioControl"
+                    ></textarea>
+                    <span
+                      class="pointer-events-none absolute right-3 bottom-2 bg-[var(--sanring-surface)] pl-1 text-xs tabular-nums text-[var(--sanring-muted)]"
+                      aria-live="polite"
+                    >
+                      {{ bioControl.value.length }}/500
+                    </span>
+                  </div>
+                  <sanring-error-message>Bio must be at least 50 characters.</sanring-error-message>
                 </sanring-field>
               </div>
             </app-component-page-code-previewer>
@@ -134,7 +145,14 @@ export class TextareaPageComponent {
   protected readonly page = textareaPage;
   protected readonly examples = textareaPageExamples;
   protected readonly i18n = inject(I18nService);
-  protected bio = 'Sanring UI demo text';
+  protected readonly bioControl = new FormControl('Sanring UI demo text', {
+    nonNullable: true,
+    validators: [Validators.minLength(50)],
+  });
+
+  constructor() {
+    this.bioControl.markAsTouched();
+  }
 
   protected section(id: string) {
     return getComponentPageSection(this.page, id);

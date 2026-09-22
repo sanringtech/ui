@@ -1,5 +1,5 @@
 import { Component, inject } from '@angular/core';
-import { FormControl, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
 import {
   DescriptionDirective,
   ErrorMessageComponent,
@@ -29,7 +29,6 @@ import { inputPage, inputPageExamples } from './input.docs';
     DescriptionDirective,
     ErrorMessageComponent,
     FieldLabelDirective,
-    FormsModule,
     InputDirective,
     ReactiveFormsModule,
     SanringFieldComponent,
@@ -141,10 +140,21 @@ import { InputDirective } from './components/ui/input';"
                 <sanring-field>
                   <!-- eslint-disable-next-line @angular-eslint/template/label-has-associated-control -->
                   <label sanringLabel>Title</label>
-                  <input sanringInput maxlength="500" [(ngModel)]="title" />
-                  <p sanringDescription class="text-end tabular-nums" aria-live="polite">
-                    {{ title.length }}/500
-                  </p>
+                  <div class="relative min-w-0 w-full" ngProjectAs="[sanringInput]">
+                    <input
+                      sanringInput
+                      class="min-w-0 pr-14"
+                      maxlength="500"
+                      [formControl]="titleControl"
+                    />
+                    <span
+                      class="pointer-events-none absolute top-1/2 right-3 -translate-y-1/2 text-xs tabular-nums text-[var(--sanring-muted)]"
+                      aria-live="polite"
+                    >
+                      {{ titleControl.value.length }}/500
+                    </span>
+                  </div>
+                  <sanring-error-message>Title must be at least 50 characters.</sanring-error-message>
                 </sanring-field>
               </div>
             </app-component-page-code-previewer>
@@ -174,10 +184,14 @@ export class InputPageComponent {
     nonNullable: true,
     validators: [Validators.required],
   });
-  protected title = 'Sanring UI demo text';
+  protected readonly titleControl = new FormControl('Sanring UI demo text', {
+    nonNullable: true,
+    validators: [Validators.minLength(50)],
+  });
 
   constructor() {
     this.emailControl.markAsTouched();
+    this.titleControl.markAsTouched();
   }
 
   protected section(id: string) {
