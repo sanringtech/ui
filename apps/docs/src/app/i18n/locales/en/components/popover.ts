@@ -12,6 +12,14 @@ export const popoverTranslations = {
   'popover.examples.description':
     'Common popover patterns: alignment, user profile overlay, and form controls.',
   'popover.demo.align': 'Align',
+  'popover.demo.side': 'Side',
+  'popover.api.side.description':
+    "Preferred side of the trigger: 'top', 'right', 'bottom' (default), or 'left'. The panel flips if it would overflow the viewport.",
+  'popover.api.sideOffset.description': 'Distance in pixels between the trigger and the panel.',
+  'popover.api.ariaLabel.description':
+    'Accessible-name fallback used when no sanring-popover-title is projected and ariaLabelledBy is unset.',
+  'popover.api.ariaLabelledBy.description':
+    'Ids of external elements that label the panel. Takes precedence over PopoverTitle and ariaLabel.',
   'popover.demo.withHeader': 'With Header',
   'popover.demo.profile': 'User profile',
   'popover.demo.profileEmail': 'jane@example.com',
@@ -24,7 +32,7 @@ export const popoverTranslations = {
     "Alignment relative to the trigger: 'start', 'center' (default), or 'end'.",
   'popover.api.class.description': 'Additional classes merged onto the floating panel.',
   'popover.accessibility.description':
-    "The trigger button has aria-haspopup='dialog', aria-expanded, and aria-controls pointing to the panel id. The panel carries role='dialog'. Include sanringPopoverTitle or sanringPopoverDescription to have aria-labelledby and aria-describedby wired automatically.",
+    "The trigger button has aria-haspopup='dialog', aria-expanded, and aria-controls pointing to the panel id. The panel carries role='dialog'. Project sanring-popover-title to wire aria-labelledby, or set ariaLabel / ariaLabelledBy when the panel has no title.",
   'popover.keyboard.description': 'Focus moves into the panel when it opens.',
   'popover.keyboard.escape': 'Close the popover panel and return focus to the trigger.',
   'popover.keyboard.tab': 'Move focus to the next focusable element inside the panel.',

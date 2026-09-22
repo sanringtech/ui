@@ -36,6 +36,8 @@ export const tablePage = {
         { id: 'example-sortable', titleKey: 'table.demo.sortable', level: 3 },
         { id: 'example-column-sizing', titleKey: 'table.demo.columnSizing', level: 3 },
         { id: 'example-sticky', titleKey: 'table.demo.sticky', level: 3 },
+        { id: 'example-loading', titleKey: 'table.demo.loading', level: 3 },
+        { id: 'example-column-visibility', titleKey: 'table.demo.columnVisibility', level: 3 },
         { id: 'example-empty', titleKey: 'table.demo.empty', level: 3 },
         { id: 'example-selection', titleKey: 'table.demo.selection', level: 3 },
         { id: 'example-actions', titleKey: 'table.demo.actions', level: 3 },
@@ -208,22 +210,14 @@ import { SortDirective, SortHeaderComponent, TableCellDefDirective, TableCellDir
   </table>
 </sanring-table-container>`,
 
-  sticky: `<!-- Sticky start -->
+  sticky: `<!-- Sticky cells already get an opaque background. Add a shadow if you want an edge. -->
 <sanring-table-container class="max-w-[520px]">
   <table cdk-table sanringTable [dataSource]="invoices" class="min-w-[760px]">
     <ng-container sanringColumnDef="invoice" sticky>
-      <th
-        sanringHeaderCell
-        *sanringHeaderCellDef
-        class="bg-[var(--sanring-background)] shadow-[1px_0_0_var(--sanring-border)]"
-      >
+      <th sanringHeaderCell *sanringHeaderCellDef class="shadow-[1px_0_0_var(--sanring-border)]">
         Invoice
       </th>
-      <td
-        sanringCell
-        *sanringCellDef="let invoice"
-        class="bg-[var(--sanring-background)] shadow-[1px_0_0_var(--sanring-border)]"
-      >
+      <td sanringCell *sanringCellDef="let invoice" class="shadow-[1px_0_0_var(--sanring-border)]">
         {{ invoice.id }}
       </td>
     </ng-container>
@@ -241,15 +235,11 @@ import { SortDirective, SortHeaderComponent, TableCellDefDirective, TableCellDir
       <th
         sanringHeaderCell
         *sanringHeaderCellDef
-        class="bg-[var(--sanring-background)] text-right shadow-[-1px_0_0_var(--sanring-border)]"
+        class="text-right shadow-[-1px_0_0_var(--sanring-border)]"
       >
         Actions
       </th>
-      <td
-        sanringCell
-        *sanringCellDef="let invoice"
-        class="bg-[var(--sanring-background)] text-right shadow-[-1px_0_0_var(--sanring-border)]"
-      >
+      <td sanringCell *sanringCellDef="let invoice" class="text-right shadow-[-1px_0_0_var(--sanring-border)]">
         <button sanringBtn variant="ghost" size="icon" aria-label="Open actions">
           <svg lucideEllipsis class="size-4"></svg>
         </button>
@@ -257,6 +247,60 @@ import { SortDirective, SortHeaderComponent, TableCellDefDirective, TableCellDir
     </ng-container>
   </table>
 </sanring-table-container>`,
+
+  loading: `@if (loading) {
+  <table class="w-full">
+    <thead>
+      <tr>
+        <th class="h-12 px-4 text-left">Invoice</th>
+        <th class="h-12 px-4 text-left">Customer</th>
+        <th class="h-12 px-4 text-left">Status</th>
+        <th class="h-12 px-4 text-right">Amount</th>
+      </tr>
+    </thead>
+    <tbody>
+      @for (row of [1, 2, 3, 4]; track row) {
+        <tr>
+          <td class="p-4"><div sanringSkeleton class="h-4 w-20"></div></td>
+          <td class="p-4"><div sanringSkeleton class="h-4 w-28"></div></td>
+          <td class="p-4"><div sanringSkeleton class="h-4 w-16"></div></td>
+          <td class="p-4"><div sanringSkeleton class="ml-auto h-4 w-16"></div></td>
+        </tr>
+      }
+    </tbody>
+  </table>
+} @else {
+  <table cdk-table sanringTable [dataSource]="invoices">…</table>
+}`,
+
+  columnVisibility: `<sanring-dropdown-menu>
+  <button sanringBtn variant="outline" sanringDropdownMenuTrigger [menu]="columnsMenu.menu">
+    Columns
+  </button>
+  <sanring-dropdown-menu-content #columnsMenu="sanringDropdownMenuContent" class="w-44">
+    @for (column of allColumns; track column.id) {
+      <button
+        sanringDropdownMenuItem
+        type="button"
+        [value]="column.id"
+        (click)="$event.preventDefault(); toggleColumn(column.id)"
+      >
+        <span class="flex size-4 items-center justify-center">
+          @if (isColumnVisible(column.id)) {
+            <svg lucideCheck class="size-4"></svg>
+          }
+        </span>
+        {{ column.label }}
+      </button>
+    }
+  </sanring-dropdown-menu-content>
+</sanring-dropdown-menu>
+
+<table cdk-table sanringTable [dataSource]="invoices">
+  <!-- column defs for invoice / customer / status / amount... -->
+  <tr cdk-header-row sanringRow *sanringHeaderRowDef="visibleColumns()"></tr>
+  <tr cdk-row sanringRow *sanringRowDef="let row; columns: visibleColumns()"></tr>
+</table>`,
 
   empty: `<table cdk-table sanringTable [dataSource]="[]">
   <!-- columns... -->

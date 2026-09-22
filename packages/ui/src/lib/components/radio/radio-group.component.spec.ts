@@ -48,10 +48,23 @@ class RadioGroupTestHost {
 })
 class RadioGroupA11yHost {}
 
+@Component({
+  imports: [RadioGroupComponent, RadioItemComponent],
+  template: `
+    <sanring-radio-group size="sm" ariaLabel="Small">
+      <sanring-radio-item value="a" />
+    </sanring-radio-group>
+    <sanring-radio-group size="lg" ariaLabel="Large">
+      <sanring-radio-item value="b" />
+    </sanring-radio-group>
+  `,
+})
+class RadioSizeHost {}
+
 describe('RadioGroupComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [RadioGroupTestHost],
+      imports: [RadioGroupTestHost, RadioSizeHost],
     }).compileComponents();
   });
 
@@ -130,6 +143,15 @@ describe('RadioGroupComponent', () => {
     const group = fixture.nativeElement.querySelectorAll('[role="radiogroup"]')[2] as HTMLElement;
     expect(group.classList.contains('custom-class')).toBe(true);
     expect(group.classList.contains('grid')).toBe(true);
+  });
+
+  it('applies the group size to each item', () => {
+    const fixture = TestBed.createComponent(RadioSizeHost);
+    fixture.detectChanges();
+
+    const items = fixture.nativeElement.querySelectorAll('[role="radio"]');
+    expect(items[0].className).toContain('h-3');
+    expect(items[1].className).toContain('h-5');
   });
 
   it('has no axe-detectable a11y violations when items are paired with an external <label for>', async () => {

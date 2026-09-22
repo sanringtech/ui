@@ -53,13 +53,13 @@
 
 ### 該做
 
-- [ ] **table sticky 欄背景**：`sticky`/`stickyEnd` 已能傳進 CDK，但 CDK 只加 `position: sticky` + 位移，沒有不透明背景；捲動時文字會透出來。細節與「刻意不做」的 `CdkTextColumn` / CDK flex-layout 見 [packages/ui/src/lib/components/table/todolist.md](packages/ui/src/lib/components/table/todolist.md)
-- [ ] **table docs 配方**（不寫新元件）：loading skeleton rows（既有 `skeleton`）；欄位顯隱（dropdown-menu + checkbox + 動態 `sanringRowDefColumns`）。同上 todolist「使用模式」節
-- [ ] **sheet 對齊 dialog**：dialog content 已有內建 `showClose` / `closeAriaLabel`，header 已有 `align`；sheet 還要自己放 `[sanringSheetClose]`，`sanring-sheet-header` 沒有 `align`
-- [ ] **radio `size`**：checkbox / switch / otp-input 有 sm/md/lg；radio 寫死 `RADIO_SIZE_CLASS = 'aspect-square h-4 w-4'`（`radio.styles.ts`）
-- [ ] **dropdown-menu 真 submenu**：docs 鍵盤表寫了左右鍵開關子選單，官網範例卻是 `mouseenter` 切兩欄，不是巢狀 `menu`。checkbox / radio 範例用打勾圖示組出來即可，不必先做成一等 primitive
-- [ ] **popover `side` + aria fallback**：tooltip / hover-card 已有四向 `side`；popover 只做上/下，而且沒投影 title 時仍綁死 `aria-labelledby`（`popover-content.component.ts`）
-- [ ] **transfer 根層 `disabled` + `ariaLabel`**：現在只能 disable 單一 item（`TransferItem.disabled`）；雙列表是沒名字的 `role="group"`
+- [x] **table sticky 欄背景**：`sticky`/`stickyEnd` 已能傳進 CDK，但 CDK 只加 `position: sticky` + 位移，沒有不透明背景；捲動時文字會透出來。細節與「刻意不做」的 `CdkTextColumn` / CDK flex-layout 見 [packages/ui/src/lib/components/table/todolist.md](packages/ui/src/lib/components/table/todolist.md)
+- [x] **table docs 配方**（不寫新元件）：loading skeleton rows（既有 `skeleton`）；欄位顯隱（dropdown-menu + checkbox + 動態 `sanringRowDefColumns`）。同上 todolist「使用模式」節
+- [x] **sheet 對齊 dialog**：dialog content 已有內建 `showClose` / `closeAriaLabel`，header 已有 `align`；sheet 還要自己放 `[sanringSheetClose]`，`sanring-sheet-header` 沒有 `align`
+- [x] **radio `size`**：checkbox / switch / otp-input 有 sm/md/lg；radio 寫死 `RADIO_SIZE_CLASS = 'aspect-square h-4 w-4'`（`radio.styles.ts`）
+- [x] **dropdown-menu 真 submenu**：docs 鍵盤表寫了左右鍵開關子選單，官網範例卻是 `mouseenter` 切兩欄，不是巢狀 `menu`。checkbox / radio 範例用打勾圖示組出來即可，不必先做成一等 primitive
+- [x] **popover `side` + aria fallback**：tooltip / hover-card 已有四向 `side`；popover 只做上/下，而且沒投影 title 時仍綁死 `aria-labelledby`（`popover-content.component.ts`）
+- [x] **transfer 根層 `disabled` + `ariaLabel`**：現在只能 disable 單一 item（`TransferItem.disabled`）；雙列表是沒名字的 `role="group"`
 
 ### 可選（有缺口，但已有組合路徑）
 

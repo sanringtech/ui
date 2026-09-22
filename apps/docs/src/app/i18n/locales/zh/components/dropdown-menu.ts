@@ -26,6 +26,10 @@ export const dropdownMenuTranslations = {
   'dropdownMenu.api.variant.description':
     '控制 item 語氣；移除資料或高風險操作可使用 destructive。',
   'dropdownMenu.api.class.description': '與對應 dropdown menu primitive 樣式合併的額外 class。',
+  'dropdownMenu.api.submenu.description':
+    '要開啟的巢狀選單，綁定到 sub-content 匯出的參照（#ref="sanringDropdownMenuSubContent"，再用 [submenu]="ref.menu"）。右方向鍵開啟，左方向鍵關閉。',
+  'dropdownMenu.api.subTriggerValue.description':
+    '底層 ARIA menu item 要求必填。請與同層其他 item 使用不同的 value。',
   'dropdownMenu.accessibility.description':
     "基於 @angular/aria/menu 構建。面板有 role='menu'，每個 item 依情況有 role='menuitem'、role='menuitemcheckbox' 或 role='menuitemradio'。trigger 按鈕的 aria-haspopup='menu' 與 aria-expanded 由底層 MenuTrigger 指令管理。",
   'dropdownMenu.keyboard.description': '鍵盤導覽遵循 WAI-ARIA menu 模式。',
@@ -35,5 +39,5 @@ export const dropdownMenuTranslations = {
   'dropdownMenu.keyboard.openSubmenu': '開啟聚焦的子選單。',
   'dropdownMenu.keyboard.closeSubmenu': '關閉目前的子選單。',
   'dropdownMenu.stateModel.description':
-    "無狀態。DropdownMenuItemDirective 啟動時送出 (itemSelected)。DropdownMenuCheckboxItemComponent 和 DropdownMenuRadioGroupComponent 透過 checked input 和 checkedChange output 自行管理選取狀態。開啟/關閉狀態由 @angular/aria/menu 內部管理。",
+    '無狀態。DropdownMenuItemDirective 啟動時送出 (itemSelected)。巢狀子選單用 sanring-dropdown-menu-sub 搭配 sub-trigger 與 sub-content。Checkbox / radio 範例是在一般 item 上組合圖示。開啟/關閉狀態由 @angular/aria/menu 內部管理。',
 } as const;

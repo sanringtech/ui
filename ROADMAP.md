@@ -10,14 +10,7 @@ This is a snapshot, not a commitment or a timeline. Items move, get reprioritize
 
 ## Component completeness
 
-Sibling alignment and advertised capabilities — not new primitives. Tracked as P32 in [`TODOLIST.md`](TODOLIST.md).
-
-- **Table** — sticky column background; docs recipes for loading skeleton rows and column show/hide
-- **Sheet** — built-in close control and header `align`, to match dialog
-- **Radio** — `size` variants aligned with checkbox / switch
-- **Dropdown menu** — a real nested submenu (docs keyboard table already describes it)
-- **Popover** — four-way `side` plus an accessible name when no title is projected
-- **Transfer** — root `disabled` and `ariaLabel`
+Optional leftover sibling gaps, still tracked as P32 in [`TODOLIST.md`](TODOLIST.md): combobox `ariaLabel`, select `required`, and toast `class` docs.
 
 ## Ecosystem / team use
 
@@ -26,6 +19,7 @@ Sibling alignment and advertised capabilities — not new primitives. Tracked as
 
 ## Recently shipped
 
+- P32 sibling alignment — sheet built-in close and header `align`, radio `size`, a real dropdown-menu submenu, popover four-way `side` plus aria fallback, transfer root `disabled`/`ariaLabel`, and table sticky backgrounds plus loading/column-visibility recipes
 - Blocks starter set — `sanring add block/login` (and `dashboard-shell`, `table-page`) installs a page-level template plus its component dependencies
 - Open in StackBlitz — each component docs previewer can open a minimal Angular 22 + Tailwind project with that example
 - GitHub registries — `--registry github:owner/repo` (optional `#ref` / `@ref`) expands to the raw `registry.json` at the repo root

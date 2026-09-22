@@ -25,6 +25,10 @@ export const sheetTranslations = {
   'sheet.api.description': 'sheet primitives 支援的 inputs 與 outputs。',
   'sheet.api.isOpen.description': '控制開啟狀態，支援 [(isOpen)] 雙向綁定。',
   'sheet.api.side.description': "面板滑入的邊緣：'top'、'right'（預設）、'bottom' 或 'left'。",
+  'sheet.api.showClose.description': '是否渲染內建關閉按鈕。',
+  'sheet.api.closeAriaLabel.description': '內建關閉按鈕的 accessible name，預設為「關閉面板」。',
+  'sheet.api.headerAlign.description':
+    '標題列對齊。start 靠左，center 在所有斷點置中。預設在小螢幕置中，sm 以上靠左。',
   'sheet.demo.customClose': '自訂關閉按鈕',
   'sheet.demo.confirmDelete': '確認刪除',
   'sheet.demo.confirmDeleteDescription': '此操作無法復原。',

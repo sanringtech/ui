@@ -6,6 +6,9 @@ import { expectNoA11yViolations } from '../../../testing/axe-a11y';
 import { DropdownMenuComponent } from './dropdown-menu.component';
 import { DropdownMenuContentComponent } from './dropdown-menu-content.component';
 import { DropdownMenuItemDirective } from './dropdown-menu-item.directive';
+import { DropdownMenuSubComponent } from './dropdown-menu-sub.component';
+import { DropdownMenuSubContentComponent } from './dropdown-menu-sub-content.component';
+import { DropdownMenuSubTriggerComponent } from './dropdown-menu-sub-trigger.component';
 import { DropdownMenuTriggerDirective } from './dropdown-menu-trigger.directive';
 
 @Component({
@@ -47,12 +50,40 @@ class DropdownMenuTestHost {}
 })
 class DropdownMenuClassTestHost {}
 
+@Component({
+  imports: [
+    DropdownMenuComponent,
+    DropdownMenuContentComponent,
+    DropdownMenuItemDirective,
+    DropdownMenuSubComponent,
+    DropdownMenuSubContentComponent,
+    DropdownMenuSubTriggerComponent,
+    DropdownMenuTriggerDirective,
+  ],
+  template: `
+    <sanring-dropdown-menu>
+      <button type="button" sanringDropdownMenuTrigger [menu]="menu.menu">Open</button>
+      <sanring-dropdown-menu-content #menu="sanringDropdownMenuContent">
+        <sanring-dropdown-menu-sub>
+          <sanring-dropdown-menu-sub-trigger value="more" [submenu]="sub.menu">
+            More
+          </sanring-dropdown-menu-sub-trigger>
+          <sanring-dropdown-menu-sub-content #sub="sanringDropdownMenuSubContent">
+            <button type="button" sanringDropdownMenuItem value="nested">Nested</button>
+          </sanring-dropdown-menu-sub-content>
+        </sanring-dropdown-menu-sub>
+      </sanring-dropdown-menu-content>
+    </sanring-dropdown-menu>
+  `,
+})
+class DropdownMenuSubmenuTestHost {}
+
 describe('DropdownMenuComponent', () => {
   let overlayContainer: OverlayContainer;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [DropdownMenuTestHost, DropdownMenuClassTestHost],
+      imports: [DropdownMenuTestHost, DropdownMenuClassTestHost, DropdownMenuSubmenuTestHost],
     }).compileComponents();
 
     overlayContainer = TestBed.inject(OverlayContainer);
@@ -169,6 +200,41 @@ describe('DropdownMenuComponent', () => {
 
     expect(menu?.classList.contains('custom-menu-class')).toBe(true);
     expect(item?.classList.contains('custom-item-class')).toBe(true);
+  });
+
+  it('opens a nested submenu from the parent menu item', async () => {
+    const fixture = TestBed.createComponent(DropdownMenuSubmenuTestHost);
+    fixture.detectChanges();
+    await fixture.whenStable();
+    fixture.detectChanges();
+
+    const trigger = fixture.nativeElement.querySelector('[sanringDropdownMenuTrigger]') as HTMLElement;
+    trigger.click();
+    fixture.detectChanges();
+    await fixture.whenStable();
+    fixture.detectChanges();
+
+    const overlayElement = overlayContainer.getContainerElement();
+    const subTrigger = overlayElement.querySelector(
+      'sanring-dropdown-menu-sub-trigger',
+    ) as HTMLElement;
+    expect(subTrigger.getAttribute('aria-haspopup')).toBe('true');
+    expect(subTrigger.getAttribute('aria-expanded')).toBe('false');
+
+    subTrigger.dispatchEvent(new MouseEvent('mouseover', { bubbles: true }));
+    fixture.detectChanges();
+    await new Promise((resolve) => setTimeout(resolve, 150));
+    fixture.detectChanges();
+    await fixture.whenStable();
+    fixture.detectChanges();
+
+    expect(subTrigger.getAttribute('aria-expanded')).toBe('true');
+
+    const visibleMenus = Array.from(overlayElement.querySelectorAll('[role="menu"]')).filter(
+      (menu) => menu.getAttribute('data-visible') === 'true',
+    );
+    expect(visibleMenus.length).toBeGreaterThanOrEqual(2);
+    expect(overlayElement.textContent).toContain('Nested');
   });
 
   it('has no axe-detectable a11y violations, trigger and open menu together', async () => {

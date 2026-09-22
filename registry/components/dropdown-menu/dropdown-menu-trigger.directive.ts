@@ -104,10 +104,12 @@ export class DropdownMenuTriggerDirective implements OnDestroy {
     this.overlayRef.attach(new DomPortal(contentElement));
 
     this.overlayRef.outsidePointerEvents().subscribe((event) => {
+      const target = event.target as Node | null;
       if (
         this.ngTrigger.expanded() &&
-        !this.elementRef.nativeElement.contains(event.target as Node) &&
-        !contentElement.contains(event.target as Node)
+        !this.elementRef.nativeElement.contains(target) &&
+        !contentElement.contains(target) &&
+        !(target instanceof Element && target.closest('sanring-dropdown-menu-sub-content'))
       ) {
         this.ngTrigger.close();
       }

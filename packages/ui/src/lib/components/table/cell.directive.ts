@@ -68,7 +68,9 @@ export class TableHeaderCellDirective {
   standalone: true,
   // 🧠 當 <td> 蛋糕出生時，我們強行把 CDK 原生的 CdkCell 邏輯塞進去！
   hostDirectives: [CdkCell],
-  host: { class: 'p-4 align-middle [&:has([role=checkbox])]:pr-0' },
+  host: {
+    class: 'p-4 align-middle [&:has([role=checkbox])]:pr-0',
+  },
 })
 export class TableCellDirective {}
 
@@ -77,6 +79,8 @@ export class TableCellDirective {}
   standalone: true,
   // 🧠 當 footer 蛋糕出生時，我們強行把 CDK 原生的 CdkFooterCell 邏輯塞進去！
   hostDirectives: [CdkFooterCell],
-  host: { class: 'border-t p-4 align-middle font-medium [&:has([role=checkbox])]:pr-0' },
+  host: {
+    class: 'border-t p-4 align-middle font-medium [&:has([role=checkbox])]:pr-0',
+  },
 })
 export class TableFooterCellDirective {}

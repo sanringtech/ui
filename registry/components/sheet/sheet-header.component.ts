@@ -10,5 +10,16 @@ import { cn } from '../shared/utils';
 })
 export class SheetHeaderComponent {
   readonly class = input<string | undefined>();
-  protected readonly hostClass = computed(() => cn('flex flex-col gap-1.5', this.class()));
+
+  readonly align = input<'start' | 'center' | undefined>(undefined);
+
+  protected readonly hostClass = computed(() =>
+    cn(
+      'flex flex-col gap-1.5',
+      this.align() === 'center' && 'items-center text-center',
+      this.align() === 'start' && 'items-start text-left',
+      !this.align() && 'text-center sm:text-left',
+      this.class(),
+    ),
+  );
 }

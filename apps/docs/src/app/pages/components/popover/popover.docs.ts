@@ -36,6 +36,7 @@ export const popoverPage = {
       level: 2,
       children: [
         { id: 'example-align', titleKey: 'popover.demo.align', level: 3 },
+        { id: 'example-side', titleKey: 'popover.demo.side', level: 3 },
         { id: 'example-with-header', titleKey: 'popover.demo.withHeader', level: 3 },
       ],
     },
@@ -76,6 +77,30 @@ export const popoverPage = {
       type: "'start' | 'center' | 'end'",
       defaultValue: "'center'",
       descriptionKey: 'popover.api.align.description',
+    },
+    {
+      property: 'side',
+      type: "'top' | 'right' | 'bottom' | 'left'",
+      defaultValue: "'bottom'",
+      descriptionKey: 'popover.api.side.description',
+    },
+    {
+      property: 'sideOffset',
+      type: 'number',
+      defaultValue: '8',
+      descriptionKey: 'popover.api.sideOffset.description',
+    },
+    {
+      property: 'ariaLabel',
+      type: 'string',
+      defaultValue: 'undefined',
+      descriptionKey: 'popover.api.ariaLabel.description',
+    },
+    {
+      property: 'ariaLabelledBy',
+      type: 'string',
+      defaultValue: 'undefined',
+      descriptionKey: 'popover.api.ariaLabelledBy.description',
     },
     {
       property: 'class',
@@ -149,6 +174,12 @@ export class ExampleComponent {}`,
 <sanring-popover align="start">…</sanring-popover>
 <sanring-popover align="center">…</sanring-popover>
 <sanring-popover align="end">…</sanring-popover>`,
+
+  side: `<!-- side prefers a direction; the panel flips if it would overflow -->
+<sanring-popover-content side="top">…</sanring-popover-content>
+<sanring-popover-content side="right">…</sanring-popover-content>
+<sanring-popover-content side="bottom">…</sanring-popover-content>
+<sanring-popover-content side="left" ariaLabel="Filters">…</sanring-popover-content>`,
 
   withHeader: `<sanring-popover>
   <button sanringBtn variant="outline" sanringPopoverTrigger>

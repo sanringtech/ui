@@ -54,12 +54,44 @@ class SheetTestHost {}
 })
 class UntitledSheetTestHost {}
 
+@Component({
+  imports: [SheetContentComponent, SheetTriggerDirective, SheetComponent],
+  template: `
+    <sanring-sheet>
+      <button type="button" sanringSheetTrigger>Open</button>
+      <sanring-sheet-content [showClose]="false" ariaLabel="Filters"></sanring-sheet-content>
+    </sanring-sheet>
+  `,
+})
+class HiddenCloseSheetHost {}
+
+@Component({
+  imports: [
+    SheetContentComponent,
+    SheetHeaderComponent,
+    SheetTitleComponent,
+    SheetTriggerDirective,
+    SheetComponent,
+  ],
+  template: `
+    <sanring-sheet>
+      <button type="button" sanringSheetTrigger>Open</button>
+      <sanring-sheet-content>
+        <sanring-sheet-header align="center">
+          <sanring-sheet-title>Centered</sanring-sheet-title>
+        </sanring-sheet-header>
+      </sanring-sheet-content>
+    </sanring-sheet>
+  `,
+})
+class AlignedHeaderSheetHost {}
+
 describe('SheetComponent', () => {
   let overlayContainer: OverlayContainer;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [SheetTestHost],
+      imports: [SheetTestHost, HiddenCloseSheetHost, AlignedHeaderSheetHost],
     }).compileComponents();
 
     overlayContainer = TestBed.inject(OverlayContainer);
@@ -283,6 +315,52 @@ describe('SheetComponent', () => {
     fixture.detectChanges();
 
     expect(trigger.getAttribute('aria-expanded')).toBe('false');
+  });
+
+  it('renders a built-in close button that closes the panel', () => {
+    const fixture = TestBed.createComponent(SheetTestHost);
+    fixture.detectChanges();
+
+    (fixture.nativeElement.querySelector('button[sanringSheetTrigger]') as HTMLElement).click();
+    fixture.detectChanges();
+
+    const closeButton = overlayContainer
+      .getContainerElement()
+      .querySelector('button[aria-label="關閉面板"]') as HTMLElement;
+
+    expect(closeButton).toBeTruthy();
+    closeButton.click();
+    fixture.detectChanges();
+
+    expect(
+      fixture.nativeElement.querySelector('button[sanringSheetTrigger]')?.getAttribute('aria-expanded'),
+    ).toBe('false');
+  });
+
+  it('hides the built-in close button when showClose is false', () => {
+    const fixture = TestBed.createComponent(HiddenCloseSheetHost);
+    fixture.detectChanges();
+
+    (fixture.nativeElement.querySelector('button') as HTMLElement).click();
+    fixture.detectChanges();
+
+    expect(
+      overlayContainer.getContainerElement().querySelector('button[aria-label="關閉面板"]'),
+    ).toBeNull();
+  });
+
+  it('aligns the header when align is set', () => {
+    const fixture = TestBed.createComponent(AlignedHeaderSheetHost);
+    fixture.detectChanges();
+
+    (fixture.nativeElement.querySelector('button') as HTMLElement).click();
+    fixture.detectChanges();
+
+    const header = overlayContainer
+      .getContainerElement()
+      .querySelector('sanring-sheet-header') as HTMLElement;
+    expect(header.classList.contains('items-center')).toBe(true);
+    expect(header.classList.contains('text-center')).toBe(true);
   });
 
   it('closes via a sanringSheetClose button inside the panel', () => {

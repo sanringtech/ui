@@ -19,6 +19,8 @@ export const OVERLAY_SURFACE_CLASS =
   'border border-[var(--sanring-border)] bg-[var(--sanring-elevated)] text-[var(--sanring-foreground)] shadow-lg';
 export const POPOVER_SURFACE_CLASS = 'z-50 w-72 rounded-[var(--sanring-radius-sm)] p-4 shadow-md outline-none';
 export const OVERLAY_CLOSE_ICON_CLASS = 'size-4';
+export const OVERLAY_ABSOLUTE_CLOSE_BUTTON_CLASS =
+  'absolute right-4 top-4 rounded-[var(--sanring-radius-xs)] text-[var(--sanring-muted)] opacity-70 ring-offset-[var(--sanring-surface)] transition-colors transition-opacity hover:text-[var(--sanring-foreground)] hover:opacity-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--sanring-border-strong)] focus-visible:ring-offset-2 disabled:pointer-events-none';
 
 export const SELECTION_CONTROL_BASE_CLASS =
   'peer flex shrink-0 items-center justify-center transition-colors disabled:cursor-not-allowed disabled:opacity-50';

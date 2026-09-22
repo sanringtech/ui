@@ -64,6 +64,36 @@ export const cliVersionChangelog: readonly CliVersionEntry[] = [
         componentIds: ['field'],
         text: '`sanring-field` now projects `textarea[sanringTextarea]` into the control slot, so a character-count description renders below the textarea instead of above it.',
       },
+      {
+        type: 'added',
+        componentIds: ['sheet'],
+        text: '`sanring-sheet-content` renders a built-in close button (`showClose`, `closeAriaLabel`). `sanring-sheet-header` accepts `align` (`start` | `center`).',
+      },
+      {
+        type: 'added',
+        componentIds: ['radio'],
+        text: '`sanring-radio-group` accepts `size` (`sm` | `md` | `lg`), matching checkbox and switch.',
+      },
+      {
+        type: 'added',
+        componentIds: ['dropdown-menu'],
+        text: '`sanring-dropdown-menu-sub`, `sanring-dropdown-menu-sub-trigger`, and `sanring-dropdown-menu-sub-content` open a nested menu with Arrow Right / Arrow Left.',
+      },
+      {
+        type: 'added',
+        componentIds: ['popover'],
+        text: '`sanring-popover-content` accepts four-way `side` and only sets `aria-labelledby` when a title is projected; `ariaLabel` is the fallback.',
+      },
+      {
+        type: 'added',
+        componentIds: ['transfer'],
+        text: '`sanring-transfer` accepts root `disabled` and `ariaLabel` on the `role="group"` host.',
+      },
+      {
+        type: 'changed',
+        componentIds: ['table'],
+        text: 'Sticky header, body, and footer cells use an opaque `--sanring-background` so scrolled text does not show through. Docs add loading skeleton and column-visibility recipes.',
+      },
     ],
   },
   {

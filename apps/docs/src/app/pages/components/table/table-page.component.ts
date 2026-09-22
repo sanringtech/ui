@@ -1,12 +1,13 @@
 import { CdkTableModule } from '@angular/cdk/table';
 import { Component, computed, inject, signal } from '@angular/core';
-import { LucideEllipsis, LucideFile, LucideSettings, LucideTrash2 } from '@lucide/angular';
+import { LucideCheck, LucideEllipsis, LucideFile, LucideSettings, LucideTrash2 } from '@lucide/angular';
 import {
   ButtonDirective,
   CheckboxComponent,
   CheckedState,
   PaginatorComponent,
   SANRING_DROPDOWN_MENU_IMPORTS,
+  SkeletonDirective,
   SortDirective,
   SortHeaderComponent,
   SortState,
@@ -51,6 +52,7 @@ interface InvoiceRow {
     ButtonDirective,
     CheckboxComponent,
     SANRING_DROPDOWN_MENU_IMPORTS,
+    LucideCheck,
     LucideEllipsis,
     LucideFile,
     LucideSettings,
@@ -64,6 +66,7 @@ interface InvoiceRow {
     ComponentPageSectionComponent,
     ComponentPageUsageImportsComponent,
     PaginatorComponent,
+    SkeletonDirective,
     SortDirective,
     SortHeaderComponent,
     TableCellDefDirective,
@@ -264,14 +267,14 @@ interface InvoiceRow {
                       <th
                         sanringHeaderCell
                         *sanringHeaderCellDef
-                        class="bg-[var(--sanring-background)] shadow-[1px_0_0_var(--sanring-border)]"
+                        class="shadow-[1px_0_0_var(--sanring-border)]"
                       >
                         Invoice
                       </th>
                       <td
                         sanringCell
                         *sanringCellDef="let invoice"
-                        class="bg-[var(--sanring-background)] shadow-[1px_0_0_var(--sanring-border)]"
+                        class="shadow-[1px_0_0_var(--sanring-border)]"
                       >
                         {{ invoice.id }}
                       </td>
@@ -337,14 +340,14 @@ interface InvoiceRow {
                       <th
                         sanringHeaderCell
                         *sanringHeaderCellDef
-                        class="bg-[var(--sanring-background)] text-right shadow-[-1px_0_0_var(--sanring-border)]"
+                        class="text-right shadow-[-1px_0_0_var(--sanring-border)]"
                       >
                         Actions
                       </th>
                       <td
                         sanringCell
                         *sanringCellDef="let invoice"
-                        class="bg-[var(--sanring-background)] text-right shadow-[-1px_0_0_var(--sanring-border)]"
+                        class="text-right shadow-[-1px_0_0_var(--sanring-border)]"
                       >
                         <button sanringBtn variant="ghost" size="icon" aria-label="Open actions">
                           <svg lucideEllipsis class="size-4"></svg>
@@ -354,6 +357,128 @@ interface InvoiceRow {
 
                     <tr cdk-header-row sanringRow *sanringHeaderRowDef="stickyEndColumns"></tr>
                     <tr cdk-row sanringRow *sanringRowDef="let row; columns: stickyEndColumns"></tr>
+                  </table>
+                </sanring-table-container>
+              </div>
+            </app-component-page-code-previewer>
+          </app-component-page-section>
+
+          <app-component-page-section [section]="section('example-loading')">
+            <app-component-page-code-previewer [code]="examples.loading" language="angular-html">
+              <div previewer class="w-full">
+                <sanring-table-container
+                  class="rounded-[var(--sanring-radius)] border border-[var(--docs-border)]"
+                >
+                  <table class="w-full">
+                    <thead>
+                      <tr>
+                        <th class="h-12 px-4 text-left text-sm font-medium text-[var(--sanring-muted)]">
+                          Invoice
+                        </th>
+                        <th class="h-12 px-4 text-left text-sm font-medium text-[var(--sanring-muted)]">
+                          Customer
+                        </th>
+                        <th class="h-12 px-4 text-left text-sm font-medium text-[var(--sanring-muted)]">
+                          Status
+                        </th>
+                        <th class="h-12 px-4 text-right text-sm font-medium text-[var(--sanring-muted)]">
+                          Amount
+                        </th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      @for (row of skeletonRows; track row) {
+                        <tr class="border-t border-[var(--sanring-border)]">
+                          <td class="p-4"><div sanringSkeleton class="h-4 w-20"></div></td>
+                          <td class="p-4"><div sanringSkeleton class="h-4 w-28"></div></td>
+                          <td class="p-4"><div sanringSkeleton class="h-4 w-16"></div></td>
+                          <td class="p-4">
+                            <div sanringSkeleton class="ml-auto h-4 w-16"></div>
+                          </td>
+                        </tr>
+                      }
+                    </tbody>
+                  </table>
+                </sanring-table-container>
+              </div>
+            </app-component-page-code-previewer>
+          </app-component-page-section>
+
+          <app-component-page-section [section]="section('example-column-visibility')">
+            <app-component-page-code-previewer
+              [code]="examples.columnVisibility"
+              language="angular-html"
+            >
+              <div previewer class="grid w-full gap-3">
+                <sanring-dropdown-menu>
+                  <button
+                    sanringBtn
+                    variant="outline"
+                    sanringDropdownMenuTrigger
+                    [menu]="columnsMenu.menu"
+                  >
+                    Columns
+                  </button>
+                  <sanring-dropdown-menu-content
+                    #columnsMenu="sanringDropdownMenuContent"
+                    class="w-44"
+                  >
+                    @for (column of allColumns; track column.id) {
+                      <button
+                        sanringDropdownMenuItem
+                        type="button"
+                        [value]="column.id"
+                        (click)="$event.preventDefault(); toggleColumn(column.id)"
+                      >
+                        <span class="flex size-4 items-center justify-center">
+                          @if (isColumnVisible(column.id)) {
+                            <svg lucideCheck class="size-4"></svg>
+                          }
+                        </span>
+                        {{ column.label }}
+                      </button>
+                    }
+                  </sanring-dropdown-menu-content>
+                </sanring-dropdown-menu>
+
+                <sanring-table-container
+                  class="rounded-[var(--sanring-radius)] border border-[var(--docs-border)]"
+                >
+                  <table cdk-table sanringTable [dataSource]="invoices">
+                    <ng-container sanringColumnDef="invoice">
+                      <th sanringHeaderCell *sanringHeaderCellDef>Invoice</th>
+                      <td sanringCell *sanringCellDef="let invoice">{{ invoice.id }}</td>
+                    </ng-container>
+                    <ng-container sanringColumnDef="customer">
+                      <th sanringHeaderCell *sanringHeaderCellDef>Customer</th>
+                      <td sanringCell *sanringCellDef="let invoice">{{ invoice.customer }}</td>
+                    </ng-container>
+                    <ng-container sanringColumnDef="status">
+                      <th sanringHeaderCell *sanringHeaderCellDef>Status</th>
+                      <td sanringCell *sanringCellDef="let invoice">
+                        <span [class]="statusClass(invoice.status)">{{ invoice.status }}</span>
+                      </td>
+                    </ng-container>
+                    <ng-container sanringColumnDef="amount">
+                      <th sanringHeaderCell *sanringHeaderCellDef class="text-right">Amount</th>
+                      <td
+                        sanringCell
+                        *sanringCellDef="let invoice"
+                        class="text-right tabular-nums"
+                      >
+                        {{ formatAmount(invoice.amount) }}
+                      </td>
+                    </ng-container>
+                    <tr
+                      cdk-header-row
+                      sanringRow
+                      *sanringHeaderRowDef="visibleColumns()"
+                    ></tr>
+                    <tr
+                      cdk-row
+                      sanringRow
+                      *sanringRowDef="let row; columns: visibleColumns()"
+                    ></tr>
                   </table>
                 </sanring-table-container>
               </div>
@@ -610,6 +735,20 @@ export class TablePageComponent {
   protected readonly page = tablePage;
   protected readonly examples = tablePageExamples;
   protected readonly i18n = inject(I18nService);
+  protected readonly skeletonRows = [1, 2, 3, 4];
+  protected readonly allColumns = [
+    { id: 'invoice', label: 'Invoice' },
+    { id: 'customer', label: 'Customer' },
+    { id: 'status', label: 'Status' },
+    { id: 'amount', label: 'Amount' },
+  ] as const;
+  protected readonly visibleColumnIds = signal<string[]>([
+    'invoice',
+    'customer',
+    'status',
+    'amount',
+  ]);
+  protected readonly visibleColumns = computed(() => this.visibleColumnIds());
   protected readonly displayedColumns = ['invoice', 'customer', 'status', 'amount'];
   protected readonly sizingColumns = ['select', 'invoice', 'customer', 'amount', 'actions'];
   protected readonly stickyStartColumns = ['invoice', 'customer', 'status', 'amount'];
@@ -762,6 +901,16 @@ export class TablePageComponent {
 
       return next;
     });
+  }
+
+  protected isColumnVisible(id: string): boolean {
+    return this.visibleColumnIds().includes(id);
+  }
+
+  protected toggleColumn(id: string): void {
+    this.visibleColumnIds.update((columns) =>
+      columns.includes(id) ? columns.filter((column) => column !== id) : [...columns, id],
+    );
   }
 
   private sortValue(row: InvoiceRow, active: string): string | number {

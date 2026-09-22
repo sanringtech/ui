@@ -18,13 +18,13 @@
 
 ## 待處理
 
-- [ ] Sticky 欄位的背景色 —— `sticky`/`stickyEnd` 已能傳進去，但 CDK 只會加 `position: sticky` + 位移，不會加背景色，實際用 sticky checkbox/actions 欄時要自己補不透明背景(例如 `bg-[var(--sanring-surface)]`），不然捲動時文字會透出來。
+- [x] Sticky 欄位的背景色 —— `sanring-table-container` 對投影進去的 `.cdk-table-sticky` / `.cdk-table-sticky-end` 補 `--sanring-background`（sticky 一定包在可捲動 container 裡）。消費者 `class` 仍可覆蓋。
 - [ ] `CdkTextColumn` 等效元件 —— 目前決定不做(它是 sealed Component，模板寫死原生 `cdk-*` attribute，要支援等於要重寫一整套 `ViewChild` 註冊邏輯)，先讓使用者手動組 `sanringColumnDef` + `sanringCellDef`。
 - [ ] CDK flex-layout(`<cdk-table>` 自訂標籤，非原生 `<table>`)—— 目前完全不支援。`TableDirective` 的 selector 已收窄成只認 `table[cdk-table][sanringTable]`，因為所有 cell/row directive 都只匹配原生 `th`/`td`/`tr`。真的要支援 flex 模式，需要幫每個 cell/row directive 都做一份平行 selector(例如 `cdk-cell[sanringCell]`），範圍不小，先不做。
 
 ## 不用寫新元件，純粹是「使用模式」要補進文件
 
 - [x] Row actions(⋯ 選單)—— docs table 頁面已示範用 `dropdown-menu` 放進最後一欄的 cell
-- [ ] Loading skeleton rows —— 用既有 `skeleton`，loading 時把 tbody 內容換掉；docs 頁面尚未示範
-- [ ] 欄位顯示/隱藏切換 —— dropdown-menu + checkbox 湊 checklist，搭配 `sanringRowDefColumns` 動態陣列；docs 頁面尚未示範
+- [x] Loading skeleton rows —— docs 用既有 `skeleton` 示範 loading 時把 tbody 換成骨架列
+- [x] 欄位顯示/隱藏切換 —— docs 用 dropdown-menu + 打勾圖示 + 動態 `sanringRowDef` columns 示範
 - [x] Row selection checkbox 欄 —— docs table 頁面已示範 `sanringColumnDef` + `sanring-checkbox` + `TableRowDirective` 的 `selected` input 組合

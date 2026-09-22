@@ -114,6 +114,29 @@ import { popoverPage, popoverPageExamples } from './popover.docs';
             </app-component-page-code-previewer>
           </app-component-page-section>
 
+          <app-component-page-section [section]="section('example-side')">
+            <app-component-page-code-previewer [code]="examples.side" language="angular-html">
+              <div
+                previewer
+                class="flex min-h-[220px] flex-wrap items-center justify-center gap-3"
+              >
+                @for (side of sides; track side) {
+                  <sanring-popover>
+                    <button sanringBtn size="sm" variant="outline" sanringPopoverTrigger>
+                      {{ side }}
+                    </button>
+                    <sanring-popover-content [side]="side" [ariaLabel]="'Side: ' + side">
+                      <p class="m-0 text-sm font-medium">Side: {{ side }}</p>
+                      <p class="m-0 mt-1 text-xs text-[var(--docs-muted)]">
+                        Flips when it would overflow.
+                      </p>
+                    </sanring-popover-content>
+                  </sanring-popover>
+                }
+              </div>
+            </app-component-page-code-previewer>
+          </app-component-page-section>
+
           <!-- With Header (profile card) -->
           <app-component-page-section [section]="section('example-with-header')">
             <app-component-page-code-previewer [code]="examples.withHeader" language="angular-html">
@@ -162,6 +185,7 @@ export class PopoverPageComponent {
   protected readonly i18n = inject(I18nService);
 
   protected readonly aligns = ['start', 'center', 'end'] as const;
+  protected readonly sides = ['top', 'right', 'bottom', 'left'] as const;
 
   protected section(id: string) {
     return getComponentPageSection(this.page, id);

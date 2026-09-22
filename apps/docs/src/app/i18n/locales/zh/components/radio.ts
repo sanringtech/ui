@@ -8,6 +8,12 @@ export const radioTranslations = {
   'radio.examples.description': '常見模式，包含搭配標籤、水平排列與停用狀態。',
   'radio.demo.withLabel': '搭配標籤',
   'radio.demo.horizontal': '水平排列',
+  'radio.demo.size': '尺寸',
+  'radio.demo.size.sm': '小',
+  'radio.demo.size.md': '中',
+  'radio.demo.size.lg': '大',
+  'radio.api.group.size':
+    '套用到群組內每個選項的尺寸，與 checkbox / switch 對齊：sm、md（預設）或 lg。',
   'radio.demo.disabled': '停用',
   'radio.demo.field': '搭配 Field',
   'radio.demo.planFree': '免費方案',

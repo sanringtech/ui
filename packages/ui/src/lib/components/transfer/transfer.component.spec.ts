@@ -52,10 +52,48 @@ class TransferTestHost {
   readonly mode = signal<TransferMode>('two-way');
 }
 
+@Component({
+  imports: [
+    TransferComponent,
+    TransferPanelComponent,
+    TransferHeaderComponent,
+    TransferListComponent,
+    TransferActionDirective,
+  ],
+  template: `
+    <sanring-transfer
+      [items]="items"
+      [(selectedKeys)]="selectedKeys"
+      disabled
+      ariaLabel="Assign languages"
+      #transfer
+    >
+      <sanring-transfer-panel direction="source">
+        <sanring-transfer-header>Available</sanring-transfer-header>
+        <sanring-transfer-list />
+      </sanring-transfer-panel>
+      <div sanringTransferAction>
+        <button type="button" (click)="transfer.moveToTarget()">to-target</button>
+      </div>
+      <sanring-transfer-panel direction="target">
+        <sanring-transfer-header>Selected</sanring-transfer-header>
+        <sanring-transfer-list />
+      </sanring-transfer-panel>
+    </sanring-transfer>
+  `,
+})
+class DisabledTransferHost {
+  items = [
+    { key: '1', label: 'One' },
+    { key: '2', label: 'Two' },
+  ];
+  selectedKeys = ['2'];
+}
+
 describe('TransferComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [TransferTestHost],
+      imports: [TransferTestHost, DisabledTransferHost],
     }).compileComponents();
   });
 
@@ -221,6 +259,32 @@ describe('TransferComponent', () => {
     fixture.detectChanges();
 
     expect(four.getAttribute('aria-checked')).toBe('true');
+  });
+
+  it('names the group and blocks all moves when the root is disabled', async () => {
+    const fixture = TestBed.createComponent(DisabledTransferHost);
+    fixture.detectChanges();
+    await fixture.whenStable();
+    fixture.detectChanges();
+
+    const root = fixture.nativeElement.querySelector('sanring-transfer') as HTMLElement;
+    expect(root.getAttribute('role')).toBe('group');
+    expect(root.getAttribute('aria-label')).toBe('Assign languages');
+    expect(root.getAttribute('aria-disabled')).toBe('true');
+
+    const source = root.querySelector('[data-direction="source"]') as HTMLElement;
+    const one = source.querySelector('[role="checkbox"][aria-label="One"]') as HTMLElement;
+    expect(one.getAttribute('aria-disabled')).toBe('true');
+
+    one.click();
+    fixture.detectChanges();
+    Array.from(root.querySelectorAll('button'))
+      .find((button) => button.textContent?.trim() === 'to-target')
+      ?.click();
+    fixture.detectChanges();
+    await fixture.whenStable();
+
+    expect(fixture.componentInstance.selectedKeys).toEqual(['2']);
   });
 
   it('has no axe-detectable a11y violations', async () => {
