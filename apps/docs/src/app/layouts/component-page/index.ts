@@ -2,7 +2,6 @@ export * from './component-page-api-table.component';
 export * from './component-page-code-block.component';
 export * from './component-page-code-previewer.component';
 export * from './component-page-header.component';
-export * from './component-page-hint.component';
 export * from './component-page-installation.component';
 export * from './component-page-keyboard-table.component';
 export * from './component-page-recent-changes.component';

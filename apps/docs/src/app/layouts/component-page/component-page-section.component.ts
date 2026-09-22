@@ -21,27 +21,30 @@ interface StructuredDescriptionItem {
   template: `
     <section [id]="sectionId" [class]="sectionClass">
       <div class="mb-3.5">
-        <div [class]="headingWrapClass">
-          @if (level === 2) {
-            <span class="mt-1.5 h-5 w-0.5 shrink-0 bg-[var(--docs-accent)]" aria-hidden="true"></span>
-          }
-          @switch (level) {
-            @case (4) {
-              <h4 [class]="headingClass">
-                {{ i18n.t(section.titleKey) }}
-              </h4>
+        <div class="flex min-w-0 items-start justify-between gap-3">
+          <div [class]="headingWrapClass">
+            @if (level === 2) {
+              <span class="mt-1.5 h-5 w-0.5 shrink-0 bg-[var(--docs-accent)]" aria-hidden="true"></span>
             }
-            @case (3) {
-              <h3 [class]="headingClass">
-                {{ i18n.t(section.titleKey) }}
-              </h3>
+            @switch (level) {
+              @case (4) {
+                <h4 [class]="headingClass">
+                  {{ i18n.t(section.titleKey) }}
+                </h4>
+              }
+              @case (3) {
+                <h3 [class]="headingClass">
+                  {{ i18n.t(section.titleKey) }}
+                </h3>
+              }
+              @default {
+                <h2 [class]="headingClass">
+                  {{ i18n.t(section.titleKey) }}
+                </h2>
+              }
             }
-            @default {
-              <h2 [class]="headingClass">
-                {{ i18n.t(section.titleKey) }}
-              </h2>
-            }
-          }
+          </div>
+          <ng-content select="[section-action]" />
         </div>
 
         @if (section.descriptionKey) {

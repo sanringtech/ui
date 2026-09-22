@@ -16,7 +16,6 @@ import {
   ComponentPageCodePreviewer,
   ComponentPageComponent,
   ComponentPageHeaderComponent,
-  ComponentPageHintComponent,
   ComponentPageInstallationComponent,
   ComponentPageSectionComponent,
   ComponentPageUsageImportsComponent,
@@ -38,7 +37,6 @@ import { comboboxPage, comboboxPageExamples } from './combobox.docs';
     ComponentPageCodePreviewer,
     ComponentPageComponent,
     ComponentPageHeaderComponent,
-    ComponentPageHintComponent,
     ComponentPageInstallationComponent,
     ComponentPageSectionComponent,
     ComponentPageUsageImportsComponent,
@@ -78,9 +76,9 @@ import { comboboxPage, comboboxPageExamples } from './combobox.docs';
                   </sanring-combobox-list>
                 </sanring-combobox-content>
               </sanring-combobox>
-              <app-component-page-hint>
+              <p class="m-0 text-xs leading-5 text-[var(--docs-muted)]">
                 {{ i18n.t('combobox.demo.selected') }} {{ labelFor(framework) || '—' }}
-              </app-component-page-hint>
+              </p>
             </div>
           </div>
         </app-component-page-code-previewer>
@@ -224,18 +222,18 @@ import { comboboxPage, comboboxPageExamples } from './combobox.docs';
                       </sanring-combobox-list>
                     </sanring-combobox-content>
                   </sanring-combobox>
-                  <app-component-page-hint>
+                  <p class="m-0 text-xs leading-5 text-[var(--docs-muted)]">
                     {{ i18n.t('combobox.demo.selected') }} {{ library || '—' }}
-                  </app-component-page-hint>
+                  </p>
                 </div>
               </div>
             </app-component-page-code-previewer>
           </app-component-page-section>
 
           <app-component-page-section [section]="section('example-popup')">
-            <app-component-page-hint class="text-sm leading-6">
+            <p class="m-0 text-sm leading-6 text-[var(--docs-muted)]">
               {{ i18n.t('combobox.demo.popupDescription') }}
-            </app-component-page-hint>
+            </p>
             <app-component-page-code-previewer [code]="examples.popup" language="angular-html">
               <div previewer class="flex w-full min-h-[240px] items-start justify-center pt-8">
                 <div class="grid w-[min(360px,100%)] gap-2">
@@ -276,9 +274,9 @@ import { comboboxPage, comboboxPageExamples } from './combobox.docs';
           </app-component-page-section>
 
           <app-component-page-section [section]="section('example-clear')">
-            <app-component-page-hint class="text-sm leading-6">
+            <p class="m-0 text-sm leading-6 text-[var(--docs-muted)]">
               {{ i18n.t('combobox.demo.clearButtonDescription') }}
-            </app-component-page-hint>
+            </p>
             <app-component-page-code-previewer [code]="examples.clear" language="angular-html">
               <div previewer class="flex w-full min-h-[240px] items-start justify-center pt-8">
                 <div class="grid w-[min(360px,100%)] gap-2">

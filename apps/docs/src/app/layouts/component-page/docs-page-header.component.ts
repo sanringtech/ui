@@ -7,8 +7,17 @@ import { Component, Input } from '@angular/core';
     class: 'block min-w-0',
   },
   template: `
-    <header class="docs-panel-lg relative mb-12 p-6 max-[720px]:p-5">
-      <div class="min-w-0">
+    <header class="docs-panel-lg relative mb-12 overflow-hidden p-6 max-[720px]:p-5">
+      <div
+        class="pointer-events-none absolute inset-x-0 top-0 h-1 bg-[linear-gradient(90deg,var(--docs-accent),var(--docs-accent-alt),var(--docs-accent-warm))]"
+        aria-hidden="true"
+      ></div>
+      <div
+        class="pointer-events-none absolute inset-0 opacity-60 [background-image:linear-gradient(var(--docs-bg-grid)_1px,transparent_1px),linear-gradient(90deg,var(--docs-bg-grid)_1px,transparent_1px)] [background-size:32px_32px]"
+        aria-hidden="true"
+      ></div>
+
+      <div class="relative z-10 min-w-0">
         @if (eyebrow) {
           <p class="docs-eyebrow mb-3 font-mono">
             <span class="min-w-0 truncate">{{ eyebrow }}</span>
