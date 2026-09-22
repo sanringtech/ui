@@ -1,5 +1,7 @@
 # Table 元件待辦清單
 
+全庫追蹤見根目錄 [TODOLIST.md](../../../../../../TODOLIST.md) P32。本檔只記 table 自己的細節。
+
 ## 已完成
 
 - `caption.directive.ts` — `TableCaptionDirective`(`caption[sanringCaption]`），投影進 `CdkTable` 內建的 `<ng-content select="caption">`

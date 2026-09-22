@@ -8,6 +8,17 @@ This is a snapshot, not a commitment or a timeline. Items move, get reprioritize
 
 - **More blocks** — remaining page templates (`register`, `forgot-password`, `settings-page`, `detail-page`, `wizard`, `pricing-page`) on top of the starter three.
 
+## Component completeness
+
+Sibling alignment and advertised capabilities — not new primitives. Tracked as P32 in [`TODOLIST.md`](TODOLIST.md).
+
+- **Table** — sticky column background; docs recipes for loading skeleton rows and column show/hide
+- **Sheet** — built-in close control and header `align`, to match dialog
+- **Radio** — `size` variants aligned with checkbox / switch
+- **Dropdown menu** — a real nested submenu (docs keyboard table already describes it)
+- **Popover** — four-way `side` plus an accessible name when no title is projected
+- **Transfer** — root `disabled` and `ariaLabel`
+
 ## Ecosystem / team use
 
 - **Registry Directory** — a docs page listing community/third-party registries, so teams can discover each other's component sets.
