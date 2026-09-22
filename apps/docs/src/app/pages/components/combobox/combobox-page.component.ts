@@ -109,21 +109,32 @@ import { comboboxPage, comboboxPageExamples } from './combobox.docs';
 
       <app-component-page-section [section]="section('example')">
         <div class="grid gap-2">
-          <app-component-page-section [section]="section('example-multiple')">
-            <app-component-page-code-previewer [code]="examples.multiple" language="angular-html">
+          <app-component-page-section [section]="section('example-multiple-single-line')">
+            <app-component-page-code-previewer
+              [code]="examples.multipleSingleLine"
+              language="angular-html"
+            >
               <div previewer class="flex w-full min-h-[240px] items-start justify-center pt-8">
-                <div class="grid w-[min(320px,100%)] gap-2">
-                  <sanring-combobox [multiple]="true" [(value)]="selectedFrameworks">
+                <div class="grid w-full min-w-0 max-w-[360px] gap-2">
+                  <sanring-combobox [multiple]="true" [(value)]="nowrapFrameworks">
                     <sanring-combobox-label>{{
                       i18n.t('combobox.demo.frameworks')
                     }}</sanring-combobox-label>
-                    <sanring-combobox-chip-input>
-                      @for (value of selectedFrameworkValues(); track value) {
-                        <sanring-combobox-chip [value]="value">{{
-                          labelFor(value)
-                        }}</sanring-combobox-chip>
-                      }
+                    <sanring-combobox-chip-input [wrap]="false">
+                      <sanring-combobox-chips [wrap]="false">
+                        @for (value of nowrapFrameworkValues(); track value) {
+                          <sanring-combobox-chip [value]="value">{{
+                            labelFor(value)
+                          }}</sanring-combobox-chip>
+                        }
+                      </sanring-combobox-chips>
                       <sanring-combobox-input />
+                      <span
+                        class="ml-auto shrink-0 self-center text-xs tabular-nums text-[var(--sanring-muted)]"
+                        aria-live="polite"
+                      >
+                        {{ nowrapFrameworkValues().length }}/{{ frameworks.length }}
+                      </span>
                     </sanring-combobox-chip-input>
                     <sanring-combobox-content>
                       <sanring-combobox-empty>{{
@@ -138,12 +149,51 @@ import { comboboxPage, comboboxPageExamples } from './combobox.docs';
                       </sanring-combobox-list>
                     </sanring-combobox-content>
                   </sanring-combobox>
-                  <p
-                    class="m-0 text-end text-[0.8rem] tabular-nums text-[var(--docs-muted)]"
-                    aria-live="polite"
-                  >
-                    {{ selectedFrameworkValues().length }}/{{ frameworks.length }}
-                  </p>
+                </div>
+              </div>
+            </app-component-page-code-previewer>
+          </app-component-page-section>
+
+          <app-component-page-section [section]="section('example-multiple-multi-line')">
+            <app-component-page-code-previewer
+              [code]="examples.multipleMultiLine"
+              language="angular-html"
+            >
+              <div previewer class="flex w-full min-h-[240px] items-start justify-center pt-8">
+                <div class="grid w-full min-w-0 max-w-[280px] gap-2">
+                  <sanring-combobox [multiple]="true" [(value)]="wrapFrameworks">
+                    <sanring-combobox-label>{{
+                      i18n.t('combobox.demo.frameworks')
+                    }}</sanring-combobox-label>
+                    <sanring-combobox-chip-input>
+                      <sanring-combobox-chips>
+                        @for (value of wrapFrameworkValues(); track value) {
+                          <sanring-combobox-chip [value]="value">{{
+                            labelFor(value)
+                          }}</sanring-combobox-chip>
+                        }
+                      </sanring-combobox-chips>
+                      <sanring-combobox-input />
+                      <span
+                        class="ml-auto shrink-0 self-center text-xs tabular-nums text-[var(--sanring-muted)]"
+                        aria-live="polite"
+                      >
+                        {{ wrapFrameworkValues().length }}/{{ frameworks.length }}
+                      </span>
+                    </sanring-combobox-chip-input>
+                    <sanring-combobox-content>
+                      <sanring-combobox-empty>{{
+                        i18n.t('combobox.demo.empty')
+                      }}</sanring-combobox-empty>
+                      <sanring-combobox-list>
+                        @for (item of frameworks; track item.value) {
+                          <sanring-combobox-item [value]="item.value" [label]="item.label">
+                            {{ item.label }}
+                          </sanring-combobox-item>
+                        }
+                      </sanring-combobox-list>
+                    </sanring-combobox-content>
+                  </sanring-combobox>
                 </div>
               </div>
             </app-component-page-code-previewer>
@@ -314,7 +364,20 @@ export class ComboboxPageComponent {
   protected readonly i18n = inject(I18nService);
 
   protected framework: string | string[] | null = 'angular';
-  protected selectedFrameworks: string | string[] | null = ['angular', 'astro'];
+  protected wrapFrameworks: string | string[] | null = [
+    'angular',
+    'react',
+    'sveltekit',
+    'nuxt',
+    'astro',
+  ];
+  protected nowrapFrameworks: string | string[] | null = [
+    'angular',
+    'react',
+    'sveltekit',
+    'nuxt',
+    'astro',
+  ];
   protected library: string | string[] | null = 'angular';
   protected country: string | string[] | null = null;
   protected clearDemoValue: string | string[] | null = 'react';
@@ -346,8 +409,12 @@ export class ComboboxPageComponent {
     return getComponentPageSection(this.page, id);
   }
 
-  protected selectedFrameworkValues(): string[] {
-    return Array.isArray(this.selectedFrameworks) ? this.selectedFrameworks : [];
+  protected wrapFrameworkValues(): string[] {
+    return Array.isArray(this.wrapFrameworks) ? this.wrapFrameworks : [];
+  }
+
+  protected nowrapFrameworkValues(): string[] {
+    return Array.isArray(this.nowrapFrameworks) ? this.nowrapFrameworks : [];
   }
 
   protected labelFor(

@@ -1,6 +1,14 @@
-import { ChangeDetectionStrategy, Component, computed, inject, input } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  computed,
+  ElementRef,
+  inject,
+  input,
+} from '@angular/core';
 import { LucideX } from '@lucide/angular';
 import { ComboboxComponent } from './combobox.component';
+import { ComboboxChipsComponent } from './combobox-chips.component';
 import { cn } from '../shared/utils';
 
 @Component({
@@ -39,6 +47,20 @@ export class ComboboxChipComponent {
 
   // 🪄 依賴注入：連線到大腦
   protected combobox = inject(ComboboxComponent);
+  private readonly chipsParent = inject(ComboboxChipsComponent, { optional: true });
+  private readonly elementRef = inject<ElementRef<HTMLElement>>(ElementRef);
+
+  protected readonly overflowHidden = computed(() => {
+    const parent = this.chipsParent;
+    if (!parent) return false;
+    const from = parent.hiddenFrom();
+    if (from === null) return false;
+    const node = this.elementRef.nativeElement;
+    const chips = node.parentElement
+      ? [...node.parentElement.children].filter((child) => child.tagName === 'SANRING-COMBOBOX-CHIP')
+      : [];
+    return chips.indexOf(node) >= from;
+  });
 
   // 🔍 禁用狀態判斷：如果大腦被禁用了，或者這顆 Chip 自己被禁用了，就鎖死按鈕
   protected readonly isDisabled = computed(() => this.disabled() || this.combobox.isDisabled());
@@ -46,11 +68,12 @@ export class ComboboxChipComponent {
   // 🎨 視覺排版：經典的 Badge/Chip 樣式
   protected readonly chipClass = computed(() =>
     cn(
-      'inline-flex items-center justify-between rounded-[var(--sanring-radius-xs)] px-1.5 py-0.5 text-xs font-semibold transition-colors',
+      'inline-flex shrink-0 items-center justify-between rounded-[var(--sanring-radius-xs)] px-1.5 py-0.5 text-xs font-semibold transition-colors',
       // 預設樣式：次要背景色
       'border border-[var(--sanring-border)] bg-[var(--sanring-surface-strong)] text-[var(--sanring-foreground)]',
       // 禁用狀態的透明度
       this.isDisabled() ? 'opacity-50 pointer-events-none' : 'hover:bg-[var(--sanring-active)]',
+      this.overflowHidden() && 'pointer-events-none invisible absolute',
       this.class(),
     ),
   );

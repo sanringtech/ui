@@ -32,6 +32,7 @@ import { FIELD_SIZE_CLASS } from '../shared/component-styles';
       (focus)="combobox.onFocus()"
       (blur)="combobox.onBlur()"
       autocomplete="off"
+      size="1"
       role="combobox"
       [attr.aria-expanded]="combobox.isOpen()"
       [attr.aria-controls]="combobox.listId()"
@@ -70,8 +71,13 @@ export class ComboboxInputComponent {
   protected readonly inputClass = computed(() => {
     if (this.chipInputParent) {
       return cn(
-        'min-w-[60px] flex-1 border-0 bg-transparent p-0 text-sm text-[var(--sanring-foreground)] outline-none',
+        'border-0 bg-transparent p-0 text-sm text-[var(--sanring-foreground)] outline-none',
         'placeholder:text-[var(--sanring-muted)] disabled:cursor-not-allowed disabled:opacity-50',
+        this.chipInputParent.wrap()
+          ? 'min-w-[4ch] w-auto'
+          : this.chipInputParent.chipsOverflowing() && !this.combobox.inputValue()
+            ? 'w-0 min-w-0 flex-none overflow-hidden'
+            : 'min-w-0 flex-1',
         this.class(),
       );
     }

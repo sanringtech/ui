@@ -92,7 +92,7 @@ export class ComboboxComponent extends SanringCvaBase<ComboboxValue> {
   readonly isDisabled = computed(() => this.disabled() || this.disabledState());
 
   protected readonly hostClass = computed(() =>
-    cn('relative block w-full', this.isDisabled() && 'opacity-50 cursor-not-allowed', this.class()),
+    cn('relative block w-full min-w-0', this.isDisabled() && 'opacity-50 cursor-not-allowed', this.class()),
   );
 
   readonly computedAriaDescribedBy = this.makeComputedAriaDescribedBy();

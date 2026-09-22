@@ -167,4 +167,10 @@ export const commonTranslations = {
   'status.maintenance.title': 'Under maintenance',
   'status.maintenance.description':
     'This component is temporarily under maintenance and hidden from production navigation. It remains reachable directly while we work on it.',
+  'combobox.demo.multipleSingleLine': 'Multiple, single line',
+  'combobox.demo.multipleMultiLine': 'Multiple, multi-line',
+  'combobox.api.chipInputWrap.description':
+    'When false, chips and the search input stay on one row instead of wrapping.',
+  'combobox.api.chipsWrap.description':
+    'When false, selected chips stay on one line and overflow with an ellipsis.',
 } as const;

@@ -1,3 +1,4 @@
+/** Combobox docs copy. */
 export const comboboxTranslations = {
   'combobox.description': '具備建議清單的自動完成輸入元件。',
   'combobox.examples.basic.description':
@@ -33,7 +34,14 @@ export const comboboxTranslations = {
   'combobox.api.description': 'combobox primitives 支援的 inputs 與 models。',
   'combobox.api.value.description':
     '由 root 控制的選取值。單選使用 string，多選使用 string array。',
-  'combobox.api.multiple.description': '允許選取多個項目，並可搭配 chips 呈現。',
+  'combobox.demo.multipleSingleLine': '多選、單行',
+  'combobox.demo.multipleMultiLine': '多選、多行',
+  'combobox.api.chipInputWrap.description':
+    '設為 false 時，chips 與搜尋框維持單行，不再換行。',
+  'combobox.api.chipsWrap.description':
+    '設為 false 時，已選 chips 維持單行，超出輸入框寬度時以刪節號收斂。',
+  'combobox.api.multiple.description':
+    '允許選取多個項目，並可搭配 chips 呈現。',
   'combobox.api.disabled.description': '停用 combobox input，並阻止選取狀態變更。',
   'combobox.api.inputId.description':
     'input 或自訂 trigger 與其 label 共用的 ID；未提供時自動產生，也可覆寫以串接應用程式內的關聯。',

@@ -162,4 +162,10 @@ export const commonTranslations = {
   'status.maintenance.title': '維護中',
   'status.maintenance.description':
     '此元件目前維護中，已從正式環境的導覽中暫時移除；維護期間仍可透過直接連結訪問。',
+  'combobox.demo.multipleSingleLine': '多選、單行',
+  'combobox.demo.multipleMultiLine': '多選、多行',
+  'combobox.api.chipInputWrap.description':
+    '設為 false 時，chips 與搜尋框維持單行，不再換行。',
+  'combobox.api.chipsWrap.description':
+    '設為 false 時，已選 chips 維持單行，超出輸入框寬度時以刪節號收斂。',
 } as const;
