@@ -41,14 +41,16 @@ export class LabelDirective {
       // floating 模式：label 疊在 input 上方 (relative wrapper 由 field.component.ts 提供)，
       // 用 pointer-events-none 確保點擊一律落在 input 上，而不是被 label 攔截
       floating && [
-        'pointer-events-none absolute left-3 origin-left transition-all duration-150',
+        // 只過渡會插值的屬性：字級用 scale 而不是 text-sm→text-xs，避免重排字型造成頓點。
+        // 缺口色塊兩態都帶同一條 gradient，只改上半色，背景才接得上。
+        'pointer-events-none absolute left-3 origin-left px-[var(--sanring-field-label-padding-x,0.375rem)] transition-[top,translate,scale,color,background] duration-200 ease-[cubic-bezier(0.2,0,0,1)] motion-reduce:transition-none',
         this.isFloated()
           ? // top-0 -translate-y-1/2：不管字級多大，label 自己的垂直中心永遠精準卡在 border 線上，
             // 不需要量測高度。label 背景用上下雙色漸層：上半吃 input 外部背景，下半吃 input 內部背景。
             // 這能處理 Field 放在 card/panel/dialog 時，外部 surface 與 input surface 不同色的情況。
             // 若 input 被自訂成不同背景，可覆寫 --sanring-field-control-background；仍不需要 Angular 量測。
-            'top-0 -translate-y-1/2 bg-[linear-gradient(to_bottom,var(--sanring-field-label-background,var(--sanring-background))_50%,var(--sanring-field-control-background,var(--sanring-surface))_50%)] px-[var(--sanring-field-label-padding-x,0.375rem)] text-xs'
-          : 'top-1/2 -translate-y-1/2 text-sm text-[var(--sanring-muted)]',
+            'top-0 -translate-y-1/2 scale-[0.85] text-[var(--sanring-foreground)] bg-[linear-gradient(to_bottom,var(--sanring-field-label-background,var(--sanring-background))_50%,var(--sanring-field-control-background,var(--sanring-surface))_50%)]'
+          : 'top-1/2 -translate-y-1/2 scale-100 text-[var(--sanring-muted)] bg-[linear-gradient(to_bottom,var(--sanring-field-control-background,var(--sanring-surface))_50%,var(--sanring-field-control-background,var(--sanring-surface))_50%)]',
       ],
       // 有 Field 包裝時，精確依賴 control 狀態，不受 DOM 順序影響
       this.field?.isDisabled() && 'cursor-not-allowed opacity-70',
