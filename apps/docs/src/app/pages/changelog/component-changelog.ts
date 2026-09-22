@@ -36,34 +36,9 @@ function isPatch(version: string): boolean {
  */
 export const cliVersionChangelog: readonly CliVersionEntry[] = [
   {
-    version: '0.25.0',
-    date: '2026-09-21',
+    version: '0.25.1',
+    date: '2026-09-23',
     changes: [
-      {
-        type: 'added',
-        notable: true,
-        text: 'Registry gains a `blocks` category (`sanring add block/login`) and accepts `github:owner/repo` as a registry source.',
-      },
-      {
-        type: 'added',
-        componentIds: ['dialog'],
-        text: '`sanring-dialog-header` accepts `align` (`start` | `center`). Header `class` can set a background that is not the dialog body surface.',
-      },
-      {
-        type: 'added',
-        componentIds: ['input', 'textarea'],
-        text: 'Docs examples show a live character count inside the control on the right, so `sanring-error-message` can stay below.',
-      },
-      {
-        type: 'added',
-        componentIds: ['combobox'],
-        text: '`sanring-combobox-chip-input` and `sanring-combobox-chips` accept `wrap`. Single-line multiple selection overflows with an ellipsis; the selected/total count sits on the right of the field.',
-      },
-      {
-        type: 'changed',
-        componentIds: ['field'],
-        text: '`sanring-field` now projects `textarea[sanringTextarea]` into the control slot, so a character-count description renders below the textarea instead of above it.',
-      },
       {
         type: 'added',
         componentIds: ['sheet'],
@@ -93,6 +68,47 @@ export const cliVersionChangelog: readonly CliVersionEntry[] = [
         type: 'changed',
         componentIds: ['table'],
         text: 'Sticky header, body, and footer cells use an opaque `--sanring-background` so scrolled text does not show through. Docs add loading skeleton and column-visibility recipes.',
+      },
+      {
+        type: 'added',
+        componentIds: ['dialog'],
+        text: '`sanring-dialog-header` `class` can set a background that is not the dialog body surface.',
+      },
+      {
+        type: 'added',
+        componentIds: ['input', 'textarea'],
+        text: 'Docs examples show a live character count inside the control on the right, so `sanring-error-message` can stay below.',
+      },
+      {
+        type: 'added',
+        componentIds: ['combobox'],
+        text: '`sanring-combobox-chip-input` and `sanring-combobox-chips` accept `wrap`. Single-line multiple selection overflows with an ellipsis; the selected/total count sits on the right of the field.',
+      },
+      {
+        type: 'fixed',
+        componentIds: ['field'],
+        text: 'Floating labels animate with `scale` instead of swapping font sizes, and keep the notch gradient in both floated states.',
+      },
+    ],
+  },
+  {
+    version: '0.25.0',
+    date: '2026-09-21',
+    changes: [
+      {
+        type: 'added',
+        notable: true,
+        text: 'Registry gains a `blocks` category (`sanring add block/login`) and accepts `github:owner/repo` as a registry source.',
+      },
+      {
+        type: 'added',
+        componentIds: ['dialog'],
+        text: '`sanring-dialog-header` accepts `align` (`start` | `center`).',
+      },
+      {
+        type: 'changed',
+        componentIds: ['field'],
+        text: '`sanring-field` now projects `textarea[sanringTextarea]` into the control slot, so a character-count description renders below the textarea instead of above it.',
       },
     ],
   },

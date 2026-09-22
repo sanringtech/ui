@@ -49,7 +49,7 @@
 
 2026-09-22 對 `packages/ui` 52 個正式元件做產品/API 掃描（公開 input/output、兄弟組件對齊、docs 是否超賣能力）。不是重跑 P3/P26/P30 的 a11y 稽核。`check-registry-parity.mjs` 與 `check-registry-sync.mjs` 當日皆綠（52/52）。官方目錄不缺新 primitive；該做的是把兄弟組件對齊，以及把 docs 已經講出去的能力做完。
 
-0.25.0 進行中的 input/textarea/combobox count、combobox chip wrap、dialog header `align`/獨立底色**不列入本項**，那些收斂完再看要不要疊。
+0.25.0 已出（blocks / dialog header align / field textarea projection）。0.25.1 收斂 input/textarea/combobox count、combobox chip wrap、dialog header 獨立底色，以及 P32 sibling API。
 
 ### 該做
 

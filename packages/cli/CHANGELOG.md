@@ -1,5 +1,13 @@
 # @sanring/cli
 
+## 0.25.1
+
+### Patch Changes
+
+- 7b17eb9: Keep input/textarea/combobox counts inside the field on the right, add combobox chip wrap/ellipsis, and let dialog headers use a different background from the body.
+- Smooth the floating field label transition with scale instead of font-size swaps, and keep the notch gradient in both floated states.
+- a203334: Align sibling APIs on existing primitives: sheet close/header, radio size, a real dropdown submenu, popover side and aria fallback, transfer root disabled, and table sticky backgrounds.
+
 ## 0.25.0
 
 ### Minor Changes
