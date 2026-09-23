@@ -1,6 +1,6 @@
 import { Component, inject } from '@angular/core';
 import { LucideActivity, LucideKey, LucideSettings } from '@lucide/angular';
-import { SANRING_TABS_IMPORTS } from '@sanring/ui';
+import { BadgeDirective, SANRING_TABS_IMPORTS } from '@sanring/ui';
 import { getComponentPageSection } from '../../../docs-schema/component-page.utils';
 import { I18nService } from '../../../i18n/i18n.service';
 import {
@@ -20,6 +20,7 @@ import { tabsPage, tabsPageExamples } from './tabs.docs';
   selector: 'app-tabs-page',
   imports: [
     ComponentPageApiTableComponent,
+    BadgeDirective,
     SANRING_TABS_IMPORTS,
     ComponentPageCodeBlock,
     ComponentPageCodePreviewer,
@@ -185,6 +186,41 @@ import { tabsPage, tabsPageExamples } from './tabs.docs';
                       class="rounded-[var(--sanring-radius)] border border-[var(--docs-border)] p-4 text-sm text-[var(--docs-muted)]"
                     >
                       Workspace preferences and defaults.
+                    </div>
+                  </sanring-tabs-content>
+                </sanring-tabs>
+              </div>
+            </app-component-page-code-previewer>
+          </app-component-page-section>
+
+          <app-component-page-section [section]="section('example-with-count')">
+            <app-component-page-code-previewer [code]="examples.withCount" language="angular-html">
+              <div previewer class="w-[min(560px,100%)]">
+                <sanring-tabs defaultValue="inbox">
+                  <sanring-tabs-list>
+                    <sanring-tabs-trigger
+                      value="inbox"
+                      [attr.aria-label]="i18n.t('tabs.demo.inboxCountLabel')"
+                    >
+                      {{ i18n.t('tabs.demo.inbox') }}
+                      <span sanringBadge variant="destructive" class="h-4 min-w-4 px-1">3</span>
+                    </sanring-tabs-trigger>
+                    <sanring-tabs-trigger value="drafts">
+                      {{ i18n.t('tabs.demo.drafts') }}
+                    </sanring-tabs-trigger>
+                  </sanring-tabs-list>
+                  <sanring-tabs-content value="inbox">
+                    <div
+                      class="rounded-[var(--sanring-radius)] border border-[var(--docs-border)] p-4 text-sm text-[var(--docs-muted)]"
+                    >
+                      {{ i18n.t('tabs.demo.inboxContent') }}
+                    </div>
+                  </sanring-tabs-content>
+                  <sanring-tabs-content value="drafts">
+                    <div
+                      class="rounded-[var(--sanring-radius)] border border-[var(--docs-border)] p-4 text-sm text-[var(--docs-muted)]"
+                    >
+                      {{ i18n.t('tabs.demo.draftsContent') }}
                     </div>
                   </sanring-tabs-content>
                 </sanring-tabs>

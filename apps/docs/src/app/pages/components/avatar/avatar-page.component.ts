@@ -47,7 +47,7 @@ import { avatarPage, avatarPageExamples } from './avatar.docs';
         <app-component-page-code-previewer [code]="examples.basic" language="angular-html">
           <div previewer class="flex items-center justify-center">
             <sanring-avatar ariaLabel="Ada Lovelace">
-              <img sanringAvatarImage src="https://i.pravatar.cc/96?img=5" alt="Ada Lovelace" />
+              <img sanringAvatarImage src="/avatars/lantern.jpg" alt="Ada Lovelace" />
               <sanring-avatar-fallback>AL</sanring-avatar-fallback>
             </sanring-avatar>
           </div>
@@ -97,7 +97,7 @@ import { avatarPage, avatarPageExamples } from './avatar.docs';
             <app-component-page-code-previewer [code]="examples.badge" language="angular-html">
               <div previewer class="flex items-center justify-center gap-4">
                 <sanring-avatar ariaLabel="Online user">
-                  <img sanringAvatarImage src="https://i.pravatar.cc/96?img=12" alt="Online user" />
+                  <img sanringAvatarImage src="/avatars/stairs.jpg" alt="Online user" />
                   <sanring-avatar-fallback>OU</sanring-avatar-fallback>
                   <span sanringAvatarBadge status="online" ariaLabel="Online"></span>
                 </sanring-avatar>
@@ -113,6 +113,23 @@ import { avatarPage, avatarPageExamples } from './avatar.docs';
             </app-component-page-code-previewer>
           </app-component-page-section>
 
+          <app-component-page-section [section]="section('example-badge-count')">
+            <app-component-page-code-previewer [code]="examples.badgeCount" language="angular-html">
+              <div previewer class="flex items-center justify-center gap-6">
+                <sanring-avatar ariaLabel="Ada Lovelace">
+                  <img sanringAvatarImage src="/avatars/lantern.jpg" alt="Ada Lovelace" />
+                  <sanring-avatar-fallback>AL</sanring-avatar-fallback>
+                  <span sanringAvatarBadge [count]="3" ariaLabel="3 unread"></span>
+                  <span sanringAvatarBadge status="online" ariaLabel="Online"></span>
+                </sanring-avatar>
+                <sanring-avatar ariaLabel="Unread overflow">
+                  <sanring-avatar-fallback>99</sanring-avatar-fallback>
+                  <span sanringAvatarBadge [count]="128" ariaLabel="128 unread"></span>
+                </sanring-avatar>
+              </div>
+            </app-component-page-code-previewer>
+          </app-component-page-section>
+
           <app-component-page-section [section]="section('example-badge-with-icon')">
             <app-component-page-code-previewer
               [code]="examples.badgeWithIcon"
@@ -122,7 +139,7 @@ import { avatarPage, avatarPageExamples } from './avatar.docs';
                 <sanring-avatar ariaLabel="Verified user">
                   <img
                     sanringAvatarImage
-                    src="https://i.pravatar.cc/96?img=21"
+                    src="/avatars/night-lantern.jpg"
                     alt="Verified user"
                   />
                   <sanring-avatar-fallback>VU</sanring-avatar-fallback>
@@ -139,12 +156,15 @@ import { avatarPage, avatarPageExamples } from './avatar.docs';
               <div previewer class="flex items-center justify-center">
                 <sanring-avatar-group ariaLabel="Project members">
                   <sanring-avatar ariaLabel="Ada Lovelace">
+                    <img sanringAvatarImage src="/avatars/lantern.jpg" alt="Ada Lovelace" />
                     <sanring-avatar-fallback>AL</sanring-avatar-fallback>
                   </sanring-avatar>
                   <sanring-avatar ariaLabel="Grace Hopper">
+                    <img sanringAvatarImage src="/avatars/stairs.jpg" alt="Grace Hopper" />
                     <sanring-avatar-fallback>GH</sanring-avatar-fallback>
                   </sanring-avatar>
                   <sanring-avatar ariaLabel="Katherine Johnson">
+                    <img sanringAvatarImage src="/avatars/path.jpg" alt="Katherine Johnson" />
                     <sanring-avatar-fallback>KJ</sanring-avatar-fallback>
                   </sanring-avatar>
                   <sanring-avatar-group-count [count]="3" ariaLabel="3 more members" />
@@ -161,9 +181,11 @@ import { avatarPage, avatarPageExamples } from './avatar.docs';
               <div previewer class="flex items-center justify-center">
                 <sanring-avatar-group ariaLabel="Project members">
                   <sanring-avatar ariaLabel="Ada Lovelace">
+                    <img sanringAvatarImage src="/avatars/lantern.jpg" alt="Ada Lovelace" />
                     <sanring-avatar-fallback>AL</sanring-avatar-fallback>
                   </sanring-avatar>
                   <sanring-avatar ariaLabel="Grace Hopper">
+                    <img sanringAvatarImage src="/avatars/night-lantern.jpg" alt="Grace Hopper" />
                     <sanring-avatar-fallback>GH</sanring-avatar-fallback>
                   </sanring-avatar>
                   <sanring-avatar-group-count ariaLabel="Add member">

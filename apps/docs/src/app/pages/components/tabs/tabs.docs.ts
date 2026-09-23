@@ -50,6 +50,12 @@ export const tabsPage = {
           level: 3,
         },
         {
+          id: 'example-with-count',
+          titleKey: 'tabs.demo.withCount',
+          descriptionKey: 'tabs.examples.withCount.description',
+          level: 3,
+        },
+        {
           id: 'example-line',
           titleKey: 'tabs.demo.line',
           level: 3,
@@ -204,6 +210,18 @@ export class ExampleComponent {}`,
   <sanring-tabs-content value="overview">Overview content</sanring-tabs-content>
   <sanring-tabs-content value="analytics">Analytics content</sanring-tabs-content>
   <sanring-tabs-content value="reports">Reports content</sanring-tabs-content>
+</sanring-tabs>`,
+  withCount: `<sanring-tabs defaultValue="inbox">
+  <sanring-tabs-list>
+    <sanring-tabs-trigger value="inbox" aria-label="Inbox, 3 unread">
+      Inbox
+      <span sanringBadge variant="destructive" class="h-4 min-w-4 px-1">3</span>
+    </sanring-tabs-trigger>
+    <sanring-tabs-trigger value="drafts">Drafts</sanring-tabs-trigger>
+  </sanring-tabs-list>
+
+  <sanring-tabs-content value="inbox">Inbox content</sanring-tabs-content>
+  <sanring-tabs-content value="drafts">Drafts content</sanring-tabs-content>
 </sanring-tabs>`,
   withIcon: `<sanring-tabs defaultValue="overview">
   <sanring-tabs-list>

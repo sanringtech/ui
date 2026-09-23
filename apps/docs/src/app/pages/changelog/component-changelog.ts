@@ -36,6 +36,22 @@ function isPatch(version: string): boolean {
  */
 export const cliVersionChangelog: readonly CliVersionEntry[] = [
   {
+    version: '0.25.2',
+    date: '2026-09-23',
+    changes: [
+      {
+        type: 'added',
+        componentIds: ['avatar'],
+        text: '`[sanringAvatarBadge]` accepts `count` (hidden at 0, capped at `99+`) and `placement` `top` / `bottom`. Count defaults to top-end so it can sit with a status dot at the bottom.',
+      },
+      {
+        type: 'changed',
+        componentIds: ['tabs'],
+        text: 'Docs add a Badge-inside-trigger recipe for unread counts, including an `aria-label` that names the count.',
+      },
+    ],
+  },
+  {
     version: '0.25.1',
     date: '2026-09-23',
     changes: [
