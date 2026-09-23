@@ -1,5 +1,11 @@
 # @sanring/cli
 
+## 0.25.2
+
+### Patch Changes
+
+- 0a4e763: Avatar badge accepts `count` (hidden at 0, capped at 99+) and `top`/`bottom` placement. Tabs docs add a Badge composition recipe for unread counts.
+
 ## 0.25.1
 
 ### Patch Changes
