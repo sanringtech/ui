@@ -1,7 +1,7 @@
 import { en } from './locales/en/index';
 import { zh } from './locales/zh/index';
 
-/** Docs locale catalogs. TranslationKey is keyof typeof en. */
+/** Docs locale catalogs. TranslationKey is inferred from the English catalog. */
 
 export const supportedLocales = ['en', 'zh'] as const;
 

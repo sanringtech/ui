@@ -11,6 +11,14 @@ export const tabsTranslations = {
   'tabs.demo.settings': 'Settings',
   'tabs.demo.horizontal': 'Horizontal',
   'tabs.demo.withIcon': 'With icon',
+  'tabs.demo.withCount': 'With count',
+  'tabs.demo.inbox': 'Inbox',
+  'tabs.demo.drafts': 'Drafts',
+  'tabs.demo.inboxCountLabel': 'Inbox, 3 unread',
+  'tabs.demo.inboxContent': 'Unread messages stay in the inbox.',
+  'tabs.demo.draftsContent': 'Drafts have no unread count, so the badge is omitted.',
+  'tabs.examples.withCount.description':
+    'Compose sanringBadge inside a trigger. Put the count in the trigger aria-label. Omit the badge when the count is 0.',
   'tabs.demo.vertical': 'Vertical',
   'tabs.demo.line': 'Line variant',
   'tabs.demo.disabled': 'Disabled tab',
@@ -37,7 +45,7 @@ export const tabsTranslations = {
   'tabs.api.disabled.description':
     'Prevents a trigger from being selected or focused by keyboard navigation.',
   'tabs.api.valueChange.description': 'Emits when the selected tab value changes.',
-  'tabs.accessibility.description': "WAI-ARIA Tabs pattern via @angular/aria/tabs. role='tablist' on sanring-tabs-list, role='tab' on each trigger, role='tabpanel' on each content panel, linked with aria-controls and aria-labelledby. aria-selected reflects the active tab.",
+  'tabs.accessibility.description': "WAI-ARIA Tabs pattern via @angular/aria/tabs. role='tablist' on sanring-tabs-list, role='tab' on each trigger, role='tabpanel' on each content panel, linked with aria-controls and aria-labelledby. aria-selected reflects the active tab. If a trigger shows a count, set aria-label on the trigger so the count is announced (for example 'Inbox, 3 unread').",
   'tabs.keyboard.description': 'Arrow navigation within the trigger list; Tab moves into the active panel.',
   'tabs.keyboard.arrowLeftRight': 'Navigate between tab triggers (horizontal orientation).',
   'tabs.keyboard.arrowUpDown': 'Navigate between tab triggers (vertical orientation).',

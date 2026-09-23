@@ -35,11 +35,24 @@ import { AvatarComponent } from './avatar.component';
         (clicked)="clicks = clicks + 1"
       />
     </sanring-avatar-group>
+
+    <sanring-avatar ariaLabel="Unread mailbox">
+      <sanring-avatar-fallback>MB</sanring-avatar-fallback>
+      <span
+        sanringAvatarBadge
+        [count]="badgeCount"
+        [placement]="badgePlacement"
+        ariaLabel="3 unread"
+      ></span>
+      <span sanringAvatarBadge status="online" ariaLabel="Online"></span>
+    </sanring-avatar>
   `,
 })
 class AvatarTestHost {
   clicks = 0;
   countDisabled = false;
+  badgeCount: number | undefined = 3;
+  badgePlacement: 'start' | 'end' | 'top' | 'bottom' | undefined;
 }
 
 describe('AvatarComponent', () => {
@@ -98,6 +111,57 @@ describe('AvatarComponent', () => {
     fixture.detectChanges();
 
     expect(fixture.componentInstance.clicks).toBe(0);
+  });
+
+  it('renders a notification count on the top edge and keeps the status badge at the bottom', () => {
+    const fixture = TestBed.createComponent(AvatarTestHost);
+    fixture.detectChanges();
+
+    const avatar = fixture.nativeElement.querySelectorAll(
+      'sanring-avatar',
+    )[2] as HTMLElement;
+    const badges = avatar.querySelectorAll('[sanringAvatarBadge]');
+    const countBadge = badges[0] as HTMLElement;
+    const statusBadge = badges[1] as HTMLElement;
+
+    expect(countBadge.textContent?.trim()).toBe('3');
+    expect(countBadge.className).toContain('top-0');
+    expect(countBadge.className).toContain('right-0');
+    expect(countBadge.getAttribute('aria-label')).toBe('3 unread');
+    expect(statusBadge.className).toContain('bottom-0');
+    expect(statusBadge.className).toContain('size-3');
+  });
+
+  it('hides a zero count', () => {
+    const fixture = TestBed.createComponent(AvatarTestHost);
+    fixture.componentInstance.badgeCount = 0;
+    fixture.detectChanges();
+
+    const avatar = fixture.nativeElement.querySelectorAll(
+      'sanring-avatar',
+    )[2] as HTMLElement;
+    const countBadge = avatar.querySelectorAll('[sanringAvatarBadge]')[0] as HTMLElement;
+
+    expect(countBadge.hidden).toBe(true);
+    expect(countBadge.getAttribute('aria-hidden')).toBe('true');
+    expect(countBadge.textContent?.trim()).toBe('');
+  });
+
+  it('caps large counts at 99+ and honors an explicit bottom placement', () => {
+    const fixture = TestBed.createComponent(AvatarTestHost);
+    fixture.componentInstance.badgeCount = 128;
+    fixture.componentInstance.badgePlacement = 'bottom';
+    fixture.detectChanges();
+
+    const avatar = fixture.nativeElement.querySelectorAll(
+      'sanring-avatar',
+    )[2] as HTMLElement;
+    const countBadge = avatar.querySelectorAll('[sanringAvatarBadge]')[0] as HTMLElement;
+
+    expect(countBadge.hidden).toBe(false);
+    expect(countBadge.textContent?.trim()).toBe('99+');
+    expect(countBadge.className).toContain('bottom-0');
+    expect(countBadge.className).not.toContain('top-0');
   });
 
   it('has no axe-detectable a11y violations', async () => {

@@ -3,6 +3,9 @@ export const avatarTranslations = {
   'avatar.demo.sizes': '尺寸',
   'avatar.demo.statusBadge': '狀態徽章',
   'avatar.demo.badgeWithIcon': '包含圖示的徽章',
+  'avatar.demo.badgeCount': '通知計數',
+  'avatar.examples.badgeCount.description':
+    '傳入 count 會渲染數字 pill。預設在右上角，可與右下角狀態點同時存在。0 會隱藏 pill；超過 99 顯示為 99+。',
   'avatar.demo.group': '頭像群組',
   'avatar.demo.groupWithIcon': '包含圖示的頭像群組',
   'avatar.examples.description': '常見頭像模式，包含 fallback、在線狀態與精簡成員群組。',
@@ -20,14 +23,17 @@ export const avatarTranslations = {
   'avatar.api.ariaLabel.description': '無可見文字時，提供單一頭像或頭像群組的無障礙標籤。',
   'avatar.api.delayMs.description': 'fallback 顯示前的延遲毫秒數。',
   'avatar.api.status.description': '控制徽章顏色，可使用 online、offline、away、busy 或 default。',
-  'avatar.api.placement.description': '將徽章放在視覺起點或終點，並尊重 RTL 方向。',
+  'avatar.api.placement.description':
+    '將徽章放在 start、end、top 或 bottom。狀態徽章預設 end（右下）；計數徽章預設 top（右上）。start/end 會跟隨 RTL。',
+  'avatar.api.badgeCount.description':
+    '[sanringAvatarBadge] 的未讀計數。小於等於 0 時隱藏；超過 99 顯示為 99+。',
   'avatar.api.overlap.description': '頭像群組的堆疊重疊量，單位為 rem。',
   'avatar.api.count.description': '頭像群組數量項目顯示的數字。',
   'avatar.api.clickable.description': '讓群組數量項目具備按鈕語意，並可由滑鼠與鍵盤操作。',
   'avatar.api.disabled.description': '停用可點擊的群組數量項目，並將它移出 Tab 序列。',
   'avatar.api.clicked.description': '啟用中的可點擊群組數量項目被觸發時送出。',
   'avatar.accessibility.description':
-    "宿主具有 role='img'。為非裝飾性的頭像提供 ariaLabel 或 ariaLabelledBy。若頭像純屬裝飾性用途（例如緊鄰已出現在文字中的使用者名稱），請在 <sanring-avatar> 上加 aria-hidden='true' 以避免重複播報。可點擊的群組數量項目會提供 button 語意並反映停用狀態。",
+    "宿主具有 role='img'。為非裝飾性的頭像提供 ariaLabel 或 ariaLabelledBy。若頭像純屬裝飾性用途（例如緊鄰已出現在文字中的使用者名稱），請在 <sanring-avatar> 上加 aria-hidden='true' 以避免重複播報。計數徽章為 role='status'，請給它 ariaLabel，例如「3 則未讀」。可點擊的群組數量項目會提供 button 語意並反映停用狀態。",
   'avatar.keyboard.description': '頭像預設不可聚焦；可點擊的群組數量項目支援 Enter 與 Space。',
   'avatar.stateModel.description':
     '無狀態。src 載入圖片；失敗時顯示 fallback 插槽；縮寫字母作為最後備援。沒有內部選取或值狀態。',
