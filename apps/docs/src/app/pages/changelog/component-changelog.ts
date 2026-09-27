@@ -46,6 +46,11 @@ export const cliVersionChangelog: readonly CliVersionEntry[] = [
         text: 'Add `sortable` for pointer and keyboard reordering of a single list. Cards and other content compose with `[sanringSortableItem]`.',
       },
       {
+        type: 'added',
+        notable: true,
+        text: '`sanring mcp` adds `get_component_spec` for selectors, anatomy, API, accessibility, and a canonical example. `get_component_info` stays install metadata; `search_components` also matches aliases such as modal → dialog.',
+      },
+      {
         type: 'changed',
         notable: true,
         componentIds: ['timeline'],
