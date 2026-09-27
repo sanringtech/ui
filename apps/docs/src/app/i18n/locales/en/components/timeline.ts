@@ -2,13 +2,14 @@ export const timelineTranslations = {
   'timeline.description':
     'Composable timeline primitives for chronological events, activity feeds, and process milestones.',
   'timeline.examples.basic.description':
-    'Use sanringTimeline with native list markup, then compose separators, markers, connectors, and content.',
+    'A vertical list with a built-in rail. Leave the separator empty for a default marker, or project an icon or avatar.',
   'timeline.usage.description':
-    'Import the timeline directives and apply them to list or div-based activity markup.',
+    'Each item is a separator plus content. The separator draws the connector; project a node only when the default marker is not enough.',
   'timeline.installation.description':
     'Install the timeline primitives and compose item, separator, and content directives where each event renders.',
   'timeline.demo.horizontal': 'Horizontal',
   'timeline.demo.divBased': 'Div-based timeline',
+  'timeline.demo.reorder': 'Reorder',
   'timeline.demo.releaseActivity': 'Release activity',
   'timeline.demo.releaseActivityDescription':
     'A compact activity trail for release notes and registry updates.',
@@ -37,6 +38,8 @@ export const timelineTranslations = {
   'timeline.demo.qaTitle': 'Quality review',
   'timeline.demo.qaMeta': 'QA pass',
   'timeline.demo.qaDescription': 'Visual spacing and empty states were reviewed before publishing.',
+  'timeline.demo.reorder.description':
+    'Compose with sortable and drag the grip to reorder. Timeline stays layout; sortable owns order. Also install sortable.',
   'timeline.api.description': 'Inputs supported by the Timeline directives.',
   'timeline.api.orientation.description':
     'Controls whether items stack vertically or horizontally.',
@@ -46,7 +49,7 @@ export const timelineTranslations = {
     'Additional classes merged with each separator wrapper.',
   'timeline.api.contentClass.description': 'Additional classes merged with each content container.',
   'timeline.accessibility.description':
-    'Timeline is a visual layout primitive with no built-in ARIA role. When timeline items represent an ordered sequence, wrap the content in a native <ol> or <ul> in your template so screen readers understand the list structure.',
+    'The root sets role=list and each item sets role=listitem so Tailwind Preflight does not strip list semantics. The separator is aria-hidden. Prefer native ul or ol when the sequence is ordered.',
   'timeline.keyboard.description': 'Not focusable unless interactive children are present.',
   'timeline.stateModel.description':
     'Stateless layout component — no value, selection, or event state.',

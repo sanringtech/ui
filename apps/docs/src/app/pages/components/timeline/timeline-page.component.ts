@@ -1,12 +1,10 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
+import { LucideGripVertical } from '@lucide/angular';
 import {
-  BadgeDirective,
   SANRING_AVATAR_IMPORTS,
   SANRING_CARD_IMPORTS,
-  TimelineContentDirective,
-  TimelineDirective,
-  TimelineItemDirective,
-  TimelineSeparatorDirective,
+  SANRING_SORTABLE_IMPORTS,
+  SANRING_TIMELINE_IMPORTS,
 } from '@sanring/ui';
 import { getComponentPageSection } from '../../../docs-schema/component-page.utils';
 import { I18nService } from '../../../i18n/i18n.service';
@@ -22,6 +20,16 @@ import {
 } from '../../../layouts/component-page';
 import { timelinePage, timelinePageExamples } from './timeline.docs';
 
+interface TimelineReorderEvent {
+  id: string;
+  titleKey: 'timeline.demo.created' | 'timeline.demo.reviewed' | 'timeline.demo.shipped';
+  descriptionKey:
+    | 'timeline.demo.createdDescription'
+    | 'timeline.demo.reviewedDescription'
+    | 'timeline.demo.shippedDescription';
+  metaKey: 'timeline.demo.createdMeta' | 'timeline.demo.reviewedMeta' | 'timeline.demo.shippedMeta';
+}
+
 @Component({
   selector: 'app-timeline-page',
   imports: [
@@ -33,13 +41,11 @@ import { timelinePage, timelinePageExamples } from './timeline.docs';
     ComponentPageInstallationComponent,
     ComponentPageUsageImportsComponent,
     ComponentPageSectionComponent,
-    BadgeDirective,
+    LucideGripVertical,
     SANRING_AVATAR_IMPORTS,
     SANRING_CARD_IMPORTS,
-    TimelineContentDirective,
-    TimelineDirective,
-    TimelineItemDirective,
-    TimelineSeparatorDirective,
+    SANRING_SORTABLE_IMPORTS,
+    SANRING_TIMELINE_IMPORTS,
   ],
   template: `
     <app-component-page [sections]="page.sections" [componentId]="page.componentId">
@@ -54,38 +60,24 @@ import { timelinePage, timelinePageExamples } from './timeline.docs';
         [stateModelLabel]="i18n.t('component.header.stateless')"
       />
 
-      <!-- Basic vertical timeline -->
       <app-component-page-section [section]="section('basic')">
         <app-component-page-code-previewer [code]="examples.basic" language="angular-html">
           <ul previewer sanringTimeline class="w-full max-w-md">
-            @for (event of events; track event.titleKey; let last = $last) {
+            @for (event of events; track event.titleKey) {
               <li sanringTimelineItem>
-                <span sanringTimelineSeparator>
-                  <span
-                    class="grid size-6 shrink-0 place-items-center rounded-full border-2 border-[var(--docs-border-strong)] bg-[var(--docs-panel)]"
-                  >
-                    <span class="size-2 rounded-full" [class]="event.dotClass"></span>
-                  </span>
-                  @if (!last) {
-                    <span class="w-px flex-1 bg-[var(--docs-border)]"></span>
-                  }
-                </span>
-                <div sanringTimelineContent class="pb-6">
-                  <sanring-card>
-                    <sanring-card-content class="flex items-center justify-between gap-4 p-4">
-                      <div class="min-w-0">
-                        <p class="m-0 text-sm font-medium text-[var(--docs-fg)]">
-                          {{ i18n.t(event.titleKey) }}
-                        </p>
-                        <p class="m-0 mt-0.5 text-sm text-[var(--docs-muted)]">
-                          {{ i18n.t(event.descriptionKey) }}
-                        </p>
-                      </div>
-                      <span sanringBadge variant="outline" class="shrink-0">
-                        {{ i18n.t(event.metaKey) }}
-                      </span>
-                    </sanring-card-content>
-                  </sanring-card>
+                <span sanringTimelineSeparator></span>
+                <div sanringTimelineContent>
+                  <div class="flex items-baseline justify-between gap-4">
+                    <p class="m-0 text-sm font-medium text-[var(--docs-fg)]">
+                      {{ i18n.t(event.titleKey) }}
+                    </p>
+                    <time class="shrink-0 text-xs tabular-nums text-[var(--docs-muted)]">
+                      {{ i18n.t(event.metaKey) }}
+                    </time>
+                  </div>
+                  <p class="m-0 mt-1 text-sm leading-6 text-[var(--docs-muted)]">
+                    {{ i18n.t(event.descriptionKey) }}
+                  </p>
                 </div>
               </li>
             }
@@ -95,7 +87,10 @@ import { timelinePage, timelinePageExamples } from './timeline.docs';
 
       <app-component-page-section [section]="section('usage')">
         <div class="grid gap-6">
-          <app-component-page-usage-imports [code]="examples.usageImport" />
+          <app-component-page-usage-imports
+            [code]="examples.usageImport"
+            [individualCode]="examples.usageIndividualImports"
+          />
           <app-component-page-code-block [code]="examples.usageMain" language="angular-html" />
         </div>
       </app-component-page-section>
@@ -103,39 +98,24 @@ import { timelinePage, timelinePageExamples } from './timeline.docs';
       <app-component-page-section [section]="section('installation')">
         <app-component-page-installation
           componentName="timeline"
-          manualSnippet="import { TimelineDirective } from './components/ui/timeline';"
+          manualSnippet="import { SANRING_TIMELINE_IMPORTS } from './components/ui/timeline';"
         />
       </app-component-page-section>
 
       <app-component-page-section [section]="section('example')">
         <div class="grid gap-8">
-          <!-- Horizontal timeline -->
           <app-component-page-section [section]="section('example-horizontal')">
             <app-component-page-code-previewer [code]="examples.horizontal" language="angular-html">
               <div previewer class="w-full overflow-x-auto">
-                <ul sanringTimeline orientation="horizontal" class="min-w-[560px] gap-0">
-                  @for (event of compactEvents; track event.titleKey; let last = $last) {
-                    <li sanringTimelineItem class="flex-1">
-                      <span sanringTimelineSeparator class="w-full">
-                        <span
-                          class="h-px flex-1 bg-[var(--docs-border)]"
-                          [class.invisible]="$first"
-                        ></span>
-                        <span
-                          class="grid size-7 shrink-0 place-items-center rounded-full border-2 border-[var(--docs-border-strong)] bg-[var(--docs-panel)] text-xs font-semibold text-[var(--docs-fg)]"
-                        >
-                          {{ $index + 1 }}
-                        </span>
-                        <span
-                          class="h-px flex-1 bg-[var(--docs-border)]"
-                          [class.invisible]="last"
-                        ></span>
-                      </span>
-                      <div sanringTimelineContent class="px-2 pt-3 text-center">
+                <ul sanringTimeline orientation="horizontal" class="min-w-[28rem]">
+                  @for (event of compactEvents; track event.titleKey) {
+                    <li sanringTimelineItem>
+                      <span sanringTimelineSeparator></span>
+                      <div sanringTimelineContent class="px-1 text-center">
                         <p class="m-0 text-sm font-medium text-[var(--docs-fg)]">
                           {{ i18n.t(event.titleKey) }}
                         </p>
-                        <p class="m-0 mt-1 text-sm text-[var(--docs-muted)]">
+                        <p class="m-0 mt-1 text-sm leading-6 text-[var(--docs-muted)]">
                           {{ i18n.t(event.descriptionKey) }}
                         </p>
                       </div>
@@ -146,14 +126,13 @@ import { timelinePage, timelinePageExamples } from './timeline.docs';
             </app-component-page-code-previewer>
           </app-component-page-section>
 
-          <!-- Div-based activity feed -->
           <app-component-page-section [section]="section('example-div')">
             <app-component-page-code-previewer [code]="examples.divBased" language="angular-html">
               <div previewer class="w-full max-w-lg">
-                <sanring-card>
-                  <div sanringTimeline class="divide-y divide-[var(--docs-border)]">
+                <sanring-card class="p-5">
+                  <div sanringTimeline>
                     @for (item of feedItems; track item.titleKey) {
-                      <div sanringTimelineItem class="items-center p-4">
+                      <div sanringTimelineItem>
                         <span sanringTimelineSeparator>
                           <sanring-avatar size="sm">
                             <sanring-avatar-fallback>{{ item.initials }}</sanring-avatar-fallback>
@@ -168,7 +147,7 @@ import { timelinePage, timelinePageExamples } from './timeline.docs';
                               {{ i18n.t(item.metaKey) }}
                             </span>
                           </div>
-                          <p class="m-0 mt-0.5 text-sm text-[var(--docs-muted)]">
+                          <p class="m-0 mt-1 text-sm leading-6 text-[var(--docs-muted)]">
                             {{ i18n.t(item.descriptionKey) }}
                           </p>
                         </div>
@@ -176,6 +155,47 @@ import { timelinePage, timelinePageExamples } from './timeline.docs';
                     }
                   </div>
                 </sanring-card>
+              </div>
+            </app-component-page-code-previewer>
+          </app-component-page-section>
+
+          <app-component-page-section [section]="section('example-reorder')">
+            <app-component-page-code-previewer [code]="examples.reorder" language="angular-html">
+              <div previewer class="w-full max-w-md">
+                <sanring-sortable
+                  class="gap-0"
+                  [data]="reorderable()"
+                  (sorted)="onReordered($event)"
+                >
+                  @for (event of reorderable(); track event.id) {
+                    <div sanringTimelineItem sanringSortableItem>
+                      <span sanringTimelineSeparator></span>
+                      <div sanringTimelineContent class="flex items-start gap-3">
+                        <div class="min-w-0 flex-1">
+                          <div class="flex items-baseline justify-between gap-4">
+                            <p class="m-0 text-sm font-medium text-[var(--docs-fg)]">
+                              {{ i18n.t(event.titleKey) }}
+                            </p>
+                            <time class="shrink-0 text-xs tabular-nums text-[var(--docs-muted)]">
+                              {{ i18n.t(event.metaKey) }}
+                            </time>
+                          </div>
+                          <p class="m-0 mt-1 text-sm leading-6 text-[var(--docs-muted)]">
+                            {{ i18n.t(event.descriptionKey) }}
+                          </p>
+                        </div>
+                        <button
+                          sanringSortableHandle
+                          type="button"
+                          class="mt-0.5 inline-flex size-8 shrink-0 items-center justify-center rounded-[var(--sanring-radius-sm)] text-[var(--docs-muted)]"
+                          [attr.aria-label]="i18n.t('sortable.demo.reorder')"
+                        >
+                          <svg lucideGripVertical class="size-4" aria-hidden="true"></svg>
+                        </button>
+                      </div>
+                    </div>
+                  }
+                </sanring-sortable>
               </div>
             </app-component-page-code-previewer>
           </app-component-page-section>
@@ -202,21 +222,43 @@ export class TimelinePageComponent {
       titleKey: 'timeline.demo.created',
       descriptionKey: 'timeline.demo.createdDescription',
       metaKey: 'timeline.demo.createdMeta',
-      dotClass: 'bg-[var(--docs-accent-strong)]',
     },
     {
       titleKey: 'timeline.demo.reviewed',
       descriptionKey: 'timeline.demo.reviewedDescription',
       metaKey: 'timeline.demo.reviewedMeta',
-      dotClass: 'bg-emerald-500',
     },
     {
       titleKey: 'timeline.demo.shipped',
       descriptionKey: 'timeline.demo.shippedDescription',
       metaKey: 'timeline.demo.shippedMeta',
-      dotClass: 'bg-amber-500',
     },
   ] as const;
+
+  protected readonly reorderable = signal<TimelineReorderEvent[]>([
+    {
+      id: 'created',
+      titleKey: 'timeline.demo.created',
+      descriptionKey: 'timeline.demo.createdDescription',
+      metaKey: 'timeline.demo.createdMeta',
+    },
+    {
+      id: 'reviewed',
+      titleKey: 'timeline.demo.reviewed',
+      descriptionKey: 'timeline.demo.reviewedDescription',
+      metaKey: 'timeline.demo.reviewedMeta',
+    },
+    {
+      id: 'shipped',
+      titleKey: 'timeline.demo.shipped',
+      descriptionKey: 'timeline.demo.shippedDescription',
+      metaKey: 'timeline.demo.shippedMeta',
+    },
+  ]);
+
+  protected onReordered(items: unknown[]): void {
+    this.reorderable.set(items as TimelineReorderEvent[]);
+  }
 
   protected readonly compactEvents = [
     {
