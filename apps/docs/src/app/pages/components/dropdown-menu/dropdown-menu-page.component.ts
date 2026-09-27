@@ -201,7 +201,7 @@ import { dropdownMenuPage, dropdownMenuPageExamples } from './dropdown-menu.docs
                   <sanring-dropdown-menu-content
                     #fileMenu="sanringDropdownMenuContent"
                     class="w-56"
-                    (itemSelected)="onFileAction($event)"
+                    (itemSelected)="onFileAction()"
                   >
                     <sanring-dropdown-menu-label>File</sanring-dropdown-menu-label>
                     <sanring-dropdown-menu-sub>
