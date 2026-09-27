@@ -3,7 +3,7 @@ export const mcpTranslations = {
     '以 stdio transport 啟動 MCP server，讓 Claude Code、Cursor、Windsurf 等 AI coding agent 能直接查詢、安裝 Sanring UI 元件，不用手動下 shell 指令。',
   'mcp.overview.title': '概覽',
   'mcp.overview.body':
-    'sanring mcp 指令會以 stdio transport 啟動 MCP server，讀取跟 sanring CLI 及這個文件站相同的元件 registry，並曝露五個 tool，讓 AI agent 能查詢、預覽、安裝你 Angular 專案裡的元件。',
+    'sanring mcp 指令會以 stdio transport 啟動 MCP server，讀取跟 sanring CLI 及這個文件站相同的元件 registry，並曝露 tools 讓 AI agent 先拿到寫程式用的 API 契約，再預覽、安裝你 Angular 專案裡的元件。',
   'mcp.tools.title': '可用的 Tool',
   'mcp.tools.body':
     '所有 tool 都有 runtime input validation；找不到元件或缺少必要參數時，會回傳 MCP error result，而不是直接丟出例外。',

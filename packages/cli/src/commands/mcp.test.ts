@@ -82,6 +82,7 @@ describe('mcp server', () => {
       'migration_status',
       'search_components',
       'get_component_info',
+      'get_component_spec',
       'plan_component_install',
       'add_component',
     ]);
@@ -264,5 +265,49 @@ describe('mcp server', () => {
     expect(existsSync(join(projectDir, 'sanring-added.txt'))).toBe(true);
     expect(textContent(result)).toContain('Successfully added "widget"');
     expect(textContent(result)).toContain('installed widget');
+  });
+
+  it('resolves modal via aliases and returns an authoring spec', async () => {
+    writeFileSync(
+      join(registryDir, 'specs.json'),
+      JSON.stringify({
+        widget: {
+          name: 'widget',
+          title: 'Widget',
+          aliases: ['modal'],
+          anatomy: 'sanring-widget',
+          example: '<sanring-widget />',
+          accessibility: ["role='group'"],
+        },
+      }),
+      'utf-8',
+    );
+
+    const testClient = await connect();
+    const searchResult = await testClient.callTool({
+      name: 'search_components',
+      arguments: { query: 'modal' },
+    });
+    const specResult = await testClient.callTool({
+      name: 'get_component_spec',
+      arguments: { name: 'widget' },
+    });
+
+    expect(textContent(searchResult)).toContain('widget');
+    expect(textContent(specResult)).toContain('sanring-widget');
+    expect(textContent(specResult)).toContain("role='group'");
+    expect(textContent(specResult)).toContain('Do not invent APIs');
+    expect((specResult as { isError?: boolean }).isError).toBeUndefined();
+  });
+
+  it('returns isError when get_component_spec has no specs.json', async () => {
+    const testClient = await connect();
+    const result = await testClient.callTool({
+      name: 'get_component_spec',
+      arguments: { name: 'widget' },
+    });
+
+    expect((result as { isError?: boolean }).isError).toBe(true);
+    expect(textContent(result)).toContain('No authoring spec');
   });
 });
