@@ -14,6 +14,7 @@ export const FieldType = {
   fileUpload: 'file-upload',
   calendar: 'calendar',
   datePicker: 'date-picker',
+  colorPicker: 'color-picker',
 } as const;
 
 export type FieldType = (typeof FieldType)[keyof typeof FieldType];

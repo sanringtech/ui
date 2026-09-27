@@ -37,6 +37,7 @@ export type DocsComponentId =
   | 'carousel'
   | 'checkbox'
   | 'collapsible'
+  | 'color-picker'
   | 'command'
   | 'combobox'
   | 'context-menu'
@@ -188,6 +189,13 @@ export const docsComponentItems: DocsComponentNavItem[] = [
     labelKey: 'component.collapsible',
     descriptionKey: 'collapsible.description',
     path: '/components/collapsible',
+    active: true,
+  },
+  {
+    id: 'color-picker',
+    labelKey: 'component.colorPicker',
+    descriptionKey: 'colorPicker.description',
+    path: '/components/color-picker',
     active: true,
   },
   {

@@ -36,6 +36,18 @@ function isPatch(version: string): boolean {
  */
 export const cliVersionChangelog: readonly CliVersionEntry[] = [
   {
+    version: '0.28.0',
+    date: '2026-09-27',
+    changes: [
+      {
+        type: 'added',
+        notable: true,
+        componentIds: ['color-picker'],
+        text: 'Add `color-picker` for choosing a hex color from a swatch trigger, native color input, optional presets, and Angular forms.',
+      },
+    ],
+  },
+  {
     version: '0.27.0',
     date: '2026-09-27',
     changes: [

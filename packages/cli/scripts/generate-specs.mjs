@@ -31,6 +31,7 @@ const ALIASES = {
   switch: ['toggle switch'],
   slider: ['range'],
   sortable: ['drag', 'reorder', 'drag list', 'sortable list'],
+  'color-picker': ['colour picker', 'hex picker', 'colorpicker'],
   sidebar: ['sidenav'],
   table: ['datagrid', 'data table'],
   transfer: ['shuttle'],

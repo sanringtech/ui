@@ -11,6 +11,7 @@ import { cardTranslations } from './card';
 import { carouselTranslations } from './carousel';
 import { checkboxTranslations } from './checkbox';
 import { collapsibleTranslations } from './collapsible';
+import { colorPickerTranslations } from './color-picker';
 import { comboboxTranslations } from './combobox';
 import { commandTranslations } from './command';
 import { contextMenuTranslations } from './context-menu';
@@ -66,6 +67,7 @@ export const componentTranslations = {
   ...carouselTranslations,
   ...checkboxTranslations,
   ...collapsibleTranslations,
+  ...colorPickerTranslations,
   ...comboboxTranslations,
   ...commandTranslations,
   ...contextMenuTranslations,

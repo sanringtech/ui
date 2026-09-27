@@ -172,6 +172,13 @@ export const routes: Routes = [
                   ),
               },
               {
+                path: 'color-picker',
+                loadComponent: () =>
+                  import('./pages/components/color-picker/color-picker-page.component').then(
+                    (m) => m.ColorPickerPageComponent,
+                  ),
+              },
+              {
                 path: 'command',
                 loadComponent: () =>
                   import('./pages/components/command/command-page.component').then(

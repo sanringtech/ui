@@ -395,6 +395,29 @@
       }
     },
     {
+      "name": "color-picker",
+      "description": "A form control for choosing a hex color from a swatch trigger, native color input, and optional presets.",
+      "sharedDeps": [
+        "component-styles",
+        "cva-base",
+        "utils"
+      ],
+      "componentDeps": [
+        "popover",
+        "input",
+        "field"
+      ],
+      "peerDependencies": {
+        "@angular/forms": "^22.0.0",
+        "@angular/cdk": "^22.0.0"
+      },
+      "files": [
+        "color-picker/color-picker.component.ts",
+        "color-picker/color-picker.util.ts",
+        "color-picker/index.ts"
+      ]
+    },
+    {
       "name": "dialog",
       "description": "A window overlaid on either the primary window, rendering the content underneath inert.",
       "sharedDeps": [

@@ -13,6 +13,7 @@ export * from './lib/components/avatar';
 export * from './lib/components/button';
 export * from './lib/components/checkbox';
 export * from './lib/components/collapsible';
+export * from './lib/components/color-picker';
 export * from './lib/components/command';
 export * from './lib/components/combobox';
 export * from './lib/components/context-menu';

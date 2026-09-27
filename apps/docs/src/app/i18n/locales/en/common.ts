@@ -56,6 +56,7 @@ export const commonTranslations = {
   'component.carousel': 'Carousel',
   'component.checkbox': 'Checkbox',
   'component.collapsible': 'Collapsible',
+  'component.colorPicker': 'Color Picker',
   'component.command': 'Command',
   'component.combobox': 'Combobox',
   'component.contextMenu': 'Context Menu',

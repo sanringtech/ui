@@ -56,6 +56,7 @@ export const commonTranslations = {
   'component.carousel': '輪播',
   'component.checkbox': '核取方塊',
   'component.collapsible': 'Collapsible',
+  'component.colorPicker': '顏色選擇器',
   'component.command': 'Command',
   'component.combobox': 'Combobox',
   'component.contextMenu': '右鍵選單',
