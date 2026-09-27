@@ -45,6 +45,17 @@ export const cliVersionChangelog: readonly CliVersionEntry[] = [
         componentIds: ['sortable'],
         text: 'Add `sortable` for pointer and keyboard reordering of a single list. Cards and other content compose with `[sanringSortableItem]`.',
       },
+      {
+        type: 'changed',
+        notable: true,
+        componentIds: ['timeline'],
+        text: '`sanringTimelineSeparator` now draws the rail and a default marker, so items no longer need hand-rolled dots, cards, or connector spans.',
+      },
+      {
+        type: 'changed',
+        componentIds: ['sortable'],
+        text: '`[sanringSortableItem]` no longer binds a host `class` string, so it can sit on the same node as `[sanringTimelineItem]`.',
+      },
     ],
   },
   {

@@ -3,7 +3,7 @@ import { cn } from '../../utils';
 import { TimelineOrientation } from './timeline-type';
 
 @Directive({
-  selector: 'ul[sanringTimeline], div[sanringTimeline]',
+  selector: 'ul[sanringTimeline], ol[sanringTimeline], div[sanringTimeline]',
   standalone: true,
   host: {
     '[class]': 'timelineClass()',
@@ -16,10 +16,6 @@ export class TimelineDirective {
   readonly class = input<string | undefined>();
 
   protected readonly timelineClass = computed(() =>
-    cn(
-      'relative flex w-full',
-      this.orientation() === 'vertical' ? 'flex-col gap-4' : 'flex-row gap-6',
-      this.class(),
-    ),
+    cn('relative flex w-full', this.orientation() === 'vertical' ? 'flex-col' : 'flex-row', this.class()),
   );
 }

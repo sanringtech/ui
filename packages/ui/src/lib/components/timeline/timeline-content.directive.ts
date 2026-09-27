@@ -11,5 +11,5 @@ import { cn } from '../../utils';
 export class TimelineContentDirective {
   readonly class = input<string | undefined>();
 
-  protected readonly contentClass = computed(() => cn('min-w-0 flex-1', this.class()));
+  protected readonly contentClass = computed(() => cn('min-w-0 flex-1 pt-px', this.class()));
 }

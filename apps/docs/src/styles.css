@@ -602,4 +602,13 @@
     outline: none;
     box-shadow: 0 0 0 2px var(--docs-focus-ring);
   }
+
+  .cdk-drag-placeholder {
+    opacity: 0.4;
+  }
+
+  .sanring-sortable-preview {
+    box-sizing: border-box;
+    box-shadow: 0 10px 28px rgb(0 0 0 / 0.22);
+  }
 }

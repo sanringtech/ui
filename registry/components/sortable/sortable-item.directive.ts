@@ -1,14 +1,5 @@
 import { CdkDrag } from '@angular/cdk/drag-drop';
-import {
-  Directive,
-  booleanAttribute,
-  computed,
-  contentChild,
-  effect,
-  inject,
-  input,
-} from '@angular/core';
-import { cn } from '../shared/utils';
+import { Directive, booleanAttribute, computed, contentChild, effect, inject, input } from '@angular/core';
 import { SortableHandleDirective } from './sortable-handle.directive';
 import { SortableComponent } from './sortable.component';
 
@@ -18,14 +9,14 @@ import { SortableComponent } from './sortable.component';
   hostDirectives: [CdkDrag],
   host: {
     role: 'listitem',
-    '[class]': 'hostClass()',
+    '[class.cursor-grab]': 'showGrabCursor()',
+    '[class.select-none]': '!isDisabled()',
     '[attr.tabindex]': 'isDisabled() ? -1 : 0',
     '[attr.data-disabled]': 'isDisabled() ? "" : null',
     '(keydown)': 'onKeydown($event)',
   },
 })
 export class SortableItemDirective {
-  readonly class = input<string | undefined>();
   readonly disabled = input(false, { transform: booleanAttribute });
 
   private readonly sortable = inject(SortableComponent);
@@ -41,10 +32,7 @@ export class SortableItemDirective {
   }
 
   protected readonly isDisabled = computed(() => this.disabled() || this.sortable.disabled());
-
-  protected readonly hostClass = computed(() =>
-    cn(this.handle() ? null : 'cursor-grab', this.class()),
-  );
+  protected readonly showGrabCursor = computed(() => !this.handle() && !this.isDisabled());
 
   protected onKeydown(event: KeyboardEvent): void {
     if (this.isDisabled()) return;

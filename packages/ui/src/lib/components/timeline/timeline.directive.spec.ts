@@ -20,10 +20,15 @@ import { TimelineDirective } from './timeline.directive';
         <span sanringTimelineSeparator></span>
         <div sanringTimelineContent>First event</div>
       </li>
+      <li sanringTimelineItem>
+        <span sanringTimelineSeparator></span>
+        <div sanringTimelineContent>Last event</div>
+      </li>
     </ul>
 
     <div sanringTimeline>
       <div sanringTimelineItem>
+        <span sanringTimelineSeparator></span>
         <div sanringTimelineContent>Second event</div>
       </div>
     </div>
@@ -79,15 +84,18 @@ describe('Timeline primitives', () => {
     expect(separator.classList).not.toContain('flex-col');
   });
 
-  it('lays out item content in a row and the separator in a column for vertical (default) orientation', () => {
+  it('offsets vertical items for an overlay rail', () => {
     const fixture = TestBed.createComponent(TimelineTestHost);
     fixture.detectChanges();
 
     const timeline = fixture.nativeElement.querySelector('div[sanringTimeline]');
     const item = timeline.querySelector('div[sanringTimelineItem]');
+    const separator = item.querySelector('[sanringTimelineSeparator]');
 
-    expect(item.classList).toContain('flex-row');
-    expect(item.classList).not.toContain('flex-col');
+    expect(item.classList).toContain('pl-10');
+    expect(item.classList).toContain('last:before:hidden');
+    expect(separator.classList).toContain('absolute');
+    expect(separator.classList).toContain('flex-col');
   });
 
   it('has no axe-detectable a11y violations', async () => {

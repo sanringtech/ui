@@ -3836,8 +3836,8 @@
     "name": "timeline",
     "title": "Timeline",
     "description": "Composable timeline primitives for chronological events, activity feeds, and process milestones.",
-    "example": "<ul sanringTimeline>\n  <li sanringTimelineItem>\n    <span sanringTimelineSeparator>\n      <span class=\"grid size-6 place-items-center rounded-full border-2 bg-background\">\n        <span class=\"size-2 rounded-full bg-primary\"></span>\n      </span>\n      <!-- omit on the last item -->\n      <span class=\"w-px flex-1 bg-border\"></span>\n    </span>\n    <div sanringTimelineContent class=\"pb-6\">\n      <div class=\"rounded-lg border bg-background p-4\">\n        <div class=\"flex items-center justify-between gap-4\">\n          <div>\n            <p class=\"font-medium\">Created project</p>\n            <p class=\"text-sm text-muted-foreground\">Workspace and registry files are ready.</p>\n          </div>\n          <span sanringBadge variant=\"outline\">09:12</span>\n        </div>\n      </div>\n    </div>\n  </li>\n</ul>",
-    "usageImport": "import { TimelineContentDirective, TimelineDirective, TimelineItemDirective, TimelineSeparatorDirective } from './components/ui/timeline';",
+    "example": "<ul sanringTimeline>\n  <li sanringTimelineItem>\n    <span sanringTimelineSeparator></span>\n    <div sanringTimelineContent>\n      <div class=\"flex items-baseline justify-between gap-4\">\n        <p class=\"font-medium\">Created project</p>\n        <time class=\"text-xs tabular-nums text-muted-foreground\">09:12</time>\n      </div>\n      <p class=\"mt-1 text-sm text-muted-foreground\">\n        Workspace and registry files are ready.\n      </p>\n    </div>\n  </li>\n</ul>",
+    "usageImport": "import { Component } from '@angular/core';\nimport { SANRING_TIMELINE_IMPORTS } from './components/ui/timeline';\n\n@Component({\n  imports: [SANRING_TIMELINE_IMPORTS],\n})\nexport class ExampleComponent {}",
     "api": [
       {
         "property": "orientation",
@@ -3871,8 +3871,9 @@
       }
     ],
     "accessibility": [
-      "Timeline is a visual layout primitive with no built-in ARIA role.",
-      "When timeline items represent an ordered sequence, wrap the content in a native <ol> or <ul> in your template so screen readers understand the list structure."
+      "The root sets role=list and each item sets role=listitem so Tailwind Preflight does not strip list semantics.",
+      "The separator is aria-hidden.",
+      "Prefer native ul or ol when the sequence is ordered."
     ],
     "stateModel": [
       "Stateless layout component — no value, selection, or event state."
