@@ -1,5 +1,11 @@
 # @sanring/cli
 
+## 0.28.0
+
+### Minor Changes
+
+- d579d02: Add `color-picker` for hex, rgb, and hsl with a swatch trigger, native color input, alpha, optional presets, and Angular forms.
+
 ## 0.27.0
 
 ### Minor Changes
