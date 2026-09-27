@@ -396,7 +396,7 @@
     },
     {
       "name": "color-picker",
-      "description": "A form control for choosing a hex color from a swatch trigger, native color input, and optional presets.",
+      "description": "A form control for choosing hex, rgb, or hsl colors from a swatch trigger, native color input, alpha, and optional presets.",
       "sharedDeps": [
         "component-styles",
         "cva-base",

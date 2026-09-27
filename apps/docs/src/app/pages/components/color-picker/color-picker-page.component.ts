@@ -93,6 +93,20 @@ import { colorPickerPage, colorPickerPageExamples } from './color-picker.docs';
             </app-component-page-code-previewer>
           </app-component-page-section>
 
+          <app-component-page-section [section]="section('example-formats')">
+            <app-component-page-code-previewer [code]="examples.formats" language="angular-html">
+              <div previewer class="flex items-center gap-3 px-4">
+                <sanring-color-picker
+                  [value]="formatValue()"
+                  format="rgb"
+                  [ariaLabel]="i18n.t('colorPicker.demo.brand')"
+                  (valueChange)="formatValue.set($event)"
+                />
+                <span class="font-mono text-sm text-[var(--docs-muted)]">{{ formatValue() }}</span>
+              </div>
+            </app-component-page-code-previewer>
+          </app-component-page-section>
+
           <app-component-page-section [section]="section('example-disabled')">
             <app-component-page-code-previewer [code]="examples.disabled" language="angular-html">
               <div previewer class="px-4">
@@ -141,6 +155,7 @@ export class ColorPickerPageComponent {
   protected readonly i18n = inject(I18nService);
   protected readonly basicValue = signal('#2563eb');
   protected readonly swatchValue = signal('#2563eb');
+  protected readonly formatValue = signal('rgb(37, 99, 235)');
   protected readonly swatches = ['#0f172a', '#2563eb', '#16a34a', '#e11d48', '#f59e0b', '#fff'];
   protected readonly brandControl = new FormControl('#2563eb', { nonNullable: true });
 

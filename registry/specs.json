@@ -877,13 +877,13 @@
   "color-picker": {
     "name": "color-picker",
     "title": "Color Picker",
-    "description": "A form control for choosing a hex color. The trigger shows the current swatch; the popover holds a native color input, hex field, and optional presets.",
+    "description": "A form control for choosing a color. The trigger shows the current swatch; the popover holds a native color input, format switch, value field, alpha, and optional presets.",
     "aliases": [
       "colour picker",
       "hex picker",
       "colorpicker"
     ],
-    "anatomy": "sanring-color-picker\n└── trigger swatch + hex\n    └── popover\n        ├── native color input\n        ├── hex input\n        └── optional swatches",
+    "anatomy": "sanring-color-picker\n└── trigger swatch + formatted value\n    └── popover\n        ├── hex / rgb / hsl\n        ├── native color input\n        ├── alpha\n        ├── value input\n        └── optional swatches",
     "example": "<sanring-color-picker [value]=\"color\" ariaLabel=\"Brand color\" (valueChange)=\"color = $event\" />",
     "usageImport": "import { ColorPickerComponent } from './components/ui/color-picker';",
     "api": [
@@ -903,7 +903,13 @@
         "property": "value",
         "type": "string",
         "defaultValue": "—",
-        "description": "Current color as #rgb or #rrggbb. Stored and emitted as lowercase #rrggbb."
+        "description": "Current color. Accepts #rgb, #rrggbb, #rrggbbaa, rgb()/rgba(), and hsl()/hsla(). Emitted in the selected format."
+      },
+      {
+        "property": "format",
+        "type": "'hex' | 'rgb' | 'hsl'",
+        "defaultValue": "'hex'",
+        "description": "Output syntax: 'hex', 'rgb', or 'hsl'. Defaults to hex. Switching formats emits the same color in the new syntax."
       },
       {
         "property": "disabled",
@@ -927,13 +933,13 @@
         "property": "swatches",
         "type": "string[]",
         "defaultValue": "[]",
-        "description": "Optional preset hex colors shown as chips in the popover."
+        "description": "Optional preset colors shown as chips in the popover."
       },
       {
         "property": "valueChange",
         "type": "EventEmitter<string>",
         "defaultValue": "—",
-        "description": "Emits the next #rrggbb value after user interaction."
+        "description": "Emits the next formatted color string after user interaction."
       },
       {
         "property": "ariaLabel",
@@ -960,10 +966,28 @@
         "description": "Accessible name for the native color input inside the popover."
       },
       {
+        "property": "valueInputLabel",
+        "type": "string",
+        "defaultValue": "'Color value'",
+        "description": "Accessible name for the formatted value field inside the popover."
+      },
+      {
         "property": "hexInputLabel",
         "type": "string",
-        "defaultValue": "'Hex'",
-        "description": "Accessible name for the hex text field inside the popover."
+        "defaultValue": "—",
+        "description": "Optional override for the value field accessible name."
+      },
+      {
+        "property": "alphaInputLabel",
+        "type": "string",
+        "defaultValue": "'Alpha'",
+        "description": "Visible and accessible name for the alpha slider."
+      },
+      {
+        "property": "formatGroupLabel",
+        "type": "string",
+        "defaultValue": "'Color format'",
+        "description": "Accessible name for the hex / rgb / hsl switch."
       }
     ],
     "keyboard": [
@@ -983,7 +1007,8 @@
     "accessibility": [
       "The trigger is a button with aria-haspopup='dialog'.",
       "The panel is role='dialog'.",
-      "Native color and hex fields have their own labels.",
+      "Format buttons use aria-pressed.",
+      "Native color, value, and alpha have their own labels.",
       "Preset chips use aria-pressed.",
       "Works with sanring-field for automatic aria-describedby wiring."
     ],
@@ -991,7 +1016,9 @@
       "Implements ControlValueAccessor.",
       "Use [(ngModel)] or formControl.",
       "Value type: string.",
-      "Invalid hex is kept as a draft and reverted on blur; 3-digit hex expands to #rrggbb."
+      "Internal model is RGBA; format chooses hex, rgb(), or hsl().",
+      "Alpha below 1 emits 8-digit hex, rgba(), or hsl() with slash alpha.",
+      "Named colors, oklch, and color-mix() are rejected."
     ]
   },
   "combobox": {

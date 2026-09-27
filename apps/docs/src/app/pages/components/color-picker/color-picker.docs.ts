@@ -40,6 +40,12 @@ export const colorPickerPage = {
           descriptionKey: 'colorPicker.examples.swatches.description',
           level: 3,
         },
+        {
+          id: 'example-formats',
+          titleKey: 'colorPicker.demo.formats',
+          descriptionKey: 'colorPicker.examples.formats.description',
+          level: 3,
+        },
         { id: 'example-disabled', titleKey: 'colorPicker.demo.disabled', level: 3 },
         {
           id: 'example-field',
@@ -92,6 +98,12 @@ export const colorPickerPage = {
       type: 'string',
       defaultValue: '—',
       descriptionKey: 'colorPicker.api.value.description',
+    },
+    {
+      property: 'format',
+      type: "'hex' | 'rgb' | 'hsl'",
+      defaultValue: "'hex'",
+      descriptionKey: 'colorPicker.api.format.description',
     },
     {
       property: 'disabled',
@@ -148,10 +160,28 @@ export const colorPickerPage = {
       descriptionKey: 'colorPicker.api.colorInputLabel.description',
     },
     {
+      property: 'valueInputLabel',
+      type: 'string',
+      defaultValue: "'Color value'",
+      descriptionKey: 'colorPicker.api.valueInputLabel.description',
+    },
+    {
       property: 'hexInputLabel',
       type: 'string',
-      defaultValue: "'Hex'",
+      defaultValue: '—',
       descriptionKey: 'colorPicker.api.hexInputLabel.description',
+    },
+    {
+      property: 'alphaInputLabel',
+      type: 'string',
+      defaultValue: "'Alpha'",
+      descriptionKey: 'colorPicker.api.alphaInputLabel.description',
+    },
+    {
+      property: 'formatGroupLabel',
+      type: 'string',
+      defaultValue: "'Color format'",
+      descriptionKey: 'colorPicker.api.formatGroupLabel.description',
     },
   ] satisfies readonly ComponentPageApiRow[],
   keyboardRows: [
@@ -166,18 +196,27 @@ export const colorPickerPageExamples = {
   usageImport: `import { ColorPickerComponent } from './components/ui/color-picker';`,
   usageMain: `<sanring-color-picker
   [value]="color"
+  format="hex"
   ariaLabel="Brand color"
   (valueChange)="color = $event"
 />`,
   composition: `sanring-color-picker
-└── trigger swatch + hex
+└── trigger swatch + formatted value
     └── popover
+        ├── hex / rgb / hsl
         ├── native color input
-        ├── hex input
+        ├── alpha
+        ├── value input
         └── optional swatches`,
   swatches: `<sanring-color-picker
   [value]="color"
   [swatches]="['#0f172a', '#2563eb', '#16a34a', '#e11d48', '#f59e0b', '#fff']"
+  ariaLabel="Brand color"
+  (valueChange)="color = $event"
+/>`,
+  formats: `<sanring-color-picker
+  [value]="color"
+  format="rgb"
   ariaLabel="Brand color"
   (valueChange)="color = $event"
 />`,

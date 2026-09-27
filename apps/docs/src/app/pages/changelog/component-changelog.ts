@@ -43,7 +43,7 @@ export const cliVersionChangelog: readonly CliVersionEntry[] = [
         type: 'added',
         notable: true,
         componentIds: ['color-picker'],
-        text: 'Add `color-picker` for choosing a hex color from a swatch trigger, native color input, optional presets, and Angular forms.',
+        text: 'Add `color-picker` for hex, rgb, and hsl with a swatch trigger, native color input, alpha, optional presets, and Angular forms.',
       },
     ],
   },

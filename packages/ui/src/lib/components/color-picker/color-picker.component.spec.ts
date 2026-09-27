@@ -17,6 +17,12 @@ import { ColorPickerComponent } from './color-picker.component';
     />
     <sanring-color-picker disabled [value]="'#111111'" ariaLabel="Locked color" />
     <sanring-color-picker [(ngModel)]="modelValue" ariaLabel="Model color" class="custom-class" />
+    <sanring-color-picker
+      [value]="rgbColor"
+      format="rgb"
+      [ariaLabel]="'RGB color'"
+      (valueChange)="rgbLatest = $event"
+    />
   `,
 })
 class ColorPickerTestHost {
@@ -24,6 +30,8 @@ class ColorPickerTestHost {
   latestValue: string | null = null;
   modelValue = '#16a34a';
   swatches = ['#0f172a', '#2563eb', '#fff'];
+  rgbColor = 'rgb(37, 99, 235)';
+  rgbLatest: string | null = null;
 }
 
 describe('ColorPickerComponent', () => {
@@ -120,7 +128,7 @@ describe('ColorPickerComponent', () => {
 
     const swatch = overlayContainer
       .getContainerElement()
-      .querySelector('button[aria-label="#ffffff"]') as HTMLButtonElement;
+      .querySelector('button[aria-label="#fff"]') as HTMLButtonElement;
     swatch.click();
     fixture.detectChanges();
 
@@ -152,6 +160,60 @@ describe('ColorPickerComponent', () => {
       'button[sanringpopovertrigger]',
     )[2] as HTMLButtonElement;
     expect(modeled.textContent?.trim()).toBe('#16a34a');
+  });
+
+  it('emits rgb when the format is switched', () => {
+    const fixture = TestBed.createComponent(ColorPickerTestHost);
+    fixture.detectChanges();
+    openFirst(fixture);
+
+    const rgb = [...overlayContainer.getContainerElement().querySelectorAll('[role="group"] button')].find(
+      (button) => button.textContent?.trim() === 'rgb',
+    ) as HTMLButtonElement;
+    rgb.click();
+    fixture.detectChanges();
+
+    expect(fixture.componentInstance.latestValue).toBe('rgb(37, 99, 235)');
+    expect(firstTrigger(fixture).textContent?.trim()).toBe('rgb(37, 99, 235)');
+  });
+
+  it('keeps alpha when the native color changes and emits 8-digit hex', () => {
+    const fixture = TestBed.createComponent(ColorPickerTestHost);
+    fixture.detectChanges();
+    openFirst(fixture);
+
+    const alpha = overlayContainer
+      .getContainerElement()
+      .querySelector('input[type="range"]') as HTMLInputElement;
+    alpha.value = '50';
+    alpha.dispatchEvent(new Event('input', { bubbles: true }));
+    fixture.detectChanges();
+
+    expect(fixture.componentInstance.latestValue).toBe('#2563eb80');
+
+    const native = overlayContainer
+      .getContainerElement()
+      .querySelector('input[type="color"]') as HTMLInputElement;
+    native.value = '#16a34a';
+    native.dispatchEvent(new Event('input', { bubbles: true }));
+    fixture.detectChanges();
+
+    expect(fixture.componentInstance.latestValue).toBe('#16a34a80');
+  });
+
+  it('accepts a typed rgb value', () => {
+    const fixture = TestBed.createComponent(ColorPickerTestHost);
+    fixture.detectChanges();
+    openFirst(fixture);
+
+    const value = overlayContainer
+      .getContainerElement()
+      .querySelector('input[sanringinput]') as HTMLInputElement;
+    value.value = 'rgb(22, 163, 74)';
+    value.dispatchEvent(new Event('input', { bubbles: true }));
+    fixture.detectChanges();
+
+    expect(fixture.componentInstance.latestValue).toBe('#16a34a');
   });
 
   it('merges a consumer class onto the host', () => {
