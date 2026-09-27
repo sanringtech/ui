@@ -325,5 +325,5 @@ export class DropdownMenuPageComponent {
     if (value === 'compact' || value === 'comfortable') this.density = value;
   }
 
-  protected onFileAction(_value: unknown): void {}
+  protected onFileAction(): void {}
 }
