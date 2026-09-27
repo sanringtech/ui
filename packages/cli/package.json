@@ -3,6 +3,10 @@
   "version": "0.27.0",
   "description": "CLI for adding Sanring UI components to your Angular project",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/sanringtech/ui.git"
+  },
   "type": "module",
   "bin": {
     "sanring": "./dist/index.js"
