@@ -36,7 +36,7 @@ function isPatch(version: string): boolean {
  */
 export const cliVersionChangelog: readonly CliVersionEntry[] = [
   {
-    version: '0.26.0',
+    version: '0.27.0',
     date: '2026-09-27',
     changes: [
       {
