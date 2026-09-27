@@ -68,6 +68,7 @@
         "select",
         "sheet",
         "sidebar",
+        "sortable",
         "stepper",
         "table",
         "timeline",
@@ -694,6 +695,22 @@
       "files": [
         "slider/slider.component.ts",
         "slider/index.ts"
+      ]
+    },
+    {
+      "name": "sortable",
+      "description": "A single-list reorder primitive built on Angular CDK drag-drop.",
+      "sharedDeps": [
+        "utils"
+      ],
+      "peerDependencies": {
+        "@angular/cdk": "^22.0.0"
+      },
+      "files": [
+        "sortable/sortable.component.ts",
+        "sortable/sortable-item.directive.ts",
+        "sortable/sortable-handle.directive.ts",
+        "sortable/index.ts"
       ]
     },
     {

@@ -36,6 +36,18 @@ function isPatch(version: string): boolean {
  */
 export const cliVersionChangelog: readonly CliVersionEntry[] = [
   {
+    version: '0.26.0',
+    date: '2026-09-27',
+    changes: [
+      {
+        type: 'added',
+        notable: true,
+        componentIds: ['sortable'],
+        text: 'Add `sortable` for pointer and keyboard reordering of a single list. Cards and other content compose with `[sanringSortableItem]`.',
+      },
+    ],
+  },
+  {
     version: '0.25.2',
     date: '2026-09-23',
     changes: [

@@ -78,6 +78,7 @@ export const commonTranslations = {
   'component.sidebar': 'Sidebar',
   'component.skeleton': 'Skeleton',
   'component.slider': 'Slider',
+  'component.sortable': 'Sortable',
   'component.stepper': 'Stepper',
   'component.switch': 'Switch',
   'component.table': 'Table',
