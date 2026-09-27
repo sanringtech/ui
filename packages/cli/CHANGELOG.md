@@ -1,5 +1,11 @@
 # @sanring/cli
 
+## 0.26.0
+
+### Minor Changes
+
+- b426dbc: Add `sortable` for pointer and keyboard reordering. Timeline separators now draw the rail and default marker. MCP adds `get_component_spec` so agents get authoring contracts instead of inventing APIs.
+
 ## 0.25.2
 
 ### Patch Changes
