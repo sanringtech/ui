@@ -17,8 +17,10 @@ export class TimelineItemDirective {
 
   protected readonly itemClass = computed(() =>
     cn(
-      'relative flex min-w-0 gap-4',
-      this.timeline?.orientation() === 'horizontal' ? 'flex-col' : 'flex-row',
+      'group/timeline-item relative min-w-0',
+      this.timeline?.orientation() === 'horizontal'
+        ? 'flex flex-1 flex-col gap-3'
+        : "pb-8 pl-10 last:pb-0 before:absolute before:bottom-0 before:left-[15px] before:top-3 before:w-px before:bg-[var(--sanring-border)] before:content-[''] last:before:hidden",
       this.class(),
     ),
   );

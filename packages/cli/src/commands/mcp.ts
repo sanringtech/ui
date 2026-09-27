@@ -22,6 +22,7 @@ import {
 } from '../registry.js';
 import { findRegistryReferenceIssues } from '../registry-integrity.js';
 import { isAngularProject, readConfig, resolveComponentBasePath, resolveRegistrySource, semverLte } from '../utils.js';
+import { fetchComponentSpecs, formatComponentSpec, rankRegistryItems } from '../component-spec.js';
 import { resolveInstallSet, collectPeerDeps } from './add.js';
 import { registryRelativePath } from './diff.js';
 
@@ -168,14 +169,20 @@ export function createMcpServer(options: CreateMcpServerOptions = {}): Server {
   });
 
   let cachedRegistry: Registry | null = null;
+  let cachedSpecs: Awaited<ReturnType<typeof fetchComponentSpecs>> | null = null;
   let cachedAt = 0;
   const CACHE_TTL_MS = 30_000;
   const getRegistry = async (forceRefresh = false): Promise<Registry> => {
     if (forceRefresh || !cachedRegistry || Date.now() - cachedAt > CACHE_TTL_MS) {
       cachedRegistry = await fetchRegistry(registryUrl);
+      cachedSpecs = await fetchComponentSpecs(registryUrl);
       cachedAt = Date.now();
     }
     return cachedRegistry;
+  };
+  const getSpecs = async (): Promise<NonNullable<typeof cachedSpecs>> => {
+    await getRegistry();
+    return cachedSpecs ?? {};
   };
 
   const server = new Server(
@@ -228,7 +235,7 @@ export function createMcpServer(options: CreateMcpServerOptions = {}): Server {
       {
         name: 'search_components',
         description:
-          'Search Sanring UI components by name or description. Returns matching components ranked by relevance (name matches first).',
+          'Search Sanring UI components by name, description, or alias (e.g. modal → dialog / alert-dialog). Ranked by relevance. Call get_component_spec next before writing templates.',
         inputSchema: {
           type: 'object' as const,
           properties: {
@@ -240,13 +247,28 @@ export function createMcpServer(options: CreateMcpServerOptions = {}): Server {
       {
         name: 'get_component_info',
         description:
-          'Get detailed information about a specific Sanring UI component: files, component dependencies that will be auto-installed, and required peer dependencies.',
+          'Install details for a Sanring UI component: files, auto-installed component dependencies, shared utilities, and peer dependencies. For selectors, anatomy, API, and accessibility, call get_component_spec.',
         inputSchema: {
           type: 'object' as const,
           properties: {
             name: {
               type: 'string',
               description: "Component name (e.g. 'button', 'dialog', 'accordion')",
+            },
+          },
+          required: ['name'],
+        },
+      },
+      {
+        name: 'get_component_spec',
+        description:
+          'Authoring contract for a Sanring UI component: real selectors, anatomy, API, accessibility, keyboard, and a canonical example. Call this before writing Angular templates. Do not invent APIs.',
+        inputSchema: {
+          type: 'object' as const,
+          properties: {
+            name: {
+              type: 'string',
+              description: "Component name (e.g. 'dialog', 'alert-dialog', 'select')",
             },
           },
           required: ['name'],
@@ -398,12 +420,7 @@ export function createMcpServer(options: CreateMcpServerOptions = {}): Server {
         const registry = await getRegistry();
         const q = query.toLowerCase();
         const items = registryInstallables(registry);
-        const nameMatches = items.filter((c) => c.name.toLowerCase().includes(q));
-        const descMatches = items.filter(
-          (c) =>
-            !c.name.toLowerCase().includes(q) && c.description.toLowerCase().includes(q),
-        );
-        const matches = [...nameMatches, ...descMatches];
+        const matches = rankRegistryItems(items, q, await getSpecs());
 
         if (matches.length === 0) {
           return {
@@ -456,6 +473,44 @@ export function createMcpServer(options: CreateMcpServerOptions = {}): Server {
               text: formatComponentDetail(component, registry),
             },
           ],
+        };
+      }
+
+      case 'get_component_spec': {
+        const validated = requireStrings(args, ['name']);
+        if ('isError' in validated) return validated;
+        const { name: componentName } = validated.values;
+        const registry = await getRegistry();
+        const component = findRegistryItem(registry, componentName);
+
+        if (!component) {
+          const available = registryInstallables(registry).map((c) => c.name).join(', ');
+          return {
+            isError: true,
+            content: [
+              {
+                type: 'text' as const,
+                text: `Component "${componentName}" not found.\n\nAvailable: ${available}`,
+              },
+            ],
+          };
+        }
+
+        const spec = (await getSpecs())[component.name];
+        if (!spec) {
+          return {
+            isError: true,
+            content: [
+              {
+                type: 'text' as const,
+                text: `No authoring spec for "${component.name}". Call get_component_info for install details, or generate registry/specs.json.`,
+              },
+            ],
+          };
+        }
+
+        return {
+          content: [{ type: 'text' as const, text: formatComponentSpec(spec) }],
         };
       }
 

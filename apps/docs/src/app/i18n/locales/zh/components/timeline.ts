@@ -1,12 +1,14 @@
 export const timelineTranslations = {
   'timeline.description': '可組合的時間軸 primitives，適合時間事件、活動紀錄與流程里程碑。',
   'timeline.examples.basic.description':
-    '使用 sanringTimeline 搭配原生清單標記，再自行組合分隔、節點、連接線與內容。',
-  'timeline.usage.description': '匯入 Timeline directives，並套用到清單或 div 型活動資料標記。',
+    '垂直列表，軌道由元件自己畫。Separator 留空就是預設圓點；需要時再投影 icon 或 avatar。',
+  'timeline.usage.description':
+    '每個 item 是 separator 加 content。連接線由 separator 負責；只有預設圓點不夠時才投影節點。',
   'timeline.installation.description':
     '安裝 Timeline primitives，並在每個事件中組合 item、separator 與 content directives。',
   'timeline.demo.horizontal': '水平',
   'timeline.demo.divBased': 'Div 型時間軸',
+  'timeline.demo.reorder': '調整順序',
   'timeline.demo.releaseActivity': '發布活動',
   'timeline.demo.releaseActivityDescription': '適合發布紀錄與 registry 更新的精簡活動軌跡。',
   'timeline.demo.today': '今天',
@@ -31,6 +33,8 @@ export const timelineTranslations = {
   'timeline.demo.qaTitle': '品質檢查',
   'timeline.demo.qaMeta': 'QA 通過',
   'timeline.demo.qaDescription': '發布前已檢查視覺間距與空狀態。',
+  'timeline.demo.reorder.description':
+    '跟 sortable 組合，拖右側握把即可改順序。Timeline 只管排版，順序由 sortable 負責。這個範例另外需要安裝 sortable。',
   'timeline.api.description': 'Timeline directives 支援的 Inputs。',
   'timeline.api.orientation.description': '控制項目垂直堆疊或水平排列。',
   'timeline.api.class.description': '與 timeline 根元素合併的額外 class。',
@@ -38,7 +42,7 @@ export const timelineTranslations = {
   'timeline.api.separatorClass.description': '與每個 separator wrapper 合併的額外 class。',
   'timeline.api.contentClass.description': '與每個 content container 合併的額外 class。',
   'timeline.accessibility.description':
-    'Timeline 是視覺版面 primitive，沒有內建 ARIA 角色。當時間軸項目代表有序序列時，請在模板中用原生 <ol> 或 <ul> 包裹內容，讓螢幕閱讀器理解清單結構。',
+    '根元素會設 role=list，每個 item 設 role=listitem，避免 Tailwind Preflight 拿掉清單語意。Separator 為 aria-hidden。有序序列請優先用原生 ul 或 ol。',
   'timeline.keyboard.description': '除非內部有互動子元素，否則不可聚焦。',
   'timeline.stateModel.description': '無狀態版面元件——沒有值、選取或事件狀態。',
 } as const;

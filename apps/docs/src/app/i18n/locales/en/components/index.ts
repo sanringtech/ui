@@ -37,6 +37,7 @@ import { sheetTranslations } from './sheet';
 import { sidebarTranslations } from './sidebar';
 import { skeletonTranslations } from './skeleton';
 import { sliderTranslations } from './slider';
+import { sortableTranslations } from './sortable';
 import { spinnerTranslations } from './spinner';
 import { stepperTranslations } from './stepper';
 import { switchTranslations } from './switch';
@@ -91,6 +92,7 @@ export const componentTranslations = {
   ...sidebarTranslations,
   ...skeletonTranslations,
   ...sliderTranslations,
+  ...sortableTranslations,
   ...spinnerTranslations,
   ...stepperTranslations,
   ...switchTranslations,

@@ -36,6 +36,34 @@ function isPatch(version: string): boolean {
  */
 export const cliVersionChangelog: readonly CliVersionEntry[] = [
   {
+    version: '0.26.0',
+    date: '2026-09-27',
+    changes: [
+      {
+        type: 'added',
+        notable: true,
+        componentIds: ['sortable'],
+        text: 'Add `sortable` for pointer and keyboard reordering of a single list. Cards and other content compose with `[sanringSortableItem]`.',
+      },
+      {
+        type: 'added',
+        notable: true,
+        text: '`sanring mcp` adds `get_component_spec` for selectors, anatomy, API, accessibility, and a canonical example. `get_component_info` stays install metadata; `search_components` also matches aliases such as modal → dialog.',
+      },
+      {
+        type: 'changed',
+        notable: true,
+        componentIds: ['timeline'],
+        text: '`sanringTimelineSeparator` now draws the rail and a default marker, so items no longer need hand-rolled dots, cards, or connector spans.',
+      },
+      {
+        type: 'changed',
+        componentIds: ['sortable'],
+        text: '`[sanringSortableItem]` no longer binds a host `class` string, so it can sit on the same node as `[sanringTimelineItem]`.',
+      },
+    ],
+  },
+  {
     version: '0.25.2',
     date: '2026-09-23',
     changes: [

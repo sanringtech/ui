@@ -43,6 +43,12 @@ export const timelinePage = {
           titleKey: 'timeline.demo.divBased',
           level: 3,
         },
+        {
+          id: 'example-reorder',
+          titleKey: 'timeline.demo.reorder',
+          descriptionKey: 'timeline.demo.reorder.description',
+          level: 3,
+        },
       ],
     },
     {
@@ -101,64 +107,61 @@ export const timelinePage = {
 export const timelinePageExamples = {
   basic: `<ul sanringTimeline>
   <li sanringTimelineItem>
-    <span sanringTimelineSeparator>
-      <span class="grid size-6 place-items-center rounded-full border-2 bg-background">
-        <span class="size-2 rounded-full bg-primary"></span>
-      </span>
-      <!-- omit on the last item -->
-      <span class="w-px flex-1 bg-border"></span>
-    </span>
-    <div sanringTimelineContent class="pb-6">
-      <div class="rounded-lg border bg-background p-4">
-        <div class="flex items-center justify-between gap-4">
-          <div>
-            <p class="font-medium">Created project</p>
-            <p class="text-sm text-muted-foreground">Workspace and registry files are ready.</p>
-          </div>
-          <span sanringBadge variant="outline">09:12</span>
-        </div>
+    <span sanringTimelineSeparator></span>
+    <div sanringTimelineContent>
+      <div class="flex items-baseline justify-between gap-4">
+        <p class="font-medium">Created project</p>
+        <time class="text-xs tabular-nums text-muted-foreground">09:12</time>
       </div>
+      <p class="mt-1 text-sm text-muted-foreground">
+        Workspace and registry files are ready.
+      </p>
     </div>
   </li>
 </ul>`,
-  usageImport: `import { TimelineContentDirective, TimelineDirective, TimelineItemDirective, TimelineSeparatorDirective } from './components/ui/timeline';`,
-  usageMain: `<ul sanringTimeline orientation="vertical">
+  usageImport: `import { Component } from '@angular/core';
+import { SANRING_TIMELINE_IMPORTS } from './components/ui/timeline';
+
+@Component({
+  imports: [SANRING_TIMELINE_IMPORTS],
+})
+export class ExampleComponent {}`,
+  usageIndividualImports: `import { Component } from '@angular/core';
+import {
+  TimelineContentDirective,
+  TimelineDirective,
+  TimelineItemDirective,
+  TimelineSeparatorDirective,
+} from './components/ui/timeline';
+
+@Component({
+  imports: [
+    TimelineDirective,
+    TimelineItemDirective,
+    TimelineSeparatorDirective,
+    TimelineContentDirective,
+  ],
+})
+export class ExampleComponent {}`,
+  usageMain: `<ul sanringTimeline>
   <li sanringTimelineItem>
     <span sanringTimelineSeparator></span>
     <div sanringTimelineContent>Created project</div>
   </li>
 </ul>`,
-  horizontal: `<!-- TimelineItem stacks vertically and TimelineSeparator runs
-     horizontally once orientation="horizontal" -->
-<ul sanringTimeline orientation="horizontal" class="gap-0">
-  <li sanringTimelineItem class="flex-1">
-    <span sanringTimelineSeparator class="w-full">
-      <!-- first item: hide the leading line segment -->
-      <span class="h-px flex-1 bg-border invisible"></span>
-      <span class="grid size-7 place-items-center rounded-full border-2 bg-background text-xs">
-        1
-      </span>
-      <span class="h-px flex-1 bg-border"></span>
-    </span>
-    <div sanringTimelineContent class="pt-3 text-center">Plan</div>
+  horizontal: `<ul sanringTimeline orientation="horizontal">
+  <li sanringTimelineItem>
+    <span sanringTimelineSeparator></span>
+    <div sanringTimelineContent class="text-center">Plan</div>
   </li>
-  <li sanringTimelineItem class="flex-1">
-    <span sanringTimelineSeparator class="w-full">
-      <span class="h-px flex-1 bg-border"></span>
-      <span class="grid size-7 place-items-center rounded-full border-2 bg-background text-xs">
-        2
-      </span>
-      <!-- last item: hide the trailing line segment -->
-      <span class="h-px flex-1 bg-border invisible"></span>
-    </span>
-    <div sanringTimelineContent class="pt-3 text-center">Build</div>
+  <li sanringTimelineItem>
+    <span sanringTimelineSeparator></span>
+    <div sanringTimelineContent class="text-center">Build</div>
   </li>
 </ul>`,
-  divBased: `<!-- sanringTimeline/-Item/-Content also accept plain divs, so the
-     primitives compose with a Card instead of a semantic list -->
-<sanring-card>
-  <div sanringTimeline class="divide-y">
-    <div sanringTimelineItem class="items-center p-4">
+  divBased: `<sanring-card class="p-5">
+  <div sanringTimeline>
+    <div sanringTimelineItem>
       <span sanringTimelineSeparator>
         <sanring-avatar size="sm">
           <sanring-avatar-fallback>UI</sanring-avatar-fallback>
@@ -168,4 +171,15 @@ export const timelinePageExamples = {
     </div>
   </div>
 </sanring-card>`,
+  reorder: `<sanring-sortable class="max-w-md gap-0" [data]="items" (sorted)="items = $event">
+  @for (item of items; track item.id) {
+    <div sanringTimelineItem sanringSortableItem>
+      <span sanringTimelineSeparator></span>
+      <div sanringTimelineContent class="flex items-start gap-3">
+        <div class="min-w-0 flex-1">{{ item.title }}</div>
+        <button sanringSortableHandle type="button" aria-label="Reorder">⋮⋮</button>
+      </div>
+    </div>
+  }
+</sanring-sortable>`,
 } as const;

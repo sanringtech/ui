@@ -51,7 +51,7 @@ Every command accepts `--registry <url-or-path>` to point at a custom registry. 
 - Requires Node.js >= 18, Angular >= 22, Tailwind CSS.
 - `init` creates `sanring.config.json` and writes `src/sanring-theme.css`. Add the theme file to your global CSS once: `@import './sanring-theme.css';`
 - `add` records a content hash per file so `diff`/`update` can tell untouched files from customized ones — untouched files update silently, customized files always prompt first.
-- `mcp` starts an MCP server over stdio for AI coding agents (`npx @sanring/cli@latest mcp`).
+- `mcp` starts an MCP server over stdio for AI coding agents (`npx @sanring/cli@latest mcp`). `get_component_spec` returns selectors, anatomy, API, and accessibility; `get_component_info` is install metadata.
 - `build` generates a `registry.json` from your own Angular component source tree for publishing a private registry (`npx @sanring/cli@latest build --help`).
 
 ## Links

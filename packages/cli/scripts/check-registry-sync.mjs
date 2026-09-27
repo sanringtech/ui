@@ -15,6 +15,7 @@
 //   `sanring add menu` would have installed source for a component that was
 //   never actually part of the library.
 import { readFileSync, existsSync, readdirSync } from 'node:fs';
+import { spawnSync } from 'node:child_process';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -24,6 +25,7 @@ const DOCS_NAV_PATH = join(REPO_ROOT, 'apps/docs/src/app/navigation/docs-navigat
 const DOCS_ROUTES_PATH = join(REPO_ROOT, 'apps/docs/src/app/app.routes.ts');
 const DOCS_PAGES_DIR = join(REPO_ROOT, 'apps/docs/src/app/pages/components');
 const REGISTRY_JSON_PATH = join(REPO_ROOT, 'registry/registry.json');
+const REGISTRY_SPECS_PATH = join(REPO_ROOT, 'registry/specs.json');
 const REGISTRY_COMPONENTS_DIR = join(REPO_ROOT, 'registry/components');
 const REGISTRY_BLOCKS_DIR = join(REPO_ROOT, 'registry/blocks');
 const UI_COMPONENTS_DIR = join(REPO_ROOT, 'packages/ui/src/lib/components');
@@ -175,6 +177,9 @@ const publicApiNames = getPublicApiExportedNames();
 const docsIds = getDocsComponentIds();
 const docsPageDirs = getDocsPageDirNames();
 const routedIds = getRoutedComponentIds();
+const specNames = existsSync(REGISTRY_SPECS_PATH)
+  ? Object.keys(JSON.parse(readFileSync(REGISTRY_SPECS_PATH, 'utf-8')))
+  : [];
 
 // 1. registry.json entries must point at files that actually exist —
 //    otherwise `sanring add <name>` fails at install time, not at CI time.
@@ -292,6 +297,26 @@ diffSurfaces({
   onlyInBFails: true, // a route with no nav entry is reachable but silently orphaned — worth flagging too
   gapKey: 'docsVsRoutes',
 });
+
+diffSurfaces({
+  a: docsIds,
+  aLabel: 'docs-navigation.ts',
+  b: specNames,
+  bLabel: 'registry/specs.json',
+  onlyInAFails: true,
+  onlyInBFails: false,
+  gapKey: 'docsVsSpecs',
+});
+
+const specCheck = spawnSync(process.execPath, [join(__dirname, 'generate-specs.mjs'), '--check'], {
+  encoding: 'utf8',
+});
+if (specCheck.status !== 0) {
+  fail(
+    'registry/specs.json is stale (docs changed without regenerating specs)',
+    [specCheck.stderr.trim() || specCheck.stdout.trim() || 'pnpm --filter @sanring/cli generate-specs'],
+  );
+}
 
 if (hasError) process.exit(1);
 

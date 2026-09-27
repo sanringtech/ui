@@ -43,6 +43,7 @@ export * from './lib/components/sheet';
 export * from './lib/components/sidebar';
 export * from './lib/components/skeleton';
 export * from './lib/components/slider';
+export * from './lib/components/sortable';
 export * from './lib/components/spinner';
 export * from './lib/components/stepper';
 export * from './lib/components/switch';

@@ -18,6 +18,7 @@
   ],
   "scripts": {
     "sync-registry": "node scripts/sync-registry.mjs",
+    "generate-specs": "node scripts/generate-specs.mjs",
     "build": "npm run sync-registry && tsc && tsc -p tsconfig.schematics.json && node scripts/copy-schematics-assets.mjs",
     "dev": "tsc --watch",
     "test": "vitest run",
