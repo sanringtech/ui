@@ -18,7 +18,7 @@ import {
   template: `
     <div class="mt-9 grid gap-4">
       <section
-        class="docs-panel-lg min-w-0"
+        class="docs-panel-lg min-w-0 overflow-hidden"
         role="group"
         [attr.aria-label]="i18n.t('component.previewer.preview')"
       >
