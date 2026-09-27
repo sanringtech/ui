@@ -78,6 +78,7 @@ export const commonTranslations = {
   'component.sidebar': 'Sidebar',
   'component.skeleton': '骨架屏',
   'component.slider': '滑桿',
+  'component.sortable': '可排序列表',
   'component.stepper': '步驟器',
   'component.switch': '開關',
   'component.table': '表格',

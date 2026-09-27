@@ -354,6 +354,13 @@ export const routes: Routes = [
                   ),
               },
               {
+                path: 'sortable',
+                loadComponent: () =>
+                  import('./pages/components/sortable/sortable-page.component').then(
+                    (m) => m.SortablePageComponent,
+                  ),
+              },
+              {
                 path: 'spinner',
                 loadComponent: () =>
                   import('./pages/components/spinner/spinner-page.component').then(

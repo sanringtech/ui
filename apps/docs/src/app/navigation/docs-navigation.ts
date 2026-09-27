@@ -63,6 +63,7 @@ export type DocsComponentId =
   | 'sidebar'
   | 'skeleton'
   | 'slider'
+  | 'sortable'
   | 'spinner'
   | 'stepper'
   | 'switch'
@@ -369,6 +370,13 @@ export const docsComponentItems: DocsComponentNavItem[] = [
     labelKey: 'component.slider',
     descriptionKey: 'slider.description',
     path: '/components/slider',
+    active: true,
+  },
+  {
+    id: 'sortable',
+    labelKey: 'component.sortable',
+    descriptionKey: 'sortable.description',
+    path: '/components/sortable',
     active: true,
   },
   {
