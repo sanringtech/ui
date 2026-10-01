@@ -55,6 +55,8 @@ pnpm start        # docs dev server → http://localhost:4200
 
 **改動 `registry/` 底下的元件檔案後，一定要重新 build 一次 CLI 套件**（或至少跑 `pnpm --filter @sanring/cli sync-registry`），否則發布出去的 CLI 會裝到舊版程式碼——這正是 [.changeset/plenty-pumas-sync.md](.changeset/plenty-pumas-sync.md) 修的問題。
 
+docs app 另有一份 `apps/docs/src/registry-stage/`（不進 git），由 `apps/docs/scripts/stage-registry.mjs` 把 `registry/` 攤平成消費端安裝後的佈局（`<component>/`、`<block>/`、`shared/` 同層）。block 用 `'../card'` 這種相對路徑引用元件，只有這個佈局解析得到；docs 因此能編譯、型別檢查所有 registry 元件與 block，並直接渲染 block 預覽。`pnpm install`（postinstall）與 `pnpm start` / `build` / `test` 前都會自動刷新；直接編輯 `registry/` 時可另開一個終端跑 `pnpm stage:registry --watch`。
+
 `pnpm test:e2e:cli` 會使用 `packages/cli/e2e/fresh-angular.mjs` 建立獨立暫存專案，成功時自動清除；失敗時保留路徑供除錯。若要保留成功專案，也可使用 `SANRING_E2E_KEEP_TEMP=1 pnpm test:e2e:cli`。這項測試會從 npm 安裝 fresh project dependencies，CI 已在 `Test (@sanring/cli)` job 執行。
 
 ## `@sanring/cli` 版本相容性（Changesets）
