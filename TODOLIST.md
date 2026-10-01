@@ -91,7 +91,7 @@
 - 選型決策：[ADR-0002](.claude/adrs/0002-org-chart-layout-engine.md)（elkjs `layered`，不用 d3、不開 primitive）
 - 範圍 / 步驟 / 停止條件 / 驗證：[charter p33-org-chart](.claude/charters/p33-org-chart.md)
 
-- [ ] 批次 A Spike（gate）：虛線處理、300/1000 節點耗時、worker chunk 分離
+- [x] 批次 A Spike（gate）：全數通過，結果見 ADR-0002
 - [ ] 批次 B `layout.ts`
 - [ ] 批次 C 渲染殼
 - [ ] 批次 D 互動（平移縮放）

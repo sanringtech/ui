@@ -23,7 +23,7 @@ related_adr: .claude/adrs/0002-org-chart-layout-engine.md
 
 ## 2. 核心重點（每批都要守）
 
-1. **elkjs 只在 `layout.ts`**——其他檔案 grep 不到 `elkjs`。
+1. **elkjs 只在 `layout.ts` 與 `org-chart.worker.ts`**——其他檔案 grep 不到 `elkjs`。
 2. **演算法只用 `elk.layered`**，`elk.edgeRouting: ORTHOGONAL`。
 3. **節點 HTML、連線 SVG**，同一座標系；不做純 SVG 圖。
 4. **Worker 預設開**；elk 不得進主 bundle。
@@ -35,7 +35,7 @@ related_adr: .claude/adrs/0002-org-chart-layout-engine.md
 
 ### ✅ 可做
 
-- `registry/blocks/org-chart/`（`org-chart.component.ts`、`layout.ts`、`index.ts`）
+- `registry/blocks/org-chart/`（`org-chart.component.ts`、`layout.ts`、`org-chart.worker.ts`、`index.ts`）
 - `registry/registry.json` `blocks[]` 新增一筆，`peerDependencies: { "elkjs": "^0.12.0" }`
 - 根 `package.json` 加 `elkjs`（docs app / spike 用）
 - docs app：`/blocks` 頁加 org-chart 示範；spike 期間可加暫時頁面（批次 A 結束移除）
@@ -60,12 +60,17 @@ related_adr: .claude/adrs/0002-org-chart-layout-engine.md
 
 docs app 暫時頁 + 假資料：≥1 位雙主管員工、≥1 條 CEO → 基層 PM 跨層虛線。
 
-- [ ] A1 虛線處理：比較「虛線一起參與 layered」vs「只用實線排版、虛線另算繞線」，截圖存證，選一種
-- [ ] A2 效能：300 / 1000 節點在 Worker 中 `layout()` 耗時（記錄數字）
-- [ ] A3 打包：`ng build` 後確認 elk 位於獨立 worker chunk，主 bundle 無 elk
-- [ ] A4 結論寫回 ADR-0002（Status → Accepted 或 Rejected）
+- [x] A1 虛線處理：比較「虛線一起參與 layered」vs「只用實線排版、虛線另算繞線」，截圖存證，選一種
+- [x] A2 效能：300 / 1000 節點在 Worker 中 `layout()` 耗時（記錄數字）
+- [x] A3 打包：`ng build` 後確認 elk 位於獨立 worker chunk，主 bundle 無 elk
+- [x] A4 結論寫回 ADR-0002（Status → Accepted 或 Rejected）
 
 ### 批次 B：`layout.ts`
+
+結果與選項定案見 ADR-0002「Spike 結果」。
+
+- [ ] 修正 mergeEdges 讓虛線起點被實線匯流排蓋住的問題
+- [ ] worker 檔隨 block 出貨（`org-chart.worker.ts`，內容僅 `import 'elkjs/lib/elk-worker.min.js'`）
 
 - [ ] 型別：`OrgNode { id, ... }`、`OrgEdge { id, source, target, kind: 'solid' | 'dotted' }`
 - [ ] 選項定案（依 A1）；輸出 `{ nodes: {id,x,y,width,height}[], edges: {id,kind,points}[] }`
@@ -89,7 +94,7 @@ docs app 暫時頁 + 假資料：≥1 位雙主管員工、≥1 條 CEO → 基�
 ### 批次 F：Registry + docs
 
 - [ ] `registry.json` `blocks[]`、`/blocks` 頁示範
-- [ ] docs 註明 EPL-2.0 與 ~460 KB（gzip）worker 體積
+- [ ] docs 註明 EPL-2.0、worker 體積（~336 KB transfer）、`allowedCommonJsDependencies: ["elkjs"]`
 
 ### 批次 G：E2E + 發版
 
@@ -119,7 +124,7 @@ docs app 暫時頁 + 假資料：≥1 位雙主管員工、≥1 條 CEO → 基�
 ```bash
 pnpm lint
 pnpm test
-grep -rln "elkjs" registry/blocks/org-chart | grep -v layout.ts   # 必須無輸出
+grep -rln "elkjs" registry/blocks/org-chart | grep -v -e layout.ts -e worker.ts   # 必須無輸出
 grep -rn "d3-" registry/blocks/org-chart package.json             # 必須無輸出
 ```
 
