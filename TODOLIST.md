@@ -81,3 +81,22 @@
 **影響**：不處理的話，消費者會在「看起來該有的兄弟 API」上卡關（sheet 關閉鈕、radio 尺寸、popover 左右、transfer 整組停用），或照著 dropdown-menu 鍵盤表做出不能用方向鍵開的子選單。
 
 **成本**：中。各子項可獨立交付；table docs 配方最低、sheet/radio 次之、dropdown-menu submenu 最重（要接 `@angular/aria/menu` 巢狀，不能沿用現在的兩欄 hover）。
+
+---
+
+## P33 — Block:`org-chart`（elkjs 排版 + 薄殼渲染）
+
+經典組織圖 block：雙主管 / 矩陣匯報、跨層虛線、直角連線避障、平移縮放，`tree` 側欄負責鍵盤導航。
+
+- 選型決策：[ADR-0002](.claude/adrs/0002-org-chart-layout-engine.md)（elkjs `layered`，不用 d3、不開 primitive）
+- 範圍 / 步驟 / 停止條件 / 驗證：[charter p33-org-chart](.claude/charters/p33-org-chart.md)
+
+- [ ] 批次 A Spike（gate）：虛線處理、300/1000 節點耗時、worker chunk 分離
+- [ ] 批次 B `layout.ts`
+- [ ] 批次 C 渲染殼
+- [ ] 批次 D 互動（平移縮放）
+- [ ] 批次 E a11y（tree 聯動）
+- [ ] 批次 F registry + docs
+- [ ] 批次 G E2E + changeset
+
+**成本**：中高。批次 A 決定可行性，先做；C–G 各自可拆 PR。
