@@ -69,13 +69,12 @@ docs app 暫時頁 + 假資料：≥1 位雙主管員工、≥1 條 CEO → 基�
 
 結果與選項定案見 ADR-0002「Spike 結果」。
 
-- [ ] 修正 mergeEdges 讓虛線起點被實線匯流排蓋住的問題
-- [ ] worker 檔隨 block 出貨（`org-chart.worker.ts`，內容僅 `import 'elkjs/lib/elk-worker.min.js'`）
-
-- [ ] 型別：`OrgNode { id, ... }`、`OrgEdge { id, source, target, kind: 'solid' | 'dotted' }`
-- [ ] 選項定案（依 A1）；輸出 `{ nodes: {id,x,y,width,height}[], edges: {id,kind,points}[] }`
-- [ ] 循環偵測
-- [ ] unit test（sync bundled 版，小圖）
+- [x] 修正虛線被實線匯流排蓋住：改用每節點 4 個固定 port（實線 in/out 置中、虛線 in/out 右移 24px），不開 `mergeEdges`；同主管實線仍共用單一出線點
+- [x] worker 檔隨 block 出貨（`org-chart.worker.ts`）
+- [x] 型別：`OrgNode { id }`、`OrgEdge { source, target, kind?: 'solid' | 'dotted' }`；引擎以 `OrgLayoutEngine` 注入（app 用 `createOrgLayoutEngine()` 走 worker，測試用 bundled）
+- [x] 輸出 `OrgLayout { width, height, nodes, edges: { id, source, target, kind, points }[], dropped }` + `orgEdgePath()`
+- [x] 邊清理：未知節點、自環、重複邊、實線匯報循環（drop 閉環那條，`console.warn`）；虛線可反向指上
+- [x] unit test：`apps/docs/src/app/pages/blocks/org-chart-layout.spec.ts`（放 docs 是因為 `registry/` 整包進 CLI tarball）——驗證雙主管、虛線不改層級、同主管單一匯流排、虛線不疊實線、線不穿卡片、循環 / 清理
 
 ### 批次 C：渲染殼
 

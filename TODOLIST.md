@@ -92,7 +92,7 @@
 - 範圍 / 步驟 / 停止條件 / 驗證：[charter p33-org-chart](.claude/charters/p33-org-chart.md)
 
 - [x] 批次 A Spike（gate）：全數通過，結果見 ADR-0002
-- [ ] 批次 B `layout.ts`
+- [x] 批次 B `layout.ts`
 - [ ] 批次 C 渲染殼
 - [ ] 批次 D 互動（平移縮放）
 - [ ] 批次 E a11y（tree 聯動）
