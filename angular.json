@@ -68,6 +68,7 @@
             "browser": "apps/docs/src/main.ts",
             "tsConfig": "apps/docs/tsconfig.app.json",
             "inlineStyleLanguage": "css",
+            "allowedCommonJsDependencies": ["elkjs"],
             "assets": [
               {
                 "glob": "**/*",

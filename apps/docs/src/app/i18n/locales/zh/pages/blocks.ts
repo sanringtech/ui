@@ -13,4 +13,7 @@ export const blocksTranslations = {
   'blocks.table.title': '資料表頁',
   'blocks.table.body':
     '含搜尋、狀態篩選、列選取、新增抽屜、loading skeleton 與 toast 的資料表頁。',
+  'blocks.org.title': '組織圖',
+  'blocks.org.body':
+    '經典組織圖：主管在上、下屬在下，支援雙主管與虛線匯報，直角連線自動繞開卡片。排版由 elkjs（EPL-2.0）在 Web Worker 中計算，CLI 會以 peer dependency 安裝。',
 } as const;

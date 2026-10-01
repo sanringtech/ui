@@ -78,8 +78,10 @@ docs app 暫時頁 + 假資料：≥1 位雙主管員工、≥1 條 CEO → 基�
 
 ### 批次 C：渲染殼
 
-- [ ] 卡片層（`@for` + 絕對定位）+ SVG 連線層（實線 / 虛線走 token）
-- [ ] loading / empty / error 三態
+- [x] 卡片層（`@for` + 絕對定位，卡片是 `<button>`，`[(selected)]` model）+ SVG 連線層（實線 `--sanring-border-strong`、虛線 `--sanring-primary`）
+- [x] loading（skeleton）/ empty / error 三態；重新排版時保留上一版畫面（`linkedSignal`），不閃 skeleton
+- [x] 樣式只用 `var(--sanring-*)` token（不用 shadcn 類名，消費端沒有那些 theme 色）
+- [x] docs `/blocks` 頁即時預覽——靠 `apps/docs/scripts/stage-registry.mjs` 把 registry 攤成消費端佈局後編譯（另見 CONTRIBUTING）
 
 ### 批次 D：互動
 

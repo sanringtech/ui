@@ -93,7 +93,7 @@
 
 - [x] 批次 A Spike（gate）：全數通過，結果見 ADR-0002
 - [x] 批次 B `layout.ts`
-- [ ] 批次 C 渲染殼
+- [x] 批次 C 渲染殼
 - [ ] 批次 D 互動（平移縮放）
 - [ ] 批次 E a11y（tree 聯動）
 - [ ] 批次 F registry + docs
