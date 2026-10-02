@@ -47,4 +47,10 @@ export const blocksTranslations = {
     'Cards use avatar and badge; toolbar buttons and skeleton cover chrome and loading. tree provides keyboard navigation beside the canvas. Layout runs in a Web Worker via the elkjs peer.',
   'blocks.org.notes':
     'elkjs is EPL-2.0 (~336 KB transfer for the worker chunk). Add `allowedCommonJsDependencies: ["elkjs"]` to your Angular build options if the CLI warns about CommonJS.',
+  'blocks.org.preview.withTree': 'With directory tree',
+  'blocks.org.preview.withTreeDescription':
+    'Default. The tree is for keyboard access; selection stays in sync with the canvas.',
+  'blocks.org.preview.canvasOnly': 'Canvas only',
+  'blocks.org.preview.canvasOnlyDescription':
+    'Set `[showTree]="false"` when you only need the chart. Pan, zoom, and card selection still work.',
 } as const;

@@ -47,4 +47,10 @@ export const blocksTranslations = {
     '卡片用 avatar、badge；工具列 button 與 skeleton 處理 chrome／載入。tree 在側邊提供鍵盤導覽。排版由 peer elkjs 在 Web Worker 計算。',
   'blocks.org.notes':
     'elkjs 為 EPL-2.0（worker chunk 約 336 KB transfer）。若 Angular 警告 CommonJS，在 build options 加上 `allowedCommonJsDependencies: ["elkjs"]`。',
+  'blocks.org.preview.withTree': '含目錄樹',
+  'blocks.org.preview.withTreeDescription':
+    '預設。目錄樹給鍵盤選取用；選取會與畫布同步。',
+  'blocks.org.preview.canvasOnly': '僅畫布',
+  'blocks.org.preview.canvasOnlyDescription':
+    '設 `[showTree]="false"` 就只顯示圖。平移、縮放與點選卡片仍可用。',
 } as const;
