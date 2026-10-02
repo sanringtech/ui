@@ -46,8 +46,41 @@ export const routes: Routes = [
           },
           {
             path: 'blocks',
-            loadComponent: () =>
-              import('./pages/blocks/blocks-page.component').then((m) => m.BlocksPageComponent),
+            children: [
+              {
+                path: '',
+                loadComponent: () =>
+                  import('./pages/blocks/blocks-page.component').then((m) => m.BlocksPageComponent),
+              },
+              {
+                path: 'dashboard-shell',
+                loadComponent: () =>
+                  import('./pages/blocks/dashboard-shell/dashboard-shell-block-page.component').then(
+                    (m) => m.DashboardShellBlockPageComponent,
+                  ),
+              },
+              {
+                path: 'login',
+                loadComponent: () =>
+                  import('./pages/blocks/login/login-block-page.component').then(
+                    (m) => m.LoginBlockPageComponent,
+                  ),
+              },
+              {
+                path: 'table-page',
+                loadComponent: () =>
+                  import('./pages/blocks/table-page/table-page-block-page.component').then(
+                    (m) => m.TablePageBlockPageComponent,
+                  ),
+              },
+              {
+                path: 'org-chart',
+                loadComponent: () =>
+                  import('./pages/blocks/org-chart/org-chart-block-page.component').then(
+                    (m) => m.OrgChartBlockPageComponent,
+                  ),
+              },
+            ],
           },
           {
             path: 'changelog',

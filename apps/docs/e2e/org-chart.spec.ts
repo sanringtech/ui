@@ -32,7 +32,7 @@ async function expectNoAxeViolations(page: Page, selector: string) {
 
 test.describe('org-chart block', () => {
   test('renders chart cards, pans/zooms, and syncs tree selection', async ({ page }) => {
-    await page.goto('/blocks#org-chart');
+    await page.goto('/blocks/org-chart');
 
     const preview = page.getByRole('group', { name: 'Preview' }).last();
     await expect(preview.getByRole('button', { name: /Ada Lin/i }).first()).toBeVisible({

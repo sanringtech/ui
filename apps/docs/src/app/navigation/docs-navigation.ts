@@ -102,8 +102,7 @@ export const docsSectionItems: DocsSidebarItem[] = [
 
 export interface DocsBlockNavItem extends DocsSidebarItem {
   id: string;
-  path: '/blocks';
-  fragment: string;
+  path: string;
   descriptionKey: TranslationKey;
 }
 
@@ -112,32 +111,28 @@ export const docsBlockItems: DocsBlockNavItem[] = [
     id: 'dashboard-shell',
     labelKey: 'blocks.dashboard.title',
     descriptionKey: 'blocks.dashboard.body',
-    path: '/blocks',
-    fragment: 'dashboard-shell',
+    path: '/blocks/dashboard-shell',
     active: true,
   },
   {
     id: 'login',
     labelKey: 'blocks.login.title',
     descriptionKey: 'blocks.login.body',
-    path: '/blocks',
-    fragment: 'login',
+    path: '/blocks/login',
     active: true,
   },
   {
     id: 'table-page',
     labelKey: 'blocks.table.title',
     descriptionKey: 'blocks.table.body',
-    path: '/blocks',
-    fragment: 'table-page',
+    path: '/blocks/table-page',
     active: true,
   },
   {
     id: 'org-chart',
     labelKey: 'blocks.org.title',
     descriptionKey: 'blocks.org.body',
-    path: '/blocks',
-    fragment: 'org-chart',
+    path: '/blocks/org-chart',
     active: true,
     badge: true,
   },
