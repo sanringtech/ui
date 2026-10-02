@@ -98,6 +98,15 @@ describe('collectPeerDeps', () => {
   it('returns an empty object when nothing has peer dependencies', () => {
     expect(collectPeerDeps([component({ name: 'a' })], [])).toEqual({});
   });
+
+  it('keeps elkjs when collecting peers for an org-chart-like block', () => {
+    expect(
+      collectPeerDeps(
+        [component({ name: 'org-chart', peerDependencies: { elkjs: '^0.12.0' } })],
+        [],
+      ),
+    ).toEqual({ elkjs: '^0.12.0' });
+  });
 });
 
 describe('parseComponentRef', () => {
@@ -360,6 +369,40 @@ describe('addCommand (integration)', () => {
       'export const login = true;\n',
     );
     expect(existsSync(join(projectDir, 'src/app/components/ui/widget/index.ts'))).toBe(true);
+  });
+
+  it('dry-runs installing elkjs when adding block/org-chart with that peer', async () => {
+    const logs: string[] = [];
+    vi.mocked(console.log).mockImplementation((...args: unknown[]) => {
+      logs.push(args.join(' '));
+    });
+
+    writeRegistryFixture(registryDir, {
+      widget: 'export const widget = 1;\n',
+      block: 'export const org = true;\n',
+    });
+    const registryJsonPath = join(registryDir, 'registry.json');
+    const registryJson = JSON.parse(readFileSync(registryJsonPath, 'utf-8')) as Registry;
+    const login = registryJson.blocks?.[0];
+    if (!login) throw new Error('expected fixture block');
+    login.name = 'org-chart';
+    login.files = ['org-chart/index.ts'];
+    login.peerDependencies = { elkjs: '^0.12.0' };
+    mkdirSync(join(registryDir, 'blocks', 'org-chart'), { recursive: true });
+    writeFileSync(
+      join(registryDir, 'blocks', 'org-chart', 'index.ts'),
+      'export const org = true;\n',
+      'utf-8',
+    );
+    writeFileSync(registryJsonPath, JSON.stringify(registryJson, null, 2), 'utf-8');
+
+    await addCommand.parseAsync(['block/org-chart', '--registry', registryDir, '--dry-run'], {
+      from: 'user',
+    });
+
+    expect(logs.some((line) => line.includes('Would install: npm install elkjs@^0.12.0'))).toBe(
+      true,
+    );
   });
 
   it('installs a block by bare name when no component shares that name', async () => {

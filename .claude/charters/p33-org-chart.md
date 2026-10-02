@@ -2,7 +2,7 @@
 schema_version: 1
 charter_id: p33-org-chart
 charter_name: P33 — Block org-chart（elkjs 排版 + 薄殼渲染）
-status: draft
+status: completed
 charter_type: feature
 parent_charter:
 date: 2026-10-01
@@ -85,23 +85,23 @@ docs app 暫時頁 + 假資料：≥1 位雙主管員工、≥1 條 CEO → 基�
 
 ### 批次 D：互動
 
-- [ ] 平移、縮放（滑鼠 + 觸控板）、fit-to-view、捲到指定節點
+- [x] 平移、縮放（滑鼠 + 觸控板）、fit-to-view、捲到指定節點
 
 ### 批次 E：a11y
 
-- [ ] `tree` 側欄聯動：選取同步、焦點移到對應卡片
-- [ ] axe 掃描零違規
+- [x] `tree` 側欄聯動：選取同步、焦點移到對應卡片
+- [x] axe 掃描零違規
 
 ### 批次 F：Registry + docs
 
-- [ ] `registry.json` `blocks[]`、`/blocks` 頁示範
-- [ ] docs 註明 EPL-2.0、worker 體積（~336 KB transfer）、`allowedCommonJsDependencies: ["elkjs"]`
+- [x] `registry.json` `blocks[]`、`/blocks` 頁示範
+- [x] docs 註明 EPL-2.0、worker 體積（~336 KB transfer）、`allowedCommonJsDependencies: ["elkjs"]`
 
 ### 批次 G：E2E + 發版
 
-- [ ] Playwright：渲染、縮放、tree 聯動
-- [ ] CLI e2e：`sanring add block/org-chart` 會裝 elkjs
-- [ ] changeset
+- [x] Playwright：渲染、縮放、tree 聯動
+- [x] CLI e2e：`sanring add block/org-chart` 會裝 elkjs
+- [x] changeset
 
 ## 5. Commit 邊界
 
