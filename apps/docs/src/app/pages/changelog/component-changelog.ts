@@ -36,6 +36,17 @@ function isPatch(version: string): boolean {
  */
 export const cliVersionChangelog: readonly CliVersionEntry[] = [
   {
+    version: '0.28.1',
+    date: '2026-10-02',
+    changes: [
+      {
+        type: 'fixed',
+        componentIds: ['context-menu'],
+        text: 'Fix `context-menu` shared import path and `block/table-page` Delete menu item `value` so both compile after install.',
+      },
+    ],
+  },
+  {
     version: '0.28.0',
     date: '2026-09-27',
     changes: [
