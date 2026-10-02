@@ -9,4 +9,5 @@ export interface MenuItem {
 export const menuItems: MenuItem[] = [
   { labelKey: 'nav.docs', path: '/introduction', exact: false },
   { labelKey: 'nav.components', path: '/components', exact: false },
+  { labelKey: 'nav.blocks', path: '/blocks', exact: false },
 ];
