@@ -252,7 +252,7 @@ export class FeatureListComponent {
       .map((item) => ({
         label: this.i18n.t(item.labelKey),
         description: this.i18n.t(item.descriptionKey),
-        path: `${item.path}#${item.fragment}`,
+        path: item.path,
       }));
     const componentItems = docsComponentItems
       .filter((item) => !item.disabled)
