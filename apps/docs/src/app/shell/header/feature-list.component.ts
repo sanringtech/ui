@@ -4,11 +4,13 @@ import { LucideMenu, LucideMonitor, LucideMoon, LucideSearch, LucideSun } from '
 import { CommandDialogComponent, SANRING_COMMAND_IMPORTS, SANRING_SHEET_IMPORTS } from '@sanring/ui';
 import { I18nService } from '../../i18n/i18n.service';
 import {
+  docsBlockItems,
   docsComponentItems,
   docsSectionItems,
   visibleDocsComponentItems,
 } from '../../navigation/docs-navigation';
 import { isRecentlyUpdatedComponentId } from '../../pages/changelog/component-changelog';
+import { DocsBlocksListComponent } from '../sidebar/docs-blocks-list.component';
 import { DocsComponentsListComponent } from '../sidebar/docs-components-list.component';
 import { DocsSectionComponent } from '../sidebar/docs-section.component';
 import { DocsNavStateService } from '../docs-nav-state.service';
@@ -33,6 +35,7 @@ const MAX_SEARCH_RESULTS = 8;
   imports: [
     HeaderActionButtonComponent,
     RouterLink,
+    DocsBlocksListComponent,
     DocsComponentsListComponent,
     DocsSectionComponent,
     LucideMenu,
@@ -87,6 +90,8 @@ const MAX_SEARCH_RESULTS = 8;
               [title]="i18n.t('sidebar.sections')"
               [items]="mobileNavigationItems"
             />
+
+            <app-docs-blocks-list sectionClass="mt-8 border-t border-[var(--docs-border)] pt-5" />
 
             @if (navState.hasSidebar()) {
               <app-docs-components-list sectionClass="mt-8 border-t border-[var(--docs-border)] pt-5" />
@@ -242,6 +247,13 @@ export class FeatureListComponent {
     const sectionItems = docsSectionItems
       .filter((item): item is typeof item & { path: string } => !!item.path && !item.disabled)
       .map((item) => ({ label: this.i18n.t(item.labelKey), path: item.path }));
+    const blockItems = docsBlockItems
+      .filter((item) => !item.disabled)
+      .map((item) => ({
+        label: this.i18n.t(item.labelKey),
+        description: this.i18n.t(item.descriptionKey),
+        path: `${item.path}#${item.fragment}`,
+      }));
     const componentItems = docsComponentItems
       .filter((item) => !item.disabled)
       .map((item) => ({
@@ -250,7 +262,7 @@ export class FeatureListComponent {
         path: item.path,
       }));
 
-    return [...sectionItems, ...componentItems];
+    return [...sectionItems, ...blockItems, ...componentItems];
   });
 
   // 空字串時直接瀏覽全部項目（Command Dialog 是完整 modal，讓使用者不用打字也能瀏覽比較合理）；

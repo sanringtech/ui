@@ -22,6 +22,7 @@ import {
   ComponentPageSectionComponent,
   DocsPageHeaderComponent,
 } from '../../layouts/component-page';
+import { OrgChartComponent, type OrgLink, type OrgPerson } from '../../../registry-stage/org-chart';
 
 @Component({
   selector: 'app-blocks-page',
@@ -43,6 +44,7 @@ import {
     ComponentPageComponent,
     ComponentPageSectionComponent,
     DocsPageHeaderComponent,
+    OrgChartComponent,
   ],
   template: `
     <app-component-page [sections]="sections">
@@ -167,6 +169,23 @@ import {
         </p>
         <app-component-page-code-block class="mt-6" [code]="installTable" language="bash" />
       </app-component-page-section>
+
+      <app-component-page-section [section]="sections[4]">
+        <p class="mt-0 text-base leading-[1.7] text-[var(--docs-muted)]">
+          {{ i18n.t('blocks.org.body') }}
+        </p>
+        <app-component-page-code-block class="mt-6" [code]="installOrg" language="bash" />
+        <app-component-page-code-previewer class="mt-6" [code]="orgSnippet" language="angular-html">
+          <div previewer class="w-full min-w-0 overflow-hidden bg-[var(--docs-surface)] p-4">
+            <sanring-org-chart
+              class="h-[480px]"
+              [people]="orgPeople"
+              [links]="orgLinks"
+              [(selected)]="orgSelected"
+            />
+          </div>
+        </app-component-page-code-previewer>
+      </app-component-page-section>
     </app-component-page>
   `,
 })
@@ -190,14 +209,54 @@ export class BlocksPageComponent {
     { id: 'dashboard-shell', titleKey: 'blocks.dashboard.title' },
     { id: 'login', titleKey: 'blocks.login.title' },
     { id: 'table-page', titleKey: 'blocks.table.title' },
+    { id: 'org-chart', titleKey: 'blocks.org.title' },
   ];
 
   protected readonly installAll = `npx @sanring/cli add block/dashboard-shell
 npx @sanring/cli add block/login
-npx @sanring/cli add block/table-page`;
+npx @sanring/cli add block/table-page
+npx @sanring/cli add block/org-chart`;
   protected readonly installDashboard = `npx @sanring/cli add block/dashboard-shell`;
   protected readonly installLogin = `npx @sanring/cli add block/login`;
   protected readonly installTable = `npx @sanring/cli add block/table-page`;
+  protected readonly installOrg = `npx @sanring/cli add block/org-chart`;
+  protected readonly orgSnippet = `<sanring-org-chart [people]="people" [links]="links" [(selected)]="selectedId" />`;
+  protected readonly orgSelected = signal<string | null>(null);
+  protected readonly orgPeople: OrgPerson[] = [
+    { id: 'ada', name: 'Ada Lin', title: 'CEO' },
+    { id: 'ben', name: 'Ben Ho', title: 'CTO', department: 'Eng' },
+    { id: 'cora', name: 'Cora Wu', title: 'CFO', department: 'Finance' },
+    { id: 'dan', name: 'Dan Chen', title: 'VP Sales', department: 'Sales' },
+    { id: 'eve', name: 'Eve Tsai', title: 'Eng Manager', department: 'Eng' },
+    { id: 'finn', name: 'Finn Kao', title: 'Eng Manager', department: 'Eng' },
+    { id: 'gus', name: 'Gus Lee', title: 'Controller', department: 'Finance' },
+    { id: 'hana', name: 'Hana Su', title: 'Sales Lead', department: 'Sales' },
+    { id: 'jo', name: 'Jo Yang', title: 'Engineer', department: 'Eng' },
+    { id: 'kai', name: 'Kai Lu', title: 'Engineer', department: 'Eng' },
+    { id: 'mia', name: 'Mia Hsu', title: 'Solutions Eng', department: 'Eng' },
+    { id: 'nia', name: 'Nia Lo', title: 'Accountant', department: 'Finance' },
+    { id: 'oto', name: 'Oto Pan', title: 'Account Exec', department: 'Sales' },
+    { id: 'quin', name: 'Quin Fang', title: 'Junior PM', department: 'Eng' },
+  ];
+  protected readonly orgLinks: OrgLink[] = [
+    { source: 'ada', target: 'ben' },
+    { source: 'ada', target: 'cora' },
+    { source: 'ada', target: 'dan' },
+    { source: 'ben', target: 'eve' },
+    { source: 'ben', target: 'finn' },
+    { source: 'cora', target: 'gus' },
+    { source: 'dan', target: 'hana' },
+    { source: 'eve', target: 'jo' },
+    { source: 'eve', target: 'quin' },
+    { source: 'finn', target: 'kai' },
+    // Mia reports to both Finn and Hana.
+    { source: 'finn', target: 'mia' },
+    { source: 'hana', target: 'mia' },
+    { source: 'gus', target: 'nia' },
+    { source: 'hana', target: 'oto' },
+    // The CEO sponsors Quin's project directly.
+    { source: 'ada', target: 'quin', kind: 'dotted' },
+  ];
   protected readonly dashboardSnippet = `<sanring-dashboard-shell>
   <router-outlet />
 </sanring-dashboard-shell>`;

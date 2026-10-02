@@ -16,6 +16,7 @@ export const docsComponentStatusDotClass: Record<DocsComponentStatus, string> = 
 export interface DocsSidebarItem {
   labelKey: TranslationKey;
   path?: string;
+  fragment?: string;
   exact?: boolean;
   active?: boolean;
   badge?: boolean;
@@ -97,6 +98,49 @@ export const docsSectionItems: DocsSidebarItem[] = [
   { labelKey: 'nav.components', path: '/components', active: true },
   { labelKey: 'sidebar.changelog', path: '/version-notes', active: true },
   { labelKey: 'sidebar.roadmap', path: '/roadmap', active: true },
+];
+
+export interface DocsBlockNavItem extends DocsSidebarItem {
+  id: string;
+  path: '/blocks';
+  fragment: string;
+  descriptionKey: TranslationKey;
+}
+
+export const docsBlockItems: DocsBlockNavItem[] = [
+  {
+    id: 'dashboard-shell',
+    labelKey: 'blocks.dashboard.title',
+    descriptionKey: 'blocks.dashboard.body',
+    path: '/blocks',
+    fragment: 'dashboard-shell',
+    active: true,
+  },
+  {
+    id: 'login',
+    labelKey: 'blocks.login.title',
+    descriptionKey: 'blocks.login.body',
+    path: '/blocks',
+    fragment: 'login',
+    active: true,
+  },
+  {
+    id: 'table-page',
+    labelKey: 'blocks.table.title',
+    descriptionKey: 'blocks.table.body',
+    path: '/blocks',
+    fragment: 'table-page',
+    active: true,
+  },
+  {
+    id: 'org-chart',
+    labelKey: 'blocks.org.title',
+    descriptionKey: 'blocks.org.body',
+    path: '/blocks',
+    fragment: 'org-chart',
+    active: true,
+    badge: true,
+  },
 ];
 
 export const docsComponentItems: DocsComponentNavItem[] = [

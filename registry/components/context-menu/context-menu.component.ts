@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, model, output, signal } from '@angular/core';
-import { focusAdjacentDocumentTabStop } from '../../shared/menu-navigation';
+import { focusAdjacentDocumentTabStop } from '../shared/menu-navigation';
 
 export interface ContextMenuPosition {
   x: number;

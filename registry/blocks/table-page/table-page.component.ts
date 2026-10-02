@@ -180,7 +180,7 @@ const SEED: TablePageRow[] = [
                     <svg lucideEllipsis class="size-4"></svg>
                   </button>
                   <sanring-dropdown-menu-content #rowMenu="sanringDropdownMenuContent">
-                    <button type="button" sanringDropdownMenuItem (click)="removeRow(row.id)">
+                    <button type="button" sanringDropdownMenuItem value="delete" (click)="removeRow(row.id)">
                       <svg lucideTrash2 class="size-4"></svg>
                       <span>Delete</span>
                     </button>

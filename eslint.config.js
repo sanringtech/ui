@@ -12,6 +12,8 @@ module.exports = tseslint.config(
       'node_modules/**',
       // build 產物：registry/** 同步過去的複本，見 CONTRIBUTING.md
       'packages/cli/registry/**',
+      // registry/** 的消費端佈局複本，見 apps/docs/scripts/stage-registry.mjs
+      'apps/docs/src/registry-stage/**',
     ],
   },
   {

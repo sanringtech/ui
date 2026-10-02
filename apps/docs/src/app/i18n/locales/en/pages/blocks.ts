@@ -13,4 +13,7 @@ export const blocksTranslations = {
   'blocks.table.title': 'Table page',
   'blocks.table.body':
     'A data table with search, status filter, row selection, a create sheet, loading skeletons, and toast.',
+  'blocks.org.title': 'Org chart',
+  'blocks.org.body':
+    'A classic org chart: managers above reports, dual managers and dotted-line reporting, orthogonal connectors routed around cards. Layout runs in a Web Worker via elkjs (EPL-2.0), which the CLI installs as a peer dependency.',
 } as const;

@@ -23,6 +23,7 @@
 
 @source "./app";
 @source "../../../packages/ui/src";
+@source "../../../registry";
 
 @theme inline {
   /* 主色綁定 docs-accent，讓 light/dark 切換時 bg-primary 等 utility 跟著變動 */
