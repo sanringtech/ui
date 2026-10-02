@@ -84,7 +84,8 @@
       "components": [
         "dashboard-shell",
         "login",
-        "table-page"
+        "table-page",
+        "org-chart"
       ]
     }
   ],
@@ -1316,6 +1317,27 @@
       "files": [
         "table-page/table-page.component.ts",
         "table-page/index.ts"
+      ]
+    },
+    {
+      "name": "org-chart",
+      "description": "Classic org chart with dual managers, dotted-line reporting, pan/zoom, and a tree directory for keyboard access. Layout runs in a Web Worker via elkjs (EPL-2.0).",
+      "tags": ["org", "page"],
+      "componentDeps": [
+        "avatar",
+        "badge",
+        "button",
+        "skeleton",
+        "tree"
+      ],
+      "peerDependencies": {
+        "elkjs": "^0.12.0"
+      },
+      "files": [
+        "org-chart/org-chart.component.ts",
+        "org-chart/layout.ts",
+        "org-chart/org-chart.worker.ts",
+        "org-chart/index.ts"
       ]
     }
   ]

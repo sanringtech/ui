@@ -15,5 +15,7 @@ export const blocksTranslations = {
     'A data table with search, status filter, row selection, a create sheet, loading skeletons, and toast.',
   'blocks.org.title': 'Org chart',
   'blocks.org.body':
-    'A classic org chart: managers above reports, dual managers and dotted-line reporting, orthogonal connectors routed around cards. Layout runs in a Web Worker via elkjs (EPL-2.0), which the CLI installs as a peer dependency.',
+    'A classic org chart: managers above reports, dual managers and dotted-line reporting, orthogonal connectors routed around cards. Pan and zoom the canvas, or use the directory tree for keyboard selection. Layout runs in a Web Worker via elkjs (EPL-2.0, ~336 KB transfer); the CLI installs elkjs as a peer. Add `allowedCommonJsDependencies: ["elkjs"]` to your Angular build options if the CLI warns about CommonJS.',
+  'blocks.org.notes':
+    'elkjs is EPL-2.0. The worker keeps layout off the main thread; expect ~336 KB transfer for the worker chunk.',
 } as const;

@@ -174,11 +174,14 @@ import { OrgChartComponent, type OrgLink, type OrgPerson } from '../../../regist
         <p class="mt-0 text-base leading-[1.7] text-[var(--docs-muted)]">
           {{ i18n.t('blocks.org.body') }}
         </p>
+        <p class="mt-3 text-sm leading-6 text-[var(--docs-muted)]">
+          {{ i18n.t('blocks.org.notes') }}
+        </p>
         <app-component-page-code-block class="mt-6" [code]="installOrg" language="bash" />
-        <app-component-page-code-previewer class="mt-6" [code]="orgSnippet" language="angular-html">
+        <app-component-page-code-previewer class="mt-6" [code]="orgSnippet" language="angular-html" [wide]="true">
           <div previewer class="w-full min-w-0 overflow-hidden bg-[var(--docs-surface)] p-4">
             <sanring-org-chart
-              class="h-[480px]"
+              class="h-[520px]"
               [people]="orgPeople"
               [links]="orgLinks"
               [(selected)]="orgSelected"

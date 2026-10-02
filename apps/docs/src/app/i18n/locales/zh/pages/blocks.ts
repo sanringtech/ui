@@ -15,5 +15,7 @@ export const blocksTranslations = {
     '含搜尋、狀態篩選、列選取、新增抽屜、loading skeleton 與 toast 的資料表頁。',
   'blocks.org.title': '組織圖',
   'blocks.org.body':
-    '經典組織圖：主管在上、下屬在下，支援雙主管與虛線匯報，直角連線自動繞開卡片。排版由 elkjs（EPL-2.0）在 Web Worker 中計算，CLI 會以 peer dependency 安裝。',
+    '經典組織圖：主管在上、下屬在下，支援雙主管與虛線匯報，直角連線自動繞開卡片。可平移縮放畫布，或用目錄樹鍵盤選取。排版由 elkjs（EPL-2.0，約 336 KB transfer）在 Web Worker 計算，CLI 會以 peer dependency 安裝。若 Angular 警告 CommonJS，在 build options 加上 `allowedCommonJsDependencies: ["elkjs"]`。',
+  'blocks.org.notes':
+    'elkjs 為 EPL-2.0。Worker 讓排版不阻塞主執行緒；worker chunk 約 336 KB transfer。',
 } as const;
