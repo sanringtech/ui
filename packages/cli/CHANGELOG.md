@@ -1,5 +1,11 @@
 # @sanring/cli
 
+## 0.28.1
+
+### Patch Changes
+
+- 68f6b97: Fix two registry items that failed to compile after install: `context-menu` imported `../../shared/menu-navigation` instead of `../shared/menu-navigation`, and `block/table-page` left out the required `value` on its row "Delete" menu item.
+
 ## 0.28.0
 
 ### Minor Changes
