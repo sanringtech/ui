@@ -1,16 +1,18 @@
 import { Component, DestroyRef, inject, OnInit } from '@angular/core';
 import { DocsNavStateService } from '../docs-nav-state.service';
+import { DocsBlocksListComponent } from './docs-blocks-list.component';
 import { DocsComponentsListComponent } from './docs-components-list.component';
 import { DocsSectionsListComponent } from './docs-sections-list.component';
 
 @Component({
   selector: 'app-docs-sidebar',
-  imports: [DocsSectionsListComponent, DocsComponentsListComponent],
+  imports: [DocsSectionsListComponent, DocsBlocksListComponent, DocsComponentsListComponent],
   template: `
     <aside
       class="docs-sidebar-scroll sticky top-[76px] hidden h-[calc(100dvh-76px)] overflow-auto border-r border-[var(--docs-border)] bg-[var(--docs-bg)] py-10 pl-[30px] pr-7 min-[861px]:block"
     >
       <app-docs-sections-list />
+      <app-docs-blocks-list />
       <app-docs-components-list />
     </aside>
   `,
