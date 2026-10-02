@@ -1,5 +1,11 @@
 # @sanring/cli
 
+## 0.29.0
+
+### Minor Changes
+
+- a1a41c8: Add `block/org-chart`: elkjs worker layout, pan/zoom canvas, and a tree directory for keyboard access. Dual managers and dotted-line reporting are supported; `elkjs` is installed as a peer dependency (EPL-2.0).
+
 ## 0.28.1
 
 ### Patch Changes
