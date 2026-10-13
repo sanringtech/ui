@@ -3,16 +3,22 @@ import { toSignal } from '@angular/core/rxjs-interop';
 import { FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
 import {
   LucideBold,
+  LucideCode,
+  LucideCornerDownLeft,
   LucideItalic,
   LucideList,
   LucideListOrdered,
+  LucideMinus,
   LucideQuote,
   LucideRedo2,
+  LucideRemoveFormatting,
+  LucideSquareCode,
   LucideStrikethrough,
   LucideUnderline,
   LucideUndo2,
 } from '@lucide/angular';
 import {
+  ButtonDirective,
   DividerComponent,
   ErrorMessageComponent,
   FieldLabelDirective,
@@ -47,15 +53,21 @@ import { richTextEditorPage, richTextEditorPageExamples } from './rich-text-edit
     ComponentPageKeyboardTableComponent,
     ComponentPageUsageImportsComponent,
     ComponentPageSectionComponent,
+    ButtonDirective,
     DividerComponent,
     ErrorMessageComponent,
     FieldLabelDirective,
     LucideBold,
+    LucideCode,
+    LucideCornerDownLeft,
     LucideItalic,
     LucideList,
     LucideListOrdered,
+    LucideMinus,
     LucideQuote,
     LucideRedo2,
+    LucideRemoveFormatting,
+    LucideSquareCode,
     LucideStrikethrough,
     LucideUnderline,
     LucideUndo2,
@@ -171,6 +183,104 @@ import { richTextEditorPage, richTextEditorPageExamples } from './rich-text-edit
 
       <app-component-page-section [section]="section('example')">
         <div class="grid gap-10">
+          <app-component-page-section [section]="section('example-disabled')">
+            <app-component-page-code-previewer [code]="examples.disabled" language="angular-html">
+              <div previewer class="grid w-[min(520px,100%)] justify-items-start gap-3">
+                <sanring-rich-text-editor
+                  ariaLabel="Summary"
+                  class="w-full"
+                  data-testid="rte-disabled"
+                  [formControl]="summary"
+                >
+                  <sanring-rich-text-editor-toolbar>
+                    <button sanringRichTextEditorToggle="bold" size="sm" ariaLabel="Bold">
+                      <svg lucideBold class="size-4"></svg>
+                    </button>
+                    <button sanringRichTextEditorToggle="italic" size="sm" ariaLabel="Italic">
+                      <svg lucideItalic class="size-4"></svg>
+                    </button>
+                  </sanring-rich-text-editor-toolbar>
+                </sanring-rich-text-editor>
+                <button
+                  sanringBtn
+                  variant="outline"
+                  size="sm"
+                  type="button"
+                  data-testid="rte-disabled-toggle"
+                  (click)="toggleSummary()"
+                >
+                  {{ summary.disabled ? 'Enable editing' : 'Disable editing' }}
+                </button>
+              </div>
+            </app-component-page-code-previewer>
+          </app-component-page-section>
+
+          <app-component-page-section [section]="section('example-validation')">
+            <app-component-page-code-previewer [code]="examples.validation" language="angular-html">
+              <div previewer class="w-[min(520px,100%)]">
+                <sanring-field>
+                  <!-- eslint-disable-next-line @angular-eslint/template/label-has-associated-control -->
+                  <label sanringLabel id="rte-docs-description-label">Description</label>
+                  <sanring-rich-text-editor
+                    ariaLabelledBy="rte-docs-description-label"
+                    required
+                    data-testid="rte-validation"
+                    [formControl]="description"
+                  />
+                  <sanring-error-message>Description is required.</sanring-error-message>
+                </sanring-field>
+              </div>
+            </app-component-page-code-previewer>
+          </app-component-page-section>
+
+          <app-component-page-section [section]="section('example-commands')">
+            <app-component-page-code-previewer [code]="examples.commands" language="angular-html">
+              <div previewer class="w-[min(520px,100%)]">
+                <sanring-rich-text-editor
+                  ariaLabel="Snippet"
+                  class="flex-row"
+                  contentClass="min-w-0 flex-1"
+                  data-testid="rte-commands"
+                  [formControl]="snippet"
+                >
+                  <sanring-rich-text-editor-toolbar orientation="vertical" data-testid="rte-commands-toolbar">
+                    <sanring-rich-text-editor-heading-menu [levels]="[2, 3, 4]" />
+                    <button sanringRichTextEditorToggle="code" size="sm" ariaLabel="Inline code">
+                      <svg lucideCode class="size-4"></svg>
+                    </button>
+                    <button sanringRichTextEditorToggle="codeBlock" size="sm" ariaLabel="Code block">
+                      <svg lucideSquareCode class="size-4"></svg>
+                    </button>
+                    <button
+                      sanringRichTextEditorAction="horizontalRule"
+                      variant="ghost"
+                      size="icon"
+                      ariaLabel="Divider"
+                    >
+                      <svg lucideMinus class="size-4"></svg>
+                    </button>
+                    <button
+                      sanringRichTextEditorAction="hardBreak"
+                      variant="ghost"
+                      size="icon"
+                      ariaLabel="Line break"
+                    >
+                      <svg lucideCornerDownLeft class="size-4"></svg>
+                    </button>
+                    <button
+                      sanringRichTextEditorAction="clearFormatting"
+                      variant="ghost"
+                      size="icon"
+                      ariaLabel="Clear formatting"
+                    >
+                      <svg lucideRemoveFormatting class="size-4"></svg>
+                    </button>
+                  </sanring-rich-text-editor-toolbar>
+                </sanring-rich-text-editor>
+              </div>
+            </app-component-page-code-previewer>
+          </app-component-page-section>
+
           <app-component-page-section [section]="section('example-character-count')">
             <app-component-page-code-previewer [code]="examples.characterCount" language="angular-html">
               <div previewer class="w-[min(520px,100%)]">
@@ -187,6 +297,17 @@ import { richTextEditorPage, richTextEditorPageExamples } from './rich-text-edit
                     <sanring-rich-text-editor-character-count data-testid="rte-character-count" />
                   </sanring-rich-text-editor>
                 </sanring-field>
+                <button
+                  sanringBtn
+                  variant="outline"
+                  size="sm"
+                  type="button"
+                  class="mt-3"
+                  data-testid="rte-load-long"
+                  (click)="comment.setValue(longComment)"
+                >
+                  Load a long comment
+                </button>
               </div>
             </app-component-page-code-previewer>
           </app-component-page-section>
@@ -243,6 +364,33 @@ export class RichTextEditorPageComponent {
   });
 
   protected readonly comment = new FormControl('', { nonNullable: true });
+  protected readonly longComment =
+    '<p>This comment came from the server and is longer than the 140-character limit. The editor shows all of it, the count turns red, and you can only delete text until it fits again.</p>';
+  protected readonly summary = new FormControl(
+    { value: '<p>Quarterly results are <strong>final</strong>; editing is locked until review.</p>', disabled: true },
+    { nonNullable: true },
+  );
+  protected readonly description = new FormControl('', {
+    nonNullable: true,
+    validators: [Validators.required],
+  });
+  protected readonly snippet = new FormControl(
+    '<h3>Install</h3><p>Run <code>pnpm add @tiptap/core</code>, then:</p><pre><code>sanring add rich-text-editor</code></pre>',
+    { nonNullable: true },
+  );
+
+  constructor() {
+    // Show the validation state right away, like the input and radio docs.
+    this.description.markAsTouched();
+  }
+
+  protected toggleSummary(): void {
+    if (this.summary.disabled) {
+      this.summary.enable();
+    } else {
+      this.summary.disable();
+    }
+  }
   protected readonly notes = new FormControl(
     '<h2>Version 2.4</h2><ul><li><p>Faster search</p></li><li><p>New <strong>export</strong> menu</p></li></ul><blockquote><p>Upgrade notes are in the changelog.</p></blockquote>',
     { nonNullable: true },

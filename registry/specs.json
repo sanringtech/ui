@@ -3015,6 +3015,10 @@
         "action": "In the toolbar, move between enabled buttons. Disabled buttons are skipped."
       },
       {
+        "keys": "ArrowUp / ArrowDown",
+        "action": "In a toolbar with orientation=\"vertical\", move between enabled buttons instead of the left and right arrows."
+      },
+      {
         "keys": "Home / End",
         "action": "In the toolbar, jump to the first or last enabled button."
       },

@@ -45,6 +45,8 @@ export const richTextEditorTranslations = {
     'Layout and arrow-key axis of sanring-rich-text-editor-toolbar.',
   'richTextEditor.keyboard.arrows':
     'In the toolbar, move between enabled buttons. Disabled buttons are skipped.',
+  'richTextEditor.keyboard.verticalArrows':
+    'In a toolbar with orientation="vertical", move between enabled buttons instead of the left and right arrows.',
   'richTextEditor.keyboard.homeEnd':
     'In the toolbar, jump to the first or last enabled button.',
   'richTextEditor.api.readonly.description':
@@ -57,8 +59,17 @@ export const richTextEditorTranslations = {
     'Shows the character count, or count/limit when maxCharacters is set. Turns to the error color when the content is over the limit.',
   'richTextEditor.demo.characterCount': 'Placeholder and character count',
   'richTextEditor.demo.characterCount.description':
-    'Set placeholder and maxCharacters, then place sanring-rich-text-editor-character-count inside the editor. A value from the form that is already over the limit is kept as is; the count turns red and only deletions are allowed.',
+    'Set placeholder and maxCharacters, then place sanring-rich-text-editor-character-count inside the editor. Typing stops at the limit. Load a long comment to see a form value that is already over the limit: it is kept as is, the count turns red, and only deletions are allowed.',
   'richTextEditor.demo.readonly': 'Read-only',
   'richTextEditor.demo.readonly.description':
     'readonly keeps the content selectable and copyable. The toolbar stays in place with every button disabled.',
+  'richTextEditor.demo.disabled': 'Disabled',
+  'richTextEditor.demo.disabled.description':
+    'Disable the bound control (or set the disabled input). The content dims, cannot be focused or edited, and every toolbar button is disabled. Enabling the control restores all of it.',
+  'richTextEditor.demo.validation': 'Validation',
+  'richTextEditor.demo.validation.description':
+    'Validators.required treats an empty document as empty. Once the control is touched and invalid, the frame turns red, the editable area gets aria-invalid, and sanring-error-message is shown and linked through aria-describedby.',
+  'richTextEditor.demo.commands': 'All commands, vertical toolbar',
+  'richTextEditor.demo.commands.description':
+    'Commands not shown above: inline code, code block, divider, line break, and clear formatting. levels picks the heading levels in the menu. With orientation="vertical", the toolbar sits beside the content and ArrowUp / ArrowDown move between buttons.',
 } as const;

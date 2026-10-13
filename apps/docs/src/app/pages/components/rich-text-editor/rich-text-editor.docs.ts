@@ -41,6 +41,24 @@ export const richTextEditorPage = {
       level: 2,
       children: [
         {
+          id: 'example-disabled',
+          titleKey: 'richTextEditor.demo.disabled',
+          descriptionKey: 'richTextEditor.demo.disabled.description',
+          level: 3,
+        },
+        {
+          id: 'example-validation',
+          titleKey: 'richTextEditor.demo.validation',
+          descriptionKey: 'richTextEditor.demo.validation.description',
+          level: 3,
+        },
+        {
+          id: 'example-commands',
+          titleKey: 'richTextEditor.demo.commands',
+          descriptionKey: 'richTextEditor.demo.commands.description',
+          level: 3,
+        },
+        {
           id: 'example-character-count',
           titleKey: 'richTextEditor.demo.characterCount',
           descriptionKey: 'richTextEditor.demo.characterCount.description',
@@ -192,6 +210,7 @@ export const richTextEditorPage = {
   keyboardRows: [
     { keys: 'Tab', descriptionKey: 'richTextEditor.keyboard.tab' },
     { keys: 'ArrowLeft / ArrowRight', descriptionKey: 'richTextEditor.keyboard.arrows' },
+    { keys: 'ArrowUp / ArrowDown', descriptionKey: 'richTextEditor.keyboard.verticalArrows' },
     { keys: 'Home / End', descriptionKey: 'richTextEditor.keyboard.homeEnd' },
     { keys: 'Mod+B / Mod+I / Mod+U', descriptionKey: 'richTextEditor.keyboard.marks' },
     { keys: 'Mod+Z / Mod+Shift+Z', descriptionKey: 'richTextEditor.keyboard.history' },
@@ -250,6 +269,52 @@ export const richTextEditorPageExamples = {
 │   ├── button[sanringRichTextEditorAction]
 │   └── sanring-rich-text-editor-heading-menu
 └── sanring-rich-text-editor-character-count`,
+  disabled: `<!-- summary = new FormControl({ value: '<p>…</p>', disabled: true }) -->
+<sanring-rich-text-editor ariaLabel="Summary" [formControl]="summary">
+  <sanring-rich-text-editor-toolbar>
+    <button sanringRichTextEditorToggle="bold" size="sm" ariaLabel="Bold">
+      <svg lucideBold class="size-4"></svg>
+    </button>
+    <button sanringRichTextEditorToggle="italic" size="sm" ariaLabel="Italic">
+      <svg lucideItalic class="size-4"></svg>
+    </button>
+  </sanring-rich-text-editor-toolbar>
+</sanring-rich-text-editor>
+
+<button sanringBtn variant="outline" size="sm" type="button" (click)="toggleSummary()">
+  {{ summary.disabled ? 'Enable editing' : 'Disable editing' }}
+</button>`,
+  validation: `<!-- description = new FormControl('', { validators: [Validators.required] }) -->
+<sanring-field>
+  <label sanringLabel id="description-label">Description</label>
+  <sanring-rich-text-editor ariaLabelledBy="description-label" required [formControl]="description" />
+  <sanring-error-message>Description is required.</sanring-error-message>
+</sanring-field>`,
+  commands: `<sanring-rich-text-editor
+  ariaLabel="Snippet"
+  class="flex-row"
+  contentClass="min-w-0 flex-1"
+  [formControl]="snippet"
+>
+  <sanring-rich-text-editor-toolbar orientation="vertical">
+    <sanring-rich-text-editor-heading-menu [levels]="[2, 3, 4]" />
+    <button sanringRichTextEditorToggle="code" size="sm" ariaLabel="Inline code">
+      <svg lucideCode class="size-4"></svg>
+    </button>
+    <button sanringRichTextEditorToggle="codeBlock" size="sm" ariaLabel="Code block">
+      <svg lucideSquareCode class="size-4"></svg>
+    </button>
+    <button sanringRichTextEditorAction="horizontalRule" variant="ghost" size="icon" ariaLabel="Divider">
+      <svg lucideMinus class="size-4"></svg>
+    </button>
+    <button sanringRichTextEditorAction="hardBreak" variant="ghost" size="icon" ariaLabel="Line break">
+      <svg lucideCornerDownLeft class="size-4"></svg>
+    </button>
+    <button sanringRichTextEditorAction="clearFormatting" variant="ghost" size="icon" ariaLabel="Clear formatting">
+      <svg lucideRemoveFormatting class="size-4"></svg>
+    </button>
+  </sanring-rich-text-editor-toolbar>
+</sanring-rich-text-editor>`,
   characterCount: `<sanring-field>
   <label sanringLabel id="comment-label">Comment</label>
   <sanring-rich-text-editor
@@ -260,7 +325,12 @@ export const richTextEditorPageExamples = {
   >
     <sanring-rich-text-editor-character-count />
   </sanring-rich-text-editor>
-</sanring-field>`,
+</sanring-field>
+
+<!-- A value written by the form is never trimmed, even over the limit. -->
+<button sanringBtn variant="outline" size="sm" type="button" (click)="comment.setValue(longComment)">
+  Load a long comment
+</button>`,
   readonly: `<sanring-rich-text-editor ariaLabel="Release notes" readonly [formControl]="notes">
   <sanring-rich-text-editor-toolbar>
     <sanring-rich-text-editor-heading-menu />
