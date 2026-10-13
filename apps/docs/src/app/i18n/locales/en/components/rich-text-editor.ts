@@ -33,4 +33,16 @@ export const richTextEditorTranslations = {
   'richTextEditor.keyboard.history': 'Undo or redo the last change.',
   'richTextEditor.stateModel.description':
     'A ControlValueAccessor. The value is an HTML string and an empty document is "". Writing a value from the form does not emit it back. There is no [(value)] model; use formControl or ngModel.',
+  'richTextEditor.api.toggle.description':
+    'Turns a button into a pressed-state toggle for a mark or block. Reuses sanringToggle styling; pass size and variant as usual.',
+  'richTextEditor.api.action.description':
+    'Turns a button into a one-shot command. Reuses sanringBtn styling; variant="ghost" size="icon" suits a toolbar.',
+  'richTextEditor.api.levels.description':
+    'Heading levels offered by sanring-rich-text-editor-heading-menu, after Paragraph.',
+  'richTextEditor.api.orientation.description':
+    'Layout and arrow-key axis of sanring-rich-text-editor-toolbar.',
+  'richTextEditor.keyboard.arrows':
+    'In the toolbar, move between enabled buttons. Disabled buttons are skipped.',
+  'richTextEditor.keyboard.homeEnd':
+    'In the toolbar, jump to the first or last enabled button.',
 } as const;

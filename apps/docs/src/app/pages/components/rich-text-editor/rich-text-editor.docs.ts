@@ -110,6 +110,30 @@ export const richTextEditorPage = {
       descriptionKey: 'richTextEditor.api.extensions.description',
     },
     {
+      property: 'sanringRichTextEditorToggle',
+      type: "'bold' | 'italic' | 'underline' | 'strike' | 'code' | 'bulletList' | 'orderedList' | 'blockquote' | 'codeBlock'",
+      defaultValue: '-',
+      descriptionKey: 'richTextEditor.api.toggle.description',
+    },
+    {
+      property: 'sanringRichTextEditorAction',
+      type: "'undo' | 'redo' | 'horizontalRule' | 'hardBreak' | 'clearFormatting'",
+      defaultValue: '-',
+      descriptionKey: 'richTextEditor.api.action.description',
+    },
+    {
+      property: 'heading-menu levels',
+      type: '(1 | 2 | 3 | 4 | 5 | 6)[]',
+      defaultValue: '[1, 2, 3]',
+      descriptionKey: 'richTextEditor.api.levels.description',
+    },
+    {
+      property: 'toolbar orientation',
+      type: "'horizontal' | 'vertical'",
+      defaultValue: "'horizontal'",
+      descriptionKey: 'richTextEditor.api.orientation.description',
+    },
+    {
       property: '(editorReady)',
       type: 'Editor',
       defaultValue: '-',
@@ -118,6 +142,8 @@ export const richTextEditorPage = {
   ] satisfies readonly ComponentPageApiRow[],
   keyboardRows: [
     { keys: 'Tab', descriptionKey: 'richTextEditor.keyboard.tab' },
+    { keys: 'ArrowLeft / ArrowRight', descriptionKey: 'richTextEditor.keyboard.arrows' },
+    { keys: 'Home / End', descriptionKey: 'richTextEditor.keyboard.homeEnd' },
     { keys: 'Mod+B / Mod+I / Mod+U', descriptionKey: 'richTextEditor.keyboard.marks' },
     { keys: 'Mod+Z / Mod+Shift+Z', descriptionKey: 'richTextEditor.keyboard.history' },
   ] satisfies readonly ComponentPageKeyboardRow[],
@@ -126,9 +152,54 @@ export const richTextEditorPage = {
 export const richTextEditorPageExamples = {
   basic: `<sanring-field>
   <label sanringLabel id="message-label">Message</label>
-  <sanring-rich-text-editor ariaLabelledBy="message-label" [formControl]="message" />
+  <sanring-rich-text-editor ariaLabelledBy="message-label" [formControl]="message">
+    <sanring-rich-text-editor-toolbar>
+      <button sanringRichTextEditorAction="undo" variant="ghost" size="icon" ariaLabel="Undo">
+        <svg lucideUndo2 class="size-4"></svg>
+      </button>
+      <button sanringRichTextEditorAction="redo" variant="ghost" size="icon" ariaLabel="Redo">
+        <svg lucideRedo2 class="size-4"></svg>
+      </button>
+      <sanring-divider vertical class="mx-1 my-1" />
+      <sanring-rich-text-editor-heading-menu />
+      <sanring-divider vertical class="mx-1 my-1" />
+      <sanring-tooltip>
+        <button sanringRichTextEditorToggle="bold" sanringTooltipTrigger size="sm" ariaLabel="Bold">
+          <svg lucideBold class="size-4"></svg>
+        </button>
+        <sanring-tooltip-content>Bold (Ctrl+B)</sanring-tooltip-content>
+      </sanring-tooltip>
+      <sanring-tooltip>
+        <button sanringRichTextEditorToggle="italic" sanringTooltipTrigger size="sm" ariaLabel="Italic">
+          <svg lucideItalic class="size-4"></svg>
+        </button>
+        <sanring-tooltip-content>Italic (Ctrl+I)</sanring-tooltip-content>
+      </sanring-tooltip>
+      <button sanringRichTextEditorToggle="underline" size="sm" ariaLabel="Underline">
+        <svg lucideUnderline class="size-4"></svg>
+      </button>
+      <button sanringRichTextEditorToggle="strike" size="sm" ariaLabel="Strikethrough">
+        <svg lucideStrikethrough class="size-4"></svg>
+      </button>
+      <sanring-divider vertical class="mx-1 my-1" />
+      <button sanringRichTextEditorToggle="bulletList" size="sm" ariaLabel="Bulleted list">
+        <svg lucideList class="size-4"></svg>
+      </button>
+      <button sanringRichTextEditorToggle="orderedList" size="sm" ariaLabel="Numbered list">
+        <svg lucideListOrdered class="size-4"></svg>
+      </button>
+      <button sanringRichTextEditorToggle="blockquote" size="sm" ariaLabel="Quote">
+        <svg lucideQuote class="size-4"></svg>
+      </button>
+    </sanring-rich-text-editor-toolbar>
+  </sanring-rich-text-editor>
   <sanring-error-message>Message is required.</sanring-error-message>
 </sanring-field>`,
-  usageImport: `import { RichTextEditorComponent } from './components/ui/rich-text-editor';`,
-  usageMain: `<sanring-rich-text-editor ariaLabel="Notes" [formControl]="notes" />`,
+  usageImport: `import { SANRING_RICH_TEXT_EDITOR_IMPORTS } from './components/ui/rich-text-editor';`,
+  usageMain: `<sanring-rich-text-editor ariaLabel="Notes" [formControl]="notes">
+  <sanring-rich-text-editor-toolbar>
+    <button sanringRichTextEditorToggle="bold" size="sm" ariaLabel="Bold">B</button>
+    <button sanringRichTextEditorToggle="italic" size="sm" ariaLabel="Italic">I</button>
+  </sanring-rich-text-editor-toolbar>
+</sanring-rich-text-editor>`,
 } as const;

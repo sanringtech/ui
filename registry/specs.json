@@ -2892,8 +2892,8 @@
     "name": "rich-text-editor",
     "title": "Rich Text Editor",
     "description": "A rich text editor built on Tiptap that plugs into Angular forms and sanring-field.",
-    "example": "<sanring-field>\n  <label sanringLabel id=\"message-label\">Message</label>\n  <sanring-rich-text-editor ariaLabelledBy=\"message-label\" [formControl]=\"message\" />\n  <sanring-error-message>Message is required.</sanring-error-message>\n</sanring-field>",
-    "usageImport": "import { RichTextEditorComponent } from './components/ui/rich-text-editor';",
+    "example": "<sanring-field>\n  <label sanringLabel id=\"message-label\">Message</label>\n  <sanring-rich-text-editor ariaLabelledBy=\"message-label\" [formControl]=\"message\">\n    <sanring-rich-text-editor-toolbar>\n      <button sanringRichTextEditorAction=\"undo\" variant=\"ghost\" size=\"icon\" ariaLabel=\"Undo\">\n        <svg lucideUndo2 class=\"size-4\"></svg>\n      </button>\n      <button sanringRichTextEditorAction=\"redo\" variant=\"ghost\" size=\"icon\" ariaLabel=\"Redo\">\n        <svg lucideRedo2 class=\"size-4\"></svg>\n      </button>\n      <sanring-divider vertical class=\"mx-1 my-1\" />\n      <sanring-rich-text-editor-heading-menu />\n      <sanring-divider vertical class=\"mx-1 my-1\" />\n      <sanring-tooltip>\n        <button sanringRichTextEditorToggle=\"bold\" sanringTooltipTrigger size=\"sm\" ariaLabel=\"Bold\">\n          <svg lucideBold class=\"size-4\"></svg>\n        </button>\n        <sanring-tooltip-content>Bold (Ctrl+B)</sanring-tooltip-content>\n      </sanring-tooltip>\n      <sanring-tooltip>\n        <button sanringRichTextEditorToggle=\"italic\" sanringTooltipTrigger size=\"sm\" ariaLabel=\"Italic\">\n          <svg lucideItalic class=\"size-4\"></svg>\n        </button>\n        <sanring-tooltip-content>Italic (Ctrl+I)</sanring-tooltip-content>\n      </sanring-tooltip>\n      <button sanringRichTextEditorToggle=\"underline\" size=\"sm\" ariaLabel=\"Underline\">\n        <svg lucideUnderline class=\"size-4\"></svg>\n      </button>\n      <button sanringRichTextEditorToggle=\"strike\" size=\"sm\" ariaLabel=\"Strikethrough\">\n        <svg lucideStrikethrough class=\"size-4\"></svg>\n      </button>\n      <sanring-divider vertical class=\"mx-1 my-1\" />\n      <button sanringRichTextEditorToggle=\"bulletList\" size=\"sm\" ariaLabel=\"Bulleted list\">\n        <svg lucideList class=\"size-4\"></svg>\n      </button>\n      <button sanringRichTextEditorToggle=\"orderedList\" size=\"sm\" ariaLabel=\"Numbered list\">\n        <svg lucideListOrdered class=\"size-4\"></svg>\n      </button>\n      <button sanringRichTextEditorToggle=\"blockquote\" size=\"sm\" ariaLabel=\"Quote\">\n        <svg lucideQuote class=\"size-4\"></svg>\n      </button>\n    </sanring-rich-text-editor-toolbar>\n  </sanring-rich-text-editor>\n  <sanring-error-message>Message is required.</sanring-error-message>\n</sanring-field>",
+    "usageImport": "import { SANRING_RICH_TEXT_EDITOR_IMPORTS } from './components/ui/rich-text-editor';",
     "api": [
       {
         "property": "id",
@@ -2950,6 +2950,30 @@
         "description": "Additional open-source Tiptap extensions. Read once when the editor is created."
       },
       {
+        "property": "sanringRichTextEditorToggle",
+        "type": "'bold' | 'italic' | 'underline' | 'strike' | 'code' | 'bulletList' | 'orderedList' | 'blockquote' | 'codeBlock'",
+        "defaultValue": "-",
+        "description": "Turns a button into a pressed-state toggle for a mark or block. Reuses sanringToggle styling; pass size and variant as usual."
+      },
+      {
+        "property": "sanringRichTextEditorAction",
+        "type": "'undo' | 'redo' | 'horizontalRule' | 'hardBreak' | 'clearFormatting'",
+        "defaultValue": "-",
+        "description": "Turns a button into a one-shot command. Reuses sanringBtn styling; variant=\"ghost\" size=\"icon\" suits a toolbar."
+      },
+      {
+        "property": "heading-menu levels",
+        "type": "(1 | 2 | 3 | 4 | 5 | 6)[]",
+        "defaultValue": "[1, 2, 3]",
+        "description": "Heading levels offered by sanring-rich-text-editor-heading-menu, after Paragraph."
+      },
+      {
+        "property": "toolbar orientation",
+        "type": "'horizontal' | 'vertical'",
+        "defaultValue": "'horizontal'",
+        "description": "Layout and arrow-key axis of sanring-rich-text-editor-toolbar."
+      },
+      {
         "property": "(editorReady)",
         "type": "Editor",
         "defaultValue": "-",
@@ -2960,6 +2984,14 @@
       {
         "keys": "Tab",
         "action": "Move focus into or out of the editor."
+      },
+      {
+        "keys": "ArrowLeft / ArrowRight",
+        "action": "In the toolbar, move between enabled buttons. Disabled buttons are skipped."
+      },
+      {
+        "keys": "Home / End",
+        "action": "In the toolbar, jump to the first or last enabled button."
       },
       {
         "keys": "Mod+B / Mod+I / Mod+U",

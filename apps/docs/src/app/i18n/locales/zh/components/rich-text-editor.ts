@@ -26,4 +26,16 @@ export const richTextEditorTranslations = {
   'richTextEditor.keyboard.history': '復原或重做上一個變更。',
   'richTextEditor.stateModel.description':
     'ControlValueAccessor。值為 HTML 字串，空白文件為 ""。由表單寫入的值不會再回傳。沒有 [(value)] model，請使用 formControl 或 ngModel。',
+  'richTextEditor.api.toggle.description':
+    '把按鈕變成標記或區塊的切換鈕，帶有按下狀態。沿用 sanringToggle 樣式，可照常傳 size 與 variant。',
+  'richTextEditor.api.action.description':
+    '把按鈕變成單次執行的指令。沿用 sanringBtn 樣式，工具列建議用 variant="ghost" size="icon"。',
+  'richTextEditor.api.levels.description':
+    'sanring-rich-text-editor-heading-menu 在「段落」之後提供的標題層級。',
+  'richTextEditor.api.orientation.description':
+    'sanring-rich-text-editor-toolbar 的排列方向，以及方向鍵移動的軸向。',
+  'richTextEditor.keyboard.arrows':
+    '在工具列中於可用按鈕間移動，會跳過 disabled 的按鈕。',
+  'richTextEditor.keyboard.homeEnd':
+    '在工具列中跳到第一個或最後一個可用按鈕。',
 } as const;

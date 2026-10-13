@@ -994,11 +994,15 @@
         "utils"
       ],
       "componentDeps": [
+        "button",
+        "dropdown-menu",
         "field",
-        "skeleton"
+        "skeleton",
+        "toggle"
       ],
       "peerDependencies": {
         "@angular/forms": "^22.0.0",
+        "@lucide/angular": "^1.18.0",
         "@tiptap/core": "^3.31.4",
         "@tiptap/pm": "^3.31.4",
         "@tiptap/starter-kit": "^3.31.4"
@@ -1006,6 +1010,10 @@
       "files": [
         "rich-text-editor/rich-text-editor.component.ts",
         "rich-text-editor/rich-text-editor.context.ts",
+        "rich-text-editor/rich-text-editor.commands.ts",
+        "rich-text-editor/rich-text-editor-toolbar.component.ts",
+        "rich-text-editor/rich-text-editor-buttons.directive.ts",
+        "rich-text-editor/rich-text-editor-heading-menu.component.ts",
         "rich-text-editor/index.ts"
       ]
     },
