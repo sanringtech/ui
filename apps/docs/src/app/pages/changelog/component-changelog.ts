@@ -36,6 +36,29 @@ function isPatch(version: string): boolean {
  */
 export const cliVersionChangelog: readonly CliVersionEntry[] = [
   {
+    version: '0.30.0',
+    date: '2026-10-13',
+    changes: [
+      {
+        type: 'added',
+        notable: true,
+        componentIds: ['rich-text-editor'],
+        text: 'Add `rich-text-editor`, a Tiptap-based editor with forms and `sanring-field` support, a composable toolbar, heading menu, placeholder, read-only mode, and character count; Tiptap loads lazily so it stays out of the initial bundle.',
+      },
+    ],
+  },
+  {
+    version: '0.29.0',
+    date: '2026-10-02',
+    changes: [
+      {
+        type: 'added',
+        notable: true,
+        text: 'Add `block/org-chart` with elkjs worker layout, a pan/zoom canvas, and a tree directory for keyboard access; `elkjs` is installed as a peer dependency.',
+      },
+    ],
+  },
+  {
     version: '0.28.1',
     date: '2026-10-02',
     changes: [
