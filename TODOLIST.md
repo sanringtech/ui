@@ -110,10 +110,10 @@
 **P32 破例**：P32「明確不做」排除新 primitive。rich-text-editor 不是重複既有能力的 primitive，而是 `textarea` 做不到的缺口（格式化文字），消費端只能自行整合第三方編輯器，樣式、field 整合、a11y 都對不上。
 
 - 範圍 / 使用者故事 / API / 風險：[PRD rich-text-editor](.claude/prds/rich-text-editor.md)
-- 選型決策：ADR-0003（待寫：Tiptap v3 版本鎖定、CDK overlay 浮動 UI、`@sanring/ui` 依賴策略）
+- 選型決策：[ADR-0003](.claude/adrs/0003-rich-text-editor-engine.md)（Tiptap v3 開源套件、動態 `import()` 載入、`@sanring/ui` dependencies、CDK overlay）
 - 範圍 / 步驟 / 停止條件 / 驗證：[charter p34-rich-text-editor](.claude/charters/p34-rich-text-editor.md)
 
-- [ ] M0 Spike（gate）：v3 + Angular 22 建立 / 銷毀、SSR build、bundle 量測、selection 定位 overlay PoC → ADR-0003
+- [x] M0 Spike（gate）：全數通過，結果見 ADR-0003
 - [ ] M1 核心：root + CVA + field + StarterKit 工具列 + placeholder / readonly / disabled / 字數 + registry + docs
 - [ ] M2 連結 + 圖片 + bubble menu
 - [ ] M3 表格

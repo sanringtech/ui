@@ -25,7 +25,7 @@ related_adr: .claude/adrs/0003-rich-text-editor-engine.md
 
 ## 2. 核心重點（每批都要守）
 
-1. **`@tiptap/*` 的值匯入只出現在 root 元件與擴充設定檔**，其他檔案只能用 `import type`（比照 ADR-0002 決策 3 的引擎隔離）。檔名以 B1 定案為準，提案為 `rich-text-editor.component.ts` 與 `rich-text-editor.extensions.ts`；改名要同步改 §8 的 grep。
+1. **`@tiptap/*` 的值匯入（一律以動態 `import()` 載入，ADR-0003 決策 2）只出現在 root 元件與擴充設定檔**，其他檔案只能用 `import type`（比照 ADR-0002 決策 3 的引擎隔離）。檔名以 B1 定案為準，提案為 `rich-text-editor.component.ts` 與 `rich-text-editor.extensions.ts`；改名要同步改 §8 的 grep。
 2. **只用 `@tiptap/core` + 開源擴充**：不用 `ngx-tiptap`、Tiptap Pro / Cloud 擴充、`@tiptap/extension-bubble-menu`、`@tailwindcss/typography`。`@floating-ui/dom` 只允許作為 `@tiptap/suggestion` 的傳遞 peer 存在（M4），我們的程式碼不得直接 import 它。
 3. **`new Editor()` 只在 `afterNextRender` 內建立**，`DestroyRef.onDestroy` 時 `editor.destroy()`（比照 `carousel-content.component.ts`）。server 端不碰 `window` / `document`。
 4. **子元件只注入 `SANRING_RICH_TEXT_EDITOR` context**，不持有 `Editor` 參考，也不自建 `Editor`。
@@ -79,9 +79,9 @@ related_adr: .claude/adrs/0003-rich-text-editor-engine.md
 
 在 docs app 暫時頁 `/spike/rich-text-editor` 進行，所有數字與結論寫進 ADR-0003。
 
-- [ ] **A1 生命週期**：Tiptap v3 + StarterKit 在 Angular 22 docs app（沿用現行 change detection 設定）下建立 / 銷毀。反覆進出路由 ≥ 10 次，確認 `editor.destroy()` 後無殘留 listener / DOM。以 transaction 事件驅動 signal 版本號，確認 OnPush 會更新。
-- [ ] **A2 SSR**：repo 沒有 SSR build 目標（docs 無 server 設定，CLI e2e 用 `--ssr=false`），因此在 repo 外 scratchpad 建 `ng new --ssr` 專案，裝入 spike 版元件，跑 server build 並 render 一次。指令與版本寫入 ADR-0003，供每個里程碑收尾重跑。此專案不 commit。
-- [ ] **A3 Bundle 量測**（記錄用，不設數字門檻）：
+- [x] **A1 生命週期**：Tiptap v3 + StarterKit 在 Angular 22 docs app（沿用現行 change detection 設定）下建立 / 銷毀。反覆進出路由 ≥ 10 次，確認 `editor.destroy()` 後無殘留 listener / DOM。以 transaction 事件驅動 signal 版本號，確認 OnPush 會更新。
+- [x] **A2 SSR**：repo 沒有 SSR build 目標（docs 無 server 設定，CLI e2e 用 `--ssr=false`），因此在 repo 外 scratchpad 建 `ng new --ssr` 專案，裝入 spike 版元件，跑 server build 並 render 一次。指令與版本寫入 ADR-0003，供每個里程碑收尾重跑。此專案不 commit。
+- [x] **A3 Bundle 量測**（記錄用，不設數字門檻）：
 
   | 路徑 \ 組合 | M1 組合（core / pm / starter-kit / extensions） | 全擴充（再加 image / table / mention / suggestion） |
   |---|---|---|
@@ -89,18 +89,18 @@ related_adr: .claude/adrs/0003-rich-text-editor-engine.md
   | `@sanring/ui`：scratch 消費端只 import 非 rte 元件時 tiptap 是否進 bundle；import rte 時的增量 | | |
 
   硬性要求：tiptap **不得**進入 docs initial chunk（現行 budget：initial 500kB warning / 1MB error）。
-- [ ] **A4 `@sanring/ui` dependencies 驗證**：已拍板用 dependencies + 單一 entry（核心重點 10）。M0 只驗證 tree-shaking：消費端未 import rte 時，tiptap 不出現在其 bundle。結果寫入 ADR-0003；若 tree-shaking 失效，記錄於 ADR 並回報使用者，不自行改成 secondary entry。
-- [ ] **A5 v3 API 細節**（以 `npm view` 與 v3 原始碼 / 文件確認，不參考 v2）：
+- [x] **A4 `@sanring/ui` dependencies 驗證**：已拍板用 dependencies + 單一 entry（核心重點 10）。M0 只驗證 tree-shaking：消費端未 import rte 時，tiptap 不出現在其 bundle。結果寫入 ADR-0003；若 tree-shaking 失效，記錄於 ADR 並回報使用者，不自行改成 secondary entry。
+- [x] **A5 v3 API 細節**（以 `npm view` 與 v3 原始碼 / 文件確認，不參考 v2）：
   - 各套件確切名稱與最新版本，訂出 peer 範圍
   - `setContent` 簽章，以及不 emit `update` 的方法
   - StarterKit 停用 Link 的設定鍵名
   - Mention 預設輸出的 HTML 屬性
   - CharacterCount 貼上超限內容時是截斷還是拒絕
   - Image 擴充有無載入失敗 hook
-- [ ] **A6 CDK overlay PoC**：`flexibleConnectedTo({x,y,width,height})` + `editor.view.coordsAtPos` 定位到選取範圍，翻轉時不偏移。只用 `menu-overlay-controller` / `collection-controller` 既有 API；若需擴充，記錄要「新增」什麼。打字時焦點留在編輯區。
-- [ ] **A7 授權**：`npm view <pkg> license` 逐一確認所有預計使用的 `@tiptap/*` 及傳遞依賴（至少 `prosemirror-*`），列表寫入 ADR。
-- [ ] **A8 ADR-0003**：Context / Decision / Consequences / ≥2 alternatives / Spike 結果 / 推翻條件，Status 改 Accepted 或 Rejected。TODOLIST P34 同步補 ADR 連結。
-- [ ] **Gate 結束清理**：
+- [x] **A6 CDK overlay PoC**：`flexibleConnectedTo({x,y,width,height})` + `editor.view.coordsAtPos` 定位到選取範圍，翻轉時不偏移。只用 `menu-overlay-controller` / `collection-controller` 既有 API；若需擴充，記錄要「新增」什麼。打字時焦點留在編輯區。
+- [x] **A7 授權**：`npm view <pkg> license` 逐一確認所有預計使用的 `@tiptap/*` 及傳遞依賴（至少 `prosemirror-*`），列表寫入 ADR。
+- [x] **A8 ADR-0003**：Context / Decision / Consequences / ≥2 alternatives / Spike 結果 / 推翻條件，Status 改 Accepted 或 Rejected。TODOLIST P34 同步補 ADR 連結。
+- [x] **Gate 結束清理**：
   - 刪除 `/spike/rich-text-editor` 暫時頁與 route。
   - 根 `package.json` **只保留 M1 組合**（`@tiptap/core`、`@tiptap/pm`、`@tiptap/starter-kit`、`@tiptap/extensions`），其餘到各自里程碑再加。
   - `packages/ui/package.json` 批次 A 不動，B1 才加。
@@ -219,7 +219,12 @@ node packages/cli/scripts/check-registry-sync.mjs
 node packages/cli/scripts/check-registry-parity.mjs
 pnpm --filter @sanring/cli test        # 本批有動 registry.json 或 add.test.ts 時
 # 引擎隔離：只有 root 與 extensions 檔可以值匯入 @tiptap（輸出必須為空）
-grep -rlE "^import \{[^}]*\} from '@tiptap/" --include='*.ts' --exclude='*.spec.ts' \
+# 靜態值匯入（`import type` 除外）一律禁止——會讓 @sanring/ui 消費端無法 tree-shake（ADR-0003 A4）
+grep -rnE "^import .* from '@tiptap/" --include='*.ts' --exclude='*.spec.ts' \
+  registry/components/rich-text-editor packages/ui/src/lib/components/rich-text-editor \
+  | grep -v ":import type "
+# 動態 import('@tiptap/…') 只能出現在 root 與 extensions 檔
+grep -rlE "import\('@tiptap/" --include='*.ts' --exclude='*.spec.ts' \
   registry/components/rich-text-editor packages/ui/src/lib/components/rich-text-editor \
   | grep -vE "rich-text-editor\.(component|extensions)\.ts$"
 # 禁用依賴（輸出必須為空）
@@ -277,4 +282,4 @@ grep -rn "@floating-ui/dom" registry/components/rich-text-editor packages/ui/src
 - [ ] TODO：A + B1 能否在 docs 標「預覽」先合併
 - [ ] TODO：M2 之後的分支 / PR 命名
 - [ ] TODO：PRD §12 待決題（各批準入條件已列出），以及各里程碑日期
-- [ ] unknown：`pnpm test`（`ng test`）是否同時涵蓋 `@sanring/ui` 與 docs 兩個 project 的 spec（B1 實測）
+- [ ] TODO（B1）：M0 實測 `pnpm test`（`ng test`）只跑到 2 個 spec 檔（docs），未涵蓋 `@sanring/ui` 的 spec。B1 需確認 `@sanring/ui` spec 的正確執行指令（如 `pnpm ng test @sanring/ui`）並補進 §8

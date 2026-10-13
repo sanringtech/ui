@@ -5,7 +5,7 @@ feature_name: Rich Text Editor（Tiptap）
 status: accepted
 owner: jack755051
 last_updated: 2026-10-13
-related_adrs: [0003-rich-text-editor-engine]   # 批次 A 產出
+related_adrs: [0003-rich-text-editor-engine]
 ---
 
 # PRD: Rich Text Editor（Tiptap）
@@ -425,6 +425,8 @@ interface RichTextEditorSlashCommand {
 
 ### 待決
 - [ ] TODO：是否開 **ADR-0003**（建議開：引擎版本鎖定 + overlay 策略 + `@sanring/ui` 依賴策略）
+- [ ] TODO（M0 發現，B3 準入）：`CharacterCount` 的 `autoTrim` 預設 `true`，`writeValue` 傳入超限 HTML 會被靜默截斷、與 control 值不一致——設 `autoTrim: false`，或截斷後回寫一次 `onChange`（ADR-0003）
+- [ ] TODO（M0 發現，C2 準入）：`extension-image` 無載入失敗 hook，不寫 NodeView 的前提下 Story 6「載入失敗錯誤樣式」只能用 CSS 有限呈現——縮減該 AC 或接受 CSS 方案（ADR-0003）
 - [ ] TODO：Link protocol 白名單最終清單；圖片 src 允許的 scheme（是否允許 `data:`）
 - [ ] TODO：v1 圖片是否支援貼上 / 拖放上傳（或只支援按鈕選檔）；圖片載入失敗的呈現方式
 - [ ] TODO：bubble menu 的鍵盤進入方式（建議 `Alt+F10`）
@@ -434,8 +436,8 @@ interface RichTextEditorSlashCommand {
 - [ ] TODO：是否暴露 `extensions` input / `editorReady` output 作為逃生口
 - [ ] TODO：是否需要 `SANRING_RICH_TEXT_EDITOR_CONFIG` 全域設定 token
 - [ ] TODO：連結快捷鍵是否綁 `Mod-K`
-- [ ] TODO：`@tiptap/*` peer 版本範圍確切值（`npm view @tiptap/core version` 確認）
+- [x] `@tiptap/*` peer 版本範圍：`^3.31.4`，所有套件一起升級（ADR-0003 決策 1）
 - [ ] TODO：各 milestone 預計完成日期
 - [ ] TODO：e2e 是否慣用 `data-testid`
-- [ ] unknown：Tiptap v3 在 Angular 22 zoneless + SSR 下的已知相容問題（M0 驗證）
-- [ ] unknown：bundle 增量具體數字（M0 量測）
+- [x] Tiptap v3 在 Angular 22 zoneless + SSR：M0 驗證無問題（ADR-0003 A1、A2）
+- [x] bundle 增量：M1 組合 ~106 KB transfer、全擴充 ~130 KB transfer（ADR-0003 A3）；靜態 import 會拖累所有 `@sanring/ui` 消費端，改為動態 `import()`（ADR-0003 決策 2）
