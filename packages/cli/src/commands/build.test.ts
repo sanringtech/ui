@@ -263,6 +263,10 @@ describe('buildCommand (integration)', () => {
         '@angular/router': '^22.0.0',
         '@lucide/angular': '^1.18.0',
         '@sanring/date-picker-core': '^0.5.0',
+        '@tiptap/core': '^3.31.4',
+        '@tiptap/extensions': '^3.31.4',
+        '@tiptap/pm': '^3.31.4',
+        '@tiptap/starter-kit': '^3.31.4',
         clsx: '^2.0.0',
         'embla-carousel': '^8.6.0',
         'tailwind-merge': '^3.0.0',
@@ -281,7 +285,12 @@ describe('buildCommand (integration)', () => {
     const handByName = new Map(handWritten.components.map((c) => [c.name, c]));
     const handSharedByName = new Map(handWritten.shared.map((entry) => [entry.name, entry]));
 
-    const KNOWN_MISMATCHES: Record<string, { componentDeps?: true; sharedDeps?: true; peerDependencies?: true }> = {};
+    const KNOWN_MISMATCHES: Record<string, { componentDeps?: true; sharedDeps?: true; peerDependencies?: true }> = {
+      // The scanner only sees static imports. rich-text-editor loads @tiptap/starter-kit,
+      // @tiptap/extensions, and @tiptap/pm with dynamic import() (ADR-0003), so they must be
+      // declared by hand.
+      'rich-text-editor': { peerDependencies: true },
+    };
 
     const unexpectedDiffs: string[] = [];
 

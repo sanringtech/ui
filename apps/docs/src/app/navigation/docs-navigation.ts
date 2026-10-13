@@ -59,6 +59,7 @@ export type DocsComponentId =
   | 'progress'
   | 'radio'
   | 'resizable'
+  | 'rich-text-editor'
   | 'scroll-area'
   | 'select'
   | 'sheet'
@@ -375,6 +376,13 @@ export const docsComponentItems: DocsComponentNavItem[] = [
     labelKey: 'component.resizable',
     descriptionKey: 'resizable.description',
     path: '/components/resizable',
+    active: true,
+  },
+  {
+    id: 'rich-text-editor',
+    labelKey: 'component.richTextEditor',
+    descriptionKey: 'richTextEditor.description',
+    path: '/components/rich-text-editor',
     active: true,
   },
   {

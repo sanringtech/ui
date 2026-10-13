@@ -73,6 +73,7 @@ export const commonTranslations = {
   'component.link': '連結',
   'component.navigationMenu': '導覽選單',
   'component.pagination': '分頁器',
+  'component.richTextEditor': '富文本編輯器',
   'component.resizable': '可調整分割區',
   'component.select': '選取選單',
   'component.scrollArea': '滾動區域',

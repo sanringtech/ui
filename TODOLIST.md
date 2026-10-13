@@ -69,7 +69,7 @@
 
 ### 明確不做（查證後不是缺口，避免下次掃描重開）
 
-- 新 primitive（`kbd` / `chart` / `toggle-group` / `empty` 等）——官方方向在 blocks 與 registry 生態，不在再堆元件
+- 新 primitive（`kbd` / `chart` / `toggle-group` / `empty` 等）——官方方向在 blocks 與 registry 生態，不在再堆元件（例外：`rich-text-editor`，見 P34）
 - input / textarea 再包一層 `disabled` / `aria-*` input——原生 host 屬性 + `SanringFieldControl` 是刻意的薄 API
 - toast 元件級 `class` `@Input`——走 `ToastOptions.class`
 - table `CdkTextColumn`、CDK flex-layout `<cdk-table>`——見 table todolist，已明示不做
@@ -100,3 +100,27 @@
 - [ ] 批次 G E2E + changeset
 
 **成本**：中高。批次 A 決定可行性，先做；C–G 各自可拆 PR。
+
+---
+
+## P34 — Component:`rich-text-editor`（Tiptap v3 + CDK overlay）
+
+富文本編輯器元件：可組合工具列、表單綁定（CVA，值為 HTML 字串）、placeholder / 唯讀 / 字數上限、連結、圖片、bubble menu、表格、mention / slash 指令。直接用 `@tiptap/core`，不依賴 `ngx-tiptap`，只用開源擴充；`packages/ui` + `registry` 雙份交付，歸 `patterns` 群組。
+
+**P32 破例**：P32「明確不做」排除新 primitive。rich-text-editor 不是重複既有能力的 primitive，而是 `textarea` 做不到的缺口（格式化文字），消費端只能自行整合第三方編輯器，樣式、field 整合、a11y 都對不上。
+
+- 範圍 / 使用者故事 / API / 風險：[PRD rich-text-editor](.claude/prds/rich-text-editor.md)
+- 選型決策：[ADR-0003](.claude/adrs/0003-rich-text-editor-engine.md)（Tiptap v3 開源套件、動態 `import()` 載入、`@sanring/ui` dependencies、CDK overlay）
+- 範圍 / 步驟 / 停止條件 / 驗證：[charter p34-rich-text-editor](.claude/charters/p34-rich-text-editor.md)
+
+- [x] M0 Spike（gate）：全數通過，結果見 ADR-0003
+- [x] M1 核心：root + CVA + field + StarterKit 工具列 + placeholder / readonly / disabled / 字數 + registry + docs
+- [ ] M2 連結 + 圖片 + bubble menu
+- [ ] M3 表格
+- [ ] M4 mention + slash 指令
+
+**成本**：高。M0 決定可行性，先做；M2 與 M3 互不依賴，可對調；M4 依賴 M2 的 overlay 定位。
+
+**M1 收尾發現（P34 範圍外）**：
+- [ ] `dropdown-menu` SSR hydration 失敗（NG0500）：`DomPortal` 在 server 端也把 content 搬進 CDK overlay。`rich-text-editor-heading-menu` 暫以 `ngSkipHydration` 繞過，修好後移除。同樣用 DomPortal 的元件（如 `context-menu`）需一併檢查。見 ADR-0003 Consequences
+- [ ] docs 外框在手機寬度有 axe `scrollable-region-focusable`（可捲動的程式碼區塊不可聚焦），多個元件頁都有；`rich-text-editor` e2e 的 axe 暫時只掃描編輯器預覽區

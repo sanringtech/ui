@@ -352,6 +352,13 @@ export const routes: Routes = [
                   ),
               },
               {
+                path: 'rich-text-editor',
+                loadComponent: () =>
+                  import('./pages/components/rich-text-editor/rich-text-editor-page.component').then(
+                    (m) => m.RichTextEditorPageComponent,
+                  ),
+              },
+              {
                 path: 'scroll-area',
                 loadComponent: () =>
                   import('./pages/components/scroll-area/scroll-area-page.component').then(
