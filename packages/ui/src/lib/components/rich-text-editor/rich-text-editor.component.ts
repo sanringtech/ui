@@ -3,6 +3,7 @@ import {
   Component,
   DestroyRef,
   ElementRef,
+  ViewEncapsulation,
   afterNextRender,
   booleanAttribute,
   computed,
@@ -10,6 +11,7 @@ import {
   forwardRef,
   inject,
   input,
+  numberAttribute,
   output,
   signal,
   untracked,
@@ -22,12 +24,61 @@ import { SanringCvaBase, SanringFieldControlAdapter } from '../shared/cva-base';
 import { FieldType, SANRING_FIELD_CONTROL } from '../field/field.type';
 import { SkeletonDirective } from '../skeleton/skeleton.directive';
 import { RichTextEditorContext, SANRING_RICH_TEXT_EDITOR } from './rich-text-editor.context';
+import {
+  RICH_TEXT_EDITOR_EXTERNAL_VALUE,
+  loadBuiltInExtensions,
+} from './rich-text-editor.extensions';
 
 @Component({
   selector: 'sanring-rich-text-editor',
   standalone: true,
   imports: [SkeletonDirective],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  // The content styles target markup that ProseMirror renders, which Angular's
+  // emulated encapsulation never sees; every rule is scoped to .sanring-rte-content.
+  encapsulation: ViewEncapsulation.None,
+  styles: `
+    /* anywhere (not break-word) also shrinks min-content, so a long unbroken
+       word cannot widen the editor inside a flex or grid layout. The extra
+       class outranks the .ProseMirror rule that Tiptap injects at runtime. */
+    .sanring-rte-content.ProseMirror { overflow-wrap: anywhere; }
+    .sanring-rte-content > * + * { margin-top: 0.75em; }
+    .sanring-rte-content h1 { font-size: 1.5em; font-weight: 600; line-height: 1.25; }
+    .sanring-rte-content h2 { font-size: 1.25em; font-weight: 600; line-height: 1.3; }
+    .sanring-rte-content h3 { font-size: 1.125em; font-weight: 600; line-height: 1.4; }
+    .sanring-rte-content :is(h4, h5, h6) { font-weight: 600; }
+    .sanring-rte-content :is(ul, ol) { padding-left: 1.5em; }
+    .sanring-rte-content ul { list-style: disc; }
+    .sanring-rte-content ol { list-style: decimal; }
+    .sanring-rte-content li > p { margin: 0; }
+    .sanring-rte-content blockquote {
+      border-left: 3px solid var(--sanring-border-strong);
+      padding-left: 1em;
+      color: var(--sanring-muted);
+    }
+    .sanring-rte-content code {
+      border-radius: var(--sanring-radius-xs);
+      background: var(--sanring-surface-strong);
+      padding: 0.1em 0.3em;
+      font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+      font-size: 0.875em;
+    }
+    .sanring-rte-content pre {
+      overflow-x: auto;
+      border-radius: var(--sanring-radius-sm);
+      background: var(--sanring-surface-strong);
+      padding: 0.75em 1em;
+    }
+    .sanring-rte-content pre code { background: none; padding: 0; }
+    .sanring-rte-content hr { border: 0; border-top: 1px solid var(--sanring-border); }
+    .sanring-rte-content p.is-editor-empty:first-child::before {
+      content: attr(data-placeholder);
+      float: left;
+      height: 0;
+      pointer-events: none;
+      color: var(--sanring-muted);
+    }
+  `,
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,
@@ -50,6 +101,7 @@ import { RichTextEditorContext, SANRING_RICH_TEXT_EDITOR } from './rich-text-edi
     '[attr.aria-busy]': 'ready() ? null : "true"',
     '[attr.aria-disabled]': 'isDisabled() || null',
     '[attr.data-disabled]': 'isDisabled() || null',
+    '[attr.data-readonly]': 'isReadonly() || null',
     '[attr.data-invalid]': 'errorState || null',
   },
   template: `
@@ -70,6 +122,11 @@ export class RichTextEditorComponent extends SanringCvaBase<string> implements R
   readonly id = input(uniqueId('sanring-rich-text-editor'));
   readonly disabled = input(false, { transform: booleanAttribute });
   readonly required = input(false, { transform: booleanAttribute });
+  readonly readonly = input(false, { transform: booleanAttribute });
+  readonly placeholder = input<string | undefined>();
+  readonly maxCharacters = input<number | undefined, unknown>(undefined, {
+    transform: (value: unknown) => (value == null || value === '' ? undefined : numberAttribute(value)),
+  });
   readonly ariaLabel = input<string | undefined>();
   readonly ariaLabelledBy = input<string | undefined>();
   readonly ariaDescribedBy = input<string | undefined>();
@@ -87,6 +144,7 @@ export class RichTextEditorComponent extends SanringCvaBase<string> implements R
   readonly editor = this.editorInstance.asReadonly();
   readonly state = this.transactions.asReadonly();
   readonly isDisabled = computed(() => this.disabled() || this.disabledState());
+  readonly isReadonly = computed(() => this.readonly());
   readonly contentId = computed(() => this.id());
   protected readonly ready = computed(() => this.editorInstance() !== null);
 
@@ -111,7 +169,7 @@ export class RichTextEditorComponent extends SanringCvaBase<string> implements R
     const attributes: Record<string, string> = {
       id: this.id(),
       'aria-multiline': 'true',
-      class: cn('min-h-[80px] px-3 py-2 outline-none', this.contentClass()),
+      class: cn('sanring-rte-content min-h-[80px] px-3 py-2 outline-none', this.contentClass()),
     };
     const optional: Record<string, string | undefined> = {
       'aria-label': this.ariaLabel(),
@@ -120,6 +178,11 @@ export class RichTextEditorComponent extends SanringCvaBase<string> implements R
       'aria-invalid': this.errorState ? 'true' : undefined,
       'aria-required': this.fieldRequired ? 'true' : undefined,
       'aria-disabled': this.isDisabled() ? 'true' : undefined,
+      'aria-readonly': this.isReadonly() ? 'true' : undefined,
+      'aria-placeholder': this.placeholder() || undefined,
+      // A non-editable ProseMirror view drops out of the tab order; keep a
+      // read-only one reachable so keyboard users can select and copy.
+      tabindex: this.isReadonly() && !this.isDisabled() ? '0' : undefined,
     };
     for (const [key, value] of Object.entries(optional)) {
       if (value) attributes[key] = value;
@@ -158,7 +221,7 @@ export class RichTextEditorComponent extends SanringCvaBase<string> implements R
 
     effect(() => {
       const editor = this.editorInstance();
-      const editable = !this.isDisabled();
+      const editable = !this.isDisabled() && !this.isReadonly();
       untracked(() => editor?.setEditable(editable, false));
     });
 
@@ -174,7 +237,11 @@ export class RichTextEditorComponent extends SanringCvaBase<string> implements R
 
     this.currentValue = html;
     // Before the editor exists the value is only queued; createEditor() picks it up.
-    this.editorInstance()?.commands.setContent(html, { emitUpdate: false });
+    this.editorInstance()
+      ?.chain()
+      .setMeta(RICH_TEXT_EDITOR_EXTERNAL_VALUE, true)
+      .setContent(html, { emitUpdate: false })
+      .run();
     this.emitStateChanges();
   }
 
@@ -192,18 +259,20 @@ export class RichTextEditorComponent extends SanringCvaBase<string> implements R
   // them into the initial bundle of every app that imports @sanring/ui, even
   // apps that never render this component (ADR-0003, spike A4).
   private async createEditor(): Promise<void> {
-    const [{ Editor }, { default: StarterKit }] = await Promise.all([
+    const [{ Editor }, builtIn] = await Promise.all([
       import('@tiptap/core'),
-      import('@tiptap/starter-kit'),
+      loadBuiltInExtensions({
+        placeholder: () => this.placeholder(),
+        maxCharacters: () => this.maxCharacters(),
+      }),
     ]);
     if (this.destroyed) return;
 
     const editor = new Editor({
       element: this.content().nativeElement,
-      // Link stays off until the link UI ships (PRD M2).
-      extensions: [StarterKit.configure({ link: false }), ...this.extensions()],
+      extensions: [...builtIn, ...this.extensions()],
       content: this.currentValue,
-      editable: !this.isDisabled(),
+      editable: !this.isDisabled() && !this.isReadonly(),
       editorProps: { attributes: this.contentAttributes() },
       onTransaction: () => this.transactions.update((v) => v + 1),
       onUpdate: ({ editor: instance }) => this.handleUpdate(instance),

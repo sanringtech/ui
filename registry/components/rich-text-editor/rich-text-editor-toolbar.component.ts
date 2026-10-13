@@ -58,6 +58,7 @@ export class RichTextEditorToolbarComponent {
       this.context.editor();
       this.context.state();
       this.context.isDisabled();
+      this.context.isReadonly();
       this.syncTabStops();
     });
   }

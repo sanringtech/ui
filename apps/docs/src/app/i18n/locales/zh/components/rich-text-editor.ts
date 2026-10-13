@@ -5,7 +5,7 @@ export const richTextEditorTranslations = {
   'richTextEditor.usage.description':
     '匯入 RichTextEditorComponent，用 formControl 或 ngModel 綁定。請用 ariaLabel 或 ariaLabelledBy 提供無障礙名稱。',
   'richTextEditor.installation.description':
-    'sanring add 會以 peer dependency 安裝 @tiptap/core、@tiptap/pm 與 @tiptap/starter-kit。Tiptap 在瀏覽器中以動態 import() 載入，不會進入初始 bundle（有用到編輯器的頁面約增加 106 kB gzip）。值是原始 HTML，儲存或渲染前請在伺服器端 sanitize。',
+    'sanring add 會以 peer dependency 安裝 @tiptap/core、@tiptap/pm、@tiptap/starter-kit 與 @tiptap/extensions。Tiptap 在瀏覽器中以動態 import() 載入，不會進入初始 bundle（有用到編輯器的頁面約增加 106 kB gzip）。值是原始 HTML，儲存或渲染前請在伺服器端 sanitize。',
   'richTextEditor.api.description': 'sanring-rich-text-editor 的 Inputs 與 Outputs。',
   'richTextEditor.api.id.description': '可編輯區的 id，未提供時自動產生。',
   'richTextEditor.api.class.description': '與編輯器外框樣式合併的額外 class。',
@@ -19,7 +19,7 @@ export const richTextEditorTranslations = {
   'richTextEditor.api.extensions.description': '額外的開源 Tiptap 擴充，只在建立編輯器時讀取一次。',
   'richTextEditor.api.editorReady.description': 'Tiptap Editor 在瀏覽器載入完成後送出該實例。',
   'richTextEditor.accessibility.description':
-    '可編輯區帶有 role="textbox" 與 aria-multiline="true"。aria-invalid、aria-required、aria-disabled 與 aria-describedby 會跟隨綁定的表單控制項與 sanring-field。Tiptap 載入期間，元件會設定 aria-busy="true" 並顯示骨架。',
+    '可編輯區帶有 role="textbox" 與 aria-multiline="true"。aria-invalid、aria-required、aria-disabled 與 aria-describedby 會跟隨綁定的表單控制項與 sanring-field。Tiptap 載入期間，元件會設定 aria-busy="true" 並顯示骨架。placeholder 同時設為 aria-placeholder。唯讀時設定 aria-readonly="true"，且仍在 Tab 順序中，方便選取與複製文字。字數統計透過 aria-live="polite" 宣告。',
   'richTextEditor.keyboard.description': '標準文字編輯按鍵，以及 Tiptap StarterKit 快捷鍵。',
   'richTextEditor.keyboard.tab': '將焦點移入或移出編輯器。',
   'richTextEditor.keyboard.marks': '切換選取範圍的粗體、斜體或底線。',
@@ -38,4 +38,15 @@ export const richTextEditorTranslations = {
     '在工具列中於可用按鈕間移動，會跳過 disabled 的按鈕。',
   'richTextEditor.keyboard.homeEnd':
     '在工具列中跳到第一個或最後一個可用按鈕。',
+  'richTextEditor.api.readonly.description': '內容可選取、複製，但不能修改。工具列按鈕仍會顯示，但全部 disabled。',
+  'richTextEditor.api.placeholder.description': '文件為空時顯示的提示文字，同時設為 aria-placeholder。',
+  'richTextEditor.api.maxCharacters.description':
+    '字元上限。輸入到上限即停止，貼上的文字會截到剛好符合上限。表單寫入的值超過上限時會完整顯示，不會截斷。',
+  'richTextEditor.api.characterCount.description':
+    '顯示字元數；有設定 maxCharacters 時顯示「字數/上限」。內容超過上限時改用錯誤色。',
+  'richTextEditor.demo.characterCount': 'Placeholder 與字數統計',
+  'richTextEditor.demo.characterCount.description':
+    '設定 placeholder 與 maxCharacters，並把 sanring-rich-text-editor-character-count 放進編輯器裡。表單寫入的值若已超過上限會原樣保留，字數改為紅色，只能刪減。',
+  'richTextEditor.demo.readonly': '唯讀',
+  'richTextEditor.demo.readonly.description': 'readonly 時內容仍可選取與複製，工具列保留在原位，按鈕全部 disabled。',
 } as const;

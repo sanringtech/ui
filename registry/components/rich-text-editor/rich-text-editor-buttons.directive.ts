@@ -46,7 +46,12 @@ export class RichTextEditorToggleDirective {
   protected readonly isDisabled = computed(() => {
     this.context.state();
     const editor = this.context.editor();
-    return !editor || this.context.isDisabled() || !canRunCommand(editor, this.command());
+    return (
+      !editor ||
+      this.context.isDisabled() ||
+      this.context.isReadonly() ||
+      !canRunCommand(editor, this.command())
+    );
   });
 
   constructor() {
@@ -85,7 +90,12 @@ export class RichTextEditorActionDirective {
   protected readonly isDisabled = computed(() => {
     this.context.state();
     const editor = this.context.editor();
-    return !editor || this.context.isDisabled() || !canRunCommand(editor, this.command());
+    return (
+      !editor ||
+      this.context.isDisabled() ||
+      this.context.isReadonly() ||
+      !canRunCommand(editor, this.command())
+    );
   });
 
   protected onClick(): void {

@@ -87,7 +87,7 @@ export class RichTextEditorHeadingMenuComponent {
   protected readonly isDisabled = computed(() => {
     this.context.state();
     const editor = this.context.editor();
-    return !editor || this.context.isDisabled() || !editor.isEditable;
+    return !editor || this.context.isDisabled() || this.context.isReadonly();
   });
 
   protected select(value: RichTextEditorHeadingLevel | 0): void {

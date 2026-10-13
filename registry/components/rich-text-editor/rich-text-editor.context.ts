@@ -11,6 +11,10 @@ export interface RichTextEditorContext {
   readonly state: Signal<number>;
   /** Disabled through the input or the bound form control. */
   readonly isDisabled: Signal<boolean>;
+  /** Content can be selected and copied but not changed; toolbar buttons are disabled. */
+  readonly isReadonly: Signal<boolean>;
+  /** Character limit, or undefined when there is none. */
+  readonly maxCharacters: Signal<number | undefined>;
   /** id of the contenteditable element, for aria-controls. */
   readonly contentId: Signal<string>;
 }

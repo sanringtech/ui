@@ -30,6 +30,25 @@ export const richTextEditorPage = {
       level: 2,
     },
     {
+      id: 'example',
+      titleKey: 'toc.examples',
+      level: 2,
+      children: [
+        {
+          id: 'example-character-count',
+          titleKey: 'richTextEditor.demo.characterCount',
+          descriptionKey: 'richTextEditor.demo.characterCount.description',
+          level: 3,
+        },
+        {
+          id: 'example-readonly',
+          titleKey: 'richTextEditor.demo.readonly',
+          descriptionKey: 'richTextEditor.demo.readonly.description',
+          level: 3,
+        },
+      ],
+    },
+    {
       id: 'api',
       titleKey: 'toc.apiReference',
       descriptionKey: 'richTextEditor.api.description',
@@ -86,6 +105,24 @@ export const richTextEditorPage = {
       descriptionKey: 'richTextEditor.api.required.description',
     },
     {
+      property: 'readonly',
+      type: 'boolean',
+      defaultValue: 'false',
+      descriptionKey: 'richTextEditor.api.readonly.description',
+    },
+    {
+      property: 'placeholder',
+      type: 'string',
+      defaultValue: 'undefined',
+      descriptionKey: 'richTextEditor.api.placeholder.description',
+    },
+    {
+      property: 'maxCharacters',
+      type: 'number',
+      defaultValue: 'undefined',
+      descriptionKey: 'richTextEditor.api.maxCharacters.description',
+    },
+    {
       property: 'ariaLabel',
       type: 'string',
       defaultValue: 'undefined',
@@ -132,6 +169,12 @@ export const richTextEditorPage = {
       type: "'horizontal' | 'vertical'",
       defaultValue: "'horizontal'",
       descriptionKey: 'richTextEditor.api.orientation.description',
+    },
+    {
+      property: 'sanring-rich-text-editor-character-count',
+      type: '-',
+      defaultValue: '-',
+      descriptionKey: 'richTextEditor.api.characterCount.description',
     },
     {
       property: '(editorReady)',
@@ -195,6 +238,28 @@ export const richTextEditorPageExamples = {
   </sanring-rich-text-editor>
   <sanring-error-message>Message is required.</sanring-error-message>
 </sanring-field>`,
+  characterCount: `<sanring-field>
+  <label sanringLabel id="comment-label">Comment</label>
+  <sanring-rich-text-editor
+    ariaLabelledBy="comment-label"
+    placeholder="Write a comment…"
+    [maxCharacters]="140"
+    [formControl]="comment"
+  >
+    <sanring-rich-text-editor-character-count />
+  </sanring-rich-text-editor>
+</sanring-field>`,
+  readonly: `<sanring-rich-text-editor ariaLabel="Release notes" readonly [formControl]="notes">
+  <sanring-rich-text-editor-toolbar>
+    <sanring-rich-text-editor-heading-menu />
+    <button sanringRichTextEditorToggle="bold" size="sm" ariaLabel="Bold">
+      <svg lucideBold class="size-4"></svg>
+    </button>
+    <button sanringRichTextEditorToggle="italic" size="sm" ariaLabel="Italic">
+      <svg lucideItalic class="size-4"></svg>
+    </button>
+  </sanring-rich-text-editor-toolbar>
+</sanring-rich-text-editor>`,
   usageImport: `import { SANRING_RICH_TEXT_EDITOR_IMPORTS } from './components/ui/rich-text-editor';`,
   usageMain: `<sanring-rich-text-editor ariaLabel="Notes" [formControl]="notes">
   <sanring-rich-text-editor-toolbar>

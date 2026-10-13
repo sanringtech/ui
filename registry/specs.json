@@ -2926,6 +2926,24 @@
         "description": "Sets aria-required. Validators.required on the bound control has the same effect."
       },
       {
+        "property": "readonly",
+        "type": "boolean",
+        "defaultValue": "false",
+        "description": "Content can be selected and copied but not changed. Toolbar buttons stay visible and are disabled."
+      },
+      {
+        "property": "placeholder",
+        "type": "string",
+        "defaultValue": "undefined",
+        "description": "Text shown while the document is empty. Also set as aria-placeholder."
+      },
+      {
+        "property": "maxCharacters",
+        "type": "number",
+        "defaultValue": "undefined",
+        "description": "Character limit. Typing stops at the limit and pasted text is cut to fit. A longer value written by the form is shown in full, not trimmed."
+      },
+      {
         "property": "ariaLabel",
         "type": "string",
         "defaultValue": "undefined",
@@ -2974,6 +2992,12 @@
         "description": "Layout and arrow-key axis of sanring-rich-text-editor-toolbar."
       },
       {
+        "property": "sanring-rich-text-editor-character-count",
+        "type": "-",
+        "defaultValue": "-",
+        "description": "Shows the character count, or count/limit when maxCharacters is set. Turns to the error color when the content is over the limit."
+      },
+      {
         "property": "(editorReady)",
         "type": "Editor",
         "defaultValue": "-",
@@ -3005,7 +3029,10 @@
     "accessibility": [
       "The editable area has role=\"textbox\" and aria-multiline=\"true\".",
       "aria-invalid, aria-required, aria-disabled, and aria-describedby follow the bound form control and sanring-field.",
-      "While Tiptap loads, the component sets aria-busy=\"true\" and shows a skeleton."
+      "While Tiptap loads, the component sets aria-busy=\"true\" and shows a skeleton.",
+      "placeholder is also exposed as aria-placeholder.",
+      "A readonly editor sets aria-readonly=\"true\" and stays in the tab order so its text can be selected and copied.",
+      "The character count is announced through aria-live=\"polite\"."
     ],
     "stateModel": [
       "A ControlValueAccessor.",

@@ -165,6 +165,53 @@ import { richTextEditorPage, richTextEditorPageExamples } from './rich-text-edit
         />
       </app-component-page-section>
 
+      <app-component-page-section [section]="section('example')">
+        <div class="grid gap-10">
+          <app-component-page-section [section]="section('example-character-count')">
+            <app-component-page-code-previewer [code]="examples.characterCount" language="angular-html">
+              <div previewer class="w-[min(520px,100%)]">
+                <sanring-field>
+                  <!-- eslint-disable-next-line @angular-eslint/template/label-has-associated-control -->
+                  <label sanringLabel id="rte-docs-comment-label">Comment</label>
+                  <sanring-rich-text-editor
+                    ariaLabelledBy="rte-docs-comment-label"
+                    placeholder="Write a comment…"
+                    data-testid="rte-limited"
+                    [maxCharacters]="140"
+                    [formControl]="comment"
+                  >
+                    <sanring-rich-text-editor-character-count data-testid="rte-character-count" />
+                  </sanring-rich-text-editor>
+                </sanring-field>
+              </div>
+            </app-component-page-code-previewer>
+          </app-component-page-section>
+
+          <app-component-page-section [section]="section('example-readonly')">
+            <app-component-page-code-previewer [code]="examples.readonly" language="angular-html">
+              <div previewer class="w-[min(520px,100%)]">
+                <sanring-rich-text-editor
+                  ariaLabel="Release notes"
+                  readonly
+                  data-testid="rte-readonly"
+                  [formControl]="notes"
+                >
+                  <sanring-rich-text-editor-toolbar>
+                    <sanring-rich-text-editor-heading-menu />
+                    <button sanringRichTextEditorToggle="bold" size="sm" ariaLabel="Bold">
+                      <svg lucideBold class="size-4"></svg>
+                    </button>
+                    <button sanringRichTextEditorToggle="italic" size="sm" ariaLabel="Italic">
+                      <svg lucideItalic class="size-4"></svg>
+                    </button>
+                  </sanring-rich-text-editor-toolbar>
+                </sanring-rich-text-editor>
+              </div>
+            </app-component-page-code-previewer>
+          </app-component-page-section>
+        </div>
+      </app-component-page-section>
+
       <app-component-page-section [section]="section('api')">
         <app-component-page-api-table [rows]="page.apiRows!" />
       </app-component-page-section>
@@ -190,6 +237,12 @@ export class RichTextEditorPageComponent {
   protected readonly messageValue = toSignal(this.message.valueChanges, {
     initialValue: this.message.value,
   });
+
+  protected readonly comment = new FormControl('', { nonNullable: true });
+  protected readonly notes = new FormControl(
+    '<h2>Version 2.4</h2><ul><li><p>Faster search</p></li><li><p>New <strong>export</strong> menu</p></li></ul><blockquote><p>Upgrade notes are in the changelog.</p></blockquote>',
+    { nonNullable: true },
+  );
 
   protected section(id: string) {
     return getComponentPageSection(this.page, id);
