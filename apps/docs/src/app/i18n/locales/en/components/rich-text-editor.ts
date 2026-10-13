@@ -7,6 +7,8 @@ export const richTextEditorTranslations = {
     'Import RichTextEditorComponent and bind it with formControl or ngModel. Give it an accessible name with ariaLabel or ariaLabelledBy.',
   'richTextEditor.installation.description':
     'sanring add installs @tiptap/core, @tiptap/pm, @tiptap/starter-kit, and @tiptap/extensions as peer dependencies. Tiptap is loaded with dynamic import() in the browser, so it never lands in your initial bundle (about 106 kB gzipped on pages that render the editor). The value is raw HTML: sanitize it on the server before storing or rendering it.',
+  'richTextEditor.composition.description':
+    'The root owns the Tiptap editor; every other part reads it through context, so use only the parts you need. Toolbar items can be wrapped in sanring-tooltip or separated with sanring-divider. Anything placed outside the toolbar, such as the character count, renders below the editable area.',
   'richTextEditor.api.description': 'Inputs and outputs of sanring-rich-text-editor.',
   'richTextEditor.api.id.description': 'id of the editable element. Generated when omitted.',
   'richTextEditor.api.class.description': 'Additional classes merged with the editor frame styles.',

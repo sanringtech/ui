@@ -279,7 +279,7 @@ grep -rn "@floating-ui/dom" registry/components/rich-text-editor packages/ui/src
 
 ### 待決
 - [ ] TODO：axe 覆蓋方式——新增 `rich-text-editor.spec.ts`，或擴充 `component-page-accessibility.spec.ts`（後者目前不是逐元件迭代）
-- [ ] TODO：A + B1 能否在 docs 標「預覽」先合併
+- [x] A + B1 能否在 docs 標「預覽」先合併：不需要，M1（B1–B4）已一起完成（2026-10-13）
 - [ ] TODO：M2 之後的分支 / PR 命名
 - [ ] TODO：PRD §12 待決題（各批準入條件已列出），以及各里程碑日期
 - [x] `pnpm test`（`ng test`）同時跑 `@sanring/ui`（74 檔）與 docs（2 檔）。M0 時誤判為只跑 docs（只看了輸出尾段）；單獨跑 `@sanring/ui` 用 `pnpm ng test @sanring/ui --watch=false`

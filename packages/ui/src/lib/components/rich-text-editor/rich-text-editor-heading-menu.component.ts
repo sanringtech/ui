@@ -31,7 +31,11 @@ interface TextStyleOption {
     LucideChevronDown,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  host: { class: 'contents' },
+  // dropdown-menu moves its content into a CDK overlay with a DomPortal, on the
+  // server too, so hydration finds a comment where the content was (NG0500).
+  // Re-rendering this small subtree on the client keeps the rest of the editor
+  // hydratable. Remove once dropdown-menu hydrates on its own.
+  host: { class: 'contents', ngSkipHydration: 'true' },
   template: `
     <sanring-dropdown-menu>
       <button

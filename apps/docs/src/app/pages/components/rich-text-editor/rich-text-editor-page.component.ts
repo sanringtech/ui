@@ -165,6 +165,10 @@ import { richTextEditorPage, richTextEditorPageExamples } from './rich-text-edit
         />
       </app-component-page-section>
 
+      <app-component-page-section [section]="section('composition')">
+        <app-component-page-code-block [code]="examples.composition" language="bash" />
+      </app-component-page-section>
+
       <app-component-page-section [section]="section('example')">
         <div class="grid gap-10">
           <app-component-page-section [section]="section('example-character-count')">

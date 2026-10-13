@@ -397,7 +397,7 @@ interface RichTextEditorSlashCommand {
 | Milestone | 預計完成 | 內容 | 驗收門檻 |
 |---|---|---|---|
 | M0 Spike / ADR | TODO | docs 暫時頁：Tiptap v3 + StarterKit 在 Angular 22 建立 / 銷毀；SSR build 不報錯；量測 bundle 增量（M1 組合 + 全擴充組合，registry 與 `@sanring/ui` 兩條路徑）；確認 v3 套件名、`setContent` 簽章、StarterKit 停用 Link 的方法；CDK overlay 定位到選取範圍的 PoC；寫 ADR-0003 | ADR-0003 Accepted；暫時頁刪除；任一 gate 不過就停工回報 |
-| M1 核心 tracer bullet | TODO | root 元件 + CVA + field 整合 + StarterKit（Link 停用）+ toolbar（toggle / action / heading-menu / divider / tooltip）+ placeholder + readonly/disabled + character count + 內容排版樣式 + registry 條目 + `packages/ui` entry + docs 頁 + CLI peer 測試 + changeset | `pnpm lint`、`pnpm test` 綠；`check-registry-parity.mjs` 綠；`/audit-component rich-text-editor` 工程裁決 ✅；Story 1–4、10 的 AC 全過；`pnpm test:e2e:docs`（含 axe）與 `pnpm test:e2e:cli` 綠 |
+| M1 核心 tracer bullet | 完成（2026-10-13） | root 元件 + CVA + field 整合 + StarterKit（Link 停用）+ toolbar（toggle / action / heading-menu / divider / tooltip）+ placeholder + readonly/disabled + character count + 內容排版樣式 + registry 條目 + `packages/ui` entry + docs 頁 + CLI peer 測試 + changeset | `pnpm lint`、`pnpm test` 綠；`check-registry-parity.mjs` 綠；`/audit-component rich-text-editor` 工程裁決 ✅；Story 1–4、10 的 AC 全過；`pnpm test:e2e:docs`（含 axe）與 `pnpm test:e2e:cli` 綠 |
 | M2 Link + Image + Bubble menu | TODO | Link UI（popover）+ protocol 驗證；Image（URL + `imageUpload` 介面）；bubble menu（CDK overlay）；peer 新增 `@tiptap/extension-image` | Story 5–7 AC；XSS 案例測試（`javascript:` 被拒）；axe 零違規；overlay 與既有 dropdown / popover 同頁共存的 e2e |
 | M3 Table | TODO | `@tiptap/extension-table` + 表格操作選單 + 表格樣式 | Story 8 AC；鍵盤 Tab 導覽 e2e；axe 零違規 |
 | M4 Mention + Slash | TODO | `@tiptap/extension-mention` + `@tiptap/suggestion`；共用 suggestion list（CDK overlay + listbox + active-descendant）；Slash 指令由 suggestion 自寫 extension；Promise / Observable 資料來源與過期回應處理 | Story 9 AC；四態 e2e；焦點始終在編輯區；axe 零違規 |
@@ -428,6 +428,11 @@ interface RichTextEditorSlashCommand {
   - M1 不做 `SANRING_RICH_TEXT_EDITOR_CONFIG` 全域設定 token（之後有需求再加，不破壞相容）
   - e2e 使用 `data-testid`
   - 字數上限：`CharacterCount` 設 `autoTrim: false`，`writeValue` 超限內容不截斷，以錯誤色提示（ADR-0003 Consequences）
+- [x] B3 實作細節（2026-10-13）：
+  - `aria-readonly` 放在 `role="textbox"` 的編輯區，不放宿主（宿主無 role，放了 axe 會報 `aria-allowed-attr`）；宿主改帶 `data-readonly`
+  - readonly 外觀與一般狀態相同（保留邊框、不變淡），不採無邊框檢視
+  - 超過 `maxCharacters` 只以錯誤色提示，M1 不讓表單變 invalid；需要時由使用者自加 validator，之後有需求再評估內建
+  - `CharacterCount` 只負責計數；上限由自寫 plugin 執行，表單寫入帶 `RICH_TEXT_EDITOR_EXTERNAL_VALUE` meta 一律放行（內建 `limit` 會擋掉超限的 `setContent`）
 - [x] v1 範圍：StarterKit + Link + Image + Table + Mention / Slash；Placeholder、唯讀 / disabled、字數統計、Bubble menu；CVA 值為 HTML；可組合 API
 
 ### 待決

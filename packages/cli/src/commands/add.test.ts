@@ -1,7 +1,8 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { existsSync, mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
-import { join } from 'node:path';
+import { dirname, join } from 'node:path';
 import { tmpdir } from 'node:os';
+import { fileURLToPath } from 'node:url';
 import type { Registry, RegistryComponent, RegistryShared } from '../registry.js';
 import { hashContent, readConfig, writeConfig } from '../utils.js';
 import { writeRegistryFixture } from '../__tests__/registry-fixture.js';
@@ -12,6 +13,14 @@ import {
   parseComponentRef,
   resolveInstallSet,
 } from './add.js';
+
+const REPO_REGISTRY_DIR = join(dirname(fileURLToPath(import.meta.url)), '../../../../registry');
+
+function readRepoRegistry(): Registry {
+  return JSON.parse(readFileSync(join(REPO_REGISTRY_DIR, 'registry.json'), 'utf-8')) as Registry;
+}
+
+const TIPTAP_PEERS = ['@tiptap/core', '@tiptap/extensions', '@tiptap/pm', '@tiptap/starter-kit'];
 
 function component(overrides: Partial<RegistryComponent> & { name: string }): RegistryComponent {
   return { description: '', files: [`${overrides.name}/index.ts`], ...overrides };
@@ -106,6 +115,20 @@ describe('collectPeerDeps', () => {
         [],
       ),
     ).toEqual({ elkjs: '^0.12.0' });
+  });
+
+  // rich-text-editor loads Tiptap with dynamic import(), which `sanring build`
+  // cannot see, so its peers are hand-written (ADR-0003). All @tiptap/* must
+  // share one range or @tiptap/pm is installed twice.
+  it('collects every @tiptap peer for rich-text-editor at one shared range', () => {
+    const repo = readRepoRegistry();
+    const { toInstall } = resolveInstallSet(['rich-text-editor'], repo);
+    const peers = collectPeerDeps(toInstall, repo.shared);
+
+    const tiptap = Object.entries(peers).filter(([name]) => name.startsWith('@tiptap/'));
+    expect(tiptap.map(([name]) => name).sort()).toEqual(TIPTAP_PEERS);
+    expect(new Set(tiptap.map(([, range]) => range)).size).toBe(1);
+    expect(peers).not.toHaveProperty('@floating-ui/dom');
   });
 });
 
@@ -403,6 +426,23 @@ describe('addCommand (integration)', () => {
     expect(logs.some((line) => line.includes('Would install: npm install elkjs@^0.12.0'))).toBe(
       true,
     );
+  });
+
+  it('dry-runs installing the @tiptap peers when adding rich-text-editor', async () => {
+    const logs: string[] = [];
+    vi.mocked(console.log).mockImplementation((...args: unknown[]) => {
+      logs.push(args.join(' '));
+    });
+
+    await addCommand.parseAsync(['rich-text-editor', '--registry', REPO_REGISTRY_DIR, '--dry-run'], {
+      from: 'user',
+    });
+
+    const install = logs.find((line) => line.includes('Would install:'));
+    for (const peer of TIPTAP_PEERS) {
+      expect(install).toContain(`${peer}@^3.31.4`);
+    }
+    expect(existsSync(join(projectDir, 'src/app/components/ui/rich-text-editor'))).toBe(false);
   });
 
   it('installs a block by bare name when no component shares that name', async () => {

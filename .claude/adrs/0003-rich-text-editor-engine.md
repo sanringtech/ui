@@ -46,6 +46,7 @@ related: [.claude/prds/rich-text-editor.md, .claude/charters/p34-rich-text-edito
 - ✅ CLI 零改動；`packages/cli/scripts` 零改動。
 - ⚠️ 編輯器初始化為非同步：第一次進入使用編輯器的頁面時，多一段 lazy chunk 下載時間，由 skeleton 佔位（PRD §8 loading 態）。單元測試需 `await` 初始化（B1 提供 `whenReady` 類的測試輔助，命名 B1 定案）。
 - ⚠️ 使用編輯器的頁面增量：M1 組合約 106 KB transfer、全擴充約 130 KB transfer（docs 實測）。docs 需揭露。
+- ⚠️ M1 收尾 SSR 重跑（2026-10-13，以 `sanring add rich-text-editor` 從本地 registry 安裝）發現既有 `dropdown-menu` 無法 hydrate：DomPortal 在 server 端也把 content 搬進 overlay，client 得到 NG0500。單獨使用 `dropdown-menu` 也會發生，與 Tiptap 無關。`heading-menu` 先以 host `ngSkipHydration` 繞過，其餘部件正常 hydrate；`dropdown-menu` 本身的修正另列 TODOLIST，不在 P34 範圍。
 - ⚠️ `@sanring/ui` 消費端無論是否使用編輯器，都會**安裝**（非打包）`@tiptap/*`；`@sanring/ui` 目前 private，影響僅限本 repo。對外發佈時重評。
 - ⚠️ `CharacterCount` 的 `autoTrim` 預設 `true`：`writeValue` 傳入超過上限的 HTML 會被**靜默截斷**，control 值與編輯器內容不一致。已拍板（2026-10-13）：設 `autoTrim: false`，超限內容完整顯示並以錯誤色提示，不靜默刪除資料。
 - ⚠️ `extension-image` 沒有載入失敗 hook（只有啟用 `resize` NodeView 時才處理 error）。PRD Story 6「圖片載入失敗顯示錯誤樣式」在不寫自訂 NodeView（非範圍）的前提下只能用 CSS 做到有限呈現（PRD §12 新增待決）。

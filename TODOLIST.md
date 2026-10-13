@@ -114,9 +114,13 @@
 - 範圍 / 步驟 / 停止條件 / 驗證：[charter p34-rich-text-editor](.claude/charters/p34-rich-text-editor.md)
 
 - [x] M0 Spike（gate）：全數通過，結果見 ADR-0003
-- [ ] M1 核心：root + CVA + field + StarterKit 工具列 + placeholder / readonly / disabled / 字數 + registry + docs
+- [x] M1 核心：root + CVA + field + StarterKit 工具列 + placeholder / readonly / disabled / 字數 + registry + docs
 - [ ] M2 連結 + 圖片 + bubble menu
 - [ ] M3 表格
 - [ ] M4 mention + slash 指令
 
 **成本**：高。M0 決定可行性，先做；M2 與 M3 互不依賴，可對調；M4 依賴 M2 的 overlay 定位。
+
+**M1 收尾發現（P34 範圍外）**：
+- [ ] `dropdown-menu` SSR hydration 失敗（NG0500）：`DomPortal` 在 server 端也把 content 搬進 CDK overlay。`rich-text-editor-heading-menu` 暫以 `ngSkipHydration` 繞過，修好後移除。同樣用 DomPortal 的元件（如 `context-menu`）需一併檢查。見 ADR-0003 Consequences
+- [ ] docs 外框在手機寬度有 axe `scrollable-region-focusable`（可捲動的程式碼區塊不可聚焦），多個元件頁都有；`rich-text-editor` e2e 的 axe 暫時只掃描編輯器預覽區

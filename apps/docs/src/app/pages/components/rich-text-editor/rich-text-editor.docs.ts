@@ -30,6 +30,12 @@ export const richTextEditorPage = {
       level: 2,
     },
     {
+      id: 'composition',
+      titleKey: 'toc.composition',
+      descriptionKey: 'richTextEditor.composition.description',
+      level: 2,
+    },
+    {
       id: 'example',
       titleKey: 'toc.examples',
       level: 2,
@@ -238,6 +244,12 @@ export const richTextEditorPageExamples = {
   </sanring-rich-text-editor>
   <sanring-error-message>Message is required.</sanring-error-message>
 </sanring-field>`,
+  composition: `sanring-rich-text-editor
+├── sanring-rich-text-editor-toolbar
+│   ├── button[sanringRichTextEditorToggle]
+│   ├── button[sanringRichTextEditorAction]
+│   └── sanring-rich-text-editor-heading-menu
+└── sanring-rich-text-editor-character-count`,
   characterCount: `<sanring-field>
   <label sanringLabel id="comment-label">Comment</label>
   <sanring-rich-text-editor

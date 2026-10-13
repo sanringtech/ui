@@ -6,6 +6,8 @@ export const richTextEditorTranslations = {
     '匯入 RichTextEditorComponent，用 formControl 或 ngModel 綁定。請用 ariaLabel 或 ariaLabelledBy 提供無障礙名稱。',
   'richTextEditor.installation.description':
     'sanring add 會以 peer dependency 安裝 @tiptap/core、@tiptap/pm、@tiptap/starter-kit 與 @tiptap/extensions。Tiptap 在瀏覽器中以動態 import() 載入，不會進入初始 bundle（有用到編輯器的頁面約增加 106 kB gzip）。值是原始 HTML，儲存或渲染前請在伺服器端 sanitize。',
+  'richTextEditor.composition.description':
+    '根元件持有 Tiptap editor，其他部件都透過 context 讀取，所以只放需要的部件即可。工具列項目可以包在 sanring-tooltip 裡，或用 sanring-divider 分隔。放在工具列以外的部件（例如字數統計）會顯示在編輯區下方。',
   'richTextEditor.api.description': 'sanring-rich-text-editor 的 Inputs 與 Outputs。',
   'richTextEditor.api.id.description': '可編輯區的 id，未提供時自動產生。',
   'richTextEditor.api.class.description': '與編輯器外框樣式合併的額外 class。',

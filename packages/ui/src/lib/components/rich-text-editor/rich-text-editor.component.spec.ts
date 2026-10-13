@@ -6,6 +6,7 @@ import { Extension } from '@tiptap/core';
 import { describe, expect, it, vi } from 'vitest';
 import { expectNoA11yViolations } from '../../../testing/axe-a11y';
 import { ErrorMessageComponent, SanringFieldComponent } from '../field';
+import { SANRING_RICH_TEXT_EDITOR_IMPORTS } from './index';
 import { RichTextEditorComponent } from './rich-text-editor.component';
 
 @Component({
@@ -38,6 +39,21 @@ class FormHost {
 class EscapeHatchHost {
   readonly extensions: AnyExtension[] = [Extension.create({ name: 'specMarker' })];
   readyEditor: Editor | null = null;
+  readonly editor = viewChild.required(RichTextEditorComponent);
+}
+
+@Component({
+  imports: [SANRING_RICH_TEXT_EDITOR_IMPORTS],
+  template: `
+    <sanring-rich-text-editor ariaLabel="Notes" class="custom-root" contentClass="custom-content">
+      <sanring-rich-text-editor-toolbar class="custom-toolbar">
+        <button sanringRichTextEditorToggle="bold" class="custom-toggle" ariaLabel="Bold">B</button>
+      </sanring-rich-text-editor-toolbar>
+      <sanring-rich-text-editor-character-count class="custom-count" />
+    </sanring-rich-text-editor>
+  `,
+})
+class ClassHost {
   readonly editor = viewChild.required(RichTextEditorComponent);
 }
 
@@ -182,6 +198,22 @@ describe('RichTextEditorComponent', () => {
 
     expect(component.editor()).toBeNull();
     expect(fixture.componentInstance.readyEditor).toBeNull();
+  });
+
+  it('merges consumer classes into every part', async () => {
+    const fixture = TestBed.createComponent(ClassHost);
+    await whenEditorReady(fixture);
+    const root = fixture.nativeElement as HTMLElement;
+
+    const host = root.querySelector('sanring-rich-text-editor')!;
+    expect(host.classList).toContain('custom-root');
+    expect(host.classList).toContain('rounded-[var(--sanring-radius)]');
+    const content = contentOf(fixture);
+    expect(content.classList).toContain('custom-content');
+    expect(content.classList).toContain('sanring-rte-content');
+    expect(root.querySelector('sanring-rich-text-editor-toolbar')!.classList).toContain('custom-toolbar');
+    expect(root.querySelector('button')!.classList).toContain('custom-toggle');
+    expect(root.querySelector('sanring-rich-text-editor-character-count')!.classList).toContain('custom-count');
   });
 
   it('has no axe-detectable a11y violations', async () => {
