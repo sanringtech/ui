@@ -64,13 +64,20 @@ test.describe('rich-text-editor', () => {
     const content = page.getByTestId('rte-basic').getByRole('textbox', { name: 'Message' });
     const italic = page.getByTestId('rte-btn-italic');
 
+    // Select all through ProseMirror's own keymap (a synchronous transaction)
+    // and toggle a mark on real text. A collapsed cursor after a native key
+    // such as End would only set a stored mark, which ProseMirror clears when
+    // the late selectionchange from that key arrives; on slow CI runners that
+    // happened after Ctrl+I and made this test flaky.
     await content.click();
-    await page.keyboard.press('End');
+    await page.keyboard.press('ControlOrMeta+a');
     await expect(italic).toHaveAttribute('aria-pressed', 'false');
     await page.keyboard.press('ControlOrMeta+i');
     await expect(italic).toHaveAttribute('aria-pressed', 'true');
-    await page.keyboard.type('x');
-    await expect(page.getByTestId('rte-basic-value')).toContainText('<em>x</em>');
+    await expect(page.getByTestId('rte-basic-value')).toContainText('<em>');
+    await page.keyboard.press('ControlOrMeta+i');
+    await expect(italic).toHaveAttribute('aria-pressed', 'false');
+    await expect(page.getByTestId('rte-basic-value')).not.toContainText('<em>');
   });
 
   test('is one tab stop with arrow-key navigation that skips disabled buttons', async ({
