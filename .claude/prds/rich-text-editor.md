@@ -2,9 +2,9 @@
 schema_version: 1
 feature_id: rich-text-editor
 feature_name: Rich Text Editor（Tiptap）
-status: draft
+status: accepted
 owner: jack755051
-last_updated: 2026-10-12
+last_updated: 2026-10-13
 related_adrs: []   # 待新增 ADR-0003（Tiptap 版本鎖定 + 浮動 UI 策略），見 §12
 ---
 
@@ -203,7 +203,7 @@ related_adrs: []   # 待新增 ADR-0003（Tiptap 版本鎖定 + 浮動 UI 策略
 - [ ] Given CLI `collectPeerDeps`，when 收集 rich-text-editor，then 包含所有 `@tiptap/*` peer，版本範圍一致（新增測試，比照 `packages/cli/src/commands/add.test.ts` 的 elkjs 案例與 dry-run 案例）
 - [ ] Given `sanring add rich-text-editor --dry-run`，when 執行，then log 列出 `Would install: npm install @tiptap/core@… @tiptap/pm@… @tiptap/starter-kit@…`
 - [ ] Given componentDeps，when 安裝，then `toggle`、`dropdown-menu`、`popover`、`tooltip`、`divider`、`field` 一併安裝
-- [ ] Given `packages/ui` 版本，when 執行 `check-registry-parity.mjs`，then 與 registry 版本一致；`@tiptap/*` 列入 `@sanring/ui` `dependencies` 與 `ng-package.json` `allowedNonPeerDependencies`（比照 embla）
+- [ ] Given `packages/ui` 版本，when 執行 `check-registry-parity.mjs`，then 與 registry 版本一致；`@tiptap/*` 在 `@sanring/ui` 的宣告方式依 ADR-0003（dependencies 時另加 `ng-package.json` `allowedNonPeerDependencies`，比照 embla）
 - [ ] Given docs 元件頁，when 開啟，then 有 basic / usage / installation / composition / examples / API / accessibility 區段（比照 `carousel.docs.ts`），並揭露 bundle 體積與 HTML sanitize 責任
 - [ ] Given Playwright docs e2e，when 執行 `pnpm test:e2e:docs`，then 輸入、格式化、表單值、鍵盤導覽案例通過，`component-page-accessibility.spec.ts` axe 掃描零違規
 
@@ -224,7 +224,7 @@ related_adrs: []   # 待新增 ADR-0003（Tiptap 版本鎖定 + 浮動 UI 策略
 | Icon | `@lucide/angular ^1.18.0` | 既有 registry 慣例 peer |
 | 表單 | `@angular/forms ^22.0.0` + `shared/cva-base.ts` | 既有表單元件慣例 |
 | Cache / Auth / 監控 | N/A | — |
-| Deploy | registry 經 `@sanring/cli` 的 `sanring add` 發佈；`@sanring/ui` 套件把 `@tiptap/*` 列為 dependencies（比照 embla）；Tiptap 不進 CLI tarball | 使用者拍板雙份交付；CLI 部分比照 ADR-0002 決策 6 |
+| Deploy | registry 經 `@sanring/cli` 的 `sanring add` 發佈；`@sanring/ui` 套件中 `@tiptap/*` 的宣告方式（dependencies 或 optional peer）由 M0 量測後寫入 ADR-0003；Tiptap 不進 CLI tarball | 使用者拍板雙份交付；CLI 部分比照 ADR-0002 決策 6 |
 
 ## 6. 資料模型 (Data Model)
 
@@ -282,13 +282,12 @@ graph TD
 | input | `imageUpload` | `((file: File) => Promise<string>) \| undefined` | — | M2；回傳可用 URL |
 | input | `mentionItems` | `((query: string) => Promise<RichTextEditorMentionItem[]> \| Observable<RichTextEditorMentionItem[]>) \| undefined` | — | M4 |
 | input | `slashCommands` | `RichTextEditorSlashCommand[] \| ((query: string) => …)` | — | M4 |
-| model | `value` | `string` | `''` | 非表單用法的 `[(value)]`（TODO：是否提供，見 §12） |
 | output | `editorReady` | `Editor` | — | 逃生口：拿到原生 Tiptap 實例（TODO 見 §12） |
 | output | `focusChange` | `boolean` | — | — |
 | output | `imageUploadError` | `unknown` | — | M2 |
 | output | `suggestionError` | `{ kind: 'mention' \| 'slash'; error: unknown }` | — | M4 |
 
-**CVA 行為**：
+**CVA 行為**（值只走 CVA；非表單情境用 `ngModel` 或獨立 `FormControl`，不提供 `[(value)]` model）：
 - `writeValue(html)`：editor 未建立時排隊，建立後 `setContent` 且**不 emit update**（v3 `setContent` 參數簽章 M0 spike 確認）
 - `onChange`：在 editor `update` 事件時呼叫，值為 `editor.getHTML()`；`editor.isEmpty` 時回傳 `''`
 - `onTouched`：在 editor `blur` 時呼叫（`SanringCvaBase.onBlur`）
@@ -362,12 +361,12 @@ interface RichTextEditorSlashCommand {
 |---|---|---|
 | **HTML 值與 XSS**：CVA 輸出 HTML 字串，消費端若以 `innerHTML` 渲染或後端直接回吐，可能被注入（貼上的惡意 HTML、`javascript:` 連結、`img onerror`） | high | ProseMirror schema 會丟棄未定義的節點與屬性，但**這不是 sanitize 保證**。docs 明確寫出 **sanitize 是消費端 / 後端的責任**（建議伺服器端白名單 sanitize）；Link 限制 protocol；Image 只接受 `http(s)` / 相對 URL（TODO 白名單）；docs 範例渲染輸出時用 Angular 內建 sanitizer，不用 `bypassSecurityTrustHtml` |
 | **Bundle size**：ProseMirror + Tiptap + table / mention 擴充體積不小 | med | M0 spike 量測各 milestone 增量並寫入 ADR 與 docs；確認 `@sanring/ui` 的 secondary entry 不會讓未使用者被拖入；具體數字 unknown |
-| **`@sanring/ui` 依賴膨脹**：雙份交付讓 `@tiptap/*` 成為 `@sanring/ui` 的 dependencies，所有安裝 `@sanring/ui` 的人都會下載 | med | 比照 embla 前例；M0 評估改為 optional peerDependencies 的可行性（TODO），寫入 ADR-0003 |
+| **`@sanring/ui` 依賴膨脹**：若 `@tiptap/*` 列為 `@sanring/ui` 的 dependencies（比照 embla），所有安裝 `@sanring/ui` 的人都會下載 | med | M0 量測 bundle 後在 dependencies 與 optional peerDependencies 間擇一，寫入 ADR-0003 |
 | **Tiptap 主版本選擇**：目前主線為 v3（網路結果顯示 `@tiptap/core` 3.29.1，2026-08，未以 npm 直接確認）。v3 破壞性變更：StarterKit 內含 Link / Underline / ListKeymap、`History` 改名 `UndoRedo`、Placeholder / CharacterCount 移到 `@tiptap/extensions`、選單由 tippy.js 改為 `@floating-ui/dom`、移除 UMD | med | 鎖 v3；peer 範圍 `^3.x`（實際最小版本 M0 用 `npm view` 確認，TODO）；實作時對照 v3 文件，不參考 v2 範例 |
-| **peer 版本對齊**：所有 `@tiptap/*` 必須同版本，否則 `@tiptap/pm` 重複實例會造成 schema / plugin key 衝突 | med | registry `peerDependencies` 與 `@sanring/ui` dependencies 全部用同一版本範圍；CLI 測試驗證；docs 提醒升級時一起升 |
+| **peer 版本對齊**：所有 `@tiptap/*` 必須同版本，否則 `@tiptap/pm` 重複實例會造成 schema / plugin key 衝突 | med | registry `peerDependencies` 與 `@sanring/ui` 的宣告全部用同一版本範圍；CLI 測試驗證；docs 提醒升級時一起升 |
 | **Angular 相容**：編輯區 DOM 由 ProseMirror 控制，Angular 不能在 contenteditable 內渲染；zoneless / OnPush 下 editor 事件不會自動觸發變更偵測 | med | editor 掛在 `ElementRef` 子節點且 Angular 範本不碰其內容；以 `transaction` 事件更新 signal 版本號驅動 computed；特定相容問題 unknown（M0 驗證） |
 | **浮動 UI 與既有 overlay 衝突**：既有 `popover` 開啟時是 `role="dialog"` 且會把焦點移進面板，**不適合 mention / slash / bubble**（打字時焦點必須留在編輯區） | med | 已拍板統一走 CDK overlay：用 `flexibleConnectedTo({x,y,width,height})` 定位到選取範圍座標（`editor.view.coordsAtPos` / suggestion 的 `clientRect`），沿用 `menu-overlay-controller` lifecycle 與 `collection-controller` 鍵盤模型；連結 / 圖片表單需要焦點進入，維持用 `popover` |
-| **v3 StarterKit 內含 Link** 與 M2 的 Link UI 切分衝突 | low | M1 以 `StarterKit.configure({ link: false })` 停用（TODO：v3 設定鍵名 spike 確認），M2 再開 |
+| **v3 StarterKit 內含 Link** 與 M2 的 Link UI 切分衝突 | low | 已拍板：M1 以 `StarterKit.configure({ link: false })` 停用（v3 設定鍵名 M0 確認），M2 連同 protocol 白名單再開 |
 | **packages/ui 與 registry 雙份同步** | med | 受 `check-registry-parity.mjs` 約束；每個 milestone 驗收都要求 parity 綠 |
 | **a11y 複雜度**（contenteditable + toolbar + 浮動清單 + 表格） | med | 每個 milestone 都要求 axe 零違規與鍵盤 e2e；Tier 3（使用 CDK Overlay）審查 |
 | **授權**：Tiptap 開源套件為 MIT；Pro 擴充需另外授權 | low | 只裝 `@tiptap/*` 開源套件；M0 逐一確認各套件 `license` 欄位（TODO） |
@@ -387,7 +386,7 @@ interface RichTextEditorSlashCommand {
 
 ## 10. 里程碑 (Milestones)
 
-**切法理由**：
+**切法理由**（已拍板 2026-10-13）：
 1. **M0 是 gate，不出貨**：Tiptap v3 + Angular 22 + SSR + bundle 量測都還沒驗證，比照 ADR-0002 先 spike 再決定。
 2. **M1 是 tracer bullet**：從 `sanring add` / `@sanring/ui` → 元件 → CVA → field → docs → e2e 打通端到端，只放 StarterKit。之後每片 slice 都在這條鏈路上加功能。
 3. **M2 把 Link / Image / Bubble menu 放一起**：三者都需要「浮動 UI + URL 輸入」的同一組基礎設施，一起做可以一次定案 selection-anchored overlay。
@@ -416,17 +415,17 @@ interface RichTextEditorSlashCommand {
 
 ### 已拍板（2026-10-12）
 - [x] 破例 P32「不新增 primitive」：是。開 **P34**，歸入 `patterns` 群組，TODOLIST 註明破例理由
-- [x] 交付位置：`packages/ui` + `registry` 雙份，受 parity 檢查約束，`@tiptap/*` 成為 `@sanring/ui` dependencies
+- [x] 交付位置：`packages/ui` + `registry` 雙份，受 parity 檢查約束；`@tiptap/*` 在 `@sanring/ui` 的宣告方式見下方待決（M0 決定）
 - [x] 浮動 UI：CDK overlay 自寫定位（沿用 `menu-overlay-controller` + `collection-controller`），不用 `@tiptap/extension-bubble-menu` / `@floating-ui/dom`
 - [x] 空內容 CVA 值：正規化為 `''`
+- [x] 里程碑切法（2026-10-13）：M0 gate → M1 → M2 → M3 → M4；M0 任一 gate 不過就停工
+- [x] 值 API（2026-10-13）：只提供 CVA，不提供 `[(value)]` model
+- [x] M1 停用 StarterKit 內建 Link（2026-10-13），M2 連同 protocol 白名單再開
 - [x] v1 範圍：StarterKit + Link + Image + Table + Mention / Slash；Placeholder、唯讀 / disabled、字數統計、Bubble menu；CVA 值為 HTML；可組合 API
 
 ### 待決
 - [ ] TODO：是否開 **ADR-0003**（建議開：引擎版本鎖定 + overlay 策略 + `@sanring/ui` 依賴策略）
-- [ ] TODO：里程碑切法（M0 gate → M1 → M2 → M3 → M4）是否同意
-- [ ] TODO：是否同時提供 `[(value)]` model 與 CVA，還是只提供 CVA（避免雙軌）
-- [ ] TODO：M1 對 StarterKit 內建 Link 的處理：停用到 M2（建議），還是 M1 啟用但無 UI
-- [ ] TODO：`@tiptap/*` 在 `@sanring/ui` 中用 dependencies（比照 embla）還是 optional peerDependencies
+- [ ] TODO（M0 決定，寫入 ADR-0003）：`@tiptap/*` 在 `@sanring/ui` 中用 dependencies（比照 embla）還是 optional peerDependencies，依 bundle 量測結果決定
 - [ ] TODO：Link protocol 白名單最終清單；圖片 src 允許的 scheme（是否允許 `data:`）
 - [ ] TODO：v1 圖片是否支援貼上 / 拖放上傳（或只支援按鈕選檔）；圖片載入失敗的呈現方式
 - [ ] TODO：bubble menu 的鍵盤進入方式（建議 `Alt+F10`）
