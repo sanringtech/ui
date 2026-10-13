@@ -1,5 +1,11 @@
 # @sanring/cli
 
+## 0.30.1
+
+### Patch Changes
+
+- 928be2f: Fix `rich-text-editor` vertical toolbar navigation: ArrowDown / ArrowUp on the heading menu opened its menu instead of moving to the next or previous button. The toolbar now handles its navigation keys before its items do.
+
 ## 0.30.0
 
 ### Minor Changes
