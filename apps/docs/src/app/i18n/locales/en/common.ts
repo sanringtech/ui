@@ -73,6 +73,7 @@ export const commonTranslations = {
   'component.link': 'Link',
   'component.navigationMenu': 'Navigation Menu',
   'component.pagination': 'Pagination',
+  'component.richTextEditor': 'Rich Text Editor',
   'component.resizable': 'Resizable',
   'component.select': 'Select',
   'component.scrollArea': 'Scroll Area',

@@ -16,6 +16,9 @@
     "axe-core": "^4.13.0"
   },
   "dependencies": {
+    "@tiptap/core": "^3.31.4",
+    "@tiptap/pm": "^3.31.4",
+    "@tiptap/starter-kit": "^3.31.4",
     "clsx": "^2.1.1",
     "embla-carousel": "^8.6.0",
     "tailwind-merge": "^3.6.0",

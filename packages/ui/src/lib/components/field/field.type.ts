@@ -15,6 +15,7 @@ export const FieldType = {
   calendar: 'calendar',
   datePicker: 'date-picker',
   colorPicker: 'color-picker',
+  richTextEditor: 'rich-text-editor',
 } as const;
 
 export type FieldType = (typeof FieldType)[keyof typeof FieldType];

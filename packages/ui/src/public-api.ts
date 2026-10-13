@@ -38,6 +38,7 @@ export * from './lib/components/popover';
 export * from './lib/components/progress';
 export * from './lib/components/radio';
 export * from './lib/components/resizable';
+export * from './lib/components/rich-text-editor';
 export * from './lib/components/scroll-area';
 export * from './lib/components/select';
 export * from './lib/components/sheet';

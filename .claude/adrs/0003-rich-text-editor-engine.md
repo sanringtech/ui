@@ -49,6 +49,7 @@ related: [.claude/prds/rich-text-editor.md, .claude/charters/p34-rich-text-edito
 - ⚠️ `@sanring/ui` 消費端無論是否使用編輯器，都會**安裝**（非打包）`@tiptap/*`；`@sanring/ui` 目前 private，影響僅限本 repo。對外發佈時重評。
 - ⚠️ `CharacterCount` 的 `autoTrim` 預設 `true`：`writeValue` 傳入超過上限的 HTML 會被**靜默截斷**，control 值與編輯器內容不一致。已拍板（2026-10-13）：設 `autoTrim: false`，超限內容完整顯示並以錯誤色提示，不靜默刪除資料。
 - ⚠️ `extension-image` 沒有載入失敗 hook（只有啟用 `resize` NodeView 時才處理 error）。PRD Story 6「圖片載入失敗顯示錯誤樣式」在不寫自訂 NodeView（非範圍）的前提下只能用 CSS 做到有限呈現（PRD §12 新增待決）。
+- ⚠️ `sanring build` 掃描器只認得靜態 import，看不到動態 `import()`；`@tiptap/pm` 也不會被直接 import。所以 registry.json 的 `@tiptap/starter-kit` / `@tiptap/pm` peer 必須手寫，`build.test.ts` 的 golden fixture 以 `KNOWN_MISMATCHES` 登記（B1）。第三方 registry 若也用動態 import 載入依賴，會遇到同樣的問題；修掃描器屬 `packages/cli/src` 變動，另議。
 - ⚠️ CDK overlay 的 `keydownEvents()` 會收到 document 上所有按鍵（含在編輯器內打字），bubble / suggestion 的 `onKeydown` 只能處理自己負責的鍵（如 Escape）。
 - ⚠️ docs 文章區在內層容器捲動，不是 `window`；C3 需驗證 `reposition` scroll strategy 在該容器下是否跟隨（可能需要 `CdkScrollable`）。
 

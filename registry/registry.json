@@ -65,6 +65,7 @@
         "pagination",
         "popover",
         "resizable",
+        "rich-text-editor",
         "select",
         "sheet",
         "sidebar",
@@ -983,6 +984,29 @@
         "resizable/resizable.types.ts",
         "resizable/resizable.utils.ts",
         "resizable/index.ts"
+      ]
+    },
+    {
+      "name": "rich-text-editor",
+      "description": "A rich text editor built on Tiptap with form control integration. Tiptap loads lazily in the browser.",
+      "sharedDeps": [
+        "cva-base",
+        "utils"
+      ],
+      "componentDeps": [
+        "field",
+        "skeleton"
+      ],
+      "peerDependencies": {
+        "@angular/forms": "^22.0.0",
+        "@tiptap/core": "^3.31.4",
+        "@tiptap/pm": "^3.31.4",
+        "@tiptap/starter-kit": "^3.31.4"
+      },
+      "files": [
+        "rich-text-editor/rich-text-editor.component.ts",
+        "rich-text-editor/rich-text-editor.context.ts",
+        "rich-text-editor/index.ts"
       ]
     },
     {

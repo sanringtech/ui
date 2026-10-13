@@ -282,4 +282,4 @@ grep -rn "@floating-ui/dom" registry/components/rich-text-editor packages/ui/src
 - [ ] TODO：A + B1 能否在 docs 標「預覽」先合併
 - [ ] TODO：M2 之後的分支 / PR 命名
 - [ ] TODO：PRD §12 待決題（各批準入條件已列出），以及各里程碑日期
-- [ ] TODO（B1）：M0 實測 `pnpm test`（`ng test`）只跑到 2 個 spec 檔（docs），未涵蓋 `@sanring/ui` 的 spec。B1 需確認 `@sanring/ui` spec 的正確執行指令（如 `pnpm ng test @sanring/ui`）並補進 §8
+- [x] `pnpm test`（`ng test`）同時跑 `@sanring/ui`（74 檔）與 docs（2 檔）。M0 時誤判為只跑 docs（只看了輸出尾段）；單獨跑 `@sanring/ui` 用 `pnpm ng test @sanring/ui --watch=false`

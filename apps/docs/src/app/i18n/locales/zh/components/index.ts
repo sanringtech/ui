@@ -32,6 +32,7 @@ import { popoverTranslations } from './popover';
 import { progressTranslations } from './progress';
 import { radioTranslations } from './radio';
 import { resizableTranslations } from './resizable';
+import { richTextEditorTranslations } from './rich-text-editor';
 import { scrollAreaTranslations } from './scroll-area';
 import { selectTranslations } from './select';
 import { sheetTranslations } from './sheet';
@@ -88,6 +89,7 @@ export const componentTranslations = {
   ...progressTranslations,
   ...radioTranslations,
   ...resizableTranslations,
+  ...richTextEditorTranslations,
   ...scrollAreaTranslations,
   ...selectTranslations,
   ...sheetTranslations,
