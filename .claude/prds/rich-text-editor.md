@@ -61,7 +61,7 @@ related_adrs: [0003-rich-text-editor-engine]   # 批次 A 產出
 - ❌ 後端 HTML sanitize 實作，以及任何伺服器端元件（上傳 API、mention 搜尋 API）
 - ❌ 圖片實際上傳後端、圖片裁切 / 縮放把手、圖片儲存管理
 - ❌ 依賴 `ngx-tiptap` 或其他 Angular Tiptap 包裝套件
-- ❌ `@tiptap/extension-bubble-menu` / `@floating-ui/dom`（浮動 UI 統一走 CDK overlay）
+- ❌ `@tiptap/extension-bubble-menu`，以及直接使用 `@floating-ui/dom` 定位（浮動 UI 統一走 CDK overlay；`@floating-ui/dom` 僅作為 `@tiptap/suggestion` 的傳遞 peer 存在）
 - ❌ `@tailwindcss/typography`
 - ❌ 自訂 Angular NodeView（以 Angular 元件渲染 ProseMirror node）
 - ❌ 拼字檢查、翻譯、匯出 PDF / Word、版本歷程 / diff
@@ -362,7 +362,7 @@ interface RichTextEditorSlashCommand {
 | **HTML 值與 XSS**：CVA 輸出 HTML 字串，消費端若以 `innerHTML` 渲染或後端直接回吐，可能被注入（貼上的惡意 HTML、`javascript:` 連結、`img onerror`） | high | ProseMirror schema 會丟棄未定義的節點與屬性，但**這不是 sanitize 保證**。docs 明確寫出 **sanitize 是消費端 / 後端的責任**（建議伺服器端白名單 sanitize）；Link 限制 protocol；Image 只接受 `http(s)` / 相對 URL（TODO 白名單）；docs 範例渲染輸出時用 Angular 內建 sanitizer，不用 `bypassSecurityTrustHtml` |
 | **Bundle size**：ProseMirror + Tiptap + table / mention 擴充體積不小 | med | M0 spike 量測各 milestone 增量並寫入 ADR 與 docs；確認 `@sanring/ui` 未 import rte 的消費端不會被拖入（tree-shaking）；不設數字門檻，硬性要求不進 initial chunk |
 | **`@sanring/ui` 依賴膨脹**：`@tiptap/*` 列為 `@sanring/ui` 的 dependencies，所有安裝 `@sanring/ui` 的人都會下載 | low | `@sanring/ui` 目前 private 不發版，影響僅限本 repo；未來對外發佈時重評（optional peer 需 secondary entry，須改 CLI 腳本） |
-| **Tiptap 主版本選擇**：目前主線為 v3（網路結果顯示 `@tiptap/core` 3.29.1，2026-08，未以 npm 直接確認）。v3 破壞性變更：StarterKit 內含 Link / Underline / ListKeymap、`History` 改名 `UndoRedo`、Placeholder / CharacterCount 移到 `@tiptap/extensions`、選單由 tippy.js 改為 `@floating-ui/dom`、移除 UMD | med | 鎖 v3；peer 範圍 `^3.x`（實際最小版本 M0 用 `npm view` 確認，TODO）；實作時對照 v3 文件，不參考 v2 範例 |
+| **Tiptap 主版本選擇**：目前主線為 v3（`npm view` 確認 `@tiptap/core` 最新為 3.31.4，2026-09-30）。v3 破壞性變更：StarterKit 內含 Link / Underline / ListKeymap、`History` 改名 `UndoRedo`、Placeholder / CharacterCount 移到 `@tiptap/extensions`、選單由 tippy.js 改為 `@floating-ui/dom`、移除 UMD | med | 鎖 v3；peer 範圍以 3.31.4 為基準，最終範圍寫入 ADR-0003；實作時對照 v3 文件，不參考 v2 範例 |
 | **peer 版本對齊**：所有 `@tiptap/*` 必須同版本，否則 `@tiptap/pm` 重複實例會造成 schema / plugin key 衝突 | med | registry `peerDependencies` 與 `@sanring/ui` 的宣告全部用同一版本範圍；CLI 測試驗證；docs 提醒升級時一起升 |
 | **Angular 相容**：編輯區 DOM 由 ProseMirror 控制，Angular 不能在 contenteditable 內渲染；zoneless / OnPush 下 editor 事件不會自動觸發變更偵測 | med | editor 掛在 `ElementRef` 子節點且 Angular 範本不碰其內容；以 `transaction` 事件更新 signal 版本號驅動 computed；特定相容問題 unknown（M0 驗證） |
 | **浮動 UI 與既有 overlay 衝突**：既有 `popover` 開啟時是 `role="dialog"` 且會把焦點移進面板，**不適合 mention / slash / bubble**（打字時焦點必須留在編輯區） | med | 已拍板統一走 CDK overlay：用 `flexibleConnectedTo({x,y,width,height})` 定位到選取範圍座標（`editor.view.coordsAtPos` / suggestion 的 `clientRect`），沿用 `menu-overlay-controller` lifecycle 與 `collection-controller` 鍵盤模型；連結 / 圖片表單需要焦點進入，維持用 `popover` |
@@ -416,7 +416,7 @@ interface RichTextEditorSlashCommand {
 ### 已拍板（2026-10-12）
 - [x] 破例 P32「不新增 primitive」：是。開 **P34**，歸入 `patterns` 群組，TODOLIST 註明破例理由
 - [x] 交付位置：`packages/ui` + `registry` 雙份，受 parity 檢查約束；`@tiptap/*` 在 `@sanring/ui` 以 dependencies 宣告（2026-10-13 拍板，比照 embla）
-- [x] 浮動 UI：CDK overlay 自寫定位（沿用 `menu-overlay-controller` + `collection-controller`），不用 `@tiptap/extension-bubble-menu` / `@floating-ui/dom`
+- [x] 浮動 UI：CDK overlay 自寫定位（沿用 `menu-overlay-controller` + `collection-controller`），不用 `@tiptap/extension-bubble-menu`、不直接用 `@floating-ui/dom`（M4 允許它作為 `@tiptap/suggestion` 的傳遞 peer，2026-10-13）
 - [x] 空內容 CVA 值：正規化為 `''`
 - [x] 里程碑切法（2026-10-13）：M0 gate → M1 → M2 → M3 → M4；M0 任一 gate 不過就停工
 - [x] 值 API（2026-10-13）：只提供 CVA，不提供 `[(value)]` model

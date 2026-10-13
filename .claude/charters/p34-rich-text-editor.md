@@ -26,7 +26,7 @@ related_adr: .claude/adrs/0003-rich-text-editor-engine.md
 ## 2. 核心重點（每批都要守）
 
 1. **`@tiptap/*` 的值匯入只出現在 root 元件與擴充設定檔**，其他檔案只能用 `import type`（比照 ADR-0002 決策 3 的引擎隔離）。檔名以 B1 定案為準，提案為 `rich-text-editor.component.ts` 與 `rich-text-editor.extensions.ts`；改名要同步改 §8 的 grep。
-2. **只用 `@tiptap/core` + 開源擴充**：不用 `ngx-tiptap`、Tiptap Pro / Cloud 擴充、`@tiptap/extension-bubble-menu` / `@floating-ui/dom`、`@tailwindcss/typography`。
+2. **只用 `@tiptap/core` + 開源擴充**：不用 `ngx-tiptap`、Tiptap Pro / Cloud 擴充、`@tiptap/extension-bubble-menu`、`@tailwindcss/typography`。`@floating-ui/dom` 只允許作為 `@tiptap/suggestion` 的傳遞 peer 存在（M4），我們的程式碼不得直接 import 它。
 3. **`new Editor()` 只在 `afterNextRender` 內建立**，`DestroyRef.onDestroy` 時 `editor.destroy()`（比照 `carousel-content.component.ts`）。server 端不碰 `window` / `document`。
 4. **子元件只注入 `SANRING_RICH_TEXT_EDITOR` context**，不持有 `Editor` 參考，也不自建 `Editor`。
 5. **值只走 CVA**：值為 HTML，空內容 `''`，`writeValue` 不回寫。不提供 `[(value)]`。
@@ -61,7 +61,8 @@ related_adr: .claude/adrs/0003-rich-text-editor-engine.md
 
 - ❌ 修改 `packages/cli` 的 `src/`（測試檔除外）、`scripts/`（含 sync / parity 腳本的 `EXPECTED_*_GAPS`）、`e2e/fresh-angular.mjs`。
 - ❌ 把 `@tiptap/*` 放進 `@sanring/cli` 的 tarball。
-- ❌ `ngx-tiptap`、`@tiptap-pro/*`、需 Tiptap Cloud 授權的擴充、`@tiptap/extension-bubble-menu`、`@tiptap/extension-floating-menu`、`@floating-ui/dom`、`@tailwindcss/typography`。
+- ❌ `ngx-tiptap`、`@tiptap-pro/*`、需 Tiptap Cloud 授權的擴充、`@tiptap/extension-bubble-menu`、`@tiptap/extension-floating-menu`、`@tailwindcss/typography`。
+- ❌ 在我們的程式碼中 import `@floating-ui/dom`，或使用 `@tiptap/suggestion` 的 `floatingUi` 定位（`mount` / `floatingUi` 選項）；定位一律走 CDK overlay。
 - ❌ 為 `@sanring/ui` 新增 secondary entry。
 - ❌ 修改既有共用元件的公開 API：`popover`、`toggle`、`dropdown-menu`、`tooltip`、`divider`、`field`、`skeleton`（`FieldType` 新增值除外）。
 - ❌ 修改 `menu-overlay-controller.ts` / `collection-controller.ts` 的既有行為（參數語意、預設值、事件順序、焦點處理）。
@@ -195,7 +196,7 @@ chore(rich-text-editor): <...>     # 依賴、changeset
 - **生命週期**：A1 銷毀後殘留 listener / DOM，或 OnPush 下狀態無法同步。
 - **`packages/cli` 需要改程式碼**：`src/`（測試檔除外）、`scripts/`（含 `EXPECTED_*_GAPS`）、`e2e/fresh-angular.mjs`。
 - **Tree-shaking 失效**：A4 發現未 import rte 的消費端 bundle 仍含 tiptap，且無法在元件內修正。
-- **禁用依賴**：需要 Tiptap Pro / Cloud、`ngx-tiptap`、`@tiptap/extension-bubble-menu`、`@floating-ui/dom`、`@tailwindcss/typography` 才能達成 AC。
+- **禁用依賴**：需要 Tiptap Pro / Cloud、`ngx-tiptap`、`@tiptap/extension-bubble-menu`、`@tailwindcss/typography` 才能達成 AC，或需要直接使用 `@floating-ui/dom` 定位。
 - **Parity**：sync 或 parity 檢查無法在不改腳本的前提下對齊。
 - **Bundle**：tiptap 進入 docs initial chunk，或觸發 initial budget（500kB warning / 1MB error）。
 - **既有共用元件公開 API 需要變動**：`popover`、`toggle`、`dropdown-menu`、`tooltip`、`divider`、`field`、`skeleton`（`FieldType` 新增值除外）。
@@ -222,8 +223,10 @@ grep -rlE "^import \{[^}]*\} from '@tiptap/" --include='*.ts' --exclude='*.spec.
   registry/components/rich-text-editor packages/ui/src/lib/components/rich-text-editor \
   | grep -vE "rich-text-editor\.(component|extensions)\.ts$"
 # 禁用依賴（輸出必須為空）
-grep -rnE "ngx-tiptap|@tiptap-pro/|@tiptap/extension-(bubble|floating)-menu|@floating-ui/dom|@tailwindcss/typography" \
+grep -rnE "ngx-tiptap|@tiptap-pro/|@tiptap/extension-(bubble|floating)-menu|@tailwindcss/typography" \
   package.json packages/ui/package.json registry/registry.json registry/components/rich-text-editor packages/ui/src
+# @floating-ui/dom 只能是 @tiptap/suggestion 的傳遞 peer，原始碼不得 import（輸出必須為空）
+grep -rn "@floating-ui/dom" registry/components/rich-text-editor packages/ui/src/lib/components/rich-text-editor
 ```
 
 ### 里程碑收尾驗證（B4 / C4 / D / E 結束時）
@@ -267,6 +270,7 @@ grep -rnE "ngx-tiptap|@tiptap-pro/|@tiptap/extension-(bubble|floating)-menu|@flo
 - [x] Bundle：不設數字門檻；硬性要求 tiptap 不進 initial chunk，增量記錄於 ADR-0003 與 docs
 - [x] SSR 驗證：repo 外 scratch `ng new --ssr` 專案，不動 `angular.json` / CLI e2e
 - [x] ADR-0003 slug：`0003-rich-text-editor-engine`
+- [x] `@floating-ui/dom`：`@tiptap/suggestion` 3.31.4 以必要 peer 靜態 import 它（無 optional meta）。允許作為傳遞 peer 安裝（M4），原始碼不 import、不用 suggestion 的 `floatingUi` 定位，定位走 CDK overlay
 
 ### 待決
 - [ ] TODO：axe 覆蓋方式——新增 `rich-text-editor.spec.ts`，或擴充 `component-page-accessibility.spec.ts`（後者目前不是逐元件迭代）
