@@ -133,7 +133,7 @@ related_adr: .claude/adrs/0003-rich-text-editor-engine.md
   - `/audit-component rich-text-editor` 工程裁決 ✅
   - changeset、TODOLIST 勾選 M1
 
-**準入條件**：批次 A Gate 通過；PRD §12 影響 M1 的待決題（disabled 按鈕方向鍵是否跳過、readonly 時工具列隱藏或 disabled、是否暴露 `extensions` / `editorReady`、是否加 `SANRING_RICH_TEXT_EDITOR_CONFIG`、e2e 是否用 `data-testid`）已拍板。未拍板者保留 TODO，不在實作中自行決定。
+**準入條件**：批次 A Gate 通過；PRD §12 影響 M1 的待決題（disabled 按鈕方向鍵是否跳過、readonly 時工具列隱藏或 disabled、是否暴露 `extensions` / `editorReady`、是否加 `SANRING_RICH_TEXT_EDITOR_CONFIG`、e2e 是否用 `data-testid`）已拍板。未拍板者保留 TODO，不在實作中自行決定。（2026-10-13：全部已拍板，加上字數上限 `autoTrim: false`，見 PRD §12）
 **Commit 粒度**：B1–B4 各一或數個 commit，每個 commit sync 與 parity 都綠。
 
 ### 批次 C：M2 Link + Image + Bubble menu

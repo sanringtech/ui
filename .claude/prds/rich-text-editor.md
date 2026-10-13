@@ -96,7 +96,7 @@ related_adrs: [0003-rich-text-editor-engine]
 - [ ] Given toolbar 有 `role="toolbar"` 與 `aria-label`（或 `aria-labelledby`）、`aria-controls` 指向編輯區，when axe 掃描，then 零違規
 - [ ] Given 每顆 icon-only 按鈕，when 渲染，then 有 `aria-label`，hover / focus 時以 `tooltip` 顯示名稱與快捷鍵
 - [ ] Given 標題下拉（`dropdown-menu`），when 選「Heading 2」，then 當前段落轉為 `<h2>`，選單關閉、焦點回到編輯區
-- [ ] Given 某指令在目前狀態不可執行（`editor.can()` 為 false），when 渲染，then 按鈕 disabled 且方向鍵導覽跳過（或停在上面但不可觸發；TODO 見 §12）
+- [ ] Given 某指令在目前狀態不可執行（`editor.can()` 為 false），when 渲染，then 按鈕 disabled，且方向鍵導覽跳過該按鈕
 - [ ] Given 使用者按 `Mod-B` / `Mod-I` 等 StarterKit 預設快捷鍵，when 在編輯區，then 格式套用且對應按鈕狀態同步
 
 ### Story 3: Placeholder、唯讀、字數上限（M1）
@@ -107,10 +107,11 @@ related_adrs: [0003-rich-text-editor-engine]
 
 **Acceptance Criteria**:
 - [ ] Given `placeholder="寫點什麼…"` 且內容為空，when 渲染，then 空段落顯示 placeholder（CSS `::before` + `data-placeholder`），且編輯區有 `aria-placeholder`
-- [ ] Given `readonly` 為 true，when 渲染，then 可選取與複製但不可編輯，工具列隱藏或 disabled（TODO 見 §12），宿主有 `aria-readonly="true"`
+- [ ] Given `readonly` 為 true，when 渲染，then 可選取與複製但不可編輯，工具列按鈕全部 disabled（不隱藏），宿主有 `aria-readonly="true"`
 - [ ] Given `maxCharacters=200` 且已有 200 字元，when 再輸入，then 輸入被阻擋（CharacterCount `limit`）
 - [ ] Given `sanring-rich-text-editor-character-count` 已放置，when 內容改變，then 顯示 `n/200`，並以 `aria-live="polite"` 宣告（比照 textarea docs 的 character-count 範例）
-- [ ] Given 貼上超出上限的內容，when paste，then 行為依 CharacterCount 預設（TODO：M0 spike 確認截斷或拒絕）
+- [ ] Given 貼上超出上限的內容，when paste，then 從游標處截斷到上限（CharacterCount 預設；截斷後仍超限則拒絕）
+- [ ] Given `maxCharacters=200` 且 control 寫入 300 字的 HTML，when `writeValue`，then 300 字全部顯示、**不截斷**（`autoTrim: false`），control 值不變；字數顯示 `300/200` 並使用錯誤色；不能再輸入，但可以刪減
 
 ### Story 4: SSR 安全（M1）
 
@@ -277,12 +278,12 @@ graph TD
 | input | `required` | `boolean` | `false` | 覆寫 `hasInputRequired()` |
 | input | `maxCharacters` | `number \| undefined` | — | CharacterCount `limit` |
 | input | `ariaLabel` / `ariaLabelledBy` / `ariaDescribedBy` | `string \| undefined` | — | 綁在 contenteditable 元素（`role="textbox"` `aria-multiline="true"`） |
-| input | `extensions` | `AnyExtension[]` | `[]` | 額外開源擴充（逃生口；TODO 見 §12） |
+| input | `extensions` | `AnyExtension[]` | `[]` | 額外開源擴充（逃生口；消費端自行 import 的擴充進入其自身 bundle） |
 | input | `linkProtocols` | `string[]` | `['http','https','mailto']` | M2 |
 | input | `imageUpload` | `((file: File) => Promise<string>) \| undefined` | — | M2；回傳可用 URL |
 | input | `mentionItems` | `((query: string) => Promise<RichTextEditorMentionItem[]> \| Observable<RichTextEditorMentionItem[]>) \| undefined` | — | M4 |
 | input | `slashCommands` | `RichTextEditorSlashCommand[] \| ((query: string) => …)` | — | M4 |
-| output | `editorReady` | `Editor` | — | 逃生口：拿到原生 Tiptap 實例（TODO 見 §12） |
+| output | `editorReady` | `Editor` | — | 逃生口：拿到原生 Tiptap 實例（非同步初始化完成後 emit） |
 | output | `focusChange` | `boolean` | — | — |
 | output | `imageUploadError` | `unknown` | — | M2 |
 | output | `suggestionError` | `{ kind: 'mention' \| 'slash'; error: unknown }` | — | M4 |
@@ -311,7 +312,6 @@ interface RichTextEditorSlashCommand {
 |---|---|---|
 | `SANRING_RICH_TEXT_EDITOR` | root | `RichTextEditorContext`：`editor: Signal<Editor \| null>`、`state: Signal<number>`（transaction 版本號，觸發 computed 重算）、`isActive(name, attrs?)`、`can(command)`、`run(command)`、`disabled: Signal<boolean>`、`contentId` |
 | `SANRING_FIELD_CONTROL` | root | 既有 token |
-| `SANRING_RICH_TEXT_EDITOR_CONFIG`（可選） | 消費端 | 全域預設（placeholder、protocols、預設表格尺寸）；TODO 見 §12 |
 
 ### 子元件
 
@@ -338,14 +338,14 @@ interface RichTextEditorSlashCommand {
   - **空內容（empty）**：顯示 placeholder；character count 顯示 `0/limit`
   - **錯誤（error）**：表單驗證失敗時邊框改 `--sanring-error-50`（比照 textarea `errorState` 樣式）；字數超限時 count 文字改錯誤色
   - **正常（success）**：可編輯；工具列狀態隨 transaction 同步
-  - 唯讀 / disabled：`opacity-50`（disabled）或無邊框檢視（readonly，TODO 樣式待決）
+  - 唯讀 / disabled：`opacity-50`（disabled）或無邊框檢視（readonly，樣式 B3 定案）
 - **連結 popover（M2）**：URL 驗證錯誤顯示 inline 錯誤訊息；成功後關閉並把焦點還給編輯區
 - **圖片（M2）**：上傳中（插入按鈕 spinner）→ 失敗（popover 內錯誤訊息）→ 成功（插入）；已插入圖片載入失敗則顯示錯誤外框與 alt 文字（TODO：實作方式 spike）
 - **Mention / Slash 清單（M4）**：loading（spinner 列）/ empty（「無結果」）/ error（錯誤訊息 + 可重試，TODO）/ success（listbox）
 
 對應 Figma / design assets：無（`design_output_mode: assets_only`）
 
-關鍵互動的 `data-testid` 預埋清單（提案；TODO：確認既有 e2e 是否慣用 `data-testid`）：
+關鍵互動的 `data-testid` 預埋清單（已拍板使用 `data-testid`）：
 - 編輯區：`rte-content`
 - 工具列：`rte-toolbar`；按鈕：`rte-btn-<command>`（如 `rte-btn-bold`）
 - 字數：`rte-character-count`
@@ -421,23 +421,24 @@ interface RichTextEditorSlashCommand {
 - [x] 里程碑切法（2026-10-13）：M0 gate → M1 → M2 → M3 → M4；M0 任一 gate 不過就停工
 - [x] 值 API（2026-10-13）：只提供 CVA，不提供 `[(value)]` model
 - [x] M1 停用 StarterKit 內建 Link（2026-10-13），M2 連同 protocol 白名單再開
+- [x] M1 細節（2026-10-13）：
+  - toolbar 方向鍵導覽跳過 disabled 按鈕
+  - readonly 時工具列按鈕全部 disabled（不隱藏）
+  - 提供 `extensions` input 與 `editorReady` output 作為逃生口
+  - M1 不做 `SANRING_RICH_TEXT_EDITOR_CONFIG` 全域設定 token（之後有需求再加，不破壞相容）
+  - e2e 使用 `data-testid`
+  - 字數上限：`CharacterCount` 設 `autoTrim: false`，`writeValue` 超限內容不截斷，以錯誤色提示（ADR-0003 Consequences）
 - [x] v1 範圍：StarterKit + Link + Image + Table + Mention / Slash；Placeholder、唯讀 / disabled、字數統計、Bubble menu；CVA 值為 HTML；可組合 API
 
 ### 待決
 - [ ] TODO：是否開 **ADR-0003**（建議開：引擎版本鎖定 + overlay 策略 + `@sanring/ui` 依賴策略）
-- [ ] TODO（M0 發現，B3 準入）：`CharacterCount` 的 `autoTrim` 預設 `true`，`writeValue` 傳入超限 HTML 會被靜默截斷、與 control 值不一致——設 `autoTrim: false`，或截斷後回寫一次 `onChange`（ADR-0003）
 - [ ] TODO（M0 發現，C2 準入）：`extension-image` 無載入失敗 hook，不寫 NodeView 的前提下 Story 6「載入失敗錯誤樣式」只能用 CSS 有限呈現——縮減該 AC 或接受 CSS 方案（ADR-0003）
 - [ ] TODO：Link protocol 白名單最終清單；圖片 src 允許的 scheme（是否允許 `data:`）
 - [ ] TODO：v1 圖片是否支援貼上 / 拖放上傳（或只支援按鈕選檔）；圖片載入失敗的呈現方式
 - [ ] TODO：bubble menu 的鍵盤進入方式（建議 `Alt+F10`）
-- [ ] TODO：toolbar 中 disabled 按鈕在方向鍵導覽時要跳過還是可聚焦（WAI-ARIA toolbar pattern 允許兩者）
-- [ ] TODO：readonly 時工具列預設隱藏還是 disabled
 - [ ] TODO：表格預設尺寸、是否啟用欄寬 resize
-- [ ] TODO：是否暴露 `extensions` input / `editorReady` output 作為逃生口
-- [ ] TODO：是否需要 `SANRING_RICH_TEXT_EDITOR_CONFIG` 全域設定 token
 - [ ] TODO：連結快捷鍵是否綁 `Mod-K`
 - [x] `@tiptap/*` peer 版本範圍：`^3.31.4`，所有套件一起升級（ADR-0003 決策 1）
 - [ ] TODO：各 milestone 預計完成日期
-- [ ] TODO：e2e 是否慣用 `data-testid`
 - [x] Tiptap v3 在 Angular 22 zoneless + SSR：M0 驗證無問題（ADR-0003 A1、A2）
 - [x] bundle 增量：M1 組合 ~106 KB transfer、全擴充 ~130 KB transfer（ADR-0003 A3）；靜態 import 會拖累所有 `@sanring/ui` 消費端，改為動態 `import()`（ADR-0003 決策 2）
