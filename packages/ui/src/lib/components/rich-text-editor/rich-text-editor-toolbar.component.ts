@@ -1,7 +1,9 @@
 import {
   ChangeDetectionStrategy,
   Component,
+  DestroyRef,
   ElementRef,
+  Renderer2,
   afterRenderEffect,
   computed,
   inject,
@@ -28,7 +30,6 @@ export const RICH_TEXT_EDITOR_TOOLBAR_ITEM = 'data-sanring-rte-toolbar-item';
     '[attr.aria-labelledby]': 'ariaLabelledBy()',
     '[attr.aria-orientation]': 'orientation()',
     '[attr.aria-controls]': 'context.contentId()',
-    '(keydown)': 'onKeydown($event)',
     '(focusin)': 'onFocusIn($event)',
   },
   template: `<ng-content />`,
@@ -52,6 +53,17 @@ export class RichTextEditorToolbarComponent {
   );
 
   constructor() {
+    // Capture phase, so the toolbar sees navigation keys before its items do.
+    // A menu button inside it (the heading menu) opens on ArrowDown/ArrowUp,
+    // which in a vertical toolbar must move between buttons instead.
+    const unlisten = inject(Renderer2).listen(
+      this.host,
+      'keydown',
+      (event: KeyboardEvent) => this.onKeydown(event),
+      { capture: true },
+    );
+    inject(DestroyRef).onDestroy(unlisten);
+
     // Button disabled states follow the editor (its arrival, every transaction,
     // and the disabled state), so the tab stop is re-checked after each render.
     afterRenderEffect(() => {
@@ -70,7 +82,7 @@ export class RichTextEditorToolbarComponent {
     this.syncTabStops();
   }
 
-  protected onKeydown(event: KeyboardEvent): void {
+  private onKeydown(event: KeyboardEvent): void {
     const horizontal = this.orientation() === 'horizontal';
     const step: Record<string, number | 'first' | 'last'> = {
       [horizontal ? 'ArrowRight' : 'ArrowDown']: 1,
@@ -86,6 +98,7 @@ export class RichTextEditorToolbarComponent {
     if (index === -1 || items.length === 0) return;
 
     event.preventDefault();
+    event.stopPropagation();
     const next =
       move === 'first'
         ? 0

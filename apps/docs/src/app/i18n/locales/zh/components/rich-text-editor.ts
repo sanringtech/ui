@@ -38,6 +38,7 @@ export const richTextEditorTranslations = {
     'sanring-rich-text-editor-toolbar 的排列方向，以及方向鍵移動的軸向。',
   'richTextEditor.keyboard.arrows':
     '在工具列中於可用按鈕間移動，會跳過 disabled 的按鈕。',
+  'richTextEditor.keyboard.verticalArrows': '在 orientation="vertical" 的工具列中取代左右方向鍵，在可用的按鈕間移動。',
   'richTextEditor.keyboard.homeEnd':
     '在工具列中跳到第一個或最後一個可用按鈕。',
   'richTextEditor.api.readonly.description': '內容可選取、複製，但不能修改。工具列按鈕仍會顯示，但全部 disabled。',
@@ -48,7 +49,16 @@ export const richTextEditorTranslations = {
     '顯示字元數；有設定 maxCharacters 時顯示「字數/上限」。內容超過上限時改用錯誤色。',
   'richTextEditor.demo.characterCount': 'Placeholder 與字數統計',
   'richTextEditor.demo.characterCount.description':
-    '設定 placeholder 與 maxCharacters，並把 sanring-rich-text-editor-character-count 放進編輯器裡。表單寫入的值若已超過上限會原樣保留，字數改為紅色，只能刪減。',
+    '設定 placeholder 與 maxCharacters，並把 sanring-rich-text-editor-character-count 放進編輯器裡。輸入到上限即停止。按「Load a long comment」可看到表單寫入已超過上限的值：內容原樣保留，字數改為紅色，只能刪減。',
   'richTextEditor.demo.readonly': '唯讀',
   'richTextEditor.demo.readonly.description': 'readonly 時內容仍可選取與複製，工具列保留在原位，按鈕全部 disabled。',
+  'richTextEditor.demo.disabled': 'Disabled',
+  'richTextEditor.demo.disabled.description':
+    '停用綁定的表單控制項（或設定 disabled input）。內容會變淡、無法聚焦或編輯，工具列按鈕全部 disabled；重新啟用控制項後全部恢復。',
+  'richTextEditor.demo.validation': '表單驗證',
+  'richTextEditor.demo.validation.description':
+    'Validators.required 會把空白文件視為空值。控制項被 touched 且驗證失敗時，外框變紅、編輯區帶 aria-invalid，sanring-error-message 會顯示並透過 aria-describedby 關聯。',
+  'richTextEditor.demo.commands': '完整指令與直向工具列',
+  'richTextEditor.demo.commands.description':
+    '前面範例沒出現的指令：行內程式碼、程式碼區塊、分隔線、換行、清除格式。levels 決定選單裡的標題層級。orientation="vertical" 時工具列放在內容旁邊，用 ArrowUp / ArrowDown 在按鈕間移動。',
 } as const;

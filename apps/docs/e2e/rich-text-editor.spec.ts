@@ -64,13 +64,20 @@ test.describe('rich-text-editor', () => {
     const content = page.getByTestId('rte-basic').getByRole('textbox', { name: 'Message' });
     const italic = page.getByTestId('rte-btn-italic');
 
+    // Select all through ProseMirror's own keymap (a synchronous transaction)
+    // and toggle a mark on real text. A collapsed cursor after a native key
+    // such as End would only set a stored mark, which ProseMirror clears when
+    // the late selectionchange from that key arrives; on slow CI runners that
+    // happened after Ctrl+I and made this test flaky.
     await content.click();
-    await page.keyboard.press('End');
+    await page.keyboard.press('ControlOrMeta+a');
     await expect(italic).toHaveAttribute('aria-pressed', 'false');
     await page.keyboard.press('ControlOrMeta+i');
     await expect(italic).toHaveAttribute('aria-pressed', 'true');
-    await page.keyboard.type('x');
-    await expect(page.getByTestId('rte-basic-value')).toContainText('<em>x</em>');
+    await expect(page.getByTestId('rte-basic-value')).toContainText('<em>');
+    await page.keyboard.press('ControlOrMeta+i');
+    await expect(italic).toHaveAttribute('aria-pressed', 'false');
+    await expect(page.getByTestId('rte-basic-value')).not.toContainText('<em>');
   });
 
   test('is one tab stop with arrow-key navigation that skips disabled buttons', async ({
@@ -127,6 +134,96 @@ test.describe('rich-text-editor', () => {
     await expect(count).toHaveText('139/140');
   });
 
+  test('shows a value over the limit in full and only allows deleting', async ({ page }) => {
+    await openPage(page);
+    const content = page.getByTestId('rte-limited').getByRole('textbox', { name: 'Comment' });
+    const count = page.getByTestId('rte-character-count');
+
+    await page.getByTestId('rte-load-long').click();
+    await expect(content).toContainText('until it fits again.');
+    await expect(count).toHaveAttribute('data-over-limit', 'true');
+    const before = Number((await count.textContent())!.split('/')[0]);
+    expect(before).toBeGreaterThan(140);
+
+    await content.click();
+    await page.keyboard.press('ControlOrMeta+End');
+    await page.keyboard.type('x');
+    await expect(count).toHaveText(`${before}/140`);
+    await page.keyboard.press('Backspace');
+    await expect(count).toHaveText(`${before - 1}/140`);
+  });
+
+  test('disables and re-enables with the form control', async ({ page }) => {
+    await openPage(page);
+    const editor = page.getByTestId('rte-disabled');
+    const content = editor.getByRole('textbox', { name: 'Summary' });
+    const toggle = page.getByTestId('rte-disabled-toggle');
+    const bold = editor.getByRole('button', { name: 'Bold' });
+
+    await expect(content).toHaveAttribute('contenteditable', 'false');
+    await expect(content).toHaveAttribute('aria-disabled', 'true');
+    await expect(bold).toBeDisabled();
+
+    await toggle.click();
+    await expect(toggle).toHaveText('Disable editing');
+    await expect(content).toHaveAttribute('contenteditable', 'true');
+    await expect(content).not.toHaveAttribute('aria-disabled');
+    await expect(bold).toBeEnabled();
+
+    await toggle.click();
+    await expect(content).toHaveAttribute('contenteditable', 'false');
+    await expect(bold).toBeDisabled();
+  });
+
+  test('shows the required error until there is content', async ({ page }) => {
+    await openPage(page);
+    const editor = page.getByTestId('rte-validation');
+    const content = editor.getByRole('textbox', { name: 'Description' });
+    await expect(content).toBeVisible();
+
+    await expect(editor).toHaveAttribute('data-invalid', 'true');
+    await expect(content).toHaveAttribute('aria-invalid', 'true');
+    await expect(content).toHaveAttribute('aria-required', 'true');
+    const describedBy = await content.getAttribute('aria-describedby');
+    expect(describedBy).toBeTruthy();
+    await expect(page.locator(`[id="${describedBy!.split(' ')[0]}"]`)).toHaveText(
+      /Description is required/,
+    );
+
+    await content.click();
+    await page.keyboard.type('Ready');
+    await expect(content).not.toHaveAttribute('aria-invalid');
+    await expect(editor).not.toHaveAttribute('data-invalid');
+  });
+
+  test('runs the remaining commands from a vertical toolbar', async ({ page }) => {
+    await openPage(page);
+    const editor = page.getByTestId('rte-commands');
+    const content = editor.getByRole('textbox', { name: 'Snippet' });
+    const toolbar = page.getByTestId('rte-commands-toolbar');
+    await expect(content.locator('pre')).toBeVisible();
+
+    await expect(toolbar).toHaveAttribute('aria-orientation', 'vertical');
+    const textStyle = toolbar.getByRole('button', { name: /^Text style/ });
+    await textStyle.focus();
+    await page.keyboard.press('ArrowDown');
+    await expect(toolbar.getByRole('button', { name: 'Inline code' })).toBeFocused();
+    await page.keyboard.press('ArrowUp');
+    await expect(textStyle).toBeFocused();
+
+    await textStyle.click();
+    await expect(page.getByRole('menuitem', { name: 'Heading 4' })).toBeVisible();
+    await page.keyboard.press('Escape');
+
+    await content.click();
+    await page.keyboard.press('ControlOrMeta+a');
+    await toolbar.getByRole('button', { name: 'Clear formatting' }).click();
+    await expect(content.locator('h3, pre, code')).toHaveCount(0);
+
+    await toolbar.getByRole('button', { name: 'Divider' }).click();
+    await expect(content.locator('hr')).toHaveCount(1);
+  });
+
   test('keeps a read-only editor selectable with every toolbar button disabled', async ({
     page,
   }) => {
@@ -169,7 +266,14 @@ test.describe('rich-text-editor', () => {
       // Scoped to the editor previews: on mobile the docs shell itself has
       // scrollable-region-focusable findings (code blocks) that are not this
       // component's and exist on other component pages too.
-      for (const id of ['rte-basic', 'rte-limited', 'rte-readonly']) {
+      for (const id of [
+        'rte-basic',
+        'rte-disabled',
+        'rte-validation',
+        'rte-commands',
+        'rte-limited',
+        'rte-readonly',
+      ]) {
         await expectNoAxeViolations(page, `[data-testid="${id}"]`);
       }
     });
