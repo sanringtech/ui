@@ -25,6 +25,8 @@ packages/*/pnpm-lock.yaml
 !.claude/adrs/**
 !.claude/charters/
 !.claude/charters/**
+!.claude/prds/
+!.claude/prds/**
 .idea/
 .project
 .classpath
