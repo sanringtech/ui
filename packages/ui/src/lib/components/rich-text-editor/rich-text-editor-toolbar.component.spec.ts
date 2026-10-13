@@ -26,6 +26,22 @@ class ToolbarHost {
   readonly editor = viewChild.required(RichTextEditorComponent);
 }
 
+@Component({
+  imports: [ReactiveFormsModule, SANRING_RICH_TEXT_EDITOR_IMPORTS],
+  template: `
+    <sanring-rich-text-editor ariaLabel="Message" [formControl]="control">
+      <sanring-rich-text-editor-toolbar orientation="vertical">
+        <sanring-rich-text-editor-heading-menu />
+        <button sanringRichTextEditorToggle="bold" ariaLabel="Bold">B</button>
+      </sanring-rich-text-editor-toolbar>
+    </sanring-rich-text-editor>
+  `,
+})
+class VerticalToolbarHost {
+  readonly control = new FormControl('<p>Text</p>', { nonNullable: true });
+  readonly editor = viewChild.required(RichTextEditorComponent);
+}
+
 async function setup(): Promise<{ fixture: ComponentFixture<ToolbarHost>; editor: Editor }> {
   const fixture = TestBed.createComponent(ToolbarHost);
   document.body.appendChild(fixture.nativeElement);
@@ -138,6 +154,29 @@ describe('RichTextEditorToolbarComponent', () => {
     fixture.detectChanges();
     expect(button(fixture, 'Bold').tabIndex).toBe(-1);
     expect(heading.tabIndex).toBe(0);
+  });
+
+  it('moves past the heading menu with ArrowDown in a vertical toolbar instead of opening it', async () => {
+    const fixture = TestBed.createComponent(VerticalToolbarHost);
+    document.body.appendChild(fixture.nativeElement);
+    fixture.detectChanges();
+    await vi.waitFor(() => expect(fixture.componentInstance.editor().editor()).not.toBeNull());
+    fixture.detectChanges();
+    await fixture.whenStable();
+    const root = fixture.nativeElement as HTMLElement;
+    const heading = root.querySelector<HTMLButtonElement>('button[aria-label^="Text style"]')!;
+    const bold = root.querySelector<HTMLButtonElement>('button[aria-label="Bold"]')!;
+
+    heading.focus();
+    press(heading, 'ArrowDown');
+    fixture.detectChanges();
+
+    expect(document.activeElement).toBe(bold);
+    expect(heading.getAttribute('aria-expanded')).toBe('false');
+
+    press(bold, 'ArrowUp');
+    expect(document.activeElement).toBe(heading);
+    expect(heading.getAttribute('aria-expanded')).toBe('false');
   });
 
   it('brings undo into the navigation once there is history', async () => {
