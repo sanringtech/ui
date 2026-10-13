@@ -5,7 +5,7 @@ feature_name: Rich Text Editor（Tiptap）
 status: accepted
 owner: jack755051
 last_updated: 2026-10-13
-related_adrs: []   # 待新增 ADR-0003（Tiptap 版本鎖定 + 浮動 UI 策略），見 §12
+related_adrs: [0003-rich-text-editor-engine]   # 批次 A 產出
 ---
 
 # PRD: Rich Text Editor（Tiptap）
@@ -26,7 +26,7 @@ related_adrs: []   # 待新增 ADR-0003（Tiptap 版本鎖定 + 浮動 UI 策略
   - 採用指標：TODO（目前 repo 內沒有元件採用率量測機制，無法定義可量測門檻）。
 - **技術目標**：
   - SSR 安全：server 端不建立 `Editor`、不存取 `window`/`document`（對齊 audit-component Phase 1-B）。
-  - Tiptap / ProseMirror 只出現在 `rich-text-editor` 目錄內，不影響未使用此元件的消費端 bundle（registry 安裝與 `@sanring/ui` secondary entry 皆須驗證 tree-shaking）。
+  - Tiptap / ProseMirror 只出現在 `rich-text-editor` 目錄內，不影響未使用此元件的消費端 bundle（registry 安裝與 `@sanring/ui` 單一 entry 皆須驗證 tree-shaking）。
   - 實際 bundle 增量：unknown，M0 spike 量測後寫入 ADR，並在 docs 揭露（比照 org-chart 揭露 worker 體積）。
   - 通過 `/audit-component` 工程裁決 ✅、`check-registry-parity.mjs` 綠、docs axe 零違規。
 - **使用者目標**：
@@ -224,7 +224,7 @@ related_adrs: []   # 待新增 ADR-0003（Tiptap 版本鎖定 + 浮動 UI 策略
 | Icon | `@lucide/angular ^1.18.0` | 既有 registry 慣例 peer |
 | 表單 | `@angular/forms ^22.0.0` + `shared/cva-base.ts` | 既有表單元件慣例 |
 | Cache / Auth / 監控 | N/A | — |
-| Deploy | registry 經 `@sanring/cli` 的 `sanring add` 發佈；`@sanring/ui` 套件中 `@tiptap/*` 的宣告方式（dependencies 或 optional peer）由 M0 量測後寫入 ADR-0003；Tiptap 不進 CLI tarball | 使用者拍板雙份交付；CLI 部分比照 ADR-0002 決策 6 |
+| Deploy | registry 經 `@sanring/cli` 的 `sanring add` 發佈；`@sanring/ui` 以 dependencies 宣告 `@tiptap/*`（比照 embla，單一 entry）；Tiptap 不進 CLI tarball | 使用者拍板雙份交付；CLI 部分比照 ADR-0002 決策 6 |
 
 ## 6. 資料模型 (Data Model)
 
@@ -360,8 +360,8 @@ interface RichTextEditorSlashCommand {
 | 風險 | 影響 | 緩解 |
 |---|---|---|
 | **HTML 值與 XSS**：CVA 輸出 HTML 字串，消費端若以 `innerHTML` 渲染或後端直接回吐，可能被注入（貼上的惡意 HTML、`javascript:` 連結、`img onerror`） | high | ProseMirror schema 會丟棄未定義的節點與屬性，但**這不是 sanitize 保證**。docs 明確寫出 **sanitize 是消費端 / 後端的責任**（建議伺服器端白名單 sanitize）；Link 限制 protocol；Image 只接受 `http(s)` / 相對 URL（TODO 白名單）；docs 範例渲染輸出時用 Angular 內建 sanitizer，不用 `bypassSecurityTrustHtml` |
-| **Bundle size**：ProseMirror + Tiptap + table / mention 擴充體積不小 | med | M0 spike 量測各 milestone 增量並寫入 ADR 與 docs；確認 `@sanring/ui` 的 secondary entry 不會讓未使用者被拖入；具體數字 unknown |
-| **`@sanring/ui` 依賴膨脹**：若 `@tiptap/*` 列為 `@sanring/ui` 的 dependencies（比照 embla），所有安裝 `@sanring/ui` 的人都會下載 | med | M0 量測 bundle 後在 dependencies 與 optional peerDependencies 間擇一，寫入 ADR-0003 |
+| **Bundle size**：ProseMirror + Tiptap + table / mention 擴充體積不小 | med | M0 spike 量測各 milestone 增量並寫入 ADR 與 docs；確認 `@sanring/ui` 未 import rte 的消費端不會被拖入（tree-shaking）；不設數字門檻，硬性要求不進 initial chunk |
+| **`@sanring/ui` 依賴膨脹**：`@tiptap/*` 列為 `@sanring/ui` 的 dependencies，所有安裝 `@sanring/ui` 的人都會下載 | low | `@sanring/ui` 目前 private 不發版，影響僅限本 repo；未來對外發佈時重評（optional peer 需 secondary entry，須改 CLI 腳本） |
 | **Tiptap 主版本選擇**：目前主線為 v3（網路結果顯示 `@tiptap/core` 3.29.1，2026-08，未以 npm 直接確認）。v3 破壞性變更：StarterKit 內含 Link / Underline / ListKeymap、`History` 改名 `UndoRedo`、Placeholder / CharacterCount 移到 `@tiptap/extensions`、選單由 tippy.js 改為 `@floating-ui/dom`、移除 UMD | med | 鎖 v3；peer 範圍 `^3.x`（實際最小版本 M0 用 `npm view` 確認，TODO）；實作時對照 v3 文件，不參考 v2 範例 |
 | **peer 版本對齊**：所有 `@tiptap/*` 必須同版本，否則 `@tiptap/pm` 重複實例會造成 schema / plugin key 衝突 | med | registry `peerDependencies` 與 `@sanring/ui` 的宣告全部用同一版本範圍；CLI 測試驗證；docs 提醒升級時一起升 |
 | **Angular 相容**：編輯區 DOM 由 ProseMirror 控制，Angular 不能在 contenteditable 內渲染；zoneless / OnPush 下 editor 事件不會自動觸發變更偵測 | med | editor 掛在 `ElementRef` 子節點且 Angular 範本不碰其內容；以 `transaction` 事件更新 signal 版本號驅動 computed；特定相容問題 unknown（M0 驗證） |
@@ -415,7 +415,7 @@ interface RichTextEditorSlashCommand {
 
 ### 已拍板（2026-10-12）
 - [x] 破例 P32「不新增 primitive」：是。開 **P34**，歸入 `patterns` 群組，TODOLIST 註明破例理由
-- [x] 交付位置：`packages/ui` + `registry` 雙份，受 parity 檢查約束；`@tiptap/*` 在 `@sanring/ui` 的宣告方式見下方待決（M0 決定）
+- [x] 交付位置：`packages/ui` + `registry` 雙份，受 parity 檢查約束；`@tiptap/*` 在 `@sanring/ui` 以 dependencies 宣告（2026-10-13 拍板，比照 embla）
 - [x] 浮動 UI：CDK overlay 自寫定位（沿用 `menu-overlay-controller` + `collection-controller`），不用 `@tiptap/extension-bubble-menu` / `@floating-ui/dom`
 - [x] 空內容 CVA 值：正規化為 `''`
 - [x] 里程碑切法（2026-10-13）：M0 gate → M1 → M2 → M3 → M4；M0 任一 gate 不過就停工
@@ -425,7 +425,6 @@ interface RichTextEditorSlashCommand {
 
 ### 待決
 - [ ] TODO：是否開 **ADR-0003**（建議開：引擎版本鎖定 + overlay 策略 + `@sanring/ui` 依賴策略）
-- [ ] TODO（M0 決定，寫入 ADR-0003）：`@tiptap/*` 在 `@sanring/ui` 中用 dependencies（比照 embla）還是 optional peerDependencies，依 bundle 量測結果決定
 - [ ] TODO：Link protocol 白名單最終清單；圖片 src 允許的 scheme（是否允許 `data:`）
 - [ ] TODO：v1 圖片是否支援貼上 / 拖放上傳（或只支援按鈕選檔）；圖片載入失敗的呈現方式
 - [ ] TODO：bubble menu 的鍵盤進入方式（建議 `Alt+F10`）

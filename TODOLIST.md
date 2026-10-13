@@ -111,7 +111,7 @@
 
 - 範圍 / 使用者故事 / API / 風險：[PRD rich-text-editor](.claude/prds/rich-text-editor.md)
 - 選型決策：ADR-0003（待寫：Tiptap v3 版本鎖定、CDK overlay 浮動 UI、`@sanring/ui` 依賴策略）
-- 範圍 / 步驟 / 停止條件 / 驗證：charter p34-rich-text-editor（待寫）
+- 範圍 / 步驟 / 停止條件 / 驗證：[charter p34-rich-text-editor](.claude/charters/p34-rich-text-editor.md)
 
 - [ ] M0 Spike（gate）：v3 + Angular 22 建立 / 銷毀、SSR build、bundle 量測、selection 定位 overlay PoC → ADR-0003
 - [ ] M1 核心：root + CVA + field + StarterKit 工具列 + placeholder / readonly / disabled / 字數 + registry + docs
