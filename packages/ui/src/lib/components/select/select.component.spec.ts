@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
-import { OverlayContainer } from '@angular/cdk/overlay';
+import { CdkConnectedOverlay, OverlayContainer } from '@angular/cdk/overlay';
 import { TestBed } from '@angular/core/testing';
+import { By } from '@angular/platform-browser';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 
 import { expectNoA11yViolations } from '../../../testing/axe-a11y';
@@ -183,6 +184,18 @@ describe('SelectComponent', () => {
     const listbox = overlayContainer.getContainerElement().querySelector('[role="listbox"]');
     expect(listbox).toBeTruthy();
     expect(listbox?.getAttribute('data-state')).toBe('open');
+  });
+
+  // dialog/alert-dialog/sheet 開在 top layer（popover）。listbox 不用 popover 的話會被畫在 top layer 底下，
+  // 放進 dialog 時選項看得到卻點不到（z-index 對 top layer 無效）。要跟其他浮層元件一樣用 CDK 預設的 popover
+  it('renders the listbox as a popover so it stays above dialogs', () => {
+    const fixture = TestBed.createComponent(SelectTestHost);
+    fixture.detectChanges();
+
+    // directive 掛在 <ng-template> 上，query() 只找元素，要用 queryAllNodes
+    const [node] = fixture.debugElement.queryAllNodes(By.directive(CdkConnectedOverlay));
+    const overlay = node.injector.get(CdkConnectedOverlay);
+    expect(overlay.usePopover).not.toBeNull();
   });
 
   it('selects an item on click, closes the listbox, and updates the displayed value', () => {

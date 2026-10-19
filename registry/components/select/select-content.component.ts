@@ -72,7 +72,6 @@ const SELECT_ITEM_ALIGNED_POSITIONS: ConnectionPositionPair[] = [
         [cdkConnectedOverlayPositions]="positions()"
         [cdkConnectedOverlayOffsetY]="offsetY()"
         [cdkConnectedOverlayMatchWidth]="matchTriggerWidth()"
-        [cdkConnectedOverlayUsePopover]="null"
         [cdkConnectedOverlayPush]="true"
         [cdkConnectedOverlayViewportMargin]="8"
         [cdkConnectedOverlayScrollStrategy]="scrollStrategy"
