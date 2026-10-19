@@ -1,5 +1,11 @@
 # @sanring/cli
 
+## 0.30.2
+
+### Patch Changes
+
+- 995b287: Fix `select` inside a `dialog`, `alert-dialog` or `sheet`: the options showed but could not be clicked, because the dialog sits in the browser's top layer and the listbox did not. The listbox now uses the same popover overlay as the other overlay components, so it opens above dialogs.
+
 ## 0.30.1
 
 ### Patch Changes
