@@ -84,25 +84,6 @@
 
 ---
 
-## P33 — Block:`org-chart`（elkjs 排版 + 薄殼渲染）
-
-經典組織圖 block：雙主管 / 矩陣匯報、跨層虛線、直角連線避障、平移縮放，`tree` 側欄負責鍵盤導航。
-
-- 選型決策：[ADR-0002](.claude/adrs/0002-org-chart-layout-engine.md)（elkjs `layered`，不用 d3、不開 primitive）
-- 範圍 / 步驟 / 停止條件 / 驗證：[charter p33-org-chart](.claude/charters/p33-org-chart.md)
-
-- [x] 批次 A Spike（gate）：全數通過，結果見 ADR-0002
-- [x] 批次 B `layout.ts`
-- [x] 批次 C 渲染殼
-- [ ] 批次 D 互動（平移縮放）
-- [ ] 批次 E a11y（tree 聯動）
-- [ ] 批次 F registry + docs
-- [ ] 批次 G E2E + changeset
-
-**成本**：中高。批次 A 決定可行性，先做；C–G 各自可拆 PR。
-
----
-
 ## P34 — Component:`rich-text-editor`（Tiptap v3 + CDK overlay）
 
 富文本編輯器元件：可組合工具列、表單綁定（CVA，值為 HTML 字串）、placeholder / 唯讀 / 字數上限、連結、圖片、bubble menu、表格、mention / slash 指令。直接用 `@tiptap/core`，不依賴 `ngx-tiptap`，只用開源擴充；`packages/ui` + `registry` 雙份交付，歸 `patterns` 群組。
@@ -115,7 +96,7 @@
 
 - [x] M0 Spike（gate）：全數通過，結果見 ADR-0003
 - [x] M1 核心：root + CVA + field + StarterKit 工具列 + placeholder / readonly / disabled / 字數 + registry + docs
-- [ ] M2 連結 + 圖片 + bubble menu
+- [ ] M2 連結 + 圖片 + bubble menu（開工前先拍板 PRD §12「待決」：link protocol 白名單、`Mod-K`、圖片貼上 / 拖放、圖片載入失敗呈現、bubble menu 鍵盤進入方式）
 - [ ] M3 表格
 - [ ] M4 mention + slash 指令
 

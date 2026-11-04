@@ -10,6 +10,8 @@ This is a snapshot, not a commitment or a timeline. Items move, get reprioritize
 
 ## Component completeness
 
+- **Rich text editor, next milestones** — links, images, and a bubble menu; then tables; then mentions and slash commands, on top of the shipped `rich-text-editor` core.
+
 Optional leftover sibling gaps, still tracked as P32 in [`TODOLIST.md`](TODOLIST.md): combobox `ariaLabel`, select `required`, and toast `class` docs.
 
 ## Ecosystem / team use
@@ -19,6 +21,8 @@ Optional leftover sibling gaps, still tracked as P32 in [`TODOLIST.md`](TODOLIST
 
 ## Recently shipped
 
+- `rich-text-editor` — a Tiptap-based editor with forms and field integration, a composable toolbar, placeholder, read-only/disabled, and a character limit
+- `block/org-chart` — an org chart page template with automatic layout, pan/zoom, and a keyboard-accessible tree directory
 - P32 sibling alignment — sheet built-in close and header `align`, radio `size`, a real dropdown-menu submenu, popover four-way `side` plus aria fallback, transfer root `disabled`/`ariaLabel`, and table sticky backgrounds plus loading/column-visibility recipes
 - Blocks starter set — `sanring add block/login` (and `dashboard-shell`, `table-page`) installs a page-level template plus its component dependencies
 - Open in StackBlitz — each component docs previewer can open a minimal Angular 22 + Tailwind project with that example

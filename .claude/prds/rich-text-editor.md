@@ -396,7 +396,7 @@ interface RichTextEditorSlashCommand {
 
 | Milestone | 預計完成 | 內容 | 驗收門檻 |
 |---|---|---|---|
-| M0 Spike / ADR | TODO | docs 暫時頁：Tiptap v3 + StarterKit 在 Angular 22 建立 / 銷毀；SSR build 不報錯；量測 bundle 增量（M1 組合 + 全擴充組合，registry 與 `@sanring/ui` 兩條路徑）；確認 v3 套件名、`setContent` 簽章、StarterKit 停用 Link 的方法；CDK overlay 定位到選取範圍的 PoC；寫 ADR-0003 | ADR-0003 Accepted；暫時頁刪除；任一 gate 不過就停工回報 |
+| M0 Spike / ADR | 完成（2026-10-13） | docs 暫時頁：Tiptap v3 + StarterKit 在 Angular 22 建立 / 銷毀；SSR build 不報錯；量測 bundle 增量（M1 組合 + 全擴充組合，registry 與 `@sanring/ui` 兩條路徑）；確認 v3 套件名、`setContent` 簽章、StarterKit 停用 Link 的方法；CDK overlay 定位到選取範圍的 PoC；寫 ADR-0003 | ADR-0003 Accepted；暫時頁刪除；任一 gate 不過就停工回報 |
 | M1 核心 tracer bullet | 完成（2026-10-13） | root 元件 + CVA + field 整合 + StarterKit（Link 停用）+ toolbar（toggle / action / heading-menu / divider / tooltip）+ placeholder + readonly/disabled + character count + 內容排版樣式 + registry 條目 + `packages/ui` entry + docs 頁 + CLI peer 測試 + changeset | `pnpm lint`、`pnpm test` 綠；`check-registry-parity.mjs` 綠；`/audit-component rich-text-editor` 工程裁決 ✅；Story 1–4、10 的 AC 全過；`pnpm test:e2e:docs`（含 axe）與 `pnpm test:e2e:cli` 綠 |
 | M2 Link + Image + Bubble menu | TODO | Link UI（popover）+ protocol 驗證；Image（URL + `imageUpload` 介面）；bubble menu（CDK overlay）；peer 新增 `@tiptap/extension-image` | Story 5–7 AC；XSS 案例測試（`javascript:` 被拒）；axe 零違規；overlay 與既有 dropdown / popover 同頁共存的 e2e |
 | M3 Table | TODO | `@tiptap/extension-table` + 表格操作選單 + 表格樣式 | Story 8 AC；鍵盤 Tab 導覽 e2e；axe 零違規 |
@@ -435,14 +435,21 @@ interface RichTextEditorSlashCommand {
   - `CharacterCount` 只負責計數；上限由自寫 plugin 執行，表單寫入帶 `RICH_TEXT_EDITOR_EXTERNAL_VALUE` meta 一律放行（內建 `limit` 會擋掉超限的 `setContent`）
 - [x] v1 範圍：StarterKit + Link + Image + Table + Mention / Slash；Placeholder、唯讀 / disabled、字數統計、Bubble menu；CVA 值為 HTML；可組合 API
 
+- [x] 開 **ADR-0003**（2026-10-13，Accepted）：引擎版本鎖定 + overlay 策略 + `@sanring/ui` 依賴策略
+
 ### 待決
-- [ ] TODO：是否開 **ADR-0003**（建議開：引擎版本鎖定 + overlay 策略 + `@sanring/ui` 依賴策略）
-- [ ] TODO（M0 發現，C2 準入）：`extension-image` 無載入失敗 hook，不寫 NodeView 的前提下 Story 6「載入失敗錯誤樣式」只能用 CSS 有限呈現——縮減該 AC 或接受 CSS 方案（ADR-0003）
-- [ ] TODO：Link protocol 白名單最終清單；圖片 src 允許的 scheme（是否允許 `data:`）
-- [ ] TODO：v1 圖片是否支援貼上 / 拖放上傳（或只支援按鈕選檔）；圖片載入失敗的呈現方式
-- [ ] TODO：bubble menu 的鍵盤進入方式（建議 `Alt+F10`）
-- [ ] TODO：表格預設尺寸、是否啟用欄寬 resize
+
+M2 開工前：
+- [ ] TODO：Link protocol 白名單最終清單（草案 `http`、`https`、`mailto`）；圖片 src 允許的 scheme（是否允許 `data:`）
 - [ ] TODO：連結快捷鍵是否綁 `Mod-K`
+- [ ] TODO：v1 圖片是否支援貼上 / 拖放上傳（或只支援按鈕選檔）
+- [ ] TODO（M0 發現，C2 準入）：`extension-image` 無載入失敗 hook，不寫 NodeView 的前提下 Story 6「載入失敗錯誤樣式」只能用 CSS 有限呈現——縮減該 AC 或接受 CSS 方案（ADR-0003）
+- [ ] TODO：bubble menu 的鍵盤進入方式（建議 `Alt+F10`）
+
+M3 開工前：
+- [ ] TODO：表格預設尺寸、是否啟用欄寬 resize
+
+其他：
 - [x] `@tiptap/*` peer 版本範圍：`^3.31.4`，所有套件一起升級（ADR-0003 決策 1）
 - [ ] TODO：各 milestone 預計完成日期
 - [x] Tiptap v3 在 Angular 22 zoneless + SSR：M0 驗證無問題（ADR-0003 A1、A2）

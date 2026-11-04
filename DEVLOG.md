@@ -986,3 +986,28 @@ P30 先前已收完 15 個必修缺口；這輪把剩下 15 組建議項目逐�
 - [x] Docs Registry 頁補完整欄位定義(型別、必要/選用)
 
 **已完成**:`expandGithubRegistrySource` 在 `fetchRegistry` / `fetchFile` 進路徑判斷前先 normalize,避免 `github:` 被當成本地路徑。Docs 加了 GitHub 範例、root / item / shared / group / migration 五張 API 表。Directory、namespaces、auth、search API、docs 多頁拆分仍在 TODOLIST,這輪不做。
+
+---
+
+## P33 — Block `org-chart`(elkjs 排版 + 薄殼渲染)(2026-10-02)
+
+- [x] 批次 A–G 全部完成,0.29.0 出貨 `block/org-chart`(PR #51、#54)
+
+**已完成**:選型與 spike 結果見 [ADR-0002](.claude/adrs/0002-org-chart-layout-engine.md),範圍與批次見 [charter p33-org-chart](.claude/charters/p33-org-chart.md)。elkjs `layered` + 直角連線,排版跑在 Worker,elk 只出現在 `layout.ts` / `org-chart.worker.ts`;節點 HTML、連線 SVG 共用座標系。互動有平移縮放與 fit-to-view,`tree` 側欄負責鍵盤導覽並與畫布同步;`showTree=false` 可只顯示畫布。`elkjs` 以 peer dependency 安裝(EPL-2.0)。
+
+**驗證**:`org-chart-layout.spec.ts`(排版單元測試)、`apps/docs/e2e/org-chart.spec.ts`(平移縮放、tree 同步),CLI 測試涵蓋 elkjs peer 安裝。
+
+**未做**:charter 驗收清單「`pnpm build` 後主 bundle 無 elk」等三項沒有回填勾選。
+
+---
+
+## P34 — `rich-text-editor` M0 + M1(2026-10-13)
+
+- [x] M0 spike(gate):全數通過,見 [ADR-0003](.claude/adrs/0003-rich-text-editor-engine.md)
+- [x] M1 核心:0.30.0 出貨(PR #56);0.30.1 修垂直工具列方向鍵
+
+**已完成**:Tiptap v3 開源套件、動態 `import()` 載入(不進初始 bundle)。CVA 值為 HTML,空內容正規化成 `''`;整合 `sanring-field`;工具列可組合(roving focus、toggle / action、heading menu、character count);`placeholder`、`readonly`、`disabled`、`maxCharacters`(超限只提示、不截斷)。M1 細節決策記在 [PRD](.claude/prds/rich-text-editor.md) §12。
+
+**踩過的坑**:heading menu 用 `dropdown-menu` 的 `DomPortal`,SSR 會 hydration 失敗(NG0500),暫以 `ngSkipHydration` 繞過;docs 外框在手機寬度有 axe `scrollable-region-focusable`,e2e 的 axe 只掃描編輯器預覽區。兩項都留在 TODOLIST P34。
+
+**未做**:M2(連結 / 圖片 / bubble menu)、M3(表格)、M4(mention / slash),仍在 TODOLIST。
