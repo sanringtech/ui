@@ -1016,7 +1016,7 @@ P30 先前已收完 15 個必修缺口；這輪把剩下 15 組建議項目逐�
 
 ## P34 收尾 — `dropdown-menu` SSR hydration(NG0500)(2026-11-04)
 
-- [x] `dropdown-menu` 在 SSR 頁面可正常 hydrate,移除 `rich-text-editor-heading-menu` 的 `ngSkipHydration`
+- [x] `dropdown-menu` 在 SSR 頁面可正常 hydrate,移除 `rich-text-editor-heading-menu` 的 `ngSkipHydration`(0.30.3 出貨)
 
 **已完成**:trigger 與 sub-content 原本在 `effect` 裡一拿到 menu / trigger 就用 `DomPortal` 把 content 搬進 CDK overlay,server 端也會執行,client hydrate 時找不到原位的節點。改成 `afterNextRender` 設 `rendered` signal 後才 attach:server 不跑 `afterNextRender`,content 留在原位;瀏覽器在 hydration 後才搬。`context-menu` 只在開啟時 attach,不受影響。
 
@@ -1028,6 +1028,7 @@ P30 先前已收完 15 個必修缺口；這輪把剩下 15 組建議項目逐�
 
 - [x] 可捲動區域都能用鍵盤聚焦;`rich-text-editor` e2e 加上整頁 `scrollable-region-focusable` 檢查
 - [x] 修好 docs e2e 原本就失敗的 6 個測試(手機寬度溢出、org-chart)
+- [x] `table-container` 溢出時可聚焦、`paginator` 換行、org-chart 頭像改為裝飾(0.30.3 出貨)
 
 **已完成**:
 - docs 安裝區的兩個 `pre` 比照主程式碼區塊加 `tabindex="0"` + focus ring;頁首的安裝指令在「複製」按鈕裡,不能再放可聚焦的捲動區,改成截斷(按鈕複製的是完整指令)。timeline 水平範例的捲動外框加 `tabindex="0"`。
@@ -1044,7 +1045,7 @@ P30 先前已收完 15 個必修缺口；這輪把剩下 15 組建議項目逐�
 
 ## otp-input — iOS Safari / Chrome 點擊後無法聚焦(2026-11-04)
 
-- [x] iOS 上點 otp-input 的格子可以叫出鍵盤並保持聚焦
+- [x] iOS 上點 otp-input 的格子可以叫出鍵盤並保持聚焦(0.30.3 出貨)
 
 **已完成**:iOS 只接受「使用者手勢直接觸發」的聚焦才會開鍵盤。原本隱藏的 input 是 `pointer-events-none`,格子的 `pointerdown` 又呼叫 `preventDefault()`,再用 `queueMicrotask` 延後 `focus()`,iOS 不把它當成手勢,鍵盤不會出現。改成讓 input(`z-20`、`opacity-[0.01]`)直接接收點擊,依點擊座標換算是第幾格(`slotIndexFromPoint`);格子的 `pointerdown` 不再 `preventDefault()`;`focusSlot` 同步呼叫 `focus()`,`setSelectionRange` 包 `try/catch`(iOS 在欄位尚未可編輯時會丟錯);host 加 `touch-manipulation`。`packages/ui` 與 `registry` 兩份同步修改。
 
