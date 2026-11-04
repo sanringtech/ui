@@ -1,5 +1,15 @@
 # @sanring/cli
 
+## 0.30.3
+
+### Patch Changes
+
+- 398c4a3: Fix `dropdown-menu` with server-side rendering: hydration failed with NG0500 because the menu content was moved into the CDK overlay on the server too. The content now moves into the overlay only in the browser, after hydration. `rich-text-editor`'s heading menu no longer needs `ngSkipHydration`.
+- 311b81f: Keep `otp-input` focused on iOS Safari and Chrome: the hidden field now receives the tap, and slot `pointerdown` no longer calls `preventDefault()`.
+- 91d67df: - `table`: `sanring-table-container` becomes keyboard-focusable (`tabindex="0"` with a focus ring) while its content overflows, so keyboard users can scroll wide tables. Tables that fit are unchanged.
+  - `pagination`: `sanring-paginator` wraps onto two lines when space runs out, instead of squeezing the range label.
+  - `block/org-chart`: card avatars are marked decorative (`aria-hidden`), since the card button already names the person.
+
 ## 0.30.2
 
 ### Patch Changes
