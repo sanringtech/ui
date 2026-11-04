@@ -111,6 +111,7 @@ const OTP_INPUT_TEXT_ALIGN_CLASSES: Record<OtpInputTextAlign, string> = {
       [readOnly]="readOnly()"
       [disabled]="isDisabled()"
       [attr.maxlength]="slotCount()"
+      (pointerdown)="onNativePointerDown($event)"
       (focus)="onInputFocus()"
       (blur)="onInputBlur()"
       (input)="onInput($event)"
@@ -194,7 +195,7 @@ export class OtpInputComponent
 
   protected readonly hostClass = computed(() =>
     cn(
-      'relative inline-flex max-w-full',
+      'relative inline-flex max-w-full touch-manipulation',
       this.orientation() === 'vertical' ? 'flex-col' : 'flex-row items-center',
       this.isDisabled() && 'cursor-not-allowed opacity-50',
       this.class(),
@@ -203,7 +204,7 @@ export class OtpInputComponent
 
   protected readonly inputClass = computed(() =>
     cn(
-      'pointer-events-none absolute inset-0 size-full opacity-0',
+      'absolute inset-0 z-20 size-full cursor-text opacity-[0.01]',
       'border-0 bg-transparent p-0 text-base text-transparent outline-none caret-transparent',
     ),
   );
@@ -308,9 +309,15 @@ export class OtpInputComponent
     this.focus();
   }
 
+  onNativePointerDown(event: PointerEvent): void {
+    if (this.isDisabled() || this.readOnly()) return;
+    this.focused = true;
+    this.focusedIndex.set(this.slotIndexFromPoint(event.clientX, event.clientY));
+    this.emitStateChanges();
+  }
+
   onSlotPointerDown(event: PointerEvent, index: number): void {
     if (this.isDisabled() || this.readOnly()) return;
-    event.preventDefault();
     event.stopPropagation();
     this.focusSlot(index);
   }
@@ -591,17 +598,42 @@ export class OtpInputComponent
     return event.key.length === 1 && !event.metaKey && !event.ctrlKey && !event.altKey;
   }
 
+  private slotIndexFromPoint(x: number, y: number): number {
+    const slots = this.otpInput()?.nativeElement.parentElement?.querySelectorAll<HTMLElement>(
+      '[data-otp-slot]',
+    );
+    const vertical = this.orientation() === 'vertical';
+
+    if (slots) {
+      for (let index = 0; index < slots.length; index++) {
+        const rect = slots[index].getBoundingClientRect();
+        if (vertical ? y >= rect.top && y <= rect.bottom : x >= rect.left && x <= rect.right) {
+          return index;
+        }
+      }
+    }
+
+    const nextIndex = this.findFirstEmptyIndex();
+    return nextIndex === -1 ? this.slotCount() - 1 : nextIndex;
+  }
+
   private focusSlot(index: number, options?: FocusOptions): void {
     const nextIndex = Math.min(Math.max(index, 0), this.slotCount() - 1);
     this.focused = true;
     this.focusedIndex.set(nextIndex);
     this.emitStateChanges();
 
-    queueMicrotask(() => {
-      const input = this.otpInput()?.nativeElement;
-      input?.focus(options);
-      input?.setSelectionRange(input.value.length, input.value.length);
-    });
+    const input = this.otpInput()?.nativeElement;
+    if (!input) return;
+    if (typeof document === 'undefined' || document.activeElement !== input) {
+      input.focus(options);
+    }
+    try {
+      const offset = input.value.length;
+      input.setSelectionRange(offset, offset);
+    } catch {
+      // iOS can throw if the field is not yet considered editable.
+    }
   }
 
   private getKeydownEvent(event: KeyboardEvent, index: number): OtpInputKeydownEvent {

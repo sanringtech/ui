@@ -112,11 +112,25 @@ describe('OtpInputComponent', () => {
 
     expect(input.type).toBe('text');
     expect(input.classList.contains('inset-0')).toBe(true);
+    expect(input.classList.contains('z-20')).toBe(true);
+    expect(input.classList.contains('pointer-events-none')).toBe(false);
     expect(input.classList.contains('text-base')).toBe(true);
     expect(host.classList.contains('overflow-x-auto')).toBe(false);
     expect(slot.classList.contains('min-w-0')).toBe(true);
     expect(slot.classList.contains('shrink')).toBe(true);
     expect(slot.classList.contains('shrink-0')).toBe(false);
+  });
+
+  it('does not cancel a slot pointerdown, so iOS can treat it as a user gesture', () => {
+    const fixture = TestBed.createComponent(OtpInputTestHost);
+    fixture.detectChanges();
+
+    const slot = fixture.nativeElement.querySelector('[data-otp-slot]') as HTMLElement;
+    const event = new PointerEvent('pointerdown', { bubbles: true, cancelable: true });
+    slot.dispatchEvent(event);
+
+    expect(event.defaultPrevented).toBe(false);
+    expect(document.activeElement).toBe(inputAt(fixture, 0));
   });
 
   it('renders focus inside the active slot without moving it', () => {

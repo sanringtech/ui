@@ -1039,3 +1039,15 @@ P30 先前已收完 15 個必修缺口；這輪把剩下 15 組建議項目逐�
 **驗證**:全部 55 個元件頁在 mobile-chromium 跑 `scrollable-region-focusable` 為 0;`pnpm test:e2e:docs` 74 passed(修前 59 passed / 6 failed / 9 did not run);`@sanring/ui` 單元測試 505 passed;registry sync / parity 綠。
 
 **未做**:整頁 axe 還有 `color-contrast` 發現,另列 TODOLIST P34。
+
+---
+
+## otp-input — iOS Safari / Chrome 點擊後無法聚焦(2026-11-04)
+
+- [x] iOS 上點 otp-input 的格子可以叫出鍵盤並保持聚焦
+
+**已完成**:iOS 只接受「使用者手勢直接觸發」的聚焦才會開鍵盤。原本隱藏的 input 是 `pointer-events-none`,格子的 `pointerdown` 又呼叫 `preventDefault()`,再用 `queueMicrotask` 延後 `focus()`,iOS 不把它當成手勢,鍵盤不會出現。改成讓 input(`z-20`、`opacity-[0.01]`)直接接收點擊,依點擊座標換算是第幾格(`slotIndexFromPoint`);格子的 `pointerdown` 不再 `preventDefault()`;`focusSlot` 同步呼叫 `focus()`,`setSelectionRange` 包 `try/catch`(iOS 在欄位尚未可編輯時會丟錯);host 加 `touch-manipulation`。`packages/ui` 與 `registry` 兩份同步修改。
+
+**驗證**:otp-input 單元測試 16 個全過(新增「格子 pointerdown 不被取消」測試);`@sanring/ui` 單元測試 505 個全過;lint、registry sync / parity 綠。Chromium 手機模擬(Pixel 7)以觸控座標點第 3 格:修改前後都會聚焦到第 3 格並可輸入,行為一致。
+
+**未做**:本機沒有安裝 Playwright WebKit,iOS Safari 的實際行為需要在真機確認。
