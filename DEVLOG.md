@@ -1008,6 +1008,16 @@ P30 先前已收完 15 個必修缺口；這輪把剩下 15 組建議項目逐�
 
 **已完成**:Tiptap v3 開源套件、動態 `import()` 載入(不進初始 bundle)。CVA 值為 HTML,空內容正規化成 `''`;整合 `sanring-field`;工具列可組合(roving focus、toggle / action、heading menu、character count);`placeholder`、`readonly`、`disabled`、`maxCharacters`(超限只提示、不截斷)。M1 細節決策記在 [PRD](.claude/prds/rich-text-editor.md) §12。
 
-**踩過的坑**:heading menu 用 `dropdown-menu` 的 `DomPortal`,SSR 會 hydration 失敗(NG0500),暫以 `ngSkipHydration` 繞過;docs 外框在手機寬度有 axe `scrollable-region-focusable`,e2e 的 axe 只掃描編輯器預覽區。兩項都留在 TODOLIST P34。
+**踩過的坑**:heading menu 用 `dropdown-menu` 的 `DomPortal`,SSR 會 hydration 失敗(NG0500),當時以 `ngSkipHydration` 繞過,後來已修(見下一節);docs 外框在手機寬度有 axe `scrollable-region-focusable`,e2e 的 axe 只掃描編輯器預覽區,仍在 TODOLIST P34。
 
 **未做**:M2(連結 / 圖片 / bubble menu)、M3(表格)、M4(mention / slash),仍在 TODOLIST。
+
+---
+
+## P34 收尾 — `dropdown-menu` SSR hydration(NG0500)(2026-11-04)
+
+- [x] `dropdown-menu` 在 SSR 頁面可正常 hydrate,移除 `rich-text-editor-heading-menu` 的 `ngSkipHydration`
+
+**已完成**:trigger 與 sub-content 原本在 `effect` 裡一拿到 menu / trigger 就用 `DomPortal` 把 content 搬進 CDK overlay,server 端也會執行,client hydrate 時找不到原位的節點。改成 `afterNextRender` 設 `rendered` signal 後才 attach:server 不跑 `afterNextRender`,content 留在原位;瀏覽器在 hydration 後才搬。`context-menu` 只在開啟時 attach,不受影響。
+
+**驗證**:比照 ADR-0003 A2,在 repo 外 `ng new --ssr` scratch 專案放入 registry 版 dropdown-menu(含 submenu),prerender 後用 Chromium 載入:修正前 console 有 NG0500,修正後 0 錯誤、hydration 完成、menu 與 submenu 都能開。dropdown-menu / context-menu / rich-text-editor 單元測試 61 個全過;registry sync / parity 綠。

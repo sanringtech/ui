@@ -3,10 +3,12 @@ import {
   Component,
   ElementRef,
   OnDestroy,
+  afterNextRender,
   computed,
   effect,
   inject,
   input,
+  signal,
 } from '@angular/core';
 import { Menu as ngMenu } from '@angular/aria/menu';
 import {
@@ -54,6 +56,8 @@ export class DropdownMenuSubContentComponent implements OnDestroy {
 
   private overlayRef: OverlayRef | null = null;
   private positionStrategy: FlexibleConnectedPositionStrategy | null = null;
+  // Attach only in the browser after hydration; see DropdownMenuTriggerDirective.
+  private readonly rendered = signal(false);
 
   protected readonly contentClass = computed(() =>
     cn(
@@ -66,9 +70,11 @@ export class DropdownMenuSubContentComponent implements OnDestroy {
   );
 
   constructor() {
+    afterNextRender(() => this.rendered.set(true));
+
     effect(() => {
       const trigger = this.sub.triggerRef();
-      if (trigger && !this.overlayRef) {
+      if (trigger && this.rendered() && !this.overlayRef) {
         this.attachOverlay(trigger.nativeElement);
       }
     });

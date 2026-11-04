@@ -2,11 +2,13 @@ import {
   Directive,
   ElementRef,
   OnDestroy,
+  afterNextRender,
   computed,
   effect,
   inject,
   input,
   numberAttribute,
+  signal,
 } from '@angular/core';
 import {
   ConnectionPositionPair,
@@ -47,6 +49,9 @@ export class DropdownMenuTriggerDirective implements OnDestroy {
 
   private overlayRef: OverlayRef | null = null;
   private positionStrategy: FlexibleConnectedPositionStrategy | null = null;
+  // Server rendering never runs afterNextRender, so the content stays where it is declared and
+  // hydration matches; in the browser it moves into the overlay only after hydration (NG0500).
+  private readonly rendered = signal(false);
 
   readonly align = input<DropdownMenuAlign>('start');
   readonly side = input<DropdownMenuSide>('bottom');
@@ -62,11 +67,12 @@ export class DropdownMenuTriggerDirective implements OnDestroy {
 
   constructor() {
     this.focusMonitor.monitor(this.elementRef);
+    afterNextRender(() => this.rendered.set(true));
 
     // 只在 menu() 第一次出現時把它的 DOM node 搬進 overlay，之後就不再重建。
     effect(() => {
       const menu = this.ngTrigger.menu();
-      if (menu && !this.overlayRef) {
+      if (menu && this.rendered() && !this.overlayRef) {
         this.attachOverlay(menu.element);
       }
     });
