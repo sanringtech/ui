@@ -1008,7 +1008,7 @@ P30 先前已收完 15 個必修缺口；這輪把剩下 15 組建議項目逐�
 
 **已完成**:Tiptap v3 開源套件、動態 `import()` 載入(不進初始 bundle)。CVA 值為 HTML,空內容正規化成 `''`;整合 `sanring-field`;工具列可組合(roving focus、toggle / action、heading menu、character count);`placeholder`、`readonly`、`disabled`、`maxCharacters`(超限只提示、不截斷)。M1 細節決策記在 [PRD](.claude/prds/rich-text-editor.md) §12。
 
-**踩過的坑**:heading menu 用 `dropdown-menu` 的 `DomPortal`,SSR 會 hydration 失敗(NG0500),當時以 `ngSkipHydration` 繞過,後來已修(見下一節);docs 外框在手機寬度有 axe `scrollable-region-focusable`,e2e 的 axe 只掃描編輯器預覽區,仍在 TODOLIST P34。
+**踩過的坑**:heading menu 用 `dropdown-menu` 的 `DomPortal`,SSR 會 hydration 失敗(NG0500),當時以 `ngSkipHydration` 繞過,後來已修(見下一節);docs 外框在手機寬度有 axe `scrollable-region-focusable`,當時 e2e 的 axe 只掃描編輯器預覽區,後來已修(見後續小節)。
 
 **未做**:M2(連結 / 圖片 / bubble menu)、M3(表格)、M4(mention / slash),仍在 TODOLIST。
 
@@ -1021,3 +1021,21 @@ P30 先前已收完 15 個必修缺口；這輪把剩下 15 組建議項目逐�
 **已完成**:trigger 與 sub-content 原本在 `effect` 裡一拿到 menu / trigger 就用 `DomPortal` 把 content 搬進 CDK overlay,server 端也會執行,client hydrate 時找不到原位的節點。改成 `afterNextRender` 設 `rendered` signal 後才 attach:server 不跑 `afterNextRender`,content 留在原位;瀏覽器在 hydration 後才搬。`context-menu` 只在開啟時 attach,不受影響。
 
 **驗證**:比照 ADR-0003 A2,在 repo 外 `ng new --ssr` scratch 專案放入 registry 版 dropdown-menu(含 submenu),prerender 後用 Chromium 載入:修正前 console 有 NG0500,修正後 0 錯誤、hydration 完成、menu 與 submenu 都能開。dropdown-menu / context-menu / rich-text-editor 單元測試 61 個全過;registry sync / parity 綠。
+
+---
+
+## P34 收尾 — docs 手機寬度 axe `scrollable-region-focusable` + 既有 e2e 失敗(2026-11-04)
+
+- [x] 可捲動區域都能用鍵盤聚焦;`rich-text-editor` e2e 加上整頁 `scrollable-region-focusable` 檢查
+- [x] 修好 docs e2e 原本就失敗的 6 個測試(手機寬度溢出、org-chart)
+
+**已完成**:
+- docs 安裝區的兩個 `pre` 比照主程式碼區塊加 `tabindex="0"` + focus ring;頁首的安裝指令在「複製」按鈕裡,不能再放可聚焦的捲動區,改成截斷(按鈕複製的是完整指令)。timeline 水平範例的捲動外框加 `tabindex="0"`。
+- `table-container` 在瀏覽器以 `ResizeObserver` 偵測是否溢出,溢出時才加 `tabindex="0"` 與 focus ring,沒溢出的表格不多一個 tab stop。
+- 預覽區是 `grid place-items-center` 的 `auto` 軌道,會被表格的 min-content 撐開,`/components/table` 在 360px 寬到 494px。改成 `grid-cols-[minmax(0,1fr)]`,並加 `overflow-x-auto` 當保險。
+- `paginator` 加 `flex-wrap`:窄寬度時範圍文字原本被擠到 16px 寬。
+- org-chart e2e:canvas-only 預覽(`showTree=false`)加在後面以後,`.last()` 指到沒有 tree 的那個;改用第一個預覽,手機寬度(tree 在 `sm` 以下隱藏)跳過 tree 段落。卡片裡的 avatar 是裝飾(按鈕已有姓名),加 `aria-hidden`,修掉 axe `role-img-alt`。
+
+**驗證**:全部 55 個元件頁在 mobile-chromium 跑 `scrollable-region-focusable` 為 0;`pnpm test:e2e:docs` 74 passed(修前 59 passed / 6 failed / 9 did not run);`@sanring/ui` 單元測試 505 passed;registry sync / parity 綠。
+
+**未做**:整頁 axe 還有 `color-contrast` 發現,另列 TODOLIST P34。

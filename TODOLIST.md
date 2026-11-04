@@ -103,4 +103,4 @@
 **成本**：高。M0 決定可行性，先做；M2 與 M3 互不依賴，可對調；M4 依賴 M2 的 overlay 定位。
 
 **M1 收尾發現（P34 範圍外）**：
-- [ ] docs 外框在手機寬度有 axe `scrollable-region-focusable`（可捲動的程式碼區塊不可聚焦），多個元件頁都有；`rich-text-editor` e2e 的 axe 暫時只掃描編輯器預覽區
+- [ ] docs 頁面整頁 axe 有 `color-contrast`（程式碼高亮的部分 token、`#rte-docs-description-label`、field 錯誤訊息），`rich-text-editor` e2e 的完整 WCAG 掃描因此仍只掃編輯器預覽區（`scrollable-region-focusable` 已改為整頁檢查）。尚未查證是真實對比不足還是主題切換動畫中的誤報

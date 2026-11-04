@@ -1,9 +1,9 @@
 import { expect, test, type Page } from '@playwright/test';
 import axe from 'axe-core';
 
-async function expectNoAxeViolations(page: Page, selector: string) {
+async function expectNoAxeViolations(page: Page, selector: string, rules?: string[]) {
   await page.addScriptTag({ content: axe.source });
-  const violations = await page.evaluate(async (sel) => {
+  const violations = await page.evaluate(async ({ sel, rules }) => {
     const root = document.querySelector(sel);
     if (!root) throw new Error(`Missing ${sel}`);
     const axeApi = (
@@ -19,14 +19,16 @@ async function expectNoAxeViolations(page: Page, selector: string) {
       }
     ).axe;
     const results = await axeApi.run(root, {
-      runOnly: { type: 'tag', values: ['wcag2a', 'wcag2aa'] },
+      runOnly: rules
+        ? { type: 'rule', values: rules }
+        : { type: 'tag', values: ['wcag2a', 'wcag2aa'] },
     });
     return results.violations.map((v) => ({
       id: v.id,
       help: v.help,
       targets: v.nodes.map((n) => n.target),
     }));
-  }, selector);
+  }, { sel: selector, rules });
   expect(violations, JSON.stringify(violations, null, 2)).toEqual([]);
 }
 
@@ -263,9 +265,9 @@ test.describe('rich-text-editor', () => {
       await expect(page.locator('html')).toHaveAttribute('data-theme', theme);
       await expect(page.getByTestId('rte-limited').locator('.ProseMirror')).toBeVisible();
 
-      // Scoped to the editor previews: on mobile the docs shell itself has
-      // scrollable-region-focusable findings (code blocks) that are not this
-      // component's and exist on other component pages too.
+      // Full WCAG scan is scoped to the editor previews; the docs page itself still
+      // has color-contrast findings (TODOLIST P34). Scrollable regions are checked page-wide.
+      await expectNoAxeViolations(page, 'main', ['scrollable-region-focusable']);
       for (const id of [
         'rte-basic',
         'rte-disabled',

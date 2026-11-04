@@ -76,7 +76,8 @@ type PackageManager = 'pnpm' | 'npm' | 'yarn' | 'bun';
           </div>
 
           <pre
-            class="m-0 overflow-x-auto px-4 py-4 font-mono text-[13px] leading-6 text-[#cbd5e1] sm:text-sm sm:leading-7"
+            class="m-0 overflow-x-auto px-4 py-4 font-mono text-[13px] leading-6 text-[#cbd5e1] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-[var(--docs-focus-ring)] sm:text-sm sm:leading-7"
+            tabindex="0"
           ><code>{{ command() }}</code></pre>
         </div>
       </sanring-tabs-content>
@@ -100,7 +101,8 @@ type PackageManager = 'pnpm' | 'npm' | 'yarn' | 'bun';
           </div>
 
           <pre
-            class="m-0 overflow-x-auto px-4 py-4 font-mono text-[13px] leading-6 text-[#cbd5e1] sm:text-sm sm:leading-7"
+            class="m-0 overflow-x-auto px-4 py-4 font-mono text-[13px] leading-6 text-[#cbd5e1] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-[var(--docs-focus-ring)] sm:text-sm sm:leading-7"
+            tabindex="0"
           ><code>{{ manualSnippet() }}</code></pre>
         </div>
       </sanring-tabs-content>

@@ -34,7 +34,7 @@ import {
         </div>
 
         <div
-          class="grid place-items-center bg-[var(--docs-surface)]"
+          class="grid grid-cols-[minmax(0,1fr)] place-items-center overflow-x-auto bg-[var(--docs-surface)]"
           [class]="
             wide()
               ? 'min-h-[340px] p-4 max-[720px]:min-h-[280px] max-[720px]:p-3'

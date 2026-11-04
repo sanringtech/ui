@@ -34,7 +34,9 @@ test.describe('org-chart block', () => {
   test('renders chart cards, pans/zooms, and syncs tree selection', async ({ page }) => {
     await page.goto('/blocks/org-chart');
 
-    const preview = page.getByRole('group', { name: 'Preview' }).last();
+    // The first preview has the tree directory; the second is canvas-only (showTree=false).
+    const previews = page.getByRole('group', { name: 'Preview' });
+    const preview = previews.first();
     await expect(preview.getByRole('button', { name: /Ada Lin/i }).first()).toBeVisible({
       timeout: 30_000,
     });
@@ -51,11 +53,17 @@ test.describe('org-chart block', () => {
       expect(afterZoom.width).toBeGreaterThan(before.width);
     }
 
-    const directory = preview.getByRole('tree', { name: 'People' });
-    await expect(directory).toBeVisible();
-    await directory.getByRole('treeitem', { name: /Quin Fang/i }).click();
-    await expect(preview.locator('[data-org-card="quin"][data-selected="true"]')).toBeVisible();
-    await expect(preview.locator('[data-org-card="quin"]')).toBeFocused();
+    // The directory is hidden below the `sm` breakpoint (640px) by design.
+    if ((page.viewportSize()?.width ?? 0) >= 640) {
+      const directory = preview.getByRole('tree', { name: 'People' });
+      await expect(directory).toBeVisible();
+      await directory.getByRole('treeitem', { name: /Quin Fang/i }).click();
+      await expect(preview.locator('[data-org-card="quin"][data-selected="true"]')).toBeVisible();
+      await expect(preview.locator('[data-org-card="quin"]')).toBeFocused();
+    }
+
+    await expect(previews.nth(1).locator('sanring-org-chart')).toBeVisible();
+    await expect(previews.nth(1).getByRole('tree')).toHaveCount(0);
 
     await expectNoAxeViolations(page, 'sanring-org-chart');
   });

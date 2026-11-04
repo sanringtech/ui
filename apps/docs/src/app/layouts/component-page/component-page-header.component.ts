@@ -59,10 +59,11 @@ import { DocsPageHeaderComponent } from './docs-page-header.component';
                 </span>
               </span>
               <span
-                class="flex min-w-0 items-baseline gap-2 overflow-x-auto pb-0.5 font-mono text-[13px]"
+                class="flex min-w-0 items-baseline gap-2 overflow-hidden pb-0.5 font-mono text-[13px]"
               >
                 <span class="shrink-0 text-[var(--docs-accent)]">$</span>
-                <span class="whitespace-nowrap text-[var(--docs-code-fg)]">{{
+                <!-- Truncated, not scrollable: a scroll region inside the copy button cannot take focus. -->
+                <span class="min-w-0 truncate text-[var(--docs-code-fg)]">{{
                   installCommand
                 }}</span>
               </span>

@@ -106,7 +106,11 @@ interface TimelineReorderEvent {
         <div class="grid gap-8">
           <app-component-page-section [section]="section('example-horizontal')">
             <app-component-page-code-previewer [code]="examples.horizontal" language="angular-html">
-              <div previewer class="w-full overflow-x-auto">
+              <div
+                previewer
+                class="w-full overflow-x-auto focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--docs-focus-ring)]"
+                tabindex="0"
+              >
                 <ul sanringTimeline orientation="horizontal" class="min-w-[28rem]">
                   @for (event of compactEvents; track event.titleKey) {
                     <li sanringTimelineItem>
