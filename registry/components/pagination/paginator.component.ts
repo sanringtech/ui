@@ -124,7 +124,7 @@ export class PaginatorComponent {
   readonly pageChange = output<PageEvent>();
 
   protected readonly paginatorClass = computed(() =>
-    cn('flex w-full items-center justify-between gap-4', this.class()),
+    cn('flex w-full flex-wrap items-center justify-between gap-4', this.class()),
   );
 
   protected readonly pageCount = computed(() => {

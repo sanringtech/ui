@@ -177,7 +177,8 @@ interface OrgTreeNode {
                 [attr.aria-pressed]="node.id === selected()"
                 (click)="selected.set(node.id)"
               >
-                <sanring-avatar size="sm">
+                <!-- Decorative: the card button already names the person. -->
+                <sanring-avatar size="sm" aria-hidden="true">
                   @if (node.person.avatarUrl) {
                     <img sanringAvatarImage [src]="node.person.avatarUrl" alt="" />
                   }
