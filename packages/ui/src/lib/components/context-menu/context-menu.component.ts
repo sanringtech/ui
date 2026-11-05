@@ -32,9 +32,10 @@ export class ContextMenuComponent {
   private readonly _position = signal<ContextMenuPosition>({ x: 0, y: 0 });
   readonly position = this._position.asReadonly();
 
-  openAt(x: number, y: number): void {
+  openAt(x: number, y: number, options?: { pointerHeld?: boolean }): void {
     this._position.set({ x, y });
     this.isOpen.set(true);
+    if (options?.pointerHeld) this.awaitOpeningRelease();
   }
 
   close(): void {
@@ -49,15 +50,34 @@ export class ContextMenuComponent {
     if (this.triggerElement === element) this.triggerElement = null;
   }
 
+  /*
+    macOS fires `contextmenu` on mousedown, while the right button is still held. The menu opens
+    under the pointer, so the release lands on the menu (or wherever the pointer is) and the
+    browser sends `auxclick` to the common ancestor of the press and release targets — often
+    <body>. The overlay reports that as a click outside and the menu closed as soon as it opened.
+    Remember that a release is pending and ignore it; clear the flag right after it.
+  */
+  private openingReleasePending = false;
+
+  private awaitOpeningRelease(): void {
+    this.openingReleasePending = true;
+    if (typeof window === 'undefined') return;
+    window.addEventListener(
+      'pointerup',
+      () => setTimeout(() => (this.openingReleasePending = false)),
+      { capture: true, once: true },
+    );
+  }
+
   /**
-   * True for a secondary-button event on the trigger. On macOS `contextmenu` fires on
-   * mousedown, so releasing the same right-click sends `auxclick` to the trigger, which the
-   * overlay reports as an outside click. A new right-click on the trigger re-opens the menu
-   * through its own `contextmenu` handler, so these events never need to close it.
+   * Whether an outside pointer event should be ignored instead of closing the menu: the release
+   * of the right-click that opened it, or a right-click on the trigger (which re-opens the menu
+   * at the new position through the trigger's own `contextmenu` handler).
    */
-  isTriggerSecondaryClick(event: MouseEvent): boolean {
+  shouldIgnoreOutsideClick(event: MouseEvent): boolean {
+    if (event.button !== 2) return false;
+    if (this.openingReleasePending) return true;
     return (
-      event.button === 2 &&
       !!this.triggerElement &&
       event.target instanceof Node &&
       this.triggerElement.contains(event.target)

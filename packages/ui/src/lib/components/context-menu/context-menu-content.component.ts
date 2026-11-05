@@ -81,7 +81,7 @@ export class ContextMenuContentComponent {
         positions: CONTEXT_MENU_POSITIONS,
         scrollStrategy: 'close',
         onOutsideClick: (event) => {
-          if (this.contextMenu.isTriggerSecondaryClick(event)) return;
+          if (this.contextMenu.shouldIgnoreOutsideClick(event)) return;
           this.contextMenu.close();
         },
         onKeydown: (event) => {

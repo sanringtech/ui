@@ -291,6 +291,28 @@ describe('ContextMenuComponent', () => {
     expect(trigger(fixture).getAttribute('aria-expanded')).toBe('false');
   });
 
+  it('ignores the release of the opening right-click wherever it lands, then closes on the next one', async () => {
+    const fixture = await createFixture();
+    // macOS: contextmenu fires on mousedown, while the right button is still held.
+    trigger(fixture).dispatchEvent(
+      new MouseEvent('contextmenu', { bubbles: true, cancelable: true, buttons: 2 }),
+    );
+    fixture.detectChanges();
+    await fixture.whenStable();
+    fixture.detectChanges();
+
+    // The menu opens under the pointer, so the release's auxclick goes to <body>.
+    window.dispatchEvent(new PointerEvent('pointerup', { button: 2 }));
+    document.body.dispatchEvent(new MouseEvent('auxclick', { bubbles: true, button: 2 }));
+    fixture.detectChanges();
+    expect(trigger(fixture).getAttribute('aria-expanded')).toBe('true');
+
+    await new Promise((resolve) => setTimeout(resolve));
+    document.body.dispatchEvent(new MouseEvent('auxclick', { bubbles: true, button: 2 }));
+    fixture.detectChanges();
+    expect(trigger(fixture).getAttribute('aria-expanded')).toBe('false');
+  });
+
   it('closes on Escape', async () => {
     const fixture = await createFixture();
     await openMenu(fixture);

@@ -35,6 +35,10 @@ export class ContextMenuTriggerDirective {
 
   protected onContextMenu(event: MouseEvent): void {
     event.preventDefault();
-    this.contextMenu.openAt(event.clientX, event.clientY);
+    // buttons & 2: the right button is still held (macOS opens on mousedown). Keyboard
+    // (Shift+F10 / Menu key) and Windows (opens on mouseup) report 0.
+    this.contextMenu.openAt(event.clientX, event.clientY, {
+      pointerHeld: (event.buttons & 2) !== 0,
+    });
   }
 }
