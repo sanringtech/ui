@@ -49,6 +49,21 @@ export class ContextMenuComponent {
     if (this.triggerElement === element) this.triggerElement = null;
   }
 
+  /**
+   * True for a secondary-button event on the trigger. On macOS `contextmenu` fires on
+   * mousedown, so releasing the same right-click sends `auxclick` to the trigger, which the
+   * overlay reports as an outside click. A new right-click on the trigger re-opens the menu
+   * through its own `contextmenu` handler, so these events never need to close it.
+   */
+  isTriggerSecondaryClick(event: MouseEvent): boolean {
+    return (
+      event.button === 2 &&
+      !!this.triggerElement &&
+      event.target instanceof Node &&
+      this.triggerElement.contains(event.target)
+    );
+  }
+
   closeAndFocusAdjacentTabStop(delta: 1 | -1): void {
     this.close();
     if (this.triggerElement) focusAdjacentDocumentTabStop(this.triggerElement, delta);

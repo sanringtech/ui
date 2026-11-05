@@ -1052,3 +1052,13 @@ P30 先前已收完 15 個必修缺口；這輪把剩下 15 組建議項目逐�
 **驗證**:otp-input 單元測試 16 個全過(新增「格子 pointerdown 不被取消」測試);`@sanring/ui` 單元測試 505 個全過;lint、registry sync / parity 綠。Chromium 手機模擬(Pixel 7)以觸控座標點第 3 格:修改前後都會聚焦到第 3 格並可輸入,行為一致。
 
 **未做**:本機沒有安裝 Playwright WebKit,iOS Safari 的實際行為需要在真機確認。
+
+---
+
+## context-menu — macOS 右鍵打開後立刻關閉(2026-11-05)
+
+- [x] macOS 上右鍵打開的 context-menu 不會在放開按鍵時關閉
+
+**已完成**:macOS 的 `contextmenu` 在 mousedown 觸發,放開同一次右鍵時瀏覽器會對觸發區送出 `auxclick`,CDK overlay 的 `outsidePointerEvents()` 把它當成點在選單外而關閉。`MenuOverlayController` 的 `onOutsideClick` 改為帶入事件;`ContextMenuComponent.isTriggerSecondaryClick()` 判斷「右鍵且落在觸發區」時忽略。觸發區上再按右鍵本來就由 `contextmenu` 處理重新定位,所以不需要關閉。`packages/ui` 與 `registry` 兩份同步。
+
+**驗證**:docs dev server + Chromium 以分開的 mouse down / up 模擬右鍵:修正前放開後關閉,修正後保持開啟;左鍵點外面、右鍵點觸發區以外、Escape 都仍會關閉。新增單元測試(沒有修正時會失敗);`@sanring/ui` 單元測試 506 passed;lint、registry sync / parity 綠。

@@ -10,7 +10,7 @@ import { DestroyRef, ElementRef } from '@angular/core';
 export interface MenuOverlayOptions {
   positions: ConnectionPositionPair[];
   scrollStrategy: 'close' | 'reposition';
-  onOutsideClick: () => void;
+  onOutsideClick: (event: MouseEvent) => void;
   onKeydown: (event: KeyboardEvent) => void;
 }
 
@@ -73,7 +73,7 @@ export class MenuOverlayController {
     });
 
     this.overlayRef.attach(this.portal);
-    this.overlayRef.outsidePointerEvents().subscribe(() => options.onOutsideClick());
+    this.overlayRef.outsidePointerEvents().subscribe((event) => options.onOutsideClick(event));
     this.overlayRef.keydownEvents().subscribe((event) => options.onKeydown(event));
   }
 }

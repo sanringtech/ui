@@ -80,7 +80,10 @@ export class ContextMenuContentComponent {
       this.overlayCtrl.open(position, {
         positions: CONTEXT_MENU_POSITIONS,
         scrollStrategy: 'close',
-        onOutsideClick: () => this.contextMenu.close(),
+        onOutsideClick: (event) => {
+          if (this.contextMenu.isTriggerSecondaryClick(event)) return;
+          this.contextMenu.close();
+        },
         onKeydown: (event) => {
           if (event.key === 'Tab') {
             // The menu is portaled to the end of <body>, so native traversal from an overlay
