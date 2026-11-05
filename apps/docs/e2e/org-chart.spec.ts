@@ -45,13 +45,20 @@ test.describe('org-chart block', () => {
     await expect(fit).toBeVisible();
     await fit.click();
 
-    const before = await preview.locator('[data-org-card="quin"]').boundingBox();
+    // Zoom is applied on the next change detection (and the initial fit runs in a rAF), so poll
+    // instead of reading the box right after a click.
+    const card = preview.locator('[data-org-card="quin"]');
+    const cardWidth = async () => (await card.boundingBox())?.width ?? 0;
+    let before = 0;
+    await expect
+      .poll(async () => {
+        const previous = before;
+        before = await cardWidth();
+        return before > 0 && before === previous;
+      })
+      .toBe(true);
     await preview.getByRole('button', { name: '+' }).click();
-    const afterZoom = await preview.locator('[data-org-card="quin"]').boundingBox();
-    expect(before && afterZoom).toBeTruthy();
-    if (before && afterZoom) {
-      expect(afterZoom.width).toBeGreaterThan(before.width);
-    }
+    await expect.poll(cardWidth).toBeGreaterThan(before);
 
     // The directory is hidden below the `sm` breakpoint (640px) by design.
     if ((page.viewportSize()?.width ?? 0) >= 640) {

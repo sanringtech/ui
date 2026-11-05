@@ -1057,8 +1057,24 @@ P30 先前已收完 15 個必修缺口；這輪把剩下 15 組建議項目逐�
 
 ## context-menu — macOS 右鍵打開後立刻關閉(2026-11-05)
 
-- [x] macOS 上右鍵打開的 context-menu 不會在放開按鍵時關閉
+- [x] macOS 上右鍵打開的 context-menu 不會在放開按鍵時關閉(0.30.4 只修了一半,0.30.5 補完,見下一節)
 
 **已完成**:macOS 的 `contextmenu` 在 mousedown 觸發,放開同一次右鍵時瀏覽器會對觸發區送出 `auxclick`,CDK overlay 的 `outsidePointerEvents()` 把它當成點在選單外而關閉。`MenuOverlayController` 的 `onOutsideClick` 改為帶入事件;`ContextMenuComponent.isTriggerSecondaryClick()` 判斷「右鍵且落在觸發區」時忽略。觸發區上再按右鍵本來就由 `contextmenu` 處理重新定位,所以不需要關閉。`packages/ui` 與 `registry` 兩份同步。
 
 **驗證**:docs dev server + Chromium 以分開的 mouse down / up 模擬右鍵:修正前放開後關閉,修正後保持開啟;左鍵點外面、右鍵點觸發區以外、Escape 都仍會關閉。新增單元測試(沒有修正時會失敗);`@sanring/ui` 單元測試 506 passed;lint、registry sync / parity 綠。
+
+---
+
+## context-menu — 右鍵放開落在選單上仍會關閉 + 選單項目 icon 預設樣式(2026-11-05)
+
+- [x] macOS 右鍵打開後,不論放開時落在哪裡都不會關閉
+- [x] `context-menu` / `dropdown-menu` 項目裡的 icon 統一預設樣式;context-menu docs 加「包含圖示」範例
+
+**已完成**:
+- 0.30.4 只忽略「落在觸發區上」的右鍵事件。但選單開在游標正下方,放開時 `mouseup` 落在選單、`mousedown` 在觸發區,瀏覽器把 `auxclick` 送到兩者的共同祖先 `<body>`,一樣被當成點外面。改成觸發的 `contextmenu` 若 `event.buttons & 2`(右鍵仍按著,macOS 在 mousedown 觸發)就標記「等待放開」,下一次 `pointerup` 之後的同一輪事件都忽略,接著用 `setTimeout` 清掉標記。Windows(放開後才觸發)與鍵盤 Shift+F10 的 `buttons` 是 0,不會標記。
+- `MENU_ITEM_SIZE_CLASS` 加上 `[&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*=size-])]:size-4`。icon 顏色沿用文字色(destructive 變紅),disabled 整列 `opacity-50` 時一起變淡。`RADIO_INDICATOR_ICON_CLASS` 從 `h-2.5 w-2.5` 改成等效的 `size-2.5`,否則會被預設的 `size-4` 蓋掉(後代選擇器權重較高)。dropdown-menu 範例拿掉 icon 上多餘的 `size-4`。
+- org-chart e2e 的縮放斷言改成 `expect.poll`:機器負載高時,點 Fit / + 後立刻量 `boundingBox` 會量到 change detection 之前的尺寸(10 次失敗 9 次),改完 10/10 通過。
+
+**驗證**:docs dev server + Chromium 分開 mouse down / up:選單開在游標下、開在觸發區中央都保持開啟;左鍵點外面、右鍵點觸發區以外、Escape 仍會關閉。量測 icon:項目 icon 16×16,單選圓點 10×10,disabled 0.5,destructive 紅色,截圖確認對齊。新增單元測試(放開事件落在 body);`@sanring/ui` 單元測試 507 passed;lint、registry sync / parity 綠;docs e2e 74 passed。
+
+**踩過的坑**:e2e 預設 port 4310 被另一個專案(lumihub)的 dev server 佔用,Playwright `reuseExistingServer` 直接打到那個 app,整套大量失敗。改用暫時設定換 port 跑。
