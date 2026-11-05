@@ -19,7 +19,7 @@
     "lint:ng": "ng lint",
     "changeset": "changeset",
     "version-packages": "changeset version",
-    "release": "pnpm --filter @sanring/cli build && pnpm --filter @sanring/cli publish --access public"
+    "release": "pnpm --filter @sanring/cli build && changeset publish"
   },
   "private": true,
   "packageManager": "pnpm@10.33.0",
