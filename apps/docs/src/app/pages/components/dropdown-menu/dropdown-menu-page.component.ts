@@ -265,16 +265,16 @@ import { dropdownMenuPage, dropdownMenuPageExamples } from './dropdown-menu.docs
                     class="w-56"
                   >
                     <button sanringDropdownMenuItem type="button" value="new-file">
-                      <svg lucideFile class="size-4"></svg>
+                      <svg lucideFile></svg>
                       <span>New file</span>
                     </button>
                     <button sanringDropdownMenuItem type="button" value="new-folder">
-                      <svg lucideFolder class="size-4"></svg>
+                      <svg lucideFolder></svg>
                       <span>New folder</span>
                     </button>
                     <sanring-dropdown-menu-separator />
                     <button sanringDropdownMenuItem type="button" value="preferences">
-                      <svg lucideSettings class="size-4"></svg>
+                      <svg lucideSettings></svg>
                       <span>Preferences</span>
                     </button>
                   </sanring-dropdown-menu-content>

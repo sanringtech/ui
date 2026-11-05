@@ -1,4 +1,11 @@
 import { Component, inject } from '@angular/core';
+import {
+  LucideClipboardPaste,
+  LucideCopy,
+  LucidePencil,
+  LucideScissors,
+  LucideTrash2,
+} from '@lucide/angular';
 import { SANRING_CONTEXT_MENU_IMPORTS } from '@sanring/ui';
 import { getComponentPageSection } from '../../../docs-schema/component-page.utils';
 import { I18nService } from '../../../i18n/i18n.service';
@@ -19,6 +26,11 @@ import { contextMenuPage, contextMenuPageExamples } from './context-menu.docs';
   selector: 'app-context-menu-page',
   imports: [
     SANRING_CONTEXT_MENU_IMPORTS,
+    LucideClipboardPaste,
+    LucideCopy,
+    LucidePencil,
+    LucideScissors,
+    LucideTrash2,
     ComponentPageApiTableComponent,
     ComponentPageKeyboardTableComponent,
     ComponentPageCodeBlock,
@@ -188,6 +200,49 @@ import { contextMenuPage, contextMenuPageExamples } from './context-menu.docs';
                     <sanring-context-menu-separator />
                     <sanring-context-menu-item value="delete" variant="destructive">
                       Delete
+                    </sanring-context-menu-item>
+                  </sanring-context-menu-content>
+                </sanring-context-menu>
+              </div>
+            </app-component-page-code-previewer>
+          </app-component-page-section>
+
+          <app-component-page-section [section]="section('example-with-icons')">
+            <app-component-page-code-previewer [code]="examples.withIcons" language="angular-html">
+              <div previewer class="w-[min(420px,100%)]">
+                <sanring-context-menu (itemSelected)="onFileAction($event)">
+                  <div
+                    sanringContextMenuTrigger
+                    class="flex h-40 w-full items-center justify-center rounded-[var(--sanring-radius-sm)] border border-dashed border-[var(--sanring-border)] text-sm text-[var(--sanring-muted)]"
+                  >
+                    Right click here
+                  </div>
+
+                  <sanring-context-menu-content class="w-56">
+                    <sanring-context-menu-item value="cut">
+                      <svg lucideScissors></svg>
+                      <span>Cut</span>
+                      <sanring-context-menu-shortcut>⌘X</sanring-context-menu-shortcut>
+                    </sanring-context-menu-item>
+                    <sanring-context-menu-item value="copy">
+                      <svg lucideCopy></svg>
+                      <span>Copy</span>
+                      <sanring-context-menu-shortcut>⌘C</sanring-context-menu-shortcut>
+                    </sanring-context-menu-item>
+                    <sanring-context-menu-item value="paste" disabled>
+                      <svg lucideClipboardPaste></svg>
+                      <span>Paste</span>
+                      <sanring-context-menu-shortcut>⌘V</sanring-context-menu-shortcut>
+                    </sanring-context-menu-item>
+                    <sanring-context-menu-separator />
+                    <sanring-context-menu-item value="rename">
+                      <svg lucidePencil></svg>
+                      <span>Rename</span>
+                    </sanring-context-menu-item>
+                    <sanring-context-menu-separator />
+                    <sanring-context-menu-item value="delete" variant="destructive">
+                      <svg lucideTrash2></svg>
+                      <span>Delete</span>
                     </sanring-context-menu-item>
                   </sanring-context-menu-content>
                 </sanring-context-menu>

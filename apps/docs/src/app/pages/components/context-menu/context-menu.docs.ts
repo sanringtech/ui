@@ -55,6 +55,11 @@ export const contextMenuPage = {
           titleKey: 'contextMenu.demo.submenu',
           level: 3,
         },
+        {
+          id: 'example-with-icons',
+          titleKey: 'contextMenu.demo.withIcons',
+          level: 3,
+        },
       ],
     },
     {
@@ -265,6 +270,42 @@ export class ExampleComponent {}`,
     </sanring-context-menu-sub>
     <sanring-context-menu-separator />
     <sanring-context-menu-item value="delete" variant="destructive">Delete</sanring-context-menu-item>
+  </sanring-context-menu-content>
+</sanring-context-menu>`,
+  withIcons: `<sanring-context-menu (itemSelected)="onFileAction($event)">
+  <div
+    sanringContextMenuTrigger
+    class="flex h-40 w-full items-center justify-center rounded-[var(--sanring-radius-sm)] border border-dashed border-[var(--sanring-border)] text-sm text-[var(--sanring-muted)]"
+  >
+    Right click here
+  </div>
+
+  <sanring-context-menu-content class="w-56">
+    <sanring-context-menu-item value="cut">
+      <svg lucideScissors></svg>
+      <span>Cut</span>
+      <sanring-context-menu-shortcut>⌘X</sanring-context-menu-shortcut>
+    </sanring-context-menu-item>
+    <sanring-context-menu-item value="copy">
+      <svg lucideCopy></svg>
+      <span>Copy</span>
+      <sanring-context-menu-shortcut>⌘C</sanring-context-menu-shortcut>
+    </sanring-context-menu-item>
+    <sanring-context-menu-item value="paste" disabled>
+      <svg lucideClipboardPaste></svg>
+      <span>Paste</span>
+      <sanring-context-menu-shortcut>⌘V</sanring-context-menu-shortcut>
+    </sanring-context-menu-item>
+    <sanring-context-menu-separator />
+    <sanring-context-menu-item value="rename">
+      <svg lucidePencil></svg>
+      <span>Rename</span>
+    </sanring-context-menu-item>
+    <sanring-context-menu-separator />
+    <sanring-context-menu-item value="delete" variant="destructive">
+      <svg lucideTrash2></svg>
+      <span>Delete</span>
+    </sanring-context-menu-item>
   </sanring-context-menu-content>
 </sanring-context-menu>`,
 } as const;

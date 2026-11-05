@@ -12,6 +12,7 @@ export const contextMenuTranslations = {
   'contextMenu.demo.checkbox': 'Checkbox',
   'contextMenu.demo.radio': 'Radio',
   'contextMenu.demo.submenu': 'Submenu',
+  'contextMenu.demo.withIcons': '包含圖示',
   'contextMenu.api.description': 'Context menu primitives 支援的 Inputs、Outputs 與 class。',
   'contextMenu.api.itemSelected.description':
     '被啟用的 item（點擊、按 Enter 或 Space）觸發時送出對應的 value，緊接著整個選單（含任何展開中的子選單）就會關閉。宣告在 sanring-context-menu（root）上，不論選中的 item 巢狀多深都會回報到這裡。',

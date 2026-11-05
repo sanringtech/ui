@@ -14,6 +14,7 @@ export const contextMenuTranslations = {
   'contextMenu.demo.checkbox': 'Checkbox',
   'contextMenu.demo.radio': 'Radio',
   'contextMenu.demo.submenu': 'Submenu',
+  'contextMenu.demo.withIcons': 'With icons',
   'contextMenu.api.description':
     'Inputs, outputs, and classes supported by the context menu primitives.',
   'contextMenu.api.itemSelected.description':
