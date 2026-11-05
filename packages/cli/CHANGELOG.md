@@ -1,5 +1,12 @@
 # @sanring/cli
 
+## 0.30.5
+
+### Patch Changes
+
+- 526b3f9: Fix `context-menu` still closing right after it opens on macOS. The menu opens under the pointer, so the release of the opening right-click usually lands on the menu and the browser sends `auxclick` to `<body>`, which 0.30.4 did not cover. The menu now ignores the release of the right-click that opened it, wherever it lands.
+- 8809064: `context-menu` and `dropdown-menu` items now size projected icons to `size-4`, keep them from shrinking, and ignore pointer events on them, so `<svg lucideCopy></svg>` needs no classes. An explicit `size-*` class on the icon still wins; icons follow the item color (destructive items turn them red) and fade with disabled items.
+
 ## 0.30.4
 
 ### Patch Changes
