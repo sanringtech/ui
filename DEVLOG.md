@@ -1083,6 +1083,6 @@ P30 先前已收完 15 個必修缺口；這輪把剩下 15 組建議項目逐�
 
 - [x] 新增 `block/account-menu`、`block/app-footer`，讓所有 sanring 內部系統（官網後台、中台、SSO、進銷存、LumiHub）的使用者選單與頁尾一致。規範寫在 sanring-sso `docs/rp-integration.md` §四之一（業務 owner 拍板「家族化設計」，「我的系統」一律另開分頁）。
 - 兩個 block 都只負責畫面：使用者、帳號中心網址、語言、深淺色由輸入帶進來，登出、切主題、切語言用 output 交給各系統處理（各系統的登入方式不同：BFF Cookie、表單 POST）。沒有帳號中心網址時（本機假登入）隱藏帳號項目和登出。
-- 標籤預設繁中，另附 `ACCOUNT_MENU_LABELS_EN`；有多語系的系統把翻譯好的標籤傳進來。
+- 標籤預設繁中，另附 `ACCOUNT_MENU_LABELS_EN`；有多語系的系統把翻譯好的標籤傳進來。頭像可選擇顯示數字（`badgeCount`，例如官網後台的待辦數）。
 - 驗證：`check-registry-sync`、`check-registry-parity`、`@sanring/cli` 測試（265）、`ng build docs`（staged registry 會編譯所有 block）、`pnpm lint`。
 - 還沒做：docs 網站的 block 預覽頁。

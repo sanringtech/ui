@@ -106,6 +106,9 @@ export const ACCOUNT_MENU_LABELS_EN: AccountMenuLabels = {
               <svg lucideUserRound class="size-4"></svg>
             }
           </sanring-avatar-fallback>
+          @if (badgeCount() > 0) {
+            <span sanringAvatarBadge [count]="badgeCount()" data-testid="account-badge"></span>
+          }
         </sanring-avatar>
       </button>
       <sanring-dropdown-menu-content #accountMenu="sanringDropdownMenuContent" class="min-w-56 rounded-[var(--sanring-radius)] p-2"
@@ -164,6 +167,8 @@ export class AccountMenuComponent {
   readonly activeLanguage = input<string | null>(null);
   readonly isDark = input(false);
   readonly labels = input<AccountMenuLabels>(ACCOUNT_MENU_LABELS_ZH_HANT);
+  /** Optional count on the avatar (e.g. pending to-dos); 0 hides it. */
+  readonly badgeCount = input(0);
 
   readonly logout = output<void>();
   readonly themeToggle = output<void>();
