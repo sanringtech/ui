@@ -86,7 +86,9 @@
         "dashboard-shell",
         "login",
         "table-page",
-        "org-chart"
+        "org-chart",
+        "account-menu",
+        "app-footer"
       ]
     }
   ],
@@ -1373,6 +1375,32 @@
         "org-chart/layout.ts",
         "org-chart/org-chart.worker.ts",
         "org-chart/index.ts"
+      ]
+    },
+    {
+      "name": "account-menu",
+      "description": "Sanring family account menu: name, email, avatar, and a menu with personal settings, account security, my systems, language, theme, and sign out.",
+      "tags": ["layout", "shell", "auth"],
+      "componentDeps": [
+        "dropdown-menu",
+        "avatar"
+      ],
+      "peerDependencies": {
+        "@lucide/angular": "^1.18.0"
+      },
+      "files": [
+        "account-menu/account-menu.component.ts",
+        "account-menu/index.ts"
+      ]
+    },
+    {
+      "name": "app-footer",
+      "description": "Sanring family footer: © year, owner, product, and Powered by sanring-tech, full width at the bottom.",
+      "tags": ["layout", "shell"],
+      "componentDeps": [],
+      "files": [
+        "app-footer/app-footer.component.ts",
+        "app-footer/index.ts"
       ]
     }
   ]

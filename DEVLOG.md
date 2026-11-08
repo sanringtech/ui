@@ -1078,3 +1078,11 @@ P30 先前已收完 15 個必修缺口；這輪把剩下 15 組建議項目逐�
 **驗證**:docs dev server + Chromium 分開 mouse down / up:選單開在游標下、開在觸發區中央都保持開啟;左鍵點外面、右鍵點觸發區以外、Escape 仍會關閉。量測 icon:項目 icon 16×16,單選圓點 10×10,disabled 0.5,destructive 紅色,截圖確認對齊。新增單元測試(放開事件落在 body);`@sanring/ui` 單元測試 507 passed;lint、registry sync / parity 綠;docs e2e 74 passed。
 
 **踩過的坑**:e2e 預設 port 4310 被另一個專案(lumihub)的 dev server 佔用,Playwright `reuseExistingServer` 直接打到那個 app,整套大量失敗。改用暫時設定換 port 跑。
+
+## 家族外框 block：account-menu、app-footer（2026-11-08）
+
+- [x] 新增 `block/account-menu`、`block/app-footer`，讓所有 sanring 內部系統（官網後台、中台、SSO、進銷存、LumiHub）的使用者選單與頁尾一致。規範寫在 sanring-sso `docs/rp-integration.md` §四之一（業務 owner 拍板「家族化設計」，「我的系統」一律另開分頁）。
+- 兩個 block 都只負責畫面：使用者、帳號中心網址、語言、深淺色由輸入帶進來，登出、切主題、切語言用 output 交給各系統處理（各系統的登入方式不同：BFF Cookie、表單 POST）。沒有帳號中心網址時（本機假登入）隱藏帳號項目和登出。
+- 標籤預設繁中，另附 `ACCOUNT_MENU_LABELS_EN`；有多語系的系統把翻譯好的標籤傳進來。頭像可選擇顯示數字（`badgeCount`，例如官網後台的待辦數）。
+- 驗證：`check-registry-sync`、`check-registry-parity`、`@sanring/cli` 測試（265）、`ng build docs`（staged registry 會編譯所有 block）、`pnpm lint`。
+- 還沒做：docs 網站的 block 預覽頁。
