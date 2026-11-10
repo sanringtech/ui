@@ -1089,7 +1089,7 @@ P30 先前已收完 15 個必修缺口；這輪把剩下 15 組建議項目逐�
 
 ---
 
-## image-cropper — 圖片裁切、即時預覽與輸出格式選擇(2026-11-10)
+## image-cropper — 圖片裁切、即時預覽與輸出格式選擇(2026-11-10,0.32.0 出貨)
 
 - [x] 新增 `image-cropper`:可拖曳、可縮放的裁切框,鎖定 / 自由比例,圓形模式
 - [x] `image-cropper-preview` 即時預覽,`image-cropper-format` 選 PNG / JPEG / WebP、品質與 JPEG 背景色
