@@ -60,6 +60,7 @@
         "dropdown-menu",
         "file-upload",
         "hover-card",
+        "image-cropper",
         "navigation-menu",
         "otp-input",
         "pagination",
@@ -949,6 +950,24 @@
         "dropdown-menu/dropdown-menu-trigger.directive.ts",
         "dropdown-menu/dropdown-menu.type.ts",
         "dropdown-menu/index.ts"
+      ]
+    },
+    {
+      "name": "image-cropper",
+      "description": "Crop an image with a draggable, resizable box, a live preview, and a PNG / JPEG / WebP output picker. Exports a File via canvas.",
+      "sharedDeps": [
+        "component-styles",
+        "utils"
+      ],
+      "peerDependencies": {
+        "@angular/cdk": "^22.0.0"
+      },
+      "files": [
+        "image-cropper/image-cropper.component.ts",
+        "image-cropper/image-cropper-preview.component.ts",
+        "image-cropper/image-cropper-format.component.ts",
+        "image-cropper/image-cropper.util.ts",
+        "image-cropper/index.ts"
       ]
     },
     {

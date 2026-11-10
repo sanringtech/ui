@@ -67,6 +67,7 @@ export const commonTranslations = {
   'component.field': 'Field',
   'component.fileUpload': '檔案上傳',
   'component.hoverCard': 'Hover Card',
+  'component.imageCropper': '圖片裁切器',
   'component.input': '輸入框',
   'component.otpInput': 'OTP 輸入框',
   'component.label': '標籤文字',

@@ -27,6 +27,7 @@ export * from './lib/components/divider';
 export * from './lib/components/field';
 export * from './lib/components/file-upload';
 export * from './lib/components/hover-card';
+export * from './lib/components/image-cropper';
 export * from './lib/components/input';
 export * from './lib/components/label';
 export * from './lib/components/link';

@@ -67,6 +67,7 @@ export const commonTranslations = {
   'component.field': 'Field',
   'component.fileUpload': 'File Upload',
   'component.hoverCard': 'Hover Card',
+  'component.imageCropper': 'Image Cropper',
   'component.input': 'Input',
   'component.otpInput': 'OTP Input',
   'component.label': 'Label',

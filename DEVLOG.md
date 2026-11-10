@@ -1086,3 +1086,24 @@ P30 先前已收完 15 個必修缺口；這輪把剩下 15 組建議項目逐�
 - 標籤預設繁中，另附 `ACCOUNT_MENU_LABELS_EN`；有多語系的系統把翻譯好的標籤傳進來。頭像可選擇顯示數字（`badgeCount`，例如官網後台的待辦數）。
 - 驗證：`check-registry-sync`、`check-registry-parity`、`@sanring/cli` 測試（265）、`ng build docs`（staged registry 會編譯所有 block）、`pnpm lint`。
 - 還沒做：docs 網站的 block 預覽頁。
+
+---
+
+## image-cropper — 圖片裁切、即時預覽與輸出格式選擇(2026-11-10)
+
+- [x] 新增 `image-cropper`:可拖曳、可縮放的裁切框,鎖定 / 自由比例,圓形模式
+- [x] `image-cropper-preview` 即時預覽,`image-cropper-format` 選 PNG / JPEG / WebP、品質與 JPEG 背景色
+- [x] `export()` 回傳 `File`,副檔名跟著實際編碼結果
+
+**已完成**:
+- 不引入外部套件。date-picker(`@sanring/date-picker-core`)和 org-chart(`elkjs`)需要外部套件,是因為核心演算法難寫;裁切只需要矩形幾何加上 canvas 的 `drawImage` / `toBlob`。評估過 `cropperjs` v2(Web Components、自帶樣式,和 Tailwind token 衝突)與 `ngx-image-cropper`(UI 寫死、綁 Angular 大版本),都不划算。幾何邏輯放在 `image-cropper.util.ts` 的純函式(`initialCrop` / `moveCrop` / `resizeCrop` / `applyAspectRatio` / `outputSize`),元件只處理互動。
+- 拆成三個元件:cropper 本體(舞台、裁切框、`export()`),preview 與 format 用 `[for]` 指向 cropper,放在 cropper 內部時也能直接 inject 父層。`crop` / `format` / `quality` / `background` 都是 model。
+- 裁切框座標以原圖像素為單位,畫面上用百分比定位,所以不用量測顯示尺寸;只在拖曳和鍵盤操作時用 `naturalWidth / 顯示寬度` 換算位移。鎖比例時,角落把手跟著位移量較大的那一軸,才能放大也能縮小;邊緣把手沿中線對稱縮放。
+- 格式支援度在 `afterNextRender` 以 1×1 canvas 呼叫 `toDataURL(type)` 偵測,不支援的按鈕直接停用;`export()` 以 `blob.type` 為準決定 File 的 type 和副檔名,避免瀏覽器默默改成 PNG 時檔名說謊。JPEG 先填 `background`;圓形模式用 ellipse clip,PNG / WebP 四角保持透明。
+- 預覽固定佔 `size × size` 的正方形,裁切結果在裡面依比例置中。第一版讓預覽長邊固定、寬高跟著比例變,自由比例拖曳時預覽一直變寬變窄,置中排列的整排版面左右移動,裁切器在游標下滑動。
+
+**驗證**:新增 23 個單元測試(幾何、拖曳、把手縮放、鍵盤、disabled、比例切換、預覽尺寸、格式停用 / 切換、export 檔名與 canvas 呼叫、axe);`@sanring/ui` 單元測試 530 passed;CLI 265 passed;lint、registry sync / parity 綠;docs build 成功。docs dev server + Playwright:拖曳、把手縮放、方向鍵、Alt + 方向鍵都正確;匯出 `photo.jpg`(118×88)與 `avatar.png`(256×256);390px 寬無水平捲動、無 console error;自由比例拖曳時裁切器位置維持不動。
+
+**踩過的坑**:遮罩原本用 `box-shadow: 0 0 0 9999px`,截圖上看起來沒變暗,把 inline 樣式換掉也一樣。改用 SVG evenodd path 之後,量測遮罩開/關的截圖才確認兩種寫法其實都有畫出來,只是範例的森林照片本身太暗看不出差異。最後保留 SVG:不依賴瀏覽器怎麼處理超大陰影,圓形模式也能挖出真正的橢圓。docs 預設 port 4200 被 OrbStack 佔用,本地預覽改用 4300。
+
+**未做**:旋轉、縮放圖片、Dialog 版裁切 block。

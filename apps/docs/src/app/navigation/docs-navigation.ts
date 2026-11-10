@@ -49,6 +49,7 @@ export type DocsComponentId =
   | 'field'
   | 'file-upload'
   | 'hover-card'
+  | 'image-cropper'
   | 'input'
   | 'otp-input'
   | 'label'
@@ -306,6 +307,13 @@ export const docsComponentItems: DocsComponentNavItem[] = [
     labelKey: 'component.hoverCard',
     descriptionKey: 'hoverCard.description',
     path: '/components/hover-card',
+    active: true,
+  },
+  {
+    id: 'image-cropper',
+    labelKey: 'component.imageCropper',
+    descriptionKey: 'imageCropper.description',
+    path: '/components/image-cropper',
     active: true,
   },
   {

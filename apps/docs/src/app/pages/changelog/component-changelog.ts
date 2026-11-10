@@ -36,6 +36,18 @@ function isPatch(version: string): boolean {
  */
 export const cliVersionChangelog: readonly CliVersionEntry[] = [
   {
+    version: '0.32.0',
+    date: '2026-11-10',
+    changes: [
+      {
+        type: 'added',
+        notable: true,
+        componentIds: ['image-cropper'],
+        text: 'Add `image-cropper` with a draggable, resizable crop box, a live preview, and a PNG / JPEG / WebP output picker; `export()` returns a `File` and needs no extra dependencies.',
+      },
+    ],
+  },
+  {
     version: '0.30.0',
     date: '2026-10-13',
     changes: [

@@ -22,6 +22,7 @@ import { dropdownMenuTranslations } from './dropdown-menu';
 import { fieldTranslations } from './field';
 import { fileUploadTranslations } from './file-upload';
 import { hoverCardTranslations } from './hover-card';
+import { imageCropperTranslations } from './image-cropper';
 import { inputTranslations } from './input';
 import { labelTranslations } from './label';
 import { linkTranslations } from './link';
@@ -79,6 +80,7 @@ export const componentTranslations = {
   ...fieldTranslations,
   ...fileUploadTranslations,
   ...hoverCardTranslations,
+  ...imageCropperTranslations,
   ...inputTranslations,
   ...labelTranslations,
   ...linkTranslations,

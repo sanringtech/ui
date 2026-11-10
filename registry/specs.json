@@ -1975,6 +1975,180 @@
       "Not a ControlValueAccessor."
     ]
   },
+  "image-cropper": {
+    "name": "image-cropper",
+    "title": "Image Cropper",
+    "description": "Crop an image with a draggable, resizable box. A live preview and an output picker for PNG, JPEG, or WebP sit beside it, and export() returns a File.",
+    "aliases": [
+      "crop",
+      "cropper",
+      "image crop",
+      "avatar crop"
+    ],
+    "example": "<div class=\"flex flex-wrap items-start gap-6\">\n  <sanring-image-cropper #cropper=\"sanringImageCropper\" src=\"/photos/path.jpg\" [aspectRatio]=\"4 / 3\" />\n\n  <div class=\"grid gap-3\">\n    <sanring-image-cropper-preview [for]=\"cropper\" [size]=\"200\" />\n    <sanring-image-cropper-format [for]=\"cropper\" />\n    <button sanringBtn type=\"button\" (click)=\"download(cropper)\">Download</button>\n  </div>\n</div>",
+    "usageImport": "import { SANRING_IMAGE_CROPPER_IMPORTS } from './components/ui/image-cropper';\n\n@Component({\n  imports: [SANRING_IMAGE_CROPPER_IMPORTS],\n})",
+    "api": [
+      {
+        "property": "class",
+        "type": "string",
+        "defaultValue": "''",
+        "description": "Additional classes merged with the host."
+      },
+      {
+        "property": "src",
+        "type": "File | Blob | string | null",
+        "defaultValue": "null",
+        "description": "Image to crop: a File or Blob (an object URL is created and revoked for you), a URL, or a data URL."
+      },
+      {
+        "property": "crop",
+        "type": "CropRect | null",
+        "defaultValue": "null",
+        "description": "Two-way crop rectangle { x, y, width, height } in source image pixels. Set on load, reset when src changes."
+      },
+      {
+        "property": "aspectRatio",
+        "type": "number | 'free' | null",
+        "defaultValue": "null",
+        "description": "Width ÷ height to lock the box to. null or \"free\" allows any shape."
+      },
+      {
+        "property": "minSize",
+        "type": "number",
+        "defaultValue": "16",
+        "description": "Minimum crop width and height in source pixels."
+      },
+      {
+        "property": "shape",
+        "type": "'rect' | 'circle'",
+        "defaultValue": "'rect'",
+        "description": "'circle' rounds the box and preview, and clips the export to an ellipse."
+      },
+      {
+        "property": "format",
+        "type": "'image/png' | 'image/jpeg' | 'image/webp' | null",
+        "defaultValue": "null",
+        "description": "Two-way output type. null uses the source type when it is offered, otherwise the first available format."
+      },
+      {
+        "property": "formats",
+        "type": "ImageCropperFormat[]",
+        "defaultValue": "all three",
+        "description": "Types offered by the format picker. Types the browser cannot encode are disabled."
+      },
+      {
+        "property": "quality",
+        "type": "number",
+        "defaultValue": "0.92",
+        "description": "Two-way encoder quality from 0 to 1. Used for JPEG and WebP only."
+      },
+      {
+        "property": "background",
+        "type": "string",
+        "defaultValue": "'#ffffff'",
+        "description": "Two-way fill color for transparent pixels when exporting JPEG."
+      },
+      {
+        "property": "outputWidth",
+        "type": "number | null",
+        "defaultValue": "null",
+        "description": "Scales the export to this width. Height follows the crop ratio. By default the crop is exported at source resolution."
+      },
+      {
+        "property": "fileName",
+        "type": "string",
+        "defaultValue": "—",
+        "description": "Base name for export(). Defaults to the source File name, then \"cropped\". The extension always matches the encoded type."
+      },
+      {
+        "property": "crossOrigin",
+        "type": "'anonymous' | 'use-credentials' | null",
+        "defaultValue": "null",
+        "description": "CORS mode for remote URLs. The server must allow it, or the canvas is tainted and export() fails."
+      },
+      {
+        "property": "disabled",
+        "type": "boolean",
+        "defaultValue": "false",
+        "description": "Hides the handles and ignores pointer and keyboard input."
+      },
+      {
+        "property": "guides",
+        "type": "boolean",
+        "defaultValue": "true",
+        "description": "Shows rule-of-thirds lines inside the crop box."
+      },
+      {
+        "property": "loaded",
+        "type": "EventEmitter<{ width; height }>",
+        "defaultValue": "—",
+        "description": "Emits the natural image size after the image loads."
+      },
+      {
+        "property": "loadError",
+        "type": "EventEmitter<void>",
+        "defaultValue": "—",
+        "description": "Emits when the image fails to load."
+      },
+      {
+        "property": "export()",
+        "type": "(options?) => Promise<File>",
+        "defaultValue": "—",
+        "description": "Draws the crop to a canvas and resolves to a File. If the browser falls back to another type, the File type and extension follow the actual output."
+      },
+      {
+        "property": "reset()",
+        "type": "() => void",
+        "defaultValue": "—",
+        "description": "Restores the default centered crop."
+      },
+      {
+        "property": "cropAreaLabel / instructions / emptyLabel",
+        "type": "string",
+        "defaultValue": "English",
+        "description": "Accessible name of the crop box, its keyboard instructions, and the empty-state text. Override them to translate."
+      },
+      {
+        "property": "preview: for / size",
+        "type": "ImageCropperComponent / number",
+        "defaultValue": "parent / 160",
+        "description": "sanring-image-cropper-preview: the cropper to mirror, and the side in px of the square box it occupies. The crop is fitted and centered inside, so the layout never shifts while dragging."
+      },
+      {
+        "property": "format picker: for",
+        "type": "ImageCropperComponent",
+        "defaultValue": "parent",
+        "description": "sanring-image-cropper-format: the cropper to control. Also takes formatGroupLabel, qualityLabel, backgroundLabel, and unsupportedLabel."
+      }
+    ],
+    "keyboard": [
+      {
+        "keys": "Arrow keys",
+        "action": "Moves the crop box by one screen pixel."
+      },
+      {
+        "keys": "Shift + Arrow keys",
+        "action": "Moves the crop box by ten screen pixels."
+      },
+      {
+        "keys": "Alt (Option) + Arrow keys",
+        "action": "Resizes the crop box. Left / Right change the width, Up / Down change the height. The aspect ratio stays locked."
+      }
+    ],
+    "accessibility": [
+      "The crop box is a focusable role='group' named by cropAreaLabel.",
+      "aria-describedby points to its keyboard instructions.",
+      "After each keyboard move or drag, a polite live region announces the size and position.",
+      "The preview is role='img' with its own label.",
+      "Format buttons use aria-pressed.",
+      "Unsupported formats are disabled and carry a title."
+    ],
+    "stateModel": [
+      "Not a form control.",
+      "crop, format, quality, and background are two-way models; the image itself is never changed.",
+      "export() is the only step that encodes, so call it when the user confirms."
+    ]
+  },
   "input": {
     "name": "input",
     "title": "Input",

@@ -282,6 +282,13 @@ export const routes: Routes = [
                   ),
               },
               {
+                path: 'image-cropper',
+                loadComponent: () =>
+                  import('./pages/components/image-cropper/image-cropper-page.component').then(
+                    (m) => m.ImageCropperPageComponent,
+                  ),
+              },
+              {
                 path: 'input',
                 loadComponent: () =>
                   import('./pages/components/input/input-page.component').then(
