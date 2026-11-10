@@ -1,5 +1,11 @@
 # @sanring/cli
 
+## 0.32.0
+
+### Minor Changes
+
+- 5818c96: Add `image-cropper` with a draggable, resizable crop box, a live preview, and a PNG / JPEG / WebP output picker; `export()` returns a `File` with no extra dependencies.
+
 ## 0.31.0
 
 ### Minor Changes
