@@ -954,7 +954,7 @@
     },
     {
       "name": "image-cropper",
-      "description": "Crop an image with a draggable, resizable box, a live preview, and a PNG / JPEG / WebP output picker. Exports a File via canvas.",
+      "description": "Crop an image with a draggable, resizable box or a fixed frame you pan and zoom the image behind (mouse, wheel, pinch, keyboard, zoom slider), with a live preview and a PNG / JPEG / WebP output picker. Exports a File via canvas.",
       "sharedDeps": [
         "component-styles",
         "utils"
@@ -966,6 +966,7 @@
         "image-cropper/image-cropper.component.ts",
         "image-cropper/image-cropper-preview.component.ts",
         "image-cropper/image-cropper-format.component.ts",
+        "image-cropper/image-cropper-zoom.component.ts",
         "image-cropper/image-cropper.util.ts",
         "image-cropper/index.ts"
       ]

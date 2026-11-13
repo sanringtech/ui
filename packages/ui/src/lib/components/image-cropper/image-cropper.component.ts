@@ -27,6 +27,7 @@ import {
   type ImageCropperFormat,
   applyAspectRatio,
   clampCrop,
+  fitCrop,
   initialCrop,
   isImageCropperFormat,
   isLossyFormat,
@@ -36,10 +37,36 @@ import {
   resizeCrop,
   roundCrop,
   supportsTransparency,
+  zoomCrop,
 } from './image-cropper.util';
 
 export type ImageCropperSource = File | Blob | string | null | undefined;
 export type ImageCropperShape = 'rect' | 'circle';
+/**
+ * `'box'` — the image is fixed and the user drags / resizes the crop box.
+ * `'pan-zoom'` — the crop frame is fixed and the user drags / zooms the image (wheel, pinch, keys,
+ * or `sanring-image-cropper-zoom`). Needs a fixed ratio; `aspectRatio` falls back to 1.
+ */
+export type ImageCropperMode = 'box' | 'pan-zoom';
+
+/** Share of the pan-zoom stage the crop frame takes on its longer side, in percent. */
+const PAN_ZOOM_FRAME = 80;
+
+const BOX_INSTRUCTIONS =
+  'Use the arrow keys to move the crop area. Hold Alt (Option) with the arrow keys to resize. Hold Shift to move in larger steps.';
+const PAN_ZOOM_INSTRUCTIONS =
+  'Drag the image to move it; scroll or pinch to zoom. Use the arrow keys to move the image, plus and minus to zoom, and Shift for larger steps.';
+
+interface PanGesture {
+  start: CropRect;
+  midX: number;
+  midY: number;
+  distance: number;
+  /** Source pixels per CSS pixel at the gesture start. */
+  scale: number;
+  frameLeft: number;
+  frameTop: number;
+}
 
 interface DragState {
   pointerId: number;
@@ -109,6 +136,79 @@ export function detectSupportedFormats(): ReadonlySet<ImageCropperFormat> {
     '[attr.aria-disabled]': 'isDisabled() ? "true" : null',
   },
   template: `
+    @if (isPanZoom()) {
+    <div
+      #stage
+      role="group"
+      aria-roledescription="crop area"
+      [attr.tabindex]="isDisabled() || !crop() ? -1 : 0"
+      [attr.aria-label]="cropAreaLabel()"
+      [attr.aria-describedby]="instructionsId()"
+      [attr.aria-disabled]="isDisabled() ? 'true' : null"
+      [class]="stageClass()"
+      (pointerdown)="onPanPointerDown($event)"
+      (pointermove)="onPanPointerMove($event)"
+      (pointerup)="onPanPointerEnd($event)"
+      (pointercancel)="onPanPointerEnd($event)"
+      (wheel)="onWheel($event)"
+      (keydown)="onPanKeydown($event)"
+    >
+      @if (imageUrl(); as url) {
+        <img
+          #image
+          [src]="url"
+          [attr.crossorigin]="crossOrigin()"
+          alt=""
+          draggable="false"
+          class="pointer-events-none absolute max-w-none select-none"
+          [class.invisible]="!panImage()"
+          [style.left.%]="panImage()?.left"
+          [style.top.%]="panImage()?.top"
+          [style.width.%]="panImage()?.width"
+          [style.height.%]="panImage()?.height"
+          (load)="onImageLoad()"
+          (error)="onImageError()"
+        />
+        @if (panImage()) {
+          <svg
+            class="pointer-events-none absolute inset-0 size-full"
+            viewBox="0 0 100 100"
+            preserveAspectRatio="none"
+            aria-hidden="true"
+          >
+            <path fill="rgb(0 0 0 / 0.6)" fill-rule="evenodd" [attr.d]="maskPath()" />
+          </svg>
+          <span
+            class="pointer-events-none absolute ring-1 ring-white/90"
+            [class.rounded-full]="shape() === 'circle'"
+            [style.left.%]="panFrame().left"
+            [style.top.%]="panFrame().top"
+            [style.width.%]="panFrame().width"
+            [style.height.%]="panFrame().height"
+            aria-hidden="true"
+          >
+            @if (guides() && dragging()) {
+              <span
+                class="absolute inset-0 grid grid-cols-3 grid-rows-3"
+                [class.overflow-hidden]="shape() === 'circle'"
+                [class.rounded-full]="shape() === 'circle'"
+              >
+                @for (cell of guideCells; track cell) {
+                  <span class="border-[0.5px] border-white/40"></span>
+                }
+              </span>
+            }
+          </span>
+        }
+      } @else {
+        <div
+          class="flex size-full items-center justify-center bg-[var(--sanring-surface)] px-4 text-center text-sm text-[var(--sanring-muted)]"
+        >
+          <ng-content select="[sanringImageCropperEmpty]">{{ emptyLabel() }}</ng-content>
+        </div>
+      }
+    </div>
+    } @else {
     <div
       class="relative inline-block max-w-full touch-none select-none overflow-hidden rounded-[var(--sanring-radius)] border border-[var(--sanring-border)] bg-[length:16px_16px] bg-[repeating-conic-gradient(#e5e5e5_0_25%,#fff_0_50%)] align-top"
       [class.opacity-60]="isDisabled()"
@@ -185,7 +285,8 @@ export function detectSupportedFormats(): ReadonlySet<ImageCropperFormat> {
         </div>
       }
     </div>
-    <span [id]="instructionsId()" class="sr-only">{{ instructions() }}</span>
+    }
+    <span [id]="instructionsId()" class="sr-only">{{ instructionsText() }}</span>
     <span class="sr-only" aria-live="polite">{{ announcement() }}</span>
     <ng-content />
   `,
@@ -202,6 +303,10 @@ export class ImageCropperComponent {
   readonly aspectRatio = input<number | null, unknown>(null, { transform: aspectRatioAttribute });
   /** Minimum crop width and height in source pixels. */
   readonly minSize = input(16, { transform: numberAttribute });
+  /** Interaction model; see `ImageCropperMode`. */
+  readonly mode = input<ImageCropperMode>('box');
+  /** Pan-zoom only: largest zoom, relative to the crop that fits the whole image (zoom 1). */
+  readonly maxZoom = input(4, { transform: numberAttribute });
   /** `'circle'` masks the preview and, for PNG / WebP, clears the exported corners. */
   readonly shape = input<ImageCropperShape>('rect');
   /** Scales the export so its width matches; height follows the crop ratio. */
@@ -215,9 +320,8 @@ export class ImageCropperComponent {
   readonly disabled = input(false, { transform: booleanAttribute });
   readonly guides = input(true, { transform: booleanAttribute });
   readonly cropAreaLabel = input('Crop area');
-  readonly instructions = input(
-    'Use the arrow keys to move the crop area. Hold Alt (Option) with the arrow keys to resize. Hold Shift to move in larger steps.',
-  );
+  /** Screen-reader instructions. Defaults to English text that matches `mode`. */
+  readonly instructions = input<string | null>(null);
   readonly emptyLabel = input('No image selected');
 
   // ==========================================
@@ -259,6 +363,24 @@ export class ImageCropperComponent {
     if (source && available.includes(source)) return source;
     return available[0] ?? 'image/png';
   });
+  readonly isPanZoom = computed(() => this.mode() === 'pan-zoom');
+  /** Ratio actually enforced: pan-zoom needs a fixed one, so it falls back to 1. */
+  readonly effectiveAspectRatio = computed(() =>
+    this.isPanZoom() ? (this.aspectRatio() ?? 1) : this.aspectRatio(),
+  );
+  /** Crop that fits the whole image at the enforced ratio (zoom 1). */
+  readonly fitRect = computed(() => {
+    const size = this.naturalSize();
+    return size ? fitCrop(size, this.effectiveAspectRatio()) : null;
+  });
+  readonly effectiveMaxZoom = computed(() => Math.max(1, this.maxZoom() || 1));
+  /** 1 = the whole image fits; larger = zoomed in. */
+  readonly zoom = computed(() => {
+    const fit = this.fitRect();
+    const crop = this.crop();
+    return fit && crop && crop.width > 0 ? fit.width / crop.width : 1;
+  });
+  readonly dragging = signal(false);
   readonly outputSize = computed(() => {
     const crop = this.crop();
     return crop ? outputSize(crop, this.outputWidth()) : null;
@@ -267,6 +389,39 @@ export class ImageCropperComponent {
   protected readonly handles = CROP_HANDLES;
   protected readonly guideCells = [0, 1, 2, 3, 4, 5, 6, 7, 8];
   protected readonly instructionsId = computed(() => `${this.id()}-instructions`);
+  protected readonly instructionsText = computed(
+    () => this.instructions() ?? (this.isPanZoom() ? PAN_ZOOM_INSTRUCTIONS : BOX_INSTRUCTIONS),
+  );
+  protected readonly stageClass = computed(() =>
+    cn(
+      'relative block aspect-square w-[min(100%,var(--sanring-image-cropper-stage-size,20rem))] touch-none select-none overflow-hidden',
+      'rounded-[var(--sanring-radius)] border border-[var(--sanring-border)] bg-neutral-900 outline-none',
+      SELECTION_CONTROL_FOCUS_CLASS,
+      this.isDisabled() ? 'cursor-not-allowed opacity-60' : this.dragging() ? 'cursor-grabbing' : 'cursor-grab',
+    ),
+  );
+  /** Pan-zoom frame inside the square stage, in percent; it keeps the enforced ratio. */
+  protected readonly panFrame = computed(() => {
+    const ratio = this.effectiveAspectRatio() ?? 1;
+    const width = ratio >= 1 ? PAN_ZOOM_FRAME : PAN_ZOOM_FRAME * ratio;
+    const height = ratio >= 1 ? PAN_ZOOM_FRAME / ratio : PAN_ZOOM_FRAME;
+    return { left: (100 - width) / 2, top: (100 - height) / 2, width, height };
+  });
+  /** Where the image sits in the stage (percent) so that the crop lines up with the frame. */
+  protected readonly panImage = computed(() => {
+    const crop = this.crop();
+    const size = this.naturalSize();
+    if (!this.isPanZoom() || !crop || !size) return null;
+    const frame = this.panFrame();
+    const sx = frame.width / crop.width;
+    const sy = frame.height / crop.height;
+    return {
+      left: frame.left - crop.x * sx,
+      top: frame.top - crop.y * sy,
+      width: size.width * sx,
+      height: size.height * sy,
+    };
+  });
   protected readonly announcement = signal('');
   protected readonly hostClass = computed(() => cn('block', this.class()));
   protected readonly boxClass = computed(() =>
@@ -292,7 +447,7 @@ export class ImageCropperComponent {
 
   /** Dark overlay with the crop shape cut out (evenodd), in the stage's 0–100 viewBox. */
   protected readonly maskPath = computed(() => {
-    const box = this.cropPercent();
+    const box = this.isPanZoom() ? (this.panImage() ? this.panFrame() : null) : this.cropPercent();
     if (!box) return '';
     const outer = 'M0 0H100V100H0Z';
     if (this.shape() === 'circle') {
@@ -306,7 +461,10 @@ export class ImageCropperComponent {
 
   private readonly imageRef = viewChild<ElementRef<HTMLImageElement>>('image');
   private readonly boxRef = viewChild<ElementRef<HTMLElement>>('box');
+  private readonly stageRef = viewChild<ElementRef<HTMLElement>>('stage');
   private drag: DragState | null = null;
+  private readonly pointers = new Map<number, { x: number; y: number }>();
+  private gesture: PanGesture | null = null;
   private previousSource: ImageCropperSource = undefined;
 
   constructor() {
@@ -329,7 +487,7 @@ export class ImageCropperComponent {
     });
 
     effect(() => {
-      const aspectRatio = this.aspectRatio();
+      const aspectRatio = this.effectiveAspectRatio();
       untracked(() => {
         const size = this.naturalSize();
         const crop = this.crop();
@@ -341,13 +499,28 @@ export class ImageCropperComponent {
   }
 
   focus(options?: FocusOptions): void {
-    this.boxRef()?.nativeElement.focus(options);
+    (this.stageRef() ?? this.boxRef())?.nativeElement.focus(options);
   }
 
   /** Restores the default centered crop for the current image. */
   reset(): void {
     const size = this.naturalSize();
-    if (size) this.crop.set(initialCrop(size, this.aspectRatio()));
+    if (size) this.crop.set(this.defaultCrop(size));
+  }
+
+  /**
+   * Pan-zoom: sets the zoom (1 = whole image fits, up to `maxZoom`) around the crop center,
+   * or around `anchor` given in source pixels.
+   */
+  setZoom(zoom: number, anchor?: { x: number; y: number }): void {
+    const crop = this.crop();
+    const size = this.naturalSize();
+    const fit = this.fitRect();
+    if (!crop || !size || !fit || !Number.isFinite(zoom)) return;
+    const z = Math.min(Math.max(zoom, 1), this.effectiveMaxZoom());
+    const ax = anchor?.x ?? crop.x + crop.width / 2;
+    const ay = anchor?.y ?? crop.y + crop.height / 2;
+    this.crop.set(zoomCrop(crop, fit.width / z, ax, ay, size));
   }
 
   /** Draws the crop to a canvas and encodes it in the selected format. */
@@ -415,7 +588,9 @@ export class ImageCropperComponent {
       current.y >= 0 &&
       current.x + current.width <= size.width &&
       current.y + current.height <= size.height;
-    this.crop.set(fits ? applyAspectRatio(current, size, this.aspectRatio()) : initialCrop(size, this.aspectRatio()));
+    this.crop.set(
+      fits ? applyAspectRatio(current, size, this.effectiveAspectRatio()) : this.defaultCrop(size),
+    );
     this.announce();
     this.loaded.emit(size);
   }
@@ -487,6 +662,151 @@ export class ImageCropperComponent {
     this.announce();
   }
 
+  // ---------- pan-zoom ----------
+
+  protected onPanPointerDown(event: PointerEvent): void {
+    if (this.isDisabled() || !this.crop() || (event.pointerType === 'mouse' && event.button !== 0)) return;
+    event.preventDefault();
+    const stage = this.stageRef()?.nativeElement;
+    stage?.setPointerCapture?.(event.pointerId);
+    stage?.focus({ preventScroll: true });
+    this.pointers.set(event.pointerId, { x: event.clientX, y: event.clientY });
+    this.beginGesture();
+    this.dragging.set(true);
+  }
+
+  protected onPanPointerMove(event: PointerEvent): void {
+    const gesture = this.gesture;
+    const size = this.naturalSize();
+    if (!gesture || !size || !this.pointers.has(event.pointerId)) return;
+    this.pointers.set(event.pointerId, { x: event.clientX, y: event.clientY });
+    const points = [...this.pointers.values()];
+    const mid = midpoint(points);
+
+    let next = gesture.start;
+    let scale = gesture.scale;
+    if (points.length > 1 && gesture.distance > 0) {
+      // Pinch: zoom around the point that was between the fingers, then follow the fingers.
+      const width = this.clampWidth((gesture.start.width * gesture.distance) / distance(points[0], points[1]));
+      const anchor = this.sourcePoint(gesture.midX, gesture.midY, gesture);
+      next = zoomCrop(gesture.start, width, anchor.x, anchor.y, size);
+      scale = (gesture.scale * next.width) / gesture.start.width;
+    }
+    // Dragging the image right shows what was to its left, so the crop moves the other way.
+    this.crop.set(moveCrop(next, -(mid.x - gesture.midX) * scale, -(mid.y - gesture.midY) * scale, size));
+  }
+
+  protected onPanPointerEnd(event: PointerEvent): void {
+    if (!this.pointers.delete(event.pointerId)) return;
+    if (this.pointers.size > 0) {
+      this.beginGesture();
+      return;
+    }
+    this.gesture = null;
+    this.dragging.set(false);
+    this.announce();
+  }
+
+  protected onWheel(event: WheelEvent): void {
+    const crop = this.crop();
+    if (this.isDisabled() || !crop || !this.naturalSize() || event.deltaY === 0) return;
+    event.preventDefault();
+    const lines = event.deltaMode === 1 ? 16 : event.deltaMode === 2 ? 400 : 1;
+    // Trackpad pinch arrives as ctrl + wheel with small deltas; give it more weight.
+    const factor = Math.exp(event.deltaY * lines * (event.ctrlKey ? 0.01 : 0.002));
+    const geometry = this.stageGeometry();
+    const anchor = geometry ? this.sourcePoint(event.clientX, event.clientY, { start: crop, ...geometry }) : undefined;
+    const fit = this.fitRect();
+    if (fit) this.setZoom(fit.width / (crop.width * factor), anchor);
+    this.announce();
+  }
+
+  protected onPanKeydown(event: KeyboardEvent): void {
+    const crop = this.crop();
+    const size = this.naturalSize();
+    if (this.isDisabled() || !crop || !size) return;
+
+    if (event.key === '+' || event.key === '=' || event.key === '-' || event.key === '_') {
+      event.preventDefault();
+      const step = event.shiftKey ? 1.5 : 1.1;
+      const zoomIn = event.key === '+' || event.key === '=';
+      this.setZoom(zoomIn ? this.zoom() * step : this.zoom() / step);
+      this.announce();
+      return;
+    }
+
+    const pixels = event.shiftKey ? 40 : 8;
+    const scale = this.stageGeometry()?.scale ?? 1;
+    const delta: Record<string, [number, number]> = {
+      ArrowLeft: [-pixels, 0],
+      ArrowRight: [pixels, 0],
+      ArrowUp: [0, -pixels],
+      ArrowDown: [0, pixels],
+    };
+    const move = delta[event.key];
+    if (!move) return;
+    event.preventDefault();
+    // Arrow keys move the image, like dragging it.
+    this.crop.set(moveCrop(crop, -move[0] * scale, -move[1] * scale, size));
+    this.announce();
+  }
+
+  private beginGesture(): void {
+    const crop = this.crop();
+    const geometry = this.stageGeometry();
+    if (!crop || !geometry) {
+      this.gesture = null;
+      return;
+    }
+    const points = [...this.pointers.values()];
+    const mid = midpoint(points);
+    this.gesture = {
+      start: crop,
+      midX: mid.x,
+      midY: mid.y,
+      distance: points.length > 1 ? distance(points[0], points[1]) : 0,
+      ...geometry,
+    };
+  }
+
+  /** Frame position on screen and the source-pixels-per-CSS-pixel scale of the current crop. */
+  private stageGeometry(): { scale: number; frameLeft: number; frameTop: number } | null {
+    const stage = this.stageRef()?.nativeElement;
+    const crop = this.crop();
+    if (!stage || !crop) return null;
+    const rect = stage.getBoundingClientRect();
+    const frame = this.panFrame();
+    const frameWidth = (rect.width * frame.width) / 100;
+    if (frameWidth <= 0) return null;
+    return {
+      scale: crop.width / frameWidth,
+      frameLeft: rect.left + (rect.width * frame.left) / 100,
+      frameTop: rect.top + (rect.height * frame.top) / 100,
+    };
+  }
+
+  /** Source-pixel point under a screen point, using the crop and geometry captured at `gesture`. */
+  private sourcePoint(
+    clientX: number,
+    clientY: number,
+    gesture: Pick<PanGesture, 'start' | 'scale' | 'frameLeft' | 'frameTop'>,
+  ): { x: number; y: number } {
+    return {
+      x: gesture.start.x + (clientX - gesture.frameLeft) * gesture.scale,
+      y: gesture.start.y + (clientY - gesture.frameTop) * gesture.scale,
+    };
+  }
+
+  private clampWidth(width: number): number {
+    const fit = this.fitRect();
+    if (!fit) return width;
+    return Math.min(Math.max(width, fit.width / this.effectiveMaxZoom()), fit.width);
+  }
+
+  private defaultCrop(size: CropBounds): CropRect {
+    return this.isPanZoom() ? fitCrop(size, this.effectiveAspectRatio()) : initialCrop(size, this.aspectRatio());
+  }
+
   /** Source pixels per CSS pixel of the displayed image. */
   private displayScale(): number {
     const image = this.imageRef()?.nativeElement;
@@ -499,6 +819,18 @@ export class ImageCropperComponent {
     const crop = this.crop();
     if (!crop) return;
     const r = roundCrop(crop);
-    this.announcement.set(`${this.cropAreaLabel()} ${r.width} × ${r.height}, ${r.x}, ${r.y}`);
+    const zoom = this.isPanZoom() ? `, ${Math.round(this.zoom() * 100)}%` : '';
+    this.announcement.set(`${this.cropAreaLabel()} ${r.width} × ${r.height}, ${r.x}, ${r.y}${zoom}`);
   }
+}
+
+function midpoint(points: readonly { x: number; y: number }[]): { x: number; y: number } {
+  if (points.length === 0) return { x: 0, y: 0 };
+  const x = points.reduce((sum, p) => sum + p.x, 0) / points.length;
+  const y = points.reduce((sum, p) => sum + p.y, 0) / points.length;
+  return { x, y };
+}
+
+function distance(a: { x: number; y: number }, b: { x: number; y: number }): number {
+  return Math.hypot(a.x - b.x, a.y - b.y);
 }

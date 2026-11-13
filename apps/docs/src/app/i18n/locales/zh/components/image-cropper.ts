@@ -1,6 +1,6 @@
 export const imageCropperTranslations = {
   'imageCropper.description':
-    '用可拖曳、可縮放的框裁切圖片。旁邊可以放即時預覽，以及 PNG、JPEG、WebP 的輸出格式選擇器，export() 會回傳 File。',
+    '用可拖曳、可縮放的框裁切圖片，或固定裁切框、拖動與縮放後面的圖片。旁邊可以放即時預覽，以及 PNG、JPEG、WebP 的輸出格式選擇器，export() 會回傳 File。',
   'imageCropper.examples.basic.description':
     '裁切器顯示圖片與裁切框。預覽與格式選擇器用 [for] 指向它，再呼叫 export() 取得裁切後的 File。',
   'imageCropper.usage.description':
@@ -68,4 +68,21 @@ export const imageCropperTranslations = {
   'imageCropper.keyboard.alt': '調整裁切框大小。左右改寬度，上下改高度；鎖定的長寬比會維持。',
   'imageCropper.stateModel.description':
     '不是表單控制項。crop、format、quality、background 都是雙向 model，原圖不會被修改。只有 export() 會實際編碼，請在使用者確認時呼叫。',
+  'imageCropper.demo.panZoom': '拖動與縮放',
+  'imageCropper.demo.panZoomInstructions':
+    '拖曳圖片移動位置，滾輪或雙指捏合縮放。方向鍵移動圖片，加號、減號縮放，按住 Shift 一次移動較多。',
+  'imageCropper.demo.zoom': '縮放',
+  'imageCropper.demo.zoomIn': '放大',
+  'imageCropper.demo.zoomOut': '縮小',
+  'imageCropper.examples.panZoom.description':
+    'mode="pan-zoom" 讓裁切框固定、改成移動圖片：滑鼠或單指拖曳移動，滾輪、觸控板或雙指捏合縮放，也可以用縮放滑桿。圖片永遠蓋滿裁切框，匯出不會有空白邊。這是常見的大頭照流程，電腦和手機操作一致。',
+  'imageCropper.api.mode.description':
+    "'box'：圖片固定，移動、縮放裁切框。'pan-zoom'：裁切框固定，拖動、縮放圖片；需要固定比例，aspectRatio 沒設時用 1。",
+  'imageCropper.api.maxZoom.description': '只用於 pan-zoom：最大縮放倍數。1 是剛好容納整張圖的裁切範圍。',
+  'imageCropper.api.zoom.description':
+    '目前的縮放倍數（1 = 整張圖剛好放進框裡）與設定縮放的方法，可指定以原圖像素為單位的錨點。範圍限制在 1 到 maxZoom。',
+  'imageCropper.api.zoomControl.description':
+    'sanring-image-cropper-zoom：pan-zoom 模式用的縮小按鈕、縮放滑桿與放大按鈕。滑桿以 aria-valuetext 報讀百分比。',
+  'imageCropper.keyboard.panArrows': 'pan-zoom 模式下移動圖片 8 個螢幕像素（按住 Shift 為 40）。',
+  'imageCropper.keyboard.panZoom': 'pan-zoom 模式下放大或縮小 10%（按住 Shift 為 50%）。',
 } as const;

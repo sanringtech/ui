@@ -92,6 +92,34 @@ export function initialCrop(
   };
 }
 
+/** Largest rect with the given aspect ratio that fits the image, centered — zoom 1 in pan-zoom mode. */
+export function fitCrop(bounds: CropBounds, aspectRatio: number | null): CropRect {
+  return initialCrop(bounds, aspectRatio, 1);
+}
+
+/**
+ * Resizes a crop to `width` (height follows its ratio) around an anchor in source pixels.
+ * The anchor keeps its relative position inside the crop, so the point under the cursor or
+ * between two fingers stays put. The result never exceeds the image.
+ */
+export function zoomCrop(
+  start: CropRect,
+  width: number,
+  anchorX: number,
+  anchorY: number,
+  bounds: CropBounds,
+): CropRect {
+  const ratio = start.width / start.height;
+  const nextWidth = clamp(width, 1, Math.min(bounds.width, bounds.height * ratio));
+  const nextHeight = nextWidth / ratio;
+  const fx = (anchorX - start.x) / start.width;
+  const fy = (anchorY - start.y) / start.height;
+  return clampCrop(
+    { x: anchorX - fx * nextWidth, y: anchorY - fy * nextHeight, width: nextWidth, height: nextHeight },
+    bounds,
+  );
+}
+
 /** Keeps a rect inside the bounds, shrinking it first if it is larger than the image. */
 export function clampCrop(rect: CropRect, bounds: CropBounds): CropRect {
   const width = clamp(rect.width, 1, bounds.width);

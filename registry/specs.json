@@ -1978,7 +1978,7 @@
   "image-cropper": {
     "name": "image-cropper",
     "title": "Image Cropper",
-    "description": "Crop an image with a draggable, resizable box. A live preview and an output picker for PNG, JPEG, or WebP sit beside it, and export() returns a File.",
+    "description": "Crop an image with a draggable, resizable box, or pan and zoom the image behind a fixed frame. A live preview and an output picker for PNG, JPEG, or WebP sit beside it, and export() returns a File.",
     "aliases": [
       "crop",
       "cropper",
@@ -2005,6 +2005,18 @@
         "type": "CropRect | null",
         "defaultValue": "null",
         "description": "Two-way crop rectangle { x, y, width, height } in source image pixels. Set on load, reset when src changes."
+      },
+      {
+        "property": "mode",
+        "type": "'box' | 'pan-zoom'",
+        "defaultValue": "'box'",
+        "description": "'box' moves and resizes the crop box over a fixed image. 'pan-zoom' fixes the frame and pans / zooms the image; it needs a fixed ratio, so aspectRatio falls back to 1."
+      },
+      {
+        "property": "maxZoom",
+        "type": "number",
+        "defaultValue": "4",
+        "description": "pan-zoom only: the largest zoom. 1 is the crop that fits the whole image."
       },
       {
         "property": "aspectRatio",
@@ -2097,6 +2109,12 @@
         "description": "Draws the crop to a canvas and resolves to a File. If the browser falls back to another type, the File type and extension follow the actual output."
       },
       {
+        "property": "zoom / setZoom()",
+        "type": "Signal<number> / (zoom, anchor?) => void",
+        "defaultValue": "—",
+        "description": "Current zoom (1 = whole image fits) and a method to set it, optionally around an anchor in source pixels. Clamped to 1 – maxZoom."
+      },
+      {
         "property": "reset()",
         "type": "() => void",
         "defaultValue": "—",
@@ -2105,7 +2123,7 @@
       {
         "property": "cropAreaLabel / instructions / emptyLabel",
         "type": "string",
-        "defaultValue": "English",
+        "defaultValue": "English (instructions follow mode)",
         "description": "Accessible name of the crop box, its keyboard instructions, and the empty-state text. Override them to translate."
       },
       {
@@ -2113,6 +2131,12 @@
         "type": "ImageCropperComponent / number",
         "defaultValue": "parent / 160",
         "description": "sanring-image-cropper-preview: the cropper to mirror, and the side in px of the square box it occupies. The crop is fitted and centered inside, so the layout never shifts while dragging."
+      },
+      {
+        "property": "zoom control: for / zoomLabel / zoomInLabel / zoomOutLabel",
+        "type": "ImageCropperComponent / string",
+        "defaultValue": "parent / English",
+        "description": "sanring-image-cropper-zoom: zoom-out button, range slider, and zoom-in button for pan-zoom mode. The slider exposes the zoom as a percentage through aria-valuetext."
       },
       {
         "property": "format picker: for",
@@ -2133,6 +2157,14 @@
       {
         "keys": "Alt (Option) + Arrow keys",
         "action": "Resizes the crop box. Left / Right change the width, Up / Down change the height. The aspect ratio stays locked."
+      },
+      {
+        "keys": "Arrow keys (pan-zoom)",
+        "action": "In pan-zoom mode, moves the image by 8 screen pixels (40 with Shift)."
+      },
+      {
+        "keys": "+ / − (pan-zoom)",
+        "action": "In pan-zoom mode, zooms in or out by 10% (50% with Shift)."
       }
     ],
     "accessibility": [

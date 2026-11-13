@@ -47,6 +47,12 @@ export const imageCropperPage = {
           level: 3,
         },
         {
+          id: 'example-pan-zoom',
+          titleKey: 'imageCropper.demo.panZoom',
+          descriptionKey: 'imageCropper.examples.panZoom.description',
+          level: 3,
+        },
+        {
           id: 'example-upload',
           titleKey: 'imageCropper.demo.upload',
           descriptionKey: 'imageCropper.examples.upload.description',
@@ -83,6 +89,8 @@ export const imageCropperPage = {
     { property: 'class', type: 'string', defaultValue: "''", descriptionKey: 'imageCropper.api.class.description' },
     { property: 'src', type: 'File | Blob | string | null', defaultValue: 'null', descriptionKey: 'imageCropper.api.src.description' },
     { property: 'crop', type: 'CropRect | null', defaultValue: 'null', descriptionKey: 'imageCropper.api.crop.description' },
+    { property: 'mode', type: "'box' | 'pan-zoom'", defaultValue: "'box'", descriptionKey: 'imageCropper.api.mode.description' },
+    { property: 'maxZoom', type: 'number', defaultValue: '4', descriptionKey: 'imageCropper.api.maxZoom.description' },
     { property: 'aspectRatio', type: "number | 'free' | null", defaultValue: 'null', descriptionKey: 'imageCropper.api.aspectRatio.description' },
     { property: 'minSize', type: 'number', defaultValue: '16', descriptionKey: 'imageCropper.api.minSize.description' },
     { property: 'shape', type: "'rect' | 'circle'", defaultValue: "'rect'", descriptionKey: 'imageCropper.api.shape.description' },
@@ -98,15 +106,19 @@ export const imageCropperPage = {
     { property: 'loaded', type: 'EventEmitter<{ width; height }>', defaultValue: '—', descriptionKey: 'imageCropper.api.loaded.description' },
     { property: 'loadError', type: 'EventEmitter<void>', defaultValue: '—', descriptionKey: 'imageCropper.api.loadError.description' },
     { property: 'export()', type: '(options?) => Promise<File>', defaultValue: '—', descriptionKey: 'imageCropper.api.export.description' },
+    { property: 'zoom / setZoom()', type: 'Signal<number> / (zoom, anchor?) => void', defaultValue: '—', descriptionKey: 'imageCropper.api.zoom.description' },
     { property: 'reset()', type: '() => void', defaultValue: '—', descriptionKey: 'imageCropper.api.reset.description' },
-    { property: 'cropAreaLabel / instructions / emptyLabel', type: 'string', defaultValue: 'English', descriptionKey: 'imageCropper.api.labels.description' },
+    { property: 'cropAreaLabel / instructions / emptyLabel', type: 'string', defaultValue: 'English (instructions follow mode)', descriptionKey: 'imageCropper.api.labels.description' },
     { property: 'preview: for / size', type: 'ImageCropperComponent / number', defaultValue: 'parent / 160', descriptionKey: 'imageCropper.api.preview.description' },
+    { property: 'zoom control: for / zoomLabel / zoomInLabel / zoomOutLabel', type: 'ImageCropperComponent / string', defaultValue: 'parent / English', descriptionKey: 'imageCropper.api.zoomControl.description' },
     { property: 'format picker: for', type: 'ImageCropperComponent', defaultValue: 'parent', descriptionKey: 'imageCropper.api.formatPicker.description' },
   ] satisfies readonly ComponentPageApiRow[],
   keyboardRows: [
     { keys: 'Arrow keys', descriptionKey: 'imageCropper.keyboard.arrows' },
     { keys: 'Shift + Arrow keys', descriptionKey: 'imageCropper.keyboard.shift' },
     { keys: 'Alt (Option) + Arrow keys', descriptionKey: 'imageCropper.keyboard.alt' },
+    { keys: 'Arrow keys (pan-zoom)', descriptionKey: 'imageCropper.keyboard.panArrows' },
+    { keys: '+ / − (pan-zoom)', descriptionKey: 'imageCropper.keyboard.panZoom' },
   ] satisfies readonly ComponentPageKeyboardRow[],
 } as const satisfies ComponentPageDefinition;
 
@@ -153,6 +165,19 @@ export const imageCropperPageExamples = {
 />
 <sanring-image-cropper-preview [for]="cropper" [size]="96" />
 <sanring-image-cropper-format [for]="cropper" />`,
+  panZoom: `<!-- Fixed circular frame: drag the image, scroll / pinch to zoom, or use the slider.
+     The usual avatar flow on both desktop and phones. -->
+<sanring-image-cropper
+  #cropper="sanringImageCropper"
+  mode="pan-zoom"
+  shape="circle"
+  src="/photos/stairs.jpg"
+  [aspectRatio]="1"
+  [outputWidth]="256"
+>
+  <sanring-image-cropper-zoom />
+</sanring-image-cropper>
+<sanring-image-cropper-preview [for]="cropper" [size]="96" />`,
   upload: `<sanring-file-upload accept="image/*" (filesChange)="file.set($event[0] ?? null)">
   <button sanringBtn variant="outline" sanringFileTrigger type="button">Choose image</button>
 </sanring-file-upload>
