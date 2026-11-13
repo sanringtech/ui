@@ -5,6 +5,7 @@ import { expectNoA11yViolations } from '../../../testing/axe-a11y';
 import { ImageCropperComponent } from './image-cropper.component';
 import { ImageCropperFormatComponent } from './image-cropper-format.component';
 import { ImageCropperPreviewComponent } from './image-cropper-preview.component';
+import { ImageCropperZoomComponent } from './image-cropper-zoom.component';
 import type { CropRect, ImageCropperFormat } from './image-cropper.util';
 
 const PNG_SRC = 'data:image/png;base64,iVBORw0KGgo=';
@@ -300,6 +301,161 @@ describe('ImageCropperComponent', () => {
   it('has no axe violations', async () => {
     const fixture = TestBed.createComponent(ImageCropperTestHost);
     loadImage(fixture);
+    await expectNoA11yViolations(fixture.nativeElement);
+  });
+});
+
+@Component({
+  imports: [ImageCropperComponent, ImageCropperZoomComponent],
+  template: `
+    <sanring-image-cropper
+      mode="pan-zoom"
+      shape="circle"
+      [src]="src()"
+      [aspectRatio]="aspectRatio()"
+      [disabled]="disabled()"
+      [(crop)]="crop"
+    >
+      <sanring-image-cropper-zoom />
+    </sanring-image-cropper>
+  `,
+})
+class PanZoomTestHost {
+  readonly src = signal<string | null>(PNG_SRC);
+  readonly aspectRatio = signal<number | null>(1);
+  readonly disabled = signal(false);
+  readonly crop = signal<CropRect | null>(null);
+}
+
+describe('ImageCropperComponent pan-zoom mode', () => {
+  beforeEach(async () => {
+    vi.spyOn(HTMLCanvasElement.prototype, 'toDataURL').mockImplementation(function (type?: string) {
+      return `data:${type ?? 'image/png'};base64,`;
+    });
+    await TestBed.configureTestingModule({ imports: [PanZoomTestHost] }).compileComponents();
+  });
+
+  afterEach(() => vi.restoreAllMocks());
+
+  /** 400×200 image in a 100×100 stage at (0, 0): the frame is 80 px wide at (10, 10). */
+  function setup(): { fixture: ComponentFixture<PanZoomTestHost>; stage: HTMLElement; cropper: ImageCropperComponent } {
+    const fixture = TestBed.createComponent(PanZoomTestHost);
+    fixture.detectChanges();
+    const image = fixture.nativeElement.querySelector('sanring-image-cropper img') as HTMLImageElement;
+    Object.defineProperty(image, 'naturalWidth', { configurable: true, value: 400 });
+    Object.defineProperty(image, 'naturalHeight', { configurable: true, value: 200 });
+    image.dispatchEvent(new Event('load'));
+    fixture.detectChanges();
+    const stage = box(fixture as unknown as ComponentFixture<ImageCropperTestHost>);
+    vi.spyOn(stage, 'getBoundingClientRect').mockReturnValue({
+      left: 0, top: 0, width: 100, height: 100, right: 100, bottom: 100, x: 0, y: 0, toJSON: () => ({}),
+    } as DOMRect);
+    const cropper = fixture.debugElement.children[0].componentInstance as ImageCropperComponent;
+    return { fixture, stage, cropper };
+  }
+
+  function touch(type: string, id: number, clientX: number, clientY: number): MouseEvent {
+    const event = new MouseEvent(type, { bubbles: true, cancelable: true, clientX, clientY, button: 0 });
+    Object.defineProperty(event, 'pointerId', { value: id });
+    Object.defineProperty(event, 'pointerType', { value: 'touch' });
+    return event;
+  }
+
+  it('starts at zoom 1 with the largest crop that fits, and positions the image behind the frame', () => {
+    const { fixture, cropper } = setup();
+    expect(fixture.componentInstance.crop()).toEqual({ x: 100, y: 0, width: 200, height: 200 });
+    expect(cropper.zoom()).toBe(1);
+    const image = fixture.nativeElement.querySelector('sanring-image-cropper img') as HTMLImageElement;
+    // Frame is 80% wide; 200 source px → 80%, so the 400 px image is 160% wide and starts at 10 − 40 = −30%.
+    expect(image.style.width).toBe('160%');
+    expect(image.style.left).toBe('-30%');
+    expect(fixture.nativeElement.querySelector('[data-handle]')).toBeNull();
+  });
+
+  it('drags the image: the crop moves the opposite way and stays inside the image', () => {
+    const { fixture, stage } = setup();
+    // 200 source px across an 80 px frame → 2.5 source px per CSS px.
+    stage.dispatchEvent(touch('pointerdown', 1, 50, 50));
+    stage.dispatchEvent(touch('pointermove', 1, 60, 50));
+    expect(fixture.componentInstance.crop()).toEqual({ x: 75, y: 0, width: 200, height: 200 });
+    stage.dispatchEvent(touch('pointermove', 1, 500, 50));
+    expect(fixture.componentInstance.crop()?.x).toBe(0);
+    stage.dispatchEvent(touch('pointerup', 1, 500, 50));
+  });
+
+  it('pinches to zoom around the point between the fingers', () => {
+    const { fixture, stage, cropper } = setup();
+    stage.dispatchEvent(touch('pointerdown', 1, 40, 50));
+    stage.dispatchEvent(touch('pointerdown', 2, 60, 50));
+    stage.dispatchEvent(touch('pointermove', 1, 30, 50));
+    stage.dispatchEvent(touch('pointermove', 2, 70, 50));
+    // Fingers twice as far apart → zoom 2, centered on the frame center (source 200, 100).
+    expect(cropper.zoom()).toBeCloseTo(2);
+    expect(fixture.componentInstance.crop()).toEqual({ x: 150, y: 50, width: 100, height: 100 });
+    stage.dispatchEvent(touch('pointerup', 1, 30, 50));
+    stage.dispatchEvent(touch('pointerup', 2, 70, 50));
+  });
+
+  it('zooms with the wheel up to maxZoom and back to fit', () => {
+    const { fixture, stage, cropper } = setup();
+    stage.dispatchEvent(new WheelEvent('wheel', { deltaY: -100000, clientX: 50, clientY: 50, cancelable: true }));
+    expect(cropper.zoom()).toBeCloseTo(4);
+    expect(fixture.componentInstance.crop()?.width).toBeCloseTo(50);
+    stage.dispatchEvent(new WheelEvent('wheel', { deltaY: 100000, clientX: 50, clientY: 50, cancelable: true }));
+    expect(fixture.componentInstance.crop()).toEqual({ x: 100, y: 0, width: 200, height: 200 });
+  });
+
+  it('zooms with + / − and moves the image with arrow keys', () => {
+    const { fixture, stage, cropper } = setup();
+    key(stage, '+');
+    expect(cropper.zoom()).toBeCloseTo(1.1);
+    key(stage, '-');
+    expect(cropper.zoom()).toBeCloseTo(1);
+    key(stage, 'ArrowRight');
+    // Image moves right 8 px → crop moves left 8 × 2.5 = 20 source px.
+    expect(fixture.componentInstance.crop()?.x).toBeCloseTo(80);
+  });
+
+  it('drives the zoom from the slider and buttons', () => {
+    const { fixture, cropper } = setup();
+    const slider = fixture.nativeElement.querySelector('sanring-image-cropper-zoom input[type=range]') as HTMLInputElement;
+    const [zoomOut, zoomIn] = Array.from(
+      fixture.nativeElement.querySelectorAll('sanring-image-cropper-zoom button'),
+    ) as HTMLButtonElement[];
+    expect(zoomOut.disabled).toBe(true);
+    slider.value = '2';
+    slider.dispatchEvent(new Event('input'));
+    fixture.detectChanges();
+    expect(cropper.zoom()).toBeCloseTo(2);
+    expect(slider.getAttribute('aria-valuetext')).toBe('200%');
+    zoomIn.click();
+    fixture.detectChanges();
+    expect(cropper.zoom()).toBeCloseTo(2.75);
+  });
+
+  it('ignores gestures while disabled', () => {
+    const { fixture, stage } = setup();
+    fixture.componentInstance.disabled.set(true);
+    fixture.detectChanges();
+    stage.dispatchEvent(touch('pointerdown', 1, 50, 50));
+    stage.dispatchEvent(touch('pointermove', 1, 60, 50));
+    stage.dispatchEvent(new WheelEvent('wheel', { deltaY: -500, cancelable: true }));
+    expect(fixture.componentInstance.crop()).toEqual({ x: 100, y: 0, width: 200, height: 200 });
+  });
+
+  it('falls back to a square frame without an aspect ratio', () => {
+    const fixture = TestBed.createComponent(PanZoomTestHost);
+    fixture.componentInstance.aspectRatio.set(null);
+    fixture.detectChanges();
+    const image = fixture.nativeElement.querySelector('sanring-image-cropper img') as HTMLImageElement;
+    Object.defineProperty(image, 'naturalWidth', { configurable: true, value: 400 });
+    Object.defineProperty(image, 'naturalHeight', { configurable: true, value: 200 });
+    image.dispatchEvent(new Event('load'));
+    expect(fixture.componentInstance.crop()).toEqual({ x: 100, y: 0, width: 200, height: 200 });
+  });
+
+  it('has no axe violations', async () => {
+    const { fixture } = setup();
     await expectNoA11yViolations(fixture.nativeElement);
   });
 });

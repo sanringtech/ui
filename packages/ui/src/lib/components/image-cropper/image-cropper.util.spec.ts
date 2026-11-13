@@ -1,11 +1,13 @@
 import {
   applyAspectRatio,
   clampCrop,
+  fitCrop,
   initialCrop,
   moveCrop,
   outputSize,
   replaceExtension,
   resizeCrop,
+  zoomCrop,
 } from './image-cropper.util';
 
 const bounds = { width: 400, height: 200 };
@@ -78,5 +80,24 @@ describe('image-cropper.util', () => {
     expect(replaceExtension('avatar.png', 'image/jpeg')).toBe('avatar.jpg');
     expect(replaceExtension('photo', 'image/webp')).toBe('photo.webp');
     expect(replaceExtension('  ', 'image/png')).toBe('cropped.png');
+  });
+
+  it('fits the largest crop with the ratio for zoom 1', () => {
+    expect(fitCrop(bounds, 1)).toEqual({ x: 100, y: 0, width: 200, height: 200 });
+    expect(fitCrop(bounds, 4)).toEqual({ x: 0, y: 50, width: 400, height: 100 });
+  });
+
+  it('zooms around an anchor that keeps its place in the crop', () => {
+    const start = { x: 100, y: 0, width: 200, height: 200 };
+    // Anchor at the crop center: halving the width keeps the center.
+    expect(zoomCrop(start, 100, 200, 100, bounds)).toEqual({ x: 150, y: 50, width: 100, height: 100 });
+    // Anchor at the top-left quarter point stays at the same relative spot.
+    expect(zoomCrop(start, 100, 150, 50, bounds)).toEqual({ x: 125, y: 25, width: 100, height: 100 });
+  });
+
+  it('never zooms out past the image and keeps the ratio', () => {
+    const start = { x: 150, y: 50, width: 100, height: 100 };
+    const next = zoomCrop(start, 1000, 200, 100, bounds);
+    expect(next).toEqual({ x: 100, y: 0, width: 200, height: 200 });
   });
 });

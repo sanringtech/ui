@@ -188,6 +188,40 @@ const RATIOS = [
             </app-component-page-code-previewer>
           </app-component-page-section>
 
+          <app-component-page-section [section]="section('example-pan-zoom')">
+            <app-component-page-code-previewer [code]="examples.panZoom" language="angular-html">
+              <div previewer class="flex w-full flex-wrap items-start justify-center gap-6 px-4">
+                <sanring-image-cropper
+                  #panZoom="sanringImageCropper"
+                  class="grid w-full max-w-xs gap-3"
+                  mode="pan-zoom"
+                  shape="circle"
+                  src="/avatars/stairs.jpg"
+                  [aspectRatio]="1"
+                  [outputWidth]="256"
+                  [cropAreaLabel]="i18n.t('imageCropper.demo.cropArea')"
+                  [instructions]="i18n.t('imageCropper.demo.panZoomInstructions')"
+                >
+                  <sanring-image-cropper-zoom
+                    [zoomLabel]="i18n.t('imageCropper.demo.zoom')"
+                    [zoomInLabel]="i18n.t('imageCropper.demo.zoomIn')"
+                    [zoomOutLabel]="i18n.t('imageCropper.demo.zoomOut')"
+                  />
+                </sanring-image-cropper>
+                <div class="grid justify-items-start gap-3">
+                  <sanring-image-cropper-preview
+                    [for]="panZoom"
+                    [size]="96"
+                    [ariaLabel]="i18n.t('imageCropper.demo.preview')"
+                  />
+                  <button sanringBtn variant="outline" type="button" (click)="download(panZoom, 'avatar')">
+                    {{ i18n.t('imageCropper.demo.download') }}
+                  </button>
+                </div>
+              </div>
+            </app-component-page-code-previewer>
+          </app-component-page-section>
+
           <app-component-page-section [section]="section('example-upload')">
             <app-component-page-code-previewer [code]="examples.upload" language="angular-html">
               <div previewer class="grid w-full justify-items-center gap-4 px-4">

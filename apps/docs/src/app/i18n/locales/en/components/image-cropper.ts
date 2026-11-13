@@ -1,6 +1,6 @@
 export const imageCropperTranslations = {
   'imageCropper.description':
-    'Crop an image with a draggable, resizable box. A live preview and an output picker for PNG, JPEG, or WebP sit beside it, and export() returns a File.',
+    'Crop an image with a draggable, resizable box, or pan and zoom the image behind a fixed frame. A live preview and an output picker for PNG, JPEG, or WebP sit beside it, and export() returns a File.',
   'imageCropper.examples.basic.description':
     'The cropper shows the image and crop box. Point the preview and format picker at it with [for], then call export() to get the cropped File.',
   'imageCropper.usage.description':
@@ -74,4 +74,23 @@ export const imageCropperTranslations = {
     'Resizes the crop box. Left / Right change the width, Up / Down change the height. The aspect ratio stays locked.',
   'imageCropper.stateModel.description':
     'Not a form control. crop, format, quality, and background are two-way models; the image itself is never changed. export() is the only step that encodes, so call it when the user confirms.',
+  'imageCropper.demo.panZoom': 'Pan and zoom',
+  'imageCropper.demo.panZoomInstructions':
+    'Drag the image to move it; scroll or pinch to zoom. Use the arrow keys to move the image, plus and minus to zoom, and Shift for larger steps.',
+  'imageCropper.demo.zoom': 'Zoom',
+  'imageCropper.demo.zoomIn': 'Zoom in',
+  'imageCropper.demo.zoomOut': 'Zoom out',
+  'imageCropper.examples.panZoom.description':
+    'mode="pan-zoom" keeps the frame fixed and moves the image instead: drag with a mouse or one finger, zoom with the wheel, a trackpad or two-finger pinch, or the zoom slider. The image always covers the frame, so the export never has empty edges. This is the usual avatar flow and works the same on desktop and phones.',
+  'imageCropper.api.mode.description':
+    "'box' moves and resizes the crop box over a fixed image. 'pan-zoom' fixes the frame and pans / zooms the image; it needs a fixed ratio, so aspectRatio falls back to 1.",
+  'imageCropper.api.maxZoom.description':
+    'pan-zoom only: the largest zoom. 1 is the crop that fits the whole image.',
+  'imageCropper.api.zoom.description':
+    'Current zoom (1 = whole image fits) and a method to set it, optionally around an anchor in source pixels. Clamped to 1 – maxZoom.',
+  'imageCropper.api.zoomControl.description':
+    'sanring-image-cropper-zoom: zoom-out button, range slider, and zoom-in button for pan-zoom mode. The slider exposes the zoom as a percentage through aria-valuetext.',
+  'imageCropper.keyboard.panArrows':
+    'In pan-zoom mode, moves the image by 8 screen pixels (40 with Shift).',
+  'imageCropper.keyboard.panZoom': 'In pan-zoom mode, zooms in or out by 10% (50% with Shift).',
 } as const;

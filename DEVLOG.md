@@ -1089,6 +1089,22 @@ P30 先前已收完 15 個必修缺口；這輪把剩下 15 組建議項目逐�
 
 ---
 
+## image-cropper pan-zoom 模式 — 裁切框固定、拖動與縮放圖片（2026-11-13，待發布）
+
+- [x] `mode="pan-zoom"`：裁切框固定在舞台中央（長邊 80%），改成移動圖片；滑鼠／單指拖曳、滾輪（觸控板捏合是 ctrl + wheel，另給較大權重）、雙指捏合、`+` / `−`、方向鍵
+- [x] 新增 `sanring-image-cropper-zoom`：縮小按鈕＋range 滑桿＋放大按鈕，跟 preview / format 一樣用 `[for]` 或 inject 父層
+- [x] `zoom()`（1 = 整張圖剛好放進框）、`setZoom(zoom, anchor?)`、`maxZoom`（預設 4）
+
+**已完成**:
+- 為什麼：SSO 帳號中心的大頭照要用。原本的 box 模式在手機上要點 12px 的把手、框縮小後看不清楚；Google、Slack、Discord、LINE 的頭像都是「框固定、動圖片」，兩端操作一致。
+- `crop`（原圖像素）仍是唯一狀態：pan-zoom 只是換一種方式改它，所以 `export()`、preview、format picker 一行都沒動。圖片位置用百分比算（框寬% × 原圖寬 ÷ crop 寬），不用量測舞台；只有手勢開始時讀一次 `getBoundingClientRect` 換算「每個 CSS px 等於幾個原圖 px」。
+- 幾何放 util 純函式：`fitCrop`（zoom 1）、`zoomCrop`（以錨點為中心縮放，錨點在 crop 內的相對位置不變、不超出原圖、保持比例）。捏合＝先以起始兩指中點為錨點縮放，再跟著中點位移平移；放開一指時用剩下的指頭重新起算，不會跳。
+- pan-zoom 需要固定比例，`aspectRatio` 沒設時用 1；`instructions` 改成預設 null，依 mode 給對應的英文說明（有傳就用傳的，舊用法不受影響）。
+
+**驗證**：新增 12 個單元測試（util：fitCrop、zoomCrop 錨點與上限；元件：初始 zoom 1 與圖片定位、拖曳方向與邊界、雙指捏合、滾輪到 maxZoom 再退回、+/− 與方向鍵、滑桿與按鈕、disabled、無比例退回 1:1、axe）；`@sanring/ui` 542 passed；CLI 265 passed；lint、registry sync / parity 綠。docs dev server + Playwright：手機 390px 用 CDP 送真的 touch 事件，雙指捏合到 zoom 3、單指拖曳，頁面不跟著捲；桌機滾輪、拖曳、滑桿拉回 1；console 無錯誤。
+
+**未做**：旋轉；EXIF 方向交給瀏覽器（`<img>` 與 `drawImage` 都已依 EXIF 轉正）。
+
 ## image-cropper — 圖片裁切、即時預覽與輸出格式選擇(2026-11-10,0.32.0 出貨)
 
 - [x] 新增 `image-cropper`:可拖曳、可縮放的裁切框,鎖定 / 自由比例,圓形模式
