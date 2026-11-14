@@ -36,6 +36,18 @@ function isPatch(version: string): boolean {
  */
 export const cliVersionChangelog: readonly CliVersionEntry[] = [
   {
+    version: '0.33.0',
+    date: '2026-11-13',
+    changes: [
+      {
+        type: 'added',
+        notable: true,
+        componentIds: ['image-cropper'],
+        text: '`image-cropper` gains `mode="pan-zoom"`: the frame stays fixed and the user drags and zooms the image (wheel, pinch, `+` / `−`, or the new `sanring-image-cropper-zoom` slider); `zoom()`, `setZoom()`, and `maxZoom` expose it, and the default `mode="box"` is unchanged.',
+      },
+    ],
+  },
+  {
     version: '0.32.0',
     date: '2026-11-10',
     changes: [
