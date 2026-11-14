@@ -1089,7 +1089,7 @@ P30 先前已收完 15 個必修缺口；這輪把剩下 15 組建議項目逐�
 
 ---
 
-## image-cropper pan-zoom 模式 — 裁切框固定、拖動與縮放圖片（2026-11-13，待發布）
+## image-cropper pan-zoom 模式 — 裁切框固定、拖動與縮放圖片（2026-11-13，0.33.0 出貨）
 
 - [x] `mode="pan-zoom"`：裁切框固定在舞台中央（長邊 80%），改成移動圖片；滑鼠／單指拖曳、滾輪（觸控板捏合是 ctrl + wheel，另給較大權重）、雙指捏合、`+` / `−`、方向鍵
 - [x] 新增 `sanring-image-cropper-zoom`：縮小按鈕＋range 滑桿＋放大按鈕，跟 preview / format 一樣用 `[for]` 或 inject 父層
