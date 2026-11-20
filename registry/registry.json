@@ -89,7 +89,9 @@
         "table-page",
         "org-chart",
         "account-menu",
-        "app-footer"
+        "app-footer",
+        "notification-bell",
+        "announcement-banner"
       ]
     }
   ],
@@ -1421,6 +1423,35 @@
       "files": [
         "app-footer/app-footer.component.ts",
         "app-footer/index.ts"
+      ]
+    },
+    {
+      "name": "notification-bell",
+      "description": "Sanring family notification bell: unread count, a panel with the list, mark all as read, and loading / empty / error states (sanring-notify).",
+      "tags": ["layout", "shell", "notification"],
+      "componentDeps": [
+        "popover",
+        "spinner"
+      ],
+      "peerDependencies": {
+        "@lucide/angular": "^1.18.0"
+      },
+      "files": [
+        "notification-bell/notification-bell.component.ts",
+        "notification-bell/index.ts"
+      ]
+    },
+    {
+      "name": "announcement-banner",
+      "description": "Sanring family announcement banner: full-width bars above the app shell for active sanring-notify banners, with optional link and dismiss.",
+      "tags": ["layout", "shell", "notification"],
+      "componentDeps": [],
+      "peerDependencies": {
+        "@lucide/angular": "^1.18.0"
+      },
+      "files": [
+        "announcement-banner/announcement-banner.component.ts",
+        "announcement-banner/index.ts"
       ]
     }
   ]

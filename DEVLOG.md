@@ -1123,3 +1123,12 @@ P30 先前已收完 15 個必修缺口；這輪把剩下 15 組建議項目逐�
 **踩過的坑**:遮罩原本用 `box-shadow: 0 0 0 9999px`,截圖上看起來沒變暗,把 inline 樣式換掉也一樣。改用 SVG evenodd path 之後,量測遮罩開/關的截圖才確認兩種寫法其實都有畫出來,只是範例的森林照片本身太暗看不出差異。最後保留 SVG:不依賴瀏覽器怎麼處理超大陰影,圓形模式也能挖出真正的橢圓。docs 預設 port 4200 被 OrbStack 佔用,本地預覽改用 4300。
 
 **未做**:旋轉、縮放圖片、Dialog 版裁切 block。
+
+## 通知 block：notification-bell、announcement-banner（2026-11-20）
+
+- [x] 新增 `block/notification-bell`、`block/announcement-banner`，給所有接 sanring-notify 的系統共用（sanring-notify PRD OQ-7 owner 拍板「直接抽成 ui」、ADR-0002 §5 橫幅）。照 `account-menu` 的模式：只負責畫面。
+- `notification-bell`：鈴鐺＋未讀數（>99 顯示 99+）、面板四態（loading、empty、error＋重試、清單），未讀有底色與圓點、「全部已讀」。資料、文字、輪詢、點擊後的導向都由各系統處理；`openChange` 告訴系統什麼時候抓清單，點一則會先關面板再發 `itemSelected`。帳號中心可帶 `sourceLabel` 顯示發送系統。
+- `announcement-banner`：外框上方的公告列，一則一列，可帶連結；`dismissible` 時有關閉鈕，`dismissed` 交給系統決定怎麼記。沒有項目就不渲染。
+- 標籤預設繁中，另附英文。
+- 驗證：`check-registry-sync`、`check-registry-parity`、`@sanring/cli` 測試（265）、`ng build docs`（staged registry 會編譯所有 block）、`eslint registry/blocks`。
+- 還沒做：docs 網站的 block 預覽頁。
