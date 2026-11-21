@@ -36,6 +36,39 @@ function isPatch(version: string): boolean {
  */
 export const cliVersionChangelog: readonly CliVersionEntry[] = [
   {
+    version: '0.35.0',
+    date: '2026-11-21',
+    changes: [
+      {
+        type: 'changed',
+        notable: true,
+        breaking: true,
+        text: '`block/announcement-banner` is now floating cards in a corner (`position: fixed`, default bottom-left, new `position` input) instead of a full-width bar, so it never changes the app layout; `dismissible` now defaults to `true`.',
+      },
+      {
+        type: 'added',
+        text: '`block/announcement-banner` adds `linkClicked` (`{ item, event }`): call `event.preventDefault()` and navigate with the router so in-app links do not reload the page.',
+      },
+      {
+        type: 'added',
+        notable: true,
+        breaking: true,
+        text: '`block/notification-bell` shows a toast with a "View" button when `unreadCount` goes up, using the app\'s `ToastService` (off with `[toastOnNew]="false"`); `unreadCount` now defaults to `null`, so pass `null` rather than `0` until the first poll returns.',
+      },
+    ],
+  },
+  {
+    version: '0.34.0',
+    date: '2026-11-20',
+    changes: [
+      {
+        type: 'added',
+        notable: true,
+        text: 'Add `block/notification-bell` (bell with unread count, list panel, mark all as read, loading / empty / error states) and `block/announcement-banner` for apps that use sanring-notify.',
+      },
+    ],
+  },
+  {
     version: '0.33.0',
     date: '2026-11-13',
     changes: [
