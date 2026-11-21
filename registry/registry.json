@@ -1427,11 +1427,12 @@
     },
     {
       "name": "notification-bell",
-      "description": "Sanring family notification bell: unread count, a panel with the list, mark all as read, and loading / empty / error states (sanring-notify).",
+      "description": "Sanring family notification bell: unread count, a panel with the list, mark all as read, loading / empty / error states, and a toast when new notifications arrive (sanring-notify).",
       "tags": ["layout", "shell", "notification"],
       "componentDeps": [
         "popover",
-        "spinner"
+        "spinner",
+        "toast"
       ],
       "peerDependencies": {
         "@lucide/angular": "^1.18.0"
@@ -1443,7 +1444,7 @@
     },
     {
       "name": "announcement-banner",
-      "description": "Sanring family announcement banner: full-width bars above the app shell for active sanring-notify banners, with optional link and dismiss.",
+      "description": "Sanring family announcement: floating cards in a corner (fixed, never changes the app layout) for active sanring-notify banners, with optional link and dismiss.",
       "tags": ["layout", "shell", "notification"],
       "componentDeps": [],
       "peerDependencies": {

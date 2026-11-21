@@ -1132,3 +1132,16 @@ P30 先前已收完 15 個必修缺口；這輪把剩下 15 組建議項目逐�
 - 標籤預設繁中，另附英文。
 - 驗證：`check-registry-sync`、`check-registry-parity`、`@sanring/cli` 測試（265）、`ng build docs`（staged registry 會編譯所有 block）、`eslint registry/blocks`。
 - 還沒做：docs 網站的 block 預覽頁。
+
+## 通知 block：公告改成浮動小卡、🔔 新通知 toast（2026-11-21）
+
+- [x] `announcement-banner` 從「外框上方的長條」改成角落的浮動小卡（`fixed`，預設左下，`position` 可選四個角）。owner 定的前提：跨系統公告不能影響各系統原本的排版。長條會把整頁往下推，浮動小卡不會。小卡會蓋住一小塊畫面，所以 `dismissible` 預設改成 `true`。預設放左下，是為了避開通常在右下的 toast。
+- [x] `announcement-banner` 新增 `linkClicked`（`{ item, event }`），blueprint 提的：「查看詳情」仍是 `<a href>`，新分頁開啟照常能用；同站連結由系統 `preventDefault()` 後用 router 換頁，不整頁重新載入。
+- [x] `notification-bell` 加新通知 toast：系統本來就每 60 秒把未讀數傳進來，未讀數變多時元件自己跳 toast（「你有 N 則新通知」＋「查看」打開面板），各系統不用加程式。用系統提供的 `ToastService`（optional inject），沒有就不跳；`toastOnNew` 可關。
+  - 第一次拿到的數字不跳：`unreadCount` 改成 `number | null`、預設 `null` 代表還沒拿到。系統要是一開始傳 0，第一次輪詢回來的數字會被當成新通知，文件與 changeset 都有寫。
+  - 面板開著時不跳（清單已經在眼前）。
+  - toast 只說「有幾則新的」，不顯示內容：清單只在面板打開時才抓，未讀數變多的當下元件手上沒有新那則的內容。
+- 驗證：
+  - 新增 `apps/docs/src/app/pages/blocks/notify-blocks.spec.ts`（5 個測試，import staged registry）：第一次不跳、變多才跳且數量正確、變少再變多會再跳、可關、沒有 ToastService 不出錯；公告是 `fixed`、可關、`linkClicked` 的 `preventDefault()` 真的擋住換頁。
+  - `ngc` strictTemplates 編譯兩個 staged block。也確認故意把模板寫錯時會報錯，所以這個檢查是有效的。
+  - `check-registry-sync`、`eslint`、docs 測試（18）、`@sanring/cli` 測試（265）。
