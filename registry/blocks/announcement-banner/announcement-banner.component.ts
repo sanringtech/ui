@@ -66,8 +66,8 @@ const POSITION_CLASSES: Record<AnnouncementBannerPosition, string> = {
       <section [attr.aria-label]="labels().region" [class]="containerClass()">
         @for (b of items(); track b.id) {
           <div role="status" data-testid="announcement-banner"
-               class="pointer-events-auto flex items-start gap-3 rounded-[var(--sanring-radius)] border border-[var(--sanring-info-80)] bg-[var(--sanring-info-90)] p-3 text-sm text-[var(--sanring-info-20)] shadow-lg">
-            <svg lucideMegaphone class="mt-0.5 size-4 shrink-0" aria-hidden="true"></svg>
+               class="pointer-events-auto flex items-start gap-3 rounded-[var(--sanring-radius)] border border-l-4 border-[var(--sanring-border)] border-l-[var(--sanring-info-50)] bg-[var(--sanring-surface)] p-3 text-sm text-[var(--sanring-foreground)] shadow-lg">
+            <svg lucideMegaphone class="mt-0.5 size-4 shrink-0 text-[var(--sanring-info-50)]" aria-hidden="true"></svg>
             <p class="min-w-0 flex-1">
               {{ b.text }}
               @if (b.link) {
@@ -76,7 +76,7 @@ const POSITION_CLASSES: Record<AnnouncementBannerPosition, string> = {
               }
             </p>
             @if (dismissible()) {
-              <button type="button" class="-m-1 flex size-7 shrink-0 cursor-pointer items-center justify-center rounded-[var(--sanring-radius)] hover:bg-[var(--sanring-info-80)]"
+              <button type="button" class="-m-1 flex size-7 shrink-0 cursor-pointer items-center justify-center rounded-[var(--sanring-radius)] text-[var(--sanring-muted)] hover:bg-[var(--sanring-surface-strong)] hover:text-[var(--sanring-foreground)]"
                       [attr.aria-label]="labels().dismiss" data-testid="announcement-dismiss" (click)="dismissed.emit(b.id)">
                 <svg lucideX class="size-4"></svg>
               </button>

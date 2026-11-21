@@ -1,7 +1,13 @@
 import { TranslationKey } from '../../i18n/translations';
 import { DocsComponentId } from '../../navigation/docs-navigation';
 
-export type DocsBlockId = 'dashboard-shell' | 'login' | 'table-page' | 'org-chart';
+export type DocsBlockId =
+  | 'dashboard-shell'
+  | 'login'
+  | 'table-page'
+  | 'org-chart'
+  | 'notification-bell'
+  | 'announcement-banner';
 
 export interface DocsBlockDefinition {
   id: DocsBlockId;
@@ -82,6 +88,30 @@ export const docsBlockCatalog: readonly DocsBlockDefinition[] = [
     componentDeps: ['avatar', 'badge', 'button', 'skeleton', 'tree'],
     peerDependencies: { elkjs: '^0.12.0' },
     path: '/blocks/org-chart',
+  },
+  {
+    id: 'notification-bell',
+    installName: 'block/notification-bell',
+    titleKey: 'blocks.bell.title',
+    descriptionKey: 'blocks.bell.body',
+    scenarioKey: 'blocks.bell.scenario',
+    compositionKey: 'blocks.bell.composition',
+    notesKey: 'blocks.bell.notes',
+    componentDeps: ['popover', 'spinner', 'toast'],
+    peerDependencies: { '@lucide/angular': '^1.18.0' },
+    path: '/blocks/notification-bell',
+  },
+  {
+    id: 'announcement-banner',
+    installName: 'block/announcement-banner',
+    titleKey: 'blocks.announcement.title',
+    descriptionKey: 'blocks.announcement.body',
+    scenarioKey: 'blocks.announcement.scenario',
+    compositionKey: 'blocks.announcement.composition',
+    notesKey: 'blocks.announcement.notes',
+    componentDeps: [],
+    peerDependencies: { '@lucide/angular': '^1.18.0' },
+    path: '/blocks/announcement-banner',
   },
 ];
 

@@ -53,4 +53,25 @@ export const blocksTranslations = {
   'blocks.org.preview.canvasOnly': '僅畫布',
   'blocks.org.preview.canvasOnlyDescription':
     '設 `[showTree]="false"` 就只顯示圖。平移、縮放與點選卡片仍可用。',
+  'blocks.bell.title': '通知鈴鐺',
+  'blocks.bell.body':
+    '鈴鐺＋未讀數，點開是通知清單：全部已讀、載入中／空的／錯誤三態，有新通知時跳 toast。',
+  'blocks.bell.scenario':
+    '放在每個接 sanring-notify 的 Sanring 系統頁首。通知由你的後端取得，block 只負責畫面。',
+  'blocks.bell.composition':
+    'popover 放面板，spinner 處理載入，未讀數在兩次輪詢之間變多時用 toast 提示「你有 N 則新通知」。',
+  'blocks.bell.notes':
+    '第一次輪詢回來之前，`unreadCount` 請傳 `null`，不要傳 `0`，不然第一次拿到的數字會被當成新通知。toast 需要你在 providers 提供 `ToastService`、頁面放 `<sanring-toaster>`；沒有就不會跳。不想要可設 `[toastOnNew]="false"`。',
+  'blocks.bell.preview.simulate': '模擬一則新通知',
+
+  'blocks.announcement.title': '系統公告',
+  'blocks.announcement.body':
+    '浮在角落的小卡片，用於跨系統公告（例如停機維護），可帶連結、可關閉。',
+  'blocks.announcement.scenario':
+    '顯示 sanring-notify 目前有效的公告（`GET /api/v1/banners/active`）。卡片是 `position: fixed`，不會推擠或改變原本的排版；在 app shell 放一次即可。',
+  'blocks.announcement.composition':
+    '不依賴其他元件：固定在角落的一疊卡片，搭配 lucide 圖示。用 `position` 選角落（預設左下，避開 toast）。',
+  'blocks.announcement.notes':
+    '連到自己系統內的頁面時，接 `linkClicked`、呼叫 `event.preventDefault()` 後用 router 換頁，就不會整頁重新載入；在新分頁開啟仍可用。',
+  'blocks.announcement.preview.hint': '預覽框代表瀏覽器視窗。',
 } as const;

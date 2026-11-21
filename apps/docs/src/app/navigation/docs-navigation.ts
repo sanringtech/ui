@@ -1,5 +1,6 @@
 import { isDevMode } from '@angular/core';
 import { TranslationKey } from '../i18n/translations';
+import { isRecentlyUpdatedBlockId } from '../pages/changelog/component-changelog';
 
 export type DocsComponentStatus = 'wip' | 'maintenance';
 
@@ -108,37 +109,53 @@ export interface DocsBlockNavItem extends DocsSidebarItem {
   descriptionKey: TranslationKey;
 }
 
-export const docsBlockItems: DocsBlockNavItem[] = [
-  {
-    id: 'dashboard-shell',
-    labelKey: 'blocks.dashboard.title',
-    descriptionKey: 'blocks.dashboard.body',
-    path: '/blocks/dashboard-shell',
-    active: true,
-  },
-  {
-    id: 'login',
-    labelKey: 'blocks.login.title',
-    descriptionKey: 'blocks.login.body',
-    path: '/blocks/login',
-    active: true,
-  },
-  {
-    id: 'table-page',
-    labelKey: 'blocks.table.title',
-    descriptionKey: 'blocks.table.body',
-    path: '/blocks/table-page',
-    active: true,
-  },
-  {
-    id: 'org-chart',
-    labelKey: 'blocks.org.title',
-    descriptionKey: 'blocks.org.body',
-    path: '/blocks/org-chart',
-    active: true,
-    badge: true,
-  },
-];
+/** The "new" dot follows the newest changelog entry (`blockIds`), like the components list. */
+export const docsBlockItems: DocsBlockNavItem[] = (
+  [
+    {
+      id: 'dashboard-shell',
+      labelKey: 'blocks.dashboard.title',
+      descriptionKey: 'blocks.dashboard.body',
+      path: '/blocks/dashboard-shell',
+      active: true,
+    },
+    {
+      id: 'login',
+      labelKey: 'blocks.login.title',
+      descriptionKey: 'blocks.login.body',
+      path: '/blocks/login',
+      active: true,
+    },
+    {
+      id: 'table-page',
+      labelKey: 'blocks.table.title',
+      descriptionKey: 'blocks.table.body',
+      path: '/blocks/table-page',
+      active: true,
+    },
+    {
+      id: 'org-chart',
+      labelKey: 'blocks.org.title',
+      descriptionKey: 'blocks.org.body',
+      path: '/blocks/org-chart',
+      active: true,
+    },
+    {
+      id: 'notification-bell',
+      labelKey: 'blocks.bell.title',
+      descriptionKey: 'blocks.bell.body',
+      path: '/blocks/notification-bell',
+      active: true,
+    },
+    {
+      id: 'announcement-banner',
+      labelKey: 'blocks.announcement.title',
+      descriptionKey: 'blocks.announcement.body',
+      path: '/blocks/announcement-banner',
+      active: true,
+    },
+  ] satisfies DocsBlockNavItem[]
+).map((item) => ({ ...item, badge: isRecentlyUpdatedBlockId(item.id) }));
 
 export const docsComponentItems: DocsComponentNavItem[] = [
   {
