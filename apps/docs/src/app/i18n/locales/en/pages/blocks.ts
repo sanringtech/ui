@@ -53,4 +53,25 @@ export const blocksTranslations = {
   'blocks.org.preview.canvasOnly': 'Canvas only',
   'blocks.org.preview.canvasOnlyDescription':
     'Set `[showTree]="false"` when you only need the chart. Pan, zoom, and card selection still work.',
+  'blocks.bell.title': 'Notification bell',
+  'blocks.bell.body':
+    'A bell with an unread count and a panel of notifications, with mark all as read, loading / empty / error states, and a toast when new ones arrive.',
+  'blocks.bell.scenario':
+    'Use this in the app header of any Sanring system that uses sanring-notify. Your backend fetches the notifications; the block only draws them.',
+  'blocks.bell.composition':
+    'popover holds the panel, spinner covers loading, and toast pops "You have N new notification(s)" when `unreadCount` goes up between polls.',
+  'blocks.bell.notes':
+    'Pass `null` as `unreadCount` until the first poll returns (not `0`), or the first count shows a toast. The toast needs `ToastService` in your providers and a `<sanring-toaster>` on the page; without them the bell simply does not toast. Turn it off with `[toastOnNew]="false"`.',
+  'blocks.bell.preview.simulate': 'Simulate a new notification',
+
+  'blocks.announcement.title': 'Announcement',
+  'blocks.announcement.body':
+    'Small cards floating in a corner for family-wide announcements such as scheduled maintenance, with an optional link and a close button.',
+  'blocks.announcement.scenario':
+    'Use this for active sanring-notify banners (`GET /api/v1/banners/active`). The cards are `position: fixed`, so they never push or reflow your layout; place the component once in your app shell.',
+  'blocks.announcement.composition':
+    'No other components: a fixed stack of cards with lucide icons. Pick the corner with `position` (default bottom-left, away from toasts).',
+  'blocks.announcement.notes':
+    'For a link inside your own app, handle `linkClicked`, call `event.preventDefault()` and navigate with the router to avoid a full page reload. Opening in a new tab still works.',
+  'blocks.announcement.preview.hint': 'The preview frame stands in for the browser window.',
 } as const;

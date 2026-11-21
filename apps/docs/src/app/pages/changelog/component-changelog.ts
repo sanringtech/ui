@@ -1,4 +1,5 @@
-import { DocsComponentId } from '../../navigation/docs-navigation';
+import type { DocsComponentId } from '../../navigation/docs-navigation';
+import type { DocsBlockId } from '../blocks/blocks.catalog';
 
 export type ComponentChangeType = 'added' | 'changed' | 'fixed';
 
@@ -7,6 +8,8 @@ export interface ComponentChange {
   text: string;
   /** Component(s) this change touches. Drives the "Updated" section on the components page. */
   componentIds?: DocsComponentId[];
+  /** Block(s) this change touches. Drives the "new" dot on the Blocks sidebar and the "Updated" section. */
+  blockIds?: DocsBlockId[];
   /** Headline-worthy change (new component, breaking change). Shown by default; non-notable entries collapse. */
   notable?: boolean;
   /** Marks a breaking change — renders a red BREAKING badge in the changelog and is referenced by `sanring migrate`. */
@@ -36,6 +39,17 @@ function isPatch(version: string): boolean {
  */
 export const cliVersionChangelog: readonly CliVersionEntry[] = [
   {
+    version: '0.35.1',
+    date: '2026-11-21',
+    changes: [
+      {
+        type: 'fixed',
+        blockIds: ['announcement-banner'],
+        text: '`block/announcement-banner` cards use the theme surface and text colors with an info-blue edge, so they follow light and dark mode instead of always being dark.',
+      },
+    ],
+  },
+  {
     version: '0.35.0',
     date: '2026-11-21',
     changes: [
@@ -43,16 +57,19 @@ export const cliVersionChangelog: readonly CliVersionEntry[] = [
         type: 'changed',
         notable: true,
         breaking: true,
+        blockIds: ['announcement-banner'],
         text: '`block/announcement-banner` is now floating cards in a corner (`position: fixed`, default bottom-left, new `position` input) instead of a full-width bar, so it never changes the app layout; `dismissible` now defaults to `true`.',
       },
       {
         type: 'added',
+        blockIds: ['announcement-banner'],
         text: '`block/announcement-banner` adds `linkClicked` (`{ item, event }`): call `event.preventDefault()` and navigate with the router so in-app links do not reload the page.',
       },
       {
         type: 'added',
         notable: true,
         breaking: true,
+        blockIds: ['notification-bell'],
         text: '`block/notification-bell` shows a toast with a "View" button when `unreadCount` goes up, using the app\'s `ToastService` (off with `[toastOnNew]="false"`); `unreadCount` now defaults to `null`, so pass `null` rather than `0` until the first poll returns.',
       },
     ],
@@ -64,6 +81,7 @@ export const cliVersionChangelog: readonly CliVersionEntry[] = [
       {
         type: 'added',
         notable: true,
+        blockIds: ['notification-bell', 'announcement-banner'],
         text: 'Add `block/notification-bell` (bell with unread count, list panel, mark all as read, loading / empty / error states) and `block/announcement-banner` for apps that use sanring-notify.',
       },
     ],
@@ -1132,6 +1150,17 @@ export function getRecentlyUpdatedComponentIds(): DocsComponentId[] {
 
 export function isRecentlyUpdatedComponentId(id: DocsComponentId): boolean {
   return getRecentlyUpdatedComponentIds().includes(id);
+}
+
+/** Block ids touched by the newest version entry (same rule as components). */
+export function getRecentlyUpdatedBlockIds(): DocsBlockId[] {
+  const latest = cliVersionChangelog[0];
+  if (!latest) return [];
+  return [...new Set(latest.changes.flatMap((change) => change.blockIds ?? []))];
+}
+
+export function isRecentlyUpdatedBlockId(id: string): boolean {
+  return (getRecentlyUpdatedBlockIds() as string[]).includes(id);
 }
 
 export function getRecentlyAddedComponentIds(): DocsComponentId[] {

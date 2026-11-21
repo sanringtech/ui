@@ -1145,3 +1145,13 @@ P30 先前已收完 15 個必修缺口；這輪把剩下 15 組建議項目逐�
   - 新增 `apps/docs/src/app/pages/blocks/notify-blocks.spec.ts`（5 個測試，import staged registry）：第一次不跳、變多才跳且數量正確、變少再變多會再跳、可關、沒有 ToastService 不出錯；公告是 `fixed`、可關、`linkClicked` 的 `preventDefault()` 真的擋住換頁。
   - `ngc` strictTemplates 編譯兩個 staged block。也確認故意把模板寫錯時會報錯，所以這個檢查是有效的。
   - `check-registry-sync`、`eslint`、docs 測試（18）、`@sanring/cli` 測試（265）。
+
+## 通知 block 的官網頁面、公告卡片跟著深淺色（2026-11-21，0.35.1）
+
+- [x] 補 `/blocks/notification-bell`、`/blocks/announcement-banner` 兩頁（情境、構成、安裝、用法、預覽、注意事項），加進側邊欄 Blocks 與 header 的 block 清單。0.34.0、0.35.0 發布時只改了 registry 和更新紀錄，沒有文件頁，owner 發現官網看不到這兩個元件。
+  - 🔔 的預覽有「模擬一則新通知」按鈕，頁面自己提供 `ToastService`、放 `<sanring-toaster>`，toast 是真的跳出來。
+  - 公告的預覽框加 `transform: translateZ(0)`，讓 `position: fixed` 的卡片以預覽框為準，不會浮在整個官網上。
+- [x] 更新紀錄可以標 block（`blockIds`）。側邊欄 block 的新標記改成跟元件一樣由最新一版決定，不再寫死在 org-chart 上；`/components` 的「Updated components」也會列出最新一版改到的 block。
+- [x] 修正：公告卡片原本用 `--sanring-info-90` 底、`--sanring-info-20` 字。這組色階 10 最淺、90 最深，所以卡片永遠是深底，淺色模式下看起來不對。改用 `--sanring-surface`／`--sanring-foreground`／`--sanring-border`，左邊框與圖示用 `--sanring-info-50`，深淺色都截圖確認過。這項要發 patch（0.35.1）。
+- 注意：「Updated components」只看最新一版。0.35.1 只改到公告，所以 🔔 的新標記在 0.35.1 之後就不會再顯示。這是原本的規則，沒有改。
+- 驗證：`ng build docs`、docs 測試、`check-registry-sync`、eslint；playwright 截圖確認 `/components`、兩個 block 頁、🔔 toast、公告的淺色與深色。

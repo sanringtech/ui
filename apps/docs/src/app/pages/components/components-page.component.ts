@@ -4,9 +4,11 @@ import { LucideHammer } from '@lucide/angular';
 import { AlertComponent, AlertDescriptionDirective, AlertTitleDirective } from '@sanring/ui';
 import { ComponentPageSectionDefinition } from '../../docs-schema/component-page.types';
 import { I18nService } from '../../i18n/i18n.service';
+import { TranslationKey } from '../../i18n/translations';
 import { SeoService } from '../../seo/seo.service';
 import { ComponentPageComponent, DocsPageHeaderComponent } from '../../layouts/component-page';
 import {
+  docsBlockItems,
   docsComponentStatusBadgeKeys,
   docsComponentStatusDotClass,
   DocsComponentNavItem,
@@ -52,7 +54,7 @@ import { isRecentlyUpdatedComponentId } from '../changelog/component-changelog';
               <div
                 class="grid grid-cols-3 gap-x-14 gap-y-7 max-[720px]:grid-cols-2 max-[520px]:grid-cols-1"
               >
-                @for (item of updatedItems; track item.id) {
+                @for (item of updatedItems; track item.path) {
                   <a
                     class="text-lg font-semibold text-[var(--docs-fg)] no-underline transition-colors hover:text-[var(--docs-muted)]"
                     [routerLink]="item.path"
@@ -151,7 +153,11 @@ export class ComponentsPageComponent {
     ...item,
     badge: isRecentlyUpdatedComponentId(item.id),
   }));
-  protected readonly updatedItems: DocsComponentNavItem[] = this.items.filter((item) => item.badge);
+  /** Updated components, then updated blocks (blocks live under /blocks but ship in the same releases). */
+  protected readonly updatedItems: readonly { path: string; labelKey: TranslationKey }[] = [
+    ...this.items.filter((item) => item.badge),
+    ...docsBlockItems.filter((item) => item.badge),
+  ];
   protected readonly hasDisabledItems = this.items.some((item) => item.disabled);
   protected readonly statusBadgeKeys = docsComponentStatusBadgeKeys;
   protected readonly statusDotClass = docsComponentStatusDotClass;

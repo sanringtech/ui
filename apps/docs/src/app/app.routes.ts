@@ -80,6 +80,20 @@ export const routes: Routes = [
                     (m) => m.OrgChartBlockPageComponent,
                   ),
               },
+              {
+                path: 'notification-bell',
+                loadComponent: () =>
+                  import('./pages/blocks/notification-bell/notification-bell-block-page.component').then(
+                    (m) => m.NotificationBellBlockPageComponent,
+                  ),
+              },
+              {
+                path: 'announcement-banner',
+                loadComponent: () =>
+                  import('./pages/blocks/announcement-banner/announcement-banner-block-page.component').then(
+                    (m) => m.AnnouncementBannerBlockPageComponent,
+                  ),
+              },
             ],
           },
           {
