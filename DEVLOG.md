@@ -1124,7 +1124,7 @@ P30 先前已收完 15 個必修缺口；這輪把剩下 15 組建議項目逐�
 
 **未做**:旋轉、縮放圖片、Dialog 版裁切 block。
 
-## 通知 block：notification-bell、announcement-banner（2026-11-20）
+## 通知 block：notification-bell、announcement-banner（2026-11-20，0.34.0 出貨）
 
 - [x] 新增 `block/notification-bell`、`block/announcement-banner`，給所有接 sanring-notify 的系統共用（sanring-notify PRD OQ-7 owner 拍板「直接抽成 ui」、ADR-0002 §5 橫幅）。照 `account-menu` 的模式：只負責畫面。
 - `notification-bell`：鈴鐺＋未讀數（>99 顯示 99+）、面板四態（loading、empty、error＋重試、清單），未讀有底色與圓點、「全部已讀」。資料、文字、輪詢、點擊後的導向都由各系統處理；`openChange` 告訴系統什麼時候抓清單，點一則會先關面板再發 `itemSelected`。帳號中心可帶 `sourceLabel` 顯示發送系統。
@@ -1133,7 +1133,7 @@ P30 先前已收完 15 個必修缺口；這輪把剩下 15 組建議項目逐�
 - 驗證：`check-registry-sync`、`check-registry-parity`、`@sanring/cli` 測試（265）、`ng build docs`（staged registry 會編譯所有 block）、`eslint registry/blocks`。
 - 還沒做：docs 網站的 block 預覽頁。
 
-## 通知 block：公告改成浮動小卡、🔔 新通知 toast（2026-11-21）
+## 通知 block：公告改成浮動小卡、🔔 新通知 toast（2026-11-21，0.35.0 出貨）
 
 - [x] `announcement-banner` 從「外框上方的長條」改成角落的浮動小卡（`fixed`，預設左下，`position` 可選四個角）。owner 定的前提：跨系統公告不能影響各系統原本的排版。長條會把整頁往下推，浮動小卡不會。小卡會蓋住一小塊畫面，所以 `dismissible` 預設改成 `true`。預設放左下，是為了避開通常在右下的 toast。
 - [x] `announcement-banner` 新增 `linkClicked`（`{ item, event }`），blueprint 提的：「查看詳情」仍是 `<a href>`，新分頁開啟照常能用；同站連結由系統 `preventDefault()` 後用 router 換頁，不整頁重新載入。
