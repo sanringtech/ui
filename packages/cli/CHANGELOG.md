@@ -1,5 +1,11 @@
 # @sanring/cli
 
+## 0.35.1
+
+### Patch Changes
+
+- a2069f4: `block/announcement-banner`: the cards now use the theme surface, border and text colors (with an info-blue left edge and icon), so they follow light and dark mode. Before, they were always dark (`--sanring-info-90`) and looked wrong in light mode.
+
 ## 0.35.0
 
 ### Minor Changes
